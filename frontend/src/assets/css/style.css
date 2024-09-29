@@ -1,0 +1,120 @@
+body{
+    font-family:  "Inter", sans-serif;
+
+}section{
+    font-family:  "Inter", sans-serif;
+    display: flex;
+    align-items: center;
+    height: 100vh;
+}
+.custom-placeholder::placeholder {
+    
+    color: #2288e26f  !important; 
+    opacity: 0.5;
+}.text-theme{
+    color: #E5F0FD !important;
+}.cat-img{
+    padding: 15px 12px !important;
+    border: #E5F0FD solid 1.5px !important;
+    text-align: center !important;
+    border-radius: 8px;
+}.cat-img img {
+    width: 45px;
+    height: 60px;
+}.cat-div{
+    width: 11.11% !important;
+}.b-theme{
+    border: 1.5px solid #E5F0FD !important;
+}.br-theme{
+    border-radius: 8px;
+}.location-card img{
+    height: 150px;
+    object-fit: cover;
+}.location-card{
+    border-radius: 16px;
+}.fs-12{
+    font-size: 12px !important;
+}.fs-13{
+    font-size: 13px !important;
+}.fs-14{
+    font-size: 14px !important;
+}.fs-15{
+    font-size: 15px !important;
+}.fs-16{
+    font-size: 16px !important;
+}
+.fs-20{
+    font-size: 20px !important;
+}.fs-30{
+    font-size: 30px !important;
+}.fs-45{
+    font-size: 45px !important;
+}.testi-div{
+    border-radius: 16px !important;
+   
+}.testi-div img{
+    border-radius: 50% !important;
+    width: 50px;
+    height: 45px;
+    object-fit: cover;
+}.testi-theme{
+    background-color: #E5F0FD;
+    transition: .3s ease-in-out;
+    transform: scale(1.05); 
+}.testi-theme {
+    background-color: #E5F0FD; 
+    color: rgb(0, 0, 0);
+}
+.slick-slide {
+    transition: opacity 0.3s ease;
+}
+
+.slick-center .slick-slide {
+    opacity: 1;
+}
+
+.slick-slide img {
+    display: block;
+    margin: 0 auto;
+}
+
+.slick-prev,
+.slick-next {
+    font-size: 24px;
+    color: #E5F0FD;
+    z-index: 1;
+}
+
+.slick-dots li.slick-active button:before {
+    color: #E5F0FD; 
+}.h-100vh{
+    height: 100vh !important;
+}.h-90vh{
+    height: 90vh !important;
+}.footer-section{
+    background-color: #111111;
+}.btn-theme{
+    background-color: #228ae2 !important;
+    border-radius: 50px !important;
+}footer{
+    font-family:  "Inter", sans-serif;
+}
+footer .btn-theme{
+    font-size: 23px !important;
+    color: white;
+}footer .usefull-links a{
+    text-decoration: none;
+}.text-decoration-none{
+    text-decoration: none !important;
+}
+@media screen and (max-width: 768px) {
+    .fs-45{
+        font-size: 30px !important;
+    }.cat-div {
+        width: 50% !important;
+    }footer .btn-theme{
+        font-size: 18px !important;
+        color: white;
+    }
+    
+}
