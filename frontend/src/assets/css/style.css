@@ -23,6 +23,8 @@ body{
     height: 60px;
 }.cat-div{
     width: 11.11% !important;
+    cursor: pointer;
+    color: #111111;
 }.b-theme{
     border: 1.5px solid #E5F0FD !important;
 }.br-theme{
@@ -42,6 +44,8 @@ body{
     font-size: 15px !important;
 }.fs-16{
     font-size: 16px !important;
+}.fs-18{
+    font-size: 18px !important;
 }
 .fs-20{
     font-size: 20px !important;
@@ -111,6 +115,146 @@ footer .btn-theme{
     border-radius: 16px;
     width: 120px;
     cursor: pointer;
+}.react-tel-input .form-control {
+    position: relative !important;
+    font-size: 14px !important;
+    letter-spacing: .01rem !important;
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+    padding-left: 48px !important;
+    margin-left: 0 !important;
+    background: #FFFFFF !important;
+    border: 1px solid #dce0e4 !important;
+    border-radius: 5px !important;
+    line-height: 25px !important;
+    height: 38px !important;
+    width: 100% !important;
+    outline: none !important;
+}
+.react-tel-input .flag-dropdown {
+    position: absolute !important;
+    top: 0 !important;
+    bottom: 0 !important;
+    padding: 0 !important;
+    background-color: #ffffff !important;
+    border: 1px solid #d5d9dd !important;
+    border-right: none !important;
+    border-radius: 5px 0 0 5px !important;
+}.form-text{
+    color: #238ae3;
+}.bl-none{
+    border-left: none;
+}.br-none{
+    border-right: none;
+}.btn-theme2{
+    background-color: #238ae3;
+    color: white;
+}.btn-theme2:hover{
+    background-color: #1869b2;
+    color: white;
+}input:focus{
+    outline: none !important;
+}.css-1d3z3hw-MuiOutlinedInput-notchedOutline {
+    text-align: left;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    top: -5px;
+    left: 0;
+    margin: 0;
+    padding: 0 8px;
+    pointer-events: none;
+    border-radius: 0px 8px 8px 0px;
+    border-style: solid;
+    border-width: 1px;
+    overflow: hidden;
+    min-width: 0%;
+    border-color: rgb(222 226 230);
+}.css-1d3z3hw-MuiOutlinedInput-notchedOutline:focus{
+    outline: rgb(222 226 230) !important;
+}.css-1wgn40h-MuiInputBase-root-MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline {
+    border-color: rgb(222 226 230);
+}.css-1wgn40h-MuiInputBase-root-MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline{
+    border: rgb(222 226 230);
+}.brl-none{
+    border-radius: 0px 5px 5px 0px !important;
+}.bll-none{
+    border-radius: 5px 0px 0px 5px !important;
+}.br-0{
+    border-radius: 0px !important;
+}.day-div{
+    border: 1px dashed black;
+    border-radius: 50%;
+    width: fit-content;
+    padding: 15px 15px;
+    cursor: pointer;
+}
+.services-list{
+    background-color: #238ae3;
+    color: white;
+    width: fit-content;
+    border-radius: 16px;
+    padding: 8px 15px;
+}.text-theme2{
+    color: #238ae3;
+}.day-div.active{
+    background-color: #238ae3;
+    color: white;
+    border: none;
+}.right-portion{
+    height: 100vh;
+    overflow: hidden;
+    overflow-y: scroll;
+}.right-portion::-webkit-scrollbar{
+    display: none;
+}.left-portion img{
+    object-fit: cover;
+}.react-tel-input .form-control {
+    height: 48px !important;
+}.b-theme2{
+    border: 1px solid #228ae2;
+
+}
+.br-20{
+    border-radius: 20px !important;
+}.subscription-tick{
+    padding: 3px;
+    border-radius: 50%;
+    color: rgb(219, 219, 219);
+    cursor: pointer;
+}.subscription-tick.active{
+    color: white !important;
+    background-color: #228ae2 !important;
+}.business-view-banner{
+    height: 600px !important;
+}.business-view-banner img{
+    object-fit: cover;
+}.business-view-banner .image-title{
+    position: absolute;
+    color: white;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+}.business-view-banner .image-title h2{
+    font-weight: bold;
+    font-size: 50px;
+}.business-feature span{
+    border: 1px solid #228ae2;
+    border-radius: 5px;
+    padding: 2px;
+}.business-view-div-main .location-card img{
+    height: 270px;
+    object-fit: cover;  
+}.test-div-bottom img{
+    width: 90px;
+}.newsletter-content{
+    position: relative;
+}.input-div{
+    border-radius: 10px;
+}footer .contact-banner{
+    background-color: #111111;
+    padding: 15px 20px;
 }
 @media screen and (max-width: 768px) {
     .fs-45{
@@ -120,6 +264,10 @@ footer .btn-theme{
     }footer .btn-theme{
         font-size: 18px !important;
         color: white;
+    }.jsc-md{
+        justify-content: center;
+    }.aic-md{
+        align-items: center;
     }
     
 }

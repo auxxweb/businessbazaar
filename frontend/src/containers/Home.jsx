@@ -6,6 +6,8 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Slider from 'react-slick'; // Import Slider component
 import 'slick-carousel/slick/slick.css'; 
 import 'slick-carousel/slick/slick-theme.css';
+import { Navigate } from 'react-router';
+import { Link } from 'react-router-dom';
 
 export default function Home() {
     const [currentSlide, setCurrentSlide] = useState(0);
@@ -158,7 +160,7 @@ export default function Home() {
             </div>
            </div>
 
-            <section className="mt-4 bg-light h-90vh">
+            <section className="mt-4 bg-light h-auto">
                 <div className="container" style={{width:'90%'}}>
                 <div className="mb-5 p-4">
                     <h1 className="text-center fw-bold mt-4" style={{marginTop:"20px"}}>
@@ -171,150 +173,150 @@ export default function Home() {
                 </div>
                 <div className='mb-2 mt-2'>
                     <div className="row w-100 justify-content-center">
-                        <div className="cat-div">
+                        <Link className="cat-div text-decoration-none" to='/business'>
                         <div className="cat-img">
                             <img src="/src/assets/images/cat.png" alt="" />
                         </div>
                         <div className='text-center'>
                             <p>Beauty Spa</p>
                         </div>
-                        </div>
+                        </Link>
 
-                        <div className="cat-div">
+                        <Link className="cat-div text-decoration-none" to='/business'>
                         <div className="cat-img">
                             <img src="/src/assets/images/cat2.png" alt="" />
                         </div>
                         <div className='text-center'>
                             <p>Restaurants</p>
                         </div>
-                        </div>
+                        </Link>
 
-                        <div className="cat-div">
+                        <Link className="cat-div text-decoration-none" to='/business'>
                         <div className="cat-img">
                             <img src="/src/assets/images/cat3.png" alt="" />
                         </div>
                         <div className='text-center'>
                             <p>Hospital</p>
                         </div>
-                        </div>
+                        </Link>
 
-                        <div className="cat-div">
+                        <Link className="cat-div text-decoration-none" to='/business'>
                         <div className="cat-img">
                             <img src="/src/assets/images/cat4.png" alt="" />
                         </div>
                         <div className='text-center'>
                             <p>Hotels</p>
                         </div>
-                        </div>
+                        </Link>
 
-                        <div className="cat-div">
+                        <Link className="cat-div text-decoration-none" to='/business'>
                         <div className="cat-img">
-                            <img src="/src/assets/images/cat.png" alt="" />
+                            <img src="/src/assets/images/books.png" alt="" />
                         </div>
                         <div className='text-center'>
-                            <p>Beauty Spa</p>
+                            <p>Education</p>
                         </div>
-                        </div>
+                        </Link>
 
-                        <div className="cat-div">
+                        <Link className="cat-div text-decoration-none" to='/business'>
                         <div className="cat-img">
-                            <img src="/src/assets/images/cat.png" alt="" />
+                            <img src="/src/assets/images/constructor.png" alt="" />
                         </div>
                         <div className='text-center'>
-                            <p>Beauty Spa</p>
+                            <p>Contractors</p>
                         </div>
-                        </div>
+                        </Link>
 
-                        <div className="cat-div">
+                        <Link className="cat-div text-decoration-none" to='/business'>
                         <div className="cat-img">
-                            <img src="/src/assets/images/cat.png" alt="" />
+                            <img src="/src/assets/images/building.png" alt="" />
                         </div>
                         <div className='text-center'>
-                            <p>Beauty Spa</p>
+                            <p>Villas</p>
                         </div>
-                        </div>
+                        </Link>
 
-                        <div className="cat-div">
+                        <Link className="cat-div text-decoration-none" to='/business'>
                         <div className="cat-img">
-                            <img src="/src/assets/images/cat.png" alt="" />
+                            <img src="/src/assets/images/repair service.png" alt="" />
                         </div>
                         <div className='text-center'>
-                            <p>Beauty Spa</p>
+                            <p>Repair Services</p>
                         </div>
-                        </div>
+                        </Link>
 
-                        <div className="cat-div">
+                        <Link className="cat-div text-decoration-none" to='/business'>
                         <div className="cat-img">
-                            <img src="/src/assets/images/cat.png" alt="" />
+                            <img src="/src/assets/images/salon.png" alt="" />
                         </div>
                         <div className='text-center'>
-                            <p>Beauty Spa</p>
+                            <p>Salon</p>
                         </div>
-                        </div>
+                        </Link>
 
 
-                        <div className="cat-div">
+                        <Link className="cat-div text-decoration-none" to='/business'>
                         <div className="cat-img">
-                            <img src="/src/assets/images/cat.png" alt="" />
+                            <img src="/src/assets/images/achitects.png" alt="" />
                         </div>
                         <div className='text-center'>
-                            <p>Beauty Spa</p>
+                            <p>Architects</p>
                         </div>
-                        </div>
+                        </Link>
 
-                        <div className="cat-div">
+                        <Link className="cat-div text-decoration-none" to='/business'>
                         <div className="cat-img">
-                            <img src="/src/assets/images/cat.png" alt="" />
+                            <img src="/src/assets/images/astroleger.png" alt="" />
                         </div>
                         <div className='text-center'>
-                            <p>Beauty Spa</p>
+                            <p>Astroleger</p>
                         </div>
-                        </div>
+                        </Link>
 
-                        <div className="cat-div">
+                        <Link className="cat-div text-decoration-none" to='/business'>
                         <div className="cat-img">
-                            <img src="/src/assets/images/cat.png" alt="" />
+                            <img src="/src/assets/images/electricians.png" alt="" />
                         </div>
                         <div className='text-center'>
-                            <p>Beauty Spa</p>
+                            <p>Electricians</p>
                         </div>
-                        </div>
+                        </Link>
 
-                        <div className="cat-div">
+                        <Link className="cat-div text-decoration-none" to='/business'>
                         <div className="cat-img">
-                            <img src="/src/assets/images/cat.png" alt="" />
+                            <img src="/src/assets/images/software.png" alt="" />
                         </div>
                         <div className='text-center'>
-                            <p>Beauty Spa</p>
+                            <p>Software</p>
                         </div>
-                        </div>
+                        </Link>
 
-                        <div className="cat-div">
+                        <Link className="cat-div text-decoration-none" to='/business'>
                         <div className="cat-img">
-                            <img src="/src/assets/images/cat.png" alt="" />
+                            <img src="/src/assets/images/photographers.png" alt="" />
                         </div>
                         <div className='text-center'>
-                            <p>Beauty Spa</p>
+                            <p>Photographers</p>
                         </div>
-                        </div>
+                        </Link>
 
-                        <div className="cat-div">
+                        <Link className="cat-div text-decoration-none" to='/business'>
                         <div className="cat-img">
-                            <img src="/src/assets/images/cat.png" alt="" />
+                            <img src="/src/assets/images/courier.png" alt="" />
                         </div>
                         <div className='text-center'>
-                            <p>Beauty Spa</p>
+                            <p>Courier Services</p>
                         </div>
-                        </div>
+                        </Link>
 
-                        <div className="cat-div">
+                        <Link className="cat-div text-decoration-none" to='/business'>
                         <div className="cat-img">
-                            <img src="/src/assets/images/cat.png" alt="" />
+                            <img src="/src/assets/images/gym.png" alt="" />
                         </div>
                         <div className='text-center'>
-                            <p>Beauty Spa</p>
+                            <p>Gym</p>
                         </div>
-                        </div>
+                        </Link>
 
                     </div>
                 </div>

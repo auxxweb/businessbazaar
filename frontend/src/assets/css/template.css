@@ -1,0 +1,87 @@
+.pjs{
+    font-family: 'Plus Jakarta Sans';
+}.nav-logo img{
+    width: 40px;
+    height: 100%;
+    object-fit: cover;
+}.david-font{
+    font-family: "David Libre", serif;
+}.banner-title{
+    color: '#101A24';
+    font-size: 70px;
+    font-weight: '700';
+    line-height: 70px;
+}.radius-theme{
+    border-radius: 10px 0px;
+}.box-shadow{
+    box-shadow: 0px 15px 30px rgba(0, 0, 0, 0.15);
+}.theme{
+    background-color: #EA6D27;
+    color: white;
+    border: none;
+}.contact-banner{
+    border-radius: 50%;
+    border: 1px solid black;
+    width: fit-content;
+    padding: 5px 10px;
+}.banner-image{
+    border-radius: 100px 40px;
+}.banner-image-2{
+    position: absolute;
+    top: 60%;
+}.address-section{
+    border-radius: 16px !important;
+    background-color: #EA6D27;
+    padding: 30px;
+}.address-logo i{
+    padding: 10px;
+    background-color: white;
+    color: #ea6d27;
+    border-radius: 50%;
+    height: auto;
+}.about-image img{
+    width: 80%;
+}.dish-div {
+    padding: 20px 30px;
+    border-radius: 100px 8px 50px 8px;
+    border: 2px solid rgb(255, 255, 255);
+    width: 90% !important;
+    transition: .5s ease-in-out;
+}.dish-div:hover{
+    background-color: white;
+}
+.text-orange{
+    color: #DF6827;
+}.w-80{
+    width: 80%;
+}.cat-option{
+    border-right: 1px dashed #DF6827;
+}.service-design{
+    border-radius: 90px 30px 90px 30px;
+    padding: 20px;
+    width: 90% !important;
+}.service-design.active{
+    background-color: #DF6827;
+    color: white;
+    transition: 0.5s ease-in-out;
+}.test-button-img-div{
+    position: relative;
+    /* bottom: 60%; */
+    bottom: 15%;
+}.test-div-bottom{
+    border-radius: 80px 30px 80px 30px ; 
+    width: 90% !important;
+}.newsletter-content{
+    bottom: 35%;
+    left: 27%;
+    /* right: 50%; */
+}.newsletter-content input{
+    border: none;
+}.newsletter-content button{
+    margin-top: 10px;
+}.news-button{
+    top: 2px;
+}footer{
+    height: 50vh;
+    background-color: black;
+}
