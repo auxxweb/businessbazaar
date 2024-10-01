@@ -60,9 +60,9 @@ export default function Home() {
     return (
         <Layout title="Home" navClass='home'>
             <div className="container">
-            <div className="row w-100">
+            <div className="row">
                 <div className="col-md-6">
-                    <div className="row w-100 justify-content-between">
+                    <div className="row justify-content-between">
                         {/* Location Input with Crosshair Icon */}
                         <div className="col-6 col-md-4">
                             <div className="input-group">
@@ -172,7 +172,7 @@ export default function Home() {
                     </p>
                 </div>
                 <div className='mb-2 mt-2'>
-                    <div className="row w-100 justify-content-center">
+                    <div className="row justify-content-center">
                         <Link className="cat-div text-decoration-none" to='/business'>
                         <div className="cat-img">
                             <img src="/src/assets/images/cat.png" alt="" />
@@ -331,9 +331,9 @@ export default function Home() {
                     Find out what makes these places stand out and start your next adventure right here!
                     </p>
                 </div>
-                <div className="row w-100 justify-content-around gap-2">
+                <div className="row justify-content-around gap-2">
                     <div className="col-12 col-md-5 b-theme location-card mt-3">
-                        <div className="row p-2 w-100">
+                        <div className="row p-2">
                             <div className="col-4 p-0">
                                 <img src="/src/assets/images/1.jpg" alt="" className='w-100 br-theme'/>
                             </div>
@@ -356,31 +356,7 @@ export default function Home() {
                     </div>
 
                     <div className="col-12 col-md-5 b-theme location-card mt-3">
-                        <div className="row p-2 w-100">
-                            <div className="col-4 p-0">
-                                <img src="/src/assets/images/1.jpg" alt="" className='w-100 br-theme'/>
-                            </div>
-                            <div className="col-8">
-                                <div className="col-12 mb-2 mt-2">
-                                    <h2 style={{fontSize:'28px'}}>Hilite Home</h2>
-                                </div>
-                                <div className="col-12">
-                                    <span className='p-1 bg-success text-white pe-2 ps-2 '>4.5 <i className="bi bi-star ms-2 text-white"></i></span>
-                                    <span className="ms-2 fs-12">3.5k reviews</span>
-                                </div>
-                                <div className="col-12 mt-3">
-                                    <h3 className='fs-16'>
-                                        <i className="bi bi-crosshair"></i> 
-                                        <span className='ms-1 fs-15'>No.12/3, Calicut South Beach, Kozhikode</span>
-                                        </h3>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-
-                    <div className="col-12 col-md-5 b-theme location-card mt-3">
-                        <div className="row p-2 w-100">
+                        <div className="row p-2">
                             <div className="col-4 p-0">
                                 <img src="/src/assets/images/1.jpg" alt="" className='w-100 br-theme'/>
                             </div>
@@ -404,7 +380,31 @@ export default function Home() {
 
 
                     <div className="col-12 col-md-5 b-theme location-card mt-3">
-                        <div className="row p-2 w-100">
+                        <div className="row p-2 ">
+                            <div className="col-4 p-0">
+                                <img src="/src/assets/images/1.jpg" alt="" className='w-100 br-theme'/>
+                            </div>
+                            <div className="col-8">
+                                <div className="col-12 mb-2 mt-2">
+                                    <h2 style={{fontSize:'28px'}}>Hilite Home</h2>
+                                </div>
+                                <div className="col-12">
+                                    <span className='p-1 bg-success text-white pe-2 ps-2 '>4.5 <i className="bi bi-star ms-2 text-white"></i></span>
+                                    <span className="ms-2 fs-12">3.5k reviews</span>
+                                </div>
+                                <div className="col-12 mt-3">
+                                    <h3 className='fs-16'>
+                                        <i className="bi bi-crosshair"></i> 
+                                        <span className='ms-1 fs-15'>No.12/3, Calicut South Beach, Kozhikode</span>
+                                        </h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div className="col-12 col-md-5 b-theme location-card mt-3">
+                        <div className="row p-2 ">
                             <div className="col-4 p-0">
                                 <img src="/src/assets/images/1.jpg" alt="" className='w-100 br-theme'/>
                             </div>
@@ -452,7 +452,7 @@ export default function Home() {
                                         index === currentSlide ? 'testi-theme' : ''
                                     }`} 
                                 >
-                                    <div className="row w-100">
+                                    <div className="row ">
                                         <div className="col-2">
                                             <img src={testimonial.img} alt={testimonial.name} />
                                         </div>
@@ -471,10 +471,10 @@ export default function Home() {
                 </div>
             </div>
             </section>
-            <footer className='mt-3 h-100vh footer-section'>
+            <footer className='mt-3 h-auto footer-section'>
                 <div className="container">
                     <div className="p-4 mt-0 mt-md-5 pt-5" >
-                        <div className="row w-100">
+                        <div className="row ">
                             <div className="col-12 col-md-6">
                                 <h1 className="fs-45 text-white text-center text-md-start fw-bold">
                                     Ready to Create Your Business
@@ -487,7 +487,7 @@ export default function Home() {
                     </div>
                     <hr className="bg-white" />
                     <div className="p-4 mt-5 pt-0 pt-md-5" >
-                        <div className="row w-100">
+                        <div className="row ">
                             <div className="col-12 col-md-6">
                                 <h1 className="fs-45 text-white text-center text-md-start fw-bold mb-3">
                                     Business Bazaar
@@ -495,7 +495,7 @@ export default function Home() {
                                 <span className='fs-20 text-white text-center text-md-start'>where requirements are found</span>
                             </div>
                             <div className="col-12 col-md-6">
-                               <div className="row w-100">
+                               <div className="row ">
                                 <div className="col-12 col-md-6 text-start usefull-links">
                                     <h3 className="text-white mb-3 fs-20 fw-bold text-center text-md-start mt-3 mt-md-0">
                                         Useful Links
@@ -537,11 +537,11 @@ export default function Home() {
                     </div>
 
                     <div className="p-4 mt-2" >
-                        <div className="row w-100 text-white">
-                            <div className="col-6 col-md-2 mt-2">Cookie Policy</div>
-                            <div className="col-6 col-md-2 mt-2">Terms and Conditions</div>
+                        <div className="row text-white">
+                            <div className="col-12 text-center text-md-start col-md-2 mt-2">Cookie Policy</div>
+                            <div className="col-12 text-center text-md-start col-md-2 mt-2">Terms and Conditions</div>
                         </div>
-                        <div className="text-secondary mt-5">
+                        <div className="text-secondary text-center text-md-start mt-5">
                             <div className='fs-16'>© 2024. All rights reserved</div>
                         </div>
                     </div>

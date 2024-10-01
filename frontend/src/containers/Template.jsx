@@ -13,25 +13,49 @@ export default function Template() {
         infinite: true,
         autoplay: true,
         arrows: false,
+        // centerMode: true,
         speed: 500,
-        slidesToShow: 4, // Number of dishes to show
+        slidesToShow: 2, // Number of dishes to show
+        // mobileFirst: true,
         slidesToScroll: 1,
 
         responsive: [
             {
                 breakpoint: 1024,
                 settings: {
-                    slidesToShow: 4,
-                    slidesToScroll: 1,
-                }
-            },
-            {
+                  slidesToShow: 3,
+                  slidesToScroll: 1,
+                  infinite: true,
+                },
+              },
+              {
+                breakpoint: 768,
+                settings: {
+                  slidesToShow: 1,
+                  slidesToScroll: 1,
+                },
+              },
+              {
                 breakpoint: 600,
                 settings: {
-                    slidesToShow: 1,
-                    slidesToScroll: 1,
-                }
-            }
+                  slidesToShow: 1,
+                  slidesToScroll: 1,
+                },
+              },
+              {
+                breakpoint: 480,
+                settings: {
+                  slidesToShow: 1,
+                  slidesToScroll: 1,
+                },
+              },
+              {
+                breakpoint: 390,
+                settings: {
+                  slidesToShow: 1,
+                  slidesToScroll: 1,
+                },
+              },
         ]
     };
     const setting2 = {
@@ -39,25 +63,48 @@ export default function Template() {
         arrows: false,
         infinite: true,
         autoplay: true,
+        // centerMode: true,
         speed: 500,
-        slidesToShow: 3,
+        slidesToShow: 2,
         slidesToScroll: 1,
         afterChange: (current) => setCurrentSlide(current),
         responsive: [
             {
                 breakpoint: 1024,
                 settings: {
-                    slidesToShow: 2,
-                    slidesToScroll: 1
-                }
-            },
-            {
+                  slidesToShow: 3,
+                  slidesToScroll: 1,
+                  infinite: true,
+                },
+              },
+              {
+                breakpoint: 768,
+                settings: {
+                  slidesToShow: 1,
+                  slidesToScroll: 1,
+                },
+              },
+              {
                 breakpoint: 600,
                 settings: {
-                    slidesToShow: 1,
-                    slidesToScroll: 1
-                }
-            }
+                  slidesToShow: 1,
+                  slidesToScroll: 1,
+                },
+              },
+              {
+                breakpoint: 480,
+                settings: {
+                  slidesToShow: 1,
+                  slidesToScroll: 1,
+                },
+              },
+              {
+                breakpoint: 390,
+                settings: {
+                  slidesToShow: 1,
+                  slidesToScroll: 1,
+                },
+              },
         ]
     };
 
@@ -66,27 +113,48 @@ export default function Template() {
         dots: false,
         infinite: true,
         speed: 500,
-        slidesToShow: 2,
+        slidesToShow: 1,
         slidesToScroll: 1,
         autoplay: true,
+        // centerMode: true,
         arrows: false,
         responsive: [
             {
                 breakpoint: 1024,
                 settings: {
-                    slidesToShow: 2,
-                    slidesToScroll: 1,
-                    infinite: true,
-                    dots: true
-                }
-            },
-            {
+                  slidesToShow: 1,
+                  slidesToScroll: 1,
+                  infinite: true,
+                },
+              },
+              {
+                breakpoint: 768,
+                settings: {
+                  slidesToShow: 1,
+                  slidesToScroll: 1,
+                },
+              },
+              {
                 breakpoint: 600,
                 settings: {
-                    slidesToShow: 1,
-                    slidesToScroll: 1
-                }
-            }
+                  slidesToShow: 1,
+                  slidesToScroll: 1,
+                },
+              },
+              {
+                breakpoint: 480,
+                settings: {
+                  slidesToShow: 1,
+                  slidesToScroll: 1,
+                },
+              },
+              {
+                breakpoint: 390,
+                settings: {
+                  slidesToShow: 1,
+                  slidesToScroll: 1,
+                },
+              },
         ]
     };
 
@@ -187,17 +255,17 @@ export default function Template() {
                     <Navbar.Toggle aria-controls="basic-navbar-nav" style={{ color: 'black' }} />
 
                     <Navbar.Collapse id="basic-navbar-nav">
-                        <Nav className="ms-auto w-100 justify-content-evenly">
-                            <NavLink href="#menu" className='text-black  text-decoration-none fs-14' style={{ color: 'black' }}>
+                        <Nav className="ms-auto w-100 justify-content-evenly jcc">
+                            <NavLink href="#menu" className='text-black text-center text-lg-start  text-decoration-none fs-14' style={{ color: 'black' }}>
                                 Menu
                             </NavLink>
-                            <NavLink href="#gallery" className='text-black  text-decoration-none fs-14' style={{ color: 'black' }}>
+                            <NavLink href="#gallery" className='text-black text-center text-lg-start  text-decoration-none fs-14' style={{ color: 'black' }}>
                                 Gallery
                             </NavLink>
-                            <NavLink href="#about" className='text-black  text-decoration-none fs-14' style={{ color: 'black' }}>
+                            <NavLink href="#about" className='text-black text-center text-lg-start  text-decoration-none fs-14' style={{ color: 'black' }}>
                                 About
                             </NavLink>
-                            <NavLink href="#contact" className='text-black  text-decoration-none fs-14' style={{ color: 'black' }}>
+                            <NavLink href="#contact" className='text-black text-center text-lg-start  text-decoration-none fs-14' style={{ color: 'black' }}>
                                 Contact
                             </NavLink>
                             <NavLink
@@ -210,7 +278,7 @@ export default function Template() {
                                     fontSize: '13px',
                                     boxShadow: '0px 15px 30px rgba(0, 0, 0, 0.15)'
                                 }}
-                                className='fw-bold text-decoration-none'
+                                className='fw-bold text-decoration-none text-center text-lg-start'
                             >
                                 Book a table
                             </NavLink>
@@ -220,36 +288,41 @@ export default function Template() {
             </Navbar>
             <section className='h-auto'>
                 <div className="container">
-                    <div className="row align-items-center w-100">
-                    <div className="col-12 col-md-6 text-end d-block d-md-none">
+                    <div className="row align-items-center">
+                        {/* Left Image for Mobile View */}
+                        <div className="col-12 col-lg-6 text-end d-block d-lg-none">
                             <img src="/src/assets/images/banner-image.png" alt="" className='banner-image' />
                             <div className='banner-image-2 d-none'>
                                 <img src="/src/assets/images/baner-image2.png" alt="" />
                             </div>
                         </div>
-                        <div className="col-12 col-md-6 order-0 order-md-1">
+
+                        {/* Text Content */}
+                        <div className="col-12 col-lg-6 order-0 order-lg-1">
                             <div className="row align-items-center">
                                 <div className="col-12">
-                                    <h1 className="text-start text-dark fw-bold david-font fw-bold banner-title text-center text-md-start">We provide the <br />
-                                        best food for you</h1>
+                                    <h1 className="text-start text-dark fw-bold david-font fw-bold banner-title text-center text-lg-start">
+                                        We provide the <br />
+                                        best food for you
+                                    </h1>
                                 </div>
                                 <div className="col-12">
-                                    <p className='text-secondary text-center text-md-start david-font'>
+                                    <p className='text-secondary text-center text-lg-start david-font'>
                                         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed vel neque ac nunc faucibus commodo. Donec sagittis neque vel neque congue, vel pellentesque lacus malesuada.
                                         Donec sed ultricies nunc, in efficitur nisi.
                                     </p>
                                 </div>
                                 <div className="mt-3 col-12">
                                     <div className="row">
-                                        <div className="col-6 col-lg-2">
+                                        <div className="col-6 col-lg-2 mb-2">
                                             <button className="btn btn-dark text-white radius-theme box-shadow w-100">Menu</button>
                                         </div>
-                                        <div className="col-6 col-lg-3">
+                                        <div className="col-6 col-lg-3 mb-2">
                                             <button className="btn btn-dark text-white radius-theme box-shadow theme w-100">Book a table</button>
                                         </div>
                                     </div>
                                 </div>
-                                <div className="mt-5 col-12 row jcc-md  gap-3">
+                                <div className="mt-5 col-12 row justify-content-center gap-3">
                                     <div className="contact-banner">
                                         <i className="bi bi-facebook"></i>
                                     </div>
@@ -259,74 +332,70 @@ export default function Template() {
                                     <div className="contact-banner">
                                         <i className="bi bi-twitter"></i>
                                     </div>
-                                    {/* <hr style={{width:"fit-content",opacity: 0.15,}}></hr> */}
                                 </div>
                             </div>
                         </div>
 
-                        <div className="col-12 col-md-6 text-end d-none d-md-block">
+                        {/* Right Image for Desktop View */}
+                        <div className="col-12 col-lg-6 text-end d-none d-lg-block">
                             <img src="/src/assets/images/banner-image.png" alt="" className='banner-image' />
                             <div className='banner-image-2 d-none'>
                                 <img src="/src/assets/images/baner-image2.png" alt="" />
                             </div>
                         </div>
-
                     </div>
                 </div>
             </section>
+
             <div className="mt-5 mb-5">
                 <div className="container">
                     <div className="col-12 address-section">
                         <div className="row">
-                            <div className="col-12  col-md-4">
-                                <div className="row align-items-center justify-content-around">
-                                    <div className="col-1 address-logo">
+                            <div className="col-12 col-lg-4 mb-3 mb-lg-0">
+                                <div className="row align-items-center justify-content-start">
+                                    <div className="col-auto address-logo">
                                         <i className="bi bi-geo-alt-fill"></i>
                                     </div>
-
-                                    <div className="col-10 text-white">
+                                    <div className="col">
                                         <span className="fs-13">Address</span>
                                         <p className='fs-16'>Calicut South Beach, Kozhikode</p>
                                     </div>
                                 </div>
                             </div>
 
-                            <div className="col-12  col-md-4">
-                                <div className="row align-items-center justify-content-around">
-                                    <div className="col-1 address-logo">
+                            <div className="col-12 col-lg-4 mb-3 mb-lg-0">
+                                <div className="row align-items-center justify-content-start">
+                                    <div className="col-auto address-logo">
                                         <i className="bi bi-envelope-fill"></i>
                                     </div>
-
-                                    <div className="col-10 text-white">
+                                    <div className="col">
                                         <span className="fs-13">Send Email</span>
-                                        <p className='fs-16'>Calicut South Beach, Kozhikode</p>
+                                        <p className='fs-16'>example@example.com</p>
                                     </div>
                                 </div>
                             </div>
 
-
-                            <div className="col-12  col-md-4">
-                                <div className="row align-items-center justify-content-around">
-                                    <div className="col-1 address-logo">
+                            <div className="col-12 col-lg-4 mb-3 mb-lg-0">
+                                <div className="row align-items-center justify-content-start">
+                                    <div className="col-auto address-logo">
                                         <i className="bi bi-telephone"></i>
                                     </div>
-
-                                    <div className="col-10 text-white">
+                                    <div className="col">
                                         <span className="fs-13">Contact</span>
                                         <p className='fs-16'>+91 0123654799</p>
                                     </div>
                                 </div>
                             </div>
-
                         </div>
                     </div>
                 </div>
             </div>
 
+
             <section className=' h-auto' style={{ backgroundColor: "#F3F3F4" }} id='about'>
                 <div className="container">
                     <div className="row mt-5 align-items-center mb-5">
-                        <div className="col-12 col-md-6 mt-2 text-center text-md-start about-image">
+                        <div className="col-12 col-lg-6 mt-2 text-center text-lg-start about-image">
                             <img
                                 src="/src/assets/images/baner-image2.png"
                                 className="img-fluid"
@@ -334,22 +403,22 @@ export default function Template() {
                             />
 
                         </div>
-                        <div className="col-12 col-md-6">
+                        <div className="col-12 col-lg-6">
                             <div className="col-12 mb-3">
-                                <h1 className="text-center text-md-start text-dark fw-bold david-font fw-bold banner-title">Wecome to Our Restaurant</h1>
+                                <h1 className="text-center text-lg-start text-dark fw-bold david-font fw-bold banner-title">Wecome to Our Restaurant</h1>
                             </div>
                             <div className="col-12 mt-4">
-                                <p className='text-secondary text-center text-md-start david-font mt-4'>
+                                <p className='text-secondary text-center text-lg-start david-font mt-4'>
                                     Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed vel neque ac nunc faucibus commodo. Donec sagittis neque vel neque congue, vel pellentesque lacus malesuada.
                                     Donec sed ultricies nunc, in efficitur nisi. Sed consectetur, quam sit amet lobortis vulputate, velit velit consectetur ex, id malesuada ligula ipsum eu eros.
                                 </p>
                             </div>
                             <div className="mt-3 col-12">
                                 <div className="row">
-                                    <div className="col-6 col-md-2">
+                                    <div className="col-6 col-lg-2">
                                         <button className="btn btn-dark text-white radius-theme box-shadow w-100">Menu</button>
                                     </div>
-                                    <div className="col-6 col-md-3">
+                                    <div className="col-6 col-lg-3">
                                         <button className="btn btn-dark text-white radius-theme box-shadow theme w-100">Book a table</button>
                                     </div>
                                 </div>
@@ -371,7 +440,7 @@ export default function Template() {
                             <div className="row justify-content-center">
                                 <div className="col-6 mb-5">
                                     <p className='text-secondary text-center mb-5'>
-                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
+                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
                                         Sed vel neque ac nunc faucibus commodo. Donec sagittis neque vel neque congue,
                                     </p>
                                 </div>
@@ -406,13 +475,14 @@ export default function Template() {
                     <div className="col-12 mb-5">
                         <div className="row justify-content-center">
                             <div className="col-6 text-center">
-                                <h1 className="text-dark fw-bold david-font fw-bold banner-title fs-45">Menu</h1>
+                                <h1 className="text-dark fw-bold david-font banner-title fs-45">Menu</h1>
                             </div>
                         </div>
                     </div>
+
                     <div className="mt-3 mb-5 p-3" style={{ borderBottom: "2px solid #F3F3F4" }}>
                         <div className="row">
-                            <div className="col-6 mb-3 col-md-3 cat-option">
+                            <div className="col-6 mb-3 col-lg-3 cat-option">
                                 <div className='row align-items-center'>
                                     <div className="col-3">
                                         <img src="/src/assets/images/burger1.png" alt="" className='w-80' />
@@ -422,7 +492,7 @@ export default function Template() {
                                     </div>
                                 </div>
                             </div>
-                            <div className="col-6 mb-3 col-md-3 cat-option">
+                            <div className="col-6 mb-3 col-lg-3 cat-option">
                                 <div className='row align-items-center'>
                                     <div className="col-3">
                                         <img src="/src/assets/images/orange-juice.png" alt="" className='w-80' />
@@ -432,7 +502,7 @@ export default function Template() {
                                     </div>
                                 </div>
                             </div>
-                            <div className="col-6 mb-3 col-md-3 cat-option">
+                            <div className="col-6 mb-3 col-lg-3 cat-option">
                                 <div className='row align-items-center'>
                                     <div className="col-3">
                                         <img src="/src/assets/images/pizza.png" alt="" className='w-80' />
@@ -442,7 +512,7 @@ export default function Template() {
                                     </div>
                                 </div>
                             </div>
-                            <div className="col-6 mb-3 col-md-3 cat-option br-none">
+                            <div className="col-6 mb-3 col-lg-3 cat-option br-none">
                                 <div className='row align-items-center'>
                                     <div className="col-3">
                                         <img src="/src/assets/images/food.png" alt="" className='w-80' />
@@ -454,118 +524,49 @@ export default function Template() {
                             </div>
                         </div>
                     </div>
+
                     <div className="mt-5 david-font">
                         <div className="mb-5">
                             <div className="row mb-3">
-
-                                <div className="col-12 col-md-6 mt-3">
-                                    <div className="row">
-                                        <div className="col-2">
-                                            <img src="/src/assets/images/menu1.png" alt="" className='w-100' />
-                                        </div>
-                                        <div className="col-8">
-                                            <h1 className='fs-20 fw-bold'>Chinese Pasta</h1>
-                                            <p className="mt-2">it's a testament to our.</p>
-                                        </div>
-                                        <div className="col-2">
-                                            <span className='fw-bold'>$15.99</span>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div className="col-12 col-md-6 mt-3">
-                                    <div className="row">
-                                        <div className="col-2">
-                                            <img src="/src/assets/images/menu2.png" alt="" className='w-100' />
-                                        </div>
-                                        <div className="col-8">
-                                            <h1 className='fs-20 fw-bold'>Egg and Cucumber</h1>
-                                            <p className="mt-2">it's a testament to our.</p>
-                                        </div>
-                                        <div className="col-2">
-                                            <span className='fw-bold'>$15.99</span>
+                                {[
+                                    { title: "Chinese Pasta", image: "/src/assets/images/menu1.png", price: "$15.99" },
+                                    { title: "Egg and Cucumber", image: "/src/assets/images/menu2.png", price: "$15.99" },
+                                    { title: "Chicken Fried Rice", image: "/src/assets/images/menu3.png", price: "$15.99" },
+                                    { title: "Chicken White Rice", image: "/src/assets/images/menu4.png", price: "$15.99" },
+                                    { title: "Chicken Pizza", image: "/src/assets/images/menu5.png", price: "$15.99" },
+                                    { title: "Spatial Barger", image: "/src/assets/images/menu6.png", price: "$15.99" },
+                                ].map((item, index) => (
+                                    <div className="col-12 col-lg-6 mt-3" key={index}>
+                                        <div className="row">
+                                            <div className="col-2">
+                                                <img src={item.image} alt="" className='w-100' />
+                                            </div>
+                                            <div className="col-8">
+                                                <h1 className='fs-20 fw-bold'>{item.title}</h1>
+                                                <p className="mt-2">it's a testament to our.</p>
+                                            </div>
+                                            <div className="col-2 p-0">
+                                                <span className='fw-bold'>{item.price}</span>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-
-
-                                <div className="col-12 col-md-6 mt-3">
-                                    <div className="row">
-                                        <div className="col-2">
-                                            <img src="/src/assets/images/menu3.png" alt="" className='w-100' />
-                                        </div>
-                                        <div className="col-8">
-                                            <h1 className='fs-20 fw-bold'>Chicken Fried Rice</h1>
-                                            <p className="mt-2">it's a testament to our.</p>
-                                        </div>
-                                        <div className="col-2">
-                                            <span className='fw-bold'>$15.99</span>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div className="col-12 col-md-6 mt-3">
-                                    <div className="row">
-                                        <div className="col-2">
-                                            <img src="/src/assets/images/menu4.png" alt="" className='w-100' />
-                                        </div>
-                                        <div className="col-8">
-                                            <h1 className='fs-20 fw-bold'>Chicken White Rice</h1>
-                                            <p className="mt-2">it's a testament to our.</p>
-                                        </div>
-                                        <div className="col-2">
-                                            <span className='fw-bold'>$15.99</span>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div className="col-12 col-md-6 mt-3">
-                                    <div className="row">
-                                        <div className="col-2">
-                                            <img src="/src/assets/images/menu5.png" alt="" className='w-100' />
-                                        </div>
-                                        <div className="col-8">
-                                            <h1 className='fs-20 fw-bold'>Chicken Pizza</h1>
-                                            <p className="mt-2">it's a testament to our.</p>
-                                        </div>
-                                        <div className="col-2">
-                                            <span className='fw-bold'>$15.99</span>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div className="col-12 col-md-6 mt-3 mb-5">
-                                    <div className="row">
-                                        <div className="col-2">
-                                            <img src="/src/assets/images/menu6.png" alt="" className='w-100' />
-                                        </div>
-                                        <div className="col-8">
-                                            <h1 className='fs-20 fw-bold'>Spatial Barger</h1>
-                                            <p className="mt-2">it's a testament to our.</p>
-                                        </div>
-                                        <div className="col-2">
-                                            <span className='fw-bold'>$15.99</span>
-                                        </div>
-                                    </div>
-                                </div>
-
-
+                                ))}
                             </div>
                         </div>
                     </div>
-
                 </div>
             </section>
 
+
             <section className="h-auto david-font" style={{ backgroundColor: "#F3F3F4" }}>
                 <div className="container">
-                    <div className="col-12 mt-5 text-center text-md-start">
+                    <div className="col-12 mt-5 text-center text-lg-start">
                         <h1 className='fw-bold'>Services We Provide</h1>
                     </div>
                     <div className="col-12 mb-5">
                         <Slider {...setting2} className='mb-5'>
                             {services.map((service, index) => (
-                                <div key={index} className={`col-12 col-md-4 service-design ${index === currentSlide ? 'active' : 'bg-white'}  mt-5 mb-5 text-center`}>
+                                <div key={index} className={`col-12 col-lg-4 service-design ${index === currentSlide ? 'active' : 'bg-white'}  mt-5 mb-5 text-center`}>
                                     <div className="col-12 text-center">
                                         <h3>{service.title}</h3>
                                     </div>
@@ -585,20 +586,20 @@ export default function Template() {
                             <h1 className="fw-bold text-center">Gallery</h1>
                         </div>
                         <div className="row justify-content-center mb-5">
-                            <div className="col-12 col-md-4 mt-4">
-                                <img src="/src/assets/images/gallery.png" alt="" />
+                            <div className="col-12 col-lg-4 mt-4">
+                                <img src="/src/assets/images/gallery.png" alt="" className='w-100' />
                             </div>
-                            <div className="col-12 col-md-4 mt-4">
-                                <img src="/src/assets/images/gallery1.png" alt="" />
+                            <div className="col-12 col-lg-4 mt-4">
+                                <img src="/src/assets/images/gallery1.png" alt="" className='w-100' />
                             </div>
-                            <div className="col-12 col-md-4 mt-4">
-                                <img src="/src/assets/images/gallery2.png" alt="" />
+                            <div className="col-12 col-lg-4 mt-4">
+                                <img src="/src/assets/images/gallery2.png" alt="" className='w-100' />
                             </div>
-                            <div className="col-12 col-md-4 mt-4">
-                                <img src="/src/assets/images/gallery3.png" alt="" />
+                            <div className="col-12 col-lg-4 mt-4">
+                                <img src="/src/assets/images/gallery3.png" alt="" className='w-100' />
                             </div>
-                            <div className="col-12 col-md-4 mt-4 mb-4">
-                                <img src="/src/assets/images/gallery4.png" alt="" />
+                            <div className="col-12 col-lg-4 mt-4 mb-4">
+                                <img src="/src/assets/images/gallery4.png" alt="" className='w-100' />
                             </div>
                         </div>
                     </div>
@@ -608,28 +609,28 @@ export default function Template() {
             <section className='bg-white'>
                 <div className="container">
                     <div className="row align-items-center">
-                        <div className="col-12 col-md-6 row align-items-center">
+                        <div className="col-12 col-lg-6 row align-items-center">
                             <div>
-                                <div className="col-12 text-center text-md-start">
+                                <div className="col-12 text-center text-lg-start">
                                     <h1 className="fw-bold fs-45">Our Expert Chef</h1>
                                 </div>
-                                <div className="col-12 text-center text-md-start">
+                                <div className="col-12 text-center text-lg-start">
                                     <p className="fs-25">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non neque elit. Sed ut tellus ac neque fermentum tristique. Donec sed facilisis tellus, a vulputate turpis. Duis eget turpis non tellus tincidunt fermentum.</p>
                                 </div>
                             </div>
                             <div className="mt-3 col-12 mb-5">
                                 <div className="row">
-                                    <div className="col-6 col-md-2">
+                                    <div className="col-6 col-lg-2">
                                         <button className="btn btn-dark text-white radius-theme box-shadow w-100">Menu</button>
                                     </div>
-                                    <div className="col-6 col-md-3">
+                                    <div className="col-6 col-lg-3">
                                         <button className="btn btn-dark text-white radius-theme box-shadow theme w-100">Book a table</button>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
-                        <div className="col-12 col-md-6">
+                        <div className="col-12 col-lg-6">
                             <div className="col-12 text-center">
                                 <img src="/src/assets/images/chef.png" alt="" className='chef-div img-fluid w-100' />
 
@@ -640,7 +641,7 @@ export default function Template() {
                     </div>
                 </div>
             </section>
-            <section style={{ backgroundColor: "#F3F3F4" }}>
+            <section className='' style={{ backgroundColor: "#F3F3F4" }}>
                 <div className="container david-font">
                     <div className="col-12 text-center">
                         <h1>Our Happy Customers</h1>
@@ -674,7 +675,7 @@ export default function Template() {
                         </Slider>
                     </div>
                     <div className="col-12">
-                        <div className="col-12 text-center">
+                        <div className="col-12 text-center mb-3">
                             <button className="btn btn-dark text-white radius-theme box-shadow theme mt-5">Write Review</button>
 
                         </div>
@@ -685,93 +686,93 @@ export default function Template() {
             <section className="h-auto david-font" id='contact'>
                 <div className="container">
                     <div className="col-12 newsletter position-relative">
-                        <img src="/src/assets/images/newsletter.png" alt="" className='w-100'/>
+                        <img src="/src/assets/images/newsletter.png" alt="" className='w-100' />
                         <div className="text-center newsletter-content position-absolute">
                             <div className='d-none d-lg-block'>
-                            <h2 className="fs-45 mb-3  fw-bold text-white">
-                                Create Your own Business <br />
-                                Subscribing To our  Newsletter
-                            </h2>
-                            <div className='row bg-white align-items-center input-div p-2'>
-                                <div className="col-md-8 ">
-                                    <input type="text" style={{ border: "0 !important" }} className="form-control form-control-lg" />
-                                </div>
-                                <div className="col-4 position-relative news-button">
-                                    <button className="btn theme btn-lg ">Subscribe</button>
+                                <h2 className="fs-45 mb-3 fw-bold text-white">
+                                    Create Your Own Business <br />
+                                    Subscribing To Our Newsletter
+                                </h2>
+                                <div className='row bg-white align-items-center input-div p-2'>
+                                    <div className="col-lg-8">
+                                        <input type="text" style={{ border: "0 !important" }} className="form-control form-control-lg" />
+                                    </div>
+                                    <div className="col-lg-4">
+                                        <button className="btn theme btn-lg w-100">Subscribe</button>
+                                    </div>
                                 </div>
                             </div>
-                            </div>
-
 
                             <div className='d-block d-lg-none'>
-                            <h2 className="fs-16  fw-bold text-white">
-                                Create Your own Business <br />
-                                Subscribing To our  Newsletter
-                            </h2>
-                            <div className='row'>
-                                <div className="col-md-12 ">
-                                    <input type="text" style={{ border: "0 !important" }} className="form-control form-control-sm" />
+                                <h2 className="fs-16 fw-bold text-white">
+                                    Create Your Own Business <br />
+                                    Subscribing To Our Newsletter
+                                </h2>
+                                <div className='row'>
+                                    <div className="col-12">
+                                        <input type="text" style={{ border: "0 !important" }} className="form-control form-control-sm" />
+                                    </div>
+                                    <div className="col-12">
+                                        <button className="btn theme btn-sm mt-1 w-100">Subscribe</button>
+                                    </div>
                                 </div>
-                                <div className="col-12 position-relative news-button">
-                                    <button className="btn theme btn-sm mt-1">Subscribe</button>
-                                </div>
-                            </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </section>
 
+
             <footer className='h-auto'>
                 <div className="container pjs">
                     <div className="mt-5">
                         <div className="row">
-                            <div className="col-12 col-md-4">
-                                <div className="col-12 text-center text-md-start text mt-5">
+                            <div className="col-12 col-lg-4">
+                                <div className="col-12 text-center text-lg-start text mt-5">
                                     <img src="/src/assets/images/logo.svg" alt="" />
                                     <span className="ms-2 fs-45 text-white">Food House</span>
                                 </div>
-                                <div className="col-12 mt-4  text-center text-md-start" style={{ color: "#A4B3CB" }}>
+                                <div className="col-12 mt-4  text-center text-lg-start" style={{ color: "#A4B3CB" }}>
                                     <p>
                                         Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
                                     </p>
                                 </div>
                             </div>
 
-                            <div className="col-12 col-md-4">
+                            <div className="col-12 col-lg-4">
                                 <div className="col-12 mt-5">
-                                    <div className="col-12 mt-3 mb-3 text-center text-md-start">
+                                    <div className="col-12 mt-3 mb-3 text-center text-lg-start">
                                         <a href="#" className=" fs-14 text-decoration-none text-orange">NAVIGATION</a>
                                     </div>
-                                    <div className="col-12 mt-3 mb-3  text-center text-md-start">
+                                    <div className="col-12 mt-3 mb-3  text-center text-lg-start">
                                         <a href="#" className="fs-14 text-decoration-none" style={{ color: "#A4B3CB" }}>Menu</a>
                                     </div>
-                                    <div className="col-12 mt-3 mb-3  text-center text-md-start">
+                                    <div className="col-12 mt-3 mb-3  text-center text-lg-start">
                                         <a href="#" className="fs-14 text-decoration-none" style={{ color: "#A4B3CB" }}>About Us</a>
                                     </div>
-                                    <div className="col-12 mt-3 mb-3  text-center text-md-start">
+                                    <div className="col-12 mt-3 mb-3  text-center text-lg-start">
                                         <a href="#" className="fs-14 text-decoration-none" style={{ color: "#A4B3CB" }}>Contact Us</a>
                                     </div>
-                                    <div className="col-12 mt-3 mb-3  text-center text-md-start">
+                                    <div className="col-12 mt-3 mb-3  text-center text-lg-start">
                                         <a href="#" className="fs-14 text-decoration-none" style={{ color: "#A4B3CB" }}>Main Dishes</a>
                                     </div>
                                 </div>
                             </div>
 
-                            <div className="col-12 col-md-4">
+                            <div className="col-12 col-lg-4">
                                 <div className="col-12 mt-5">
-                                    <div className="col-12 mt-3 mb-3 text-center text-md-start">
+                                    <div className="col-12 mt-3 mb-3 text-center text-lg-start">
                                         <a href="#" className=" fs-14 text-decoration-none text-orange">Follow Us</a>
                                     </div>
 
-                                    <div className="mt-5 col-12 row gap-3 jcc-md text-center text-md-start">
-                                        <div className="contact-banner text-orange text-center text-md-start">
+                                    <div className="mt-5 col-12 row gap-3 jcc-md text-center text-lg-start">
+                                        <div className="contact-banner text-orange text-center text-lg-start">
                                             <i className="bi bi-facebook text-orange"></i>
                                         </div>
-                                        <div className="contact-banner text-center text-md-start">
+                                        <div className="contact-banner text-center text-lg-start">
                                             <i className="bi bi-instagram text-orange"></i>
                                         </div>
-                                        <div className="contact-banner text-center text-md-start">
+                                        <div className="contact-banner text-center text-lg-start">
                                             <i className="bi bi-twitter text-orange"></i>
                                         </div>
                                         {/* <hr style={{width:"fit-content",opacity: 0.15,}}></hr> */}
@@ -782,23 +783,23 @@ export default function Template() {
 
                             <div className="col-12">
                                 <div className="row">
-                                    <div className="col-md-4">
+                                    <div className="col-lg-4">
                                         <div className="col-12">
-                                            <div className="col-12 mt-3 mb-3 text-center text-md-start">
+                                            <div className="col-12 mt-3 mb-3 text-center text-lg-start">
                                                 <a href="#" className=" fs-14 text-decoration-none text-orange">OPENING HOURS</a>
                                             </div>
-                                            <div className="mt-3 text-center text-md-start" style={{ color: "#A4B3CB" }}>
+                                            <div className="mt-3 text-center text-lg-start" style={{ color: "#A4B3CB" }}>
                                                 <span>Monday - Friday</span>
                                             </div>
-                                            <div className="mt-3 text-center text-md-start" style={{ color: "#A4B3CB" }}>
+                                            <div className="mt-3 text-center text-lg-start" style={{ color: "#A4B3CB" }}>
                                                 <span>8:00 am to 9:00 pm</span>
                                             </div>
                                         </div>
                                     </div>
 
 
-                                    <div className="col-md-4">
-                                        <div className="col-12 mt-5 text-center text-md-start">
+                                    <div className="col-lg-4">
+                                        <div className="col-12 mt-5 text-center text-lg-start">
                                             <div className="mt-3" style={{ color: "#A4B3CB" }}>
                                                 <span>Sunday</span>
                                             </div>
@@ -813,14 +814,14 @@ export default function Template() {
 
                             <div className="col-12">
                                 <div className="row">
-                                    <div className="col-12 col-md-8 mt-5"  style={{ color: "#A4B3CB" }}>
+                                    <div className="col-12 col-lg-8 mt-5 text-center text-lg-start" style={{ color: "#A4B3CB" }}>
                                         <span>© 2024 Business Bazaar. All Right Reserved</span>
                                     </div>
-                                    
-                                    <div className="col-12 col-md-6  text-center text-md-start mb-5 mt-5"  style={{ color: "#A4B3CB" }}>
+
+                                    <div className="col-12 col-lg-6  text-center text-lg-start mb-5 mt-5" style={{ color: "#A4B3CB" }}>
                                         <div className="row">
-                                            <div className="col-12 col-md-6">Terms of Service</div>
-                                            <div className="col-12 col-md-6">Privacy Policy</div>
+                                            <div className="col-12 col-lg-6">Terms of Service</div>
+                                            <div className="col-12 col-lg-6">Privacy Policy</div>
                                         </div>
                                     </div>
                                 </div>

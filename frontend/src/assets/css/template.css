@@ -29,16 +29,6 @@
 }.banner-image-2{
     position: absolute;
     top: 60%;
-}.address-section{
-    border-radius: 16px !important;
-    background-color: #EA6D27;
-    padding: 30px;
-}.address-logo i{
-    padding: 10px;
-    background-color: white;
-    color: #ea6d27;
-    border-radius: 50%;
-    height: auto;
 }.about-image img{
     width: 80%;
 }.dish-div {
@@ -103,10 +93,66 @@
         width: 75% !important;
     }.fs-sm-16{
         font-size: 16px !important;
-    }    .newsletter-content {
-        bottom: 35%;
-        left: 7%;
-        /* right: 50%; */
-        top: 6%;
+    } 
+    .newsletter-content {
+        bottom: 0%;
+        left: 50%;
+        right: -30%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+    }.newsletter img{
+        height: 100%;
+        object-fit: cover;
+        border-radius: 30px;
+    }.newsletter{
+        height: 200px;
+    }
+}
+@media screen and (min-width: 768px) and (max-width: 1024px) {
+    .jcc-md{
+        justify-content: center;
+    }
+}
+
+.address-section {
+    border-radius: 16px !important;
+    background-color: #EA6D27;
+    padding: 30px;
+    color: white !important;
+}
+
+.address-logo i {
+    padding: 10px;
+    background-color: white;
+    color: #ea6d27;
+    border-radius: 50%;
+    height: auto;
+    font-size: 1.5rem; /* Adjusted for better visibility */
+}
+
+.fs-13 {
+    font-size: 0.9rem; /* Font size for labels */
+}
+
+.fs-16 {
+    font-size: 1rem; /* Font size for descriptions */
+}
+
+/* Responsive Adjustments */
+@media (max-width: 576px) {
+    .address-section {
+        padding: 20px; /* Reduce padding on smaller screens */
+    }
+
+    .fs-13 {
+        font-size: 0.8rem; /* Slightly smaller font size */
+    }
+
+    .fs-16 {
+        font-size: 0.9rem; /* Slightly smaller font size */
+    }
+
+    .address-logo i {
+        font-size: 1.25rem; /* Smaller icon for mobile */
     }
 }

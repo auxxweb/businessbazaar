@@ -9,7 +9,7 @@ export default function Header() {
     <Navbar expand="lg" className="bg-white">
       <Container>
         {/* Align Brand to the start (left side) */}
-        <Navbar.Brand href="#home" className='fw-bold w-50' style={{ fontSize: '36px' }}>
+        <Navbar.Brand href="/" className='fw-bold w-50' style={{ fontSize: '36px' }}>
           Business Bazar
         </Navbar.Brand>
 
@@ -17,7 +17,7 @@ export default function Header() {
 
         <Navbar.Collapse id="basic-navbar-nav" className='text-center'>
           <Nav className="ms-auto w-100 justify-content-evenly">
-            <NavLink href="#home" className='text-black  text-decoration-none' style={{color:'black'}}>
+            <NavLink href="/" className='text-black  text-decoration-none' style={{color:'black'}}>
               Home
             </NavLink>
             <NavLink href="#notification" className='text-black  text-decoration-none' style={{color:'black'}}>

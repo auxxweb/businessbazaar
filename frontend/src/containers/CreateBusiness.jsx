@@ -156,43 +156,19 @@ export default function CreateBusiness() {
                         <div className="d-none d-md-block left-portion   p-0 col-5">
                             <img src="/src/assets/images/contact-details.jpg" alt="" className='w-100 h-100' />
                         </div>
-                        <div className="col-12 col-md-7 row align-items-center p-5 p-sm-0 right-portion">
+                        <div className="col-12 col-md-7 row align-items-center right-portion p-5">
                             <div>
                                 <div className="col-12">
-                                    <h1 className='fw-bold'>Add <br /> Contact Details</h1>
+                                    <h1 className="fw-bold">Add <br /> Contact Details</h1>
                                 </div>
                                 <div className="col-12 p-5 p-sm-0">
                                     <input type="text" placeholder="Name" className="form-control form-control-lg" />
+
+                                    {/* Mobile Number Section */}
                                     <div id="mobileNumberDiv">
                                         {mobileNumbers.map((number) => (
                                             <div className="row w-100 mt-3" key={number.id}>
-                                                <div className="col-2">
-                                                    <PhoneInput
-                                                        country={'us'}
-                                                        enableSearch={true}
-                                                        onChange={phone => console.log(phone)}
-                                                        containerStyle={{ width: '100%', height: '100%' }}
-                                                    />
-                                                </div>
-                                                <div className="col-8">
-                                                    <input type="text" name='phone' className="form-control form-control-lg w-100" placeholder="Phone Number" />
-                                                </div>
-                                                    {/* Render Remove button only if it's not the first input */}
-                                                    {number.id > 1 && (
-                                                <div className="col-2">
-                                                        <button className="btn btn-danger btn-sm w-100" onClick={() => removeMobileNumber(number.id)}>Remove</button>
-                                                    
-                                                </div>
-                                                    )}
-                                            </div>
-                                        ))}
-                                    </div>
-                                    <a href="#" onClick={addMobileNumber} className='text-decoration-none form-text'>+ add another Mobile number</a>
-
-                                    <div id="whatsappNumberDiv">
-                                        {whatsappNumbers.map((number) => (
-                                            <div className="row w-100 mt-3" key={number.id}>
-                                                <div className="col-2">
+                                                <div className="col-12 col-sm-3 col-md-2">
                                                     <PhoneInput
                                                         country={'us'}
                                                         enableSearch={true}
@@ -200,41 +176,76 @@ export default function CreateBusiness() {
                                                         containerStyle={{ width: '100%' }}
                                                     />
                                                 </div>
-                                                <div className="col-8">
-                                                    <input type="text" name='whatsapp' className="form-control form-control-lg w-100" placeholder="WhatsApp Number" />
+                                                <div className="col-12 col-sm-7 col-md-8 mt-2 mt-sm-0">
+                                                    <input type="text" name="phone" className="form-control form-control-lg w-100" placeholder="Phone Number" />
                                                 </div>
-                                                <div className="col-2 text-end">
+                                                {/* Render Remove button only if it's not the first input */}
+                                                {number.id > 1 && (
+                                                    <div className="col-12 col-sm-2 mt-2 mt-sm-0">
+                                                        <button className="btn btn-danger btn-sm w-100" onClick={() => removeMobileNumber(number.id)}>
+                                                            <i className="bi bi-trash"></i>
+                                                        </button>
+                                                    </div>
+                                                )}
+                                            </div>
+                                        ))}
+                                    </div>
+                                    <a href="#" onClick={addMobileNumber} className="text-decoration-none form-text">+ add another Mobile number</a>
+
+                                    {/* WhatsApp Number Section */}
+                                    <div id="whatsappNumberDiv">
+                                        {whatsappNumbers.map((number) => (
+                                            <div className="row w-100 mt-3" key={number.id}>
+                                                <div className="col-12 col-sm-3 col-md-2">
+                                                    <PhoneInput
+                                                        country={'us'}
+                                                        enableSearch={true}
+                                                        onChange={phone => console.log(phone)}
+                                                        containerStyle={{ width: '100%' }}
+                                                    />
+                                                </div>
+                                                <div className="col-12 col-sm-7 col-md-8 mt-2 mt-sm-0">
+                                                    <input type="text" name="whatsapp" className="form-control form-control-lg w-100" placeholder="WhatsApp Number" />
+                                                </div>
+                                                <div className="col-12 col-sm-2 mt-2 mt-sm-0">
                                                     {/* Render Remove button only if it's not the first input */}
                                                     {number.id > 1 && (
-                                                        <button className="btn btn-danger btn-sm mt-1 w-100" onClick={() => removeWhatsappNumber(number.id)}>Remove</button>
+                                                        <button className="btn btn-danger btn-sm w-100" onClick={() => removeWhatsappNumber(number.id)}>
+                                                            <i className="bi bi-trash"></i>
+                                                        </button>
                                                     )}
                                                 </div>
                                             </div>
                                         ))}
                                     </div>
-                                    <a href="#" onClick={addWhatsappNumber} className='text-decoration-none form-text'>+ add another WhatsApp number</a>
+                                    <a href="#" onClick={addWhatsappNumber} className="text-decoration-none form-text">+ add another WhatsApp number</a>
 
+                                    {/* Email Section */}
                                     {emails.map((email) => (
                                         <div className="row w-100 mt-3" key={email.id}>
-                                            <div className="col-10">
+                                            <div className="col-12 col-sm-10">
                                                 <input type="text" placeholder="Email" className="form-control form-control-lg" />
                                             </div>
-                                            <div className="col-2 text-end">
+                                            <div className="col-12 col-sm-2 mt-2 mt-sm-0">
                                                 {/* Render Remove button only if it's not the first input */}
                                                 {email.id > 1 && (
-                                                    <button className="btn btn-danger btn-sm mt-1 w-100" onClick={() => removeEmail(email.id)}>Remove</button>
+                                                    <button className="btn btn-danger btn-sm w-100" onClick={() => removeEmail(email.id)}>Remove</button>
                                                 )}
                                             </div>
                                         </div>
                                     ))}
-                                    <a href="#" onClick={addEmail} className='text-decoration-none form-text'>+ add another Email</a>
+                                    <a href="#" onClick={addEmail} className="text-decoration-none form-text">+ add another Email</a>
 
+                                    {/* Website Section */}
                                     <input type="url" placeholder="Website" className="form-control form-control-lg mt-3" />
+
+                                    {/* Save Button */}
                                     <div className="col-12 mt-3">
-                                        <button className="btn  btn-theme2 w-100" onClick={handleNextStep}>Save & Next</button>
+                                        <button className="btn btn-theme2 w-100" onClick={handleNextStep}>Save & Next</button>
                                     </div>
                                 </div>
                             </div>
+
                         </div>
                     </div>
                 </div>
@@ -244,47 +255,49 @@ export default function CreateBusiness() {
     function CatgoryDetails() {
         return (
             <>
-                <div className='h-100vh'>
+                <div className="h-100vh">
                     <div className="row w-100 h-100 justify-content-center">
-                        <div className="d-none d-md-block left-portion   p-0 col-5 h-100">
-                            <img src="/src/assets/images/add_category.jpg" alt="" className='w-100 h-100' />
-                        </div>
-                        <div className="col-12 col-md-7 row align-items-end h-100 p-5 right-portion">
-                            <div>
-                                <div>
-                                    <div className="col-12">
-                                        <h1 className='fw-bold'>Add <br /> Business Category</h1>
-                                    </div>
-                                </div>
-                                <div className="input-group mt-4">
-                                    <span className="input-group-text bg-white">
-                                        <i className="bi bi-search"></i>
-                                    </span>
-                                    <div className="col-11 ">
-                                        <Autocomplete
-                                            disablePortal
-                                            options={countries}
-                                            sx={{ width: '100%' }}
-                                            className='bl-none'
-                                            renderInput={(params) => <TextField {...params} label="Categories" />}
-                                        />
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="col-12 p-5 mt-5">
-
-                            </div>
-
-                            <div className="col-12 text-center mt-5 p-5">
-                                <button className="btn btn-theme2 w-100 text-white p-2 " onClick={handleNextStep}>Save & Next</button>
-                            </div>
+                        {/* Left Image Section (hidden on small screens, visible on medium and larger screens) */}
+                        <div className="d-none d-md-block left-portion col-md-5 h-100 p-0">
+                            <img src="/src/assets/images/add_category.jpg" alt="" className="w-100 h-100 object-fit-cover" />
                         </div>
 
+                        {/* Right Form Section */}
+                        <div className="col-12 col-md-7 d-flex flex-column justify-content-between align-items-center right-portion h-100 p-5">
+                            <div className="col-12">
+                                <h1 className="fw-bold text-center text-md-start">Add <br /> Business Category</h1>
+                            </div>
+
+                            {/* Input Group Section */}
+                            <div className="input-group mt-4 w-100 align-items-center">
+    {/* Search Icon */}
+    <span className="input-group-text bg-white p-3" style={{ flexBasis: '50px' }}>
+        <i className="bi bi-search"></i>
+    </span>
+
+    {/* Autocomplete Input */}
+    <div style={{ flexGrow: 1 }}>
+        <Autocomplete
+            disablePortal
+            options={countries}
+            sx={{ width: '100%' }}
+            renderInput={(params) => <TextField {...params} label="Categories" />}
+        />
+    </div>
+</div>
 
 
+                            {/* Empty div for potential additional content */}
+                            <div className="col-12 mt-5"></div>
+
+                            {/* Save & Next Button */}
+                            <div className="col-12 text-center mt-5">
+                                <button className="btn btn-theme2 w-100 text-white p-2" onClick={handleNextStep}>Save & Next</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
+
             </>
         );
     }
@@ -311,72 +324,80 @@ export default function CreateBusiness() {
 
         return (
             <>
-                <div className='h-100vh'>
-                    <div className="row w-100 h-100 justify-content-center">
-                        <div className="d-none d-md-block left-portion   p-0 col-5 h-100">
-                            <img src="/src/assets/images/service_offering.jpg" alt="" className='w-100 h-100' />
+               <div className="h-100vh">
+    <div className="row w-100 h-100 justify-content-center">
+        {/* Left portion (image) */}
+        <div className="d-none d-md-block left-portion p-0 col-md-5 h-100">
+            <img src="/src/assets/images/service_offering.jpg" alt="" className="w-100 h-100" />
+        </div>
+
+        {/* Right portion (form) */}
+        <div className="col-12 col-md-7 row align-items-end justify-content-center h-100 p-3 p-md-5 right-portion">
+            <div className="row justify-content-center w-100">
+                <div className="col-12 text-center">
+                    <h1 className="fw-bold">
+                        Add <br /> Service and Offering
+                    </h1>
+                </div>
+
+                {/* Input field for adding service */}
+                <div className="col-12 col-md-10 mt-4 mt-md-5">
+                    <div className="input-group">
+                        <div className="col-1 brl-none br-none d-flex align-items-center justify-content-center">
+                            <span className="input-group-text bg-white br-0" style={{ padding: '11px' }}>
+                                <i className="bi bi-bag-plus"></i>
+                            </span>
                         </div>
-                        <div className="col-12 col-md-7 row align-items-end justify-content-center h-100 p-5 right-portion">
-                            <div className='row justify-content-center'>
-                                <div>
-                                    <div className="col-12">
-                                        <h1 className='fw-bold'>Add <br /> Service and Offering</h1>
-                                    </div>
-                                </div>
-                                <div className="col-12 col-md-10 mt-5">
-                                    <div className="input-group  h-100">
-                                        <div className="col-1 brl-none br-none">
-                                            <span className="input-group-text bg-white br-0" style={{ padding: '11px ' }}>
-                                                <i className="bi bi-bag-plus"></i>
-                                            </span>
-                                        </div>
-                                        <div className="col-9 bl-none br-0">
-                                            <input
-                                                type="text"
-                                                className="form-control form-control-lg w-100 bl-none br-0"
-                                                onChange={(e) => setInputService(e.target.value)}
-                                                value={inputService}
-                                                placeholder='Add Service and Offering'
-                                            />
-                                        </div>
-                                        <div className="col-1 br-0">
-                                            <button
-                                                className="btn w-100 btn-success brl-none br-0"
-                                                style={{ padding: '11px' }}
-                                                onClick={addService}
-                                                disabled={inputService.trim() === ''}
-                                            >
-                                                Add
-                                            </button>
-                                        </div>
-                                    </div>
+                        <div className="col-8 col-md-9 bl-none br-0">
+                            <input
+                                type="text"
+                                className="form-control form-control-lg w-100 bl-none br-0"
+                                onChange={(e) => setInputService(e.target.value)}
+                                value={inputService}
+                                placeholder="Add Service and Offering"
+                            />
+                        </div>
+                        <div className="col-3 col-md-2">
+                            <button
+                                className="btn w-100 btn-success brl-none br-0"
+                                style={{ padding: '11px' }}
+                                onClick={addService}
+                                disabled={inputService.trim() === ''}
+                            >
+                                Add
+                            </button>
+                        </div>
+                    </div>
 
-                                    <div className="col-12 mt-4">
-                                        <div className="row gap-2 w-100">
-                                            {services.map((service, index) => (
-                                                <div key={index} className="mt-2 text-center services-list">
-                                                    {service}
-                                                    <span
-                                                        className='ms-2 cursor-pointer'
-                                                        onClick={() => deleteService(index)}
-                                                    >
-                                                        <i className="bi bi-x text-white"></i> {/* Delete icon */}
-                                                    </span>
-                                                </div>
-                                            ))}
-                                        </div>
-                                    </div>
+                    {/* Services list */}
+                    <div className="col-12 mt-4">
+                        <div className="row gap-2 justify-content-center w-100">
+                            {services.map((service, index) => (
+                                <div key={index} className="mt-2 text-center services-list p-2">
+                                    {service}
+                                    <span
+                                        className="ms-2 cursor-pointer"
+                                        onClick={() => deleteService(index)}
+                                    >
+                                        <i className="bi bi-x text-white"></i> {/* Delete icon */}
+                                    </span>
                                 </div>
-                            </div>
-
-                            <div className="col-12 text-center mt-5 p-5">
-                                <button className="btn btn-theme2 w-100 text-white p-2" onClick={handleNextStep}>
-                                    Save & Next
-                                </button>
-                            </div>
+                            ))}
                         </div>
                     </div>
                 </div>
+            </div>
+
+            {/* Save & Next button */}
+            <div className="col-12 text-center mt-5 p-3 p-md-5">
+                <button className="btn btn-theme2 w-100 text-white p-2" onClick={handleNextStep}>
+                    Save & Next
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
             </>
         );
     };
@@ -399,57 +420,67 @@ export default function CreateBusiness() {
                 setDays([]);
             }
         };
+    
         return (
             <>
                 <div className='h-100vh'>
                     <div className="row w-100 h-100 justify-content-center">
-                        <div className="d-none d-md-block left-portion   p-0 col-5 h-100">
+                        {/* Left Image Section */}
+                        <div className="d-none d-md-block left-portion p-0 col-md-5 h-100">
                             <img src="/src/assets/images/timing.jpg" alt="" className='w-100 h-100' />
                         </div>
-                        <div className="col-12 col-md-7 row align-items-end h-100 p-5 right-portion">
+    
+                        {/* Right Form Section */}
+                        <div className="col-12 col-md-7 row align-items-end h-100 p-3 p-md-5 right-portion">
                             <div className='row w-100 justify-content-center'>
-                                <div className='col-12'>
-                                    <div className="col-12">
-                                        <h1 className='fw-bold'>Add <br /> Business Timing</h1>
-                                    </div>
+                                <div className='col-12 text-center'>
+                                    <h1 className='fw-bold'>Add <br /> Business Timing</h1>
                                 </div>
-                                <div className="col-12 col-md-10 p-5">
-                                    <h4>Select Working Days</h4>
-                                    <div className="row gap-3 jsc-md w-100 ms-2 mt-3">
+    
+                                {/* Working Days Selection */}
+                                <div className="col-12 col-md-10 p-4 p-md-5">
+                                    <h4 className='text-center text-md-start'>Select Working Days</h4>
+                                    <div className="row gap-2 gap-md-3 justify-content-center mt-3">
                                         {allDays.map((day) => (
                                             <div
                                                 key={day}
-                                                className={`day-div ${days.includes(day) ? 'active' : ''}`}
+                                                className={`day-div ${days.includes(day) ? 'active' : ''} p-2 text-center cursor-pointer`}
+                                                style={{ width: '60px', borderRadius: '8px', background: days.includes(day) ? '#5cb85c' : '#f0f0f0' }}
                                                 onClick={() => toggleDay(day)}
                                             >
                                                 <span>{day}</span>
                                             </div>
                                         ))}
                                     </div>
-
-                                    <div className="mt-5 ms-2">
+    
+                                    {/* Select All Checkbox */}
+                                    <div className="mt-5 text-center">
                                         <input
                                             type="checkbox"
-                                            id="flexCheckDefault"
+                                            id="selectAllDays"
                                             className='form-check-input'
                                             onChange={handleSelectAll}
-                                            checked={days.length === allDays.length} // Check if all days are selected
+                                            checked={days.length === allDays.length}
                                         />
-                                        <label className="form-check-label ms-2 text-theme2 fs-14" htmlFor="flexCheckDefault">
+                                        <label className="form-check-label ms-2 text-theme2 fs-14" htmlFor="selectAllDays">
                                             Select All Days
                                         </label>
                                     </div>
-
-                                    <div className="mt-5 col-12 col-md-6 ms-2">
-                                        <input type="time" className='form-control form-control-lg' />
-                                    </div>
-                                    <div className="mt-3 col-12 col-md-6 ms-2">
-                                        <input type="time" className='form-control form-control-lg' />
+    
+                                    {/* Time Input Fields */}
+                                    <div className="row mt-5 g-3 justify-content-center">
+                                        <div className="col-12 col-md-5">
+                                            <input type="time" className='form-control form-control-lg' />
+                                        </div>
+                                        <div className="col-12 col-md-5">
+                                            <input type="time" className='form-control form-control-lg' />
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-
-                            <div className="col-12 text-center p-5">
+    
+                            {/* Save & Next Button */}
+                            <div className="col-12 text-center p-3 p-md-5">
                                 <button className="btn btn-theme2 w-100 text-white p-2" onClick={handleNextStep}>
                                     Save & Next
                                 </button>
@@ -460,6 +491,7 @@ export default function CreateBusiness() {
             </>
         );
     }
+    
 
     const [description, setDescription] = useState('')
 
@@ -467,31 +499,40 @@ export default function CreateBusiness() {
 
         return (
             <>
-                <div className='h-100vh'>
-                    <div className="row w-100 h-100 justify-content-center">
-                        <div className="d-none d-md-block left-portion   p-0 col-5 h-100">
-                            <img src="/src/assets/images/business-description.jpg" alt="" className='w-100 h-100' />
-                        </div>
-                        <div className="col-12 col-md-7 row align-items-end h-100 p-5 right-portion">
-                            <div className='row w-100 justify-content-center'>
-                                <div className='col-12'>
-                                    <div className="col-12">
-                                        <h1 className='fw-bold'>Add <br /> Business Description</h1>
-                                    </div>
-                                </div>
-                                <div className="col-12 col-md-10 p-5">
-                                    <Editor value="Business Description" onChange={(e) => { setDescription(e.target.value) }} style={{ height: '320px' }} />
-                                </div>
-                            </div>
+               <div className='h-100vh'>
+    <div className="row w-100 h-100 justify-content-center">
+        {/* Left Image Section */}
+        <div className="d-none d-md-block left-portion p-0 col-md-5 h-100">
+            <img src="/src/assets/images/business-description.jpg" alt="" className='w-100 h-100' />
+        </div>
 
-                            <div className="col-12 text-center p-5">
-                                <button className="btn btn-theme2 w-100 text-white p-2" onClick={handleNextStep}>
-                                    Save & Next
-                                </button>
-                            </div>
-                        </div>
-                    </div>
+        {/* Right Form Section */}
+        <div className="col-12 col-md-7 row align-items-end h-100 p-3 p-md-5 right-portion">
+            <div className='row w-100 justify-content-center'>
+                <div className='col-12 text-center'>
+                    <h1 className='fw-bold'>Add <br /> Business Description</h1>
                 </div>
+
+                {/* Text Editor Section */}
+                <div className="col-12 col-md-10 p-3 p-md-5">
+                    <Editor 
+                        value="Business Description"
+                        onChange={(e) => { setDescription(e.target.value) }}
+                        style={{ height: '320px', width: '100%' }}
+                    />
+                </div>
+            </div>
+
+            {/* Save & Next Button */}
+            <div className="col-12 text-center p-3 p-md-5">
+                <button className="btn btn-theme2 w-100 text-white p-2" onClick={handleNextStep}>
+                    Save & Next
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
             </>
         );
     }
@@ -671,250 +712,216 @@ export default function CreateBusiness() {
         return (
             <>
                 <div className='h-100vh'>
-                    <div className="row w-100 h-100 justify-content-center">
-                        <div className="d-none d-md-block left-portion p-0 col-5 h-100">
-                            <img src="/src/assets/images/landing-page.jpg" alt="" className='w-100 h-100' />
-                        </div>
-                        <div className="col-12 col-md-7 row align-items-end h-100 p-5 right-portion">
-                            <div className='row w-100 justify-content-center'>
-                                <div className='col-12'>
-                                    <div className="col-12">
-                                        <h1 className='fw-bold'>Add Details <br /> About Landing Page</h1>
-                                    </div>
-                                </div>
-                                <div className="col-12 col-md-10 p-5">
-                                    <h5 className='fs-18 mb-4'>Color Theme</h5>
-                                    <div className="col-12 mb-3">
-                                        <input
-                                            type="text"
-                                            name="color"
-                                            className='form-control form-control-lg'
-                                            placeholder='Color Theme'
-                                            value={landingData.color}
-                                            onChange={handleChange}
-                                        />
-                                    </div>
+    <div className="row w-100 h-100 justify-content-center">
+        {/* Left Image Section */}
+        <div className="d-none d-md-block left-portion p-0 col-md-5 h-100">
+            <img src="/src/assets/images/landing-page.jpg" alt="" className='w-100 h-100' />
+        </div>
 
-                                    <h5 className='fs-18 mb-4'>Add Frontpage Details</h5>
-
-                                    <div className="col-12 mb-3">
-                                        <input
-                                            type="text"
-                                            name="title"
-                                            className='form-control form-control-lg'
-                                            placeholder='Title'
-                                            value={landingData.title}
-                                            onChange={handleChange}
-                                        />
-                                    </div>
-
-                                    <div className="col-12 mb-3">
-                                        <textarea
-                                            name="description"
-                                            className='form-control form-control-lg'
-                                            placeholder='Description'
-                                            value={landingData.description}
-                                            onChange={handleChange}
-                                        />
-                                    </div>
-                                    <input type="file" hidden id='LandingImageInput' onChange={(e) => handleFileChange("image", null, e)} />
-                                    <div onClick={LandImageUpload} className="p-2 mt-2 mb-3 add-logo-div" id='LandingImageDiv'>
-                                        <div className="text-center" id="addLandingImageDiv">
-                                            <img src="/src/assets/images/add_image.png" width="50" alt="Add Logo" />
-                                            <div className="col-12">
-                                                <span>Add Image</span>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    {/* Add Special Dish Details */}
-                                    <h5 className='fs-18 mb-4'>Add Special Dish Details</h5>
-                                    {landingData.product.map((product, index) => (
-                                        <div key={index} className='row align-items-center'>
-                                            <div className="col-12 mb-3">
-                                                <input
-                                                    type="text"
-                                                    name="title"
-                                                    className='form-control form-control-lg'
-                                                    placeholder='Name'
-                                                    value={product.title}
-                                                    onChange={(e) => handleProductChange(index, e)}
-                                                />
-                                            </div>
-
-                                            <div className="col-12 mb-3">
-                                                <textarea
-                                                    name="description"
-                                                    className='form-control form-control-lg'
-                                                    placeholder='Description'
-                                                    value={product.description}
-                                                    onChange={(e) => handleProductChange(index, e)}
-                                                />
-                                            </div>
-
-                                            <div className="col-12 col-md-3">
-                                                <input type="file" hidden className='productImageInput' onChange={(e) => handleFileChange("productImage", index, e)} />
-                                                <div onClick={() => UploadImages(index, 'productImage')} className="p-2 mt-2 mb-3 add-logo-div">
-                                                    <div className="text-center">
-                                                        <img src={product.image || "/src/assets/images/add_image.png"} width="50" alt="Add Logo" />
-                                                        <div className="col-12">
-                                                            <span>Add Image</span>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div className="col-12 col-md-6">
-                                                <input
-                                                    type="number"
-                                                    name="price"
-                                                    className='form-control form-control-lg w-100'
-                                                    placeholder='Price'
-                                                    value={product.price}
-                                                    onChange={(e) => handleProductChange(index, e)}
-                                                />
-                                            </div>
-                                        </div>
-                                    ))}
-                                    <div className="col-12">
-                                        <a href='#' onClick={addMoreProduct} className='text-decoration-none'>+ Add More Product</a>
-                                    </div>
-
-                                    {/* Add Menu Details */}
-                                    <h5 className='fs-18 mb-4 mt-3'>Add Menu Details</h5>
-                                    {landingData.menu.map((menuItem, index) => (
-                                        <div key={index} className='row align-items-center'>
-                                            <div className="col-12 mb-3">
-                                                <input
-                                                    type="text"
-                                                    name="category"
-                                                    className='form-control form-control-lg'
-                                                    placeholder='Menu Category'
-                                                    value={menuItem.category}
-                                                    onChange={(e) => handleMenuChange(index, e)}
-                                                />
-                                            </div>
-
-                                            <div className="col-12 mb-3">
-                                                <input
-                                                    type="text"
-                                                    name="product_name"
-                                                    className='form-control form-control-lg'
-                                                    placeholder='Product Name'
-                                                    value={menuItem.product_name}
-                                                    onChange={(e) => handleMenuChange(index, e)}
-                                                />
-                                            </div>
-
-
-                                            <div className="col-12 col-md-3">
-                                                <input type="file" hidden className='menuImageInput' onChange={(e) => handleFileChange("menuImage", index, e)} />
-                                                <div onClick={() => UploadImages(index, 'menuImage')} className="p-2 mt-2 mb-3 add-logo-div">
-                                                    <div className="text-center">
-                                                        <img src={menuItem.image || "/src/assets/images/add_image.png"} width="50" alt="Add Logo" />
-                                                        <div className="col-12">
-                                                            <span>Add Image</span>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-
-                                            <div className="col-12 col-md-6 mb-3">
-                                                <input
-                                                    type="number"
-                                                    name="price"
-                                                    className='form-control form-control-lg'
-                                                    placeholder='Price'
-                                                    value={menuItem.price}
-                                                    onChange={(e) => handleMenuChange(index, e)}
-                                                />
-                                            </div>
-
-                                        </div>
-                                    ))}
-                                    <div className="col-12">
-                                        <a href='#' onClick={addMoreMenu} className='text-decoration-none'>+ Add More Menu</a>
-                                    </div>
-
-                                    {/* Add Services Details */}
-                                    <h5 className='fs-18 mb-4 mt-3'>Add Services Details</h5>
-                                    {landingData.services.map((service, index) => (
-                                        <div key={index} className='row align-items-center'>
-                                            <div className="col-12 mb-3">
-                                                <input
-                                                    type="text"
-                                                    name="title"
-                                                    className='form-control form-control-lg'
-                                                    placeholder='Service Title'
-                                                    value={service.title}
-                                                    onChange={(e) => handleServiceChange(index, e)}
-                                                />
-                                            </div>
-
-                                            <div className="col-12 mb-3">
-                                                <textarea
-                                                    name="description"
-                                                    className='form-control form-control-lg'
-                                                    placeholder='Service Description'
-                                                    value={service.description}
-                                                    onChange={(e) => handleServiceChange(index, e)}
-                                                />
-                                            </div>
-                                        </div>
-                                    ))}
-
-                                    {/* Add Other Details */}
-                                    <h5 className='fs-18 mb-4 mt-3'>Add Other Details</h5>
-                                    {landingData.otherDetails.map((detail, index) => (
-                                        <div key={index} className='row align-items-center'>
-                                            <div className="col-12 mb-3">
-                                                <input
-                                                    type="text"
-                                                    name="title"
-                                                    className='form-control form-control-lg'
-                                                    placeholder='Detail Title'
-                                                    value={detail.title}
-                                                    onChange={(e) => handleOtherDetailsChange(index, e)}
-                                                />
-                                            </div>
-
-                                            <div className="col-12 mb-3">
-                                                <textarea
-                                                    name="description"
-                                                    className='form-control form-control-lg'
-                                                    placeholder='Detail Description'
-                                                    value={detail.description}
-                                                    onChange={(e) => handleOtherDetailsChange(index, e)}
-                                                />
-                                            </div>
-
-                                            <div className="col-12 col-md-3">
-                                                <input type="file" hidden className='otherDetailsImageInput' onChange={(e) => handleFileChange("otherDetailsImage", index, e)} />
-                                                <div onClick={() => UploadImages(index, 'otherDetailsImage')} className="p-2 mt-2 mb-3 add-logo-div">
-                                                    <div className="text-center">
-                                                        <img src={detail.image || "/src/assets/images/add_image.png"} width="50" alt="Add Logo" />
-                                                        <div className="col-12">
-                                                            <span>Add Image</span>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    ))}
-                                </div>
-                            </div>
-                            <div className="col-12 text-center p-5">
-                                <button className="btn btn-theme2 w-100 text-white p-2" onClick={handleNextStep}>
-                                    Save & Next
-                                </button>
-                            </div>
-                        </div>
-
-
-
-
-                    </div>
+        {/* Right Form Section */}
+        <div className="col-12 col-md-7 row align-items-end h-100 p-3 p-md-5 right-portion">
+            <div className='row w-100 justify-content-center'>
+                <div className='col-12 text-center'>
+                    <h1 className='fw-bold'>Add Details <br /> About Landing Page</h1>
                 </div>
+
+                {/* Color Theme Section */}
+                <div className="col-12 col-md-10 p-3 p-md-5">
+                    <h5 className='fs-18 mb-4'>Color Theme</h5>
+                    <input
+                        type="text"
+                        name="color"
+                        className='form-control form-control-lg'
+                        placeholder='Color Theme'
+                        value={landingData.color}
+                        onChange={handleChange}
+                    />
+
+                    {/* Frontpage Details */}
+                    <h5 className='fs-18 mb-4'>Add Frontpage Details</h5>
+                    <input
+                        type="text"
+                        name="title"
+                        className='form-control form-control-lg mb-3'
+                        placeholder='Title'
+                        value={landingData.title}
+                        onChange={handleChange}
+                    />
+                    <textarea
+                        name="description"
+                        className='form-control form-control-lg mb-3'
+                        placeholder='Description'
+                        value={landingData.description}
+                        onChange={handleChange}
+                    />
+
+                    {/* Image Upload */}
+                    <input type="file" hidden id='LandingImageInput' onChange={(e) => handleFileChange("image", null, e)} />
+                    <div onClick={LandImageUpload} className="p-2 mt-2 mb-3 add-logo-div" id='LandingImageDiv'>
+                        <div className="text-center" id="addLandingImageDiv">
+                            <img src="/src/assets/images/add_image.png" width="50" alt="Add Logo" />
+                            <div className="col-12">
+                                <span>Add Image</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Special Dish Details */}
+                    <h5 className='fs-18 mb-4'>Add Special Dish Details</h5>
+                    {landingData.product.map((product, index) => (
+                        <div key={index} className='row align-items-center'>
+                            <input
+                                type="text"
+                                name="title"
+                                className='form-control form-control-lg mb-3'
+                                placeholder='Name'
+                                value={product.title}
+                                onChange={(e) => handleProductChange(index, e)}
+                            />
+                            <textarea
+                                name="description"
+                                className='form-control form-control-lg mb-3'
+                                placeholder='Description'
+                                value={product.description}
+                                onChange={(e) => handleProductChange(index, e)}
+                            />
+                            <div className="col-12 col-md-3 mb-3">
+                                <input type="file" hidden className='productImageInput' onChange={(e) => handleFileChange("productImage", index, e)} />
+                                <div onClick={() => UploadImages(index, 'productImage')} className="p-2 mt-2 add-logo-div">
+                                    <div className="text-center">
+                                        <img src={product.image || "/src/assets/images/add_image.png"} width="50" alt="Add Logo" />
+                                        <div className="col-12">
+                                            <span>Add Image</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="col-12 col-md-6">
+                                <input
+                                    type="number"
+                                    name="price"
+                                    className='form-control form-control-lg w-100 mb-3'
+                                    placeholder='Price'
+                                    value={product.price}
+                                    onChange={(e) => handleProductChange(index, e)}
+                                />
+                            </div>
+                        </div>
+                    ))}
+                    <a href='#' onClick={addMoreProduct} className='text-decoration-none'>+ Add More Product</a>
+
+                    {/* Menu Details */}
+                    <h5 className='fs-18 mb-4 mt-3'>Add Menu Details</h5>
+                    {landingData.menu.map((menuItem, index) => (
+                        <div key={index} className='row align-items-center'>
+                            <input
+                                type="text"
+                                name="category"
+                                className='form-control form-control-lg mb-3'
+                                placeholder='Menu Category'
+                                value={menuItem.category}
+                                onChange={(e) => handleMenuChange(index, e)}
+                            />
+                            <input
+                                type="text"
+                                name="product_name"
+                                className='form-control form-control-lg mb-3'
+                                placeholder='Product Name'
+                                value={menuItem.product_name}
+                                onChange={(e) => handleMenuChange(index, e)}
+                            />
+                            <div className="col-12 col-md-3 mb-3">
+                                <input type="file" hidden className='menuImageInput' onChange={(e) => handleFileChange("menuImage", index, e)} />
+                                <div onClick={() => UploadImages(index, 'menuImage')} className="p-2 mt-2 add-logo-div">
+                                    <div className="text-center">
+                                        <img src={menuItem.image || "/src/assets/images/add_image.png"} width="50" alt="Add Logo" />
+                                        <div className="col-12">
+                                            <span>Add Image</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="col-12 col-md-6 mb-3">
+                                <input
+                                    type="number"
+                                    name="price"
+                                    className='form-control form-control-lg w-100'
+                                    placeholder='Price'
+                                    value={menuItem.price}
+                                    onChange={(e) => handleMenuChange(index, e)}
+                                />
+                            </div>
+                        </div>
+                    ))}
+                    <a href='#' onClick={addMoreMenu} className='text-decoration-none'>+ Add More Menu</a>
+
+                    {/* Services Details */}
+                    <h5 className='fs-18 mb-4 mt-3'>Add Services Details</h5>
+                    {landingData.services.map((service, index) => (
+                        <div key={index} className='row align-items-center'>
+                            <input
+                                type="text"
+                                name="title"
+                                className='form-control form-control-lg mb-3'
+                                placeholder='Service Title'
+                                value={service.title}
+                                onChange={(e) => handleServiceChange(index, e)}
+                            />
+                            <textarea
+                                name="description"
+                                className='form-control form-control-lg mb-3'
+                                placeholder='Service Description'
+                                value={service.description}
+                                onChange={(e) => handleServiceChange(index, e)}
+                            />
+                        </div>
+                    ))}
+
+                    {/* Other Details */}
+                    <h5 className='fs-18 mb-4 mt-3'>Add Other Details</h5>
+                    {landingData.otherDetails.map((detail, index) => (
+                        <div key={index} className='row align-items-center'>
+                            <input
+                                type="text"
+                                name="title"
+                                className='form-control form-control-lg mb-3'
+                                placeholder='Detail Title'
+                                value={detail.title}
+                                onChange={(e) => handleOtherDetailsChange(index, e)}
+                            />
+                            <textarea
+                                name="description"
+                                className='form-control form-control-lg mb-3'
+                                placeholder='Detail Description'
+                                value={detail.description}
+                                onChange={(e) => handleOtherDetailsChange(index, e)}
+                            />
+                            <div className="col-12 col-md-3 mb-3">
+                                <input type="file" hidden className='otherDetailsImageInput' onChange={(e) => handleFileChange("otherDetailsImage", index, e)} />
+                                <div onClick={() => UploadImages(index, 'otherDetailsImage')} className="p-2 mt-2 add-logo-div">
+                                    <div className="text-center">
+                                        <img src={detail.image || "/src/assets/images/add_image.png"} width="50" alt="Add Logo" />
+                                        <div className="col-12">
+                                            <span>Add Image</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </div>
+
+            {/* Save & Next Button */}
+            <div className="col-12 text-center p-3 p-md-5">
+                <button className="btn btn-theme2 w-100 text-white p-2" onClick={handleNextStep}>
+                    Save & Next
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
             </>
         );
     }
@@ -967,104 +974,117 @@ export default function CreateBusiness() {
         };
         return (
             <>
-                <div className='h-100vh'>
-                    <div className="row w-100 h-100 justify-content-center">
-                        <div className="d-none d-md-block left-portion p-0 col-5 h-100">
-                            <img src="/src/assets/images/landing-page.jpg" alt="" className='w-100 h-100' />
-                        </div>
-                        <div className="col-12 col-md-7 row align-items-end h-100 p-5 right-portion">
-                            <div className='row w-100 justify-content-center'>
-                                <div className='col-12'>
-                                    <div className="col-12">
-                                        <h1 className='fw-bold'>Add SEO</h1>
-                                    </div>
-                                </div>
-                                <div className="col-12 col-md-10 p-5">
-                                    <div className="col-12 mb-3">
-                                        <input
-                                            type="text"
-                                            name="title"
-                                            className='form-control form-control-lg'
-                                            placeholder='Title'
-                                            value={formData.title}
-                                            onChange={handleInputChange}
-                                        />
-                                    </div>
-                                    <div className="col-12 mb-3">
-                                        <textarea
-                                            name="description"
-                                            className='form-control form-control-lg'
-                                            placeholder='Description..'
-                                            value={formData.description}
-                                            onChange={handleInputChange}
-                                        ></textarea>
-                                    </div>
-                                    <div className="col-12 mb-3">
-                                        {formData.tags.map((tag, index) => (
-                                            <div className="input-group mb-2" key={index}>
-                                                <input
-                                                    type="text"
-                                                    className='form-control form-control-lg'
-                                                    placeholder='Tag'
-                                                    value={tag}
-                                                    onChange={(e) => handleTagChange(index, e.target.value)}
-                                                />
-                                                <button
-                                                    className="btn btn-danger"
-                                                    onClick={() => removeTag(index)}
-                                                    type="button"
-                                                >
-                                                    Remove
-                                                </button>
-                                            </div>
-                                        ))}
-                                        <button
-                                            className="btn btn-link"
-                                            onClick={addTag}
-                                        >
-                                            + add more tags
-                                        </button>
-                                    </div>
-                                    <div className="col-12 mb-3 mt-3">
-                                        <input
-                                            type="text"
-                                            name="instagram"
-                                            className='form-control form-control-lg'
-                                            placeholder='Instagram'
-                                            value={formData.instagram}
-                                            onChange={handleInputChange}
-                                        />
-                                    </div>
-                                    <div className="col-12 mb-3 mt-3">
-                                        <input
-                                            type="text"
-                                            name="facebook"
-                                            className='form-control form-control-lg'
-                                            placeholder='Facebook'
-                                            value={formData.facebook}
-                                            onChange={handleInputChange}
-                                        />
-                                    </div>
-                                    <div className="col-12 mb-3 mt-3">
-                                        <input
-                                            type="text"
-                                            name="twitter"
-                                            className='form-control form-control-lg'
-                                            placeholder='Twitter'
-                                            value={formData.twitter}
-                                            onChange={handleInputChange}
-                                        />
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="col-12 text-center p-5">
-                                <button className="btn btn-theme2 w-100 text-white p-2" onClick={handleNextStep}>
-                                    Save & Next
+               <div className='h-100vh'>
+    <div className="row w-100 h-100 justify-content-center">
+        {/* Left Image Section - Hidden on small screens */}
+        <div className="d-none d-md-block left-portion p-0 col-md-5 h-100">
+            <img src="/src/assets/images/landing-page.jpg" alt="" className='w-100 h-100' />
+        </div>
+
+        {/* Right Form Section */}
+        <div className="col-12 col-md-7 row align-items-end h-100 p-3 p-md-5 right-portion">
+            <div className='row w-100 justify-content-center'>
+                <div className='col-12 text-center'>
+                    <h1 className='fw-bold'>Add SEO</h1>
+                </div>
+
+                {/* Form Fields */}
+                <div className="col-12 col-md-10 p-3 p-md-5">
+                    <div className="col-12 mb-3">
+                        <input
+                            type="text"
+                            name="title"
+                            className='form-control form-control-lg'
+                            placeholder='Title'
+                            value={formData.title}
+                            onChange={handleInputChange}
+                        />
+                    </div>
+
+                    <div className="col-12 mb-3">
+                        <textarea
+                            name="description"
+                            className='form-control form-control-lg'
+                            placeholder='Description..'
+                            value={formData.description}
+                            onChange={handleInputChange}
+                        ></textarea>
+                    </div>
+
+                    {/* Tags Section */}
+                    <div className="col-12 mb-3">
+                        {formData.tags.map((tag, index) => (
+                            <div className="input-group mb-2" key={index}>
+                                <input
+                                    type="text"
+                                    className='form-control form-control-lg'
+                                    placeholder='Tag'
+                                    value={tag}
+                                    onChange={(e) => handleTagChange(index, e.target.value)}
+                                />
+                                <button
+                                    className="btn btn-danger"
+                                    onClick={() => removeTag(index)}
+                                    type="button"
+                                >
+                                    Remove
                                 </button>
                             </div>
-                        </div>
+                        ))}
+                        <button
+                            className="btn btn-link"
+                            onClick={addTag}
+                        >
+                            + add more tags
+                        </button>
+                    </div>
+
+                    {/* Social Media Links */}
+                    <div className="col-12 mb-3 mt-3">
+                        <input
+                            type="text"
+                            name="instagram"
+                            className='form-control form-control-lg'
+                            placeholder='Instagram'
+                            value={formData.instagram}
+                            onChange={handleInputChange}
+                        />
+                    </div>
+
+                    <div className="col-12 mb-3 mt-3">
+                        <input
+                            type="text"
+                            name="facebook"
+                            className='form-control form-control-lg'
+                            placeholder='Facebook'
+                            value={formData.facebook}
+                            onChange={handleInputChange}
+                        />
+                    </div>
+
+                    <div className="col-12 mb-3 mt-3">
+                        <input
+                            type="text"
+                            name="twitter"
+                            className='form-control form-control-lg'
+                            placeholder='Twitter'
+                            value={formData.twitter}
+                            onChange={handleInputChange}
+                        />
                     </div>
                 </div>
+            </div>
+
+            {/* Save & Next Button */}
+            <div className="col-12 text-center p-3 p-md-5">
+                <button className="btn btn-theme2 w-100 text-white p-2" onClick={handleNextStep}>
+                    Save & Next
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
             </>
         );
     }
@@ -1093,62 +1113,68 @@ export default function CreateBusiness() {
 
         return (
             <>
-                <div className='h-100vh'>
-                    <div className="row w-100 h-100 justify-content-center">
-                        <div className="d-none d-md-block left-portion p-0 col-5 h-100">
-                            <img src="/src/assets/images/landing-page.jpg" alt="" className='w-100 h-100' />
-                        </div>
-                        <div className="col-12 col-md-7 row align-items-end h-100 p-5 right-portion">
-                            <div className='row w-100 justify-content-center'>
-                                <div className='col-12'>
-                                    <div className="col-12">
-                                        <h1 className='fw-bold'>Add Images</h1>
-                                    </div>
-                                </div>
-                                <div className="col-12 col-md-10 p-5">
-                                    <div className="row mb-3">
-                                        {images.map((image, index) => (
-                                            <div className="col-12 col-md-3" key={index}>
-                                                <input
-                                                    type="file"
-                                                    hidden
-                                                    id={`file-input-${index}`}
-                                                    accept="image/*"
-                                                    onChange={(e) => handleFileChange(index, e)}
-                                                />
-                                                <div
-                                                    className="p-2 mt-2 mb-3 add-logo-div"
-                                                    onClick={() => handleAddImageClick(index)}
-                                                >
-                                                    <div className="text-center">
-                                                        {image ? (
-                                                            <img src={image} alt={`Uploaded Preview ${index}`} className='img-preview' width="100" />
-                                                        ) : (
-                                                            <img src="/src/assets/images/add_image.png" width="50" alt="Add Image" />
-                                                        )}
-                                                        <div className="col-12">
-                                                            <span>Add Image</span>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        ))}
-                                    </div>
-                                    <div className="col-12 mb-3 text-center">
-                                        <button className="btn btn-link text-decoration-none" onClick={addImageInput}>
-                                            + Add another image
-                                        </button>
+               <div className='h-100vh'>
+    <div className="row w-100 h-100 justify-content-center">
+        {/* Left Image Section - Hidden on small screens */}
+        <div className="d-none d-md-block left-portion p-0 col-md-5 h-100">
+            <img src="/src/assets/images/landing-page.jpg" alt="" className='w-100 h-100' />
+        </div>
+
+        {/* Right Form Section */}
+        <div className="col-12 col-md-7 row align-items-end h-100 p-3 p-md-5 right-portion">
+            <div className='row w-100 justify-content-center'>
+                <div className='col-12 text-center'>
+                    <h1 className='fw-bold'>Add Images</h1>
+                </div>
+
+                {/* Image Upload Fields */}
+                <div className="col-12 col-md-10 p-3 p-md-5">
+                    <div className="row mb-3">
+                        {images.map((image, index) => (
+                            <div className="col-6 col-md-3 mb-3" key={index}>
+                                <input
+                                    type="file"
+                                    hidden
+                                    id={`file-input-${index}`}
+                                    accept="image/*"
+                                    onChange={(e) => handleFileChange(index, e)}
+                                />
+                                <div
+                                    className="p-2 add-logo-div"
+                                    onClick={() => handleAddImageClick(index)}
+                                >
+                                    <div className="text-center">
+                                        {image ? (
+                                            <img src={image} alt={`Uploaded Preview ${index}`} className='img-preview' width="100" />
+                                        ) : (
+                                            <img src="/src/assets/images/add_image.png" width="50" alt="Add Image" />
+                                        )}
+                                        <div className="col-12">
+                                            <span>Add Image</span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                            <div className="col-12 text-center p-5">
-                                <button className="btn btn-theme2 w-100 text-white p-2" onClick={handleNextStep}>
-                                    Save & Next
-                                </button>
-                            </div>
-                        </div>
+                        ))}
+                    </div>
+                    <div className="col-12 mb-3 text-center">
+                        <button className="btn btn-link text-decoration-none" onClick={addImageInput}>
+                            + Add another image
+                        </button>
                     </div>
                 </div>
+            </div>
+
+            {/* Save & Next Button */}
+            <div className="col-12 text-center p-3 p-md-5">
+                <button className="btn btn-theme2 w-100 text-white p-2" onClick={handleNextStep}>
+                    Save & Next
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
             </>
         );
     }
@@ -1178,64 +1204,70 @@ export default function CreateBusiness() {
         return (
             <>
                 <div className='h-100vh'>
-                    <div className="row w-100 h-100 justify-content-center">
-                        <div className="d-none d-md-block left-portion p-0 col-5 h-100">
-                            <img src="/src/assets/images/landing-page.jpg" alt="" className='w-100 h-100' />
-                        </div>
-                        <div className="col-12 col-md-7 row align-items-end h-100 p-5 right-portion">
-                            <div className='row w-100 justify-content-center'>
-                                <div className='col-12'>
-                                    <div className="col-12">
-                                        <h1 className='fw-bold'>Add Videos</h1>
-                                    </div>
-                                </div>
-                                <div className="col-12 col-md-10 p-5">
-                                    <div className="row mb-3">
-                                        {videos.map((video, index) => (
-                                            <div className="col-12 col-md-3" key={index}>
-                                                <input
-                                                    type="file"
-                                                    hidden
-                                                    id={`file-input-${index}`}
-                                                    accept="video/*"
-                                                    onChange={(e) => handleFileChange(index, e)}
-                                                />
-                                                <div
-                                                    className="p-2 mt-2 mb-3 add-logo-div"
-                                                    onClick={() => handleAddVideoClick(index)}
-                                                >
-                                                    <div className="text-center">
-                                                        {video ? (
-                                                            <video width="100" controls className='video-preview'>
-                                                                <source src={video} type="video/mp4" />
-                                                                Your browser does not support the video tag.
-                                                            </video>
-                                                        ) : (
-                                                            <img src="/src/assets/images/add-video.png" width="50" alt="Add Video" />
-                                                        )}
-                                                        <div className="col-12">
-                                                            <span>Add Video</span>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        ))}
-                                    </div>
-                                    <div className="col-12 mb-3 text-center">
-                                        <button className="btn btn-link text-decoration-none" onClick={addVideoInput}>
-                                            + Add another video
-                                        </button>
+    <div className="row w-100 h-100 justify-content-center">
+        {/* Left Image Section - Hidden on small screens */}
+        <div className="d-none d-md-block left-portion p-0 col-md-5 h-100">
+            <img src="/src/assets/images/landing-page.jpg" alt="" className='w-100 h-100' />
+        </div>
+
+        {/* Right Form Section */}
+        <div className="col-12 col-md-7 row align-items-end h-100 p-3 p-md-5 right-portion">
+            <div className='row w-100 justify-content-center'>
+                <div className='col-12 text-center'>
+                    <h1 className='fw-bold'>Add Videos</h1>
+                </div>
+
+                {/* Video Upload Fields */}
+                <div className="col-12 col-md-10 p-3 p-md-5">
+                    <div className="row mb-3">
+                        {videos.map((video, index) => (
+                            <div className="col-12 col-md-6 col-lg-3 mb-3" key={index}>
+                                <input
+                                    type="file"
+                                    hidden
+                                    id={`file-input-${index}`}
+                                    accept="video/*"
+                                    onChange={(e) => handleFileChange(index, e)}
+                                />
+                                <div
+                                    className="p-2 add-logo-div"
+                                    onClick={() => handleAddVideoClick(index)}
+                                >
+                                    <div className="text-center">
+                                        {video ? (
+                                            <video width="100%" controls className='video-preview'>
+                                                <source src={video} type="video/mp4" />
+                                                Your browser does not support the video tag.
+                                            </video>
+                                        ) : (
+                                            <img src="/src/assets/images/add-video.png" width="50" alt="Add Video" />
+                                        )}
+                                        <div className="col-12">
+                                            <span>Add Video</span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                            <div className="col-12 text-center p-5">
-                                <button className="btn btn-theme2 w-100 text-white p-2" onClick={handleNextStep}>
-                                    Save & Next
-                                </button>
-                            </div>
-                        </div>
+                        ))}
+                    </div>
+                    <div className="col-12 mb-3 text-center">
+                        <button className="btn btn-link text-decoration-none" onClick={addVideoInput}>
+                            + Add another video
+                        </button>
                     </div>
                 </div>
+            </div>
+
+            {/* Save & Next Button */}
+            <div className="col-12 text-center p-3 p-md-5">
+                <button className="btn btn-theme2 w-100 text-white p-2" onClick={handleNextStep}>
+                    Save & Next
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
             </>
         );
     }
@@ -1245,101 +1277,95 @@ export default function CreateBusiness() {
 
         return (
             <>
-                <div className='h-100vh'>
-                    <div className="row w-100 h-100 justify-content-center">
-                        <div className="d-none d-md-block left-portion p-0 col-5 h-100">
-                            <img src="/src/assets/images/subscription.jpg" alt="" className='w-100 h-100' />
-                        </div>
-                        <div className="col-12 col-md-7 row align-items-end h-100 p-5 right-portion">
-                            <div className='row w-100 justify-content-center'>
-                                <div className='col-12'>
-                                    <div className="col-12">
-                                        <h1 className='fw-bold'>Add Subscriptions</h1>
+              <div className='h-100vh'>
+    <div className="row w-100 h-100 justify-content-center">
+        <div className="d-none d-md-block left-portion p-0 col-md-5 h-100">
+            <img src="/src/assets/images/subscription.jpg" alt="" className='w-100 h-100' />
+        </div>
+        <div className="col-12 col-md-7 row align-items-end h-100 p-3 p-md-5 right-portion">
+            <div className='row w-100 justify-content-center'>
+                <div className='col-12 text-center'>
+                    <h1 className='fw-bold'>Add Subscriptions</h1>
+                </div>
+                <div className="col-12">
+                    <div className="row justify-content-center">
+                        <div className="col-12 col-md-6 mb-4">
+                            <div className="card br-20 b-theme2">
+                                <div className="p-4">
+                                    <div className="col-12 text-center">
+                                        <span className='fw-bold'>Free Plan</span>
                                     </div>
-                                </div>
-                                <div className="col-12 col-md-10 p-5">
-                                    <div className="row">
-                                        <div className="col-12 col-md-6">
-                                            <div className="card br-20 b-theme2">
-                                                <div className="p-4">
-                                                    <div className="col-12">
-                                                        <span className='fw-bold'>Free Plan</span>
-                                                    </div>
-                                                    <div className="row mt-2 mb-2">
-                                                        <div className="col-3 ">
-                                                            <h1 className='fw-bold fs-45'>₹0</h1>
-                                                        </div>
-                                                        <div className="col-9 p-0">
-                                                            <span className="text-secondary">per editor/month</span> <br />
-                                                            <span className="text-secondary">Billed Monthly</span>
-                                                        </div>
-                                                    </div>
-                                                    <div className='col-12 mt-5'>
-                                                        <div><span className='subscription-tick bg-light active' onClick={(e)=>{activeHandler}}><i className="bi bi-check"></i></span> <span className='fs-16'>10 gen per day</span></div>
-                                                        <div className='mt-2'><span className='subscription-tick bg-light' onClick={(e)=>{activeHandler}}><i className="bi bi-check"></i></span> <span className='fs-16'>Unlimited Relaxed generations</span></div>
-                                                        <div className='mt-2'><span className='subscription-tick bg-light' onClick={(e)=>{activeHandler}}><i className="bi bi-check"></i></span> <span className='fs-16'>General commercial terms</span></div>
-                                                        <div className='mt-2'><span className='subscription-tick bg-light' onClick={(e)=>{activeHandler}}><i className="bi bi-check"></i></span> <span className='fs-16'>Access to member gallery</span></div>
-                                                        <div className='mt-2'><span className='subscription-tick bg-light' onClick={(e)=>{activeHandler}}><i className="bi bi-check"></i></span> <span className='fs-16'>Optional credit top ups</span></div>
-                                                        <div className='mt-2'><span className='subscription-tick bg-light' onClick={(e)=>{activeHandler}}><i className="bi bi-check"></i></span> <span className='fs-16'>12 concurrent fast jobs</span></div>
-                                                        <div className='mt-2'><span className='subscription-tick bg-light' onClick={(e)=>{activeHandler}}><i className="bi bi-check"></i></span> <span className='fs-16'>Optional credit top ups</span></div>
-                                                    </div>
-                                                    <div className="mt-5">
-                                                        <button className="btn w-100 text-white" style={{backgroundColor:"#5b7ee88c"}}>Choose Plan</button>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                    <div className="row mt-2 mb-2">
+                                        <div className="col-4">
+                                            <h1 className='fw-bold fs-30'>₹0</h1>
                                         </div>
-
-
-                                        <div className="col-12 col-md-6">
-                                            <div className="card br-20 b-theme2">
-                                                <div className="p-4">
-                                                    <div className="col-12">
-                                                        <span className='fw-bold'>Free Plan</span>
-                                                    </div>
-                                                    <div className="row mt-2 mb-2">
-                                                        <div className=" " style={{width:"fit-content"}}>
-                                                            <h1 className='fw-bold fs-45'>₹500</h1>
-                                                        </div>
-                                                        <div className="col-5 p-0">
-                                                            <span className="text-secondary">per editor/month</span> <br />
-                                                            <span className="text-secondary">Billed Monthly</span>
-                                                        </div>
-                                                    </div>
-                                                    <div className='col-12 mt-5'>
-                                                        <div><span className='subscription-tick bg-light active'><i className="bi bi-check"></i></span> <span className='fs-16'>30h Fast generations</span></div>
-                                                        <div className='mt-2'><span className='subscription-tick bg-light active' onClick={(e)=>{activeHandler}}><i className="bi bi-check"></i></span> <span className='fs-16'>Unlimited Relaxed generations</span></div>
-                                                        <div className='mt-2'><span className='subscription-tick bg-light active' onClick={(e)=>{activeHandler}}><i className="bi bi-check"></i></span> <span className='fs-16'>General commercial terms</span></div>
-                                                        <div className='mt-2'><span className='subscription-tick bg-light active' onClick={(e)=>{activeHandler}}><i className="bi bi-check"></i></span> <span className='fs-16'>Access to member gallery</span></div>
-                                                        <div className='mt-2'><span className='subscription-tick bg-light active' onClick={(e)=>{activeHandler}}><i className="bi bi-check"></i></span> <span className='fs-16'>Optional credit top ups</span></div>
-                                                        <div className='mt-2'><span className='subscription-tick bg-light active' onClick={(e)=>{activeHandler}}><i className="bi bi-check"></i></span> <span className='fs-16'>12 concurrent fast jobs</span></div>
-                                                        <div className='mt-2'><span className='subscription-tick bg-light active'><i className="bi bi-check"></i></span> <span className='fs-16'>Optional credit top ups</span></div>
-                                                    </div>
-                                                    <div className="mt-5">
-                                                        <button className="btn w-100 text-white" style={{backgroundColor:"#5b7ee88c"}}>Choose Plan</button>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                        <div className="col-8 p-0 text-start">
+                                            <span className="text-secondary">per editor/month</span> <br />
+                                            <span className="text-secondary">Billed Monthly</span>
                                         </div>
-
-
+                                    </div>
+                                    <div className='col-12 mt-4'>
+                                        <div><span className='subscription-tick bg-light active' onClick={(e) => { activeHandler }}><i className="bi bi-check"></i></span> <span className='fs-16'>10 gen per day</span></div>
+                                        <div className='mt-2'><span className='subscription-tick bg-light' onClick={(e) => { activeHandler }}><i className="bi bi-check"></i></span> <span className='fs-16'>Unlimited Relaxed generations</span></div>
+                                        <div className='mt-2'><span className='subscription-tick bg-light' onClick={(e) => { activeHandler }}><i className="bi bi-check"></i></span> <span className='fs-16'>General commercial terms</span></div>
+                                        <div className='mt-2'><span className='subscription-tick bg-light' onClick={(e) => { activeHandler }}><i className="bi bi-check"></i></span> <span className='fs-16'>Access to member gallery</span></div>
+                                        <div className='mt-2'><span className='subscription-tick bg-light' onClick={(e) => { activeHandler }}><i className="bi bi-check"></i></span> <span className='fs-16'>Optional credit top ups</span></div>
+                                        <div className='mt-2'><span className='subscription-tick bg-light' onClick={(e) => { activeHandler }}><i className="bi bi-check"></i></span> <span className='fs-16'>12 concurrent fast jobs</span></div>
+                                    </div>
+                                    <div className="mt-4">
+                                        <button className="btn w-100 text-white" style={{ backgroundColor: "#5b7ee88c" }}>Choose Plan</button>
                                     </div>
                                 </div>
                             </div>
-                            <div className="col-12 text-center p-5">
-                                <button className="btn btn-theme2 w-100 text-white p-2" onClick={handleNextStep}>
-                                    Save & Next
-                                </button>
+                        </div>
+
+                        <div className="col-12 col-md-6 mb-4">
+                            <div className="card br-20 b-theme2">
+                                <div className="p-4">
+                                    <div className="col-12 text-center">
+                                        <span className='fw-bold'>Premium Plan</span>
+                                    </div>
+                                    <div className="row mt-2 mb-2">
+                                        <div className="col-4">
+                                            <h1 className='fw-bold fs-30'>₹500</h1>
+                                        </div>
+                                        <div className="col-8 p-0 text-start">
+                                            <span className="text-secondary">per editor/month</span> <br />
+                                            <span className="text-secondary">Billed Monthly</span>
+                                        </div>
+                                    </div>
+                                    <div className='col-12 mt-4'>
+                                        <div><span className='subscription-tick bg-light active'><i className="bi bi-check"></i></span> <span className='fs-16'>30h Fast generations</span></div>
+                                        <div className='mt-2'><span className='subscription-tick bg-light active'><i className="bi bi-check"></i></span> <span className='fs-16'>Unlimited Relaxed generations</span></div>
+                                        <div className='mt-2'><span className='subscription-tick bg-light active'><i className="bi bi-check"></i></span> <span className='fs-16'>General commercial terms</span></div>
+                                        <div className='mt-2'><span className='subscription-tick bg-light active'><i className="bi bi-check"></i></span> <span className='fs-16'>Access to member gallery</span></div>
+                                        <div className='mt-2'><span className='subscription-tick bg-light active'><i className="bi bi-check"></i></span> <span className='fs-16'>Optional credit top ups</span></div>
+                                        <div className='mt-2'><span className='subscription-tick bg-light active'><i className="bi bi-check"></i></span> <span className='fs-16'>12 concurrent fast jobs</span></div>
+                                    </div>
+                                    <div className="mt-4">
+                                        <button className="btn w-100 text-white" style={{ backgroundColor: "#5b7ee88c" }}>Choose Plan</button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
+            </div>
+            <div className="col-12 text-center p-3 p-md-5">
+                <button className="btn btn-theme2 w-100 text-white p-2" onClick={handleNextStep}>
+                    Save & Next
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
             </>
         )
     }
     const Razorpay = () => {
         const [isScriptLoaded, setScriptLoaded] = useState(false);
-    
+
         // Function to load the Razorpay SDK dynamically
         const loadRazorpayScript = () => {
             return new Promise((resolve) => {
@@ -1356,7 +1382,7 @@ export default function CreateBusiness() {
                 document.body.appendChild(script);
             });
         };
-    
+
         // Function to open Razorpay payment window
         const handlePayment = async () => {
             if (!isScriptLoaded) {
@@ -1366,7 +1392,7 @@ export default function CreateBusiness() {
                     return;
                 }
             }
-    
+
             const options = {
                 key: 'rzp_test_1234567890abcdef', // Dummy Razorpay key ID for testing
                 amount: 50000, // Amount in paise (50000 paise = ₹500)
@@ -1390,11 +1416,11 @@ export default function CreateBusiness() {
                     color: '#F37254', // Customize theme color
                 },
             };
-    
+
             const rzp = new window.Razorpay(options);
             rzp.open();
         };
-    
+
         // Automatically open the Razorpay window when the component loads
         useEffect(() => {
             handlePayment();

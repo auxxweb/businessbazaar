@@ -5,7 +5,7 @@ body{
     font-family:  "Inter", sans-serif;
     display: flex;
     align-items: center;
-    height: 100vh;
+    /* height: 100vh; */
 }
 .custom-placeholder::placeholder {
     
@@ -240,7 +240,46 @@ footer .btn-theme{
 }.business-view-banner .image-title h2{
     font-weight: bold;
     font-size: 50px;
-}.business-feature span{
+}
+.business-view-banner {
+    height: 50vh; /* Use viewport height for better responsiveness */
+    position: relative; /* Position relative to control absolute child */
+    overflow: hidden; /* Hide overflow to ensure clean edges */
+}
+
+.business-view-banner img {
+    object-fit: cover;
+    width: 100%; /* Ensure the image takes full width */
+    height: 100%; /* Ensure the image takes full height */
+}
+
+.business-view-banner .image-title {
+    position: absolute;
+    color: white;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); /* Centering */
+    text-align: center; /* Center the text horizontally */
+}
+
+.business-view-banner .image-title h2 {
+    font-weight: bold;
+    font-size: 5vw; /* Use viewport width for responsiveness */
+}
+
+/* Media Queries for additional font size adjustments */
+@media (max-width: 768px) {
+    .business-view-banner .image-title h2 {
+        font-size: 8vw; /* Slightly larger font on smaller screens */
+    }
+}
+
+@media (max-width: 576px) {
+    .business-view-banner .image-title h2 {
+        font-size: 10vw; /* Larger font on mobile devices */
+    }
+}
+.business-feature span{
     border: 1px solid #228ae2;
     border-radius: 5px;
     padding: 2px;
@@ -281,4 +320,101 @@ footer .btn-theme{
 }
 .home-spot{
     margin-top: 20px;
+}
+
+
+.banner-image {
+    border-radius: 100px 40px;
+    width: 100%; /* Ensure it covers full width */
+    max-width: 100%; /* Maintain aspect ratio */
+}
+
+.banner-image-2 {
+    position: absolute;
+    top: 60%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 50%; /* Adjust size for responsiveness */
+}
+
+.banner-title {
+    color: #101A24; /* Remove quotes for hex color */
+    font-size: 4rem; /* Use rem for better scaling */
+    line-height: 1.2; /* Line height for better spacing */
+}
+
+.contact-banner {
+    border-radius: 50%;
+    border: 1px solid black;
+    width: fit-content;
+    padding: 5px 10px;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .banner-title {
+        font-size: 2.5rem; /* Smaller font size for mobile */
+    }
+
+    .banner-image {
+        border-radius: 50px 20px; /* Adjust radius for smaller screens */
+    }
+
+    .banner-image-2 {
+        width: 70%; /* Adjust size for mobile */
+    }
+
+    .contact-banner {
+        font-size: 1.5rem; /* Adjust icon size for mobile */
+    }
+}
+
+@media (min-width: 768px) {
+    .banner-title {
+        font-size: 4rem; /* Larger font size for larger screens */
+    }
+}
+
+.cat-option {
+    border-right: 1px dashed #DF6827;
+}
+
+/* Ensure proper spacing and alignment */
+.cat-option:last-child {
+    border-right: none; /* Remove border for the last item */
+}
+
+/* Responsive Adjustments */
+@media (max-width: 576px) {
+    .fs-20 {
+        font-size: 1.2rem; /* Adjust font size for smaller screens */
+    }
+
+    .fs-45 {
+        font-size: 2.5rem; /* Adjust menu title font size */
+    }
+
+    .w-80 {
+        width: 80%; /* Adjust image width for small screens */
+    }
+}
+
+@media (min-width: 576px) and (max-width: 768px) {
+    .fs-20 {
+        font-size: 1.5rem; /* Medium screens */
+    }
+
+    .fs-45 {
+        font-size: 3rem; /* Larger title for medium screens */
+    }
+}
+
+@media (min-width: 768px) {
+    .fs-20 {
+        font-size: 1.5rem; /* Default font size for larger screens */
+    }
+
+    .fs-45 {
+        font-size: 3rem; /* Default title font size */
+    }
 }
