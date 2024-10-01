@@ -322,8 +322,8 @@ export default function Home() {
                 </div>
                 </div>
             </section>
-            <section className="mt-5 mb-5">
-                <div className="container">
+            <section className="home-spot h-auto mb-5">
+                <div className="container padding">
                 <div className="text-center mb-5">
                     <h1 className='fw-bold'>Discover the Top Spots Around You:</h1>
                     <p className="mt-3 text-center">

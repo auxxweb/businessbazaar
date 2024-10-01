@@ -77,11 +77,36 @@
     /* right: 50%; */
 }.newsletter-content input{
     border: none;
-}.newsletter-content button{
-    margin-top: 10px;
 }.news-button{
     top: 2px;
 }footer{
     height: 50vh;
     background-color: black;
+}
+@media screen and (max-width: 768px) {
+    .navbar-brand span{
+        font-size: 16px !important;
+    }.banner-title{
+        color: '#101A24';
+        font-size: 40px;
+        font-weight: '700';
+        /* line-height: 70px; */
+    }.banner-image{
+        width: 100%;
+    }.banner-image-2 img{
+        width: 50%;
+    }.banner-image-2{
+        position: absolute;
+    top: 0%;
+    bottom: -21%;
+    }.chef-div{
+        width: 75% !important;
+    }.fs-sm-16{
+        font-size: 16px !important;
+    }    .newsletter-content {
+        bottom: 35%;
+        left: 7%;
+        /* right: 50%; */
+        top: 6%;
+    }
 }

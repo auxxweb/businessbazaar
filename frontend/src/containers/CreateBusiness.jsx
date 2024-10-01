@@ -100,7 +100,7 @@ export default function CreateBusiness() {
         return (
             <>
                 <div className='h-100vh'>
-                    <div className="row w-100 h-100">
+                    <div className="row w-100 justify-content-center h-100">
                         <div className="d-none d-md-block left-portion   p-0 col-5 h-100">
                             <img src="/src/assets/images/business-details.jpg" alt="" className='w-100 h-100' />
                         </div>
@@ -156,12 +156,12 @@ export default function CreateBusiness() {
                         <div className="d-none d-md-block left-portion   p-0 col-5">
                             <img src="/src/assets/images/contact-details.jpg" alt="" className='w-100 h-100' />
                         </div>
-                        <div className="col-12 col-md-7 row align-items-center p-5 right-portion">
+                        <div className="col-12 col-md-7 row align-items-center p-5 p-sm-0 right-portion">
                             <div>
                                 <div className="col-12">
                                     <h1 className='fw-bold'>Add <br /> Contact Details</h1>
                                 </div>
-                                <div className="col-12 p-5">
+                                <div className="col-12 p-5 p-sm-0">
                                     <input type="text" placeholder="Name" className="form-control form-control-lg" />
                                     <div id="mobileNumberDiv">
                                         {mobileNumbers.map((number) => (
@@ -177,12 +177,13 @@ export default function CreateBusiness() {
                                                 <div className="col-8">
                                                     <input type="text" name='phone' className="form-control form-control-lg w-100" placeholder="Phone Number" />
                                                 </div>
-                                                <div className="col-2">
                                                     {/* Render Remove button only if it's not the first input */}
                                                     {number.id > 1 && (
+                                                <div className="col-2">
                                                         <button className="btn btn-danger btn-sm w-100" onClick={() => removeMobileNumber(number.id)}>Remove</button>
-                                                    )}
+                                                    
                                                 </div>
+                                                    )}
                                             </div>
                                         ))}
                                     </div>

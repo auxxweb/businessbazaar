@@ -233,6 +233,7 @@ footer .btn-theme{
     position: absolute;
     color: white;
     top: 50%;
+    bottom: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
 
@@ -255,8 +256,13 @@ footer .btn-theme{
 }footer .contact-banner{
     background-color: #111111;
     padding: 15px 20px;
+}.padding{
+    padding-block: 50px;
 }
 @media screen and (max-width: 768px) {
+    .jcc-md{
+        justify-content: center;
+    }
     .fs-45{
         font-size: 30px !important;
     }.cat-div {
@@ -268,6 +274,11 @@ footer .btn-theme{
         justify-content: center;
     }.aic-md{
         align-items: center;
+    }.p-sm-0{
+        padding: 0 !important;
     }
     
+}
+.home-spot{
+    margin-top: 20px;
 }

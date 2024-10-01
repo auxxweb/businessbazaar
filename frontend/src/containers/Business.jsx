@@ -8,9 +8,9 @@ export default function Business() {
         <div className="container">
             <div className="row w-100">
                 <div className="col-md-6">
-                    <div className="row w-100 justify-content-between">
+                    <div className="row w-100 justify-content-center">
                         {/* Location Input with Crosshair Icon */}
-                        <div className="col-6 col-md-4">
+                        <div className="col-12 mb-3 col-md-4">
                             <div className="input-group">
                                 <span
                                     className="input-group-text"
@@ -39,7 +39,7 @@ export default function Business() {
                         </div>
 
                         {/* Search Input */}
-                        <div className="col-6 col-md-8">
+                        <div className="col-12 mb-3 col-md-8">
                             <div className="input-group">
                                 <span
                                     className="input-group-text"
@@ -79,8 +79,8 @@ export default function Business() {
         <section  className='h-auto mt-5'>
             <div className="container">
                 <div className="col-12">
-                <div className="row">
-                    <div className="col-6 col-md-2">
+                <div className="row justify-content-center">
+                    <div className="col-6 col-md-2 mt-4">
                         <select name="" id="" className='form-control'>
                             <option value="">Sort by</option>
                             <option value="price-asc">Price: Low to High</option>
@@ -90,7 +90,7 @@ export default function Business() {
                         </select>
                     </div>
 
-                    <div className="col-6 col-md-2">
+                    <div className="col-6 col-md-2 mt-4">
                         <select name="" id="" className='form-control'>
                             <option value="">Ratings</option>
                             <option value="5-star">5 Stars</option>
@@ -101,7 +101,7 @@ export default function Business() {
                         </select>
                     </div>
 
-                    <div className="col-6 col-md-2">
+                    <div className="col-6 col-md-2 mt-4">
                         <select name="" id="" className='form-control'>
                             <option value="">Amenities</option>
                             <option value="wifi">Free WiFi</option>
@@ -127,41 +127,41 @@ export default function Business() {
                     xplore the finest options available and find exactly what you're looking for!
                     </p>
                 </div>
-            <div className="col-12 mt-4 row justify-content-around mb-5 business-view-div-main">
+            <div className="col-12 mt-4 row w-100 justify-content-center mb-5 business-view-div-main">
                 <Link to='/template' className="text-decoration-none text-dark col-12 b-theme location-card mt-4">
-                        <div className="row p-2 w-100">
-                            <div className="col-4 p-0">
+                        <div className="row justify-content-center p-3 w-100">
+                            <div className="col-12 text-center col-md-4 mt-2 p-0">
                                 <img src="/src/assets/images/business-view.png" alt="" className='w-100 br-theme'/>
                             </div>
-                            <div className="col-8">
+                            <div className="col-12 col-md-8 p-3">
                                 <div className="col-12 mb-2 mt-2">
-                                    <div className="row">
-                                        <div className="col-11">
-                                            <h2 style={{fontSize:'28px'}}>Salad House</h2>
-                                        </div>
-                                        <div className="col-1">
+                                    <div className="col-12">
+                                        <div className="col-12 text-end">
                                             <i className="bi bi-heart fs-20"></i>
+                                        </div>
+                                        <div className="col-12 text-center text-md-start">
+                                            <h2 style={{fontSize:'28px'}}>Salad House</h2>
                                         </div>
                                     </div>
                                 </div>
-                                <div className="col-12">
+                                <div className="col-12 text-center text-md-start">
                                     <span className='p-1 bg-success text-white pe-2 ps-2 '>4.5 <i className="bi bi-star ms-2 text-white"></i></span>
                                     <span className="ms-2 fs-12">3.5k reviews</span>
                                 </div>
-                                <div className="col-12 mt-3">
+                                <div className="col-12 mt-3 text-center text-md-start">
                                     <h3 className='fs-16'>
                                         <i className="bi bi-crosshair"></i> 
                                         <span className='ms-1 fs-15'>No.12/3, Calicut South Beach, Kozhikode</span>
                                         </h3>
                                 </div>
                                 <div className="col-12 mt-3 mb-5">
-                                    <div className=" business-feature">
+                                    <div className=" business-feature text-center text-md-start">
                                         <span>Dine In</span>
                                         <span className='ms-2'>Indian</span>
                                         <span  className='ms-2'>Delivery</span>
                                     </div>
                                 </div>
-                                <div className="col-12 mt-3">
+                                <div className="col-12 mt-3 text-center text-md-start">
                                     <button className="btn " style={{backgroundColor:"#228ae2",color:"white"}}>Contact Us</button>
                                 </div>
                             </div>
@@ -169,13 +169,13 @@ export default function Business() {
                     </Link>
                     <Link to='/template' className="text-decoration-none text-dark col-12 b-theme location-card mt-4">
                         <div className="row p-2 w-100">
-                            <div className="col-4 p-0">
+                            <div className="col-12 text-center col-md-4 mt-2 p-0">
                                 <img src="/src/assets/images/business-view.png" alt="" className='w-100 br-theme'/>
                             </div>
-                            <div className="col-8">
+                            <div className="col-12 col-md-8 p-3">
                                 <div className="col-12 mb-2 mt-2">
                                     <div className="row">
-                                        <div className="col-11">
+                                        <div className="col-11 text-center text-md-start">
                                             <h2 style={{fontSize:'28px'}}>Salad House</h2>
                                         </div>
                                         <div className="col-1">
@@ -183,24 +183,24 @@ export default function Business() {
                                         </div>
                                     </div>
                                 </div>
-                                <div className="col-12">
+                                <div className="col-12 text-center text-md-start">
                                     <span className='p-1 bg-success text-white pe-2 ps-2 '>4.5 <i className="bi bi-star ms-2 text-white"></i></span>
                                     <span className="ms-2 fs-12">3.5k reviews</span>
                                 </div>
-                                <div className="col-12 mt-3">
+                                <div className="col-12 mt-3 text-center text-md-start">
                                     <h3 className='fs-16'>
                                         <i className="bi bi-crosshair"></i> 
                                         <span className='ms-1 fs-15'>No.12/3, Calicut South Beach, Kozhikode</span>
                                         </h3>
                                 </div>
                                 <div className="col-12 mt-3 mb-5">
-                                    <div className=" business-feature">
+                                    <div className=" business-feature text-center text-md-start">
                                         <span>Dine In</span>
                                         <span className='ms-2'>Indian</span>
                                         <span  className='ms-2'>Delivery</span>
                                     </div>
                                 </div>
-                                <div className="col-12 mt-3">
+                                <div className="col-12 mt-3 text-center text-md-start">
                                     <button className="btn " style={{backgroundColor:"#228ae2",color:"white"}}>Contact Us</button>
                                 </div>
                             </div>
@@ -208,13 +208,13 @@ export default function Business() {
                     </Link>
                     <Link to='/template' className="text-decoration-none text-dark col-12 b-theme location-card mt-4">
                         <div className="row p-2 w-100">
-                            <div className="col-4 p-0">
+                            <div className="col-12 text-center col-md-4 mt-2 p-0">
                                 <img src="/src/assets/images/business-view.png" alt="" className='w-100 br-theme'/>
                             </div>
-                            <div className="col-8">
+                            <div className="col-12 col-md-8 p-3">
                                 <div className="col-12 mb-2 mt-2">
                                     <div className="row">
-                                        <div className="col-11">
+                                        <div className="col-11 text-center text-md-start">
                                             <h2 style={{fontSize:'28px'}}>Salad House</h2>
                                         </div>
                                         <div className="col-1">
@@ -222,24 +222,24 @@ export default function Business() {
                                         </div>
                                     </div>
                                 </div>
-                                <div className="col-12">
+                                <div className="col-12 text-center text-md-start">
                                     <span className='p-1 bg-success text-white pe-2 ps-2 '>4.5 <i className="bi bi-star ms-2 text-white"></i></span>
                                     <span className="ms-2 fs-12">3.5k reviews</span>
                                 </div>
-                                <div className="col-12 mt-3">
+                                <div className="col-12 mt-3 text-center text-md-start">
                                     <h3 className='fs-16'>
                                         <i className="bi bi-crosshair"></i> 
                                         <span className='ms-1 fs-15'>No.12/3, Calicut South Beach, Kozhikode</span>
                                         </h3>
                                 </div>
                                 <div className="col-12 mt-3 mb-5">
-                                    <div className=" business-feature">
+                                    <div className=" business-feature text-center text-md-start">
                                         <span>Dine In</span>
                                         <span className='ms-2'>Indian</span>
                                         <span  className='ms-2'>Delivery</span>
                                     </div>
                                 </div>
-                                <div className="col-12 mt-3">
+                                <div className="col-12 mt-3 text-center text-md-start">
                                     <button className="btn " style={{backgroundColor:"#228ae2",color:"white"}}>Contact Us</button>
                                 </div>
                             </div>
@@ -247,13 +247,13 @@ export default function Business() {
                     </Link>
                     <Link to='/template' className="text-decoration-none text-dark col-12 b-theme location-card mt-4">
                         <div className="row p-2 w-100">
-                            <div className="col-4 p-0">
+                            <div className="col-12 text-center col-md-4 mt-2 p-0">
                                 <img src="/src/assets/images/business-view.png" alt="" className='w-100 br-theme'/>
                             </div>
-                            <div className="col-8">
+                            <div className="col-12 col-md-8 p-3">
                                 <div className="col-12 mb-2 mt-2">
                                     <div className="row">
-                                        <div className="col-11">
+                                        <div className="col-11 text-center text-md-start">
                                             <h2 style={{fontSize:'28px'}}>Salad House</h2>
                                         </div>
                                         <div className="col-1">
@@ -261,24 +261,24 @@ export default function Business() {
                                         </div>
                                     </div>
                                 </div>
-                                <div className="col-12">
+                                <div className="col-12 text-center text-md-start">
                                     <span className='p-1 bg-success text-white pe-2 ps-2 '>4.5 <i className="bi bi-star ms-2 text-white"></i></span>
                                     <span className="ms-2 fs-12">3.5k reviews</span>
                                 </div>
-                                <div className="col-12 mt-3">
+                                <div className="col-12 mt-3 text-center text-md-start">
                                     <h3 className='fs-16'>
                                         <i className="bi bi-crosshair"></i> 
                                         <span className='ms-1 fs-15'>No.12/3, Calicut South Beach, Kozhikode</span>
                                         </h3>
                                 </div>
                                 <div className="col-12 mt-3 mb-5">
-                                    <div className=" business-feature">
+                                    <div className=" business-feature text-center text-md-start">
                                         <span>Dine In</span>
                                         <span className='ms-2'>Indian</span>
                                         <span  className='ms-2'>Delivery</span>
                                     </div>
                                 </div>
-                                <div className="col-12 mt-3">
+                                <div className="col-12 mt-3 text-center text-md-start">
                                     <button className="btn " style={{backgroundColor:"#228ae2",color:"white"}}>Contact Us</button>
                                 </div>
                             </div>
@@ -286,13 +286,13 @@ export default function Business() {
                     </Link>
                     <Link to='/template' className="text-decoration-none text-dark col-12 b-theme location-card mt-4">
                         <div className="row p-2 w-100">
-                            <div className="col-4 p-0">
+                            <div className="col-12 text-center col-md-4 mt-2 p-0">
                                 <img src="/src/assets/images/business-view.png" alt="" className='w-100 br-theme'/>
                             </div>
-                            <div className="col-8">
+                            <div className="col-12 col-md-8 p-3">
                                 <div className="col-12 mb-2 mt-2">
                                     <div className="row">
-                                        <div className="col-11">
+                                        <div className="col-11 text-center text-md-start">
                                             <h2 style={{fontSize:'28px'}}>Salad House</h2>
                                         </div>
                                         <div className="col-1">
@@ -300,24 +300,24 @@ export default function Business() {
                                         </div>
                                     </div>
                                 </div>
-                                <div className="col-12">
+                                <div className="col-12 text-center text-md-start">
                                     <span className='p-1 bg-success text-white pe-2 ps-2 '>4.5 <i className="bi bi-star ms-2 text-white"></i></span>
                                     <span className="ms-2 fs-12">3.5k reviews</span>
                                 </div>
-                                <div className="col-12 mt-3">
+                                <div className="col-12 mt-3 text-center text-md-start">
                                     <h3 className='fs-16'>
                                         <i className="bi bi-crosshair"></i> 
                                         <span className='ms-1 fs-15'>No.12/3, Calicut South Beach, Kozhikode</span>
                                         </h3>
                                 </div>
                                 <div className="col-12 mt-3 mb-5">
-                                    <div className=" business-feature">
+                                    <div className=" business-feature text-center text-md-start">
                                         <span>Dine In</span>
                                         <span className='ms-2'>Indian</span>
                                         <span  className='ms-2'>Delivery</span>
                                     </div>
                                 </div>
-                                <div className="col-12 mt-3">
+                                <div className="col-12 mt-3 text-center text-md-start">
                                     <button className="btn " style={{backgroundColor:"#228ae2",color:"white"}}>Contact Us</button>
                                 </div>
                             </div>
@@ -325,13 +325,13 @@ export default function Business() {
                     </Link>
                     <Link to='/template' className="text-decoration-none text-dark col-12 b-theme location-card mt-4">
                         <div className="row p-2 w-100">
-                            <div className="col-4 p-0">
+                            <div className="col-12 text-center col-md-4 mt-2 p-0">
                                 <img src="/src/assets/images/business-view.png" alt="" className='w-100 br-theme'/>
                             </div>
-                            <div className="col-8">
+                            <div className="col-12 col-md-8 p-3">
                                 <div className="col-12 mb-2 mt-2">
                                     <div className="row">
-                                        <div className="col-11">
+                                        <div className="col-11 text-center text-md-start">
                                             <h2 style={{fontSize:'28px'}}>Salad House</h2>
                                         </div>
                                         <div className="col-1">
@@ -339,24 +339,24 @@ export default function Business() {
                                         </div>
                                     </div>
                                 </div>
-                                <div className="col-12">
+                                <div className="col-12 text-center text-md-start">
                                     <span className='p-1 bg-success text-white pe-2 ps-2 '>4.5 <i className="bi bi-star ms-2 text-white"></i></span>
                                     <span className="ms-2 fs-12">3.5k reviews</span>
                                 </div>
-                                <div className="col-12 mt-3">
+                                <div className="col-12 mt-3 text-center text-md-start">
                                     <h3 className='fs-16'>
                                         <i className="bi bi-crosshair"></i> 
                                         <span className='ms-1 fs-15'>No.12/3, Calicut South Beach, Kozhikode</span>
                                         </h3>
                                 </div>
                                 <div className="col-12 mt-3 mb-5">
-                                    <div className=" business-feature">
+                                    <div className=" business-feature text-center text-md-start">
                                         <span>Dine In</span>
                                         <span className='ms-2'>Indian</span>
                                         <span  className='ms-2'>Delivery</span>
                                     </div>
                                 </div>
-                                <div className="col-12 mt-3">
+                                <div className="col-12 mt-3 text-center text-md-start">
                                     <button className="btn " style={{backgroundColor:"#228ae2",color:"white"}}>Contact Us</button>
                                 </div>
                             </div>
@@ -364,13 +364,13 @@ export default function Business() {
                     </Link>
                     <Link to='/template' className="text-decoration-none text-dark col-12 b-theme location-card mt-4">
                         <div className="row p-2 w-100">
-                            <div className="col-4 p-0">
+                            <div className="col-12 text-center col-md-4 mt-2 p-0">
                                 <img src="/src/assets/images/business-view.png" alt="" className='w-100 br-theme'/>
                             </div>
-                            <div className="col-8">
+                            <div className="col-12 col-md-8 p-3">
                                 <div className="col-12 mb-2 mt-2">
                                     <div className="row">
-                                        <div className="col-11">
+                                        <div className="col-11 text-center text-md-start">
                                             <h2 style={{fontSize:'28px'}}>Salad House</h2>
                                         </div>
                                         <div className="col-1">
@@ -378,24 +378,24 @@ export default function Business() {
                                         </div>
                                     </div>
                                 </div>
-                                <div className="col-12">
+                                <div className="col-12 text-center text-md-start">
                                     <span className='p-1 bg-success text-white pe-2 ps-2 '>4.5 <i className="bi bi-star ms-2 text-white"></i></span>
                                     <span className="ms-2 fs-12">3.5k reviews</span>
                                 </div>
-                                <div className="col-12 mt-3">
+                                <div className="col-12 mt-3 text-center text-md-start">
                                     <h3 className='fs-16'>
                                         <i className="bi bi-crosshair"></i> 
                                         <span className='ms-1 fs-15'>No.12/3, Calicut South Beach, Kozhikode</span>
                                         </h3>
                                 </div>
                                 <div className="col-12 mt-3 mb-5">
-                                    <div className=" business-feature">
+                                    <div className=" business-feature text-center text-md-start">
                                         <span>Dine In</span>
                                         <span className='ms-2'>Indian</span>
                                         <span  className='ms-2'>Delivery</span>
                                     </div>
                                 </div>
-                                <div className="col-12 mt-3">
+                                <div className="col-12 mt-3 text-center text-md-start">
                                     <button className="btn " style={{backgroundColor:"#228ae2",color:"white"}}>Contact Us</button>
                                 </div>
                             </div>
@@ -405,7 +405,7 @@ export default function Business() {
             </div>
         </section>
 
-        <footer className='mt-3 h-100vh footer-section'>
+        <footer className='mt-3 h-auto footer-section'>
                 <div className="container">
                     <div className="p-4 mt-0 mt-md-5 pt-5" >
                         <div className="row w-100">
@@ -426,7 +426,7 @@ export default function Business() {
                                 <h1 className="fs-45 text-white text-center text-md-start fw-bold mb-3">
                                     Business Bazaar
                                 </h1>
-                                <span className='fs-20 text-white text-center text-md-start'>where requirements are found</span>
+                                <div className='fs-20 text-white text-center text-md-start'>where requirements are found</div>
                             </div>
                             <div className="col-12 col-md-6">
                                <div className="row w-100">
@@ -471,9 +471,9 @@ export default function Business() {
                     </div>
 
                     <div className="p-4 mt-2" >
-                        <div className="row w-100 text-white">
-                            <div className="col-6 col-md-2 mt-2">Cookie Policy</div>
-                            <div className="col-6 col-md-2 mt-2">Terms and Conditions</div>
+                        <div className="row w-100 text-center text-md-start text-white">
+                            <div className="col-12 col-md-2 mt-2">Cookie Policy</div>
+                            <div className="col-12 col-md-2 mt-2">Terms and Conditions</div>
                         </div>
                         <div className="text-secondary mt-5">
                             <div className='fs-16'>© 2024. All rights reserved</div>

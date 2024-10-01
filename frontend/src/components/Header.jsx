@@ -15,7 +15,7 @@ export default function Header() {
 
         <Navbar.Toggle aria-controls="basic-navbar-nav"  style={{color:'black'}}/>
 
-        <Navbar.Collapse id="basic-navbar-nav">
+        <Navbar.Collapse id="basic-navbar-nav" className='text-center'>
           <Nav className="ms-auto w-100 justify-content-evenly">
             <NavLink href="#home" className='text-black  text-decoration-none' style={{color:'black'}}>
               Home
