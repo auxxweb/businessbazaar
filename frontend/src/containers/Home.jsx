@@ -64,7 +64,7 @@ export default function Home() {
                 <div className="col-md-6">
                     <div className="row justify-content-between">
                         {/* Location Input with Crosshair Icon */}
-                        <div className="col-6 col-md-4">
+                        <div className="col-12 mt-3 col-md-4">
                             <div className="input-group">
                                 <span
                                     className="input-group-text"
@@ -93,7 +93,7 @@ export default function Home() {
                         </div>
 
                         {/* Search Input */}
-                        <div className="col-6 col-md-8">
+                        <div className="col-12 mt-3 col-md-8">
                             <div className="input-group">
                                 <span
                                     className="input-group-text"

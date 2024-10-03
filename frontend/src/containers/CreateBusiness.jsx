@@ -100,14 +100,14 @@ export default function CreateBusiness() {
         return (
             <>
                 <div className='h-100vh'>
-                    <div className="row w-100 justify-content-center h-100">
+                    <div className="row justify-content-center h-100">
                         <div className="d-none d-md-block left-portion   p-0 col-5 h-100">
                             <img src="/src/assets/images/business-details.jpg" alt="" className='w-100 h-100' />
                         </div>
                         <div className="col-12 col-md-7 row align-items-center right-portion p-5">
                             <div>
                                 <div className="col-12">
-                                    <h1 className='fw-bold'>
+                                    <h1 className='fw-bold text-center text-md-start'>
                                         Enter your <br /> Business Details
                                     </h1>
                                 </div>
@@ -127,7 +127,7 @@ export default function CreateBusiness() {
                                     <input type="text" placeholder="Building Name" className="form-control form-control-lg mt-3" />
                                     <input type="text" placeholder="Street / Colony Name" className="form-control form-control-lg mt-3" />
                                     <input type="text" placeholder="Landmark" className="form-control form-control-lg mt-3" />
-                                    <div className="row w-100">
+                                    <div className="row">
                                         <div className="col-12 col-md-6 mt-3">
                                             <input type="text" className="form-control form-control-lg w-100" placeholder="State" />
                                         </div>
@@ -152,22 +152,22 @@ export default function CreateBusiness() {
         return (
             <>
                 <div className='h-100vh'>
-                    <div className="row w-100 h-100">
+                    <div className="row  h-100">
                         <div className="d-none d-md-block left-portion   p-0 col-5">
                             <img src="/src/assets/images/contact-details.jpg" alt="" className='w-100 h-100' />
                         </div>
                         <div className="col-12 col-md-7 row align-items-center right-portion p-5">
                             <div>
                                 <div className="col-12">
-                                    <h1 className="fw-bold">Add <br /> Contact Details</h1>
+                                    <h1 className="fw-bold text-center text-md-start mb-2">Add <br /> Contact Details</h1>
                                 </div>
-                                <div className="col-12 p-5 p-sm-0">
+                                <div className="col-12 p-5 p-sm-0 mt-3">
                                     <input type="text" placeholder="Name" className="form-control form-control-lg" />
 
                                     {/* Mobile Number Section */}
                                     <div id="mobileNumberDiv">
                                         {mobileNumbers.map((number) => (
-                                            <div className="row w-100 mt-3" key={number.id}>
+                                            <div className="row  mt-3" key={number.id}>
                                                 <div className="col-12 col-sm-3 col-md-2">
                                                     <PhoneInput
                                                         country={'us'}
@@ -195,7 +195,7 @@ export default function CreateBusiness() {
                                     {/* WhatsApp Number Section */}
                                     <div id="whatsappNumberDiv">
                                         {whatsappNumbers.map((number) => (
-                                            <div className="row w-100 mt-3" key={number.id}>
+                                            <div className="row  mt-3" key={number.id}>
                                                 <div className="col-12 col-sm-3 col-md-2">
                                                     <PhoneInput
                                                         country={'us'}
@@ -222,7 +222,7 @@ export default function CreateBusiness() {
 
                                     {/* Email Section */}
                                     {emails.map((email) => (
-                                        <div className="row w-100 mt-3" key={email.id}>
+                                        <div className="row  mt-3" key={email.id}>
                                             <div className="col-12 col-sm-10">
                                                 <input type="text" placeholder="Email" className="form-control form-control-lg" />
                                             </div>
@@ -256,7 +256,7 @@ export default function CreateBusiness() {
         return (
             <>
                 <div className="h-100vh">
-                    <div className="row w-100 h-100 justify-content-center">
+                    <div className="row  h-100 justify-content-center">
                         {/* Left Image Section (hidden on small screens, visible on medium and larger screens) */}
                         <div className="d-none d-md-block left-portion col-md-5 h-100 p-0">
                             <img src="/src/assets/images/add_category.jpg" alt="" className="w-100 h-100 object-fit-cover" />
@@ -325,7 +325,7 @@ export default function CreateBusiness() {
         return (
             <>
                <div className="h-100vh">
-    <div className="row w-100 h-100 justify-content-center">
+    <div className="row  h-100 justify-content-center">
         {/* Left portion (image) */}
         <div className="d-none d-md-block left-portion p-0 col-md-5 h-100">
             <img src="/src/assets/images/service_offering.jpg" alt="" className="w-100 h-100" />
@@ -333,7 +333,7 @@ export default function CreateBusiness() {
 
         {/* Right portion (form) */}
         <div className="col-12 col-md-7 row align-items-end justify-content-center h-100 p-3 p-md-5 right-portion">
-            <div className="row justify-content-center w-100">
+            <div className="row justify-content-center ">
                 <div className="col-12 text-center">
                     <h1 className="fw-bold">
                         Add <br /> Service and Offering
@@ -371,7 +371,7 @@ export default function CreateBusiness() {
 
                     {/* Services list */}
                     <div className="col-12 mt-4">
-                        <div className="row gap-2 justify-content-center w-100">
+                        <div className="row gap-2 justify-content-center ">
                             {services.map((service, index) => (
                                 <div key={index} className="mt-2 text-center services-list p-2">
                                     {service}
@@ -424,15 +424,15 @@ export default function CreateBusiness() {
         return (
             <>
                 <div className='h-100vh'>
-                    <div className="row w-100 h-100 justify-content-center">
+                    <div className="row  h-100 justify-content-center">
                         {/* Left Image Section */}
                         <div className="d-none d-md-block left-portion p-0 col-md-5 h-100">
                             <img src="/src/assets/images/timing.jpg" alt="" className='w-100 h-100' />
                         </div>
     
                         {/* Right Form Section */}
-                        <div className="col-12 col-md-7 row align-items-end h-100 p-3 p-md-5 right-portion">
-                            <div className='row w-100 justify-content-center'>
+                        <div className="col-12 col-md-7 row align-items-end justify-content-center h-100 p-3 p-md-5 right-portion">
+                            <div className='row  justify-content-center'>
                                 <div className='col-12 text-center'>
                                     <h1 className='fw-bold'>Add <br /> Business Timing</h1>
                                 </div>
@@ -470,9 +470,11 @@ export default function CreateBusiness() {
                                     {/* Time Input Fields */}
                                     <div className="row mt-5 g-3 justify-content-center">
                                         <div className="col-12 col-md-5">
+                                            <label htmlFor="" className='form-label'>Opening Time</label>
                                             <input type="time" className='form-control form-control-lg' />
                                         </div>
                                         <div className="col-12 col-md-5">
+                                            <label htmlFor="" className='form-label'>Closing Time</label>
                                             <input type="time" className='form-control form-control-lg' />
                                         </div>
                                     </div>
@@ -500,31 +502,27 @@ export default function CreateBusiness() {
         return (
             <>
                <div className='h-100vh'>
-    <div className="row w-100 h-100 justify-content-center">
+    <div className="row  h-100 justify-content-center">
         {/* Left Image Section */}
         <div className="d-none d-md-block left-portion p-0 col-md-5 h-100">
             <img src="/src/assets/images/business-description.jpg" alt="" className='w-100 h-100' />
         </div>
 
         {/* Right Form Section */}
-        <div className="col-12 col-md-7 row align-items-end h-100 p-3 p-md-5 right-portion">
-            <div className='row w-100 justify-content-center'>
+        <div className="col-12 col-md-7 row align-items-end justify-content-center h-100 p-3 p-md-5 right-portion">
+            <div className='row  justify-content-center'>
                 <div className='col-12 text-center'>
                     <h1 className='fw-bold'>Add <br /> Business Description</h1>
                 </div>
 
                 {/* Text Editor Section */}
                 <div className="col-12 col-md-10 p-3 p-md-5">
-                    <Editor 
-                        value="Business Description"
-                        onChange={(e) => { setDescription(e.target.value) }}
-                        style={{ height: '320px', width: '100%' }}
-                    />
+                    <textarea name="description_main" className='w-100 form-control form-control-lg' rows={5} onChange={(e) => { setDescription(e.target.value) }} id="" placeholder='Business Description'></textarea>
                 </div>
             </div>
 
             {/* Save & Next Button */}
-            <div className="col-12 text-center p-3 p-md-5">
+            <div className="col-12 text-center p-3 ">
                 <button className="btn btn-theme2 w-100 text-white p-2" onClick={handleNextStep}>
                     Save & Next
                 </button>
@@ -712,22 +710,22 @@ export default function CreateBusiness() {
         return (
             <>
                 <div className='h-100vh'>
-    <div className="row w-100 h-100 justify-content-center">
+    <div className="row  h-100 justify-content-center">
         {/* Left Image Section */}
         <div className="d-none d-md-block left-portion p-0 col-md-5 h-100">
             <img src="/src/assets/images/landing-page.jpg" alt="" className='w-100 h-100' />
         </div>
 
         {/* Right Form Section */}
-        <div className="col-12 col-md-7 row align-items-end h-100 p-3 p-md-5 right-portion">
-            <div className='row w-100 justify-content-center'>
+        <div className="col-12 col-md-7 row align-items-end justify-content-center h-100 p-3 p-md-5 right-portion">
+            <div className='row  justify-content-center'>
                 <div className='col-12 text-center'>
                     <h1 className='fw-bold'>Add Details <br /> About Landing Page</h1>
                 </div>
 
                 {/* Color Theme Section */}
                 <div className="col-12 col-md-10 p-3 p-md-5">
-                    <h5 className='fs-18 mb-4'>Color Theme</h5>
+                    <h5 className='fs-18 mb-4 p-3 text-center bg-dark text-white mt-3'>Color Theme</h5>
                     <input
                         type="text"
                         name="color"
@@ -738,7 +736,7 @@ export default function CreateBusiness() {
                     />
 
                     {/* Frontpage Details */}
-                    <h5 className='fs-18 mb-4'>Add Frontpage Details</h5>
+                    <h5 className='fs-18 mb-4 p-3 text-center bg-dark text-white mt-3'>Add Frontpage Details</h5>
                     <input
                         type="text"
                         name="title"
@@ -767,7 +765,7 @@ export default function CreateBusiness() {
                     </div>
 
                     {/* Special Dish Details */}
-                    <h5 className='fs-18 mb-4'>Add Special Dish Details</h5>
+                    <h5 className='fs-18 mb-4 p-3 text-center bg-dark text-white mt-3'>Add Special Dish Details</h5>
                     {landingData.product.map((product, index) => (
                         <div key={index} className='row align-items-center'>
                             <input
@@ -811,7 +809,7 @@ export default function CreateBusiness() {
                     <a href='#' onClick={addMoreProduct} className='text-decoration-none'>+ Add More Product</a>
 
                     {/* Menu Details */}
-                    <h5 className='fs-18 mb-4 mt-3'>Add Menu Details</h5>
+                    <h5 className='fs-18 mb-4 mt-3 p-3 text-center bg-dark text-white mt-3'>Add Menu Details</h5>
                     {landingData.menu.map((menuItem, index) => (
                         <div key={index} className='row align-items-center'>
                             <input
@@ -856,7 +854,7 @@ export default function CreateBusiness() {
                     <a href='#' onClick={addMoreMenu} className='text-decoration-none'>+ Add More Menu</a>
 
                     {/* Services Details */}
-                    <h5 className='fs-18 mb-4 mt-3'>Add Services Details</h5>
+                    <h5 className='fs-18 mb-4 mt-3 p-3 text-center bg-dark text-white mt-3'>Add Services Details</h5>
                     {landingData.services.map((service, index) => (
                         <div key={index} className='row align-items-center'>
                             <input
@@ -975,15 +973,15 @@ export default function CreateBusiness() {
         return (
             <>
                <div className='h-100vh'>
-    <div className="row w-100 h-100 justify-content-center">
+    <div className="row  justify-content-center">
         {/* Left Image Section - Hidden on small screens */}
         <div className="d-none d-md-block left-portion p-0 col-md-5 h-100">
             <img src="/src/assets/images/landing-page.jpg" alt="" className='w-100 h-100' />
         </div>
 
         {/* Right Form Section */}
-        <div className="col-12 col-md-7 row align-items-end h-100 p-3 p-md-5 right-portion">
-            <div className='row w-100 justify-content-center'>
+        <div className="col-12 col-md-7 row align-items-end justify-content-center h-100 p-3 p-md-5 right-portion">
+            <div className='row  justify-content-center'>
                 <div className='col-12 text-center'>
                     <h1 className='fw-bold'>Add SEO</h1>
                 </div>
@@ -1089,8 +1087,8 @@ export default function CreateBusiness() {
         );
     }
     function MoreImages() {
-        const [images, setImages] = useState([]); // State to hold image file objects
-
+        const [images, setImages] = useState([null]); // Initialize with one image upload option
+    
         // Function to handle file input when an image is selected
         const handleFileChange = (index, event) => {
             const file = event.target.files[0]; // Get the selected file
@@ -1100,90 +1098,87 @@ export default function CreateBusiness() {
                 setImages(newImages);
             }
         };
-
+    
         // Function to add a new image input
         const addImageInput = () => {
             setImages((prevImages) => [...prevImages, null]); // Add a new entry for the new image
         };
-
+    
         // Handle the click event to trigger the hidden file input
         const handleAddImageClick = (index) => {
             document.getElementById(`file-input-${index}`).click(); // Trigger the file input click
         };
-
+    
         return (
             <>
-               <div className='h-100vh'>
-    <div className="row w-100 h-100 justify-content-center">
-        {/* Left Image Section - Hidden on small screens */}
-        <div className="d-none d-md-block left-portion p-0 col-md-5 h-100">
-            <img src="/src/assets/images/landing-page.jpg" alt="" className='w-100 h-100' />
-        </div>
-
-        {/* Right Form Section */}
-        <div className="col-12 col-md-7 row align-items-end h-100 p-3 p-md-5 right-portion">
-            <div className='row w-100 justify-content-center'>
-                <div className='col-12 text-center'>
-                    <h1 className='fw-bold'>Add Images</h1>
-                </div>
-
-                {/* Image Upload Fields */}
-                <div className="col-12 col-md-10 p-3 p-md-5">
-                    <div className="row mb-3">
-                        {images.map((image, index) => (
-                            <div className="col-6 col-md-3 mb-3" key={index}>
-                                <input
-                                    type="file"
-                                    hidden
-                                    id={`file-input-${index}`}
-                                    accept="image/*"
-                                    onChange={(e) => handleFileChange(index, e)}
-                                />
-                                <div
-                                    className="p-2 add-logo-div"
-                                    onClick={() => handleAddImageClick(index)}
-                                >
-                                    <div className="text-center">
-                                        {image ? (
-                                            <img src={image} alt={`Uploaded Preview ${index}`} className='img-preview' width="100" />
-                                        ) : (
-                                            <img src="/src/assets/images/add_image.png" width="50" alt="Add Image" />
-                                        )}
-                                        <div className="col-12">
-                                            <span>Add Image</span>
-                                        </div>
+                <div className='h-100vh'>
+                    <div className="row  h-100 justify-content-center">
+                        {/* Left Image Section - Hidden on small screens */}
+                        <div className="d-none d-md-block left-portion p-0 col-md-5 h-100">
+                            <img src="/src/assets/images/landing-page.jpg" alt="" className='w-100 h-100' />
+                        </div>
+    
+                        {/* Right Form Section */}
+                        <div className="col-12 col-md-7 row align-items-end justify-content-center h-100 p-3 p-md-5 right-portion">
+                            <div className='row  justify-content-center'>
+                                <div className='col-12 text-center'>
+                                    <h1 className='fw-bold'>Add Images</h1>
+                                </div>
+    
+                                {/* Image Upload Fields */}
+                                <div className="col-12 col-md-10 p-3 p-md-5">
+                                    <div className="row mb-3">
+                                        {images.map((image, index) => (
+                                            <div className="col-6 col-md-3 mb-3" key={index}>
+                                                <input
+                                                    type="file"
+                                                    hidden
+                                                    id={`file-input-${index}`}
+                                                    accept="image/*"
+                                                    onChange={(e) => handleFileChange(index, e)}
+                                                />
+                                                <div
+                                                    className="p-2 add-logo-div"
+                                                    onClick={() => handleAddImageClick(index)}
+                                                >
+                                                    <div className="text-center">
+                                                        {image ? (
+                                                            <img src={image} alt={`Uploaded Preview ${index}`} className='img-preview' width="100" />
+                                                        ) : (
+                                                            <img src="/src/assets/images/add_image.png" width="50" alt="Add Image" />
+                                                        )}
+                                                        <div className="col-12">
+                                                            <span>Add Image</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                    <div className="col-12 mb-3 text-center">
+                                        <button className="btn btn-link text-decoration-none" onClick={addImageInput}>
+                                            + Add another image
+                                        </button>
                                     </div>
                                 </div>
                             </div>
-                        ))}
-                    </div>
-                    <div className="col-12 mb-3 text-center">
-                        <button className="btn btn-link text-decoration-none" onClick={addImageInput}>
-                            + Add another image
-                        </button>
+    
+                            {/* Save & Next Button */}
+                            <div className="col-12 text-center p-3 p-md-5">
+                                <button className="btn btn-theme2 w-100 text-white p-2" onClick={handleNextStep}>
+                                    Save & Next
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
-
-            {/* Save & Next Button */}
-            <div className="col-12 text-center p-3 p-md-5">
-                <button className="btn btn-theme2 w-100 text-white p-2" onClick={handleNextStep}>
-                    Save & Next
-                </button>
-            </div>
-        </div>
-    </div>
-</div>
-
             </>
         );
     }
 
-
-
     function MoreVideos() {
-        const [videos, setVideos] = useState([]);
-
+        const [videos, setVideos] = useState([null]); // Initialize with one video upload option
+    
         const handleFileChange = (index, event) => {
             const file = event.target.files[0];
             if (file) {
@@ -1192,177 +1187,202 @@ export default function CreateBusiness() {
                 setVideos(newVideos);
             }
         };
-
+    
         const addVideoInput = () => {
             setVideos((prevVideos) => [...prevVideos, null]);
         };
-
+    
         const handleAddVideoClick = (index) => {
             document.getElementById(`file-input-${index}`).click();
         };
-
+    
         return (
             <>
                 <div className='h-100vh'>
-    <div className="row w-100 h-100 justify-content-center">
-        {/* Left Image Section - Hidden on small screens */}
-        <div className="d-none d-md-block left-portion p-0 col-md-5 h-100">
-            <img src="/src/assets/images/landing-page.jpg" alt="" className='w-100 h-100' />
-        </div>
-
-        {/* Right Form Section */}
-        <div className="col-12 col-md-7 row align-items-end h-100 p-3 p-md-5 right-portion">
-            <div className='row w-100 justify-content-center'>
-                <div className='col-12 text-center'>
-                    <h1 className='fw-bold'>Add Videos</h1>
-                </div>
-
-                {/* Video Upload Fields */}
-                <div className="col-12 col-md-10 p-3 p-md-5">
-                    <div className="row mb-3">
-                        {videos.map((video, index) => (
-                            <div className="col-12 col-md-6 col-lg-3 mb-3" key={index}>
-                                <input
-                                    type="file"
-                                    hidden
-                                    id={`file-input-${index}`}
-                                    accept="video/*"
-                                    onChange={(e) => handleFileChange(index, e)}
-                                />
-                                <div
-                                    className="p-2 add-logo-div"
-                                    onClick={() => handleAddVideoClick(index)}
-                                >
-                                    <div className="text-center">
-                                        {video ? (
-                                            <video width="100%" controls className='video-preview'>
-                                                <source src={video} type="video/mp4" />
-                                                Your browser does not support the video tag.
-                                            </video>
-                                        ) : (
-                                            <img src="/src/assets/images/add-video.png" width="50" alt="Add Video" />
-                                        )}
-                                        <div className="col-12">
-                                            <span>Add Video</span>
-                                        </div>
+                    <div className="row h-100 justify-content-center">
+                        {/* Left Image Section - Hidden on small screens */}
+                        <div className="d-none d-md-block left-portion p-0 col-md-5 h-100">
+                            <img src="/src/assets/images/landing-page.jpg" alt="" className='w-100 h-100' />
+                        </div>
+    
+                        {/* Right Form Section */}
+                        <div className="col-12 col-md-7 row align-items-end justify-content-center h-100 p-3 p-md-5 right-portion">
+                            <div className='row justify-content-center'>
+                                <div className='col-12 text-center'>
+                                    <h1 className='fw-bold'>Add Videos</h1>
+                                </div>
+    
+                                {/* Video Upload Fields */}
+                                <div className="col-12 col-md-10 p-3 p-md-5">
+                                    <div className="row mb-3">
+                                        {videos.map((video, index) => (
+                                            <div className="col-6 col-lg-3 mb-3" key={index}>
+                                                <input
+                                                    type="file"
+                                                    hidden
+                                                    id={`file-input-${index}`}
+                                                    accept="video/*"
+                                                    onChange={(e) => handleFileChange(index, e)}
+                                                />
+                                                <div
+                                                    className="p-2 add-logo-div"
+                                                    onClick={() => handleAddVideoClick(index)}
+                                                >
+                                                    <div className="text-center">
+                                                        {video ? (
+                                                            <video width="100%" controls className='video-preview'>
+                                                                <source src={video} type="video/mp4" />
+                                                                Your browser does not support the video tag.
+                                                            </video>
+                                                        ) : (
+                                                            <img src="/src/assets/images/add-video.png" width="50" alt="Add Video" />
+                                                        )}
+                                                        <div className="col-12">
+                                                            <span>Add Video</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                    <div className="col-12 mb-3 text-center">
+                                        <button className="btn btn-link text-decoration-none" onClick={addVideoInput}>
+                                            + Add another video
+                                        </button>
                                     </div>
                                 </div>
                             </div>
-                        ))}
-                    </div>
-                    <div className="col-12 mb-3 text-center">
-                        <button className="btn btn-link text-decoration-none" onClick={addVideoInput}>
-                            + Add another video
-                        </button>
+    
+                            {/* Save & Next Button */}
+                            <div className="col-12 text-center p-3 p-md-5">
+                                <button className="btn btn-theme2 w-100 text-white p-2" onClick={handleNextStep}>
+                                    Save & Next
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
-
-            {/* Save & Next Button */}
-            <div className="col-12 text-center p-3 p-md-5">
-                <button className="btn btn-theme2 w-100 text-white p-2" onClick={handleNextStep}>
-                    Save & Next
-                </button>
-            </div>
-        </div>
-    </div>
-</div>
-
             </>
         );
     }
-
+    
 
     function Subscription() {
-
+        // Manage active state for Free and Premium plan features
+        const [activeTicks, setActiveTicks] = useState({
+            free: [true, false, false, false, false, false],
+            premium: [true, true, true, true, true, true]
+        });
+    
+        const toggleActiveTick = (plan, index) => {
+            setActiveTicks((prevTicks) => ({
+                ...prevTicks,
+                [plan]: prevTicks[plan].map((item, idx) => idx === index ? !item : item)
+            }));
+        };
+    
         return (
             <>
-              <div className='h-100vh'>
-    <div className="row w-100 h-100 justify-content-center">
-        <div className="d-none d-md-block left-portion p-0 col-md-5 h-100">
-            <img src="/src/assets/images/subscription.jpg" alt="" className='w-100 h-100' />
-        </div>
-        <div className="col-12 col-md-7 row align-items-end h-100 p-3 p-md-5 right-portion">
-            <div className='row w-100 justify-content-center'>
-                <div className='col-12 text-center'>
-                    <h1 className='fw-bold'>Add Subscriptions</h1>
-                </div>
-                <div className="col-12">
-                    <div className="row justify-content-center">
-                        <div className="col-12 col-md-6 mb-4">
-                            <div className="card br-20 b-theme2">
-                                <div className="p-4">
-                                    <div className="col-12 text-center">
-                                        <span className='fw-bold'>Free Plan</span>
-                                    </div>
-                                    <div className="row mt-2 mb-2">
-                                        <div className="col-4">
-                                            <h1 className='fw-bold fs-30'>₹0</h1>
+                <div className='h-100vh'>
+                    <div className="row h-100 justify-content-center">
+                        {/* Left Image Section - Hidden on small screens */}
+                        <div className="d-none d-md-block left-portion p-0 col-md-5 h-100">
+                            <img src="/src/assets/images/subscription.jpg" alt="" className='w-100 h-100' />
+                        </div>
+                        {/* Right Form Section */}
+                        <div className="col-12 col-md-7 row align-items-end justify-content-center h-100 p-3 p-md-5 right-portion">
+                            <div className='row justify-content-center'>
+                                <div className='col-12 text-center'>
+                                    <h1 className='fw-bold'>Add Subscriptions</h1>
+                                </div>
+                                <div className="col-12">
+                                    <div className="row justify-content-center">
+                                        {/* Free Plan */}
+                                        <div className="col-12 col-md-6 mb-4">
+                                            <div className="card br-20 b-theme2">
+                                                <div className="p-4">
+                                                    <div className="col-12 text-center">
+                                                        <span className='fw-bold'>Free Plan</span>
+                                                    </div>
+                                                    <div className="row mt-2 mb-2">
+                                                        <div className="col-4">
+                                                            <h1 className='fw-bold fs-30'>₹0</h1>
+                                                        </div>
+                                                        <div className="col-8 p-0 text-start">
+                                                            <span className="text-secondary">per editor/month</span> <br />
+                                                            <span className="text-secondary">Billed Monthly</span>
+                                                        </div>
+                                                    </div>
+                                                    <div className='col-12 mt-4'>
+                                                        {['10 gen per day', 'Unlimited Relaxed generations', 'General commercial terms', 'Access to member gallery', 'Optional credit top ups', '12 concurrent fast jobs'].map((feature, index) => (
+                                                            <div className='mt-2' key={index}>
+                                                                <span 
+                                                                    className={`subscription-tick bg-light ${activeTicks.free[index] ? 'active' : ''}`} 
+                                                                    onClick={() => toggleActiveTick('free', index)}
+                                                                >
+                                                                    <i className="bi bi-check"></i>
+                                                                </span>
+                                                                <span className='fs-16'>{feature}</span>
+                                                            </div>
+                                                        ))}
+                                                    </div>
+                                                    <div className="mt-4">
+                                                        <button className="btn w-100 text-white" style={{ backgroundColor: "#5b7ee88c" }}>Choose Plan</button>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div className="col-8 p-0 text-start">
-                                            <span className="text-secondary">per editor/month</span> <br />
-                                            <span className="text-secondary">Billed Monthly</span>
+    
+                                        {/* Premium Plan */}
+                                        <div className="col-12 col-md-6 mb-4">
+                                            <div className="card br-20 b-theme2">
+                                                <div className="p-4">
+                                                    <div className="col-12 text-center">
+                                                        <span className='fw-bold'>Premium Plan</span>
+                                                    </div>
+                                                    <div className="row mt-2 mb-2">
+                                                        <div className="col-4">
+                                                            <h1 className='fw-bold fs-30'>₹500</h1>
+                                                        </div>
+                                                        <div className="col-8 p-0 text-start">
+                                                            <span className="text-secondary">per editor/month</span> <br />
+                                                            <span className="text-secondary">Billed Monthly</span>
+                                                        </div>
+                                                    </div>
+                                                    <div className='col-12 mt-4'>
+                                                        {['30h Fast generations', 'Unlimited Relaxed generations', 'General commercial terms', 'Access to member gallery', 'Optional credit top ups', '12 concurrent fast jobs'].map((feature, index) => (
+                                                            <div className='mt-2' key={index}>
+                                                                <span 
+                                                                    className={`subscription-tick bg-light ${activeTicks.premium[index] ? 'active' : ''}`} 
+                                                                    onClick={() => toggleActiveTick('premium', index)}
+                                                                >
+                                                                    <i className="bi bi-check"></i>
+                                                                </span>
+                                                                <span className='fs-16'>{feature}</span>
+                                                            </div>
+                                                        ))}
+                                                    </div>
+                                                    <div className="mt-4">
+                                                        <button className="btn w-100 text-white" style={{ backgroundColor: "#5b7ee88c" }}>Choose Plan</button>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div className='col-12 mt-4'>
-                                        <div><span className='subscription-tick bg-light active' onClick={(e) => { activeHandler }}><i className="bi bi-check"></i></span> <span className='fs-16'>10 gen per day</span></div>
-                                        <div className='mt-2'><span className='subscription-tick bg-light' onClick={(e) => { activeHandler }}><i className="bi bi-check"></i></span> <span className='fs-16'>Unlimited Relaxed generations</span></div>
-                                        <div className='mt-2'><span className='subscription-tick bg-light' onClick={(e) => { activeHandler }}><i className="bi bi-check"></i></span> <span className='fs-16'>General commercial terms</span></div>
-                                        <div className='mt-2'><span className='subscription-tick bg-light' onClick={(e) => { activeHandler }}><i className="bi bi-check"></i></span> <span className='fs-16'>Access to member gallery</span></div>
-                                        <div className='mt-2'><span className='subscription-tick bg-light' onClick={(e) => { activeHandler }}><i className="bi bi-check"></i></span> <span className='fs-16'>Optional credit top ups</span></div>
-                                        <div className='mt-2'><span className='subscription-tick bg-light' onClick={(e) => { activeHandler }}><i className="bi bi-check"></i></span> <span className='fs-16'>12 concurrent fast jobs</span></div>
-                                    </div>
-                                    <div className="mt-4">
-                                        <button className="btn w-100 text-white" style={{ backgroundColor: "#5b7ee88c" }}>Choose Plan</button>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-
-                        <div className="col-12 col-md-6 mb-4">
-                            <div className="card br-20 b-theme2">
-                                <div className="p-4">
-                                    <div className="col-12 text-center">
-                                        <span className='fw-bold'>Premium Plan</span>
-                                    </div>
-                                    <div className="row mt-2 mb-2">
-                                        <div className="col-4">
-                                            <h1 className='fw-bold fs-30'>₹500</h1>
-                                        </div>
-                                        <div className="col-8 p-0 text-start">
-                                            <span className="text-secondary">per editor/month</span> <br />
-                                            <span className="text-secondary">Billed Monthly</span>
-                                        </div>
-                                    </div>
-                                    <div className='col-12 mt-4'>
-                                        <div><span className='subscription-tick bg-light active'><i className="bi bi-check"></i></span> <span className='fs-16'>30h Fast generations</span></div>
-                                        <div className='mt-2'><span className='subscription-tick bg-light active'><i className="bi bi-check"></i></span> <span className='fs-16'>Unlimited Relaxed generations</span></div>
-                                        <div className='mt-2'><span className='subscription-tick bg-light active'><i className="bi bi-check"></i></span> <span className='fs-16'>General commercial terms</span></div>
-                                        <div className='mt-2'><span className='subscription-tick bg-light active'><i className="bi bi-check"></i></span> <span className='fs-16'>Access to member gallery</span></div>
-                                        <div className='mt-2'><span className='subscription-tick bg-light active'><i className="bi bi-check"></i></span> <span className='fs-16'>Optional credit top ups</span></div>
-                                        <div className='mt-2'><span className='subscription-tick bg-light active'><i className="bi bi-check"></i></span> <span className='fs-16'>12 concurrent fast jobs</span></div>
-                                    </div>
-                                    <div className="mt-4">
-                                        <button className="btn w-100 text-white" style={{ backgroundColor: "#5b7ee88c" }}>Choose Plan</button>
-                                    </div>
-                                </div>
+                            <div className="col-12 text-center p-3 p-md-5">
+                                <button className="btn btn-theme2 w-100 text-white p-2" onClick={handleNextStep}>
+                                    Save & Next
+                                </button>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div className="col-12 text-center p-3 p-md-5">
-                <button className="btn btn-theme2 w-100 text-white p-2" onClick={handleNextStep}>
-                    Save & Next
-                </button>
-            </div>
-        </div>
-    </div>
-</div>
-
             </>
         )
     }
+    
     const Razorpay = () => {
         const [isScriptLoaded, setScriptLoaded] = useState(false);
 
