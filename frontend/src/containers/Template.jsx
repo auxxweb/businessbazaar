@@ -1,12 +1,29 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Container, Nav, Navbar, NavLink } from 'react-bootstrap'
 import '/src/assets/css/template.css';
 import Slider from 'react-slick';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import { useParams } from 'react-router-dom';
+import { fetchBusinessTemplate } from '../Functions/functions';
 
 export default function Template() {
     const [currentSlide, setCurrentSlide] = useState(0);
+    const [businessData, setBusinessData] = useState(null); 
+    const { id } = useParams();
+    const [loading, setLoading] = useState(true);
+
+    useEffect(()=>{
+        const fetchData = async()=>{
+            const businessDetails = await fetchBusinessTemplate(id);
+            setBusinessData(businessDetails.data)
+            console.log(businessDetails)
+            setLoading(false);
+        }
+
+        fetchData()
+
+    },[id])
 
     const settings = {
         dots: false,
@@ -113,7 +130,7 @@ export default function Template() {
         dots: false,
         infinite: true,
         speed: 500,
-        slidesToShow: 1,
+        slidesToShow: 2,
         slidesToScroll: 1,
         autoplay: true,
         // centerMode: true,
@@ -122,7 +139,7 @@ export default function Template() {
             {
                 breakpoint: 1024,
                 settings: {
-                  slidesToShow: 1,
+                  slidesToShow: 2,
                   slidesToScroll: 1,
                   infinite: true,
                 },
@@ -159,55 +176,20 @@ export default function Template() {
     };
 
 
-    const services = [
-        {
-            title: 'Door to Door Delivery',
-            description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed vel diam id diam efficitur vestibulum. Nulla facilisi. Sed et libero vel neque tincidunt pharetra. Sed in massa ac neque pharetra consectetur.',
-            img: '/src/assets/images/service2.svg'
-        },
-        {
-            title: 'Secure Payment',
-            description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed vel diam id diam efficitur vestibulum. Nulla facilisi. Sed et libero vel neque tincidunt pharetra. Sed in massa ac neque pharetra consectetur.',
-            img: '/src/assets/images/service1.svg'
-        },
-        {
-            title: 'Fast Delivery',
-            description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed vel diam id diam efficitur vestibulum. Nulla facilisi. Sed et libero vel neque tincidunt pharetra. Sed in massa ac neque pharetra consectetur.',
-            img: '/src/assets/images/service3.svg'
-        }, {
-            title: 'Door to Door Delivery',
-            description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed vel diam id diam efficitur vestibulum. Nulla facilisi. Sed et libero vel neque tincidunt pharetra. Sed in massa ac neque pharetra consectetur.',
-            img: '/src/assets/images/service2.svg'
-        },
-    ];
+    if (loading) {
+        return <div className='h-100vh text-center '>
+            <div className='row h-100 justify-content-center align-items-center'>
 
-    const dishes = [
-        {
-            img: '/src/assets/images/dish-1.png',
-            title: 'Lumpia with Sauce',
-            description: 'Lorem ipsum dolor sit, consectetur adipiscing elit, sed do eiusmod tempor.'
-        },
-        {
-            img: '/src/assets/images/dish-2.png',
-            title: 'Fish and Veggie',
-            description: 'Lorem ipsum dolor sit, consectetur adipiscing elit, sed do eiusmod tempor.'
-        },
-        {
-            img: '/src/assets/images/dish-3.png',
-            title: 'Tofu Chili',
-            description: 'Lorem ipsum dolor sit, consectetur adipiscing elit, sed do eiusmod tempor.'
-        },
-        {
-            img: '/src/assets/images/dish-4.png',
-            title: 'Egg and Cocumber',
-            description: 'Lorem ipsum dolor sit, consectetur adipiscing elit, sed do eiusmod tempor.'
-        },
-        {
-            img: '/src/assets/images/dish-1.png',
-            title: 'Lumpia with Sauce',
-            description: 'Lorem ipsum dolor sit, consectetur adipiscing elit, sed do eiusmod tempor.'
-        }
-    ];
+            <div className='col-3 '>Loading...</div>
+            </div>
+        </div>;
+    }
+
+    // If there's no business data (e.g., fetch failed), show an error message
+    if (!businessData) {
+        return <div>Error loading business data.</div>;
+    }
+
 
 
 
@@ -244,12 +226,12 @@ export default function Template() {
             <link rel="preconnect" href="https://fonts.googleapis.com" />
             <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
             <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap" rel="stylesheet" />
-            <Navbar expand="lg" className="bg-white pjs" style={{ padding: "20px" }}>
+            <Navbar expand="lg" className="bg-white pjs fixed-top" style={{ paddingBlock: "5px" }}>
                 <Container>
                     {/* Align Brand to the start (left side) */}
                     <Navbar.Brand href="#home" className='fw-bold w-50 nav-logo' style={{ fontSize: '36px' }}>
-                        <img src="/src/assets/images/logo.svg" alt="" />
-                        <span className="ms-2">Food House</span>
+                        <img src={businessData.logo} alt="" />
+                        <span className="ms-2">{businessData.businessName}</span>
                     </Navbar.Brand>
 
                     <Navbar.Toggle aria-controls="basic-navbar-nav" style={{ color: 'black' }} />
@@ -287,29 +269,27 @@ export default function Template() {
                 </Container>
             </Navbar>
             <section className='h-auto'>
-                <div className="container">
+                <div className="container p-top">
                     <div className="row align-items-center">
                         {/* Left Image for Mobile View */}
                         <div className="col-12 col-lg-6 text-end d-block d-lg-none">
-                            <img src="/src/assets/images/banner-image.png" alt="" className='banner-image' />
+                            <img src={businessData.landingPageHero.coverImage} alt="" className='banner-image' />
                             <div className='banner-image-2 d-none'>
                                 <img src="/src/assets/images/baner-image2.png" alt="" />
                             </div>
                         </div>
 
                         {/* Text Content */}
-                        <div className="col-12 col-lg-6 order-0 order-lg-1">
+                        <div className="col-12 col-lg-6">
                             <div className="row align-items-center">
                                 <div className="col-12">
                                     <h1 className="text-start text-dark fw-bold david-font fw-bold banner-title text-center text-lg-start">
-                                        We provide the <br />
-                                        best food for you
+                                        {businessData.landingPageHero.title}
                                     </h1>
                                 </div>
                                 <div className="col-12">
                                     <p className='text-secondary text-center text-lg-start david-font'>
-                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed vel neque ac nunc faucibus commodo. Donec sagittis neque vel neque congue, vel pellentesque lacus malesuada.
-                                        Donec sed ultricies nunc, in efficitur nisi.
+                                        {businessData.landingPageHero.description}
                                     </p>
                                 </div>
                                 <div className="mt-3 col-12">
@@ -322,23 +302,23 @@ export default function Template() {
                                         </div>
                                     </div>
                                 </div>
-                                <div className="mt-5 col-12 row justify-content-center gap-3">
-                                    <div className="contact-banner">
+                                <div className="mt-5 col-12 social-media gap-3">
+                                    <a href={businessData.socialMediaLinks[0].link} target='_blank' className="contact-banner text-dark">
                                         <i className="bi bi-facebook"></i>
-                                    </div>
-                                    <div className="contact-banner">
+                                    </a>
+                                    <a href={businessData.socialMediaLinks[1].link} target='_blank' className="contact-banner text-dark">
                                         <i className="bi bi-instagram"></i>
-                                    </div>
-                                    <div className="contact-banner">
+                                    </a>
+                                    <a href={businessData.socialMediaLinks[2].link} target='_blank' className="contact-banner text-dark">
                                         <i className="bi bi-twitter"></i>
-                                    </div>
+                                    </a>
                                 </div>
                             </div>
                         </div>
 
                         {/* Right Image for Desktop View */}
                         <div className="col-12 col-lg-6 text-end d-none d-lg-block">
-                            <img src="/src/assets/images/banner-image.png" alt="" className='banner-image' />
+                            <img src={businessData.landingPageHero.coverImage} alt="" className='banner-image' />
                             <div className='banner-image-2 d-none'>
                                 <img src="/src/assets/images/baner-image2.png" alt="" />
                             </div>
@@ -348,7 +328,7 @@ export default function Template() {
             </section>
 
             <div className="mt-5 mb-5">
-                <div className="container">
+                <div className="container p-top">
                     <div className="col-12 address-section">
                         <div className="row">
                             <div className="col-12 col-lg-4 mb-3 mb-lg-0">
@@ -358,7 +338,7 @@ export default function Template() {
                                     </div>
                                     <div className="col">
                                         <span className="fs-13">Address</span>
-                                        <p className='fs-16'>Calicut South Beach, Kozhikode</p>
+                                        <p className='fs-16'>{businessData.address.buildingName}, {businessData.address.city},{businessData.address.landMark},{businessData.address.streetName}, {businessData.address.state}</p>
                                     </div>
                                 </div>
                             </div>
@@ -370,7 +350,7 @@ export default function Template() {
                                     </div>
                                     <div className="col">
                                         <span className="fs-13">Send Email</span>
-                                        <p className='fs-16'>example@example.com</p>
+                                        <p className='fs-16'>{businessData.contactDetails.email}</p>
                                     </div>
                                 </div>
                             </div>
@@ -382,7 +362,8 @@ export default function Template() {
                                     </div>
                                     <div className="col">
                                         <span className="fs-13">Contact</span>
-                                        <p className='fs-16'>+91 0123654799</p>
+                                        <p className='fs-16 mb-0'>{businessData.contactDetails.primaryNumber}</p>
+                                        <p className='fs-16 mt-0'>{businessData.contactDetails.secondaryNumber}</p>
                                     </div>
                                 </div>
                             </div>
@@ -393,11 +374,11 @@ export default function Template() {
 
 
             <section className=' h-auto' style={{ backgroundColor: "#F3F3F4" }} id='about'>
-                <div className="container">
+                <div className="container p-top">
                     <div className="row mt-5 align-items-center mb-5">
                         <div className="col-12 col-lg-6 mt-2 text-center text-lg-start about-image">
                             <img
-                                src="/src/assets/images/baner-image2.png"
+                                src={businessData.welcomePart.coverImage}
                                 className="img-fluid"
                                 alt=""
                             />
@@ -405,12 +386,11 @@ export default function Template() {
                         </div>
                         <div className="col-12 col-lg-6">
                             <div className="col-12 mb-3">
-                                <h1 className="text-center text-lg-start text-dark fw-bold david-font fw-bold banner-title">Wecome to Our Restaurant</h1>
+                                <h1 className="text-center text-lg-start text-dark fw-bold david-font fw-bold banner-title">{businessData.welcomePart.title}</h1>
                             </div>
                             <div className="col-12 mt-4">
                                 <p className='text-secondary text-center text-lg-start david-font mt-4'>
-                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed vel neque ac nunc faucibus commodo. Donec sagittis neque vel neque congue, vel pellentesque lacus malesuada.
-                                    Donec sed ultricies nunc, in efficitur nisi. Sed consectetur, quam sit amet lobortis vulputate, velit velit consectetur ex, id malesuada ligula ipsum eu eros.
+                                {businessData.welcomePart.description}
                                 </p>
                             </div>
                             <div className="mt-3 col-12">
@@ -431,11 +411,11 @@ export default function Template() {
             </section>
 
             <section className="h-auto" style={{ backgroundColor: "#F3F3F4" }}>
-                <div className="container mt-5 mb-5">
+                <div className="container p-top">
                     <div className="col-12 mb-5">
                         <div className="mt-5 text-center">
                             <div className="col-12">
-                                <h1 className="text-center text-dark fw-bold david-font fw-bold banner-title fs-45">Our Special Dishes</h1>
+                                <h1 className="text-center text-dark fw-bold david-font fw-bold banner-title fs-45">Our Products</h1>
                             </div>
                             <div className="row justify-content-center">
                                 <div className="col-6 mb-5">
@@ -451,10 +431,10 @@ export default function Template() {
 
                         <div className="col-12 mb-5 david-font">
                             <Slider {...settings}>
-                                {dishes.map((dish, index) => (
+                                {businessData.productSection.map((dish, index) => (
                                     <div key={index} className="dish-div col-12 text-center  p-3">
                                         <div className="col-12 position-relative text-center" style={{ bottom: "60px" }}>
-                                            <img src={dish.img} alt={dish.title} />
+                                            <img src={dish.image} alt={dish.title} style={{width:'300px',height:'300px'}}/>
                                         </div>
                                         <div className="col-12">
                                             <h2 className="fs-20 fw-bold">{dish.title}</h2>
@@ -471,7 +451,7 @@ export default function Template() {
                 </div>
             </section>
             <section className="bg-white h-auto david-font" id='menu'>
-                <div className="container pt-5 mt-5">
+                <div className="container  p-top">
                     <div className="col-12 mb-5">
                         <div className="row justify-content-center">
                             <div className="col-6 text-center">
@@ -528,14 +508,7 @@ export default function Template() {
                     <div className="mt-5 david-font">
                         <div className="mb-5">
                             <div className="row mb-3">
-                                {[
-                                    { title: "Chinese Pasta", image: "/src/assets/images/menu1.png", price: "$15.99" },
-                                    { title: "Egg and Cucumber", image: "/src/assets/images/menu2.png", price: "$15.99" },
-                                    { title: "Chicken Fried Rice", image: "/src/assets/images/menu3.png", price: "$15.99" },
-                                    { title: "Chicken White Rice", image: "/src/assets/images/menu4.png", price: "$15.99" },
-                                    { title: "Chicken Pizza", image: "/src/assets/images/menu5.png", price: "$15.99" },
-                                    { title: "Spatial Barger", image: "/src/assets/images/menu6.png", price: "$15.99" },
-                                ].map((item, index) => (
+                                {businessData.productSection.map((item, index) => (
                                     <div className="col-12 col-lg-6 mt-3" key={index}>
                                         <div className="row">
                                             <div className="col-2">
@@ -543,7 +516,7 @@ export default function Template() {
                                             </div>
                                             <div className="col-8">
                                                 <h1 className='fs-20 fw-bold'>{item.title}</h1>
-                                                <p className="mt-2">it's a testament to our.</p>
+                                                <p className="mt-2">{item.description}</p>
                                             </div>
                                             <div className="col-2 p-0">
                                                 <span className='fw-bold'>{item.price}</span>
@@ -559,13 +532,13 @@ export default function Template() {
 
 
             <section className="h-auto david-font" style={{ backgroundColor: "#F3F3F4" }}>
-                <div className="container">
+                <div className="container p-top">
                     <div className="col-12 mt-5 text-center text-lg-start">
                         <h1 className='fw-bold'>Services We Provide</h1>
                     </div>
                     <div className="col-12 mb-5">
                         <Slider {...setting2} className='mb-5'>
-                            {services.map((service, index) => (
+                            {businessData.service.map((service, index) => (
                                 <div key={index} className={`col-12 col-lg-4 service-design ${index === currentSlide ? 'active' : 'bg-white'}  mt-5 mb-5 text-center`}>
                                     <div className="col-12 text-center">
                                         <h3>{service.title}</h3>
@@ -574,7 +547,7 @@ export default function Template() {
                                         <p className='text-center'>{service.description}</p>
                                     </div>
                                     <div className="col-12 text-center" style={{ height: "100px" }}>
-                                        <img src={service.img} alt={service.title} className='h-100' />
+                                        <img src={service.image} alt={service.title} className='h-100' />
                                     </div>
                                 </div>
                             ))}
@@ -586,28 +559,19 @@ export default function Template() {
                             <h1 className="fw-bold text-center">Gallery</h1>
                         </div>
                         <div className="row justify-content-center mb-5">
+                        {businessData.gallery.map((image, index) => (
                             <div className="col-12 col-lg-4 mt-4">
-                                <img src="/src/assets/images/gallery.png" alt="" className='w-100' />
+                                <img src={image} alt="" className='w-100 gallery-img' />
                             </div>
-                            <div className="col-12 col-lg-4 mt-4">
-                                <img src="/src/assets/images/gallery1.png" alt="" className='w-100' />
-                            </div>
-                            <div className="col-12 col-lg-4 mt-4">
-                                <img src="/src/assets/images/gallery2.png" alt="" className='w-100' />
-                            </div>
-                            <div className="col-12 col-lg-4 mt-4">
-                                <img src="/src/assets/images/gallery3.png" alt="" className='w-100' />
-                            </div>
-                            <div className="col-12 col-lg-4 mt-4 mb-4">
-                                <img src="/src/assets/images/gallery4.png" alt="" className='w-100' />
-                            </div>
+                        ))}
+                            
                         </div>
                     </div>
 
                 </div>
             </section>
             <section className='bg-white'>
-                <div className="container">
+                <div className="container p-top">
                     <div className="row align-items-center">
                         <div className="col-12 col-lg-6 row align-items-center">
                             <div>
@@ -642,7 +606,7 @@ export default function Template() {
                 </div>
             </section>
             <section className='' style={{ backgroundColor: "#F3F3F4" }}>
-                <div className="container david-font">
+                <div className="container david-font p-top">
                     <div className="col-12 text-center">
                         <h1>Our Happy Customers</h1>
                     </div>
@@ -654,24 +618,28 @@ export default function Template() {
 
                     <div className="mt-5">
                         <Slider {...settings3}>
-                            {testimonials.map((testimonial, index) => (
-                                <div key={index} className="bg-white col-12 p-3 mt-2 test-div-bottom">
-                                    <div className="col-12 text-center test-button-img-div">
-                                        <img src={testimonial.img} alt={testimonial.name} />
-                                    </div>
-                                    <div className='text-warning text-center mt-0 m-0'>
-                                        {[...Array(testimonial.stars)].map((star, i) => (
-                                            <i key={i} className="bi bi-star-fill"></i>
-                                        ))}
-                                    </div>
-                                    <div className="col-12 mt-3">
-                                        <p>{testimonial.text}</p>
-                                    </div>
-                                    <div className="col-12 text-center mb-5">
-                                        <span className='fw-bold david-font'>{testimonial.name}</span>
-                                    </div>
+                            {businessData.testimonial.reviews.map((testimonial, index) => (
+                            <div key={index} className="bg-white col-12 p-3 mt-2 test-div-bottom">
+                                <div className="col-12 text-center test-button-img-div">
+                                    <img src={testimonial.image} alt={testimonial.name} className="img-fluid" />
                                 </div>
-                            ))}
+
+                                <div className='text-warning text-center mt-0 m-0'>
+                                    {[...Array(Math.floor(testimonial.rating))].map((star, i) => (
+                                        <i key={i} className="bi bi-star-fill"></i>
+                                    ))}
+                                    {testimonial.rating % 1 !== 0 && <i className="bi bi-star-half"></i>}
+                                </div>
+
+                                <div className="col-12 mt-3">
+                                    <p>{testimonial.review}</p>
+                                </div>
+
+                                <div className="col-12 text-center mb-5">
+                                    <span className='fw-bold david-font'>{testimonial.name}</span>
+                                </div>
+                            </div>
+                        ))}
                         </Slider>
                     </div>
                     <div className="col-12">
@@ -684,7 +652,7 @@ export default function Template() {
             </section>
 
             <section className="h-auto david-font" id='contact'>
-                <div className="container">
+                <div className="container p-top">
                     <div className="col-12 newsletter position-relative">
                         <img src="/src/assets/images/newsletter.png" alt="" className='w-100' />
                         <div className="text-center newsletter-content position-absolute">
@@ -724,17 +692,19 @@ export default function Template() {
 
 
             <footer className='h-auto'>
-                <div className="container pjs">
+                <div className="container pjs  p-top">
                     <div className="mt-5">
                         <div className="row">
                             <div className="col-12 col-lg-4">
                                 <div className="col-12 text-center text-lg-start text mt-5">
-                                    <img src="/src/assets/images/logo.svg" alt="" />
-                                    <span className="ms-2 fs-45 text-white">Food House</span>
+                                    <div className="nav-logo">
+                                    <img src={businessData.logo} alt="" />
+                                    </div>
+                                    <span className="ms-2 fs-45 text-white">{businessData.businessName}</span>
                                 </div>
                                 <div className="col-12 mt-4  text-center text-lg-start" style={{ color: "#A4B3CB" }}>
                                     <p>
-                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
+                                        {businessData.description}
                                     </p>
                                 </div>
                             </div>

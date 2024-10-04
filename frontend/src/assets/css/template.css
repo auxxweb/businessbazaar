@@ -1,8 +1,7 @@
 .pjs{
     font-family: 'Plus Jakarta Sans';
-}.nav-logo img{
-    width: 40px;
-    height: 100%;
+}.nav-logo img {
+    width: 70px;
     object-fit: cover;
 }.david-font{
     font-family: "David Libre", serif;
@@ -72,6 +71,12 @@
 }footer{
     height: 50vh;
     background-color: black;
+}.chef-div{
+    height: 500px;
+    object-fit: contain;
+}.social-media{
+    display: flex;
+    justify-content: start;
 }
 @media screen and (max-width: 768px) {
     .navbar-brand span{
@@ -90,7 +95,7 @@
     top: 0%;
     bottom: -21%;
     }.chef-div{
-        width: 75% !important;
+        width: 300px !important;
     }.fs-sm-16{
         font-size: 16px !important;
     } 
@@ -106,6 +111,11 @@
         border-radius: 30px;
     }.newsletter{
         height: 200px;
+    }.p-sm-0{
+        padding: 0 !important;
+    }.social-media{
+        display: flex;
+        justify-content: center ;
     }
 }
 @media screen and (min-width: 768px) and (max-width: 1024px) {
@@ -155,4 +165,10 @@
     .address-logo i {
         font-size: 1.25rem; /* Smaller icon for mobile */
     }
+}
+.gallery-img{
+
+    height: 300px;
+    object-fit: cover;
+    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
 }

@@ -418,3 +418,10 @@ footer .btn-theme{
         font-size: 3rem; /* Default title font size */
     }
 }
+.custom-button{
+    border-radius: 0 8px 8px 0 !important;
+}.p-top{
+    padding-block: 50px;
+}.navbar{
+    box-shadow: rgba(0, 0, 0, 0.05) 0px 1px 2px 0px;
+}
