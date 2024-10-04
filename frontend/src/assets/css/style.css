@@ -418,3 +418,6 @@ footer .btn-theme{
         font-size: 3rem; /* Default title font size */
     }
 }
+.custom-button{
+    border-radius: 0 8px 8px 0 !important;
+}

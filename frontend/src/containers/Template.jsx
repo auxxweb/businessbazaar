@@ -1,12 +1,28 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Container, Nav, Navbar, NavLink } from 'react-bootstrap'
 import '/src/assets/css/template.css';
 import Slider from 'react-slick';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import { useParams } from 'react-router-dom';
+import { fetchBusinessTemplate } from '../Functions/functions';
 
 export default function Template() {
     const [currentSlide, setCurrentSlide] = useState(0);
+    const [businessData, setBusinessData] = useState(null); 
+    const { id } = useParams();
+    const [loading, setLoading] = useState(true);
+
+    useEffect(()=>{
+        const fetchData = async()=>{
+            const businessDetails = await fetchBusinessTemplate(id);
+            setBusinessData(businessDetails.data)
+            setLoading(false);
+        }
+
+        fetchData()
+
+    },[id])
 
     const settings = {
         dots: false,
@@ -159,6 +175,21 @@ export default function Template() {
     };
 
 
+    if (loading) {
+        return <div className='h-100vh text-center '>
+            <div className='row h-100 justify-content-center align-items-center'>
+
+            <div className='col-3 '>Loading...</div>
+            </div>
+        </div>;
+    }
+
+    // If there's no business data (e.g., fetch failed), show an error message
+    if (!businessData) {
+        return <div>Error loading business data.</div>;
+    }
+
+
     const services = [
         {
             title: 'Door to Door Delivery',
@@ -248,8 +279,8 @@ export default function Template() {
                 <Container>
                     {/* Align Brand to the start (left side) */}
                     <Navbar.Brand href="#home" className='fw-bold w-50 nav-logo' style={{ fontSize: '36px' }}>
-                        <img src="/src/assets/images/logo.svg" alt="" />
-                        <span className="ms-2">Food House</span>
+                        <img src={businessData.logo} alt="" />
+                        <span className="ms-2">{businessData.businessName}</span>
                     </Navbar.Brand>
 
                     <Navbar.Toggle aria-controls="basic-navbar-nav" style={{ color: 'black' }} />
@@ -291,7 +322,7 @@ export default function Template() {
                     <div className="row align-items-center">
                         {/* Left Image for Mobile View */}
                         <div className="col-12 col-lg-6 text-end d-block d-lg-none">
-                            <img src="/src/assets/images/banner-image.png" alt="" className='banner-image' />
+                            <img src={businessData.landingPageHero.coverImage} alt="" className='banner-image' />
                             <div className='banner-image-2 d-none'>
                                 <img src="/src/assets/images/baner-image2.png" alt="" />
                             </div>
@@ -302,14 +333,12 @@ export default function Template() {
                             <div className="row align-items-center">
                                 <div className="col-12">
                                     <h1 className="text-start text-dark fw-bold david-font fw-bold banner-title text-center text-lg-start">
-                                        We provide the <br />
-                                        best food for you
+                                        {businessData.landingPageHero.title}
                                     </h1>
                                 </div>
                                 <div className="col-12">
                                     <p className='text-secondary text-center text-lg-start david-font'>
-                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed vel neque ac nunc faucibus commodo. Donec sagittis neque vel neque congue, vel pellentesque lacus malesuada.
-                                        Donec sed ultricies nunc, in efficitur nisi.
+                                        {businessData.landingPageHero.description}
                                     </p>
                                 </div>
                                 <div className="mt-3 col-12">
@@ -397,7 +426,7 @@ export default function Template() {
                     <div className="row mt-5 align-items-center mb-5">
                         <div className="col-12 col-lg-6 mt-2 text-center text-lg-start about-image">
                             <img
-                                src="/src/assets/images/baner-image2.png"
+                                src={businessData.welcomePart.coverImage}
                                 className="img-fluid"
                                 alt=""
                             />
@@ -405,12 +434,11 @@ export default function Template() {
                         </div>
                         <div className="col-12 col-lg-6">
                             <div className="col-12 mb-3">
-                                <h1 className="text-center text-lg-start text-dark fw-bold david-font fw-bold banner-title">Wecome to Our Restaurant</h1>
+                                <h1 className="text-center text-lg-start text-dark fw-bold david-font fw-bold banner-title">{businessData.welcomePart.title}</h1>
                             </div>
                             <div className="col-12 mt-4">
                                 <p className='text-secondary text-center text-lg-start david-font mt-4'>
-                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed vel neque ac nunc faucibus commodo. Donec sagittis neque vel neque congue, vel pellentesque lacus malesuada.
-                                    Donec sed ultricies nunc, in efficitur nisi. Sed consectetur, quam sit amet lobortis vulputate, velit velit consectetur ex, id malesuada ligula ipsum eu eros.
+                                {businessData.welcomePart.description}
                                 </p>
                             </div>
                             <div className="mt-3 col-12">
