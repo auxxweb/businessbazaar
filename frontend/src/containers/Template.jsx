@@ -262,7 +262,7 @@ export default function Template() {
             <Navbar expand="lg" className="bg-white pjs fixed-top" style={{ paddingBlock: "5px" }}>
                 <Container>
                     {/* Align Brand to the start (left side) */}
-                    <Navbar.Brand href="#home" className='fw-bold w-50 nav-logo' style={{ fontSize: '36px' }}>
+                    <Navbar.Brand href="/" className='fw-bold w-50 nav-logo' style={{ fontSize: '36px' }}>
                         <img src={businessData.logo} alt="" />
                         <span className="ms-2">{businessData.businessName}</span>
                     </Navbar.Brand>

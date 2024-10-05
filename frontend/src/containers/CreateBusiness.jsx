@@ -6,6 +6,8 @@ import Autocomplete from '@mui/material/Autocomplete';
 import { ColorPicker } from 'primereact/colorpicker';
 import { Editor } from 'primereact/editor';
 import { color } from '@mui/system';
+import { fetchCategories } from '../Functions/functions';
+
 
 
 export default function CreateBusiness() {
@@ -16,6 +18,138 @@ export default function CreateBusiness() {
     const handleNextStep = () => {
         setStep(prevStep => prevStep + 1);
     };
+
+    const [categoryData, setCategoryData] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+    const [formData, setFormData] = useState({
+        businessName: '',
+        logo: '',
+        ownerName: '',
+        email: '',
+        password: '',
+        address: {
+            buildingName: '',
+            streetName: '',
+            landMark: '',
+            city: '',
+            state: '',
+            pinCode: ''
+        },
+        contactDetails: {
+            primaryNumber: '',
+            secondaryNumber: '',
+            whatsAppNumber: '',
+            email: '',
+            webSite: ''
+        },
+        socialMediaLinks: [
+            { tag: 'facebook', link: '' },
+            { tag: 'instagram', link: '' },
+            { tag: 'twitter', link: '' }
+        ],
+        category: '',
+        services: [],
+        businessTiming: {
+            workingDays: [],
+            openTime: {
+                open: '',
+                close: ''
+            }
+        },
+        description: '',
+        theme: '',
+        landingPageHero: {
+            title: '',
+            description: '',
+            coverImage: ''
+        },
+        welcomePart: {
+            title: '',
+            description: '',
+            coverImage: ''
+        },
+        specialServices: {
+            title: '',
+            description: '',
+            data: []
+        },
+        productSection: [],
+        service: [],
+        testimonial: {
+            description: '',
+            reviews: []
+        },
+        gallery: [],
+        seoData: {
+            title: '',
+            description: '',
+            metaTags: []
+        },
+        selectedPlan: ''
+    });
+
+
+    const handleChange = (event) => {
+        const { name, value } = event.target;
+        setFormData({
+            ...formData,
+            [name]: value,
+        });
+    };
+
+    const handleContactChange =(event)=>{
+        const { name, value } = event.target;
+        setFormData({
+            ...formData,
+            contactDetails: {
+               ...formData.contactDetails,
+                [name]: value
+            }
+        });
+    }
+
+    const handleAddressChange = (event) =>{
+        const { name, value } = event.target;
+        setFormData({
+            ...formData,
+            address: {
+               ...formData.address,
+                [name]: value
+            }
+        });
+    }
+
+    const handleCategoryChange = (event, value) => {
+        setFormData({
+            ...formData,
+            category: value ? value._id : '' 
+        });
+    };
+
+
+
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const categoryDetails = await fetchCategories(); 
+                setCategoryData(categoryDetails.data.data);
+                console.log(categoryDetails.data.data)
+            } catch (error) {
+                console.error("Error fetching categories:", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchData();
+    }, []);
+
+
+
+
+
+
 
     function imageUpload(event) {
         document.getElementById('ImageLogo').click();
@@ -28,6 +162,10 @@ export default function CreateBusiness() {
 
         var file = event.target.files[0];
         if (file) {
+            setFormData({
+                ...formData,
+                logo: file,
+            });
             var reader = new FileReader();
             reader.onload = function (e) {
                 image.src = e.target.result;
@@ -74,23 +212,6 @@ export default function CreateBusiness() {
 
 
 
-    const [countries, setCountries] = useState([
-        "Technology",
-        "Health & Wellness",
-        "Finance",
-        "Education",
-        "Real Estate",
-        "Food & Beverage",
-        "Travel",
-        "Entertainment",
-        "Retail",
-        "Automotive",
-        "Construction",
-        "Consulting",
-        "Marketing",
-        "E-commerce",
-        "Non-Profit",
-    ]);
 
 
 
@@ -112,7 +233,7 @@ export default function CreateBusiness() {
                                     </h1>
                                 </div>
                                 <div className="col-12 mt-3" >
-                                    <input type="text" placeholder="Business Name" className="form-control form-control-lg" />
+                                    <input type="text" placeholder="Business Name" name='businessName' value={formData.businessName} onChange={handleChange} className="form-control form-control-lg" />
                                     <input type="file" hidden id="ImageLogo" onChange={LogoChange} />
 
                                     <div onClick={imageUpload} className="p-2 mt-2 add-logo-div" id='businessMainDiv'>
@@ -124,15 +245,15 @@ export default function CreateBusiness() {
                                         </div>
                                     </div>
 
-                                    <input type="text" placeholder="Building Name" className="form-control form-control-lg mt-3" />
-                                    <input type="text" placeholder="Street / Colony Name" className="form-control form-control-lg mt-3" />
-                                    <input type="text" placeholder="Landmark" className="form-control form-control-lg mt-3" />
+                                    <input type="text" placeholder="Building Name" name='buildingName' onChange={handleAddressChange} className="form-control form-control-lg mt-3" />
+                                    <input type="text" placeholder="Street / Colony Name" name='streetName' onChange={handleAddressChange} className="form-control form-control-lg mt-3" />
+                                    <input type="text" placeholder="Landmark" name='landMark' onChange={handleAddressChange} className="form-control form-control-lg mt-3" />
                                     <div className="row">
                                         <div className="col-12 col-md-6 mt-3">
-                                            <input type="text" className="form-control form-control-lg w-100" placeholder="State" />
+                                            <input type="text" className="form-control form-control-lg w-100" onChange={handleAddressChange} name='state' placeholder="State" />
                                         </div>
                                         <div className="col-12 col-md-6 mt-3">
-                                            <input type="text" className="form-control form-control-lg w-100" placeholder="Pincode" />
+                                            <input type="text" className="form-control form-control-lg w-100" onChange={handleAddressChange} name='pinCode' placeholder="Pincode" />
                                         </div>
                                     </div>
 
@@ -177,7 +298,7 @@ export default function CreateBusiness() {
                                                     />
                                                 </div>
                                                 <div className="col-12 col-sm-7 col-md-8 mt-2 mt-sm-0">
-                                                    <input type="text" name="phone" className="form-control form-control-lg w-100" placeholder="Phone Number" />
+                                                    <input type="text" name="primaryNumber"  onChange={handleContactChange}  className="form-control form-control-lg w-100" placeholder="Phone Number" />
                                                 </div>
                                                 {/* Render Remove button only if it's not the first input */}
                                                 {number.id > 1 && (
@@ -205,7 +326,7 @@ export default function CreateBusiness() {
                                                     />
                                                 </div>
                                                 <div className="col-12 col-sm-7 col-md-8 mt-2 mt-sm-0">
-                                                    <input type="text" name="whatsapp" className="form-control form-control-lg w-100" placeholder="WhatsApp Number" />
+                                                    <input type="text" name="whatsAppNumber"  onChange={handleContactChange} className="form-control form-control-lg w-100" placeholder="WhatsApp Number" />
                                                 </div>
                                                 <div className="col-12 col-sm-2 mt-2 mt-sm-0">
                                                     {/* Render Remove button only if it's not the first input */}
@@ -224,7 +345,7 @@ export default function CreateBusiness() {
                                     {emails.map((email) => (
                                         <div className="row  mt-3" key={email.id}>
                                             <div className="col-12 col-sm-10">
-                                                <input type="text" placeholder="Email" className="form-control form-control-lg" />
+                                                <input type="text" placeholder="Email" onClick={handleContactChange} className="form-control form-control-lg" />
                                             </div>
                                             <div className="col-12 col-sm-2 mt-2 mt-sm-0">
                                                 {/* Render Remove button only if it's not the first input */}
@@ -237,7 +358,7 @@ export default function CreateBusiness() {
                                     <a href="#" onClick={addEmail} className="text-decoration-none form-text">+ add another Email</a>
 
                                     {/* Website Section */}
-                                    <input type="url" placeholder="Website" className="form-control form-control-lg mt-3" />
+                                    <input type="url" placeholder="Website" onClick={handleContactChange} className="form-control form-control-lg mt-3" />
 
                                     {/* Save Button */}
                                     <div className="col-12 mt-3">
@@ -255,48 +376,57 @@ export default function CreateBusiness() {
     function CatgoryDetails() {
         return (
             <>
-                <div className="h-100vh">
-                    <div className="row  h-100 justify-content-center">
-                        {/* Left Image Section (hidden on small screens, visible on medium and larger screens) */}
-                        <div className="d-none d-md-block left-portion col-md-5 h-100 p-0">
-                            <img src="/src/assets/images/add_category.jpg" alt="" className="w-100 h-100 object-fit-cover" />
-                        </div>
+             <div className="h-100vh">
+            <div className="row h-100 justify-content-center">
+                {/* Left Image Section (hidden on small screens, visible on medium and larger screens) */}
+                <div className="d-none d-md-block left-portion col-md-5 h-100 p-0">
+                    <img src="/src/assets/images/add_category.jpg" alt="" className="w-100 h-100 object-fit-cover" />
+                </div>
 
-                        {/* Right Form Section */}
-                        <div className="col-12 col-md-7 d-flex flex-column justify-content-between align-items-center right-portion h-100 p-5">
-                            <div className="col-12">
-                                <h1 className="fw-bold text-center text-md-start">Add <br /> Business Category</h1>
-                            </div>
+                {/* Right Form Section */}
+                <div className="col-12 col-md-7 d-flex flex-column justify-content-between align-items-center right-portion h-100 p-5">
+                    <div className="col-12">
+                        <h1 className="fw-bold text-center text-md-start">Add <br /> Business Category</h1>
+                    </div>
 
-                            {/* Input Group Section */}
-                            <div className="input-group mt-4 w-100 align-items-center">
-    {/* Search Icon */}
-    <span className="input-group-text bg-white p-3" style={{ flexBasis: '50px' }}>
-        <i className="bi bi-search"></i>
-    </span>
+                    {/* Input Group Section */}
+                    <div className="input-group mt-4 w-100 align-items-center">
+                        {/* Search Icon */}
+                        <span className="input-group-text bg-white p-3" style={{ flexBasis: '50px' }}>
+                            <i className="bi bi-search"></i>
+                        </span>
 
-    {/* Autocomplete Input */}
-    <div style={{ flexGrow: 1 }}>
-        <Autocomplete
-            disablePortal
-            options={countries}
-            sx={{ width: '100%' }}
-            renderInput={(params) => <TextField {...params} label="Categories" />}
-        />
-    </div>
-</div>
-
-
-                            {/* Empty div for potential additional content */}
-                            <div className="col-12 mt-5"></div>
-
-                            {/* Save & Next Button */}
-                            <div className="col-12 text-center mt-5">
-                                <button className="btn btn-theme2 w-100 text-white p-2" onClick={handleNextStep}>Save & Next</button>
-                            </div>
+                        {/* Autocomplete Input */}
+                        <div style={{ flexGrow: 1, position: 'relative' }}>
+                            {loading ? (
+                                // Show CircularProgress when loading
+                                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
+                                    <CircularProgress size={24} />
+                                </div>
+                            ) : (
+                                <Autocomplete
+                                disablePortal
+                                options={categoryData}
+                                getOptionLabel={(option) => option.name} // Display category name
+                                isOptionEqualToValue={(option, value) => option._id === value._id} // Compare based on _id
+                                renderInput={(params) => <TextField {...params} label="Categories" />}
+                                onChange={handleCategoryChange} // Update category in formData
+                                name='category'
+                            />
+                            )}
                         </div>
                     </div>
+
+                    {/* Empty div for potential additional content */}
+                    <div className="col-12 mt-5"></div>
+
+                    {/* Save & Next Button */}
+                    <div className="col-12 text-center mt-5">
+                        <button className="btn btn-theme2 w-100 text-white p-2" onClick={handleNextStep}>Save & Next</button>
+                    </div>
                 </div>
+            </div>
+        </div>
 
             </>
         );
@@ -308,104 +438,103 @@ export default function CreateBusiness() {
     function ServicesOffering() {
         const [inputService, setInputService] = useState('');
 
-        // Function to add a service
-        const addService = (e) => {
-            e.preventDefault();
-            if (inputService.trim() !== '') {
-                setServices([...services, inputService]); // Add the new service
-                setInputService(''); // Clear the input field
-            }
-        };
+        // Add service to formData.services
+    const addService = (e) => {
+        e.preventDefault();
+        if (inputService.trim() !== '') {
+            setFormData(prevFormData => ({
+                ...prevFormData,
+                services: [...prevFormData.services, inputService]
+            }));
+            setInputService(''); // Clear input field
+        }
+    };
 
-        // Function to delete a service by filtering it out
-        const deleteService = (indexToDelete) => {
-            setServices(services.filter((service, index) => index !== indexToDelete));
-        };
+    // Delete service from formData.services
+    const deleteService = (indexToDelete) => {
+        setFormData(prevFormData => ({
+            ...prevFormData,
+            services: prevFormData.services.filter((service, index) => index !== indexToDelete)
+        }));
+    };
 
-        return (
-            <>
-               <div className="h-100vh">
-    <div className="row  h-100 justify-content-center">
-        {/* Left portion (image) */}
-        <div className="d-none d-md-block left-portion p-0 col-md-5 h-100">
-            <img src="/src/assets/images/service_offering.jpg" alt="" className="w-100 h-100" />
-        </div>
+    return (
+        <>
+            <div className="h-100vh">
+                <div className="row h-100 justify-content-center">
+                    <div className="d-none d-md-block left-portion p-0 col-md-5 h-100">
+                        <img src="/src/assets/images/service_offering.jpg" alt="" className="w-100 h-100" />
+                    </div>
+                    <div className="col-12 col-md-7 row align-items-end justify-content-center h-100 p-3 p-md-5 right-portion">
+                        <div className="row justify-content-center ">
+                            <div className="col-12 text-center">
+                                <h1 className="fw-bold">
+                                    Add <br /> Service and Offering
+                                </h1>
+                            </div>
+                            <div className="col-12 col-md-10 mt-4 mt-md-5">
+                                <div className="input-group">
+                                    <div className="col-1 brl-none br-none d-flex align-items-center justify-content-center">
+                                        <span className="input-group-text bg-white br-0" style={{ padding: '11px' }}>
+                                            <i className="bi bi-bag-plus"></i>
+                                        </span>
+                                    </div>
+                                    <div className="col-8 col-md-9 bl-none br-0">
+                                        <input
+                                            type="text"
+                                            className="form-control form-control-lg w-100 bl-none br-0"
+                                            onChange={(e) => setInputService(e.target.value)}
+                                            value={inputService}
+                                            placeholder="Add Service and Offering"
+                                        />
+                                    </div>
+                                    <div className="col-3 col-md-2">
+                                        <button
+                                            className="btn w-100 btn-success brl-none br-0"
+                                            style={{ padding: '11px' }}
+                                            onClick={addService}
+                                            disabled={inputService.trim() === ''}
+                                        >
+                                            Add
+                                        </button>
+                                    </div>
+                                </div>
 
-        {/* Right portion (form) */}
-        <div className="col-12 col-md-7 row align-items-end justify-content-center h-100 p-3 p-md-5 right-portion">
-            <div className="row justify-content-center ">
-                <div className="col-12 text-center">
-                    <h1 className="fw-bold">
-                        Add <br /> Service and Offering
-                    </h1>
-                </div>
-
-                {/* Input field for adding service */}
-                <div className="col-12 col-md-10 mt-4 mt-md-5">
-                    <div className="input-group">
-                        <div className="col-1 brl-none br-none d-flex align-items-center justify-content-center">
-                            <span className="input-group-text bg-white br-0" style={{ padding: '11px' }}>
-                                <i className="bi bi-bag-plus"></i>
-                            </span>
+                                <div className="col-12 mt-4">
+                                    <div className="row gap-2 justify-content-center">
+                                        {formData.services.map((service, index) => (
+                                            <div key={index} className="mt-2 text-center services-list p-2">
+                                                {service}
+                                                <span
+                                                    className="ms-2 cursor-pointer"
+                                                    onClick={() => deleteService(index)}
+                                                >
+                                                    <i className="bi bi-x text-white"></i> {/* Delete icon */}
+                                                </span>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <div className="col-8 col-md-9 bl-none br-0">
-                            <input
-                                type="text"
-                                className="form-control form-control-lg w-100 bl-none br-0"
-                                onChange={(e) => setInputService(e.target.value)}
-                                value={inputService}
-                                placeholder="Add Service and Offering"
-                            />
-                        </div>
-                        <div className="col-3 col-md-2">
-                            <button
-                                className="btn w-100 btn-success brl-none br-0"
-                                style={{ padding: '11px' }}
-                                onClick={addService}
-                                disabled={inputService.trim() === ''}
-                            >
-                                Add
+                        <div className="col-12 text-center mt-5 p-3 p-md-5">
+                            <button className="btn btn-theme2 w-100 text-white p-2" onClick={handleNextStep}>
+                                Save & Next
                             </button>
                         </div>
                     </div>
-
-                    {/* Services list */}
-                    <div className="col-12 mt-4">
-                        <div className="row gap-2 justify-content-center ">
-                            {services.map((service, index) => (
-                                <div key={index} className="mt-2 text-center services-list p-2">
-                                    {service}
-                                    <span
-                                        className="ms-2 cursor-pointer"
-                                        onClick={() => deleteService(index)}
-                                    >
-                                        <i className="bi bi-x text-white"></i> {/* Delete icon */}
-                                    </span>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
                 </div>
             </div>
-
-            {/* Save & Next button */}
-            <div className="col-12 text-center mt-5 p-3 p-md-5">
-                <button className="btn btn-theme2 w-100 text-white p-2" onClick={handleNextStep}>
-                    Save & Next
-                </button>
-            </div>
-        </div>
-    </div>
-</div>
-
-            </>
-        );
-    };
+        </>
+    );
+}
 
     const [days, setDays] = useState([])
-
+    const [openTime, setOpenTime] = useState('');
+    const [closeTime, setCloseTime] = useState('');
     function BusinessTiming() {
         const allDays = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+
         const toggleDay = (day) => {
             if (days.includes(day)) {
                 setDays(days.filter(d => d !== day));
@@ -413,12 +542,35 @@ export default function CreateBusiness() {
                 setDays([...days, day]);
             }
         };
+    
         const handleSelectAll = (e) => {
             if (e.target.checked) {
                 setDays(allDays);
             } else {
                 setDays([]);
             }
+        };
+    
+        const handleOpenTimeChange = (e) => {
+            setOpenTime(e.target.value);
+        };
+    
+        const handleCloseTimeChange = (e) => {
+            setCloseTime(e.target.value);
+        };
+    
+        const handleNextStep = () => {
+            setFormData(prevFormData => ({
+                ...prevFormData,
+                businessTiming: {
+                    workingDays: days,
+                    openTime: {
+                        open: openTime,
+                        close: closeTime
+                    }
+                }
+            }));
+            console.log(formData); // To verify the updated formData
         };
     
         return (
@@ -470,12 +622,22 @@ export default function CreateBusiness() {
                                     {/* Time Input Fields */}
                                     <div className="row mt-5 g-3 justify-content-center">
                                         <div className="col-12 col-md-5">
-                                            <label htmlFor="" className='form-label'>Opening Time</label>
-                                            <input type="time" className='form-control form-control-lg' />
+                                            <label htmlFor="openingTime" className='form-label'>Opening Time</label>
+                                            <input
+                                                type="time"
+                                                className='form-control form-control-lg'
+                                                value={openTime}
+                                                onChange={handleOpenTimeChange}
+                                            />
                                         </div>
                                         <div className="col-12 col-md-5">
-                                            <label htmlFor="" className='form-label'>Closing Time</label>
-                                            <input type="time" className='form-control form-control-lg' />
+                                            <label htmlFor="closingTime" className='form-label'>Closing Time</label>
+                                            <input
+                                                type="time"
+                                                className='form-control form-control-lg'
+                                                value={closeTime}
+                                                onChange={handleCloseTimeChange}
+                                            />
                                         </div>
                                     </div>
                                 </div>
@@ -483,9 +645,9 @@ export default function CreateBusiness() {
     
                             {/* Save & Next Button */}
                             <div className="col-12 text-center p-3 p-md-5">
-                                <button className="btn btn-theme2 w-100 text-white p-2" onClick={handleNextStep}>
-                                    Save & Next
-                                </button>
+                            <button className="btn btn-theme2 w-100 text-white p-2" onClick={handleNextStep}>
+                                Save & Next
+                            </button>
                             </div>
                         </div>
                     </div>
