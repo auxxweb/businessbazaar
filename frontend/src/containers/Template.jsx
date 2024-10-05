@@ -6,24 +6,52 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { useParams } from 'react-router-dom';
 import { fetchBusinessTemplate } from '../Functions/functions';
+import { Dialog } from 'primereact/dialog';
+import { Rating } from 'primereact/rating';
+import { InputText } from "primereact/inputtext";
+import { InputTextarea } from "primereact/inputtextarea";
 
 export default function Template() {
     const [currentSlide, setCurrentSlide] = useState(0);
-    const [businessData, setBusinessData] = useState(null); 
+    const [businessData, setBusinessData] = useState(null);
     const { id } = useParams();
     const [loading, setLoading] = useState(true);
+    const [colorTheme, setColorTheme] = useState('')
+    const [visible, setVisible] = useState(false);
+    const [review, setReview] = useState([{
+        rating:'',
+        name:'',
+        description:'',
+    }]);
+    const [closeDays, setCloseDays] = useState([]);
+    const allDays = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
 
-    useEffect(()=>{
-        const fetchData = async()=>{
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setReview((prevState) => ({
+            ...prevState,
+            [name]: value,
+        }));
+    };
+
+    useEffect(() => {
+        const fetchData = async () => {
             const businessDetails = await fetchBusinessTemplate(id);
             setBusinessData(businessDetails.data)
             console.log(businessDetails)
+            setColorTheme(businessDetails.data.theme)
             setLoading(false);
+            const closed = allDays.filter(day => 
+                !businessDetails.data.businessTiming.workingDays.map(d => d.toLowerCase()).includes(day)
+            );
+            setCloseDays(closed);
+            
         }
+
 
         fetchData()
 
-    },[id])
+    }, [id])
 
     const settings = {
         dots: false,
@@ -40,39 +68,39 @@ export default function Template() {
             {
                 breakpoint: 1024,
                 settings: {
-                  slidesToShow: 3,
-                  slidesToScroll: 1,
-                  infinite: true,
+                    slidesToShow: 3,
+                    slidesToScroll: 1,
+                    infinite: true,
                 },
-              },
-              {
+            },
+            {
                 breakpoint: 768,
                 settings: {
-                  slidesToShow: 1,
-                  slidesToScroll: 1,
+                    slidesToShow: 1,
+                    slidesToScroll: 1,
                 },
-              },
-              {
+            },
+            {
                 breakpoint: 600,
                 settings: {
-                  slidesToShow: 1,
-                  slidesToScroll: 1,
+                    slidesToShow: 1,
+                    slidesToScroll: 1,
                 },
-              },
-              {
+            },
+            {
                 breakpoint: 480,
                 settings: {
-                  slidesToShow: 1,
-                  slidesToScroll: 1,
+                    slidesToShow: 1,
+                    slidesToScroll: 1,
                 },
-              },
-              {
+            },
+            {
                 breakpoint: 390,
                 settings: {
-                  slidesToShow: 1,
-                  slidesToScroll: 1,
+                    slidesToShow: 1,
+                    slidesToScroll: 1,
                 },
-              },
+            },
         ]
     };
     const setting2 = {
@@ -89,39 +117,39 @@ export default function Template() {
             {
                 breakpoint: 1024,
                 settings: {
-                  slidesToShow: 3,
-                  slidesToScroll: 1,
-                  infinite: true,
+                    slidesToShow: 3,
+                    slidesToScroll: 1,
+                    infinite: true,
                 },
-              },
-              {
+            },
+            {
                 breakpoint: 768,
                 settings: {
-                  slidesToShow: 1,
-                  slidesToScroll: 1,
+                    slidesToShow: 1,
+                    slidesToScroll: 1,
                 },
-              },
-              {
+            },
+            {
                 breakpoint: 600,
                 settings: {
-                  slidesToShow: 1,
-                  slidesToScroll: 1,
+                    slidesToShow: 1,
+                    slidesToScroll: 1,
                 },
-              },
-              {
+            },
+            {
                 breakpoint: 480,
                 settings: {
-                  slidesToShow: 1,
-                  slidesToScroll: 1,
+                    slidesToShow: 1,
+                    slidesToScroll: 1,
                 },
-              },
-              {
+            },
+            {
                 breakpoint: 390,
                 settings: {
-                  slidesToShow: 1,
-                  slidesToScroll: 1,
+                    slidesToShow: 1,
+                    slidesToScroll: 1,
                 },
-              },
+            },
         ]
     };
 
@@ -139,39 +167,39 @@ export default function Template() {
             {
                 breakpoint: 1024,
                 settings: {
-                  slidesToShow: 2,
-                  slidesToScroll: 1,
-                  infinite: true,
+                    slidesToShow: 2,
+                    slidesToScroll: 1,
+                    infinite: true,
                 },
-              },
-              {
+            },
+            {
                 breakpoint: 768,
                 settings: {
-                  slidesToShow: 1,
-                  slidesToScroll: 1,
+                    slidesToShow: 1,
+                    slidesToScroll: 1,
                 },
-              },
-              {
+            },
+            {
                 breakpoint: 600,
                 settings: {
-                  slidesToShow: 1,
-                  slidesToScroll: 1,
+                    slidesToShow: 1,
+                    slidesToScroll: 1,
                 },
-              },
-              {
+            },
+            {
                 breakpoint: 480,
                 settings: {
-                  slidesToShow: 1,
-                  slidesToScroll: 1,
+                    slidesToShow: 1,
+                    slidesToScroll: 1,
                 },
-              },
-              {
+            },
+            {
                 breakpoint: 390,
                 settings: {
-                  slidesToShow: 1,
-                  slidesToScroll: 1,
+                    slidesToShow: 1,
+                    slidesToScroll: 1,
                 },
-              },
+            },
         ]
     };
 
@@ -180,7 +208,7 @@ export default function Template() {
         return <div className='h-100vh text-center '>
             <div className='row h-100 justify-content-center align-items-center'>
 
-            <div className='col-3 '>Loading...</div>
+                <div className='col-3 '>Loading...</div>
             </div>
         </div>;
     }
@@ -192,40 +220,45 @@ export default function Template() {
 
 
 
-
-    const testimonials = [
-        {
-            name: 'Ama Ampomah',
-            text: 'Amanda, a 25-year-old loyal customer, has been using our restaurant for over 5 years. She has a strong sense of food and a love for authentic Italian cuisine. She has been a regular at our restaurant and has consistently given us excellent reviews.',
-            img: '/src/assets/images/Mask group.png',
-            stars: 5
-        },
-        {
-            name: 'John Doe',
-            text: 'John is a frequent diner at our restaurant, always praising our fresh ingredients and authentic recipes. He appreciates our consistency in delivering high-quality meals.',
-            img: '/src/assets/images/Mask group.png',
-            stars: 5
-        },
-        {
-            name: 'Sarah Williams',
-            text: 'Sarah loves our cozy ambiance and the diverse menu options. She often brings her family to dine here and enjoys the variety of desserts we offer.',
-            img: '/src/assets/images/Mask group.png',
-            stars: 4
-        },
-        {
-            name: 'Michael Johnson',
-            text: 'Michael is a food enthusiast who enjoys trying new dishes. He has been impressed by our chef’s special menu and the unique flavors we incorporate.',
-            img: '/src/assets/images/Mask group.png',
-            stars: 5
-        }
-    ];
-
-
     return (
         <>
             <link rel="preconnect" href="https://fonts.googleapis.com" />
             <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
             <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap" rel="stylesheet" />
+            <style> {`
+                    ::-webkit-scrollbar {
+                        width: 12px; /* Width of the entire scrollbar */
+                    }
+
+                    /* Scrollbar track */
+                    ::-webkit-scrollbar-track {
+                        background: rgb(243, 243, 244); /* Background of the scrollbar track */
+                    }::-webkit-scrollbar-thumb {
+                        background-color: ${colorTheme}; /* Color of the scrollbar thumb */
+                        border-radius: 10px;     /* Rounded edges of the thumb */
+                        border: 3px solid  ${colorTheme}; /* Padding around the thumb */
+                    }
+                .theme
+                {
+                    background-color: ${colorTheme};
+                    color: white;
+                    border: none;
+                }.service-design.active{
+                    background-color: ${colorTheme};
+                }.address-section{
+                background-color:${colorTheme};
+                }.address-logo i{
+                color: ${colorTheme};
+                }.cat-option{
+                    border-right: 1px dashed ${colorTheme};
+                }.text-orange{
+                        color: ${colorTheme};
+                    }.dish-div:hover{
+                        background-color: ${colorTheme};
+                        color:white;
+                    }
+                    `}
+            </style>
             <Navbar expand="lg" className="bg-white pjs fixed-top" style={{ paddingBlock: "5px" }}>
                 <Container>
                     {/* Align Brand to the start (left side) */}
@@ -253,7 +286,7 @@ export default function Template() {
                             <NavLink
                                 to='/create-business'
                                 style={{
-                                    background: '#EA6D27',
+                                    backgroundColor: colorTheme,
                                     color: 'white',
                                     borderRadius: '10px 0px',
                                     padding: '8px 20px',
@@ -270,7 +303,7 @@ export default function Template() {
             </Navbar>
             <section className='h-auto'>
                 <div className="container p-top">
-                    <div className="row align-items-center">
+                    <div className="row align-items-center banner-section">
                         {/* Left Image for Mobile View */}
                         <div className="col-12 col-lg-6 text-end d-block d-lg-none">
                             <img src={businessData.landingPageHero.coverImage} alt="" className='banner-image' />
@@ -390,7 +423,7 @@ export default function Template() {
                             </div>
                             <div className="col-12 mt-4">
                                 <p className='text-secondary text-center text-lg-start david-font mt-4'>
-                                {businessData.welcomePart.description}
+                                    {businessData.welcomePart.description}
                                 </p>
                             </div>
                             <div className="mt-3 col-12">
@@ -415,13 +448,12 @@ export default function Template() {
                     <div className="col-12 mb-5">
                         <div className="mt-5 text-center">
                             <div className="col-12">
-                                <h1 className="text-center text-dark fw-bold david-font fw-bold banner-title fs-45">Our Products</h1>
+                                <h1 className="text-center text-dark fw-bold david-font fw-bold banner-title fs-45">{businessData.specialServices.title}</h1>
                             </div>
                             <div className="row justify-content-center">
                                 <div className="col-6 mb-5">
                                     <p className='text-secondary text-center mb-5'>
-                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                                        Sed vel neque ac nunc faucibus commodo. Donec sagittis neque vel neque congue,
+                                        {businessData.specialServices.description}
                                     </p>
                                 </div>
                             </div>
@@ -431,10 +463,10 @@ export default function Template() {
 
                         <div className="col-12 mb-5 david-font">
                             <Slider {...settings}>
-                                {businessData.productSection.map((dish, index) => (
+                                {businessData.specialServices.data.map((dish, index) => (
                                     <div key={index} className="dish-div col-12 text-center  p-3">
                                         <div className="col-12 position-relative text-center" style={{ bottom: "60px" }}>
-                                            <img src={dish.image} alt={dish.title} style={{width:'300px',height:'300px'}}/>
+                                            <img src={dish.image} alt={dish.title} style={{ width: '300px', height: '300px', objectFit: 'cover' }} />
                                         </div>
                                         <div className="col-12">
                                             <h2 className="fs-20 fw-bold">{dish.title}</h2>
@@ -460,50 +492,6 @@ export default function Template() {
                         </div>
                     </div>
 
-                    <div className="mt-3 mb-5 p-3" style={{ borderBottom: "2px solid #F3F3F4" }}>
-                        <div className="row">
-                            <div className="col-6 mb-3 col-lg-3 cat-option">
-                                <div className='row align-items-center'>
-                                    <div className="col-3">
-                                        <img src="/src/assets/images/burger1.png" alt="" className='w-80' />
-                                    </div>
-                                    <div className="col-9 fw-bold text-orange">
-                                        <span>Fast Food</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="col-6 mb-3 col-lg-3 cat-option">
-                                <div className='row align-items-center'>
-                                    <div className="col-3">
-                                        <img src="/src/assets/images/orange-juice.png" alt="" className='w-80' />
-                                    </div>
-                                    <div className="col-9 fw-bold text-orange">
-                                        <span>Drink & Juice</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="col-6 mb-3 col-lg-3 cat-option">
-                                <div className='row align-items-center'>
-                                    <div className="col-3">
-                                        <img src="/src/assets/images/pizza.png" alt="" className='w-80' />
-                                    </div>
-                                    <div className="col-9 fw-bold text-orange">
-                                        <span>Chicken Pizza</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="col-6 mb-3 col-lg-3 cat-option br-none">
-                                <div className='row align-items-center'>
-                                    <div className="col-3">
-                                        <img src="/src/assets/images/food.png" alt="" className='w-80' />
-                                    </div>
-                                    <div className="col-9 fw-bold text-orange">
-                                        <span>Chicken</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
 
                     <div className="mt-5 david-font">
                         <div className="mb-5">
@@ -559,18 +547,18 @@ export default function Template() {
                             <h1 className="fw-bold text-center">Gallery</h1>
                         </div>
                         <div className="row justify-content-center mb-5">
-                        {businessData.gallery.map((image, index) => (
-                            <div className="col-12 col-lg-4 mt-4">
-                                <img src={image} alt="" className='w-100 gallery-img' />
-                            </div>
-                        ))}
-                            
+                            {businessData.gallery.map((image, index) => (
+                                <div className="col-12 col-lg-4 mt-4">
+                                    <img src={image} alt="" className='w-100 gallery-img' />
+                                </div>
+                            ))}
+
                         </div>
                     </div>
 
                 </div>
             </section>
-            <section className='bg-white'>
+            <section className='bg-white d-none'>
                 <div className="container p-top">
                     <div className="row align-items-center">
                         <div className="col-12 col-lg-6 row align-items-center">
@@ -584,10 +572,10 @@ export default function Template() {
                             </div>
                             <div className="mt-3 col-12 mb-5">
                                 <div className="row">
-                                    <div className="col-6 col-lg-2">
+                                    <div className="menu-button">
                                         <button className="btn btn-dark text-white radius-theme box-shadow w-100">Menu</button>
                                     </div>
-                                    <div className="col-6 col-lg-3">
+                                    <div className="book-a-table">
                                         <button className="btn btn-dark text-white radius-theme box-shadow theme w-100">Book a table</button>
                                     </div>
                                 </div>
@@ -619,38 +607,83 @@ export default function Template() {
                     <div className="mt-5">
                         <Slider {...settings3}>
                             {businessData.testimonial.reviews.map((testimonial, index) => (
-                            <div key={index} className="bg-white col-12 p-3 mt-2 test-div-bottom">
-                                <div className="col-12 text-center test-button-img-div">
-                                    <img src={testimonial.image} alt={testimonial.name} className="img-fluid" />
-                                </div>
+                                <div key={index} className="bg-white col-12 p-3 mt-2 test-div-bottom">
+                                    <div className="col-12 text-center test-button-img-div">
+                                        <img src={testimonial.image} alt={testimonial.name} className="img-fluid" />
+                                    </div>
 
-                                <div className='text-warning text-center mt-0 m-0'>
-                                    {[...Array(Math.floor(testimonial.rating))].map((star, i) => (
-                                        <i key={i} className="bi bi-star-fill"></i>
-                                    ))}
-                                    {testimonial.rating % 1 !== 0 && <i className="bi bi-star-half"></i>}
-                                </div>
+                                    <div className='text-warning text-center mt-0 m-0'>
+                                        {[...Array(Math.floor(testimonial.rating))].map((star, i) => (
+                                            <i key={i} className="bi bi-star-fill"></i>
+                                        ))}
+                                        {testimonial.rating % 1 !== 0 && <i className="bi bi-star-half"></i>}
+                                    </div>
 
-                                <div className="col-12 mt-3">
-                                    <p>{testimonial.review}</p>
-                                </div>
+                                    <div className="col-12 mt-3">
+                                        <p>{testimonial.review}</p>
+                                    </div>
 
-                                <div className="col-12 text-center mb-5">
-                                    <span className='fw-bold david-font'>{testimonial.name}</span>
+                                    <div className="col-12 text-center mb-5">
+                                        <span className='fw-bold david-font'>{testimonial.name}</span>
+                                    </div>
                                 </div>
-                            </div>
-                        ))}
+                            ))}
                         </Slider>
                     </div>
                     <div className="col-12">
                         <div className="col-12 text-center mb-3">
-                            <button className="btn btn-dark text-white radius-theme box-shadow theme mt-5">Write Review</button>
+                            <button className="btn btn-dark text-white radius-theme box-shadow theme mt-5" onClick={() => setVisible(true)} >Write Review</button>
 
                         </div>
                     </div>
                 </div>
             </section>
+            <Dialog
+            header="Write a Review"
+            visible={visible}
+            onHide={() => { if (!visible) return; setVisible(false); }}
+            style={{ width: '50vw' }}
+            breakpoints={{ '960px': '75vw', '641px': '100vw' }}
+        >
+            <div className="container">
+                <div className="p-3 justify-content-center">
+                    <Rating
+                        value={review.rating}  
+                        onChange={(e) => setReview({ ...review, rating: e.value })} 
+                        cancel={false}
+                    />
+                </div>
+                <div className="col-12">
+                    <InputText
+                        keyfilter="text"
+                        placeholder="Full Name"
+                        className='w-100'
+                        value={review.name}  
+                        name="name"  
+                        onChange={handleInputChange} 
+                    />
+                </div>
 
+                {/* Description Input Field */}
+                <div className="col-12 mt-3">
+                    <div className="card flex justify-content-center">
+                        <InputTextarea
+                            value={review.description}  // Bind the description from state
+                            onChange={handleInputChange}  // Update description in state
+                            rows={5}
+                            cols={30}
+                            name="description"  // Important: use `name` for targeting in handleInputChange
+                            placeholder="Write your review here..."
+                        />
+                    </div>
+                </div>
+                <div className="col-12 mt-3">
+                    <div className="row">
+                        <button className="btn-theme2 btn theme radius">Submit Review</button>
+                    </div>
+                </div>
+            </div>
+        </Dialog>
             <section className="h-auto david-font" id='contact'>
                 <div className="container p-top">
                     <div className="col-12 newsletter position-relative">
@@ -696,11 +729,11 @@ export default function Template() {
                     <div className="mt-5">
                         <div className="row">
                             <div className="col-12 col-lg-4">
-                                <div className="col-12 text-center text-lg-start text mt-5">
-                                    <div className="nav-logo">
-                                    <img src={businessData.logo} alt="" />
+                                <div className="col-12 d-block d-lg-flex text-center text-lg-start text mt-5">
+                                    <div className="nav-logo width-fit">
+                                        <img src={businessData.logo} alt="" />
                                     </div>
-                                    <span className="ms-2 fs-45 text-white">{businessData.businessName}</span>
+                                    <span className="ms-2 fs-30 text-white">{businessData.businessName}</span>
                                 </div>
                                 <div className="col-12 mt-4  text-center text-lg-start" style={{ color: "#A4B3CB" }}>
                                     <p>
@@ -736,15 +769,15 @@ export default function Template() {
                                     </div>
 
                                     <div className="mt-5 col-12 row gap-3 jcc-md text-center text-lg-start">
-                                        <div className="contact-banner text-orange text-center text-lg-start">
+                                        <a href={businessData.socialMediaLinks[0].link} className="contact-banner text-orange text-center text-lg-start">
                                             <i className="bi bi-facebook text-orange"></i>
-                                        </div>
-                                        <div className="contact-banner text-center text-lg-start">
+                                        </a>
+                                        <a href={businessData.socialMediaLinks[1].link} className="contact-banner text-center text-lg-start">
                                             <i className="bi bi-instagram text-orange"></i>
-                                        </div>
-                                        <div className="contact-banner text-center text-lg-start">
+                                        </a>
+                                        <a href={businessData.socialMediaLinks[2].link} className="contact-banner text-center text-lg-start">
                                             <i className="bi bi-twitter text-orange"></i>
-                                        </div>
+                                        </a>
                                         {/* <hr style={{width:"fit-content",opacity: 0.15,}}></hr> */}
                                     </div>
 
@@ -759,7 +792,9 @@ export default function Template() {
                                                 <a href="#" className=" fs-14 text-decoration-none text-orange">OPENING HOURS</a>
                                             </div>
                                             <div className="mt-3 text-center text-lg-start" style={{ color: "#A4B3CB" }}>
-                                                <span>Monday - Friday</span>
+                                                {businessData.businessTiming.workingDays.map((day, index) => (
+                                                    <p>{day}</p>
+                                                ))}
                                             </div>
                                             <div className="mt-3 text-center text-lg-start" style={{ color: "#A4B3CB" }}>
                                                 <span>8:00 am to 9:00 pm</span>
@@ -771,7 +806,9 @@ export default function Template() {
                                     <div className="col-lg-4">
                                         <div className="col-12 mt-5 text-center text-lg-start">
                                             <div className="mt-3" style={{ color: "#A4B3CB" }}>
-                                                <span>Sunday</span>
+                                               {closeDays.map((day,index) =>(
+                                                <p>{day}</p>
+                                               ))}
                                             </div>
                                             <div className="mt-3" style={{ color: "#A4B3CB" }}>
                                                 <span>CLOSED</span>

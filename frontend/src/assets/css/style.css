@@ -375,9 +375,6 @@ footer .btn-theme{
     }
 }
 
-.cat-option {
-    border-right: 1px dashed #DF6827;
-}
 
 /* Ensure proper spacing and alignment */
 .cat-option:last-child {

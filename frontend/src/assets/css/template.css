@@ -14,10 +14,6 @@
     border-radius: 10px 0px;
 }.box-shadow{
     box-shadow: 0px 15px 30px rgba(0, 0, 0, 0.15);
-}.theme{
-    background-color: #EA6D27;
-    color: white;
-    border: none;
 }.contact-banner{
     border-radius: 50%;
     border: 1px solid black;
@@ -36,21 +32,14 @@
     border: 2px solid rgb(255, 255, 255);
     width: 90% !important;
     transition: .5s ease-in-out;
-}.dish-div:hover{
-    background-color: white;
 }
-.text-orange{
-    color: #DF6827;
-}.w-80{
+.w-80{
     width: 80%;
-}.cat-option{
-    border-right: 1px dashed #DF6827;
 }.service-design{
     border-radius: 90px 30px 90px 30px;
     padding: 20px;
     width: 90% !important;
 }.service-design.active{
-    background-color: #DF6827;
     color: white;
     transition: 0.5s ease-in-out;
 }.test-button-img-div{
@@ -77,6 +66,8 @@
 }.social-media{
     display: flex;
     justify-content: start;
+}.banner-section{
+    margin-top: 100px;
 }
 @media screen and (max-width: 768px) {
     .navbar-brand span{
@@ -126,7 +117,7 @@
 
 .address-section {
     border-radius: 16px !important;
-    background-color: #EA6D27;
+    
     padding: 30px;
     color: white !important;
 }
@@ -134,36 +125,35 @@
 .address-logo i {
     padding: 10px;
     background-color: white;
-    color: #ea6d27;
+    
     border-radius: 50%;
     height: auto;
-    font-size: 1.5rem; /* Adjusted for better visibility */
+    font-size: 1.5rem; 
 }
 
 .fs-13 {
-    font-size: 0.9rem; /* Font size for labels */
+    font-size: 0.9rem; 
 }
 
 .fs-16 {
-    font-size: 1rem; /* Font size for descriptions */
+    font-size: 1rem; 
 }
 
-/* Responsive Adjustments */
 @media (max-width: 576px) {
     .address-section {
-        padding: 20px; /* Reduce padding on smaller screens */
+        padding: 20px; 
     }
 
     .fs-13 {
-        font-size: 0.8rem; /* Slightly smaller font size */
+        font-size: 0.8rem; 
     }
 
     .fs-16 {
-        font-size: 0.9rem; /* Slightly smaller font size */
+        font-size: 0.9rem;
     }
 
     .address-logo i {
-        font-size: 1.25rem; /* Smaller icon for mobile */
+        font-size: 1.25rem;
     }
 }
 .gallery-img{
@@ -171,4 +161,14 @@
     height: 300px;
     object-fit: cover;
     box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+}.width-fit{
+    width: fit-content;
+}.book-a-table{
+    width: 250px !important;
+}.menu-button{
+    width: 70px;
+}.p-rating{
+    text-align: center;
+    display: flex;
+    justify-content: center;
 }
