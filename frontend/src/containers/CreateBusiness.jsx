@@ -1663,18 +1663,18 @@ export default function CreateBusiness() {
     
                     const s3Urls = response.data.data;
     
-                    // await Promise.all(
-                    //     s3Urls.map(async (data, index) => {
-                    //         const { url, file_type } = data;
-                    //         const file = videoFiles[index];
+                    await Promise.all(
+                        s3Urls.map(async (data, index) => {
+                            const { url, file_type } = data;
+                            const file = videoFiles[index];
     
-                    //         await axios.put(url, file, {
-                    //             headers: {
-                    //                 'Content-Type': file_type,
-                    //             },
-                    //         });
-                    //     })
-                    // );
+                            await axios.put(url, file, {
+                                headers: {
+                                    'Content-Type': file_type,
+                                },
+                            });
+                        })
+                    );
     
                     handleNextStep(); 
                 } catch (error) {
