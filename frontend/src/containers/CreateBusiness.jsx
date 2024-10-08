@@ -1299,7 +1299,7 @@ export default function CreateBusiness() {
                                             />
                                             <div className="col-12 col-md-3 mb-3">
                                                 <input type="file" hidden className='otherDetailsImageInput' onChange={(e) => handleFileChange("otherDetailsImage", index, e)} />
-                                                <div onClick={() => UploadImages(index, 'otherDetailsImage')} className="p-2 mt-2 add-logo-div">
+                                                <div onClick={() => UploadImage(index, 'otherDetailsImage')} className="p-2 mt-2 add-logo-div">
                                                     <div className="text-center">
                                                         <img src={detail.image || "/src/assets/images/add_image.png"} width="50" alt="Add Logo" />
                                                         <div className="col-12">
@@ -1526,19 +1526,19 @@ export default function CreateBusiness() {
                     const s3Urls = response.data.data;
                     console.log(s3Urls)
         
-                    // await Promise.all(
-                    //     s3Urls.map(async (data, index) => {
-                    //         const { url, file_type } = data;
-                    //         const file = imageFiles[index];
-                    //         console.log(data)
-                    //         const uploadResponse = await axios.put(url, file, {
-                    //             headers: {
-                    //                 'Content-Type': file_type,
-                    //             },
-                    //         });
-                    //         console.log('Upload response:', uploadResponse.status);
-                    //     })
-                    // );
+                    await Promise.all(
+                        s3Urls.map(async (data, index) => {
+                            const { url, file_type } = data;
+                            const file = imageFiles[index];
+                            console.log(data,'aaaaaaaaaaaaaaaaaaaaaaaa')
+                            const uploadResponse = await axios.put(url, file, {
+                                headers: {
+                                    'Content-Type': file_type,
+                                },
+                            });
+                            console.log('Upload response:', uploadResponse.status);
+                        })
+                    );
         
                     handleNextStep();
                 } catch (error) {
