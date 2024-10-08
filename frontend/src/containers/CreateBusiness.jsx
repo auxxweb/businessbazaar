@@ -1299,7 +1299,7 @@ export default function CreateBusiness() {
                                             />
                                             <div className="col-12 col-md-3 mb-3">
                                                 <input type="file" hidden className='otherDetailsImageInput' onChange={(e) => handleFileChange("otherDetailsImage", index, e)} />
-                                                <div onClick={() => UploadImages(index, 'otherDetailsImage')} className="p-2 mt-2 add-logo-div">
+                                                <div onClick={() => UploadImage(index, 'otherDetailsImage')} className="p-2 mt-2 add-logo-div">
                                                     <div className="text-center">
                                                         <img src={detail.image || "/src/assets/images/add_image.png"} width="50" alt="Add Logo" />
                                                         <div className="col-12">
@@ -1482,18 +1482,18 @@ export default function CreateBusiness() {
     }
     
     function MoreImages() {
-        const [images, setImages] = useState([{ file: null, fileName: '' }]); 
+        const [images, setImages] = useState([{ file: null, fileType: '' }]); 
         const handleFileChange = (index, event) => {
             const file = event.target.files[0]; 
             if (file) {
                 const newImages = [...images];
-                newImages[index] = { file, fileName: file.name }; 
+                newImages[index] = { file, fileType: file.type }; 
                 setImages(newImages); 
             }
         };
     
         const addImageInput = () => {
-            setImages((prevImages) => [...prevImages, { file: null, fileName: '' }]); 
+            setImages((prevImages) => [...prevImages, { file: null, fileType: '' }]); 
         };
     
         const handleAddImageClick = (index) => {
@@ -1501,19 +1501,19 @@ export default function CreateBusiness() {
         };
     
         const handleGallerySubmit = () => {
-            const imageFileNames = images.map(image => image.fileName);
+            const imageFileTypes = images.map(image => image.fileType);
             const imageFiles = images.map(image => image.file);
         
             setFormData(prevFormData => ({
                 ...prevFormData,
-                gallery: imageFileNames,
+                gallery: imageFileTypes,
             }));
         
             const preRequestUrl = async () => {
                 try {
                     const url = 'https://businessbazaarserver.auxxweb.in/api/v1/s3url';
                     const requestBody = {
-                        file_names: imageFileNames,
+                        file_types: imageFileTypes,
                     };
         
                     // Request the pre-signed S3 URLs
@@ -1526,19 +1526,20 @@ export default function CreateBusiness() {
                     const s3Urls = response.data.data;
                     console.log(s3Urls)
         
-                    // await Promise.all(
-                    //     s3Urls.map(async (data, index) => {
-                    //         const { url, file_type } = data;
-                    //         const file = imageFiles[index];
-                    //         console.log(data)
-                    //         const uploadResponse = await axios.put(url, file, {
-                    //             headers: {
-                    //                 'Content-Type': file_type,
-                    //             },
-                    //         });
-                    //         console.log('Upload response:', uploadResponse.status);
-                    //     })
-                    // );
+                    await Promise.all(
+                        s3Urls.map(async (data, index) => {
+                            const { url, file_type } = data;
+                            const file = imageFiles[index];
+                            console.log(data,'aaaaaaaaaaaaaaaaaaaaaaaa')
+                            console.log(file,'ccccccccccccccccccccccccccc')
+                            const uploadResponse = await axios.put(url, file, {
+                                headers: {
+                                    'Content-Type': file?.type,
+                                },
+                            });
+                            console.log('Upload response:', uploadResponse.status);
+                        })
+                    );
         
                     handleNextStep();
                 } catch (error) {
@@ -1663,18 +1664,18 @@ export default function CreateBusiness() {
     
                     const s3Urls = response.data.data;
     
-                    // await Promise.all(
-                    //     s3Urls.map(async (data, index) => {
-                    //         const { url, file_type } = data;
-                    //         const file = videoFiles[index];
+                    await Promise.all(
+                        s3Urls.map(async (data, index) => {
+                            const { url, file_type } = data;
+                            const file = videoFiles[index];
     
-                    //         await axios.put(url, file, {
-                    //             headers: {
-                    //                 'Content-Type': file_type,
-                    //             },
-                    //         });
-                    //     })
-                    // );
+                            await axios.put(url, file, {
+                                headers: {
+                                    'Content-Type': file_type,
+                                },
+                            });
+                        })
+                    );
     
                     handleNextStep(); 
                 } catch (error) {
