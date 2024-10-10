@@ -87,3 +87,29 @@ export const fetchBusinessTemplate = async (id)=>{
 
     }
 }
+
+
+export const CreateBusinessDetails = async (formData) => {
+    try {
+        const response = await axios.post(`${baseUrl}/api/v1/business/`, formData, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+
+        if (response.status !== 200) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const data = response.data;
+        if (data.success) {
+            return data; // Successfully created business details
+        } else {
+            console.error('Failed to create business details:', data.message || 'Unknown error');
+            throw new Error(data.message || 'Failed to create business details');
+        }
+    } catch (error) {
+        console.error("Error occurred while fetching business site details:", error.message);
+        throw error; // Propagate the error
+    }
+};
