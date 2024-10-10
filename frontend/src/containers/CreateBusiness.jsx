@@ -120,16 +120,17 @@ export default function CreateBusiness() {
 
 
 
-    const preRequestFun = async (file) => {
+    const preRequestFun = async (file,position) => {
         const url = 'https://businessbazaarserver.auxxweb.in/api/v1/s3url';
-        const requestBody = { file_types: file.type };
-        console.log('File being uploaded:', file);
+        const requestBody = [{
+            position:position,
+            file_type:file.type
+        }];
         
         try {
             const response = await axios.post(url, requestBody, {
                 headers: { 'Content-Type': 'application/json' },
             });
-            console.log('Response from S3 URL request:', response);
             const preReq = response.data; 
             console.log('preReq:', preReq);
     
@@ -138,7 +139,7 @@ export default function CreateBusiness() {
             }
         
             await axios.put(preReq.url, file, {
-                headers: { 'Content-Type': file.type },
+                headers: { 'Content-Type': file.file_type },
             });
         
             return preReq;
@@ -184,11 +185,6 @@ export default function CreateBusiness() {
             state: '',
             pinCode: ''
         });
-        const [fileState, setFileState] = useState({
-            file: '',
-            fileName: '',
-            fileType: '',
-        });
     
         const [location, setLocation] = useState({
             lat: '',
@@ -215,6 +211,7 @@ export default function CreateBusiness() {
     
         const handleLogoChange = async (event) => {
             const file = event.target.files[0];
+
             console.log('Selected file:', file);
             
             if (file) {
@@ -222,7 +219,7 @@ export default function CreateBusiness() {
                 
                 reader.onload = async function (e) {
                     try {
-                        const preReq = await preRequestFun(file);
+                        const preReq = await preRequestFun(file,"Landing");
                         let url = '';
                         const landingItem = preReq.find(req => req.position === 'Logo');
                         if (landingItem) {
@@ -354,24 +351,14 @@ export default function CreateBusiness() {
                                     </div>
                                 </div>
                                 <div className="row">
-                                    <div className="col-12 col-md-6 mt-3">
-                                        <input
-                                            type="text"
-                                            className="form-control form-control-lg w-100"
-                                            name="lat"
-                                            value={location.lat}
-                                            onChange={handleLocationChange}
-                                            placeholder="Location Lat"
-                                        />
-                                    </div>
-                                    <div className="col-12 col-md-6 mt-3">
+                                    <div className="col-12 mt-3">
                                         <input
                                             type="text"
                                             className="form-control form-control-lg w-100"
                                             name="lon"
                                             value={location.lon}
                                             onChange={handleLocationChange}
-                                            placeholder="Location Lon"
+                                            placeholder="Location"
                                         />
                                     </div>
                                 </div>
@@ -1058,10 +1045,10 @@ export default function CreateBusiness() {
     
                             {/* Color Theme Section */}
                             <div className="col-12 p-3 p-md-5">
-                                <div className="col-12 text-center">
-                                <h5 className='fs-18 mb-4 p-3 text-center text-dark fw-bold mt-3 form-sub-heading'>Color Theme</h5>
-                                </div>
+                                <u><h5 className='fs-18 mb-4 p-1 text-center text-md-start text-dark fw-bold mt-3'>Color Theme</h5></u>
+                               
                                 <div className="col-6 col-md-3">
+                                    <label htmlFor="">Choose Color :</label>
                                     <input
                                         type="color"
                                         name="color"
@@ -1073,8 +1060,9 @@ export default function CreateBusiness() {
     
                                 {/* Landing Page Hero Details */}
                                 <div className="col-12 text-center">
-                                <h5 className='fs-18 mb-4 p-3 text-center text-dark fw-bold mt-3 form-sub-heading'>Add Landing Page Banner</h5>
+                                <u><h5 className='fs-18 mb-2 p-1 text-center text-md-start text-dark fw-bold mt-3'>Add Landing Page Banner</h5></u>
                                 </div>
+                                <label htmlFor="">Title :</label>
                                 <input
                                     type="text"
                                     name="title"
@@ -1083,6 +1071,7 @@ export default function CreateBusiness() {
                                     value={landingPageHero.title}
                                     onChange={(e) => handleInputChange(e, setLandingPageHero)}
                                 />
+                                <label htmlFor="">Description :</label>
                                 <textarea
                                     name="description"
                                     className='form-control form-control-lg mb-3'
@@ -1104,8 +1093,9 @@ export default function CreateBusiness() {
     
                                 {/* Welcome Part */}
                                 <div className="col-12 text-center">
-                                <h5 className='fs-18 mb-4 p-3 text-center text-dark fw-bold mt-3 form-sub-heading'>Add Welcome Part</h5>
+                                <u><h5 className='fs-18 mb-2 p-1 text-center text-md-start text-dark fw-bold mt-3'>Add Welcome Part</h5></u>
                                 </div>
+                                <label htmlFor=""> Title :</label>
                                 <input
                                     type="text"
                                     name="title"
@@ -1114,6 +1104,7 @@ export default function CreateBusiness() {
                                     value={welcomePart.title}
                                     onChange={(e) => handleInputChange(e, setWelcomePart)}
                                 />
+                                <label htmlFor="">Description :</label>
                                 <textarea
                                     name="description"
                                     className='form-control form-control-lg mb-3'
@@ -1258,7 +1249,7 @@ export default function CreateBusiness() {
     
                                 <div className="col-12">
                                     <div className="col-12 text-center">
-                                        <h5 className='fs-18 mb-4 p-3 text-center text-dark fw-bold mt-3 form-sub-heading'>Add Special Service Content</h5>
+                                       <u> <h5 className='fs-18 mb-4 p-1 text-center text-md-start text-dark fw-bold mt-3'>Add Special Service Content</h5></u>
                                     </div>
                                     <div className="col-12 text-center">
                                         <input
@@ -1280,12 +1271,15 @@ export default function CreateBusiness() {
     
                                     {/* Special Services List */}
                                     <div className="col-12 text-center">
-                                        <h5 className='fs-18 mb-4 p-3 text-center text-dark fw-bold mt-3 form-sub-heading'>Add Special Services</h5>
+                                        <u><h5 className='fs-18 mb-4 p-1 text-center text-md-start text-dark fw-bold mt-3'>Add Special Services</h5></u>
                                     </div>
     
                                     {specialService.data.map((p, index) => (
                                         <div key={index} className="mt-2">
+                                            {index !=0 ? (
+                                                
                                             <div className="divider"></div>
+                                            ):''}
                                             <input
                                                 type="text"
                                                 name="title"
@@ -1320,16 +1314,19 @@ export default function CreateBusiness() {
                                                         </div>
                                                     </div>
                                                 </div>
-                                                {index > 0 && ( // Show remove button only if not the first element
-                                                    <button
+                                              
+                                            </div>
+                                            {index > 0 && ( // Show remove button only if not the first element
+                                                <div className="col-12 text-center">
+                                                        <button
                                                         type="button"
                                                         onClick={() => removeSpecialService(index)}
-                                                        className="btn btn-danger mt-2"
+                                                        className="btn btn-danger mt-2 w-100 mb-2"
                                                     >
                                                         Remove
                                                     </button>
+                                                </div>
                                                 )}
-                                            </div>
                                         </div>
                                     ))}
     
@@ -1348,7 +1345,7 @@ export default function CreateBusiness() {
     
                                     {/* Services List */}
                                     <div className="col-12 text-center">
-                                        <h5 className='fs-18 mb-4 p-3 text-center text-dark fw-bold mt-3 form-sub-heading'>Add Service Details</h5>
+                                        <h5 className='fs-18 mb-4 p-1 text-center text-md-start text-dark fw-bold mt-3'>Add Service Details</h5>
                                     </div>
     
                                     {services.map((service, index) => (
@@ -1372,7 +1369,7 @@ export default function CreateBusiness() {
                                                 <button
                                                     type="button"
                                                     onClick={() => removeService(index)}
-                                                    className="btn btn-danger mt-2"
+                                                    className="btn btn-danger mt-2 mb-2 w-100"
                                                 >
                                                     Remove
                                                 </button>
@@ -1469,7 +1466,7 @@ export default function CreateBusiness() {
     
                                 <div className="col-12 ">
                                 <div className="col-12 text-center">
-                                <h5 className='fs-18 mb-4 p-3 text-center text-dark fw-bold mt-3 form-sub-heading'>Add Products</h5>
+                                <u><h5 className='fs-18 mb-4 p-1 text-center text-md-start text-dark fw-bold mt-3'>Add Products</h5></u>
                                 </div>
                                     {productSection.map((item, index) => (
                                         <div key={index} className='row align-items-center'>
@@ -1746,45 +1743,51 @@ export default function CreateBusiness() {
             document.getElementById(`file-input-${index}`).click();
         };
     
+        const removeImage = (index) => {
+            const updatedImages = images.filter((_, i) => i !== index);
+            setImages(updatedImages);
+            setS3Files(updatedImages);
+        };
+    
         const handleGallerySubmit = async () => {
             const imageFileTypes = images.map((image) => image?.fileType);
             const imageFiles = images.map((image) => image?.file);
-            console.log(imageFileTypes.length)
-            if (imageFileTypes.length>0){
-            setLoading(true);
-        
-            try {
-                const url = 'https://businessbazaarserver.auxxweb.in/api/v1/s3url';
-                const requestBody = { file_types: imageFileTypes };
-        
-                const response = await axios.post(url, requestBody, {
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                });
-        
-                const s3Urls = response.data.data;
-                setS3PreRequest(s3Urls);
-        
-                await Promise.all(
-                    s3Urls.map(async (data, index) => {
-                        const { url } = data;
-                        const file = imageFiles[index];
-                        await axios.put(url, file, {
-                            headers: { 'Content-Type': file.type },
-                        });
-                    })
-                );
-        
+    
+            if (imageFileTypes.length > 0) {
+                setLoading(true);
+    
+                try {
+                    const url = 'https://businessbazaarserver.auxxweb.in/api/v1/s3url';
+                    const requestBody = { file_types: imageFileTypes };
+    
+                    const response = await axios.post(url, requestBody, {
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                    });
+    
+                    const s3Urls = response.data.data;
+                    setS3PreRequest(s3Urls);
+    
+                    await Promise.all(
+                        s3Urls.map(async (data, index) => {
+                            const { url } = data;
+                            const file = imageFiles[index];
+                            await axios.put(url, file, {
+                                headers: { 'Content-Type': file.type },
+                            });
+                        })
+                    );
+    
+                    handleNextStep();
+                } catch (error) {
+                    console.error('Error fetching the S3 URLs or uploading files:', error);
+                } finally {
+                    setLoading(false);
+                }
+            } else {
                 handleNextStep();
-            } catch (error) {
-                console.error('Error fetching the S3 URLs or uploading files:', error);
-            } finally {
-                setLoading(false);
             }
-        }else{
-            handleNextStep();
-        }
         };
     
         return (
@@ -1834,6 +1837,16 @@ export default function CreateBusiness() {
                                                     )}
                                                 </div>
                                             </div>
+    
+                                            {/* Remove Button for all except the first image */}
+                                            {index > 0 && (
+                                                <button
+                                                    className="btn btn-danger mt-2 w-100"
+                                                    onClick={() => removeImage(index)}
+                                                >
+                                                    Remove
+                                                </button>
+                                            )}
                                         </div>
                                     ))}
                                 </div>
@@ -1880,43 +1893,45 @@ export default function CreateBusiness() {
             setVideos((prevVideos) => [...prevVideos, { file: null, fileType: '' }]);
         };
     
+        const removeVideoInput = (index) => {
+            const updatedVideos = videos.filter((_, i) => i !== index);
+            setVideos(updatedVideos);
+        };
+    
         const handleAddVideoClick = (index) => {
             document.getElementById(`file-input-${index}`).click();
         };
     
         const handleGallerySubmit = async () => {
             const videoFiles = videos.map(video => video.file);
-            const videoFilesTypes = videos.map(video => video.file.type);
-            console.log(videoFilesTypes.length)
-            if (videoFilesTypes.length>0){
-                
-            try {
-                const url = 'https://businessbazaarserver.auxxweb.in/api/v1/s3url';
-                const requestBody = { file_types: videoFilesTypes };
-                const response = await axios.post(url, requestBody, {
-                    headers: { 'Content-Type': 'application/json' },
-                });
+            const videoFilesTypes = videos.map(video => video.file?.type || '');
     
-                const s3Urls = response.data.data;
-                setS3PreRequest(s3Urls.map(url => url.url));
+            if (videoFilesTypes.length > 0) {
+                try {
+                    const url = 'https://businessbazaarserver.auxxweb.in/api/v1/s3url';
+                    const requestBody = { file_types: videoFilesTypes };
+                    const response = await axios.post(url, requestBody, {
+                        headers: { 'Content-Type': 'application/json' },
+                    });
     
-                await Promise.all(
-                    s3Urls.map(async (data, index) => {
-                        const { url } = data;
-                        const file = videoFiles[index];
-                        await axios.put(url, file, {
-                            headers: { 'Content-Type': file.type },
-                        });
-                    })
-                );
-                handleNextStep()
+                    const s3Urls = response.data.data;
+                    setS3PreRequest(s3Urls.map(url => url.url));
     
-                // Proceed to the next step here (handleNextStep)
-            } catch (error) {
-                console.error('Error uploading videos:', error);
-            }
-            }else{
-                handleNextStep()
+                    await Promise.all(
+                        s3Urls.map(async (data, index) => {
+                            const { url } = data;
+                            const file = videoFiles[index];
+                            await axios.put(url, file, {
+                                headers: { 'Content-Type': file.type },
+                            });
+                        })
+                    );
+                    handleNextStep();
+                } catch (error) {
+                    console.error('Error uploading videos:', error);
+                }
+            } else {
+                handleNextStep();
             }
         };
     
@@ -1937,7 +1952,7 @@ export default function CreateBusiness() {
                             </div>
     
                             {/* Video Upload Fields */}
-                            <div className="col-12 col-md-10 p-3 p-md-5">
+                            <div className="col-12">
                                 <div className="row mb-3">
                                     {videos.map((video, index) => (
                                         <div className="col-6 col-lg-3 mb-3" key={index}>
@@ -1948,10 +1963,7 @@ export default function CreateBusiness() {
                                                 accept="video/*"
                                                 onChange={(e) => handleFileChange(index, e)}
                                             />
-                                            <div
-                                                className="p-2 add-logo-div"
-                                                onClick={() => handleAddVideoClick(index)}
-                                            >
+                                            <div className="p-2 add-logo-div" onClick={() => handleAddVideoClick(index)}>
                                                 <div className="text-center">
                                                     {video.file ? (
                                                         <video width="100%" controls className='video-preview'>
@@ -1966,12 +1978,21 @@ export default function CreateBusiness() {
                                                     </div>
                                                 </div>
                                             </div>
+    
+                                            {/* Remove Button */}
+                                            {index > 0 && (
+                                                <div className="text-center mt-2">
+                                                    <button className="btn btn-danger btn-sm" onClick={() => removeVideoInput(index)}>
+                                                        Remove
+                                                    </button>
+                                                </div>
+                                            )}
                                         </div>
                                     ))}
                                 </div>
                                 <div className="col-12 mb-3 text-center">
                                     <button className="btn w-100 btn btn-success" onClick={addVideoInput}>
-                                        + Add another image
+                                        + Add another video
                                     </button>
                                 </div>
                             </div>
@@ -1988,6 +2009,7 @@ export default function CreateBusiness() {
             </div>
         );
     }
+    
     
 
     function PreviewTemplates() {
