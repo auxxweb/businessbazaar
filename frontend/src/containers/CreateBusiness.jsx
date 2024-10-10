@@ -39,6 +39,7 @@ export default function CreateBusiness() {
     const [step, setStep] = useState(1);
 
     const handleNextStep = () => {
+        console.log('aaaaaaaaaaa')
         setStep(prevStep => prevStep + 1);
     };
     const handlePrevStep = () => {
@@ -119,9 +120,38 @@ export default function CreateBusiness() {
 
 
 
+    const preRequestFun = async (file) => {
+        const url = 'https://businessbazaarserver.auxxweb.in/api/v1/s3url';
+        const requestBody = { file_types: file.type };
+        console.log('File being uploaded:', file);
+        
+        try {
+            const response = await axios.post(url, requestBody, {
+                headers: { 'Content-Type': 'application/json' },
+            });
+            console.log('Response from S3 URL request:', response);
+            const preReq = response.data; 
+            console.log('preReq:', preReq);
+    
+            if (!preReq.url) {
+                throw new Error('The URL is not defined in the response.');
+            }
+        
+            await axios.put(preReq.url, file, {
+                headers: { 'Content-Type': file.type },
+            });
+        
+            return preReq;
+        } catch (error) {
+            console.error('Error uploading file:', error.message || error);
+            throw new Error('File upload failed');
+        }
+    };
+    
 
-
-
+        
+    
+                
 
 
     useEffect(() => {
@@ -183,24 +213,37 @@ export default function CreateBusiness() {
             }));
         };
     
-        // Handle logo upload
-        const handleLogoChange = (event) => {
+        const handleLogoChange = async (event) => {
             const file = event.target.files[0];
+            console.log('Selected file:', file);
+            
             if (file) {
                 const reader = new FileReader();
-                reader.onload = function (e) {
-                    setFileState({
-                        file: file,
-                        fileType: file.type,
-                        fileName: file.name,
-                    });
-                    setLogo(e.target.result); // Set the preview image
+                
+                reader.onload = async function (e) {
+                    try {
+                        const preReq = await preRequestFun(file);
+                        let url = '';
+                        const landingItem = preReq.find(req => req.position === 'Logo');
+                        if (landingItem) {
+                            url = landingItem.url;
+                        }
+                        setLogo(url);
+                    } catch (error) {
+                        console.error('Error uploading logo:', error.message || error);
+                    }
                 };
-                reader.readAsDataURL(file);
+        
+                reader.onerror = function () {
+                    console.error('Error reading file:', reader.error);
+                };
+        
+                reader.readAsDataURL(file); 
             }
         };
     
-        // Trigger the file input for the logo
+
+
         const imageUpload = () => {
             document.getElementById('ImageLogo').click();
         };
@@ -212,12 +255,6 @@ export default function CreateBusiness() {
                 businessName: businessName,
                 address: address,
                 location: location,
-            }));
-            setS3Files(prevS3Files => ({
-                ...prevS3Files,
-                file: fileState.file,
-                fileName: fileState.fileName,
-                fileType: fileState.fileType,
             }));
             handleNextStep();
         };
@@ -235,7 +272,7 @@ export default function CreateBusiness() {
                             </button>
                         </div>
                         <div>
-                            <div className="col-12">
+                            <div className="col-12 mt-5">
                                 <h1 className='fw-bold text-center text-md-start'>
                                     Enter your <br /> Business Details
                                 </h1>
@@ -307,7 +344,7 @@ export default function CreateBusiness() {
                                     </div>
                                     <div className="col-12 col-md-6 mt-3">
                                         <input
-                                            type="text"
+                                            type="number"
                                             className="form-control form-control-lg w-100"
                                             name="pinCode"
                                             value={address.pinCode}
@@ -355,259 +392,236 @@ export default function CreateBusiness() {
 
     function ContactDetails() {
         console.log(formData)
+        console.log(formData);
+    
         const [mobileNumbers, setMobileNumbers] = useState([{ id: 1, number: '' }]);
         const [whatsappNumbers, setWhatsappNumbers] = useState([{ id: 1, number: '' }]);
         const [emails, setEmails] = useState([{ id: 1, email: '' }]);
-
+        
         const [newFormData, setNewFormData] = useState({
             contactDetails: {
                 name: '',
                 mobileNumbers: [],
                 whatsappNumbers: [],
                 emails: [],
-                website: ''
-            }
+                website: '',
+            },
         });
-
+        
+        // Handle contact details change
         const handleContactChange = (event) => {
             const { name, value } = event.target;
-
-            setNewFormData(prevData => ({
+            setNewFormData((prevData) => ({
                 ...prevData,
                 contactDetails: {
                     ...prevData.contactDetails,
                     [name]: value,
-                }
+                },
             }));
         };
-
+    
+        // Handle dynamic input changes
         const handleMobileNumberChange = (id, value) => {
-            const updatedMobileNumbers = mobileNumbers.map(number =>
+            const updatedMobileNumbers = mobileNumbers.map((number) =>
                 number.id === id ? { ...number, number: value } : number
             );
-
             setMobileNumbers(updatedMobileNumbers);
-
-            // Update formData with new mobile numbers
-            setNewFormData(prevFormData => {
-                const newFormValue = {
-                    ...prevFormData,
-                    contactDetails: {
-                        ...prevFormData.contactDetails,
-                        mobileNumbers: updatedMobileNumbers.map(number => number.number)
-                    }
-                };
-                console.log(newFormData.contactDetails); // Log updated formData
-                return newFormValue;
-            });
+            updateContactDetails('mobileNumbers', updatedMobileNumbers);
         };
-
+    
         const handleWhatsappNumberChange = (id, value) => {
-            const updatedWhatsappNumbers = whatsappNumbers.map(number =>
+            const updatedWhatsappNumbers = whatsappNumbers.map((number) =>
                 number.id === id ? { ...number, number: value } : number
             );
-
             setWhatsappNumbers(updatedWhatsappNumbers);
-
-            // Update formData with new WhatsApp numbers
-            setNewFormData(prevFormData => {
-                const newFormvalue = {
-                    ...prevFormData,
-                    contactDetails: {
-                        ...prevFormData.contactDetails,
-                        whatsappNumbers: updatedWhatsappNumbers.map(number => number.number)
-                    }
-                };
-                console.log(newFormvalue); // Log updated formData
-                return newFormvalue;
-            });
+            updateContactDetails('whatsappNumbers', updatedWhatsappNumbers);
         };
-
+    
         const handleEmailChange = (id, value) => {
-            const updatedEmails = emails.map(email =>
+            const updatedEmails = emails.map((email) =>
                 email.id === id ? { ...email, email: value } : email
             );
-
             setEmails(updatedEmails);
-
-            // Update formData with new emails
-            setNewFormData(prevFormData => {
-                const newFormvalue = {
-                    ...prevFormData,
-                    contactDetails: {
-                        ...prevFormData.contactDetails,
-                        emails: updatedEmails.map(email => email.email)
-                    }
-                };
-                console.log(newFormvalue); // Log updated formData
-                return newFormvalue;
-            });
+            updateContactDetails('emails', updatedEmails);
         };
-
-        const addMobileNumber = () => {
-            setMobileNumbers([...mobileNumbers, { id: mobileNumbers.length + 1, number: '' }]);
-        };
-
-        const removeMobileNumber = (id) => {
-            setMobileNumbers(mobileNumbers.filter(number => number.id !== id));
-        };
-
-        const addWhatsappNumber = () => {
-            setWhatsappNumbers([...whatsappNumbers, { id: whatsappNumbers.length + 1, number: '' }]);
-        };
-
-        const removeWhatsappNumber = (id) => {
-            setWhatsappNumbers(whatsappNumbers.filter(number => number.id !== id));
-        };
-
-        const addEmail = () => {
-            setEmails([...emails, { id: emails.length + 1, email: '' }]);
-        };
-
-        const removeEmail = (id) => {
-            setEmails(emails.filter(email => email.id !== id));
-        };
-
-        const contactSubmitHandler = () => {
-            console.log("Submitting Contact Details:", newFormData); // Log before updating global state
-
-            setFormData(prevData => ({
-                ...prevData,
-                contactDetails: newFormData.contactDetails, // Ensure you are only updating the contactDetails part
+    
+        const updateContactDetails = (field, updatedArray) => {
+            setNewFormData((prevFormData) => ({
+                ...prevFormData,
+                contactDetails: {
+                    ...prevFormData.contactDetails,
+                    [field]: updatedArray.map((item) => item.number || item.email),
+                },
             }));
-
-            handleNextStep(); // Ensure this function is defined
         };
-
+    
+        // Add and remove fields for mobile numbers, WhatsApp, and emails
+        const addMobileNumber = () => setMobileNumbers([...mobileNumbers, { id: mobileNumbers.length + 1, number: '' }]);
+        const removeMobileNumber = (id) => setMobileNumbers(mobileNumbers.filter((number) => number.id !== id));
+    
+        const addWhatsappNumber = () => setWhatsappNumbers([...whatsappNumbers, { id: whatsappNumbers.length + 1, number: '' }]);
+        const removeWhatsappNumber = (id) => setWhatsappNumbers(whatsappNumbers.filter((number) => number.id !== id));
+    
+        const addEmail = () => setEmails([...emails, { id: emails.length + 1, email: '' }]);
+        const removeEmail = (id) => setEmails(emails.filter((email) => email.id !== id));
+    
+        // Submit handler
+        const contactSubmitHandler = () => {
+            setFormData((prevData) => ({
+                ...prevData,
+                contactDetails: newFormData.contactDetails,
+            }));
+            handleNextStep(); // Ensure this is defined elsewhere
+        };
+    
         return (
             <div className='h-100vh'>
                 <div className="row h-100">
                     <div className="d-none d-md-block left-portion p-0 col-5">
-                        <img src="/src/assets/images/contact-details.jpg" alt="" className='w-100 h-100' />
+                        <img src="/src/assets/images/contact-details.jpg" alt="Contact Details" className='w-100 h-100' />
                     </div>
                     <div className="col-12 col-md-7 row align-items-center right-portion p-5">
-                    <div className="col-12 text-start">
-                        <button className="btn btn-dark w-auto float-start" onClick={handlePrevStep}><i className="bi bi-arrow-left"></i></button>
+                        <div className="col-12 text-start">
+                            <button className="btn btn-dark w-auto float-start" onClick={handlePrevStep}>
+                                <i className="bi bi-arrow-left"></i>
+                            </button>
                         </div>
-                        <div>
-                            <div className="col-12">
-                                <h1 className="fw-bold text-center text-md-start mb-2">Add <br /> Contact Details</h1>
+                        <div className="col-12">
+                            <h1 className="fw-bold text-center text-md-start mb-2">Add Contact Details</h1>
+                        </div>
+                        <div className="col-12 p-5 p-sm-0 mt-3">
+                            <input
+                                type="text"
+                                name="name"
+                                placeholder="Name"
+                                onChange={handleContactChange}
+                                className="form-control form-control-lg"
+                            />
+    
+                            {/* Mobile Numbers */}
+                            <div id="mobileNumberDiv" className="mt-4">
+                                {mobileNumbers.map((number) => (
+                                    <div className="row mt-3" key={number.id}>
+                                        <div className="col-12 col-sm-3 col-md-2">
+                                            <PhoneInput
+                                                country={'us'}
+                                                enableSearch={true}
+                                                value={number.number}
+                                                onChange={(phone) => handleMobileNumberChange(number.id, phone)}
+                                                containerStyle={{ width: '100%' }}
+                                            />
+                                        </div>
+                                        <div className="col-12 col-sm-7 col-md-8 mt-2 mt-sm-0">
+                                            <input
+                                                type="text"
+                                                value={number.number}
+                                                onChange={(e) => handleMobileNumberChange(number.id, e.target.value)}
+                                                className="form-control form-control-lg w-100"
+                                                placeholder="Phone Number"
+                                            />
+                                        </div>
+                                        {number.id > 1 ? (
+                                            <div className="col-12 col-sm-2 mt-2 mt-sm-0">
+                                                <button className="btn btn-danger btn-sm w-100" onClick={() => removeMobileNumber(number.id)}>
+                                                    <i className="bi bi-trash"></i>
+                                                </button>
+                                            </div>
+                                        ) : (
+                                            <div className="col-12 col-sm-2 mt-2 mt-sm-0">
+                                                <button type="button" onClick={addMobileNumber} className="btn w-100 btn-success mt-2">
+                                                    + Add
+                                                </button>
+                                            </div>
+                                        )}
+                                    </div>
+                                ))}
                             </div>
-                            <div className="col-12 p-5 p-sm-0 mt-3">
+    
+                            {/* WhatsApp Numbers */}
+                            <div id="whatsappNumberDiv" className="mt-4">
+                                {whatsappNumbers.map((number) => (
+                                    <div className="row mt-3" key={number.id}>
+                                        <div className="col-12 col-sm-3 col-md-2">
+                                            <PhoneInput
+                                                country={'us'}
+                                                enableSearch={true}
+                                                value={number.number}
+                                                onChange={(phone) => handleWhatsappNumberChange(number.id, phone)}
+                                                containerStyle={{ width: '100%' }}
+                                            />
+                                        </div>
+                                        <div className="col-12 col-sm-7 col-md-8 mt-2 mt-sm-0">
+                                            <input
+                                                type="text"
+                                                value={number.number}
+                                                onChange={(e) => handleWhatsappNumberChange(number.id, e.target.value)}
+                                                className="form-control form-control-lg w-100"
+                                                placeholder="WhatsApp Number"
+                                            />
+                                        </div>
+                                        {number.id > 1 ? (
+                                            <div className="col-12 col-sm-2 mt-2 mt-sm-0">
+                                                <button className="btn btn-danger btn-sm w-100" onClick={() => removeWhatsappNumber(number.id)}>
+                                                    <i className="bi bi-trash"></i>
+                                                </button>
+                                            </div>
+                                        ) : (
+                                            <div className="col-12 col-sm-2 mt-2 mt-sm-0">
+                                                <button type="button" onClick={addWhatsappNumber} className="btn w-100 btn-success mt-2">
+                                                    + Add
+                                                </button>
+                                            </div>
+                                        )}
+                                    </div>
+                                ))}
+                            </div>
+    
+                            {/* Emails */}
+                            <div id="emailDiv" className="mt-4">
+                                {emails.map((email) => (
+                                    <div className="row mt-3" key={email.id}>
+                                        <div className="col-12 col-md-10">
+                                            <input
+                                                type="email"
+                                                value={email.email}
+                                                onChange={(e) => handleEmailChange(email.id, e.target.value)}
+                                                className="form-control form-control-lg w-100"
+                                                placeholder="Email"
+                                            />
+                                        </div>
+                                        {email.id > 1 ? (
+                                            <div className="col-12 col-md-2 mt-2 mt-sm-0">
+                                                <button className="btn btn-danger btn-sm w-100" onClick={() => removeEmail(email.id)}>
+                                                    <i className="bi bi-trash"></i>
+                                                </button>
+                                            </div>
+                                        ) : (
+                                            <div className="col-12 col-sm-2 mt-2 mt-sm-0">
+                                                <button type="button" onClick={addEmail} className="btn w-100 btn-success mt-2">
+                                                    + Add
+                                                </button>
+                                            </div>
+                                        )}
+                                    </div>
+                                ))}
+                            </div>
+    
+                            {/* Website */}
+                            <div className="mt-4">
                                 <input
                                     type="text"
-                                    name="name"
-                                    placeholder="Name"
+                                    name="website"
+                                    placeholder="Website"
                                     onChange={handleContactChange}
                                     className="form-control form-control-lg"
                                 />
-
-                                {/* Mobile Number Section */}
-                                <div id="mobileNumberDiv">
-                                    {mobileNumbers.map((number) => (
-                                        <div className="row mt-3" key={number.id}>
-                                            <div className="col-12 col-sm-3 col-md-2">
-                                                <PhoneInput
-                                                    country={'us'}
-                                                    enableSearch={true}
-                                                    onChange={phone => handleMobileNumberChange(number.id, phone)}
-                                                    containerStyle={{ width: '100%' }}
-                                                />
-                                            </div>
-                                            <div className="col-12 col-sm-7 col-md-8 mt-2 mt-sm-0">
-                                                <input
-                                                    type="text"
-                                                    value={mobileNumbers[number.id - 1]?.number || ''}
-                                                    onChange={(e) => handleMobileNumberChange(number.id, e.target.value)}
-                                                    className="form-control form-control-lg w-100"
-                                                    placeholder="Phone Number"
-                                                />
-                                            </div>
-                                            {number.id > 1 && (
-                                                <div className="col-12 col-sm-2 mt-2 mt-sm-0">
-                                                    <button className="btn btn-danger btn-sm w-100" onClick={() => removeMobileNumber(number.id)}>
-                                                        <i className="bi bi-trash"></i>
-                                                    </button>
-                                                </div>
-                                            )}
-                                        </div>
-                                    ))}
-                                </div>
-                                <a href="#" onClick={addMobileNumber} className="text-primary mt-2">+ Add another mobile number</a>
-
-                                {/* WhatsApp Number Section */}
-                                <div id="whatsappNumberDiv" className="mt-4">
-                                    {whatsappNumbers.map((number) => (
-                                        <div className="row mt-3" key={number.id}>
-                                            <div className="col-12 col-sm-3 col-md-2">
-                                                <PhoneInput
-                                                    country={'us'}
-                                                    enableSearch={true}
-                                                    onChange={phone => handleWhatsappNumberChange(number.id, phone)}
-                                                    containerStyle={{ width: '100%' }}
-                                                />
-                                            </div>
-                                            <div className="col-12 col-sm-7 col-md-8 mt-2 mt-sm-0">
-                                                <input
-                                                    type="text"
-                                                    value={whatsappNumbers[number.id - 1]?.number || ''}
-                                                    onChange={(e) => handleWhatsappNumberChange(number.id, e.target.value)}
-                                                    className="form-control form-control-lg w-100"
-                                                    placeholder="WhatsApp Number"
-                                                />
-                                            </div>
-                                            {number.id > 1 && (
-                                                <div className="col-12 col-sm-2 mt-2 mt-sm-0">
-                                                    <button className="btn btn-danger btn-sm w-100" onClick={() => removeWhatsappNumber(number.id)}>
-                                                        <i className="bi bi-trash"></i>
-                                                    </button>
-                                                </div>
-                                            )}
-                                        </div>
-                                    ))}
-                                </div>
-                                <a href="#" onClick={addWhatsappNumber} className="text-primary mt-2">+ Add another WhatsApp number</a>
-
-                                {/* Email Section */}
-                                <div id="emailDiv" className="mt-4">
-                                    {emails.map((email) => (
-                                        <div className="row mt-3" key={email.id}>
-                                            <div className="col-12 col-md-10">
-                                                <input
-                                                    type="email"
-                                                    value={emails[email.id - 1]?.email || ''}
-                                                    onChange={(e) => handleEmailChange(email.id, e.target.value)}
-                                                    className="form-control form-control-lg w-100"
-                                                    placeholder="Email"
-                                                />
-                                            </div>
-                                            {email.id > 1 && (
-                                                <div className="col-12 col-md-2 mt-2 mt-sm-0">
-                                                    <button className="btn btn-danger btn-sm w-100" onClick={() => removeEmail(email.id)}>
-                                                        <i className="bi bi-trash"></i>
-                                                    </button>
-                                                </div>
-                                            )}
-                                        </div>
-                                    ))}
-                                </div>
-                                <a href="#" onClick={addEmail} className="text-primary mt-2">+ Add another email</a>
-
-                                <div className="mt-4">
-                                    <input
-                                        type="text"
-                                        name="website"
-                                        placeholder="Website"
-                                        onChange={handleContactChange}
-                                        className="form-control form-control-lg"
-                                    />
-                                </div>
-
-                                <div className="text-center mt-5">
-                                    <button className="btn btn-theme2 w-100" onClick={contactSubmitHandler}>
-                                        Save & Next
-                                    </button>
-                                </div>
+                            </div>
+    
+                            {/* Submit Button */}
+                            <div className="mt-4 text-center">
+                                <button className="btn btn-primary w-100" onClick={contactSubmitHandler}>
+                                    Submit
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -615,62 +629,66 @@ export default function CreateBusiness() {
             </div>
         );
     }
+    
 
     function CategoryDetails() {
         const handleCategoryChange = (event, value) => {
             setFormData({
                 ...formData,
-                category: value ? value._id : ''
+                category: value ? value._id : '' 
             });
         };
     
         return (
             <div className="h-100vh">
-                <div className="row h-100 justify-content-center">
-                    <div className="d-none d-md-block left-portion col-md-5 h-100 p-0">
-                        <img src="/src/assets/images/add_category.jpg" alt="" className="w-100 h-100 object-fit-cover" />
+            <div className="row h-100 justify-content-center">
+                <div className="d-none d-md-block left-portion col-md-5 h-100 p-0">
+                    <img src="/src/assets/images/add_category.jpg" alt="" className="w-100 h-100 object-fit-cover" />
+                </div>
+
+                <div className="col-12 col-md-7 d-flex flex-column justify-content-between align-items-center right-portion h-100 p-5">
+                    <div className="col-12 text-start">
+                        <button className="btn btn-dark w-auto float-start" onClick={handlePrevStep}>
+                            <i className="bi bi-arrow-left"></i>
+                        </button>
                     </div>
-    
-                    <div className="col-12 col-md-7 d-flex flex-column justify-content-between align-items-center right-portion h-100 p-5">
-                        <div className="col-12 text-start">
-                            <button className="btn btn-dark w-auto float-start" onClick={handlePrevStep}>
-                                <i className="bi bi-arrow-left"></i>
-                            </button>
+                   <div className="col-12">
+                   <h1 className="fw-bold text-center text-md-start">Add <br /> Business Category</h1>
+                   </div>
+
+                    <div className="input-group mt-4 w-100 align-items-center">
+                        <span className="input-group-text bg-white p-3" style={{ flexBasis: '50px' }}>
+                            <i className="bi bi-search"></i>
+                        </span>
+
+                        <div style={{ flexGrow: 1, position: 'relative' }}>
+                            {loading ? (
+                                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
+                                    <CircularProgress size={24} />
+                                </div>
+                            ) : (
+                                <Autocomplete
+                                    disablePortal
+                                    options={categoryData}
+                                    getOptionLabel={(option) => option.name}
+                                    isOptionEqualToValue={(option, value) => option._id === value._id}
+                                    renderInput={(params) => <TextField {...params} label="Categories" variant="outlined" />}
+                                    onChange={handleCategoryChange}
+                                    name='category'
+                                    value={categoryData.find(category => category._id === formData.category) || null} // Controlled component
+                                />
+                            )}
                         </div>
-                        <h1 className="fw-bold text-center text-md-start">Add <br /> Business Category</h1>
-    
-                        <div className="input-group mt-4 w-100 align-items-center">
-                            <span className="input-group-text bg-white p-3" style={{ flexBasis: '50px' }}>
-                                <i className="bi bi-search"></i>
-                            </span>
-    
-                            <div style={{ flexGrow: 1, position: 'relative' }}>
-                                {loading ? (
-                                    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
-                                        <CircularProgress size={24} />
-                                    </div>
-                                ) : (
-                                    <Autocomplete
-                                        disablePortal
-                                        options={categoryData}
-                                        getOptionLabel={(option) => option.name}
-                                        isOptionEqualToValue={(option, value) => option._id === value._id}
-                                        renderInput={(params) => <TextField {...params} label="Categories" />}
-                                        onChange={handleCategoryChange}
-                                        name='category'
-                                    />
-                                )}
-                            </div>
-                        </div>
-    
-                        <div className="col-12 mt-5"></div>
-    
-                        <div className="col-12 text-center mt-5">
-                            <button className="btn btn-theme2 w-100 text-white p-2" onClick={handleNextStep}>Save & Next</button>
-                        </div>
+                    </div>
+
+                    <div className="col-12 mt-5"></div>
+
+                    <div className="col-12 text-center mt-5">
+                        <button className="btn btn-theme2 w-100 text-white p-2" onClick={handleNextStep}>Save & Next</button>
                     </div>
                 </div>
             </div>
+        </div>
         );
     }
     
@@ -713,13 +731,13 @@ export default function CreateBusiness() {
                         <div className="col-12 text-start">
                         <button className="btn btn-dark w-auto float-start" onClick={handlePrevStep}><i className="bi bi-arrow-left"></i></button>
                         </div>
-                            <div className="row justify-content-center ">
-                                <div className="col-12 text-center">
+                            <div className="row justify-content-center mt-2">
+                                <div className="col-12 text-center text-md-start">
                                     <h1 className="fw-bold">
                                         Add <br /> Service and Offering
                                     </h1>
                                 </div>
-                                <div className="col-12 col-md-10 mt-4 mt-md-5">
+                                <div className="col-12 mt-4 mt-md-5">
                                     <div className="input-group">
                                         <div className="col-1 brl-none br-none d-flex align-items-center justify-content-center">
                                             <span className="input-group-text bg-white br-0" style={{ padding: '11px' }}>
@@ -839,12 +857,12 @@ export default function CreateBusiness() {
                         <button className="btn btn-dark w-auto float-start" onClick={handlePrevStep}><i className="bi bi-arrow-left"></i></button>
                         </div>
                             <div className='row  justify-content-center'>
-                                <div className='col-12 text-center'>
+                                <div className='col-12 text-center text-md-start mt-5'>
                                     <h1 className='fw-bold'>Add <br /> Business Timing</h1>
                                 </div>
 
                                 {/* Working Days Selection */}
-                                <div className="col-12 col-md-10 p-4 p-md-5">
+                                <div className="col-12 p-4 p-md-5">
                                     <h4 className='text-center text-md-start'>Select Working Days</h4>
                                     <div className="row gap-2 gap-md-3 justify-content-center mt-3">
                                         {allDays.map((day) => (
@@ -938,12 +956,12 @@ export default function CreateBusiness() {
                         <button className="btn btn-dark w-auto float-start" onClick={handlePrevStep}><i className="bi bi-arrow-left"></i></button>
                         </div>
                             <div className='row  justify-content-center'>
-                                <div className='col-12 text-center'>
+                                <div className='col-12 text-center text-md-start'>
                                     <h1 className='fw-bold'>Add <br /> Business Description</h1>
                                 </div>
 
                                 {/* Text Editor Section */}
-                                <div className="col-12 col-md-10 p-3 p-md-5">
+                                <div className="col-12  p-3 p-md-5">
                                     <textarea name="description_main" className='w-100 form-control form-control-lg' rows={5} onChange={(e) => { setDescription(e.target.value) }} id="" value={description} placeholder='Business Description'>{description}</textarea>
                                 </div>
                             </div>
@@ -973,34 +991,35 @@ export default function CreateBusiness() {
             description: "",
             coverImage: "",
         });
-
+        const [s3Files, setS3Files] = useState({});
+    
         // Generic File Change Handler
         const handleFileChange = (name, e, sectionSetter) => {
             const file = e.target.files[0];
-            const reader = new FileReader();
-    
-            reader.onload = () => {
-                if (name === "coverImage") {
-                    sectionSetter(prevData => ({ ...prevData, coverImage: file.name }));
-                }
-                setS3Files(prevS3Files => ({
-                    ...prevS3Files,
-                    file: file.file,
-                    fileName: file.name,
-                    fileType: file.type,
-                }));
-            };
-    
             if (file) {
-                reader.readAsDataURL(file);
+                const reader = new FileReader();
+                reader.onload = () => {
+
+                    var preReq = preRequestFun(file)
+                    let url = '';
+                    const landingItem = preReq.find(req => req.position === name);
+                    if (landingItem) {
+                        url = landingItem.url;
+                    }
+                    sectionSetter(prevData => ({
+                        ...prevData,
+                        coverImage: url,
+                    }));
+                };
+                reader.readAsDataURL(file); // Convert image to base64 for preview
             }
         };
-
+    
         const handleInputChange = (e, sectionSetter) => {
             const { name, value } = e.target;
             sectionSetter(prevData => ({ ...prevData, [name]: value }));
         };
-
+    
         const handleLandingSubmit = () => {
             setFormData(prevFormData => ({
                 ...prevFormData,
@@ -1010,12 +1029,12 @@ export default function CreateBusiness() {
             }));
             handleNextStep();
         };
-
+    
         // Dynamic Upload Trigger
         const triggerFileUpload = (inputId) => {
             document.getElementById(inputId).click();
         };
-
+    
         return (
             <div className='h-100vh'>
                 <div className="row h-100 justify-content-center">
@@ -1023,33 +1042,39 @@ export default function CreateBusiness() {
                     <div className="d-none d-md-block left-portion p-0 col-md-5 h-100">
                         <img src="/src/assets/images/landing-page.jpg" alt="" className='w-100 h-100' />
                     </div>
-
+    
                     {/* Right Form Section */}
                     <div className="col-12 col-md-7 row align-items-end justify-content-center h-100 p-3 p-md-5 right-portion">
-                    <div className="col-12 text-start">
-                        <button className="btn btn-dark w-auto float-start" onClick={handlePrevStep}><i className="bi bi-arrow-left"></i></button>
+                        <div className="col-12 text-start">
+                            <button className="btn btn-dark w-auto float-start" onClick={handlePrevStep}>
+                                <i className="bi bi-arrow-left"></i>
+                            </button>
                         </div>
+    
                         <div className='row justify-content-center'>
-                            <div className='col-12 text-center'>
+                            <div className='col-12 text-center text-md-start mt-5'>
                                 <h1 className='fw-bold'>Add Details <br /> About Landing Page</h1>
                             </div>
-
+    
                             {/* Color Theme Section */}
-                            <div className="col-12 col-md-10 p-3 p-md-5">
-                                <h5 className='fs-18 mb-4 p-3 text-center bg-dark text-white mt-3'>Color Theme</h5>
-                                <div className="col-6 col-md-3">
-                                <input
-                                    type="color"
-                                    name="color"
-                                    className='form-control form-control-lg'
-                                    placeholder='Color Theme'
-                                    value={theme}
-                                    onChange={(e) => setTheme(e.target.value)}
-                                />
+                            <div className="col-12 p-3 p-md-5">
+                                <div className="col-12 text-center">
+                                <h5 className='fs-18 mb-4 p-3 text-center text-dark fw-bold mt-3 form-sub-heading'>Color Theme</h5>
                                 </div>
-
+                                <div className="col-6 col-md-3">
+                                    <input
+                                        type="color"
+                                        name="color"
+                                        className='form-control form-control-lg'
+                                        value={theme}
+                                        onChange={(e) => setTheme(e.target.value)}
+                                    />
+                                </div>
+    
                                 {/* Landing Page Hero Details */}
-                                <h5 className='fs-18 mb-4 p-3 text-center bg-dark text-white mt-3'>Add Landing Page Hero</h5>
+                                <div className="col-12 text-center">
+                                <h5 className='fs-18 mb-4 p-3 text-center text-dark fw-bold mt-3 form-sub-heading'>Add Landing Page Banner</h5>
+                                </div>
                                 <input
                                     type="text"
                                     name="title"
@@ -1065,9 +1090,9 @@ export default function CreateBusiness() {
                                     value={landingPageHero.description}
                                     onChange={(e) => handleInputChange(e, setLandingPageHero)}
                                 />
-
+    
                                 {/* Hero Image Upload */}
-                                <input type="file" hidden id='LandingHeroImageInput' onChange={(e) => handleFileChange("coverImage", e, setLandingPageHero)} />
+                                <input type="file" hidden id='LandingHeroImageInput' onChange={(e) => handleFileChange("landingPageHeroImage", e, setLandingPageHero)} />
                                 <div onClick={() => triggerFileUpload('LandingHeroImageInput')} className="p-2 mt-2 mb-3 add-logo-div">
                                     <div className="text-center">
                                         <img src={landingPageHero.coverImage || "/src/assets/images/add_image.png"} width="50" alt="Add Hero Image" />
@@ -1076,14 +1101,15 @@ export default function CreateBusiness() {
                                         </div>
                                     </div>
                                 </div>
-
+    
                                 {/* Welcome Part */}
-                                <h5 className='fs-18 mb-4 p-3 text-center bg-dark text-white mt-3'>Add Welcome Part</h5>
-                                
+                                <div className="col-12 text-center">
+                                <h5 className='fs-18 mb-4 p-3 text-center text-dark fw-bold mt-3 form-sub-heading'>Add Welcome Part</h5>
+                                </div>
                                 <input
                                     type="text"
                                     name="title"
-                                    className='form-control form-control-lg mb-3 w-100'
+                                    className='form-control form-control-lg mb-3'
                                     placeholder='Title'
                                     value={welcomePart.title}
                                     onChange={(e) => handleInputChange(e, setWelcomePart)}
@@ -1095,9 +1121,9 @@ export default function CreateBusiness() {
                                     value={welcomePart.description}
                                     onChange={(e) => handleInputChange(e, setWelcomePart)}
                                 />
-
+    
                                 {/* Welcome Image Upload */}
-                                <input type="file" hidden id='WelcomeImageInput' onChange={(e) => handleFileChange("coverImage", e, setWelcomePart)} />
+                                <input type="file" hidden id='WelcomeImageInput' onChange={(e) => handleFileChange("welcomePartImage", e, setWelcomePart)} />
                                 <div onClick={() => triggerFileUpload('WelcomeImageInput')} className="p-2 mt-2 mb-3 add-logo-div">
                                     <div className="text-center">
                                         <img src={welcomePart.coverImage || "/src/assets/images/add_image.png"} width="50" alt="Add Welcome Image" />
@@ -1106,9 +1132,11 @@ export default function CreateBusiness() {
                                         </div>
                                     </div>
                                 </div>
-
+    
                                 <div className='col-12 mt-4 text-center'>
-                                    <button className='btn btn-theme2 w-100 text-center' onClick={handleLandingSubmit}>Save & Next</button>
+                                    <button className='btn btn-theme2 w-100' onClick={handleLandingSubmit}>
+                                        Save & Next
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -1117,9 +1145,8 @@ export default function CreateBusiness() {
             </div>
         );
     }
-
+    
     function CreateServices() {
-        console.log(formData)
         const [specialService, setSpecialService] = useState({
             title: "",
             description: "",
@@ -1149,30 +1176,23 @@ export default function CreateBusiness() {
         };
     
         // Handle file input change for special service images
-        const handleFileChange = (name, index, e) => {
+        const handleFileChange = (index, e) => {
             const file = e.target.files[0];
             if (file && index !== null) {
                 const reader = new FileReader();
                 reader.onload = () => {
                     setSpecialService((prevData) => {
                         const updatedData = [...prevData.data];
-                        updatedData[index].image = file.name; // store file name or data URL
+                        updatedData[index].image = reader.result; // store the image data URL for preview
                         return { ...prevData, data: updatedData };
                     });
-                    // Assuming you also have a setS3Files function to store file metadata
-                    setS3Files(prevS3Files => ({
-                        ...prevS3Files,
-                        file: file.file,
-                        fileName: file.fileName,
-                        fileType: file.fileType,
-                    }));
                 };
                 reader.readAsDataURL(file);
             }
         };
     
         // Trigger file upload for specific image input fields
-        const uploadImage = (index, name) => {
+        const uploadImage = (index) => {
             document.querySelectorAll('.productImageInput')[index].click();
         };
     
@@ -1184,12 +1204,34 @@ export default function CreateBusiness() {
     
         // Submit function to store data
         const handleServiceSubmit = () => {
-            setFormData(prevFormData => ({
+            setFormData((prevFormData) => ({
                 ...prevFormData,
                 specialServices: specialService,
-                service: services
+                service: services,
             }));
             handleNextStep();
+        };
+    
+        // Function to remove a special service
+        const removeSpecialService = (index) => {
+            if (specialService.data.length > 1) {
+                setSpecialService((prevData) => {
+                    const updatedData = [...prevData.data];
+                    updatedData.splice(index, 1);
+                    return { ...prevData, data: updatedData };
+                });
+            }
+        };
+    
+        // Function to remove a service
+        const removeService = (index) => {
+            if (services.length > 1) {
+                setServices((prev) => {
+                    const updatedServices = [...prev];
+                    updatedServices.splice(index, 1);
+                    return updatedServices;
+                });
+            }
         };
     
         return (
@@ -1204,16 +1246,20 @@ export default function CreateBusiness() {
                         {/* Right Form Section */}
                         <div className="col-12 col-md-7 row align-items-end justify-content-center h-100 p-3 p-md-5 right-portion">
                             <div className="col-12 text-start">
-                                <button className="btn btn-dark w-auto float-start" onClick={handlePrevStep}><i className="bi bi-arrow-left"></i></button>
+                                <button className="btn btn-dark w-auto float-start" onClick={handlePrevStep}>
+                                    <i className="bi bi-arrow-left"></i>
+                                </button>
                             </div>
     
                             <div className='row justify-content-center'>
-                                <div className="col-12 text-center">
+                                <div className="col-12 mt-5 text-center text-md-start">
                                     <h1 className="fw-bold">Add Service Details</h1>
                                 </div>
     
-                                <div className="col-12 col-md-10 p-3 p-md-5">
-                                    <h5 className="fs-18 mb-4 p-3 text-center bg-dark text-white mt-3">Add Special Service Main Content </h5>
+                                <div className="col-12">
+                                    <div className="col-12 text-center">
+                                        <h5 className='fs-18 mb-4 p-3 text-center text-dark fw-bold mt-3 form-sub-heading'>Add Special Service Content</h5>
+                                    </div>
                                     <div className="col-12 text-center">
                                         <input
                                             type="text"
@@ -1233,7 +1279,9 @@ export default function CreateBusiness() {
                                     </div>
     
                                     {/* Special Services List */}
-                                    <h5 className="fs-18 mb-4 p-3 text-center bg-dark text-white mt-3">Add Special Services</h5>
+                                    <div className="col-12 text-center">
+                                        <h5 className='fs-18 mb-4 p-3 text-center text-dark fw-bold mt-3 form-sub-heading'>Add Special Services</h5>
+                                    </div>
     
                                     {specialService.data.map((p, index) => (
                                         <div key={index} className="mt-2">
@@ -1258,9 +1306,9 @@ export default function CreateBusiness() {
                                                     type="file"
                                                     hidden
                                                     className="productImageInput"
-                                                    onChange={(e) => handleFileChange("productImage", index, e)}
+                                                    onChange={(e) => handleFileChange(index, e)}
                                                 />
-                                                <div onClick={() => uploadImage(index, "productImage")} className="p-2 mt-2 add-logo-div">
+                                                <div onClick={() => uploadImage(index)} className="p-2 mt-2 add-logo-div">
                                                     <div className="text-center">
                                                         <img
                                                             src={p.image || "/src/assets/images/add_image.png"}
@@ -1272,6 +1320,15 @@ export default function CreateBusiness() {
                                                         </div>
                                                     </div>
                                                 </div>
+                                                {index > 0 && ( // Show remove button only if not the first element
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => removeSpecialService(index)}
+                                                        className="btn btn-danger mt-2"
+                                                    >
+                                                        Remove
+                                                    </button>
+                                                )}
                                             </div>
                                         </div>
                                     ))}
@@ -1284,13 +1341,15 @@ export default function CreateBusiness() {
                                                 data: [...prevData.data, { title: "", description: "", image: "" }],
                                             }))
                                         }
-                                        className="text-decoration-none"
+                                        className="text-decoration-none btn btn-success w-100"
                                     >
-                                        + Add More Product/Service
+                                        + Add More Special Service
                                     </a>
     
                                     {/* Services List */}
-                                    <h5 className="fs-18 mb-4 mt-3 p-3 text-center bg-dark text-white">Add Services Details</h5>
+                                    <div className="col-12 text-center">
+                                        <h5 className='fs-18 mb-4 p-3 text-center text-dark fw-bold mt-3 form-sub-heading'>Add Service Details</h5>
+                                    </div>
     
                                     {services.map((service, index) => (
                                         <div key={index} className="row align-items-center">
@@ -1309,13 +1368,22 @@ export default function CreateBusiness() {
                                                 value={service.description}
                                                 onChange={(e) => handleServiceChange(index, e)}
                                             />
+                                            {index > 0 && ( // Show remove button only if not the first element
+                                                <button
+                                                    type="button"
+                                                    onClick={() => removeService(index)}
+                                                    className="btn btn-danger mt-2"
+                                                >
+                                                    Remove
+                                                </button>
+                                            )}
                                         </div>
                                     ))}
     
                                     <a
                                         href="#"
                                         onClick={() => setServices((prev) => [...prev, { title: "", description: "" }])}
-                                        className="text-decoration-none"
+                                        className="text-decoration-none btn btn-success w-100"
                                     >
                                         + Add More Service
                                     </a>
@@ -1331,9 +1399,10 @@ export default function CreateBusiness() {
             </>
         );
     }
-    
+
+
+
     function CreateProductPart() {
-        console.log(formData)
         const [productSection, setProductSection] = useState([{
             title: "",
             description: "",
@@ -1341,21 +1410,27 @@ export default function CreateBusiness() {
             price: "",
         }]);
     
+        const [s3Files, setS3Files] = useState({});
+    
         const handleFileChange = (index, e) => {
             const file = e.target.files[0];
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                const updatedProducts = [...productSection];
-                updatedProducts[index].image = file.name; // Assuming you're saving only the image name
-                setProductSection(updatedProducts);
-                setS3Files(prevS3Files => ({
-                    ...prevS3Files,
-                    file:file.file,
-                    fileNme:file.fileName,
-                    fileType:file.fileType,
-                }));
-            };
             if (file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const updatedProducts = [...productSection];
+                    updatedProducts[index].image = e.target.result; // Using data URL for image preview
+                    setProductSection(updatedProducts);
+    
+                    // Set file details for S3 upload or further processing
+                    setS3Files((prevS3Files) => ({
+                        ...prevS3Files,
+                        [index]: {
+                            file: file,
+                            fileName: file.name,
+                            fileType: file.type,
+                        },
+                    }));
+                };
                 reader.readAsDataURL(file);
             }
         };
@@ -1365,7 +1440,8 @@ export default function CreateBusiness() {
         };
     
         const handleProductSubmit = () => {
-            setFormData(prevFormData => ({
+            // Assuming formData is part of your state or props and is updated elsewhere
+            setFormData((prevFormData) => ({
                 ...prevFormData,
                 productSection,
             }));
@@ -1383,16 +1459,18 @@ export default function CreateBusiness() {
     
                         {/* Right Form Section */}
                         <div className="col-12 col-md-7 row align-items-end justify-content-center h-100 p-3 p-md-5 right-portion">
-                        <div className="col-12 text-start">
-                        <button className="btn btn-dark w-auto float-start" onClick={handlePrevStep}><i className="bi bi-arrow-left"></i></button>
-                        </div>
+                            <div className="col-12 text-start">
+                                <button className="btn btn-dark w-auto float-start" onClick={handlePrevStep}><i className="bi bi-arrow-left"></i></button>
+                            </div>
                             <div className='row justify-content-center'>
-                                <div className="col-12 text-center">
+                                <div className="col-12 text-center text-md-start mt-3">
                                     <h1 className="fw-bold">Add Product Details</h1>
                                 </div>
     
-                                <div className="col-12 col-md-10 p-3 p-md-5">
-                                    <h5 className='fs-18 mb-4 mt-3 p-3 text-center bg-dark text-white mt-3'>Add Product</h5>
+                                <div className="col-12 ">
+                                <div className="col-12 text-center">
+                                <h5 className='fs-18 mb-4 p-3 text-center text-dark fw-bold mt-3 form-sub-heading'>Add Products</h5>
+                                </div>
                                     {productSection.map((item, index) => (
                                         <div key={index} className='row align-items-center'>
                                             <input
@@ -1420,10 +1498,19 @@ export default function CreateBusiness() {
                                             />
     
                                             <div className="col-12 col-md-3 mb-3">
-                                                <input type="file" hidden className='menuImageInput' onChange={(e) => handleFileChange(index, e)} />
+                                                <input
+                                                    type="file"
+                                                    hidden
+                                                    className='menuImageInput'
+                                                    onChange={(e) => handleFileChange(index, e)}
+                                                />
                                                 <div onClick={() => uploadImage(index)} className="p-2 mt-2 add-logo-div">
                                                     <div className="text-center">
-                                                        <img src={item.image || "/src/assets/images/add_image.png"} width="50" alt="Add Product Image" />
+                                                        <img
+                                                            src={item.image || "/src/assets/images/add_image.png"}
+                                                            width="50"
+                                                            alt="Add Product Image"
+                                                        />
                                                         <div className="col-12">
                                                             <span>Add Image</span>
                                                         </div>
@@ -1449,10 +1536,9 @@ export default function CreateBusiness() {
                                     ))}
                                     <a
                                         href="#"
-                                        onClick={() => setProductSection((prev) => [...prev, {title: "", description: "",image: "", price: "", }])}
-                                        className="text-decoration-none"
+                                        onClick={() => setProductSection((prev) => [...prev, { title: "", description: "", image: "", price: "" }])}
+                                        className="text-decoration-none btn btn-success w-100"
                                     >
-                                        <div className="divider"></div>
                                         + Add More Product
                                     </a>
                                 </div>
@@ -1536,8 +1622,8 @@ export default function CreateBusiness() {
         };
 
         return (
-            <div className='h-100vh'>
-                <div className="row justify-content-center">
+                <div className='h-100vh'>
+                <div className="row h-100 justify-content-center">
                     {/* Left Image Section - Hidden on small screens */}
                     <div className="d-none d-md-block left-portion p-0 col-md-5 h-100">
                         <img src="/src/assets/images/landing-page.jpg" alt="" className='w-100 h-100' />
@@ -1549,12 +1635,12 @@ export default function CreateBusiness() {
                         <button className="btn btn-dark w-auto float-start" onClick={handlePrevStep}><i className="bi bi-arrow-left"></i></button>
                         </div>
                         <div className='row justify-content-center'>
-                            <div className='col-12 text-center'>
+                            <div className='col-12 text-center text-md-start mt-4'>
                                 <h1 className='fw-bold'>Add SEO</h1>
                             </div>
 
                             {/* Form Fields */}
-                            <div className="col-12 col-md-10 p-3 p-md-5">
+                            <div className="col-12">
                                 <div className="col-12 mb-3">
                                     <input
                                         type="text"
@@ -1587,6 +1673,7 @@ export default function CreateBusiness() {
                                                 value={tag}
                                                 onChange={(e) => handleTagChange(index, e.target.value)}
                                             />
+                                            {index > 0 ? (
                                             <button
                                                 className="btn btn-danger"
                                                 onClick={() => removeTag(index)}
@@ -1594,14 +1681,16 @@ export default function CreateBusiness() {
                                             >
                                                 Remove
                                             </button>
+                                            ):
+                                            <button
+                                                className="btn btn-success" type='button'
+                                                onClick={addTag}
+                                            >
+                                                Add More
+                                            </button>
+                                            }
                                         </div>
                                     ))}
-                                    <button
-                                        className="btn btn-link"
-                                        onClick={addTag}
-                                    >
-                                        + add more tags
-                                    </button>
                                 </div>
 
                                 {/* Social Media Links */}
@@ -1658,30 +1747,25 @@ export default function CreateBusiness() {
         };
     
         const handleGallerySubmit = async () => {
-            const imageFileTypes = images.map((image) => image.fileType);
-            const imageFiles = images.map((image) => image.file);
-            const imageFileNames = images.map((image) => image.fileName);
-    
-            setFormData((prevFormData) => ({
-                ...prevFormData,
-                gallery: imageFileNames,
-            }));
-    
+            const imageFileTypes = images.map((image) => image?.fileType);
+            const imageFiles = images.map((image) => image?.file);
+            console.log(imageFileTypes.length)
+            if (imageFileTypes.length>0){
             setLoading(true);
-    
+        
             try {
                 const url = 'https://businessbazaarserver.auxxweb.in/api/v1/s3url';
                 const requestBody = { file_types: imageFileTypes };
-    
+        
                 const response = await axios.post(url, requestBody, {
                     headers: {
                         'Content-Type': 'application/json',
                     },
                 });
-    
+        
                 const s3Urls = response.data.data;
                 setS3PreRequest(s3Urls);
-    
+        
                 await Promise.all(
                     s3Urls.map(async (data, index) => {
                         const { url } = data;
@@ -1691,13 +1775,16 @@ export default function CreateBusiness() {
                         });
                     })
                 );
-    
+        
                 handleNextStep();
             } catch (error) {
                 console.error('Error fetching the S3 URLs or uploading files:', error);
             } finally {
                 setLoading(false);
             }
+        }else{
+            handleNextStep();
+        }
         };
     
         return (
@@ -1717,12 +1804,12 @@ export default function CreateBusiness() {
                         </div>
     
                         <div className='row justify-content-center'>
-                            <div className='col-12 text-center'>
+                            <div className='col-12 text-center text-md-start'>
                                 <h1 className='fw-bold'>Add Images</h1>
                             </div>
     
                             {/* Image Upload Fields */}
-                            <div className="col-12 col-md-10 p-3 p-md-5">
+                            <div className="col-12 p-md-5">
                                 <div className="row mb-3 gap-2">
                                     {images.map((image, index) => (
                                         <div className="col-6 col-md-3 mb-3" key={index}>
@@ -1735,21 +1822,23 @@ export default function CreateBusiness() {
                                             />
                                             <div className="p-2 add-logo-div" onClick={() => handleAddImageClick(index)}>
                                                 <div className="text-center">
-                                                    {image.fileName ? (
-                                                        <img src={URL.createObjectURL(image.file)} alt={`Uploaded Preview ${index}`} className='img-preview' width="100" />
+                                                    {image.file ? (
+                                                        <img
+                                                            src={URL.createObjectURL(image.file)}
+                                                            alt={`Uploaded Preview ${index}`}
+                                                            className='img-preview'
+                                                            width="100"
+                                                        />
                                                     ) : (
                                                         <img src="/src/assets/images/add_image.png" width="50" alt="Add Image" />
                                                     )}
-                                                    <div className="col-12">
-                                                        <span>{image.fileName || "Add Image"}</span>
-                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                     ))}
                                 </div>
                                 <div className="col-12 mb-3 text-center">
-                                    <button className="btn btn-link text-decoration-none" onClick={addImageInput}>
+                                    <button className="btn w-100 btn btn-success" onClick={addImageInput}>
                                         + Add another image
                                     </button>
                                 </div>
@@ -1760,7 +1849,7 @@ export default function CreateBusiness() {
                         <div className="col-12 text-center p-3 p-md-5">
                             {loading ? (
                                 <div className="spinner-border" role="status">
-                                    <span className="sr-only">Loading...</span>
+                                    <span className="sr-only"></span>
                                 </div>
                             ) : (
                                 <button className="btn btn-theme2 w-100 text-white p-2" onClick={handleGallerySubmit}>
@@ -1774,95 +1863,79 @@ export default function CreateBusiness() {
         );
     }
     
-
     function MoreVideos() {
-        console.log(formData)
-        const [videos, setVideos] = useState([{ file: null, fileName: '',fileType:'' }]);
-
+        const [videos, setVideos] = useState([{ file: null, fileType: '' }]);
+        const [s3PreRequest, setS3PreRequest] = useState([]);
+    
         const handleFileChange = (index, event) => {
             const file = event.target.files[0];
             if (file) {
                 const newVideos = [...videos];
-                newVideos[index] = { file, fileName: file.name,fileType:file.type };
+                newVideos[index] = { file, fileType: file.type };
                 setVideos(newVideos);
             }
         };
-
+    
         const addVideoInput = () => {
-            setVideos((prevVideos) => [...prevVideos, { file: null, fileName: '',fileType:'' }]);
+            setVideos((prevVideos) => [...prevVideos, { file: null, fileType: '' }]);
         };
-
+    
         const handleAddVideoClick = (index) => {
             document.getElementById(`file-input-${index}`).click();
         };
-
+    
         const handleGallerySubmit = async () => {
-            const videoFileNames = videos.map(video => video.fileName);
             const videoFiles = videos.map(video => video.file);
             const videoFilesTypes = videos.map(video => video.file.type);
-
-            // Set video names to formData
-            setFormData(prevFormData => ({
-                ...prevFormData,
-                gallery: videoFileNames,
-            }));
-
-            const preRequestUrl = async () => {
-                try {
-                    const url = 'https://businessbazaarserver.auxxweb.in/api/v1/s3url';
-                    const requestBody = {
-                        file_types: videoFilesTypes,
-                    };
-                    const response = await axios.post(url, requestBody, {
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                    });
-
-                    const s3Urls = response.data.data;
-                    console.log(s3Urls)
-                    setS3PreRequest(s3Urls.map(url =>url.url));
-
-                    await Promise.all(
-                        s3Urls.map(async (data, index) => {
-                            const { url, file_type } = data;
-                            const file = videoFiles[index];
-
-                            await axios.put(url, file, {
-                                headers: {
-                                    'Content-Type': file_type,
-                                },
-                            });
-                        })
-                    );
-
-                    handleNextStep();
-                } catch (error) {
-                    console.error('Error fetching the S3 URLs or uploading files:', error);
-                }
-            };
-
-            preRequestUrl();
+            console.log(videoFilesTypes.length)
+            if (videoFilesTypes.length>0){
+                
+            try {
+                const url = 'https://businessbazaarserver.auxxweb.in/api/v1/s3url';
+                const requestBody = { file_types: videoFilesTypes };
+                const response = await axios.post(url, requestBody, {
+                    headers: { 'Content-Type': 'application/json' },
+                });
+    
+                const s3Urls = response.data.data;
+                setS3PreRequest(s3Urls.map(url => url.url));
+    
+                await Promise.all(
+                    s3Urls.map(async (data, index) => {
+                        const { url } = data;
+                        const file = videoFiles[index];
+                        await axios.put(url, file, {
+                            headers: { 'Content-Type': file.type },
+                        });
+                    })
+                );
+                handleNextStep()
+    
+                // Proceed to the next step here (handleNextStep)
+            } catch (error) {
+                console.error('Error uploading videos:', error);
+            }
+            }else{
+                handleNextStep()
+            }
         };
-
+    
         return (
             <div className='h-100vh'>
                 <div className="row h-100 justify-content-center">
-                    {/* Left Image Section - Hidden on small screens */}
                     <div className="d-none d-md-block left-portion p-0 col-md-5 h-100">
-                        <img src="/src/assets/images/landing-page.jpg" alt="" className='w-100 h-100' />
+                        <img src="/src/assets/images/landing-page.jpg" alt="Landing Page" className='w-100 h-100' />
                     </div>
-
-                    {/* Right Form Section */}
+    
                     <div className="col-12 col-md-7 row align-items-end justify-content-center h-100 p-3 p-md-5 right-portion">
-                    <div className="col-12 text-start">
-                        <button className="btn btn-dark w-auto float-start" onClick={handlePrevStep}><i className="bi bi-arrow-left"></i></button>
+                        <div className="col-12 text-start">
+                            <button className="btn btn-dark w-auto float-start" onClick={handlePrevStep}><i className="bi bi-arrow-left"></i></button>
                         </div>
                         <div className='row justify-content-center'>
-                            <div className='col-12 text-center'>
+                            <div className='col-12 text-center text-md-start mt-2'>
                                 <h1 className='fw-bold'>Add Videos</h1>
                             </div>
-
+    
                             {/* Video Upload Fields */}
                             <div className="col-12 col-md-10 p-3 p-md-5">
                                 <div className="row mb-3">
@@ -1882,7 +1955,7 @@ export default function CreateBusiness() {
                                                 <div className="text-center">
                                                     {video.file ? (
                                                         <video width="100%" controls className='video-preview'>
-                                                            <source src={URL.createObjectURL(video.file)} type="video/mp4" />
+                                                            <source src={URL.createObjectURL(video.file)} type={video.file.type} />
                                                             Your browser does not support the video tag.
                                                         </video>
                                                     ) : (
@@ -1897,13 +1970,13 @@ export default function CreateBusiness() {
                                     ))}
                                 </div>
                                 <div className="col-12 mb-3 text-center">
-                                    <button className="btn btn-link text-decoration-none" onClick={addVideoInput}>
-                                        + Add another video
+                                    <button className="btn w-100 btn btn-success" onClick={addVideoInput}>
+                                        + Add another image
                                     </button>
                                 </div>
                             </div>
                         </div>
-
+    
                         {/* Save & Next Button */}
                         <div className="col-12 text-center p-3 p-md-5">
                             <button className="btn btn-theme2 w-100 text-white p-2" onClick={handleGallerySubmit}>
@@ -1915,8 +1988,7 @@ export default function CreateBusiness() {
             </div>
         );
     }
-
-
+    
 
     function PreviewTemplates() {
         const [currentSlide, setCurrentSlide] = useState(0);

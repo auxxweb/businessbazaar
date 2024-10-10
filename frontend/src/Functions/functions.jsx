@@ -31,7 +31,7 @@ export const fetchCategories = async () => {
 export const fetchBusiness = async () => {
     try {
         const response = await axios.get(`${baseUrl}/api/v1/business`, config); // Use backticks for template literals
-
+        console.log(response)
         if (response.status !== 200) {
             throw new Error(`HTTP error! Status: ${response.status}`);
         }
