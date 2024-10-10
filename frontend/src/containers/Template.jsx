@@ -37,7 +37,7 @@ export default function Template() {
     useEffect(() => {
         const fetchData = async () => {
             const businessDetails = await fetchBusinessTemplate(id);
-            setBusinessData(businessDetails.data)
+            setBusinessData(businessDetails)
             console.log(businessDetails)
             setColorTheme(businessDetails.data.theme)
             setLoading(false);

@@ -46,6 +46,8 @@ export default function Home() {
                 setCategoryData(categoryDetails.data.data)
                 setBusinessData(businessDetails.data.data)
 
+                console.log(businessDetails)
+
                
 
                 
