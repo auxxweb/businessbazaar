@@ -193,7 +193,7 @@ footer .btn-theme{
     background-color: #238ae3;
     color: white;
     width: fit-content;
-    border-radius: 16px;
+    border-radius: 0;
     padding: 8px 15px;
 }.text-theme2{
     color: #238ae3;
@@ -426,4 +426,9 @@ footer .btn-theme{
 .divider{
     border: 1px dashed #000000;
     margin-bottom: 10px;
+}
+.form-sub-heading{
+    border: 2px dashed #000000;
+    border-radius: 8px !important;
+    width: fit-content;
 }

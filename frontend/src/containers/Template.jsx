@@ -37,7 +37,7 @@ export default function Template() {
     useEffect(() => {
         const fetchData = async () => {
             const businessDetails = await fetchBusinessTemplate(id);
-            setBusinessData(businessDetails)
+            setBusinessData(businessDetails?.data)
             console.log(businessDetails)
             setColorTheme(businessDetails.data.theme)
             setLoading(false);
@@ -263,8 +263,8 @@ export default function Template() {
                 <Container>
                     {/* Align Brand to the start (left side) */}
                     <Navbar.Brand href="/" className='fw-bold w-50 nav-logo' style={{ fontSize: '36px' }}>
-                        <img src={businessData.logo} alt="" />
-                        <span className="ms-2">{businessData.businessName}</span>
+                        <img src={businessData?.logo} alt="" />
+                        <span className="ms-2">{businessData?.businessName}</span>
                     </Navbar.Brand>
 
                     <Navbar.Toggle aria-controls="basic-navbar-nav" style={{ color: 'black' }} />
@@ -306,7 +306,7 @@ export default function Template() {
                     <div className="row align-items-center banner-section">
                         {/* Left Image for Mobile View */}
                         <div className="col-12 col-lg-6 text-end d-block d-lg-none">
-                            <img src={businessData.landingPageHero.coverImage} alt="" className='banner-image' />
+                            <img src={businessData?.landingPageHero?.coverImage} alt="" className='banner-image' />
                             <div className='banner-image-2 d-none'>
                                 <img src="/src/assets/images/baner-image2.png" alt="" />
                             </div>
@@ -317,12 +317,12 @@ export default function Template() {
                             <div className="row align-items-center">
                                 <div className="col-12">
                                     <h1 className="text-start text-dark fw-bold david-font fw-bold banner-title text-center text-lg-start">
-                                        {businessData.landingPageHero.title}
+                                        {businessData?.landingPageHero?.title}
                                     </h1>
                                 </div>
                                 <div className="col-12">
                                     <p className='text-secondary text-center text-lg-start david-font'>
-                                        {businessData.landingPageHero.description}
+                                        {businessData?.landingPageHero?.description}
                                     </p>
                                 </div>
                                 <div className="mt-3 col-12">
@@ -336,13 +336,13 @@ export default function Template() {
                                     </div>
                                 </div>
                                 <div className="mt-5 col-12 social-media gap-3">
-                                    <a href={businessData.socialMediaLinks[0].link} target='_blank' className="contact-banner text-dark">
+                                    <a href={businessData?.socialMediaLinks?.length&&businessData?.socialMediaLinks[0]?.link} target='_blank' className="contact-banner text-dark">
                                         <i className="bi bi-facebook"></i>
                                     </a>
-                                    <a href={businessData.socialMediaLinks[1].link} target='_blank' className="contact-banner text-dark">
+                                    <a href={businessData?.socialMediaLinks?.length&&businessData?.socialMediaLinks[1]?.link} target='_blank' className="contact-banner text-dark">
                                         <i className="bi bi-instagram"></i>
                                     </a>
-                                    <a href={businessData.socialMediaLinks[2].link} target='_blank' className="contact-banner text-dark">
+                                    <a href={businessData?.socialMediaLinks?.length&&businessData?.socialMediaLinks[2]?.link} target='_blank' className="contact-banner text-dark">
                                         <i className="bi bi-twitter"></i>
                                     </a>
                                 </div>
@@ -351,7 +351,7 @@ export default function Template() {
 
                         {/* Right Image for Desktop View */}
                         <div className="col-12 col-lg-6 text-end d-none d-lg-block">
-                            <img src={businessData.landingPageHero.coverImage} alt="" className='banner-image' />
+                            <img src={businessData?.landingPageHero?.coverImage} alt="" className='banner-image' />
                             <div className='banner-image-2 d-none'>
                                 <img src="/src/assets/images/baner-image2.png" alt="" />
                             </div>
@@ -371,7 +371,7 @@ export default function Template() {
                                     </div>
                                     <div className="col">
                                         <span className="fs-13">Address</span>
-                                        <p className='fs-16'>{businessData.address.buildingName}, {businessData.address.city},{businessData.address.landMark},{businessData.address.streetName}, {businessData.address.state}</p>
+                                        <p className='fs-16'>{businessData?.address?.buildingName}, {businessData?.address?.city},{businessData?.address?.landMark},{businessData?.address?.streetName}, {businessData?.address?.state}</p>
                                     </div>
                                 </div>
                             </div>
@@ -383,7 +383,7 @@ export default function Template() {
                                     </div>
                                     <div className="col">
                                         <span className="fs-13">Send Email</span>
-                                        <p className='fs-16'>{businessData.contactDetails.email}</p>
+                                        <p className='fs-16'>{businessData?.contactDetails?.email}</p>
                                     </div>
                                 </div>
                             </div>
@@ -395,8 +395,8 @@ export default function Template() {
                                     </div>
                                     <div className="col">
                                         <span className="fs-13">Contact</span>
-                                        <p className='fs-16 mb-0'>{businessData.contactDetails.primaryNumber}</p>
-                                        <p className='fs-16 mt-0'>{businessData.contactDetails.secondaryNumber}</p>
+                                        <p className='fs-16 mb-0'>{businessData?.contactDetails?.primaryNumber}</p>
+                                        <p className='fs-16 mt-0'>{businessData?.contactDetails?.secondaryNumber}</p>
                                     </div>
                                 </div>
                             </div>
@@ -411,7 +411,7 @@ export default function Template() {
                     <div className="row mt-5 align-items-center mb-5">
                         <div className="col-12 col-lg-6 mt-2 text-center text-lg-start about-image">
                             <img
-                                src={businessData.welcomePart.coverImage}
+                                src={businessData?.welcomePart?.coverImage}
                                 className="img-fluid"
                                 alt=""
                             />
@@ -419,11 +419,11 @@ export default function Template() {
                         </div>
                         <div className="col-12 col-lg-6">
                             <div className="col-12 mb-3">
-                                <h1 className="text-center text-lg-start text-dark fw-bold david-font fw-bold banner-title">{businessData.welcomePart.title}</h1>
+                                <h1 className="text-center text-lg-start text-dark fw-bold david-font fw-bold banner-title">{businessData?.welcomePart?.title}</h1>
                             </div>
                             <div className="col-12 mt-4">
                                 <p className='text-secondary text-center text-lg-start david-font mt-4'>
-                                    {businessData.welcomePart.description}
+                                    {businessData?.welcomePart?.description}
                                 </p>
                             </div>
                             <div className="mt-3 col-12">
@@ -448,12 +448,12 @@ export default function Template() {
                     <div className="col-12 mb-5">
                         <div className="mt-5 text-center">
                             <div className="col-12">
-                                <h1 className="text-center text-dark fw-bold david-font fw-bold banner-title fs-45">{businessData.specialServices.title}</h1>
+                                <h1 className="text-center text-dark fw-bold david-font fw-bold banner-title fs-45">{businessData?.specialServices?.title}</h1>
                             </div>
                             <div className="row justify-content-center">
                                 <div className="col-6 mb-5">
                                     <p className='text-secondary text-center mb-5'>
-                                        {businessData.specialServices.description}
+                                        {businessData?.specialServices?.description}
                                     </p>
                                 </div>
                             </div>
@@ -463,7 +463,7 @@ export default function Template() {
 
                         <div className="col-12 mb-5 david-font">
                             <Slider {...settings}>
-                                {businessData.specialServices.data.map((dish, index) => (
+                                {businessData?.specialServices?.data.map((dish, index) => (
                                     <div key={index} className="dish-div col-12 text-center  p-3">
                                         <div className="col-12 position-relative text-center" style={{ bottom: "60px" }}>
                                             <img src={dish.image} alt={dish.title} style={{ width: '300px', height: '300px', objectFit: 'cover' }} />
@@ -496,7 +496,7 @@ export default function Template() {
                     <div className="mt-5 david-font">
                         <div className="mb-5">
                             <div className="row mb-3">
-                                {businessData.productSection.map((item, index) => (
+                                {businessData?.productSection?.map((item, index) => (
                                     <div className="col-12 col-lg-6 mt-3" key={index}>
                                         <div className="row">
                                             <div className="col-2">
@@ -526,7 +526,7 @@ export default function Template() {
                     </div>
                     <div className="col-12 mb-5">
                         <Slider {...setting2} className='mb-5'>
-                            {businessData.service.map((service, index) => (
+                            {businessData?.service?.map((service, index) => (
                                 <div key={index} className={`col-12 col-lg-4 service-design ${index === currentSlide ? 'active' : 'bg-white'}  mt-5 mb-5 text-center`}>
                                     <div className="col-12 text-center">
                                         <h3>{service.title}</h3>
@@ -547,7 +547,7 @@ export default function Template() {
                             <h1 className="fw-bold text-center">Gallery</h1>
                         </div>
                         <div className="row justify-content-center mb-5">
-                            {businessData.gallery.map((image, index) => (
+                            {businessData?.gallery?.map((image, index) => (
                                 <div className="col-12 col-lg-4 mt-4">
                                     <img src={image} alt="" className='w-100 gallery-img' />
                                 </div>
@@ -606,25 +606,25 @@ export default function Template() {
 
                     <div className="mt-5">
                         <Slider {...settings3}>
-                            {businessData.testimonial.reviews.map((testimonial, index) => (
+                            {businessData?.testimonial?.reviews.map((testimonial, index) => (
                                 <div key={index} className="bg-white col-12 p-3 mt-2 test-div-bottom">
                                     <div className="col-12 text-center test-button-img-div">
-                                        <img src={testimonial.image} alt={testimonial.name} className="img-fluid" />
+                                        <img src={testimonial?.image} alt={testimonial?.name} className="img-fluid" />
                                     </div>
 
                                     <div className='text-warning text-center mt-0 m-0'>
-                                        {[...Array(Math.floor(testimonial.rating))].map((star, i) => (
+                                        {[...Array(Math.floor(testimonial?.rating))].map((star, i) => (
                                             <i key={i} className="bi bi-star-fill"></i>
                                         ))}
-                                        {testimonial.rating % 1 !== 0 && <i className="bi bi-star-half"></i>}
+                                        {testimonial?.rating % 1 !== 0 && <i className="bi bi-star-half"></i>}
                                     </div>
 
                                     <div className="col-12 mt-3">
-                                        <p>{testimonial.review}</p>
+                                        <p>{testimonial?.review}</p>
                                     </div>
 
                                     <div className="col-12 text-center mb-5">
-                                        <span className='fw-bold david-font'>{testimonial.name}</span>
+                                        <span className='fw-bold david-font'>{testimonial?.name}</span>
                                     </div>
                                 </div>
                             ))}
@@ -731,13 +731,13 @@ export default function Template() {
                             <div className="col-12 col-lg-4">
                                 <div className="col-12 d-block d-lg-flex text-center text-lg-start text mt-5">
                                     <div className="nav-logo width-fit">
-                                        <img src={businessData.logo} alt="" />
+                                        <img src={businessData?.logo} alt="" />
                                     </div>
-                                    <span className="ms-2 fs-30 text-white">{businessData.businessName}</span>
+                                    <span className="ms-2 fs-30 text-white">{businessData?.businessName}</span>
                                 </div>
                                 <div className="col-12 mt-4  text-center text-lg-start" style={{ color: "#A4B3CB" }}>
                                     <p>
-                                        {businessData.description}
+                                        {businessData?.description}
                                     </p>
                                 </div>
                             </div>
@@ -769,13 +769,13 @@ export default function Template() {
                                     </div>
 
                                     <div className="mt-5 col-12 row gap-3 jcc-md text-center text-lg-start">
-                                        <a href={businessData.socialMediaLinks[0].link} className="contact-banner text-orange text-center text-lg-start">
+                                        <a href={businessData?.socialMediaLinks?.length&&businessData?.socialMediaLinks[0]?.link} className="contact-banner text-orange text-center text-lg-start">
                                             <i className="bi bi-facebook text-orange"></i>
                                         </a>
-                                        <a href={businessData.socialMediaLinks[1].link} className="contact-banner text-center text-lg-start">
+                                        <a href={businessData?.socialMediaLinks?.length&&businessData?.socialMediaLinks[1]?.link} className="contact-banner text-center text-lg-start">
                                             <i className="bi bi-instagram text-orange"></i>
                                         </a>
-                                        <a href={businessData.socialMediaLinks[2].link} className="contact-banner text-center text-lg-start">
+                                        <a href={businessData?.socialMediaLinks?.length&&businessData?.socialMediaLinks[2]?.link} className="contact-banner text-center text-lg-start">
                                             <i className="bi bi-twitter text-orange"></i>
                                         </a>
                                         {/* <hr style={{width:"fit-content",opacity: 0.15,}}></hr> */}
@@ -792,7 +792,7 @@ export default function Template() {
                                                 <a href="#" className=" fs-14 text-decoration-none text-orange">OPENING HOURS</a>
                                             </div>
                                             <div className="mt-3 text-center text-lg-start" style={{ color: "#A4B3CB" }}>
-                                                {businessData.businessTiming.workingDays.map((day, index) => (
+                                                {businessData?.businessTiming?.workingDays?.map((day, index) => (
                                                     <p>{day}</p>
                                                 ))}
                                             </div>
@@ -806,7 +806,7 @@ export default function Template() {
                                     <div className="col-lg-4">
                                         <div className="col-12 mt-5 text-center text-lg-start">
                                             <div className="mt-3" style={{ color: "#A4B3CB" }}>
-                                               {closeDays.map((day,index) =>(
+                                               {closeDays?.map((day,index) =>(
                                                 <p>{day}</p>
                                                ))}
                                             </div>
