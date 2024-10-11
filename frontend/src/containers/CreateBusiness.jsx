@@ -378,11 +378,8 @@ export default function CreateBusiness() {
 
 
     function ContactDetails() {
-        console.log(formData)
-        console.log(formData);
-    
-        const [mobileNumbers, setMobileNumbers] = useState([{ id: 1, number: '' }]);
-        const [whatsappNumbers, setWhatsappNumbers] = useState([{ id: 1, number: '' }]);
+        const [mobileNumbers, setMobileNumbers] = useState([{ id: 1, number: '', countryCode: 'us' }]);
+        const [whatsappNumbers, setWhatsappNumbers] = useState([{ id: 1, number: '', countryCode: 'us' }]);
         const [emails, setEmails] = useState([{ id: 1, email: '' }]);
         
         const [newFormData, setNewFormData] = useState({
@@ -394,7 +391,7 @@ export default function CreateBusiness() {
                 website: '',
             },
         });
-        
+    
         // Handle contact details change
         const handleContactChange = (event) => {
             const { name, value } = event.target;
@@ -407,23 +404,25 @@ export default function CreateBusiness() {
             }));
         };
     
-        // Handle dynamic input changes
-        const handleMobileNumberChange = (id, value) => {
+        // Handle mobile number change with country code
+        const handleMobileNumberChange = (id, value, countryCode = 'us') => {
             const updatedMobileNumbers = mobileNumbers.map((number) =>
-                number.id === id ? { ...number, number: value } : number
+                number.id === id ? { ...number, number: value, countryCode } : number
             );
             setMobileNumbers(updatedMobileNumbers);
             updateContactDetails('mobileNumbers', updatedMobileNumbers);
         };
     
-        const handleWhatsappNumberChange = (id, value) => {
+        // Handle WhatsApp number change with country code
+        const handleWhatsappNumberChange = (id, value, countryCode = 'us') => {
             const updatedWhatsappNumbers = whatsappNumbers.map((number) =>
-                number.id === id ? { ...number, number: value } : number
+                number.id === id ? { ...number, number: value, countryCode } : number
             );
             setWhatsappNumbers(updatedWhatsappNumbers);
             updateContactDetails('whatsappNumbers', updatedWhatsappNumbers);
         };
     
+        // Handle email change
         const handleEmailChange = (id, value) => {
             const updatedEmails = emails.map((email) =>
                 email.id === id ? { ...email, email: value } : email
@@ -437,16 +436,19 @@ export default function CreateBusiness() {
                 ...prevFormData,
                 contactDetails: {
                     ...prevFormData.contactDetails,
-                    [field]: updatedArray.map((item) => item.number || item.email),
+                    [field]: updatedArray.map((item) => ({
+                        number: item.number || item.email,
+                        countryCode: item.countryCode || null
+                    })),
                 },
             }));
         };
     
-        // Add and remove fields for mobile numbers, WhatsApp, and emails
-        const addMobileNumber = () => setMobileNumbers([...mobileNumbers, { id: mobileNumbers.length + 1, number: '' }]);
+        // Add and remove fields
+        const addMobileNumber = () => setMobileNumbers([...mobileNumbers, { id: mobileNumbers.length + 1, number: '', countryCode: 'us' }]);
         const removeMobileNumber = (id) => setMobileNumbers(mobileNumbers.filter((number) => number.id !== id));
     
-        const addWhatsappNumber = () => setWhatsappNumbers([...whatsappNumbers, { id: whatsappNumbers.length + 1, number: '' }]);
+        const addWhatsappNumber = () => setWhatsappNumbers([...whatsappNumbers, { id: whatsappNumbers.length + 1, number: '', countryCode: 'us' }]);
         const removeWhatsappNumber = (id) => setWhatsappNumbers(whatsappNumbers.filter((number) => number.id !== id));
     
         const addEmail = () => setEmails([...emails, { id: emails.length + 1, email: '' }]);
@@ -463,6 +465,7 @@ export default function CreateBusiness() {
     
         return (
             <div className='h-100vh'>
+                {/* Contact details form */}
                 <div className="row h-100">
                     <div className="d-none d-md-block left-portion p-0 col-5">
                         <img src="/src/assets/images/contact-details.jpg" alt="Contact Details" className='w-100 h-100' />
@@ -491,10 +494,12 @@ export default function CreateBusiness() {
                                     <div className="row mt-3" key={number.id}>
                                         <div className="col-12 col-sm-3 col-md-2">
                                             <PhoneInput
-                                                country={'us'}
+                                                country={number.countryCode}
                                                 enableSearch={true}
                                                 value={number.number}
-                                                onChange={(phone) => handleMobileNumberChange(number.id, phone)}
+                                                onChange={(phone, countryData) =>
+                                                    handleMobileNumberChange(number.id, phone, countryData?.countryCode || 'us')
+                                                }
                                                 containerStyle={{ width: '100%' }}
                                             />
                                         </div>
@@ -530,10 +535,12 @@ export default function CreateBusiness() {
                                     <div className="row mt-3" key={number.id}>
                                         <div className="col-12 col-sm-3 col-md-2">
                                             <PhoneInput
-                                                country={'us'}
+                                                country={number.countryCode}
                                                 enableSearch={true}
                                                 value={number.number}
-                                                onChange={(phone) => handleWhatsappNumberChange(number.id, phone)}
+                                                onChange={(phone, countryData) =>
+                                                    handleWhatsappNumberChange(number.id, phone, countryData?.countryCode || 'us')
+                                                }
                                                 containerStyle={{ width: '100%' }}
                                             />
                                         </div>
@@ -583,7 +590,7 @@ export default function CreateBusiness() {
                                                 </button>
                                             </div>
                                         ) : (
-                                            <div className="col-12 col-sm-2 mt-2 mt-sm-0">
+                                            <div className="col-12 col-md-2 mt-2 mt-sm-0">
                                                 <button type="button" onClick={addEmail} className="btn w-100 btn-success mt-2">
                                                     + Add
                                                 </button>
@@ -600,16 +607,14 @@ export default function CreateBusiness() {
                                     name="website"
                                     placeholder="Website"
                                     onChange={handleContactChange}
-                                    className="form-control form-control-lg"
+                                    className="form-control form-control-lg w-100"
                                 />
                             </div>
-    
-                            {/* Submit Button */}
-                            <div className="mt-4 text-center">
-                                <button className="btn btn-primary w-100" onClick={contactSubmitHandler}>
-                                    Submit
-                                </button>
-                            </div>
+                        </div>
+                        <div className="col-12">
+                            <button onClick={contactSubmitHandler} className="btn btn-dark text-center w-100 mt-3">
+                                Next
+                            </button>
                         </div>
                     </div>
                 </div>
