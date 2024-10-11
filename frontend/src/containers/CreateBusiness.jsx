@@ -1,3 +1,6 @@
+/* eslint-disable react/no-unescaped-entities */
+/* eslint-disable react/jsx-key */
+/* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from 'react';
 import PhoneInput from 'react-phone-input-2';
 import 'react-phone-input-2/lib/style.css';
@@ -17,6 +20,7 @@ import { Dialog } from 'primereact/dialog';
 import { Rating } from 'primereact/rating';
 import { InputText } from "primereact/inputtext";
 import { InputTextarea } from "primereact/inputtextarea";
+import { CircularProgress } from '@mui/material';
 
 
 
@@ -2224,7 +2228,7 @@ export default function CreateBusiness() {
         return (
             <>
                 <link rel="preconnect" href="https://fonts.googleapis.com" />
-                <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+                <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin />
                 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap" rel="stylesheet" />
                 <style> {`
                         ::-webkit-scrollbar {

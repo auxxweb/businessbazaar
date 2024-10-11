@@ -1,4 +1,6 @@
-import React, { useEffect, useState } from 'react'
+/* eslint-disable react/no-unescaped-entities */
+ 
+import  { useEffect, useState } from 'react'
 import { Container, Nav, Navbar, NavLink } from 'react-bootstrap'
 import '/src/assets/css/template.css';
 import Slider from 'react-slick';
@@ -223,7 +225,7 @@ export default function Template() {
     return (
         <>
             <link rel="preconnect" href="https://fonts.googleapis.com" />
-            <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+            <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin />
             <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap" rel="stylesheet" />
             <style> {`
                     ::-webkit-scrollbar {
@@ -548,7 +550,7 @@ export default function Template() {
                         </div>
                         <div className="row justify-content-center mb-5">
                             {businessData?.gallery?.map((image, index) => (
-                                <div className="col-12 col-lg-4 mt-4">
+                                <div key={`key-${index}`} className="col-12 col-lg-4 mt-4">
                                     <img src={image} alt="" className='w-100 gallery-img' />
                                 </div>
                             ))}
@@ -793,7 +795,7 @@ export default function Template() {
                                             </div>
                                             <div className="mt-3 text-center text-lg-start" style={{ color: "#A4B3CB" }}>
                                                 {businessData?.businessTiming?.workingDays?.map((day, index) => (
-                                                    <p>{day}</p>
+                                                    <p key={`key-${index}`}>{day}</p>
                                                 ))}
                                             </div>
                                             <div className="mt-3 text-center text-lg-start" style={{ color: "#A4B3CB" }}>
@@ -807,7 +809,7 @@ export default function Template() {
                                         <div className="col-12 mt-5 text-center text-lg-start">
                                             <div className="mt-3" style={{ color: "#A4B3CB" }}>
                                                {closeDays?.map((day,index) =>(
-                                                <p>{day}</p>
+                                                <p key={`key-${index}`}>{day}</p>
                                                ))}
                                             </div>
                                             <div className="mt-3" style={{ color: "#A4B3CB" }}>

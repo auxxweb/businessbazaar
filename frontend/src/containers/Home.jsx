@@ -217,7 +217,7 @@ export default function Home() {
                     <div className='mb-2 mt-2'>
                         <div className="row justify-content-center">
 
-                            {categoryData.map(category => (
+                            {categoryData?.map(category => (
                                 <Link
                                     className="cat-div text-decoration-none"
                                     to={`/business/${category._id}`}  // Dynamically generate the URL with the category ID
