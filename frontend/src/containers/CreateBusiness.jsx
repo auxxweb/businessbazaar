@@ -119,35 +119,37 @@ export default function CreateBusiness() {
     });
 
 
-
-    const preRequestFun = async (file,position) => {
+    const preRequestFun = async (file, position) => {
         const url = 'https://businessbazaarserver.auxxweb.in/api/v1/s3url';
-        const requestBody = [{
-            position:position,
-            file_type:file.type
-        }];
+        const requestBody = {
+            files: [{
+                position: position,
+                file_type: file.type
+            }]
+        };
         
         try {
             const response = await axios.post(url, requestBody, {
                 headers: { 'Content-Type': 'application/json' },
             });
-            const preReq = response.data; 
+            const preReq = response.data.data[0];
+        
             console.log('preReq:', preReq);
     
             if (!preReq.url) {
                 throw new Error('The URL is not defined in the response.');
             }
-        
             await axios.put(preReq.url, file, {
-                headers: { 'Content-Type': file.file_type },
+                headers: { 'Content-Type': file.type }, 
             });
-        
+    
             return preReq;
         } catch (error) {
             console.error('Error uploading file:', error.message || error);
             throw new Error('File upload failed');
         }
     };
+    
     
 
         
@@ -211,7 +213,7 @@ export default function CreateBusiness() {
     
         const handleLogoChange = async (event) => {
             const file = event.target.files[0];
-
+        
             console.log('Selected file:', file);
             
             if (file) {
@@ -219,13 +221,15 @@ export default function CreateBusiness() {
                 
                 reader.onload = async function (e) {
                     try {
-                        const preReq = await preRequestFun(file,"Landing");
-                        let url = '';
-                        const landingItem = preReq.find(req => req.position === 'Logo');
-                        if (landingItem) {
-                            url = landingItem.url;
+                        const preReq = await preRequestFun(file, "Landing");
+                        let accessLink = '';
+                        if (preReq && preReq.accessLink) {
+                            accessLink = preReq.accessLink;
+                        } else {
+                            console.error('Access link not found in response.');
+                            return;
                         }
-                        setLogo(url);
+                        setLogo(accessLink);
                     } catch (error) {
                         console.error('Error uploading logo:', error.message || error);
                     }
@@ -234,10 +238,10 @@ export default function CreateBusiness() {
                 reader.onerror = function () {
                     console.error('Error reading file:', reader.error);
                 };
-        
-                reader.readAsDataURL(file); 
+                reader.readAsDataURL(file);
             }
         };
+        
     
 
 
@@ -987,23 +991,26 @@ export default function CreateBusiness() {
     
         // Generic File Change Handler
         const handleFileChange = (name, e, sectionSetter) => {
+            console.log(formData)
             const file = e.target.files[0];
             if (file) {
                 const reader = new FileReader();
-                reader.onload = () => {
+                reader.onload = async () => {
 
-                    var preReq = preRequestFun(file)
-                    let url = '';
-                    const landingItem = preReq.find(req => req.position === name);
-                    if (landingItem) {
-                        url = landingItem.url;
+                    const preReq = await preRequestFun(file, name);
+                    let accessLink = '';
+                    if (preReq && preReq.accessLink) {
+                        accessLink = preReq.accessLink;
+                        sectionSetter(prevData => ({
+                            ...prevData,
+                            coverImage: accessLink,
+                        }));
+                    } else {
+                        console.error('Access link not found in response.');
+                        return;
                     }
-                    sectionSetter(prevData => ({
-                        ...prevData,
-                        coverImage: url,
-                    }));
                 };
-                reader.readAsDataURL(file); // Convert image to base64 for preview
+                reader.readAsDataURL(file); 
             }
         };
     
@@ -1176,12 +1183,21 @@ export default function CreateBusiness() {
             const file = e.target.files[0];
             if (file && index !== null) {
                 const reader = new FileReader();
-                reader.onload = () => {
-                    setSpecialService((prevData) => {
-                        const updatedData = [...prevData.data];
-                        updatedData[index].image = reader.result; // store the image data URL for preview
-                        return { ...prevData, data: updatedData };
-                    });
+                reader.onload = async () => {
+                    const preReq = await preRequestFun(file, "service");
+                    let accessLink = '';
+                    if (preReq && preReq.accessLink) {
+                        accessLink = preReq.accessLink;
+                        setSpecialService((prevData) => {
+                            const updatedData = [...prevData.data];
+                            updatedData[index].image = accessLink; 
+                            return { ...prevData, data: updatedData };
+                        });
+                    } else {
+                        console.error('Access link not found in response.');
+                        return;
+                    }
+                   
                 };
                 reader.readAsDataURL(file);
             }
@@ -1418,20 +1434,19 @@ export default function CreateBusiness() {
             const file = e.target.files[0];
             if (file) {
                 const reader = new FileReader();
-                reader.onload = (e) => {
-                    const updatedProducts = [...productSection];
-                    updatedProducts[index].image = e.target.result; // Using data URL for image preview
-                    setProductSection(updatedProducts);
-    
-                    // Set file details for S3 upload or further processing
-                    setS3Files((prevS3Files) => ({
-                        ...prevS3Files,
-                        [index]: {
-                            file: file,
-                            fileName: file.name,
-                            fileType: file.type,
-                        },
-                    }));
+                reader.onload = async (e) => {
+                    const preReq = await preRequestFun(file, name);
+                    let accessLink = '';
+                    if (preReq && preReq.accessLink) {
+                        accessLink = preReq.accessLink;
+                        const updatedProducts = [...productSection];
+                        updatedProducts[index].image = accessLinka; 
+                        setProductSection(updatedProducts);
+                    } else {
+                        console.error('Access link not found in response.');
+                        return;
+                    }
+                    
                 };
                 reader.readAsDataURL(file);
             }
@@ -1725,7 +1740,6 @@ export default function CreateBusiness() {
     function MoreImages() {
         const [loading, setLoading] = useState(false);
         const [images, setImages] = useState([{ file: null, fileType: '', fileName: '' }]);
-        const [s3Files, setS3Files] = useState([]);
         const [formData, setFormData] = useState({});
         const [s3PreRequest, setS3PreRequest] = useState([]);
     
@@ -1735,13 +1749,11 @@ export default function CreateBusiness() {
                 const updatedImages = [...images];
                 updatedImages[index] = { file, fileType: file.type, fileName: file.name };
                 setImages(updatedImages);
-                setS3Files(updatedImages);
             }
         };
     
         const addImageInput = () => {
             setImages((prevImages) => [...prevImages, { file: null, fileType: '', fileName: '' }]);
-            setS3Files((prevImages) => [...prevImages, { file: null, fileType: '', fileName: '' }]);
         };
     
         const handleAddImageClick = (index) => {
@@ -1751,20 +1763,24 @@ export default function CreateBusiness() {
         const removeImage = (index) => {
             const updatedImages = images.filter((_, i) => i !== index);
             setImages(updatedImages);
-            setS3Files(updatedImages);
         };
     
         const handleGallerySubmit = async () => {
-            const imageFileTypes = images.map((image) => image?.fileType);
             const imageFiles = images.map((image) => image?.file);
     
-            if (imageFileTypes.length > 0) {
+            if (imageFiles.length > 0) {
                 setLoading(true);
+                const requestBody = {
+                    files: imageFiles.map(file => ({
+                        position: 'gallery',
+                        file_type: file.type
+                    }))
+                };
     
                 try {
                     const url = 'https://businessbazaarserver.auxxweb.in/api/v1/s3url';
-                    const requestBody = { file_types: imageFileTypes };
     
+                    // Fetch pre-signed S3 URLs
                     const response = await axios.post(url, requestBody, {
                         headers: {
                             'Content-Type': 'application/json',
@@ -1772,26 +1788,36 @@ export default function CreateBusiness() {
                     });
     
                     const s3Urls = response.data.data;
-                    setS3PreRequest(s3Urls);
     
+                    // Upload each file to its respective S3 URL
                     await Promise.all(
                         s3Urls.map(async (data, index) => {
                             const { url } = data;
                             const file = imageFiles[index];
+    
                             await axios.put(url, file, {
                                 headers: { 'Content-Type': file.type },
                             });
                         })
                     );
     
-                    handleNextStep();
+                    // Collect access links and store them in formData
+                    const accessLinks = s3Urls.map(s3Data => s3Data.accessLink);
+                    console.log(accessLinks)
+    
+                    setFormData(prevFormData => ({
+                        ...prevFormData,
+                        gallery: accessLinks,
+                    }));
+    
+                    handleNextStep(); // Call the next step after successful upload
                 } catch (error) {
-                    console.error('Error fetching the S3 URLs or uploading files:', error);
+                    console.error('Error fetching S3 URLs or uploading files:', error);
                 } finally {
                     setLoading(false);
                 }
             } else {
-                handleNextStep();
+                handleNextStep(); // Proceed to the next step if there are no files to upload
             }
         };
     
@@ -1882,6 +1908,7 @@ export default function CreateBusiness() {
     }
     
     function MoreVideos() {
+        console.log(formData)
         const [videos, setVideos] = useState([{ file: null, fileType: '' }]);
         const [s3PreRequest, setS3PreRequest] = useState([]);
     
