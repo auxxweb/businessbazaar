@@ -2,7 +2,7 @@
 /* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from 'react'
 import Layout from '../components/Layout'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import {
   fetchBusinessByCategory,
   fetchCategoryById,
@@ -23,17 +23,23 @@ export default function Business() {
   const [loading, setLoading] = useState(true)
   const [category, setCategory] = useState(null)
 
-  useEffect(async () => {
-    try {
-      const categoryData = await fetchCategoryById(id)
-      console.log(categoryData, 'category-category')
-      setCategory(categoryData?.data)
-    } catch (error) {
-      console.error('Error fetching categories:', error)
-    } finally {
-      setLoading(false)
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    const fatchCategoryId = async () => {
+      try {
+        setLoading(true)
+        const categoryData = await fetchCategoryById(id)
+        setCategory(categoryData?.data)
+      } catch (error) {
+        setLoading(false)
+        console.error('Error fetching categories:', error)
+      } finally {
+        setLoading(false)
+      }
     }
-  }, [id])
+    fatchCategoryId()
+  }, [paginationData, searchTerm])
 
   useEffect(() => {
     const fetchData = async () => {
@@ -129,9 +135,12 @@ export default function Business() {
         </div>
       </div>
 
-      <section className="mt-5 business-view-banner">
+      <section className="mt-1 business-view-banner">
         <img
-          src="/src/assets/images/business-image.png"
+          src={
+            category?.coverImage ??
+            (!loading && '/src/assets/images/business-image.png')
+          }
           className="w-100 h-100"
           alt=""
         />
@@ -259,7 +268,14 @@ export default function Business() {
                 </h1>
               </div>
               <div className="col-12 col-md-6 text-center text-md-end">
-                <button className="btn btn-theme mt-3">Create Now</button>
+                <button
+                  onClick={() => {
+                    navigate('/create-business')
+                  }}
+                  className="btn btn-theme mt-3"
+                >
+                  Create Now
+                </button>
               </div>
             </div>
           </div>

@@ -226,7 +226,9 @@ footer .btn-theme{
     color: white !important;
     background-color: #228ae2 !important;
 }.business-view-banner{
-    height: 600px !important;
+    max-height: 30rem;
+    min-height: 30rem;
+    /* height: 600px !important; */
 }.business-view-banner img{
     object-fit: cover;
 }.business-view-banner .image-title{
