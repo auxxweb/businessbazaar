@@ -97,9 +97,9 @@ export const CreateBusinessDetails = async (formData) => {
             },
         });
 
-        if (response.status !== 200) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
-        }
+        // if (response.status !== 200) {
+        //     throw new Error(`HTTP error! Status: ${response.status}`);
+        // }
 
         const data = response.data;
         if (data.success) {
@@ -113,3 +113,25 @@ export const CreateBusinessDetails = async (formData) => {
         throw error; // Propagate the error
     }
 };
+
+
+
+export const FetchPlans = async () =>{
+    try {
+        const response = await axios.get(`${baseUrl}/api/v1/plans`, config); // Use backticks for template literals
+        
+        if (response.status !== 200) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const data = response.data;
+        if (data.success) {
+            console.log(data)
+            return data; 
+        } else {
+            console.error("Failed to fetch categories");
+        }
+    } catch (error) {
+        console.error("Error fetching categories:", error.message);
+    }
+}

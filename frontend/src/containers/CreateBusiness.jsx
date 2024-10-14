@@ -3,7 +3,7 @@ import PhoneInput from 'react-phone-input-2';
 import 'react-phone-input-2/lib/style.css';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
-import { CreateBusinessDetails, fetchCategories } from '../Functions/functions';
+import { CreateBusinessDetails, fetchCategories, FetchPlans } from '../Functions/functions';
 import axios from 'axios';
 
 import { Container, Nav, Navbar, NavLink } from 'react-bootstrap'
@@ -12,7 +12,6 @@ import Slider from 'react-slick';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { useParams } from 'react-router-dom';
-import { fetchBusinessTemplate } from '../Functions/functions';
 import { Dialog } from 'primereact/dialog';
 import { Rating } from 'primereact/rating';
 import { InputText } from "primereact/inputtext";
@@ -23,23 +22,9 @@ import { InputTextarea } from "primereact/inputtextarea";
 
 
 export default function CreateBusiness() {
-
-
-    const [s3Files,setS3Files] = useState([
-        {
-            file:'',
-            fileName:'',
-            fileType:'',
-        },
-    ])
-    const [s3PreRequest,setS3PreRequest] = useState([])
-
-
-
     const [step, setStep] = useState(1);
 
     const handleNextStep = () => {
-        console.log('aaaaaaaaaaa')
         setStep(prevStep => prevStep + 1);
     };
     const handlePrevStep = () => {
@@ -50,6 +35,8 @@ export default function CreateBusiness() {
 
     const [categoryData, setCategoryData] = useState([]);
     const [loading, setLoading] = useState(true);
+
+    const [planData, setPlanData] = useState([]);
 
 
     const [formData, setFormData] = useState({
@@ -110,6 +97,7 @@ export default function CreateBusiness() {
             reviews: []
         },
         gallery: [],
+        videos: [],
         seoData: {
             title: '',
             description: '',
@@ -119,35 +107,36 @@ export default function CreateBusiness() {
     });
 
 
-
-    const preRequestFun = async (file,position) => {
+    const preRequestFun = async (file, position) => {
         const url = 'https://businessbazaarserver.auxxweb.in/api/v1/s3url';
-        const requestBody = [{
-            position:position,
-            file_type:file.type
-        }];
+        const requestBody = {
+            files: [{
+                position: position,
+                file_type: file.type
+            }]
+        };
         
         try {
             const response = await axios.post(url, requestBody, {
                 headers: { 'Content-Type': 'application/json' },
             });
-            const preReq = response.data; 
-            console.log('preReq:', preReq);
+            const preReq = response.data.data[0];
+        
     
             if (!preReq.url) {
                 throw new Error('The URL is not defined in the response.');
             }
-        
             await axios.put(preReq.url, file, {
-                headers: { 'Content-Type': file.file_type },
+                headers: { 'Content-Type': file.type }, 
             });
-        
+    
             return preReq;
         } catch (error) {
             console.error('Error uploading file:', error.message || error);
             throw new Error('File upload failed');
         }
     };
+    
     
 
         
@@ -159,8 +148,9 @@ export default function CreateBusiness() {
         const fetchData = async () => {
             try {
                 const categoryDetails = await fetchCategories();
+                const plans = await FetchPlans();
+                setPlanData(plans.data.data)
                 setCategoryData(categoryDetails.data.data);
-                console.log(categoryDetails.data.data)
             } catch (error) {
                 console.error("Error fetching categories:", error);
             } finally {
@@ -171,6 +161,101 @@ export default function CreateBusiness() {
     }, []);
 
 
+
+
+    
+    function AuthenticationDetails() {
+        const [authData, setAuthData] = useState({
+            email: '',
+            password: '',
+        });
+        const [passwordError, setPasswordError] = useState('');
+        const { email, password } = authData;
+    
+        // Handles input change for both email and password
+        function handleInputChange(e) {
+            const { name, value } = e.target;
+            setAuthData((prevAuthData) => ({
+                ...prevAuthData,
+                [name]: value,
+            }));
+        }
+    
+        // Validate password and handle submission
+        function handleAuthSubmit() {
+            if (validatePassword()) {
+                // Set the email and password into formData and proceed to the next step
+                setFormData((prevFormData) => ({
+                    ...prevFormData,
+                    email: email,
+                    password: password,
+                }));
+                handleNextStep();
+            }
+        }
+    
+        // Password validation function
+        function validatePassword() {
+            if (password.length < 8) {
+                setPasswordError('Password must be at least 8 characters long.');
+                return false;
+            }
+            setPasswordError('');
+            return true;
+        }
+    
+        return (
+            <div className="h-100vh">
+                <div className="row h-100 justify-content-center">
+                    <div className="d-none d-md-block left-portion col-md-5 h-100 p-0">
+                        <img src="/src/assets/images/login.jpg" alt="" className="w-100 h-100 object-fit-cover" />
+                    </div>
+    
+                    <div className="col-12 col-md-7 d-flex flex-column justify-content-between align-items-center right-portion h-100 p-5">
+                        <div className="col-12 text-start">
+                            <button className="btn btn-dark w-auto float-start" onClick={handlePrevStep}>
+                                <i className="bi bi-arrow-left"></i>
+                            </button>
+                        </div>
+                        <div className="col-12">
+                            <h1 className="fw-bold text-center text-md-start">Add <br /> Authentication Details</h1>
+                        </div>
+    
+                        {/* Email Input */}
+                        <div className="input-group mt-4 w-100 align-items-center">
+                            <TextField
+                                fullWidth
+                                label="Email"
+                                variant="outlined"
+                                name="email"
+                                value={authData.email}
+                                onChange={handleInputChange}
+                            />
+                        </div>
+    
+                        {/* Password Input */}
+                        <div className="input-group w-100 align-items-center">
+                            <TextField
+                                fullWidth
+                                label="Password"
+                                type="password"
+                                variant="outlined"
+                                name="password"
+                                value={authData.password}
+                                onChange={handleInputChange}
+                                error={!!passwordError}
+                                helperText={passwordError}
+                            />
+                        </div>
+    
+                        <div className="col-12 text-center mt-5">
+                            <button className="btn btn-theme2 w-100 text-white p-2" onClick={handleAuthSubmit}>Save & Next</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        );
+    }
 
 
 
@@ -211,21 +296,22 @@ export default function CreateBusiness() {
     
         const handleLogoChange = async (event) => {
             const file = event.target.files[0];
-
-            console.log('Selected file:', file);
+        
             
             if (file) {
                 const reader = new FileReader();
                 
                 reader.onload = async function (e) {
                     try {
-                        const preReq = await preRequestFun(file,"Landing");
-                        let url = '';
-                        const landingItem = preReq.find(req => req.position === 'Logo');
-                        if (landingItem) {
-                            url = landingItem.url;
+                        const preReq = await preRequestFun(file, "Landing");
+                        let accessLink = '';
+                        if (preReq && preReq.accessLink) {
+                            accessLink = preReq.accessLink;
+                        } else {
+                            console.error('Access link not found in response.');
+                            return;
                         }
-                        setLogo(url);
+                        setLogo(accessLink);
                     } catch (error) {
                         console.error('Error uploading logo:', error.message || error);
                     }
@@ -234,10 +320,10 @@ export default function CreateBusiness() {
                 reader.onerror = function () {
                     console.error('Error reading file:', reader.error);
                 };
-        
-                reader.readAsDataURL(file); 
+                reader.readAsDataURL(file);
             }
         };
+        
     
 
 
@@ -252,6 +338,7 @@ export default function CreateBusiness() {
                 businessName: businessName,
                 address: address,
                 location: location,
+                logo:logo
             }));
             handleNextStep();
         };
@@ -378,245 +465,249 @@ export default function CreateBusiness() {
 
 
     function ContactDetails() {
-        console.log(formData)
-        console.log(formData);
-    
-        const [mobileNumbers, setMobileNumbers] = useState([{ id: 1, number: '' }]);
-        const [whatsappNumbers, setWhatsappNumbers] = useState([{ id: 1, number: '' }]);
-        const [emails, setEmails] = useState([{ id: 1, email: '' }]);
-        
-        const [newFormData, setNewFormData] = useState({
+        const [mobileNumbers, setMobileNumbers] = useState([{ id: 1, number: '', countryCode: 'us' }]);
+    const [whatsappNumbers, setWhatsappNumbers] = useState([{ id: 1, number: '', countryCode: 'us' }]);
+    const [emails, setEmails] = useState([{ id: 1, email: '' }]);
+
+    const [newFormData, setNewFormData] = useState({
+        contactDetails: {
+            name: '',
+            mobileNumbers: [],
+            whatsappNumbers: [],
+            emails: [],
+            website: '',
+        },
+    });
+
+    // Handle contact details change
+    const handleContactChange = (event) => {
+        const { name, value } = event.target;
+        setNewFormData((prevData) => ({
+            ...prevData,
             contactDetails: {
-                name: '',
-                mobileNumbers: [],
-                whatsappNumbers: [],
-                emails: [],
-                website: '',
+                ...prevData.contactDetails,
+                [name]: value,
             },
-        });
-        
-        // Handle contact details change
-        const handleContactChange = (event) => {
-            const { name, value } = event.target;
-            setNewFormData((prevData) => ({
-                ...prevData,
-                contactDetails: {
-                    ...prevData.contactDetails,
-                    [name]: value,
-                },
-            }));
-        };
-    
-        // Handle dynamic input changes
-        const handleMobileNumberChange = (id, value) => {
-            const updatedMobileNumbers = mobileNumbers.map((number) =>
-                number.id === id ? { ...number, number: value } : number
-            );
-            setMobileNumbers(updatedMobileNumbers);
-            updateContactDetails('mobileNumbers', updatedMobileNumbers);
-        };
-    
-        const handleWhatsappNumberChange = (id, value) => {
-            const updatedWhatsappNumbers = whatsappNumbers.map((number) =>
-                number.id === id ? { ...number, number: value } : number
-            );
-            setWhatsappNumbers(updatedWhatsappNumbers);
-            updateContactDetails('whatsappNumbers', updatedWhatsappNumbers);
-        };
-    
-        const handleEmailChange = (id, value) => {
-            const updatedEmails = emails.map((email) =>
-                email.id === id ? { ...email, email: value } : email
-            );
-            setEmails(updatedEmails);
-            updateContactDetails('emails', updatedEmails);
-        };
-    
-        const updateContactDetails = (field, updatedArray) => {
-            setNewFormData((prevFormData) => ({
-                ...prevFormData,
-                contactDetails: {
-                    ...prevFormData.contactDetails,
-                    [field]: updatedArray.map((item) => item.number || item.email),
-                },
-            }));
-        };
-    
-        // Add and remove fields for mobile numbers, WhatsApp, and emails
-        const addMobileNumber = () => setMobileNumbers([...mobileNumbers, { id: mobileNumbers.length + 1, number: '' }]);
-        const removeMobileNumber = (id) => setMobileNumbers(mobileNumbers.filter((number) => number.id !== id));
-    
-        const addWhatsappNumber = () => setWhatsappNumbers([...whatsappNumbers, { id: whatsappNumbers.length + 1, number: '' }]);
-        const removeWhatsappNumber = (id) => setWhatsappNumbers(whatsappNumbers.filter((number) => number.id !== id));
-    
-        const addEmail = () => setEmails([...emails, { id: emails.length + 1, email: '' }]);
-        const removeEmail = (id) => setEmails(emails.filter((email) => email.id !== id));
-    
-        // Submit handler
-        const contactSubmitHandler = () => {
-            setFormData((prevData) => ({
-                ...prevData,
-                contactDetails: newFormData.contactDetails,
-            }));
-            handleNextStep(); // Ensure this is defined elsewhere
-        };
-    
-        return (
-            <div className='h-100vh'>
-                <div className="row h-100">
-                    <div className="d-none d-md-block left-portion p-0 col-5">
-                        <img src="/src/assets/images/contact-details.jpg" alt="Contact Details" className='w-100 h-100' />
+        }));
+    };
+
+    // Handle mobile number change with country code
+    const handleMobileNumberChange = (id, value, countryCode = 'us') => {
+        const updatedMobileNumbers = mobileNumbers.map((number) =>
+            number.id === id ? { ...number, number: value, countryCode } : number
+        );
+        setMobileNumbers(updatedMobileNumbers);
+        updateContactDetails('mobileNumbers', updatedMobileNumbers);
+    };
+
+    // Handle WhatsApp number change with country code
+    const handleWhatsappNumberChange = (id, value, countryCode = 'us') => {
+        const updatedWhatsappNumbers = whatsappNumbers.map((number) =>
+            number.id === id ? { ...number, number: value, countryCode } : number
+        );
+        setWhatsappNumbers(updatedWhatsappNumbers);
+        updateContactDetails('whatsappNumbers', updatedWhatsappNumbers);
+    };
+
+    // Handle email change
+    const handleEmailChange = (id, value) => {
+        const updatedEmails = emails.map((email) =>
+            email.id === id ? { ...email, email: value } : email
+        );
+        setEmails(updatedEmails);
+        updateContactDetails('emails', updatedEmails);
+    };
+
+    const updateContactDetails = (field, updatedArray) => {
+        setNewFormData((prevFormData) => ({
+            ...prevFormData,
+            contactDetails: {
+                ...prevFormData.contactDetails,
+                [field]: updatedArray.map((item) => ({
+                    number: item.number || item.email,
+                    countryCode: item.countryCode || null
+                })),
+            },
+        }));
+    };
+
+    // Add and remove fields
+    const addMobileNumber = () => setMobileNumbers([...mobileNumbers, { id: mobileNumbers.length + 1, number: '', countryCode: 'us' }]);
+    const removeMobileNumber = (id) => setMobileNumbers(mobileNumbers.filter((number) => number.id !== id));
+
+    const addWhatsappNumber = () => setWhatsappNumbers([...whatsappNumbers, { id: whatsappNumbers.length + 1, number: '', countryCode: 'us' }]);
+    const removeWhatsappNumber = (id) => setWhatsappNumbers(whatsappNumbers.filter((number) => number.id !== id));
+
+    const addEmail = () => setEmails([...emails, { id: emails.length + 1, email: '' }]);
+    const removeEmail = (id) => setEmails(emails.filter((email) => email.id !== id));
+
+    // Submit handler
+    const contactSubmitHandler = () => {
+        setFormData((prevData) => ({
+            ...prevData,
+            contactDetails: newFormData.contactDetails,
+        }));
+        handleNextStep(); // Ensure this is defined elsewhere
+    };
+
+    return (
+        <div className='h-100vh'>
+            <div className="row h-100">
+                <div className="d-none d-md-block left-portion p-0 col-5">
+                    <img src="/src/assets/images/contact-details.jpg" alt="Contact Details" className='w-100 h-100' />
+                </div>
+                <div className="col-12 col-md-7 row align-items-center right-portion p-5">
+                    <div className="col-12 text-start">
+                        <button className="btn btn-dark w-auto float-start" onClick={handlePrevStep}>
+                            <i className="bi bi-arrow-left"></i>
+                        </button>
                     </div>
-                    <div className="col-12 col-md-7 row align-items-center right-portion p-5">
-                        <div className="col-12 text-start">
-                            <button className="btn btn-dark w-auto float-start" onClick={handlePrevStep}>
-                                <i className="bi bi-arrow-left"></i>
-                            </button>
+                    <div className="col-12">
+                        <h1 className="fw-bold text-center text-md-start mb-2">Add Contact Details</h1>
+                    </div>
+                    <div className="col-12 p-5 p-sm-0 mt-3">
+                        <input
+                            type="text"
+                            name="name"
+                            placeholder="Name"
+                            onChange={handleContactChange}
+                            className="form-control form-control-lg"
+                        />
+
+                        {/* Mobile Numbers */}
+                        <div id="mobileNumberDiv" className="mt-4">
+                            {mobileNumbers.map((number) => (
+                                <div className="row mt-3" key={number.id}>
+                                    <div className="col-12 col-sm-3 col-md-2">
+                                        <PhoneInput
+                                            country={number.countryCode}
+                                            enableSearch={true}
+                                            value={number.number}
+                                            onChange={(phone, countryData) =>
+                                                handleMobileNumberChange(number.id, phone, countryData?.countryCode || 'us')
+                                            }
+                                            containerStyle={{ width: '100%' }}
+                                        />
+                                    </div>
+                                    <div className="col-12 col-sm-7 col-md-8 mt-2 mt-sm-0">
+                                        <input
+                                            type="text"
+                                            value={number.number}
+                                            onChange={(e) => handleMobileNumberChange(number.id, e.target.value)}
+                                            className="form-control form-control-lg w-100"
+                                            placeholder="Phone Number"
+                                        />
+                                    </div>
+                                    {number.id > 1 ? (
+                                        <div className="col-12 col-sm-2 mt-2 mt-sm-0">
+                                            <button className="btn btn-danger btn-sm w-100" onClick={() => removeMobileNumber(number.id)}>
+                                                <i className="bi bi-trash"></i>
+                                            </button>
+                                        </div>
+                                    ) : (
+                                        <div className="col-12 col-sm-2 mt-2 mt-sm-0">
+                                            <button type="button" onClick={addMobileNumber} className="btn w-100 btn-success mt-2">
+                                                + Add
+                                            </button>
+                                        </div>
+                                    )}
+                                </div>
+                            ))}
                         </div>
-                        <div className="col-12">
-                            <h1 className="fw-bold text-center text-md-start mb-2">Add Contact Details</h1>
+
+                        {/* WhatsApp Numbers */}
+                        <div id="whatsappNumberDiv" className="mt-4">
+                            {whatsappNumbers.map((number) => (
+                                <div className="row mt-3" key={number.id}>
+                                    <div className="col-12 col-sm-3 col-md-2">
+                                        <PhoneInput
+                                            country={number.countryCode}
+                                            enableSearch={true}
+                                            value={number.number}
+                                            onChange={(phone, countryData) =>
+                                                handleWhatsappNumberChange(number.id, phone, countryData?.countryCode || 'us')
+                                            }
+                                            containerStyle={{ width: '100%' }}
+                                        />
+                                    </div>
+                                    <div className="col-12 col-sm-7 col-md-8 mt-2 mt-sm-0">
+                                        <input
+                                            type="text"
+                                            value={number.number}
+                                            onChange={(e) => handleWhatsappNumberChange(number.id, e.target.value)}
+                                            className="form-control form-control-lg w-100"
+                                            placeholder="WhatsApp Number"
+                                        />
+                                    </div>
+                                    {number.id > 1 ? (
+                                        <div className="col-12 col-sm-2 mt-2 mt-sm-0">
+                                            <button className="btn btn-danger btn-sm w-100" onClick={() => removeWhatsappNumber(number.id)}>
+                                                <i className="bi bi-trash"></i>
+                                            </button>
+                                        </div>
+                                    ) : (
+                                        <div className="col-12 col-sm-2 mt-2 mt-sm-0">
+                                            <button type="button" onClick={addWhatsappNumber} className="btn w-100 btn-success mt-2">
+                                                + Add
+                                            </button>
+                                        </div>
+                                    )}
+                                </div>
+                            ))}
                         </div>
-                        <div className="col-12 p-5 p-sm-0 mt-3">
+
+                        {/* Emails */}
+                        <div id="emailDiv" className="mt-4">
+                            {emails.map((email) => (
+                                <div className="row mt-3" key={email.id}>
+                                    <div className="col-12 col-md-10">
+                                        <input
+                                            type="email"
+                                            value={email.email}
+                                            onChange={(e) => handleEmailChange(email.id, e.target.value)}
+                                            className="form-control form-control-lg w-100"
+                                            placeholder="Email"
+                                        />
+                                    </div>
+                                    {email.id > 1 ? (
+                                        <div className="col-12 col-md-2 mt-2 mt-sm-0">
+                                            <button className="btn btn-danger btn-sm w-100" onClick={() => removeEmail(email.id)}>
+                                                <i className="bi bi-trash"></i>
+                                            </button>
+                                        </div>
+                                    ) : (
+                                        <div className="col-12 col-md-2 mt-2 mt-sm-0">
+                                            <button type="button" onClick={addEmail} className="btn w-100 btn-success mt-2">
+                                                + Add
+                                            </button>
+                                        </div>
+                                    )}
+                                </div>
+                            ))}
+                        </div>
+
+                        <div className="mt-4">
                             <input
                                 type="text"
-                                name="name"
-                                placeholder="Name"
+                                name="website"
+                                placeholder="Website"
                                 onChange={handleContactChange}
                                 className="form-control form-control-lg"
                             />
-    
-                            {/* Mobile Numbers */}
-                            <div id="mobileNumberDiv" className="mt-4">
-                                {mobileNumbers.map((number) => (
-                                    <div className="row mt-3" key={number.id}>
-                                        <div className="col-12 col-sm-3 col-md-2">
-                                            <PhoneInput
-                                                country={'us'}
-                                                enableSearch={true}
-                                                value={number.number}
-                                                onChange={(phone) => handleMobileNumberChange(number.id, phone)}
-                                                containerStyle={{ width: '100%' }}
-                                            />
-                                        </div>
-                                        <div className="col-12 col-sm-7 col-md-8 mt-2 mt-sm-0">
-                                            <input
-                                                type="text"
-                                                value={number.number}
-                                                onChange={(e) => handleMobileNumberChange(number.id, e.target.value)}
-                                                className="form-control form-control-lg w-100"
-                                                placeholder="Phone Number"
-                                            />
-                                        </div>
-                                        {number.id > 1 ? (
-                                            <div className="col-12 col-sm-2 mt-2 mt-sm-0">
-                                                <button className="btn btn-danger btn-sm w-100" onClick={() => removeMobileNumber(number.id)}>
-                                                    <i className="bi bi-trash"></i>
-                                                </button>
-                                            </div>
-                                        ) : (
-                                            <div className="col-12 col-sm-2 mt-2 mt-sm-0">
-                                                <button type="button" onClick={addMobileNumber} className="btn w-100 btn-success mt-2">
-                                                    + Add
-                                                </button>
-                                            </div>
-                                        )}
-                                    </div>
-                                ))}
-                            </div>
-    
-                            {/* WhatsApp Numbers */}
-                            <div id="whatsappNumberDiv" className="mt-4">
-                                {whatsappNumbers.map((number) => (
-                                    <div className="row mt-3" key={number.id}>
-                                        <div className="col-12 col-sm-3 col-md-2">
-                                            <PhoneInput
-                                                country={'us'}
-                                                enableSearch={true}
-                                                value={number.number}
-                                                onChange={(phone) => handleWhatsappNumberChange(number.id, phone)}
-                                                containerStyle={{ width: '100%' }}
-                                            />
-                                        </div>
-                                        <div className="col-12 col-sm-7 col-md-8 mt-2 mt-sm-0">
-                                            <input
-                                                type="text"
-                                                value={number.number}
-                                                onChange={(e) => handleWhatsappNumberChange(number.id, e.target.value)}
-                                                className="form-control form-control-lg w-100"
-                                                placeholder="WhatsApp Number"
-                                            />
-                                        </div>
-                                        {number.id > 1 ? (
-                                            <div className="col-12 col-sm-2 mt-2 mt-sm-0">
-                                                <button className="btn btn-danger btn-sm w-100" onClick={() => removeWhatsappNumber(number.id)}>
-                                                    <i className="bi bi-trash"></i>
-                                                </button>
-                                            </div>
-                                        ) : (
-                                            <div className="col-12 col-sm-2 mt-2 mt-sm-0">
-                                                <button type="button" onClick={addWhatsappNumber} className="btn w-100 btn-success mt-2">
-                                                    + Add
-                                                </button>
-                                            </div>
-                                        )}
-                                    </div>
-                                ))}
-                            </div>
-    
-                            {/* Emails */}
-                            <div id="emailDiv" className="mt-4">
-                                {emails.map((email) => (
-                                    <div className="row mt-3" key={email.id}>
-                                        <div className="col-12 col-md-10">
-                                            <input
-                                                type="email"
-                                                value={email.email}
-                                                onChange={(e) => handleEmailChange(email.id, e.target.value)}
-                                                className="form-control form-control-lg w-100"
-                                                placeholder="Email"
-                                            />
-                                        </div>
-                                        {email.id > 1 ? (
-                                            <div className="col-12 col-md-2 mt-2 mt-sm-0">
-                                                <button className="btn btn-danger btn-sm w-100" onClick={() => removeEmail(email.id)}>
-                                                    <i className="bi bi-trash"></i>
-                                                </button>
-                                            </div>
-                                        ) : (
-                                            <div className="col-12 col-sm-2 mt-2 mt-sm-0">
-                                                <button type="button" onClick={addEmail} className="btn w-100 btn-success mt-2">
-                                                    + Add
-                                                </button>
-                                            </div>
-                                        )}
-                                    </div>
-                                ))}
-                            </div>
-    
-                            {/* Website */}
-                            <div className="mt-4">
-                                <input
-                                    type="text"
-                                    name="website"
-                                    placeholder="Website"
-                                    onChange={handleContactChange}
-                                    className="form-control form-control-lg"
-                                />
-                            </div>
-    
-                            {/* Submit Button */}
-                            <div className="mt-4 text-center">
-                                <button className="btn btn-primary w-100" onClick={contactSubmitHandler}>
-                                    Submit
-                                </button>
-                            </div>
+                        </div>
+
+                        <div className="mt-4">
+                            <button className="btn btn-dark w-auto float-end" onClick={contactSubmitHandler}>
+                                Submit
+                            </button>
                         </div>
                     </div>
                 </div>
             </div>
-        );
-    }
-    
+        </div>
+    );
+}
+
 
     function CategoryDetails() {
         const handleCategoryChange = (event, value) => {
@@ -686,7 +777,6 @@ export default function CreateBusiness() {
     function ServicesOffering() {
         const [services, setServices] = useState([]);
         const [inputService, setInputService] = useState('');
-        console.log(formData)
         // Add service to formData.services
         const addService = (e) => {
             e.preventDefault();
@@ -786,7 +876,6 @@ export default function CreateBusiness() {
         const [days, setDays] = useState([])
         const [openTime, setOpenTime] = useState('');
         const [closeTime, setCloseTime] = useState('');
-        console.log(formData)
 
         const allDays = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
@@ -825,7 +914,6 @@ export default function CreateBusiness() {
                     }
                 }
             }));
-            console.log(formData); // To verify the updated formData
             handleNextStep()
         };
 
@@ -920,7 +1008,6 @@ export default function CreateBusiness() {
 
     function BusinessDesc() {
         const [description, setDescription] = useState('')
-        console.log(formData)
         const handleDescSubmit = () => {
             setFormData(prevFormData => ({
                 ...prevFormData,
@@ -985,20 +1072,22 @@ export default function CreateBusiness() {
             const file = e.target.files[0];
             if (file) {
                 const reader = new FileReader();
-                reader.onload = () => {
+                reader.onload = async () => {
 
-                    var preReq = preRequestFun(file)
-                    let url = '';
-                    const landingItem = preReq.find(req => req.position === name);
-                    if (landingItem) {
-                        url = landingItem.url;
+                    const preReq = await preRequestFun(file, name);
+                    let accessLink = '';
+                    if (preReq && preReq.accessLink) {
+                        accessLink = preReq.accessLink;
+                        sectionSetter(prevData => ({
+                            ...prevData,
+                            coverImage: accessLink,
+                        }));
+                    } else {
+                        console.error('Access link not found in response.');
+                        return;
                     }
-                    sectionSetter(prevData => ({
-                        ...prevData,
-                        coverImage: url,
-                    }));
                 };
-                reader.readAsDataURL(file); // Convert image to base64 for preview
+                reader.readAsDataURL(file); 
             }
         };
     
@@ -1171,12 +1260,21 @@ export default function CreateBusiness() {
             const file = e.target.files[0];
             if (file && index !== null) {
                 const reader = new FileReader();
-                reader.onload = () => {
-                    setSpecialService((prevData) => {
-                        const updatedData = [...prevData.data];
-                        updatedData[index].image = reader.result; // store the image data URL for preview
-                        return { ...prevData, data: updatedData };
-                    });
+                reader.onload = async () => {
+                    const preReq = await preRequestFun(file, "service");
+                    let accessLink = '';
+                    if (preReq && preReq.accessLink) {
+                        accessLink = preReq.accessLink;
+                        setSpecialService((prevData) => {
+                            const updatedData = [...prevData.data];
+                            updatedData[index].image = accessLink; 
+                            return { ...prevData, data: updatedData };
+                        });
+                    } else {
+                        console.error('Access link not found in response.');
+                        return;
+                    }
+                   
                 };
                 reader.readAsDataURL(file);
             }
@@ -1413,20 +1511,19 @@ export default function CreateBusiness() {
             const file = e.target.files[0];
             if (file) {
                 const reader = new FileReader();
-                reader.onload = (e) => {
-                    const updatedProducts = [...productSection];
-                    updatedProducts[index].image = e.target.result; // Using data URL for image preview
-                    setProductSection(updatedProducts);
-    
-                    // Set file details for S3 upload or further processing
-                    setS3Files((prevS3Files) => ({
-                        ...prevS3Files,
-                        [index]: {
-                            file: file,
-                            fileName: file.name,
-                            fileType: file.type,
-                        },
-                    }));
+                reader.onload = async (e) => {
+                    const preReq = await preRequestFun(file, name);
+                    let accessLink = '';
+                    if (preReq && preReq.accessLink) {
+                        accessLink = preReq.accessLink;
+                        const updatedProducts = [...productSection];
+                        updatedProducts[index].image = accessLink; 
+                        setProductSection(updatedProducts);
+                    } else {
+                        console.error('Access link not found in response.');
+                        return;
+                    }
+                    
                 };
                 reader.readAsDataURL(file);
             }
@@ -1553,7 +1650,6 @@ export default function CreateBusiness() {
     
 
     function SeoDetails() {
-        console.log(formData)
         const [socialMediaLinks, setSocialMediaLinks] = useState([
             { tag: 'instagram', link: '' },
             { tag: 'facebook', link: '' },
@@ -1720,8 +1816,7 @@ export default function CreateBusiness() {
     function MoreImages() {
         const [loading, setLoading] = useState(false);
         const [images, setImages] = useState([{ file: null, fileType: '', fileName: '' }]);
-        const [s3Files, setS3Files] = useState([]);
-        const [formData, setFormData] = useState({});
+        // const [formData, setFormData] = useState({});
         const [s3PreRequest, setS3PreRequest] = useState([]);
     
         const handleFileChange = (index, event) => {
@@ -1730,13 +1825,11 @@ export default function CreateBusiness() {
                 const updatedImages = [...images];
                 updatedImages[index] = { file, fileType: file.type, fileName: file.name };
                 setImages(updatedImages);
-                setS3Files(updatedImages);
             }
         };
     
         const addImageInput = () => {
             setImages((prevImages) => [...prevImages, { file: null, fileType: '', fileName: '' }]);
-            setS3Files((prevImages) => [...prevImages, { file: null, fileType: '', fileName: '' }]);
         };
     
         const handleAddImageClick = (index) => {
@@ -1746,20 +1839,24 @@ export default function CreateBusiness() {
         const removeImage = (index) => {
             const updatedImages = images.filter((_, i) => i !== index);
             setImages(updatedImages);
-            setS3Files(updatedImages);
         };
     
         const handleGallerySubmit = async () => {
-            const imageFileTypes = images.map((image) => image?.fileType);
             const imageFiles = images.map((image) => image?.file);
     
-            if (imageFileTypes.length > 0) {
+            if (imageFiles.length > 0) {
                 setLoading(true);
+                const requestBody = {
+                    files: imageFiles.map(file => ({
+                        position: 'gallery',
+                        file_type: file.type
+                    }))
+                };
     
                 try {
                     const url = 'https://businessbazaarserver.auxxweb.in/api/v1/s3url';
-                    const requestBody = { file_types: imageFileTypes };
     
+                    // Fetch pre-signed S3 URLs
                     const response = await axios.post(url, requestBody, {
                         headers: {
                             'Content-Type': 'application/json',
@@ -1767,26 +1864,34 @@ export default function CreateBusiness() {
                     });
     
                     const s3Urls = response.data.data;
-                    setS3PreRequest(s3Urls);
     
+                    // Upload each file to its respective S3 URL
                     await Promise.all(
                         s3Urls.map(async (data, index) => {
                             const { url } = data;
                             const file = imageFiles[index];
+    
                             await axios.put(url, file, {
                                 headers: { 'Content-Type': file.type },
                             });
                         })
                     );
     
-                    handleNextStep();
+                    // Collect access links and store them in formData
+                    const accessLinks = s3Urls.map(s3Data => s3Data.accessLink);
+    
+                    setFormData(prevFormData => ({
+                        ...prevFormData,
+                        gallery: accessLinks,
+                    }));
+                    handleNextStep(); 
                 } catch (error) {
-                    console.error('Error fetching the S3 URLs or uploading files:', error);
+                    console.error('Error fetching S3 URLs or uploading files:', error);
                 } finally {
                     setLoading(false);
                 }
             } else {
-                handleNextStep();
+                handleNextStep(); // Proceed to the next step if there are no files to upload
             }
         };
     
@@ -1908,8 +2013,13 @@ export default function CreateBusiness() {
     
             if (videoFilesTypes.length > 0) {
                 try {
+                    const requestBody = {
+                        files: videoFiles.map(file => ({
+                            position: 'Videos',
+                            file_type: file.type
+                        }))
+                    };
                     const url = 'https://businessbazaarserver.auxxweb.in/api/v1/s3url';
-                    const requestBody = { file_types: videoFilesTypes };
                     const response = await axios.post(url, requestBody, {
                         headers: { 'Content-Type': 'application/json' },
                     });
@@ -1926,6 +2036,14 @@ export default function CreateBusiness() {
                             });
                         })
                     );
+                    // Collect access links and store them in formData
+                    const accessLinks = s3Urls.map(s3Data => s3Data.accessLink);
+    
+                    setFormData(prevFormData => ({
+                        ...prevFormData,
+                        videos: accessLinks,
+                    }));
+    
                     handleNextStep();
                 } catch (error) {
                     console.error('Error uploading videos:', error);
@@ -2024,9 +2142,8 @@ export default function CreateBusiness() {
             name:'',
             description:'',
         }]);
-        console.log(formData)
         const [closeDays, setCloseDays] = useState([]);
-        const allDays = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
+        const allDays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
     
         const handleInputChange = (e) => {
             const { name, value } = e.target;
@@ -2384,7 +2501,9 @@ export default function CreateBusiness() {
                                         </div>
                                         <div className="col">
                                             <span className="fs-13">Send Email</span>
-                                            <p className='fs-16'>{businessData.contactDetails.email}</p>
+                                            {businessData.contactDetails.emails.map((email, index) => (
+    <p className='fs-16' key={index}>{email.number}</p>
+))}
                                         </div>
                                     </div>
                                 </div>
@@ -2396,8 +2515,9 @@ export default function CreateBusiness() {
                                         </div>
                                         <div className="col">
                                             <span className="fs-13">Contact</span>
-                                            <p className='fs-16 mb-0'>{businessData.contactDetails.primaryNumber}</p>
-                                            <p className='fs-16 mt-0'>{businessData.contactDetails.secondaryNumber}</p>
+                                            {businessData.contactDetails.mobileNumbers.map((mobile, index) => (
+    <p className='fs-16' key={index}>{mobile.number}</p>
+))}
                                         </div>
                                     </div>
                                 </div>
@@ -2535,9 +2655,7 @@ export default function CreateBusiness() {
                                         <div className="col-12 mt-5">
                                             <p className='text-center'>{service.description}</p>
                                         </div>
-                                        <div className="col-12 text-center" style={{ height: "100px" }}>
-                                            <img src={service.image} alt={service.title} className='h-100' />
-                                        </div>
+                                        
                                     </div>
                                 ))}
                             </Slider>
@@ -2548,7 +2666,7 @@ export default function CreateBusiness() {
                                 <h1 className="fw-bold text-center">Gallery</h1>
                             </div>
                             <div className="row justify-content-center mb-5">
-                                {businessData.gallery.map((image, index) => (
+                                {businessData.gallery.map(image => (
                                     <div className="col-12 col-lg-4 mt-4">
                                         <img src={image} alt="" className='w-100 gallery-img' />
                                     </div>
@@ -2844,134 +2962,86 @@ export default function CreateBusiness() {
     }
 
 
-
-
     function Subscription() {
-        
-        const [activeTicks, setActiveTicks] = useState({
-            free: [true, false, false, false, false, false],
-            premium: [true, true, true, true, true, true]
-        });
-
-        const toggleActiveTick = (plan, index) => {
-            setActiveTicks((prevTicks) => ({
-                ...prevTicks,
-                [plan]: prevTicks[plan].map((item, idx) => idx === index ? !item : item)
+        function planSubmit(id) {
+            setFormData((prevFormData) => ({
+                ...prevFormData,
+                selectedPlan: id,
             }));
-        };
-
+            handleNextStep();
+        }
+    
         return (
             <>
-                <div className='h-100vh'>
+                <div className="h-100vh">
                     <div className="row h-100 justify-content-center">
                         {/* Left Image Section - Hidden on small screens */}
                         <div className="d-none d-md-block left-portion p-0 col-md-5 h-100">
-                            <img src="/src/assets/images/subscription.jpg" alt="" className='w-100 h-100' />
+                            <img src="/src/assets/images/subscription.jpg" alt="" className="w-100 h-100" />
                         </div>
                         {/* Right Form Section */}
                         <div className="col-12 col-md-7 row align-items-end justify-content-center h-100 p-3 p-md-5 right-portion">
-                        <div className="col-12 text-start">
-                        <button className="btn btn-dark w-auto float-start" onClick={handlePrevStep}><i className="bi bi-arrow-left"></i></button>
-                        </div>
-                            <div className='row justify-content-center'>
-                                <div className='col-12 text-center'>
-                                    <h1 className='fw-bold'>Add Subscriptions</h1>
+                            <div className="col-12 text-start">
+                                <button className="btn btn-dark w-auto float-start" onClick={handlePrevStep}>
+                                    <i className="bi bi-arrow-left"></i>
+                                </button>
+                            </div>
+                            <div className="row justify-content-center">
+                                <div className="col-12 text-center">
+                                    <h1 className="fw-bold">Add Subscriptions</h1>
                                 </div>
                                 <div className="col-12">
                                     <div className="row justify-content-center">
                                         {/* Free Plan */}
-                                        <div className="col-12 col-md-6 mb-4">
-                                            <div className="card br-20 b-theme2">
-                                                <div className="p-4">
-                                                    <div className="col-12 text-center">
-                                                        <span className='fw-bold'>Free Plan</span>
-                                                    </div>
-                                                    <div className="row mt-2 mb-2">
-                                                        <div className="col-4">
-                                                            <h1 className='fw-bold fs-30'>₹0</h1>
+                                        {planData.map((plan, index) => (
+                                            <div className="col-12 col-md-6 mb-4" key={index}>
+                                                <div className="card br-20 b-theme2">
+                                                    <div className="p-4">
+                                                        <div className="col-12 text-center">
+                                                            <span className="fw-bold">{plan.plan}</span>
                                                         </div>
-                                                        <div className="col-8 p-0 text-start">
-                                                            <span className="text-secondary">per editor/month</span> <br />
-                                                            <span className="text-secondary">Billed Monthly</span>
-                                                        </div>
-                                                    </div>
-                                                    <div className='col-12 mt-4'>
-                                                        {['10 gen per day', 'Unlimited Relaxed generations', 'General commercial terms', 'Access to member gallery', 'Optional credit top ups', '12 concurrent fast jobs'].map((feature, index) => (
-                                                            <div className='mt-2' key={index}>
-                                                                <span
-                                                                    className={`subscription-tick bg-light ${activeTicks.free[index] ? 'active' : ''}`}
-                                                                    onClick={() => toggleActiveTick('free', index)}
-                                                                >
-                                                                    <i className="bi bi-check"></i>
-                                                                </span>
-                                                                <span className='fs-16'>{feature}</span>
+                                                        <div className="row mt-2 mb-2">
+                                                            <div className="col-4">
+                                                                <h1 className="fw-bold fs-30">₹{plan.amount}</h1>
                                                             </div>
-                                                        ))}
-                                                    </div>
-                                                    <div className="mt-4">
-                                                        <button className="btn w-100 text-white" style={{ backgroundColor: "#5b7ee88c" }}>Choose Plan</button>
+                                                            <div className="col-8 p-0 text-start">
+                                                                <span className="text-secondary">per editor/month</span> <br />
+                                                                <span className="text-secondary">Billed Monthly</span>
+                                                            </div>
+                                                        </div>
+                                                        <div className="col-12 mt-4">
+                                                            {plan.description.map((data, descIndex) => (
+                                                                <div className="mt-2" key={descIndex}>
+                                                                    <span className="subscription-tick bg-light active">
+                                                                        <i className="bi bi-check"></i>
+                                                                    </span>
+                                                                    <span className="fs-16">{data}</span>
+                                                                </div>
+                                                            ))}
+                                                        </div>
+                                                        <div className="mt-4">
+                                                            <button className="btn w-100 text-white" onClick={() => planSubmit(plan._id)} style={{ backgroundColor: "#5b7ee88c" }}>
+                                                                Choose Plan
+                                                            </button>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
-
-                                        {/* Premium Plan */}
-                                        <div className="col-12 col-md-6 mb-4">
-                                            <div className="card br-20 b-theme2">
-                                                <div className="p-4">
-                                                    <div className="col-12 text-center">
-                                                        <span className='fw-bold'>Premium Plan</span>
-                                                    </div>
-                                                    <div className="row mt-2 mb-2">
-                                                        <div className="col-4">
-                                                            <h1 className='fw-bold fs-30'>₹500</h1>
-                                                        </div>
-                                                        <div className="col-8 p-0 text-start">
-                                                            <span className="text-secondary">per editor/month</span> <br />
-                                                            <span className="text-secondary">Billed Monthly</span>
-                                                        </div>
-                                                    </div>
-                                                    <div className='col-12 mt-4'>
-                                                        {['30h Fast generations', 'Unlimited Relaxed generations', 'General commercial terms', 'Access to member gallery', 'Optional credit top ups', '12 concurrent fast jobs'].map((feature, index) => (
-                                                            <div className='mt-2' key={index}>
-                                                                <span
-                                                                    className={`subscription-tick bg-light ${activeTicks.premium[index] ? 'active' : ''}`}
-                                                                    onClick={() => toggleActiveTick('premium', index)}
-                                                                >
-                                                                    <i className="bi bi-check"></i>
-                                                                </span>
-                                                                <span className='fs-16'>{feature}</span>
-                                                            </div>
-                                                        ))}
-                                                    </div>
-                                                    <div className="mt-4">
-                                                        <button className="btn w-100 text-white" style={{ backgroundColor: "#5b7ee88c" }}>Choose Plan</button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
+                                        ))}
                                     </div>
                                 </div>
-                            </div>
-                            <div className="col-12 text-center p-3 p-md-5">
-                                <button className="btn btn-theme2 w-100 text-white p-2" onClick={handleNextStep}>
-                                    Save & Next
-                                </button>
                             </div>
                         </div>
                     </div>
                 </div>
             </>
-        )
+        );
     }
+    
 
     const Razorpay = () => {
-
-
-
         const [isScriptLoaded, setScriptLoaded] = useState(false);
-
-        
+        const [businessId,setBusinessId] = useState('');
         const loadRazorpayScript = () => {
             return new Promise((resolve) => {
                 const script = document.createElement('script');
@@ -2989,7 +3059,7 @@ export default function CreateBusiness() {
         };
 
         // Function to open Razorpay payment window
-        const handlePayment = async () => {
+        const handlePayment = async (id) => {
             if (!isScriptLoaded) {
                 const loaded = await loadRazorpayScript();
                 if (!loaded) {
@@ -3004,10 +3074,42 @@ export default function CreateBusiness() {
                 currency: 'INR',
                 name: 'Demo Company',
                 description: 'Test Transaction',
-                image: 'https://your_logo_url.com/logo.png', // Dummy logo URL
-                handler: function (response) {
-                    alert(`Payment successful! Payment ID: ${response.razorpay_payment_id}`);
-                    // Handle payment response (this is where you'd send the payment info to the backend)
+                image: formData.logo, // Dummy logo URL
+                handler: async function (response) {
+                    
+                        var paymentDetails = {
+                         "plan": formData.selectedPlan,
+                         "paymentId": response.razorpay_payment_id,
+                         "date": "2023-10-06T08:30:00.000Z",
+                         "paymentStatus": "success"
+                     }
+                        try {
+                            const response = await axios.post(
+                                'https://businessbazaarserver.auxxweb.in/api/v1/payment', 
+                                paymentDetails, 
+                                {
+                                    headers: {
+                                        'Content-Type': 'application/json',
+                                        'Authorization': `Bearer ${id}`,  // Sending businessId as bearer token
+                                    },
+                                }
+                            );
+                            console.log(response)
+                            if (response.status !== 200) {
+                                throw new Error(`HTTP error! Status: ${response.status}`);
+                            }
+
+                            const data = response.data;
+                            if (data.success) {
+                                return data; 
+                            } else {
+                                console.error('Failed to create business details:', data.message || 'Unknown error');
+                                throw new Error(data.message || 'Failed to create business details');
+                            }
+                        } catch (error) {
+                            console.error("Error occurred while fetching business site details:", error.message);
+                            throw error; 
+                    };
                 },
                 prefill: {
                     name: 'John Doe',
@@ -3026,12 +3128,13 @@ export default function CreateBusiness() {
             rzp.open();
         };
         useEffect(() => {
-            const submitData =() => {
-                const res = CreateBusinessDetails(formData)
-                console.log(res)
+            const submitData =async () => {
+                const res = await CreateBusinessDetails(formData)
+                const id = res.data._id || res.data.data?._id;
+                setBusinessId(id)
+                handlePayment(id);
             }
             submitData();
-            handlePayment();
         }, []);
     };
 
@@ -3040,21 +3143,22 @@ export default function CreateBusiness() {
 
     return (
         <>
-            {step === 1 && <BusinessDetails />}
-            {step === 2 && <ContactDetails />}
-            {step === 3 && <CategoryDetails />}
-            {step === 4 && <ServicesOffering />}
-            {step === 5 && <BusinessTiming />}
-            {step === 6 && <BusinessDesc />}
-            {step === 7 && <LandingPageDetails />}
-            {step === 8 && <CreateServices />}
-            {step === 9 && <CreateProductPart />}
-            {step === 10 && <SeoDetails />}
-            {step === 11 && <MoreImages />}
-            {step === 12 && <MoreVideos />}
-            {step === 13 && <PreviewTemplates />}
-            {step === 14 && <Subscription />}
-            {step === 15 && <Razorpay />}
+            {step === 1 && <AuthenticationDetails/>}
+            {step === 2 && <BusinessDetails />}
+            {step === 3 && <ContactDetails />}
+            {step === 4 && <CategoryDetails />}
+            {step === 5 && <ServicesOffering />}
+            {step === 6 && <BusinessTiming />}
+            {step === 7 && <BusinessDesc />}
+            {step === 8 && <LandingPageDetails />}
+            {step === 9 && <CreateServices />}
+            {step === 10 && <CreateProductPart />}
+            {step === 11 && <SeoDetails />}
+            {step === 12 && <MoreImages />}
+            {step === 13 && <MoreVideos />}
+            {step === 14 && <PreviewTemplates />}
+            {step === 15 && <Subscription />}
+            {step === 16 && <Razorpay />}
         </>
     );
 }
