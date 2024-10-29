@@ -20,11 +20,14 @@ export default function Header() {
             <NavLink href="/" className='text-black  text-decoration-none' style={{color:'black'}}>
               Home
             </NavLink>
-            <NavLink href="#notification" className='text-black  text-decoration-none' style={{color:'black'}}>
-              Notification
+            <NavLink href="#category" className='text-black  text-decoration-none' style={{color:'black'}}>
+              Categories
             </NavLink>
-            <NavLink href="#profile" className='text-black  text-decoration-none' style={{color:'black'}}>
-              Profile
+            <NavLink href="#business" className='text-black  text-decoration-none' style={{color:'black'}}>
+              Business
+            </NavLink>
+            <NavLink href="#review" className='text-black  text-decoration-none' style={{color:'black'}}>
+              Review
             </NavLink>
             <NavLink
               to='/create-business'
