@@ -19,9 +19,9 @@ export default function Template() {
     const [colorTheme, setColorTheme] = useState('')
     const [visible, setVisible] = useState(false);
     const [review, setReview] = useState([{
-        rating:'',
-        name:'',
-        description:'',
+        rating: '',
+        name: '',
+        description: '',
     }]);
     const [closeDays, setCloseDays] = useState([]);
     const allDays = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
@@ -41,11 +41,11 @@ export default function Template() {
             console.log(businessDetails)
             setColorTheme(businessDetails.data.theme)
             setLoading(false);
-            const closed = allDays.filter(day => 
+            const closed = allDays.filter(day =>
                 !businessDetails.data.businessTiming.workingDays.map(d => d.toLowerCase()).includes(day)
             );
             setCloseDays(closed);
-            
+
         }
 
 
@@ -203,6 +203,30 @@ export default function Template() {
         ]
     };
 
+    const gallery = {
+        dots: true,
+        infinite: true,
+        speed: 500,
+        slidesToShow: 3,
+        slidesToScroll: 1,
+        responsive: [
+            {
+                breakpoint: 1024,
+                settings: {
+                    slidesToShow: 2,
+                    slidesToScroll: 1,
+                }
+            },
+            {
+                breakpoint: 600,
+                settings: {
+                    slidesToShow: 1,
+                    slidesToScroll: 1,
+                }
+            }
+        ]
+    };
+
 
     if (loading) {
         return <div className='h-100vh text-center '>
@@ -256,7 +280,14 @@ export default function Template() {
                     }.dish-div:hover{
                         background-color: ${colorTheme};
                         color:white;
-                    }
+                    }.product-section{
+                    padding:20px;
+                    border:1px solid ${colorTheme};
+                    border-radius:16px;
+                        }.slick-dots .slick-active button{
+                            background-color: ${colorTheme};
+                            border-radius: 16px;
+                        }
                     `}
             </style>
             <Navbar expand="lg" className="bg-white pjs fixed-top" style={{ paddingBlock: "5px" }}>
@@ -271,14 +302,14 @@ export default function Template() {
 
                     <Navbar.Collapse id="basic-navbar-nav">
                         <Nav className="ms-auto w-100 justify-content-evenly jcc">
-                            <NavLink href="#menu" className='text-black text-center text-lg-start  text-decoration-none fs-14' style={{ color: 'black' }}>
-                                Menu
-                            </NavLink>
-                            <NavLink href="#gallery" className='text-black text-center text-lg-start  text-decoration-none fs-14' style={{ color: 'black' }}>
-                                Gallery
+                            <NavLink href="#" className='text-black text-center text-lg-start  text-decoration-none fs-14' style={{ color: 'black' }}>
+                                Home
                             </NavLink>
                             <NavLink href="#about" className='text-black text-center text-lg-start  text-decoration-none fs-14' style={{ color: 'black' }}>
                                 About
+                            </NavLink>
+                            <NavLink href="#gallery" className='text-black text-center text-lg-start  text-decoration-none fs-14' style={{ color: 'black' }}>
+                                Gallery
                             </NavLink>
                             <NavLink href="#contact" className='text-black text-center text-lg-start  text-decoration-none fs-14' style={{ color: 'black' }}>
                                 Contact
@@ -295,7 +326,7 @@ export default function Template() {
                                 }}
                                 className='fw-bold text-decoration-none text-center text-lg-start'
                             >
-                                Book a table
+                                Services
                             </NavLink>
                         </Nav>
                     </Navbar.Collapse>
@@ -327,22 +358,24 @@ export default function Template() {
                                 </div>
                                 <div className="mt-3 col-12">
                                     <div className="row">
-                                        <div className="col-6 col-lg-2 mb-2">
-                                            <button className="btn btn-dark text-white radius-theme box-shadow w-100">Menu</button>
+                                        <div className="col-6 col-lg-3 mb-2">
+                                            <NavLink
+                                                to='#about' className="btn btn-dark text-white radius-theme box-shadow w-100 p-1" style={{ backgroundColor: '#212529' }}>View More</NavLink>
                                         </div>
                                         <div className="col-6 col-lg-3 mb-2">
-                                            <button className="btn btn-dark text-white radius-theme box-shadow theme w-100">Book a table</button>
+                                            <NavLink
+                                                to='#service' className="btn btn-dark text-white radius-theme box-shadow theme w-100 p-1">Services</NavLink>
                                         </div>
                                     </div>
                                 </div>
                                 <div className="mt-5 col-12 social-media gap-3">
-                                    <a href={businessData?.socialMediaLinks?.length&&businessData?.socialMediaLinks[0]?.link} target='_blank' className="contact-banner text-dark">
+                                    <a href={businessData?.socialMediaLinks?.length && businessData?.socialMediaLinks[0]?.link} target='_blank' className="contact-banner text-dark">
                                         <i className="bi bi-facebook"></i>
                                     </a>
-                                    <a href={businessData?.socialMediaLinks?.length&&businessData?.socialMediaLinks[1]?.link} target='_blank' className="contact-banner text-dark">
+                                    <a href={businessData?.socialMediaLinks?.length && businessData?.socialMediaLinks[1]?.link} target='_blank' className="contact-banner text-dark">
                                         <i className="bi bi-instagram"></i>
                                     </a>
-                                    <a href={businessData?.socialMediaLinks?.length&&businessData?.socialMediaLinks[2]?.link} target='_blank' className="contact-banner text-dark">
+                                    <a href={businessData?.socialMediaLinks?.length && businessData?.socialMediaLinks[2]?.link} target='_blank' className="contact-banner text-dark">
                                         <i className="bi bi-twitter"></i>
                                     </a>
                                 </div>
@@ -363,7 +396,7 @@ export default function Template() {
             <div className="mt-5 mb-5">
                 <div className="container p-top">
                     <div className="col-12 address-section">
-                        <div className="row">
+                        <div className="row justify-content-between">
                             <div className="col-12 col-lg-4 mb-3 mb-lg-0">
                                 <div className="row align-items-center justify-content-start">
                                     <div className="col-auto address-logo">
@@ -412,7 +445,7 @@ export default function Template() {
                         <div className="col-12 col-lg-6 mt-2 text-center text-lg-start about-image">
                             <img
                                 src={businessData?.welcomePart?.coverImage}
-                                className="img-fluid"
+                                className="img-fluid about-image"
                                 alt=""
                             />
 
@@ -426,16 +459,7 @@ export default function Template() {
                                     {businessData?.welcomePart?.description}
                                 </p>
                             </div>
-                            <div className="mt-3 col-12">
-                                <div className="row">
-                                    <div className="col-6 col-lg-2">
-                                        <button className="btn btn-dark text-white radius-theme box-shadow w-100">Menu</button>
-                                    </div>
-                                    <div className="col-6 col-lg-3">
-                                        <button className="btn btn-dark text-white radius-theme box-shadow theme w-100">Book a table</button>
-                                    </div>
-                                </div>
-                            </div>
+
                         </div>
                     </div>
 
@@ -451,21 +475,21 @@ export default function Template() {
                                 <h1 className="text-center text-dark fw-bold david-font fw-bold banner-title fs-45">{businessData?.specialServices?.title}</h1>
                             </div>
                             <div className="row justify-content-center">
-                                <div className="col-6 mb-5">
-                                    <p className='text-secondary text-center mb-5'>
+                                <div className="col-12 col-lg-6 ">
+                                    <p className='text-secondary text-center mb-2'>
                                         {businessData?.specialServices?.description}
                                     </p>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div className="col-12 mt-5">
+                    <div className="col-12">
 
-                        <div className="col-12 mb-5 david-font">
+                        <div className="col-12 mb-5 david-font row gap-3">
                             <Slider {...settings}>
                                 {businessData?.specialServices?.data.map((dish, index) => (
                                     <div key={index} className="dish-div col-12 text-center  p-3">
-                                        <div className="col-12 position-relative text-center" style={{ bottom: "60px" }}>
+                                        <div className="col-12 position-relative text-center">
                                             <img src={dish.image} alt={dish.title} style={{ width: '300px', height: '300px', objectFit: 'cover' }} />
                                         </div>
                                         <div className="col-12">
@@ -486,7 +510,7 @@ export default function Template() {
                 <div className="container  p-top">
                     <div className="col-12 mb-5">
                         <div className="row justify-content-center">
-                            <div className="col-6 text-center">
+                            <div className="col-12 col-md-6 text-center">
                                 <h1 className="text-dark fw-bold david-font banner-title fs-45">Menu</h1>
                             </div>
                         </div>
@@ -497,8 +521,8 @@ export default function Template() {
                         <div className="mb-5">
                             <div className="row mb-3">
                                 {businessData?.productSection?.map((item, index) => (
-                                    <div className="col-12 col-lg-6 mt-3" key={index}>
-                                        <div className="row">
+                                    <div className="col-12 col-lg-6 mt-3 " style={{ padding: '0 30px' }} key={index}>
+                                        <div className="row  product-section align-items-center">
                                             <div className="col-2">
                                                 <img src={item.image} alt="" className='w-100' />
                                             </div>
@@ -522,7 +546,7 @@ export default function Template() {
             <section className="h-auto david-font" style={{ backgroundColor: "#F3F3F4" }}>
                 <div className="container p-top">
                     <div className="col-12 mt-5 text-center text-lg-start">
-                        <h1 className='fw-bold'>Services We Provide</h1>
+                        <h1 className='fw-bold text-center'>Services We Provide</h1>
                     </div>
                     <div className="col-12 mb-5">
                         <Slider {...setting2} className='mb-5'>
@@ -546,14 +570,13 @@ export default function Template() {
                         <div className="col-12 mb-5 mt-5">
                             <h1 className="fw-bold text-center">Gallery</h1>
                         </div>
-                        <div className="row justify-content-center mb-5">
+                        <Slider {...gallery} className="gallery-slider">
                             {businessData?.gallery?.map((image, index) => (
-                                <div className="col-12 col-lg-4 mt-4">
+                                <div key={index} className="p-2">
                                     <img src={image} alt="" className='w-100 gallery-img' />
                                 </div>
                             ))}
-
-                        </div>
+                        </Slider>
                     </div>
 
                 </div>
@@ -609,7 +632,7 @@ export default function Template() {
                             {businessData?.testimonial?.reviews.map((testimonial, index) => (
                                 <div key={index} className="bg-white col-12 p-3 mt-2 test-div-bottom">
                                     <div className="col-12 text-center test-button-img-div">
-                                        <img src={testimonial?.image} alt={testimonial?.name} className="img-fluid" />
+                                        <img src="/src/assets/images/user.png" alt={testimonial?.name} className="img-fluid" />
                                     </div>
 
                                     <div className='text-warning text-center mt-0 m-0'>
@@ -639,51 +662,51 @@ export default function Template() {
                 </div>
             </section>
             <Dialog
-            header="Write a Review"
-            visible={visible}
-            onHide={() => { if (!visible) return; setVisible(false); }}
-            style={{ width: '50vw' }}
-            breakpoints={{ '960px': '75vw', '641px': '100vw' }}
-        >
-            <div className="container">
-                <div className="p-3 justify-content-center">
-                    <Rating
-                        value={review.rating}  
-                        onChange={(e) => setReview({ ...review, rating: e.value })} 
-                        cancel={false}
-                    />
-                </div>
-                <div className="col-12">
-                    <InputText
-                        keyfilter="text"
-                        placeholder="Full Name"
-                        className='w-100'
-                        value={review.name}  
-                        name="name"  
-                        onChange={handleInputChange} 
-                    />
-                </div>
-
-                {/* Description Input Field */}
-                <div className="col-12 mt-3">
-                    <div className="card flex justify-content-center">
-                        <InputTextarea
-                            value={review.description}  // Bind the description from state
-                            onChange={handleInputChange}  // Update description in state
-                            rows={5}
-                            cols={30}
-                            name="description"  // Important: use `name` for targeting in handleInputChange
-                            placeholder="Write your review here..."
+                header="Write a Review"
+                visible={visible}
+                onHide={() => { if (!visible) return; setVisible(false); }}
+                style={{ width: '50vw' }}
+                breakpoints={{ '960px': '75vw', '641px': '100vw' }}
+            >
+                <div className="container">
+                    <div className="p-3 justify-content-center">
+                        <Rating
+                            value={review.rating}
+                            onChange={(e) => setReview({ ...review, rating: e.value })}
+                            cancel={false}
                         />
                     </div>
-                </div>
-                <div className="col-12 mt-3">
-                    <div className="row">
-                        <button className="btn-theme2 btn theme radius">Submit Review</button>
+                    <div className="col-12">
+                        <InputText
+                            keyfilter="text"
+                            placeholder="Full Name"
+                            className='w-100'
+                            value={review.name}
+                            name="name"
+                            onChange={handleInputChange}
+                        />
+                    </div>
+
+                    {/* Description Input Field */}
+                    <div className="col-12 mt-3">
+                        <div className="card flex justify-content-center">
+                            <InputTextarea
+                                value={review.description}  // Bind the description from state
+                                onChange={handleInputChange}  // Update description in state
+                                rows={5}
+                                cols={30}
+                                name="description"  // Important: use `name` for targeting in handleInputChange
+                                placeholder="Write your review here..."
+                            />
+                        </div>
+                    </div>
+                    <div className="col-12 mt-3">
+                        <div className="row">
+                            <button className="btn-theme2 btn theme radius">Submit Review</button>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </Dialog>
+            </Dialog>
             <section className="h-auto david-font" id='contact'>
                 <div className="container p-top">
                     <div className="col-12 newsletter position-relative">
@@ -696,7 +719,7 @@ export default function Template() {
                                 </h2>
                                 <div className='row bg-white align-items-center input-div p-2'>
                                     <div className="col-lg-8">
-                                        <input type="text" style={{ border: "0 !important" }} className="form-control form-control-lg" />
+                                        <input type="email" style={{ border: "0 !important" }} className="form-control form-control-lg" />
                                     </div>
                                     <div className="col-lg-4">
                                         <button className="btn theme btn-lg w-100">Subscribe</button>
@@ -711,7 +734,7 @@ export default function Template() {
                                 </h2>
                                 <div className='row'>
                                     <div className="col-12">
-                                        <input type="text" style={{ border: "0 !important" }} className="form-control form-control-sm" />
+                                        <input type="email" style={{ border: "0 !important" }} className="form-control form-control-sm" />
                                     </div>
                                     <div className="col-12">
                                         <button className="btn theme btn-sm mt-1 w-100">Subscribe</button>
@@ -769,13 +792,13 @@ export default function Template() {
                                     </div>
 
                                     <div className="mt-5 col-12 row gap-3 jcc-md text-center text-lg-start">
-                                        <a href={businessData?.socialMediaLinks?.length&&businessData?.socialMediaLinks[0]?.link} className="contact-banner text-orange text-center text-lg-start">
+                                        <a href={businessData?.socialMediaLinks?.length && businessData?.socialMediaLinks[0]?.link} className="contact-banner text-orange text-center text-lg-start">
                                             <i className="bi bi-facebook text-orange"></i>
                                         </a>
-                                        <a href={businessData?.socialMediaLinks?.length&&businessData?.socialMediaLinks[1]?.link} className="contact-banner text-center text-lg-start">
+                                        <a href={businessData?.socialMediaLinks?.length && businessData?.socialMediaLinks[1]?.link} className="contact-banner text-center text-lg-start">
                                             <i className="bi bi-instagram text-orange"></i>
                                         </a>
-                                        <a href={businessData?.socialMediaLinks?.length&&businessData?.socialMediaLinks[2]?.link} className="contact-banner text-center text-lg-start">
+                                        <a href={businessData?.socialMediaLinks?.length && businessData?.socialMediaLinks[2]?.link} className="contact-banner text-center text-lg-start">
                                             <i className="bi bi-twitter text-orange"></i>
                                         </a>
                                         {/* <hr style={{width:"fit-content",opacity: 0.15,}}></hr> */}
@@ -806,9 +829,9 @@ export default function Template() {
                                     <div className="col-lg-4">
                                         <div className="col-12 mt-5 text-center text-lg-start">
                                             <div className="mt-3" style={{ color: "#A4B3CB" }}>
-                                               {closeDays?.map((day,index) =>(
-                                                <p>{day}</p>
-                                               ))}
+                                                {closeDays?.map((day, index) => (
+                                                    <p>{day}</p>
+                                                ))}
                                             </div>
                                             <div className="mt-3" style={{ color: "#A4B3CB" }}>
                                                 <span>CLOSED</span>

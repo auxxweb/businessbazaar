@@ -96,6 +96,23 @@ export default function Home() {
             img: '/src/assets/images/testi.jpg',
         },
     ];
+
+
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 6;
+
+    // Calculate the current page's items
+    const indexOfLastItem = currentPage * itemsPerPage;
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+    const currentItems = businessData.slice(indexOfFirstItem, indexOfLastItem);
+
+    // Calculate the total number of pages
+    const totalPages = Math.ceil(businessData.length / itemsPerPage);
+
+    // Functions to handle page change
+    const nextPage = () => setCurrentPage((prev) => Math.min(prev + 1, totalPages));
+    const prevPage = () => setCurrentPage((prev) => Math.max(prev - 1, 1));
+
     return (
         <Layout title="Home" navClass='home'>
             <div className="container">
@@ -214,7 +231,7 @@ export default function Home() {
                             xplore the finest options available and find exactly what you're looking for!
                         </p>
                     </div>
-                    <div className='mb-2 mt-2'>
+                    <div className='mb-2 mt-2' id='category'>
                         <div className="row justify-content-center">
 
                             {categoryData.map(category => (
@@ -237,18 +254,17 @@ export default function Home() {
                 </div>
             </section>
             <section className="home-spot h-auto mb-5">
-                <div className="container padding">
-                    <div className="text-center mb-5">
-                        <h1 className='fw-bold'>Discover the Top Spots Around You:</h1>
-                        <p className="mt-3 text-center">
-                            Explore the most popular destinations in your area, highly rated by locals and visitors alike.
-                            Find out what makes these places stand out and start your next adventure right here!
-                        </p>
-                    </div>
-                    <div className="row justify-content-around gap-2">
-
-                    {businessData.map(business => (
-                        <Link to={`/template/${business._id}`} className="text-decoration-none text-dark col-12 col-md-5 b-theme location-card mt-3">
+            <div className="container padding" id='business'>
+                <div className="text-center mb-5">
+                    <h1 className='fw-bold'>Discover the Top Spots Around You:</h1>
+                    <p className="mt-3 text-center">
+                        Explore the most popular destinations in your area, highly rated by locals and visitors alike.
+                        Find out what makes these places stand out and start your next adventure right here!
+                    </p>
+                </div>
+                <div className="row justify-content-around gap-2">
+                    {currentItems.map(business => (
+                        <Link to={`/template/${business._id}`} key={business._id} className="text-decoration-none text-dark col-12 col-md-5 b-theme location-card mt-3">
                             <div className="row p-2">
                                 <div className="col-4 p-0">
                                     <img src={business.logo} alt="" className='w-100 br-theme' />
@@ -264,18 +280,23 @@ export default function Home() {
                                     <div className="col-12 mt-3">
                                         <h3 className='fs-16'>
                                             <i className="bi bi-crosshair"></i>
-                                            <span className='ms-1 fs-15'>{business.address.buildingName}, {business.address.city},{business.address.landMark},{business.address.streetName}, {business.address.state}</span>
+                                            <span className='ms-1 fs-15'>{business.address.buildingName}, {business.address.city}, {business.address.landMark}, {business.address.streetName}, {business.address.state}</span>
                                         </h3>
                                     </div>
                                 </div>
                             </div>
                         </Link>
-                    ))};
-
-
-                    </div>
+                    ))}
                 </div>
-            </section>
+
+                {/* Pagination Controls */}
+                <div className="d-flex justify-content-center mt-4">
+                    <button onClick={prevPage} disabled={currentPage === 1} className="btn btn-primary me-2">Previous</button>
+                    <span>Page {currentPage} of {totalPages}</span>
+                    <button onClick={nextPage} disabled={currentPage === totalPages} className="btn btn-primary ms-2">Next</button>
+                </div>
+            </div>
+        </section>
             <section className="mb-5 mt-3 bg-light">
                 <div className="container">
                     <div className="mt-3 mb-3">

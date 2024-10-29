@@ -28,10 +28,10 @@ export default function CreateBusiness() {
         setStep(prevStep => prevStep + 1);
     };
     const handlePrevStep = () => {
-        if (step != 1){
-        setStep(prevStep => prevStep - 1);
-    }
-};
+        if (step != 1) {
+            setStep(prevStep => prevStep - 1);
+        }
+    };
 
     const [categoryData, setCategoryData] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -115,33 +115,33 @@ export default function CreateBusiness() {
                 file_type: file.type
             }]
         };
-        
+
         try {
             const response = await axios.post(url, requestBody, {
                 headers: { 'Content-Type': 'application/json' },
             });
             const preReq = response.data.data[0];
-        
-    
+
+
             if (!preReq.url) {
                 throw new Error('The URL is not defined in the response.');
             }
             await axios.put(preReq.url, file, {
-                headers: { 'Content-Type': file.type }, 
+                headers: { 'Content-Type': file.type },
             });
-    
+
             return preReq;
         } catch (error) {
             console.error('Error uploading file:', error.message || error);
             throw new Error('File upload failed');
         }
     };
-    
-    
 
-        
-    
-                
+
+
+
+
+
 
 
     useEffect(() => {
@@ -163,7 +163,7 @@ export default function CreateBusiness() {
 
 
 
-    
+
     function AuthenticationDetails() {
         const [authData, setAuthData] = useState({
             email: '',
@@ -171,7 +171,7 @@ export default function CreateBusiness() {
         });
         const [passwordError, setPasswordError] = useState('');
         const { email, password } = authData;
-    
+
         // Handles input change for both email and password
         function handleInputChange(e) {
             const { name, value } = e.target;
@@ -180,7 +180,7 @@ export default function CreateBusiness() {
                 [name]: value,
             }));
         }
-    
+
         // Validate password and handle submission
         function handleAuthSubmit() {
             if (validatePassword()) {
@@ -193,7 +193,7 @@ export default function CreateBusiness() {
                 handleNextStep();
             }
         }
-    
+
         // Password validation function
         function validatePassword() {
             if (password.length < 8) {
@@ -203,14 +203,14 @@ export default function CreateBusiness() {
             setPasswordError('');
             return true;
         }
-    
+
         return (
             <div className="h-100vh">
                 <div className="row h-100 justify-content-center">
                     <div className="d-none d-md-block left-portion col-md-5 h-100 p-0">
                         <img src="/src/assets/images/login.jpg" alt="" className="w-100 h-100 object-fit-cover" />
                     </div>
-    
+
                     <div className="col-12 col-md-7 d-flex flex-column justify-content-between align-items-center right-portion h-100 p-5">
                         <div className="col-12 text-start">
                             <button className="btn btn-dark w-auto float-start" onClick={handlePrevStep}>
@@ -220,7 +220,7 @@ export default function CreateBusiness() {
                         <div className="col-12">
                             <h1 className="fw-bold text-center text-md-start">Add <br /> Authentication Details</h1>
                         </div>
-    
+
                         {/* Email Input */}
                         <div className="input-group mt-4 w-100 align-items-center">
                             <TextField
@@ -232,7 +232,7 @@ export default function CreateBusiness() {
                                 onChange={handleInputChange}
                             />
                         </div>
-    
+
                         {/* Password Input */}
                         <div className="input-group w-100 align-items-center">
                             <TextField
@@ -247,9 +247,9 @@ export default function CreateBusiness() {
                                 helperText={passwordError}
                             />
                         </div>
-    
+
                         <div className="col-12 text-center mt-5">
-                            <button className="btn btn-success w-100 text-white p-2" onClick={handleAuthSubmit}>Save & Next</button>
+                            <button className="btn btn-theme2 w-100 text-white p-2" onClick={handleAuthSubmit}>Save & Next</button>
                         </div>
                     </div>
                 </div>
@@ -262,45 +262,15 @@ export default function CreateBusiness() {
     function BusinessDetails() {
         const [logo, setLogo] = useState('');
         const [businessName, setBusinessName] = useState('');
-        const [address, setAddress] = useState({
-            buildingName: '',
-            streetName: '',
-            landMark: '',
-            city: '',
-            state: '',
-            pinCode: ''
-        });
-    
-        const [location, setLocation] = useState({
-            lat: '',
-            lon: '',
-        });
-    
-        // Update address object
-        const handleAddressChange = (event) => {
-            const { name, value } = event.target;
-            setAddress(prevAddress => ({
-                ...prevAddress,
-                [name]: value,
-            }));
-        };
-    
-        // Update location object
-        const handleLocationChange = (event) => {
-            const { name, value } = event.target;
-            setLocation(prevLocation => ({
-                ...prevLocation,
-                [name]: value,
-            }));
-        };
-    
+
+
         const handleLogoChange = async (event) => {
             const file = event.target.files[0];
-        
-            
+
+
             if (file) {
                 const reader = new FileReader();
-                
+
                 reader.onload = async function (e) {
                     try {
                         const preReq = await preRequestFun(file, "Landing");
@@ -316,40 +286,36 @@ export default function CreateBusiness() {
                         console.error('Error uploading logo:', error.message || error);
                     }
                 };
-        
+
                 reader.onerror = function () {
                     console.error('Error reading file:', reader.error);
                 };
                 reader.readAsDataURL(file);
             }
         };
-        
-    
+
+
 
 
         const imageUpload = () => {
             document.getElementById('ImageLogo').click();
         };
-    
+
         // Handle form submission
         const handleBusinessSubmit = () => {
             setFormData(prevFormData => ({
                 ...prevFormData,
                 businessName: businessName,
-                address: address,
-                location: location,
-                logo:logo
+                logo: logo
             }));
             handleNextStep();
         };
-    
+
         return (
             <div className='h-100vh'>
+
                 <div className="row justify-content-center h-100">
-                    <div className="d-none d-md-block left-portion p-0 col-5 h-100">
-                        <img src="/src/assets/images/business-details.jpg" alt="" className='w-100 h-100' />
-                    </div>
-                    <div className="col-12 col-md-7 row align-items-center right-portion p-5">
+                    <div className="col-12 col-md-6 row align-items-center right-portion p-5">
                         <div className="col-12 text-start">
                             <button className="btn btn-dark w-auto float-start" onClick={handlePrevStep}>
                                 <i className="bi bi-arrow-left"></i>
@@ -370,14 +336,14 @@ export default function CreateBusiness() {
                                     onChange={(e) => setBusinessName(e.target.value)}
                                     className="form-control form-control-lg"
                                 />
-    
+
                                 <input
                                     type="file"
                                     id="ImageLogo"
                                     style={{ display: 'none' }}
                                     onChange={handleLogoChange}
                                 />
-    
+
                                 <div onClick={imageUpload} className="p-2 mt-2 add-logo-div" id="businessMainDiv" style={{ cursor: 'pointer' }}>
                                     {logo ? (
                                         <img src={logo} alt="Business Logo" width="100" className="img-thumbnail" />
@@ -390,72 +356,71 @@ export default function CreateBusiness() {
                                         </div>
                                     )}
                                 </div>
-    
-                                <input
-                                    type="text"
-                                    placeholder="Building Name"
-                                    name="buildingName"
-                                    value={address.buildingName}
-                                    onChange={handleAddressChange}
-                                    className="form-control form-control-lg mt-3"
-                                />
-                                <input
-                                    type="text"
-                                    placeholder="Street / Colony Name"
-                                    name="streetName"
-                                    value={address.streetName}
-                                    onChange={handleAddressChange}
-                                    className="form-control form-control-lg mt-3"
-                                />
-                                <input
-                                    type="text"
-                                    placeholder="Landmark"
-                                    name="landMark"
-                                    value={address.landMark}
-                                    onChange={handleAddressChange}
-                                    className="form-control form-control-lg mt-3"
-                                />
-                                <div className="row">
-                                    <div className="col-12 col-md-6 mt-3">
-                                        <input
-                                            type="text"
-                                            className="form-control form-control-lg w-100"
-                                            name="state"
-                                            value={address.state}
-                                            onChange={handleAddressChange}
-                                            placeholder="State"
-                                        />
-                                    </div>
-                                    <div className="col-12 col-md-6 mt-3">
-                                        <input
-                                            type="number"
-                                            className="form-control form-control-lg w-100"
-                                            name="pinCode"
-                                            value={address.pinCode}
-                                            onChange={handleAddressChange}
-                                            placeholder="Pincode"
-                                        />
-                                    </div>
-                                </div>
-                                <div className="row">
-                                    <div className="col-12 mt-3">
-                                        <input
-                                            type="text"
-                                            className="form-control form-control-lg w-100"
-                                            name="lon"
-                                            value={location.lon}
-                                            onChange={handleLocationChange}
-                                            placeholder="Location"
-                                        />
-                                    </div>
-                                </div>
-    
+
+
                                 <div className="col-12 mt-3">
-                                    <button className="btn btn-success w-100" onClick={handleBusinessSubmit}>
+                                    <button className="btn btn-theme2 w-100" onClick={handleBusinessSubmit}>
                                         Save & Next
                                     </button>
                                 </div>
                             </div>
+                        </div>
+                    </div>
+                    <div className="left-portion p-3 col-12 col-lg-6 h-100 row align-items-center">
+                        <link rel="preconnect" href="https://fonts.googleapis.com" />
+                        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+                        <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap" rel="stylesheet" />
+                        <style> {`
+                        ::-webkit-scrollbar {
+                            width: 12px; /* Width of the entire scrollbar */
+                        }
+    
+                        /* Scrollbar track */
+                        ::-webkit-scrollbar-track {
+                            background: rgb(243, 243, 244); /* Background of the scrollbar track */
+                        }::-webkit-scrollbar-thumb {
+                            background-color: black; /* Color of the scrollbar thumb */
+                            border-radius: 10px;     /* Rounded edges of the thumb */
+                            border: 3px solid  black; /* Padding around the thumb */
+                        }
+                    .theme
+                    {
+                        background-color: black;
+                        color: white;
+                        border: none;
+                    }.service-design.active{
+                        background-color: black;
+                    }.address-section{
+                    background-color:black;
+                    }.address-logo i{
+                    color: black;
+                    }.cat-option{
+                        border-right: 1px dashed black;
+                    }.text-orange{
+                            color: black;
+                        }.dish-div:hover{
+                            background-color: black;
+                            color:white;
+                        }
+                        `}
+                        </style>
+                        <div className="p-3" style={{ border: '1px dashed black', borderRadius: '16px' }}>
+                            <p className='text-center'>
+                                This section contains items for the navigation bar.
+                            </p>
+                            <Navbar expand="lg" className="bg-white pjs" style={{ paddingBlock: "5px" }}>
+                                <Container>
+                                    {/* Align Brand to the start (left side) */}
+                                    <Navbar.Brand href="/" className='fw-bold w-50 nav-logo' style={{ fontSize: '36px' }}>
+                                        <img src={logo} alt="" />
+                                        <span className="ms-2">{businessName}</span>
+                                    </Navbar.Brand>
+
+                                    <Navbar.Toggle aria-controls="basic-navbar-nav" style={{ color: 'black' }} />
+
+
+                                </Container>
+                            </Navbar>
                         </div>
                     </div>
                 </div>
@@ -466,324 +431,491 @@ export default function CreateBusiness() {
 
     function ContactDetails() {
         const [mobileNumbers, setMobileNumbers] = useState([{ id: 1, number: '', countryCode: 'us' }]);
-    const [whatsappNumbers, setWhatsappNumbers] = useState([{ id: 1, number: '', countryCode: 'us' }]);
-    const [emails, setEmails] = useState([{ id: 1, email: '' }]);
+        const [whatsappNumbers, setWhatsappNumbers] = useState([{ id: 1, number: '', countryCode: 'us' }]);
+        const [emails, setEmails] = useState([{ id: 1, email: '' }]);
 
-    const [newFormData, setNewFormData] = useState({
-        contactDetails: {
-            name: '',
-            mobileNumbers: [],
-            whatsappNumbers: [],
-            emails: [],
-            website: '',
-        },
-    });
-
-    // Handle contact details change
-    const handleContactChange = (event) => {
-        const { name, value } = event.target;
-        setNewFormData((prevData) => ({
-            ...prevData,
+        const [newFormData, setNewFormData] = useState({
             contactDetails: {
-                ...prevData.contactDetails,
+                name: '',
+                mobileNumbers: [],
+                whatsappNumbers: [],
+                emails: [],
+                website: '',
+            },
+        });
+        const [address, setAddress] = useState({
+            buildingName: '',
+            streetName: '',
+            landMark: '',
+            city: '',
+            state: '',
+            pinCode: ''
+        });
+
+        const [location, setLocation] = useState({
+            lat: '',
+            lon: '',
+        });
+
+        // Update address object
+        const handleAddressChange = (event) => {
+            const { name, value } = event.target;
+            setAddress(prevAddress => ({
+                ...prevAddress,
                 [name]: value,
-            },
-        }));
-    };
+            }));
+        };
 
-    // Handle mobile number change with country code
-    const handleMobileNumberChange = (id, value, countryCode = 'us') => {
-        
-        const updatedMobileNumbers = mobileNumbers.map((number) =>
-            number.id === id ? { ...number, number: value, countryCode } : number
-        );
-        setMobileNumbers(updatedMobileNumbers);
-        updateContactDetails('mobileNumbers', updatedMobileNumbers);
-    };
+        // Update location object
+        const handleLocationChange = (event) => {
+            const { name, value } = event.target;
+            setLocation(prevLocation => ({
+                ...prevLocation,
+                [name]: value,
+            }));
+        };
 
-    // Handle WhatsApp number change with country code
-    const handleWhatsappNumberChange = (id, value, countryCode = 'us') => {
-        const updatedWhatsappNumbers = whatsappNumbers.map((number) =>
-            number.id === id ? { ...number, number: value, countryCode } : number
-        );
-        setWhatsappNumbers(updatedWhatsappNumbers);
-        updateContactDetails('whatsappNumbers', updatedWhatsappNumbers);
-    };
+        // Handle contact details change
+        const handleContactChange = (event) => {
+            const { name, value } = event.target;
+            setNewFormData((prevData) => ({
+                ...prevData,
+                contactDetails: {
+                    ...prevData.contactDetails,
+                    [name]: value,
+                },
+            }));
+        };
 
-    // Handle email change
-    const handleEmailChange = (id, value) => {
-        const updatedEmails = emails.map((email) =>
-            email.id === id ? { ...email, email: value } : email
-        );
-        setEmails(updatedEmails);
-        updateContactDetails('emails', updatedEmails);
-    };
+        // Handle mobile number change with country code
+        const handleMobileNumberChange = (id, value, countryCode = 'us') => {
+            const updatedMobileNumbers = mobileNumbers.map((number) =>
+                number.id === id ? { ...number, number: value, countryCode } : number
+            );
+            setMobileNumbers(updatedMobileNumbers);
+            updateContactDetails('mobileNumbers', updatedMobileNumbers);
+        };
 
-    const updateContactDetails = (field, updatedArray) => {
-        setNewFormData((prevFormData) => ({
-            ...prevFormData,
-            contactDetails: {
-                ...prevFormData.contactDetails,
-                [field]: updatedArray.map((item) => ({
-                    number: item.number || item.email,
-                    countryCode: item.countryCode || null
-                })),
-            },
-        }));
-    };
+        // Handle WhatsApp number change with country code
+        const handleWhatsappNumberChange = (id, value, countryCode = 'us') => {
+            const updatedWhatsappNumbers = whatsappNumbers.map((number) =>
+                number.id === id ? { ...number, number: value, countryCode } : number
+            );
+            setWhatsappNumbers(updatedWhatsappNumbers);
+            updateContactDetails('whatsappNumbers', updatedWhatsappNumbers);
+        };
 
-    // Add and remove fields
-    const addMobileNumber = () => setMobileNumbers([...mobileNumbers, { id: mobileNumbers.length + 1, number: '', countryCode: 'us' }]);
-    const removeMobileNumber = (id) => setMobileNumbers(mobileNumbers.filter((number) => number.id !== id));
+        // Handle email change
+        const handleEmailChange = (id, value) => {
+            const updatedEmails = emails.map((email) =>
+                email.id === id ? { ...email, email: value } : email
+            );
+            setEmails(updatedEmails);
+            updateContactDetails('emails', updatedEmails);
+        };
 
-    const addWhatsappNumber = () => setWhatsappNumbers([...whatsappNumbers, { id: whatsappNumbers.length + 1, number: '', countryCode: 'us' }]);
-    const removeWhatsappNumber = (id) => setWhatsappNumbers(whatsappNumbers.filter((number) => number.id !== id));
+        const updateContactDetails = (field, updatedArray) => {
+            setNewFormData((prevFormData) => ({
+                ...prevFormData,
+                contactDetails: {
+                    ...prevFormData.contactDetails,
+                    [field]: updatedArray.map((item) => ({
+                        number: item.number || item.email,
+                        countryCode: item.countryCode || null
+                    })),
+                },
+            }));
+        };
 
-    const addEmail = () => setEmails([...emails, { id: emails.length + 1, email: '' }]);
-    const removeEmail = (id) => setEmails(emails.filter((email) => email.id !== id));
+        // Add and remove fields
+        const addMobileNumber = () => setMobileNumbers([...mobileNumbers, { id: mobileNumbers.length + 1, number: '', countryCode: 'us' }]);
+        const removeMobileNumber = (id) => setMobileNumbers(mobileNumbers.filter((number) => number.id !== id));
 
-    // Submit handler
-    const contactSubmitHandler = () => {
-        setFormData((prevData) => ({
-            ...prevData,
-            contactDetails: newFormData.contactDetails,
-        }));
-        handleNextStep(); // Ensure this is defined elsewhere
-    };
+        const addWhatsappNumber = () => setWhatsappNumbers([...whatsappNumbers, { id: whatsappNumbers.length + 1, number: '', countryCode: 'us' }]);
+        const removeWhatsappNumber = (id) => setWhatsappNumbers(whatsappNumbers.filter((number) => number.id !== id));
 
-    return (
-        <div className='h-100vh'>
-            <div className="row h-100">
-                <div className="d-none d-md-block left-portion p-0 col-5">
-                    <img src="/src/assets/images/contact-details.jpg" alt="Contact Details" className='w-100 h-100' />
-                </div>
-                <div className="col-12 col-md-7 row align-items-center right-portion p-5">
-                    <div className="col-12 text-start">
-                        <button className="btn btn-dark w-auto float-start" onClick={handlePrevStep}>
-                            <i className="bi bi-arrow-left"></i>
-                        </button>
-                    </div>
-                    <div className="col-12">
-                        <h1 className="fw-bold text-center text-md-start mb-2">Add Contact Details</h1>
-                    </div>
-                    <div className="col-12 p-5 p-sm-0 mt-3">
-                        <input
-                            type="text"
-                            name="name"
-                            placeholder="Name"
-                            onChange={handleContactChange}
-                            className="form-control form-control-lg"
-                        />
+        const addEmail = () => setEmails([...emails, { id: emails.length + 1, email: '' }]);
+        const removeEmail = (id) => setEmails(emails.filter((email) => email.id !== id));
 
-                        {/* Mobile Numbers */}
-                        <div id="mobileNumberDiv" className="mt-4">
-                            {mobileNumbers.map((number) => (
-                                <div className="row mt-3" key={number.id}>
-                                    <div className="col-12 col-sm-3 col-md-2">
-                                        <PhoneInput
-                                            country={number.countryCode}
-                                            enableSearch={true}
-                                            value={number.number}
-                                            onChange={(phone, countryData) =>
-                                                handleMobileNumberChange(number.id, phone, countryData?.countryCode || 'us')
-                                            }
-                                            containerStyle={{ width: '100%' }}
-                                        />
-                                    </div>
-                                    <div className="col-12 col-sm-7 col-md-8 mt-2 mt-sm-0">
-                                        <input
-                                            type="text"
-                                            value={number.number}
-                                            onChange={(e) => handleMobileNumberChange(number.id, e.target.value)}
-                                            className="form-control form-control-lg w-100"
-                                            placeholder="Phone Number"
-                                        />
-                                    </div>
-                                    {number.id > 1 ? (
-                                        <div className="col-12 col-sm-2 mt-2 mt-sm-0">
-                                            <button className="btn btn-danger btn-sm w-100" onClick={() => removeMobileNumber(number.id)}>
-                                                <i className="bi bi-trash"></i>
-                                            </button>
-                                        </div>
-                                    ) : (
-                                        mobileNumbers.length<2?
-                                        <div className="col-12 col-sm-2 mt-2 mt-sm-0">
-                                            <button type="button" onClick={addMobileNumber} className="btn w-100 btn-success mt-2">
-                                                + Add
-                                            </button>
-                                        </div>
-                                        : ''
-                                    )}
-                                </div>
-                            ))}
+        // Submit handler
+        const contactSubmitHandler = () => {
+            setFormData((prevData) => ({
+                ...prevData,
+                contactDetails: newFormData.contactDetails,
+                address: address,
+                location: location,
+            }));
+            handleNextStep(); // Ensure this is defined elsewhere
+        };
+
+        return (
+            <div className='h-100vh'>
+                <div className="row h-100">
+                    <div className="col-12 col-md-5 row align-items-center right-portion p-5">
+                        <div className="col-12 text-start">
+                            <button className="btn btn-dark w-auto float-start" onClick={handlePrevStep}>
+                                <i className="bi bi-arrow-left"></i>
+                            </button>
                         </div>
-
-                        {/* WhatsApp Numbers */}
-                        <div id="whatsappNumberDiv" className="mt-4">
-                            {whatsappNumbers.map((number) => (
-                                <div className="row mt-3" key={number.id}>
-                                    <div className="col-12 col-sm-3 col-md-2">
-                                        <PhoneInput
-                                            country={number.countryCode}
-                                            enableSearch={true}
-                                            value={number.number}
-                                            onChange={(phone, countryData) =>
-                                                handleWhatsappNumberChange(number.id, phone, countryData?.countryCode || 'us')
-                                            }
-                                            containerStyle={{ width: '100%' }}
-                                        />
-                                    </div>
-                                    <div className="col-12 col-sm-7 col-md-8 mt-2 mt-sm-0">
-                                        <input
-                                            type="text"
-                                            value={number.number}
-                                            onChange={(e) => handleWhatsappNumberChange(number.id, e.target.value)}
-                                            className="form-control form-control-lg w-100"
-                                            placeholder="WhatsApp Number"
-                                        />
-                                    </div>
-                                    {number.id > 1 ? (
-                                        <div className="col-12 col-sm-2 mt-2 mt-sm-0">
-                                            <button className="btn btn-danger btn-sm w-100" onClick={() => removeWhatsappNumber(number.id)}>
-                                                <i className="bi bi-trash"></i>
-                                            </button>
-                                        </div>
-                                    ) : (
-                                        whatsappNumbers.length <2 ?
-                                        <div className="col-12 col-sm-2 mt-2 mt-sm-0">
-                                            <button type="button" onClick={addWhatsappNumber} className="btn w-100 btn-success mt-2">
-                                                + Add
-                                            </button>
-                                        </div>
-                                        :""
-                                    )}
-                                </div>
-                            ))}
+                        <div className="col-12">
+                            <h1 className="fw-bold text-center text-md-start mb-2">Add Contact Details</h1>
                         </div>
-
-                        {/* Emails */}
-                        <div id="emailDiv" className="mt-4">
-                            {emails.map((email) => (
-                                <div className="row mt-3" key={email.id}>
-                                    <div className="col-12 col-md-10">
-                                        <input
-                                            type="email"
-                                            value={email.email}
-                                            onChange={(e) => handleEmailChange(email.id, e.target.value)}
-                                            className="form-control form-control-lg w-100"
-                                            placeholder="Email"
-                                        />
-                                    </div>
-                                    {email.id > 1 ? (
-                                        <div className="col-12 col-md-2 mt-2 mt-sm-0">
-                                            <button className="btn btn-danger btn-sm w-100" onClick={() => removeEmail(email.id)}>
-                                                <i className="bi bi-trash"></i>
-                                            </button>
-                                        </div>
-                                    ) : (
-                                        emails.length<3?
-                                        <div className="col-12 col-md-2 mt-2 mt-sm-0">
-                                            <button type="button" onClick={addEmail} className="btn w-100 btn-success mt-2">
-                                                + Add
-                                            </button>
-                                        </div>
-                                        :""
-                                    )}
-                                </div>
-                            ))}
-                        </div>
-
-                        <div className="mt-4">
+                        <div className="col-12 p-5 p-sm-0 mt-3">
                             <input
                                 type="text"
-                                name="website"
-                                placeholder="Additional Website Link"
+                                name="name"
+                                placeholder="Name"
                                 onChange={handleContactChange}
                                 className="form-control form-control-lg"
                             />
-                        </div>
 
-                        <div className="mt-4">
-                            <button className="btn btn-success w-100 float-end" onClick={contactSubmitHandler}>
-                                Submit
-                            </button>
+                            <input
+                                type="text"
+                                placeholder="Building Name"
+                                name="buildingName"
+                                value={address.buildingName}
+                                onChange={handleAddressChange}
+                                className="form-control form-control-lg mt-3"
+                            />
+                            <input
+                                type="text"
+                                placeholder="Street / Colony Name"
+                                name="streetName"
+                                value={address.streetName}
+                                onChange={handleAddressChange}
+                                className="form-control form-control-lg mt-3"
+                            />
+                            <input
+                                type="text"
+                                placeholder="Landmark"
+                                name="landMark"
+                                value={address.landMark}
+                                onChange={handleAddressChange}
+                                className="form-control form-control-lg mt-3"
+                            />
+                            <div className="row">
+                                <div className="col-12 col-md-6 mt-3">
+                                    <input
+                                        type="text"
+                                        className="form-control form-control-lg w-100"
+                                        name="state"
+                                        value={address.state}
+                                        onChange={handleAddressChange}
+                                        placeholder="State"
+                                    />
+                                </div>
+                                <div className="col-12 col-md-6 mt-3">
+                                    <input
+                                        type="number"
+                                        className="form-control form-control-lg w-100"
+                                        name="pinCode"
+                                        value={address.pinCode}
+                                        onChange={handleAddressChange}
+                                        placeholder="Pincode"
+                                    />
+                                </div>
+                            </div>
+                            <div className="row">
+                                <div className="col-12 mt-3">
+                                    <input
+                                        type="text"
+                                        className="form-control form-control-lg w-100"
+                                        name="lon"
+                                        value={location.lon}
+                                        onChange={handleLocationChange}
+                                        placeholder="Location"
+                                    />
+                                </div>
+                            </div>
+
+                            {/* Mobile Numbers */}
+                            <div id="mobileNumberDiv" className="mt-4">
+                                {mobileNumbers.map((number) => (
+                                    <div className="row mt-3" key={number.id}>
+                                        <div className="col-12 col-sm-3 col-md-2">
+                                            <PhoneInput
+                                                country={number.countryCode}
+                                                enableSearch={true}
+                                                value={number.number}
+                                                onChange={(phone, countryData) =>
+                                                    handleMobileNumberChange(number.id, phone, countryData?.countryCode || 'us')
+                                                }
+                                                containerStyle={{ width: '100%' }}
+                                            />
+                                        </div>
+                                        <div className="col-12 col-sm-7 col-md-8 mt-2 mt-sm-0">
+                                            <input
+                                                type="text"
+                                                value={number.number}
+                                                onChange={(e) => handleMobileNumberChange(number.id, e.target.value)}
+                                                className="form-control form-control-lg w-100"
+                                                placeholder="Phone Number"
+                                            />
+                                        </div>
+                                        {number.id > 1 ? (
+                                            <div className="col-12 col-sm-2 mt-2 mt-sm-0">
+                                                <button className="btn btn-danger btn-sm w-100" onClick={() => removeMobileNumber(number.id)}>
+                                                    <i className="bi bi-trash"></i>
+                                                </button>
+                                            </div>
+                                        ) : (
+                                            <div className="col-12 col-sm-2 mt-2 mt-sm-0">
+                                                <button type="button" onClick={addMobileNumber} className="btn w-100 btn-success mt-2">
+                                                    + Add
+                                                </button>
+                                            </div>
+                                        )}
+                                    </div>
+                                ))}
+                            </div>
+
+                            {/* WhatsApp Numbers */}
+                            <div id="whatsappNumberDiv" className="mt-4">
+                                {whatsappNumbers.map((number) => (
+                                    <div className="row mt-3" key={number.id}>
+                                        <div className="col-12 col-sm-3 col-md-2">
+                                            <PhoneInput
+                                                country={number.countryCode}
+                                                enableSearch={true}
+                                                value={number.number}
+                                                onChange={(phone, countryData) =>
+                                                    handleWhatsappNumberChange(number.id, phone, countryData?.countryCode || 'us')
+                                                }
+                                                containerStyle={{ width: '100%' }}
+                                            />
+                                        </div>
+                                        <div className="col-12 col-sm-7 col-md-8 mt-2 mt-sm-0">
+                                            <input
+                                                type="text"
+                                                value={number.number}
+                                                onChange={(e) => handleWhatsappNumberChange(number.id, e.target.value)}
+                                                className="form-control form-control-lg w-100"
+                                                placeholder="WhatsApp Number"
+                                            />
+                                        </div>
+                                        {number.id > 1 ? (
+                                            <div className="col-12 col-sm-2 mt-2 mt-sm-0">
+                                                <button className="btn btn-danger btn-sm w-100" onClick={() => removeWhatsappNumber(number.id)}>
+                                                    <i className="bi bi-trash"></i>
+                                                </button>
+                                            </div>
+                                        ) : (
+                                            <div className="col-12 col-sm-2 mt-2 mt-sm-0">
+                                                <button type="button" onClick={addWhatsappNumber} className="btn w-100 btn-success mt-2">
+                                                    + Add
+                                                </button>
+                                            </div>
+                                        )}
+                                    </div>
+                                ))}
+                            </div>
+
+                            {/* Emails */}
+                            <div id="emailDiv" className="mt-4">
+                                {emails.map((email) => (
+                                    <div className="row mt-3" key={email.id}>
+                                        <div className="col-12 col-md-10">
+                                            <input
+                                                type="email"
+                                                value={email.email}
+                                                onChange={(e) => handleEmailChange(email.id, e.target.value)}
+                                                className="form-control form-control-lg w-100"
+                                                placeholder="Email"
+                                            />
+                                        </div>
+                                        {email.id > 1 ? (
+                                            <div className="col-12 col-md-2 mt-2 mt-sm-0">
+                                                <button className="btn btn-danger btn-sm w-100" onClick={() => removeEmail(email.id)}>
+                                                    <i className="bi bi-trash"></i>
+                                                </button>
+                                            </div>
+                                        ) : (
+                                            <div className="col-12 col-md-2 mt-2 mt-sm-0">
+                                                <button type="button" onClick={addEmail} className="btn w-100 btn-success mt-2">
+                                                    + Add
+                                                </button>
+                                            </div>
+                                        )}
+                                    </div>
+                                ))}
+                            </div>
+
+                            <div className="mt-4">
+                                <input
+                                    type="text"
+                                    name="website"
+                                    placeholder="Website"
+                                    onChange={handleContactChange}
+                                    className="form-control form-control-lg"
+                                />
+                            </div>
+
+                            <div className="mt-4">
+                                <button className="btn btn-theme2 w-100 float-end" onClick={contactSubmitHandler}>
+                                    Submit
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="left-portion p-3 col-12 col-lg-7 row align-items-center">
+                        <link rel="preconnect" href="https://fonts.googleapis.com" />
+                        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+                        <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap" rel="stylesheet" />
+                        <style> {`
+                    .theme
+                    {
+                        background-color: #FC791A;
+                        color: white;
+                        border: none;
+                    }.service-design.active{
+                        background-color: #FC791A;
+                    }.address-section{
+                    background-color:#FC791A;
+                    }.address-logo i{
+                    color: #FC791A;
+                    }.cat-option{
+                        border-right: 1px dashed #FC791A;
+                    }.text-orange{
+                            color: #FC791A;
+                        }.dish-div:hover{
+                            background-color: #FC791A;
+                            color:white;
+                        }
+                        `}
+                        </style>
+                        <div className="p-3" style={{ border: '1px dashed black', borderRadius: '16px' }}>
+                            <p className='text-center'>
+                                This section contains items for the Contact Information.
+                            </p>
+                            <div className="mt-5 mb-5">
+                                <div className="container p-top">
+                                    <div className="col-12 address-section">
+                                        <div className="row">
+                                            <div className="col-12 col-lg-4 mb-3 mb-lg-0">
+                                                <div className="row align-items-center justify-content-start">
+                                                    <div className="col-auto address-logo">
+                                                        <i className="bi bi-geo-alt-fill"></i>
+                                                    </div>
+                                                    <div className="col">
+                                                        <span className="fs-13">Address</span>
+                                                        <p className='fs-16'>{address.buildingName}, {address.city},{address.landMark},{address.streetName}, {address.state},{address.pinCode}</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div className="col-12 col-lg-4 mb-3 mb-lg-0">
+                                                <div className="row align-items-center justify-content-start">
+                                                    <div className="col-auto address-logo">
+                                                        <i className="bi bi-envelope-fill"></i>
+                                                    </div>
+                                                    <div className="col">
+                                                        <span className="fs-13">Send Email</span>
+                                                        {emails.map((email, index) => (
+                                                            <p className='fs-16' key={index}>{email.email}</p>
+                                                        ))}
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div className="col-12 col-lg-4 mb-3 mb-lg-0">
+                                                <div className="row align-items-center justify-content-start">
+                                                    <div className="col-auto address-logo">
+                                                        <i className="bi bi-telephone"></i>
+                                                    </div>
+                                                    <div className="col">
+                                                        <span className="fs-13">Contact</span>
+                                                        {mobileNumbers.map((number,index) => (
+                                                            <p className='fs-16' key={index}>{number.number}</p>
+                                                        ))}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    );
-}
+        );
+    }
 
 
     function CategoryDetails() {
         const handleCategoryChange = (event, value) => {
             setFormData({
                 ...formData,
-                category: value ? value._id : '' 
+                category: value ? value._id : ''
             });
         };
-    
+
         return (
             <div className="h-100vh">
-            <div className="row h-100 justify-content-center">
-                <div className="d-none d-md-block left-portion col-md-5 h-100 p-0">
-                    <img src="/src/assets/images/add_category.jpg" alt="" className="w-100 h-100 object-fit-cover" />
-                </div>
+                <div className="row h-100 justify-content-center">
 
-                <div className="col-12 col-md-7 d-flex flex-column justify-content-between align-items-center right-portion h-100 p-5">
-                    <div className="col-12 text-start">
-                        <button className="btn btn-dark w-auto float-start" onClick={handlePrevStep}>
-                            <i className="bi bi-arrow-left"></i>
-                        </button>
-                    </div>
-                   <div className="col-12">
-                   <h1 className="fw-bold text-center text-md-start">Add <br /> Business Category</h1>
-                   </div>
 
-                    <div className="input-group mt-4 w-100 align-items-center">
-                        <span className="input-group-text bg-white p-3" style={{ flexBasis: '50px' }}>
-                            <i className="bi bi-search"></i>
-                        </span>
+                    <div className="col-12 col-md-7 d-flex flex-column justify-content-between align-items-center right-portion h-100 p-5">
+                        <div className="col-12 text-start">
+                            <button className="btn btn-dark w-auto float-start" onClick={handlePrevStep}>
+                                <i className="bi bi-arrow-left"></i>
+                            </button>
+                        </div>
+                        <div className="col-12">
+                            <h1 className="fw-bold text-center text-md-start">Add <br /> Business Category</h1>
+                        </div>
 
-                        <div style={{ flexGrow: 1, position: 'relative' }}>
-                            {loading ? (
-                                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
-                                    <CircularProgress size={24} />
-                                </div>
-                            ) : (
-                                <Autocomplete
-                                    disablePortal
-                                    options={categoryData}
-                                    getOptionLabel={(option) => option.name}
-                                    isOptionEqualToValue={(option, value) => option._id === value._id}
-                                    renderInput={(params) => <TextField {...params} label="Categories" variant="outlined" />}
-                                    onChange={handleCategoryChange}
-                                    name='category'
-                                    value={categoryData.find(category => category._id === formData.category) || null} // Controlled component
-                                />
-                            )}
+                        <div className="input-group mt-4 w-100 align-items-center">
+                            <span className="input-group-text bg-white p-3" style={{ flexBasis: '50px' }}>
+                                <i className="bi bi-search"></i>
+                            </span>
+
+                            <div style={{ flexGrow: 1, position: 'relative' }}>
+                                {loading ? (
+                                    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
+                                        <CircularProgress size={24} />
+                                    </div>
+                                ) : (
+                                    <Autocomplete
+                                        disablePortal
+                                        options={categoryData}
+                                        getOptionLabel={(option) => option.name}
+                                        isOptionEqualToValue={(option, value) => option._id === value._id}
+                                        renderInput={(params) => <TextField {...params} label="Categories" variant="outlined" />}
+                                        onChange={handleCategoryChange}
+                                        name='category'
+                                        value={categoryData.find(category => category._id === formData.category) || null} // Controlled component
+                                    />
+                                )}
+                            </div>
+                        </div>
+
+                        <div className="col-12 mt-5"></div>
+
+                        <div className="col-12 text-center mt-5">
+
+                            <button className="btn btn-theme2 w-100 text-white p-2" onClick={handleNextStep}>Save & Next</button>
                         </div>
                     </div>
-
-                    <div className="col-12 mt-5"></div>
-
-                    <div className="col-12 text-center mt-5">
-                        <button className="btn btn-success w-100 text-white p-2" onClick={handleNextStep}>Save & Next</button>
-                    </div>
+                    <div className="left-portion col-12 col-lg-5 h-100 p-3 row align-items-center">
+                    <div className="p-3" style={{ border: '1px dashed black', borderRadius: '16px' }}>
+                        <p className='text-center'>
+                            Please select the business category that best represents your company. This helps us tailor the services and features specifically to your industry needs.
+                        </p>
+                        </div>
+                        </div>
                 </div>
             </div>
-        </div>
         );
     }
-    
+
+
 
 
 
     function ServicesOffering() {
+        const [services, setServices] = useState([]);
         const [inputService, setInputService] = useState('');
-        const [error, setError] = useState(''); // State for error message
-    
         // Add service to formData.services
         const addService = (e) => {
             e.preventDefault();
@@ -795,25 +927,15 @@ export default function CreateBusiness() {
                 setInputService(''); // Clear input field
             }
         };
-    
+
         // Delete service from formData.services
         const deleteService = (indexToDelete) => {
             setFormData(prevFormData => ({
                 ...prevFormData,
-                services: prevFormData.services.filter((_, index) => index !== indexToDelete)
+                services: prevFormData.services.filter((service, index) => index !== indexToDelete)
             }));
         };
-    
-        // Handle next step with validation
-        const handleNextWithValidation = () => {
-            if (formData.services.length < 2) {
-                setError('Please add at least 2 services before proceeding.');
-            } else {
-                setError('');
-                handleNextStep();
-            }
-        };
-    
+
         return (
             <>
                 <div className="h-100vh">
@@ -823,13 +945,13 @@ export default function CreateBusiness() {
                         </div>
                         <div className="col-12 col-md-7 row align-items-end justify-content-center h-100 p-3 p-md-5 right-portion">
                             <div className="col-12 text-start">
-                                <button className="btn btn-dark w-auto float-start" onClick={handlePrevStep}>
-                                    <i className="bi bi-arrow-left"></i>
-                                </button>
+                                <button className="btn btn-dark w-auto float-start" onClick={handlePrevStep}><i className="bi bi-arrow-left"></i></button>
                             </div>
                             <div className="row justify-content-center mt-2">
                                 <div className="col-12 text-center text-md-start">
-                                    <h1 className="fw-bold">Add <br /> Service and Offering</h1>
+                                    <h1 className="fw-bold">
+                                        Add <br /> Service and Offering
+                                    </h1>
                                 </div>
                                 <div className="col-12 mt-4 mt-md-5">
                                     <div className="input-group">
@@ -858,7 +980,7 @@ export default function CreateBusiness() {
                                             </button>
                                         </div>
                                     </div>
-    
+
                                     <div className="col-12 mt-4">
                                         <div className="row gap-2 justify-content-center">
                                             {formData.services.map((service, index) => (
@@ -874,12 +996,10 @@ export default function CreateBusiness() {
                                             ))}
                                         </div>
                                     </div>
-    
-                                    {error && <p className="text-danger text-danger mt-3">{error}</p>}
                                 </div>
                             </div>
                             <div className="col-12 text-center mt-5 p-3 p-md-5">
-                                <button className="btn btn-success w-100 text-white p-2" onClick={handleNextWithValidation}>
+                                <button className="btn btn-theme2 w-100 text-white p-2" onClick={handleNextStep}>
                                     Save & Next
                                 </button>
                             </div>
@@ -889,6 +1009,7 @@ export default function CreateBusiness() {
             </>
         );
     }
+
 
     function BusinessTiming() {
         const [days, setDays] = useState([])
@@ -946,9 +1067,9 @@ export default function CreateBusiness() {
 
                         {/* Right Form Section */}
                         <div className="col-12 col-md-7 row align-items-end justify-content-center h-100 p-3 p-md-5 right-portion">
-                        <div className="col-12 text-start">
-                        <button className="btn btn-dark w-auto float-start" onClick={handlePrevStep}><i className="bi bi-arrow-left"></i></button>
-                        </div>
+                            <div className="col-12 text-start">
+                                <button className="btn btn-dark w-auto float-start" onClick={handlePrevStep}><i className="bi bi-arrow-left"></i></button>
+                            </div>
                             <div className='row  justify-content-center'>
                                 <div className='col-12 text-center text-md-start mt-5'>
                                     <h1 className='fw-bold'>Add <br /> Business Timing</h1>
@@ -1010,7 +1131,7 @@ export default function CreateBusiness() {
 
                             {/* Save & Next Button */}
                             <div className="col-12 text-center p-3 p-md-5">
-                                <button className="btn btn-success w-100 text-white p-2" onClick={handleSubmit}>
+                                <button className="btn btn-theme2 w-100 text-white p-2" onClick={handleSubmit}>
                                     Save & Next
                                 </button>
                             </div>
@@ -1044,9 +1165,9 @@ export default function CreateBusiness() {
 
                         {/* Right Form Section */}
                         <div className="col-12 col-md-7 row align-items-end justify-content-center h-100 p-3 p-md-5 right-portion">
-                        <div className="col-12 text-start">
-                        <button className="btn btn-dark w-auto float-start" onClick={handlePrevStep}><i className="bi bi-arrow-left"></i></button>
-                        </div>
+                            <div className="col-12 text-start">
+                                <button className="btn btn-dark w-auto float-start" onClick={handlePrevStep}><i className="bi bi-arrow-left"></i></button>
+                            </div>
                             <div className='row  justify-content-center'>
                                 <div className='col-12 text-center text-md-start'>
                                     <h1 className='fw-bold'>Add <br /> Business Description</h1>
@@ -1060,7 +1181,7 @@ export default function CreateBusiness() {
 
                             {/* Save & Next Button */}
                             <div className="col-12 text-center p-3 ">
-                                <button className="btn btn-success w-100 text-white p-2" onClick={handleDescSubmit}>
+                                <button className="btn btn-theme2 w-100 text-white p-2" onClick={handleDescSubmit}>
                                     Save & Next
                                 </button>
                             </div>
@@ -1084,7 +1205,7 @@ export default function CreateBusiness() {
             coverImage: "",
         });
         const [s3Files, setS3Files] = useState({});
-    
+
         // Generic File Change Handler
         const handleFileChange = (name, e, sectionSetter) => {
             const file = e.target.files[0];
@@ -1105,15 +1226,15 @@ export default function CreateBusiness() {
                         return;
                     }
                 };
-                reader.readAsDataURL(file); 
+                reader.readAsDataURL(file);
             }
         };
-    
+
         const handleInputChange = (e, sectionSetter) => {
             const { name, value } = e.target;
             sectionSetter(prevData => ({ ...prevData, [name]: value }));
         };
-    
+
         const handleLandingSubmit = () => {
             setFormData(prevFormData => ({
                 ...prevFormData,
@@ -1123,12 +1244,12 @@ export default function CreateBusiness() {
             }));
             handleNextStep();
         };
-    
+
         // Dynamic Upload Trigger
         const triggerFileUpload = (inputId) => {
             document.getElementById(inputId).click();
         };
-    
+
         return (
             <div className='h-100vh'>
                 <div className="row h-100 justify-content-center">
@@ -1136,7 +1257,7 @@ export default function CreateBusiness() {
                     <div className="d-none d-md-block left-portion p-0 col-md-5 h-100">
                         <img src="/src/assets/images/landing-page.jpg" alt="" className='w-100 h-100' />
                     </div>
-    
+
                     {/* Right Form Section */}
                     <div className="col-12 col-md-7 row align-items-end justify-content-center h-100 p-3 p-md-5 right-portion">
                         <div className="col-12 text-start">
@@ -1144,16 +1265,16 @@ export default function CreateBusiness() {
                                 <i className="bi bi-arrow-left"></i>
                             </button>
                         </div>
-    
+
                         <div className='row justify-content-center'>
                             <div className='col-12 text-center text-md-start mt-5'>
                                 <h1 className='fw-bold'>Add Details <br /> About Landing Page</h1>
                             </div>
-    
+
                             {/* Color Theme Section */}
                             <div className="col-12 p-3 p-md-5">
-                                <h5 className='fs-18 mb-4 p-1 text-center text-md-start text-dark fw-bold mt-3'>Color Theme</h5>
-                               
+                                <u><h5 className='fs-18 mb-4 p-1 text-center text-md-start text-dark fw-bold mt-3'>Color Theme</h5></u>
+
                                 <div className="col-6 col-md-3">
                                     <label htmlFor="">Choose Color :</label>
                                     <input
@@ -1164,10 +1285,10 @@ export default function CreateBusiness() {
                                         onChange={(e) => setTheme(e.target.value)}
                                     />
                                 </div>
-    
+
                                 {/* Landing Page Hero Details */}
-                                <div className="col-12 text-center mt-5 mb-3">
-                                <h5 className='fs-18 mb-2 p-1 text-center text-md-start text-dark fw-bold mt-3'>Add Landing Page Banner</h5>
+                                <div className="col-12 text-center">
+                                    <u><h5 className='fs-18 mb-2 p-1 text-center text-md-start text-dark fw-bold mt-3'>Add Landing Page Banner</h5></u>
                                 </div>
                                 <label htmlFor="">Title :</label>
                                 <input
@@ -1186,7 +1307,7 @@ export default function CreateBusiness() {
                                     value={landingPageHero.description}
                                     onChange={(e) => handleInputChange(e, setLandingPageHero)}
                                 />
-    
+
                                 {/* Hero Image Upload */}
                                 <input type="file" hidden id='LandingHeroImageInput' onChange={(e) => handleFileChange("landingPageHeroImage", e, setLandingPageHero)} />
                                 <div onClick={() => triggerFileUpload('LandingHeroImageInput')} className="p-2 mt-2 mb-3 add-logo-div">
@@ -1197,10 +1318,10 @@ export default function CreateBusiness() {
                                         </div>
                                     </div>
                                 </div>
-    
+
                                 {/* Welcome Part */}
-                                <div className="col-12 text-center mt-5 mb-3">
-                                <h5 className='fs-18 mb-2 p-1 text-center text-md-start text-dark fw-bold mt-3'>Add Welcome Part</h5>
+                                <div className="col-12 text-center">
+                                    <u><h5 className='fs-18 mb-2 p-1 text-center text-md-start text-dark fw-bold mt-3'>Add Welcome Part</h5></u>
                                 </div>
                                 <label htmlFor=""> Title :</label>
                                 <input
@@ -1219,7 +1340,7 @@ export default function CreateBusiness() {
                                     value={welcomePart.description}
                                     onChange={(e) => handleInputChange(e, setWelcomePart)}
                                 />
-    
+
                                 {/* Welcome Image Upload */}
                                 <input type="file" hidden id='WelcomeImageInput' onChange={(e) => handleFileChange("welcomePartImage", e, setWelcomePart)} />
                                 <div onClick={() => triggerFileUpload('WelcomeImageInput')} className="p-2 mt-2 mb-3 add-logo-div">
@@ -1230,9 +1351,9 @@ export default function CreateBusiness() {
                                         </div>
                                     </div>
                                 </div>
-    
+
                                 <div className='col-12 mt-4 text-center'>
-                                    <button className='btn btn-success w-100' onClick={handleLandingSubmit}>
+                                    <button className='btn btn-theme2 w-100' onClick={handleLandingSubmit}>
                                         Save & Next
                                     </button>
                                 </div>
@@ -1243,16 +1364,16 @@ export default function CreateBusiness() {
             </div>
         );
     }
-    
+
     function CreateServices() {
         const [specialService, setSpecialService] = useState({
             title: "",
             description: "",
             data: [{ title: "", description: "", image: "" }],
         });
-    
+
         const [services, setServices] = useState([{ title: "", description: "" }]);
-    
+
         // Handle change for individual special service fields
         const handleProductChange = (index, e) => {
             const { name, value } = e.target;
@@ -1262,7 +1383,7 @@ export default function CreateBusiness() {
                 return { ...prevData, data: updatedData };
             });
         };
-    
+
         // Handle change for services
         const handleServiceChange = (index, e) => {
             const { name, value } = e.target;
@@ -1272,7 +1393,7 @@ export default function CreateBusiness() {
                 return updatedServices;
             });
         };
-    
+
         // Handle file input change for special service images
         const handleFileChange = (index, e) => {
             const file = e.target.files[0];
@@ -1285,30 +1406,30 @@ export default function CreateBusiness() {
                         accessLink = preReq.accessLink;
                         setSpecialService((prevData) => {
                             const updatedData = [...prevData.data];
-                            updatedData[index].image = accessLink; 
+                            updatedData[index].image = accessLink;
                             return { ...prevData, data: updatedData };
                         });
                     } else {
                         console.error('Access link not found in response.');
                         return;
                     }
-                   
+
                 };
                 reader.readAsDataURL(file);
             }
         };
-    
+
         // Trigger file upload for specific image input fields
         const uploadImage = (index) => {
             document.querySelectorAll('.productImageInput')[index].click();
         };
-    
+
         // Handle general input changes
         const handleChange = (e) => {
             const { name, value } = e.target;
             setSpecialService((prevData) => ({ ...prevData, [name]: value }));
         };
-    
+
         // Submit function to store data
         const handleServiceSubmit = () => {
             setFormData((prevFormData) => ({
@@ -1318,7 +1439,7 @@ export default function CreateBusiness() {
             }));
             handleNextStep();
         };
-    
+
         // Function to remove a special service
         const removeSpecialService = (index) => {
             if (specialService.data.length > 1) {
@@ -1329,7 +1450,7 @@ export default function CreateBusiness() {
                 });
             }
         };
-    
+
         // Function to remove a service
         const removeService = (index) => {
             if (services.length > 1) {
@@ -1340,7 +1461,7 @@ export default function CreateBusiness() {
                 });
             }
         };
-    
+
         return (
             <>
                 <div className='h-100vh'>
@@ -1349,7 +1470,7 @@ export default function CreateBusiness() {
                         <div className="d-none d-md-block left-portion p-0 col-md-5 h-100">
                             <img src="/src/assets/images/landing-page.jpg" alt="" className='w-100 h-100' />
                         </div>
-    
+
                         {/* Right Form Section */}
                         <div className="col-12 col-md-7 row align-items-end justify-content-center h-100 p-3 p-md-5 right-portion">
                             <div className="col-12 text-start">
@@ -1357,15 +1478,15 @@ export default function CreateBusiness() {
                                     <i className="bi bi-arrow-left"></i>
                                 </button>
                             </div>
-    
+
                             <div className='row justify-content-center'>
                                 <div className="col-12 mt-5 text-center text-md-start">
                                     <h1 className="fw-bold">Add Service Details</h1>
                                 </div>
-    
+
                                 <div className="col-12">
                                     <div className="col-12 text-center">
-                                       <u> <h5 className='fs-18 mb-4 p-1 text-center text-md-start text-dark fw-bold mt-3'>Add Special Service Content</h5></u>
+                                        <u> <h5 className='fs-18 mb-4 p-1 text-center text-md-start text-dark fw-bold mt-3'>Add Special Service Content</h5></u>
                                     </div>
                                     <div className="col-12 text-center">
                                         <input
@@ -1384,18 +1505,18 @@ export default function CreateBusiness() {
                                             placeholder="Description"
                                         ></textarea>
                                     </div>
-    
+
                                     {/* Special Services List */}
                                     <div className="col-12 text-center">
                                         <u><h5 className='fs-18 mb-4 p-1 text-center text-md-start text-dark fw-bold mt-3'>Add Special Services</h5></u>
                                     </div>
-    
+
                                     {specialService.data.map((p, index) => (
                                         <div key={index} className="mt-2">
-                                            {index !=0 ? (
-                                                
-                                            <div className="divider"></div>
-                                            ):''}
+                                            {index != 0 ? (
+
+                                                <div className="divider"></div>
+                                            ) : ''}
                                             <input
                                                 type="text"
                                                 name="title"
@@ -1430,11 +1551,11 @@ export default function CreateBusiness() {
                                                         </div>
                                                     </div>
                                                 </div>
-                                              
+
                                             </div>
                                             {index > 0 && ( // Show remove button only if not the first element
                                                 <div className="col-12 text-center">
-                                                        <button
+                                                    <button
                                                         type="button"
                                                         onClick={() => removeSpecialService(index)}
                                                         className="btn btn-danger mt-2 w-100 mb-2"
@@ -1442,10 +1563,10 @@ export default function CreateBusiness() {
                                                         Remove
                                                     </button>
                                                 </div>
-                                                )}
+                                            )}
                                         </div>
                                     ))}
-    
+
                                     <a
                                         href="#"
                                         onClick={() =>
@@ -1458,12 +1579,12 @@ export default function CreateBusiness() {
                                     >
                                         + Add More Special Service
                                     </a>
-    
+
                                     {/* Services List */}
                                     <div className="col-12 text-center">
                                         <h5 className='fs-18 mb-4 p-1 text-center text-md-start text-dark fw-bold mt-3'>Add Service Details</h5>
                                     </div>
-    
+
                                     {services.map((service, index) => (
                                         <div key={index} className="row align-items-center">
                                             <input
@@ -1492,7 +1613,7 @@ export default function CreateBusiness() {
                                             )}
                                         </div>
                                     ))}
-    
+
                                     <a
                                         href="#"
                                         onClick={() => setServices((prev) => [...prev, { title: "", description: "" }])}
@@ -1502,9 +1623,9 @@ export default function CreateBusiness() {
                                     </a>
                                 </div>
                             </div>
-    
+
                             <div className='col-12 mt-4 text-center'>
-                                <button className='btn btn-success w-100 text-center' onClick={handleServiceSubmit}>Save & Next</button>
+                                <button className='btn btn-theme2 w-100 text-center' onClick={handleServiceSubmit}>Save & Next</button>
                             </div>
                         </div>
                     </div>
@@ -1522,9 +1643,9 @@ export default function CreateBusiness() {
             image: "",
             price: "",
         }]);
-    
+
         const [s3Files, setS3Files] = useState({});
-    
+
         const handleFileChange = (index, e) => {
             const file = e.target.files[0];
             if (file) {
@@ -1535,22 +1656,22 @@ export default function CreateBusiness() {
                     if (preReq && preReq.accessLink) {
                         accessLink = preReq.accessLink;
                         const updatedProducts = [...productSection];
-                        updatedProducts[index].image = accessLink; 
+                        updatedProducts[index].image = accessLink;
                         setProductSection(updatedProducts);
                     } else {
                         console.error('Access link not found in response.');
                         return;
                     }
-                    
+
                 };
                 reader.readAsDataURL(file);
             }
         };
-    
+
         const uploadImage = (index) => {
             document.querySelectorAll('.menuImageInput')[index].click();
         };
-    
+
         const handleProductSubmit = () => {
             // Assuming formData is part of your state or props and is updated elsewhere
             setFormData((prevFormData) => ({
@@ -1559,7 +1680,7 @@ export default function CreateBusiness() {
             }));
             handleNextStep();
         };
-    
+
         return (
             <>
                 <div className='h-100vh'>
@@ -1568,7 +1689,7 @@ export default function CreateBusiness() {
                         <div className="d-none d-md-block left-portion p-0 col-md-5 h-100">
                             <img src="/src/assets/images/landing-page.jpg" alt="" className='w-100 h-100' />
                         </div>
-    
+
                         {/* Right Form Section */}
                         <div className="col-12 col-md-7 row align-items-end justify-content-center h-100 p-3 p-md-5 right-portion">
                             <div className="col-12 text-start">
@@ -1578,11 +1699,11 @@ export default function CreateBusiness() {
                                 <div className="col-12 text-center text-md-start mt-3">
                                     <h1 className="fw-bold">Add Product Details</h1>
                                 </div>
-    
+
                                 <div className="col-12 ">
-                                <div className="col-12 text-center">
-                                <u><h5 className='fs-18 mb-4 p-1 text-center text-md-start text-dark fw-bold mt-3'>Add Products</h5></u>
-                                </div>
+                                    <div className="col-12 text-center">
+                                        <u><h5 className='fs-18 mb-4 p-1 text-center text-md-start text-dark fw-bold mt-3'>Add Products</h5></u>
+                                    </div>
                                     {productSection.map((item, index) => (
                                         <div key={index} className='row align-items-center'>
                                             <input
@@ -1608,7 +1729,7 @@ export default function CreateBusiness() {
                                                     setProductSection(updatedProducts);
                                                 }}
                                             />
-    
+
                                             <div className="col-12 col-md-3 mb-3">
                                                 <input
                                                     type="file"
@@ -1629,7 +1750,7 @@ export default function CreateBusiness() {
                                                     </div>
                                                 </div>
                                             </div>
-    
+
                                             <div className="mt-2">
                                                 <input
                                                     type="number"
@@ -1655,9 +1776,9 @@ export default function CreateBusiness() {
                                     </a>
                                 </div>
                             </div>
-    
+
                             <div className='col-12 mt-4 text-center'>
-                                <button className='btn btn-success w-100 text-center' onClick={handleProductSubmit}>Save & Next</button>
+                                <button className='btn btn-theme2 w-100 text-center' onClick={handleProductSubmit}>Save & Next</button>
                             </div>
                         </div>
                     </div>
@@ -1665,7 +1786,7 @@ export default function CreateBusiness() {
             </>
         );
     }
-    
+
 
     function SeoDetails() {
         const [socialMediaLinks, setSocialMediaLinks] = useState([
@@ -1733,7 +1854,7 @@ export default function CreateBusiness() {
         };
 
         return (
-                <div className='h-100vh'>
+            <div className='h-100vh'>
                 <div className="row h-100 justify-content-center">
                     {/* Left Image Section - Hidden on small screens */}
                     <div className="d-none d-md-block left-portion p-0 col-md-5 h-100">
@@ -1742,8 +1863,8 @@ export default function CreateBusiness() {
 
                     {/* Right Form Section */}
                     <div className="col-12 col-md-7 row align-items-end justify-content-center h-100 p-3 p-md-5 right-portion">
-                    <div className="col-12 text-start">
-                        <button className="btn btn-dark w-auto float-start" onClick={handlePrevStep}><i className="bi bi-arrow-left"></i></button>
+                        <div className="col-12 text-start">
+                            <button className="btn btn-dark w-auto float-start" onClick={handlePrevStep}><i className="bi bi-arrow-left"></i></button>
                         </div>
                         <div className='row justify-content-center'>
                             <div className='col-12 text-center text-md-start mt-4'>
@@ -1785,20 +1906,20 @@ export default function CreateBusiness() {
                                                 onChange={(e) => handleTagChange(index, e.target.value)}
                                             />
                                             {index > 0 ? (
-                                            <button
-                                                className="btn btn-danger"
-                                                onClick={() => removeTag(index)}
-                                                type="button"
-                                            >
-                                                Remove
-                                            </button>
-                                            ):
-                                            <button
-                                                className="btn btn-success" type='button'
-                                                onClick={addTag}
-                                            >
-                                                Add More
-                                            </button>
+                                                <button
+                                                    className="btn btn-danger"
+                                                    onClick={() => removeTag(index)}
+                                                    type="button"
+                                                >
+                                                    Remove
+                                                </button>
+                                            ) :
+                                                <button
+                                                    className="btn btn-success" type='button'
+                                                    onClick={addTag}
+                                                >
+                                                    Add More
+                                                </button>
                                             }
                                         </div>
                                     ))}
@@ -1822,7 +1943,7 @@ export default function CreateBusiness() {
 
                         {/* Save & Next Button */}
                         <div className="col-12 text-center p-3 p-md-5">
-                            <button className="btn btn-success w-100 text-white p-2" onClick={handleSeoSubmit}>
+                            <button className="btn btn-theme2 w-100 text-white p-2" onClick={handleSeoSubmit}>
                                 Save & Next
                             </button>
                         </div>
@@ -1836,7 +1957,7 @@ export default function CreateBusiness() {
         const [images, setImages] = useState([{ file: null, fileType: '', fileName: '' }]);
         // const [formData, setFormData] = useState({});
         const [s3PreRequest, setS3PreRequest] = useState([]);
-    
+
         const handleFileChange = (index, event) => {
             const file = event.target.files[0];
             if (file) {
@@ -1845,23 +1966,23 @@ export default function CreateBusiness() {
                 setImages(updatedImages);
             }
         };
-    
+
         const addImageInput = () => {
             setImages((prevImages) => [...prevImages, { file: null, fileType: '', fileName: '' }]);
         };
-    
+
         const handleAddImageClick = (index) => {
             document.getElementById(`file-input-${index}`).click();
         };
-    
+
         const removeImage = (index) => {
             const updatedImages = images.filter((_, i) => i !== index);
             setImages(updatedImages);
         };
-    
+
         const handleGallerySubmit = async () => {
             const imageFiles = images.map((image) => image?.file);
-    
+
             if (imageFiles.length > 0) {
                 setLoading(true);
                 const requestBody = {
@@ -1870,39 +1991,39 @@ export default function CreateBusiness() {
                         file_type: file.type
                     }))
                 };
-    
+
                 try {
                     const url = 'https://businessbazaarserver.auxxweb.in/api/v1/s3url';
-    
+
                     // Fetch pre-signed S3 URLs
                     const response = await axios.post(url, requestBody, {
                         headers: {
                             'Content-Type': 'application/json',
                         },
                     });
-    
+
                     const s3Urls = response.data.data;
-    
+
                     // Upload each file to its respective S3 URL
                     await Promise.all(
                         s3Urls.map(async (data, index) => {
                             const { url } = data;
                             const file = imageFiles[index];
-    
+
                             await axios.put(url, file, {
                                 headers: { 'Content-Type': file.type },
                             });
                         })
                     );
-    
+
                     // Collect access links and store them in formData
                     const accessLinks = s3Urls.map(s3Data => s3Data.accessLink);
-    
+
                     setFormData(prevFormData => ({
                         ...prevFormData,
                         gallery: accessLinks,
                     }));
-                    handleNextStep(); 
+                    handleNextStep();
                 } catch (error) {
                     console.error('Error fetching S3 URLs or uploading files:', error);
                 } finally {
@@ -1912,7 +2033,7 @@ export default function CreateBusiness() {
                 handleNextStep(); // Proceed to the next step if there are no files to upload
             }
         };
-    
+
         return (
             <div className='h-100vh'>
                 <div className="row h-100 justify-content-center">
@@ -1920,7 +2041,7 @@ export default function CreateBusiness() {
                     <div className="d-none d-md-block left-portion p-0 col-md-5 h-100">
                         <img src="/src/assets/images/landing-page.jpg" alt="Landing Page" className='w-100 h-100' />
                     </div>
-    
+
                     {/* Right Form Section */}
                     <div className="col-12 col-md-7 row align-items-end justify-content-center h-100 p-3 p-md-5 right-portion">
                         <div className="col-12 text-start">
@@ -1928,12 +2049,12 @@ export default function CreateBusiness() {
                                 <i className="bi bi-arrow-left"></i>
                             </button>
                         </div>
-    
+
                         <div className='row justify-content-center'>
                             <div className='col-12 text-center text-md-start'>
-                                <h1 className='fw-bold'>Add Gallery</h1>
+                                <h1 className='fw-bold'>Add Images</h1>
                             </div>
-    
+
                             {/* Image Upload Fields */}
                             <div className="col-12 p-md-5">
                                 <div className="row mb-3 gap-2">
@@ -1960,7 +2081,7 @@ export default function CreateBusiness() {
                                                     )}
                                                 </div>
                                             </div>
-    
+
                                             {/* Remove Button for all except the first image */}
                                             {index > 0 && (
                                                 <button
@@ -1980,7 +2101,7 @@ export default function CreateBusiness() {
                                 </div>
                             </div>
                         </div>
-    
+
                         {/* Save & Next Button */}
                         <div className="col-12 text-center p-3 p-md-5">
                             {loading ? (
@@ -1988,7 +2109,7 @@ export default function CreateBusiness() {
                                     <span className="sr-only"></span>
                                 </div>
                             ) : (
-                                <button className="btn btn-success w-100 text-white p-2" onClick={handleGallerySubmit}>
+                                <button className="btn btn-theme2 w-100 text-white p-2" onClick={handleGallerySubmit}>
                                     Save & Next
                                 </button>
                             )}
@@ -1998,147 +2119,155 @@ export default function CreateBusiness() {
             </div>
         );
     }
-    
-function MoreVideos() {
-    const [videos, setVideos] = useState([{ file: null, fileType: '' }]);
-    const [s3PreRequest, setS3PreRequest] = useState([]);
 
-    const handleFileChange = (index, event) => {
-        const file = event.target.files[0];
-        if (file) {
-            const newVideos = [...videos];
-            newVideos[index] = { file, fileType: file.type };
-            setVideos(newVideos);
-        }
-    };
+    function MoreVideos() {
+        const [videos, setVideos] = useState([{ file: null, fileType: '' }]);
+        const [s3PreRequest, setS3PreRequest] = useState([]);
 
-    const addVideoInput = () => {
-        setVideos((prevVideos) => [...prevVideos, { file: null, fileType: '' }]);
-    };
+        const handleFileChange = (index, event) => {
+            const file = event.target.files[0];
+            if (file) {
+                const newVideos = [...videos];
+                newVideos[index] = { file, fileType: file.type };
+                setVideos(newVideos);
+            }
+        };
 
-    const removeVideoInput = (index) => {
-        const updatedVideos = videos.filter((_, i) => i !== index);
-        setVideos(updatedVideos);
-    };
+        const addVideoInput = () => {
+            setVideos((prevVideos) => [...prevVideos, { file: null, fileType: '' }]);
+        };
 
-    const handleAddVideoClick = (index) => {
-        document.getElementById(`file-input-${index}`).click();
-    };
+        const removeVideoInput = (index) => {
+            const updatedVideos = videos.filter((_, i) => i !== index);
+            setVideos(updatedVideos);
+        };
 
-    const handleGallerySubmit = async () => {
-        const videoFiles = videos.filter(video => video.file).map(video => video.file);
-        
-        // If there are no video files, skip uploading and move to the next step
-        if (videoFiles.length === 0) {
-            handleNextStep();
-            return;
-        }
+        const handleAddVideoClick = (index) => {
+            document.getElementById(`file-input-${index}`).click();
+        };
 
-        try {
-            const requestBody = {
-                files: videoFiles.map(file => ({
-                    position: 'Videos',
-                    file_type: file.type
-                }))
-            };
-            const url = 'https://businessbazaarserver.auxxweb.in/api/v1/s3url';
-            const response = await axios.post(url, requestBody, {
-                headers: { 'Content-Type': 'application/json' },
-            });
+        const handleGallerySubmit = async () => {
+            const videoFiles = videos.map(video => video.file);
+            const videoFilesTypes = videos.map(video => video.file?.type || '');
 
-            const s3Urls = response.data.data;
-            setS3PreRequest(s3Urls.map(url => url.url));
-
-            await Promise.all(
-                s3Urls.map(async (data, index) => {
-                    const { url } = data;
-                    const file = videoFiles[index];
-                    await axios.put(url, file, {
-                        headers: { 'Content-Type': file.type },
+            if (videoFilesTypes.length > 0) {
+                try {
+                    const requestBody = {
+                        files: videoFiles.map(file => ({
+                            position: 'Videos',
+                            file_type: file.type
+                        }))
+                    };
+                    const url = 'https://businessbazaarserver.auxxweb.in/api/v1/s3url';
+                    const response = await axios.post(url, requestBody, {
+                        headers: { 'Content-Type': 'application/json' },
                     });
-                })
-            );
-            const accessLinks = s3Urls.map(s3Data => s3Data.accessLink);
 
-            setFormData(prevFormData => ({
-                ...prevFormData,
-                videos: accessLinks,
-            }));
+                    const s3Urls = response.data.data;
+                    setS3PreRequest(s3Urls.map(url => url.url));
 
-            handleNextStep();
-        } catch (error) {
-            console.error('Error uploading videos:', error);
-        }
-    };
+                    await Promise.all(
+                        s3Urls.map(async (data, index) => {
+                            const { url } = data;
+                            const file = videoFiles[index];
+                            await axios.put(url, file, {
+                                headers: { 'Content-Type': file.type },
+                            });
+                        })
+                    );
+                    // Collect access links and store them in formData
+                    const accessLinks = s3Urls.map(s3Data => s3Data.accessLink);
 
-    return (
-        <div className='h-100vh'>
-            <div className="row h-100 justify-content-center">
-                <div className="d-none d-md-block left-portion p-0 col-md-5 h-100">
-                    <img src="/src/assets/images/landing-page.jpg" alt="Landing Page" className='w-100 h-100' />
-                </div>
+                    setFormData(prevFormData => ({
+                        ...prevFormData,
+                        videos: accessLinks,
+                    }));
 
-                <div className="col-12 col-md-7 row align-items-end justify-content-center h-100 p-3 p-md-5 right-portion">
-                    <div className="col-12 text-start">
-                        <button className="btn btn-dark w-auto float-start" onClick={handlePrevStep}><i className="bi bi-arrow-left"></i></button>
+                    handleNextStep();
+                } catch (error) {
+                    console.error('Error uploading videos:', error);
+                }
+            } else {
+                handleNextStep();
+            }
+        };
+
+        return (
+            <div className='h-100vh'>
+                <div className="row h-100 justify-content-center">
+                    <div className="d-none d-md-block left-portion p-0 col-md-5 h-100">
+                        <img src="/src/assets/images/landing-page.jpg" alt="Landing Page" className='w-100 h-100' />
                     </div>
-                    <div className='row justify-content-center'>
-                        <div className='col-12 text-center text-md-start mt-2'>
-                            <h1 className='fw-bold'>Add Video (Optional)</h1>
-                        </div>
 
-                        <div className="col-12">
-                            <div className="row mb-3">
-                                {videos.map((video, index) => (
-                                    <div className="col-6 col-lg-3 mb-3" key={index}>
-                                        <input
-                                            type="file"
-                                            hidden
-                                            id={`file-input-${index}`}
-                                            accept="video/*"
-                                            onChange={(e) => handleFileChange(index, e)}
-                                        />
-                                        <div className="p-2 add-logo-div" onClick={() => handleAddVideoClick(index)}>
-                                            <div className="text-center">
-                                                {video.file ? (
-                                                    <video width="100%" controls className='video-preview'>
-                                                        <source src={URL.createObjectURL(video.file)} type={video.file.type} />
-                                                        Your browser does not support the video tag.
-                                                    </video>
-                                                ) : (
-                                                    <img src="/src/assets/images/add-video.png" width="50" alt="Add Video" />
-                                                )}
-                                                <div className="col-12">
-                                                    <span>Add Video</span>
+                    <div className="col-12 col-md-7 row align-items-end justify-content-center h-100 p-3 p-md-5 right-portion">
+                        <div className="col-12 text-start">
+                            <button className="btn btn-dark w-auto float-start" onClick={handlePrevStep}><i className="bi bi-arrow-left"></i></button>
+                        </div>
+                        <div className='row justify-content-center'>
+                            <div className='col-12 text-center text-md-start mt-2'>
+                                <h1 className='fw-bold'>Add Videos</h1>
+                            </div>
+
+                            {/* Video Upload Fields */}
+                            <div className="col-12">
+                                <div className="row mb-3">
+                                    {videos.map((video, index) => (
+                                        <div className="col-6 col-lg-3 mb-3" key={index}>
+                                            <input
+                                                type="file"
+                                                hidden
+                                                id={`file-input-${index}`}
+                                                accept="video/*"
+                                                onChange={(e) => handleFileChange(index, e)}
+                                            />
+                                            <div className="p-2 add-logo-div" onClick={() => handleAddVideoClick(index)}>
+                                                <div className="text-center">
+                                                    {video.file ? (
+                                                        <video width="100%" controls className='video-preview'>
+                                                            <source src={URL.createObjectURL(video.file)} type={video.file.type} />
+                                                            Your browser does not support the video tag.
+                                                        </video>
+                                                    ) : (
+                                                        <img src="/src/assets/images/add-video.png" width="50" alt="Add Video" />
+                                                    )}
+                                                    <div className="col-12">
+                                                        <span>Add Video</span>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
 
-                                        {index > 0 && (
-                                            <div className="text-center mt-2">
-                                                <button className="btn btn-danger btn-sm" onClick={() => removeVideoInput(index)}>
-                                                    Remove
-                                                </button>
-                                            </div>
-                                        )}
-                                    </div>
-                                ))}
+                                            {/* Remove Button */}
+                                            {index > 0 && (
+                                                <div className="text-center mt-2">
+                                                    <button className="btn btn-danger btn-sm" onClick={() => removeVideoInput(index)}>
+                                                        Remove
+                                                    </button>
+                                                </div>
+                                            )}
+                                        </div>
+                                    ))}
+                                </div>
+                                <div className="col-12 mb-3 text-center">
+                                    <button className="btn w-100 btn btn-success" onClick={addVideoInput}>
+                                        + Add another video
+                                    </button>
+                                </div>
                             </div>
                         </div>
-                    </div>
 
-                    <div className="col-12 text-center p-3 p-md-5">
-                        <button className="btn btn-success w-100 text-white p-2" onClick={handleGallerySubmit}>
-                            Save & Next
-                        </button>
+                        {/* Save & Next Button */}
+                        <div className="col-12 text-center p-3 p-md-5">
+                            <button className="btn btn-theme2 w-100 text-white p-2" onClick={handleGallerySubmit}>
+                                Save & Next
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    );
-}
-    
-    
+        );
+    }
+
+
 
     function PreviewTemplates() {
         const [currentSlide, setCurrentSlide] = useState(0);
@@ -2148,13 +2277,13 @@ function MoreVideos() {
         const [colorTheme, setColorTheme] = useState('')
         const [visible, setVisible] = useState(false);
         const [review, setReview] = useState([{
-            rating:'',
-            name:'',
-            description:'',
+            rating: '',
+            name: '',
+            description: '',
         }]);
         const [closeDays, setCloseDays] = useState([]);
         const allDays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-    
+
         const handleInputChange = (e) => {
             const { name, value } = e.target;
             setReview((prevState) => ({
@@ -2162,26 +2291,26 @@ function MoreVideos() {
                 [name]: value,
             }));
         };
-    
+
         useEffect(() => {
             const fetchData = async () => {
                 setBusinessData(formData)
-               
+
                 setColorTheme(formData.theme)
                 setLoading(false);
-                const closed = allDays.filter(day => 
+                const closed = allDays.filter(day =>
                     !formData.businessTiming.workingDays.map(d => d.toLowerCase()).includes(day)
                 );
                 setCloseDays(closed);
-                
+
             }
-    
-    
+
+
             fetchData()
-    
+
         }, [id])
-    
-        const settings4 = {
+
+        const settings = {
             dots: false,
             infinite: true,
             autoplay: true,
@@ -2191,7 +2320,7 @@ function MoreVideos() {
             slidesToShow: 2, // Number of dishes to show
             // mobileFirst: true,
             slidesToScroll: 1,
-    
+
             responsive: [
                 {
                     breakpoint: 1024,
@@ -2280,8 +2409,8 @@ function MoreVideos() {
                 },
             ]
         };
-    
-    
+
+
         const settings3 = {
             dots: false,
             infinite: true,
@@ -2330,47 +2459,24 @@ function MoreVideos() {
                 },
             ]
         };
-    
-    
-        const gallery = {
-            dots: true,
-            infinite: true,
-            speed: 500,
-            slidesToShow: 3,
-            slidesToScroll: 1,
-            responsive: [
-                {
-                    breakpoint: 1024,
-                    settings: {
-                        slidesToShow: 2,
-                        slidesToScroll: 1,
-                    }
-                },
-                {
-                    breakpoint: 600,
-                    settings: {
-                        slidesToShow: 1,
-                        slidesToScroll: 1,
-                    }
-                }
-            ]
-        };
+
+
         if (loading) {
             return <div className='h-100vh text-center '>
                 <div className='row h-100 justify-content-center align-items-center'>
-    
+
                     <div className='col-3 '>Loading...</div>
                 </div>
             </div>;
         }
-    
+
         // If there's no business data (e.g., fetch failed), show an error message
         if (!businessData) {
             return <div>Error loading business data.</div>;
         }
-    
-    
-    
+
+
+
         return (
             <>
                 <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -2407,13 +2513,6 @@ function MoreVideos() {
                         }.dish-div:hover{
                             background-color: ${colorTheme};
                             color:white;
-                        }.product-section{
-                    padding:20px;
-                    border:1px solid ${colorTheme};
-                    border-radius:16px;
-                        }.slick-dots .slick-active button{
-                            background-color: ${colorTheme};
-                            border-radius: 16px;
                         }
                         `}
                 </style>
@@ -2424,9 +2523,9 @@ function MoreVideos() {
                             <img src={businessData.logo} alt="" />
                             <span className="ms-2">{businessData.businessName}</span>
                         </Navbar.Brand>
-    
+
                         <Navbar.Toggle aria-controls="basic-navbar-nav" style={{ color: 'black' }} />
-    
+
                         <Navbar.Collapse id="basic-navbar-nav">
                             <Nav className="ms-auto w-100 justify-content-evenly jcc">
                                 <NavLink href="#menu" className='text-black text-center text-lg-start  text-decoration-none fs-14' style={{ color: 'black' }}>
@@ -2469,7 +2568,7 @@ function MoreVideos() {
                                     <img src="/src/assets/images/baner-image2.png" alt="" />
                                 </div>
                             </div>
-    
+
                             {/* Text Content */}
                             <div className="col-12 col-lg-6">
                                 <div className="row align-items-center">
@@ -2484,16 +2583,14 @@ function MoreVideos() {
                                         </p>
                                     </div>
                                     <div className="mt-3 col-12">
-                                    <div className="row">
-                                        <div className="col-6 col-lg-3 mb-2">
-                                            <NavLink
-                                                to='#about' className="btn btn-dark text-white radius-theme box-shadow w-100 p-1" style={{ backgroundColor: '#212529' }}>View More</NavLink>
+                                        <div className="row">
+                                            <div className="col-6 col-lg-2 mb-2">
+                                                <button className="btn btn-dark text-white radius-theme box-shadow w-100">Menu</button>
+                                            </div>
+                                            <div className="col-6 col-lg-3 mb-2">
+                                                <button className="btn btn-dark text-white radius-theme box-shadow theme w-100">Book a table</button>
+                                            </div>
                                         </div>
-                                        <div className="col-6 col-lg-3 mb-2">
-                                            <NavLink
-                                                to='#service' className="btn btn-dark text-white radius-theme box-shadow theme w-100 p-1">Services</NavLink>
-                                        </div>
-                                    </div>
                                     </div>
                                     <div className="mt-5 col-12 social-media gap-3">
                                         <a href={businessData.socialMediaLinks[0].link} target='_blank' className="contact-banner text-dark">
@@ -2508,7 +2605,7 @@ function MoreVideos() {
                                     </div>
                                 </div>
                             </div>
-    
+
                             {/* Right Image for Desktop View */}
                             <div className="col-12 col-lg-6 text-end d-none d-lg-block">
                                 <img src={businessData.landingPageHero.coverImage} alt="" className='banner-image' />
@@ -2519,7 +2616,7 @@ function MoreVideos() {
                         </div>
                     </div>
                 </section>
-    
+
                 <div className="mt-5 mb-5">
                     <div className="container p-top">
                         <div className="col-12 address-section">
@@ -2535,7 +2632,7 @@ function MoreVideos() {
                                         </div>
                                     </div>
                                 </div>
-    
+
                                 <div className="col-12 col-lg-4 mb-3 mb-lg-0">
                                     <div className="row align-items-center justify-content-start">
                                         <div className="col-auto address-logo">
@@ -2544,12 +2641,12 @@ function MoreVideos() {
                                         <div className="col">
                                             <span className="fs-13">Send Email</span>
                                             {businessData.contactDetails.emails.map((email, index) => (
-    <p className='fs-16' key={index}>{email.number}</p>
-))}
+                                                <p className='fs-16' key={index}>{email.number}</p>
+                                            ))}
                                         </div>
                                     </div>
                                 </div>
-    
+
                                 <div className="col-12 col-lg-4 mb-3 mb-lg-0">
                                     <div className="row align-items-center justify-content-start">
                                         <div className="col-auto address-logo">
@@ -2558,8 +2655,8 @@ function MoreVideos() {
                                         <div className="col">
                                             <span className="fs-13">Contact</span>
                                             {businessData.contactDetails.mobileNumbers.map((mobile, index) => (
-    <p className='fs-16' key={index}>{mobile.number}</p>
-))}
+                                                <p className='fs-16' key={index}>{mobile.number}</p>
+                                            ))}
                                         </div>
                                     </div>
                                 </div>
@@ -2567,8 +2664,8 @@ function MoreVideos() {
                         </div>
                     </div>
                 </div>
-    
-    
+
+
                 <section className=' h-auto' style={{ backgroundColor: "#F3F3F4" }} id='about'>
                     <div className="container p-top">
                         <div className="row mt-5 align-items-center mb-5">
@@ -2578,7 +2675,7 @@ function MoreVideos() {
                                     className="img-fluid"
                                     alt=""
                                 />
-    
+
                             </div>
                             <div className="col-12 col-lg-6">
                                 <div className="col-12 mb-3">
@@ -2589,13 +2686,23 @@ function MoreVideos() {
                                         {businessData.welcomePart.description}
                                     </p>
                                 </div>
+                                <div className="mt-3 col-12">
+                                    <div className="row">
+                                        <div className="col-6 col-lg-2">
+                                            <button className="btn btn-dark text-white radius-theme box-shadow w-100">Menu</button>
+                                        </div>
+                                        <div className="col-6 col-lg-3">
+                                            <button className="btn btn-dark text-white radius-theme box-shadow theme w-100">Book a table</button>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-    
-    
+
+
                     </div>
                 </section>
-    
+
                 <section className="h-auto" style={{ backgroundColor: "#F3F3F4" }}>
                     <div className="container p-top">
                         <div className="col-12 mb-5">
@@ -2604,18 +2711,18 @@ function MoreVideos() {
                                     <h1 className="text-center text-dark fw-bold david-font fw-bold banner-title fs-45">{businessData.specialServices.title}</h1>
                                 </div>
                                 <div className="row justify-content-center">
-                                    <div className="col-6 mb-1">
-                                        <p className='text-secondary text-center'>
+                                    <div className="col-6 mb-5">
+                                        <p className='text-secondary text-center mb-5'>
                                             {businessData.specialServices.description}
                                         </p>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div className="col-12">
-    
-                            <div className="col-12 mb-5 row david-font">
-                                <Slider {...settings4}>
+                        <div className="col-12 mt-5">
+
+                            <div className="col-12 mb-5 david-font">
+                                <Slider {...settings}>
                                     {businessData.specialServices.data.map((dish, index) => (
                                         <div key={index} className="dish-div col-12 text-center  p-3">
                                             <div className="col-12 position-relative text-center" style={{ bottom: "60px" }}>
@@ -2631,7 +2738,7 @@ function MoreVideos() {
                                     ))}
                                 </Slider>
                             </div>
-    
+
                         </div>
                     </div>
                 </section>
@@ -2640,18 +2747,18 @@ function MoreVideos() {
                         <div className="col-12 mb-5">
                             <div className="row justify-content-center">
                                 <div className="col-6 text-center">
-                                    <h1 className="text-dark fw-bold david-font banner-title fs-45">Products</h1>
+                                    <h1 className="text-dark fw-bold david-font banner-title fs-45">Menu</h1>
                                 </div>
                             </div>
                         </div>
-    
-    
+
+
                         <div className="mt-5 david-font">
                             <div className="mb-5">
                                 <div className="row mb-3">
                                     {businessData.productSection.map((item, index) => (
                                         <div className="col-12 col-lg-6 mt-3" key={index}>
-                                            <div className="row  product-section align-items-center">
+                                            <div className="row">
                                                 <div className="col-2">
                                                     <img src={item.image} alt="" className='w-100' />
                                                 </div>
@@ -2670,8 +2777,8 @@ function MoreVideos() {
                         </div>
                     </div>
                 </section>
-    
-    
+
+
                 <section className="h-auto david-font" style={{ backgroundColor: "#F3F3F4" }}>
                     <div className="container p-top">
                         <div className="col-12 mt-5 text-center text-lg-start">
@@ -2687,25 +2794,26 @@ function MoreVideos() {
                                         <div className="col-12 mt-5">
                                             <p className='text-center'>{service.description}</p>
                                         </div>
-                                        
+
                                     </div>
                                 ))}
                             </Slider>
                         </div>
-    
+
                         <div className="col-12 mb-5" id='gallery'>
-                        <div className="col-12 mb-5 mt-5">
-                            <h1 className="fw-bold text-center">Gallery</h1>
+                            <div className="col-12 mb-5 mt-5">
+                                <h1 className="fw-bold text-center">Gallery</h1>
+                            </div>
+                            <div className="row justify-content-center mb-5">
+                                {businessData.gallery.map(image => (
+                                    <div className="col-12 col-lg-4 mt-4">
+                                        <img src={image} alt="" className='w-100 gallery-img' />
+                                    </div>
+                                ))}
+
+                            </div>
                         </div>
-                        <Slider {...gallery} className="gallery-slider">
-                            {businessData?.gallery?.map((image, index) => (
-                                <div key={index} className="p-2">
-                                    <img src={image} alt="" className='w-100 gallery-img' />
-                                </div>
-                            ))}
-                        </Slider>
-                    </div>
-    
+
                     </div>
                 </section>
                 <section className='bg-white d-none'>
@@ -2731,15 +2839,15 @@ function MoreVideos() {
                                     </div>
                                 </div>
                             </div>
-    
+
                             <div className="col-12 col-lg-6">
                                 <div className="col-12 text-center">
                                     <img src="/src/assets/images/chef.png" alt="" className='chef-div img-fluid w-100' />
-    
+
                                 </div>
                             </div>
-    
-    
+
+
                         </div>
                     </div>
                 </section>
@@ -2753,26 +2861,26 @@ function MoreVideos() {
                                 At Our Restaurant, we strive to provide the best dining experience possible. Our loyal customers have been satisfied with our culinary skills, service, and overall ambiance. Our positive feedback has helped us continuously improve our dining experience. If you're a loyal customer, we'd love to hear from you!
                             </p>
                         </div>
-    
+
                         <div className="mt-5">
                             <Slider {...settings3}>
                                 {businessData.testimonial.reviews.map((testimonial, index) => (
                                     <div key={index} className="bg-white col-12 p-3 mt-2 test-div-bottom">
                                         <div className="col-12 text-center test-button-img-div">
-                                            <img src="/src/assets/images/user.png" alt={testimonial.name} className="img-fluid" />
+                                            <img src={testimonial.image} alt={testimonial.name} className="img-fluid" />
                                         </div>
-    
+
                                         <div className='text-warning text-center mt-0 m-0'>
                                             {[...Array(Math.floor(testimonial.rating))].map((star, i) => (
                                                 <i key={i} className="bi bi-star-fill"></i>
                                             ))}
                                             {testimonial.rating % 1 !== 0 && <i className="bi bi-star-half"></i>}
                                         </div>
-    
+
                                         <div className="col-12 mt-3">
                                             <p>{testimonial.review}</p>
                                         </div>
-    
+
                                         <div className="col-12 text-center mb-5">
                                             <span className='fw-bold david-font'>{testimonial.name}</span>
                                         </div>
@@ -2783,57 +2891,57 @@ function MoreVideos() {
                         <div className="col-12">
                             <div className="col-12 text-center mb-3">
                                 <button className="btn btn-dark text-white radius-theme box-shadow theme mt-5" onClick={() => setVisible(true)} >Write Review</button>
-    
+
                             </div>
                         </div>
                     </div>
                 </section>
                 <Dialog
-                header="Write a Review"
-                visible={visible}
-                onHide={() => { if (!visible) return; setVisible(false); }}
-                style={{ width: '50vw' }}
-                breakpoints={{ '960px': '75vw', '641px': '100vw' }}
-            >
-                <div className="container">
-                    <div className="p-3 justify-content-center">
-                        <Rating
-                            value={review.rating}  
-                            onChange={(e) => setReview({ ...review, rating: e.value })} 
-                            cancel={false}
-                        />
-                    </div>
-                    <div className="col-12">
-                        <InputText
-                            keyfilter="text"
-                            placeholder="Full Name"
-                            className='w-100'
-                            value={review.name}  
-                            name="name"  
-                            onChange={handleInputChange} 
-                        />
-                    </div>
-    
-                    {/* Description Input Field */}
-                    <div className="col-12 mt-3">
-                        <div className="card flex justify-content-center">
-                            <InputTextarea
-                                value={review.description}  // Bind the description from state
-                                onChange={handleInputChange}  // Update description in state
-                                rows={5}
-                                cols={30}
-                                name="description"  // Important: use `name` for targeting in handleInputChange
-                                placeholder="Write your review here..."
+                    header="Write a Review"
+                    visible={visible}
+                    onHide={() => { if (!visible) return; setVisible(false); }}
+                    style={{ width: '50vw' }}
+                    breakpoints={{ '960px': '75vw', '641px': '100vw' }}
+                >
+                    <div className="container">
+                        <div className="p-3 justify-content-center">
+                            <Rating
+                                value={review.rating}
+                                onChange={(e) => setReview({ ...review, rating: e.value })}
+                                cancel={false}
                             />
                         </div>
-                    </div>
-                    <div className="col-12 mt-3">
-                        <div className="row">
-                            <button className="btn-theme2 btn theme radius">Submit Review</button>
+                        <div className="col-12">
+                            <InputText
+                                keyfilter="text"
+                                placeholder="Full Name"
+                                className='w-100'
+                                value={review.name}
+                                name="name"
+                                onChange={handleInputChange}
+                            />
+                        </div>
+
+                        {/* Description Input Field */}
+                        <div className="col-12 mt-3">
+                            <div className="card flex justify-content-center">
+                                <InputTextarea
+                                    value={review.description}  // Bind the description from state
+                                    onChange={handleInputChange}  // Update description in state
+                                    rows={5}
+                                    cols={30}
+                                    name="description"  // Important: use `name` for targeting in handleInputChange
+                                    placeholder="Write your review here..."
+                                />
+                            </div>
+                        </div>
+                        <div className="col-12 mt-3">
+                            <div className="row">
+                                <button className="btn-theme2 btn theme radius">Submit Review</button>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </Dialog>
+                </Dialog>
                 <section className="h-auto david-font" id='contact'>
                     <div className="container p-top">
                         <div className="col-12 newsletter position-relative">
@@ -2853,7 +2961,7 @@ function MoreVideos() {
                                         </div>
                                     </div>
                                 </div>
-    
+
                                 <div className='d-block d-lg-none'>
                                     <h2 className="fs-16 fw-bold text-white">
                                         Create Your Own Business <br />
@@ -2872,8 +2980,8 @@ function MoreVideos() {
                         </div>
                     </div>
                 </section>
-    
-    
+
+
                 <footer className='h-auto'>
                     <div className="container pjs  p-top">
                         <div className="mt-5">
@@ -2891,7 +2999,7 @@ function MoreVideos() {
                                         </p>
                                     </div>
                                 </div>
-    
+
                                 <div className="col-12 col-lg-4">
                                     <div className="col-12 mt-5">
                                         <div className="col-12 mt-3 mb-3 text-center text-lg-start">
@@ -2911,13 +3019,13 @@ function MoreVideos() {
                                         </div>
                                     </div>
                                 </div>
-    
+
                                 <div className="col-12 col-lg-4">
                                     <div className="col-12 mt-5">
                                         <div className="col-12 mt-3 mb-3 text-center text-lg-start">
                                             <a href="#" className=" fs-14 text-decoration-none text-orange">Follow Us</a>
                                         </div>
-    
+
                                         <div className="mt-5 col-12 row gap-3 jcc-md text-center text-lg-start">
                                             <a href={businessData.socialMediaLinks[0].link} className="contact-banner text-orange text-center text-lg-start">
                                                 <i className="bi bi-facebook text-orange"></i>
@@ -2930,10 +3038,10 @@ function MoreVideos() {
                                             </a>
                                             {/* <hr style={{width:"fit-content",opacity: 0.15,}}></hr> */}
                                         </div>
-    
+
                                     </div>
                                 </div>
-    
+
                                 <div className="col-12">
                                     <div className="row">
                                         <div className="col-lg-4">
@@ -2951,30 +3059,30 @@ function MoreVideos() {
                                                 </div>
                                             </div>
                                         </div>
-    
-    
+
+
                                         <div className="col-lg-4">
                                             <div className="col-12 mt-5 text-center text-lg-start">
                                                 <div className="mt-3" style={{ color: "#A4B3CB" }}>
-                                                   {closeDays.map((day,index) =>(
-                                                    <p>{day}</p>
-                                                   ))}
+                                                    {closeDays.map((day, index) => (
+                                                        <p>{day}</p>
+                                                    ))}
                                                 </div>
                                                 <div className="mt-3" style={{ color: "#A4B3CB" }}>
                                                     <span>CLOSED</span>
                                                 </div>
                                             </div>
                                         </div>
-    
+
                                     </div>
                                 </div>
-    
+
                                 <div className="col-12">
                                     <div className="row">
                                         <div className="col-12 col-lg-8 mt-5 text-center text-lg-start" style={{ color: "#A4B3CB" }}>
                                             <span>© 2024 Business Bazaar. All Right Reserved</span>
                                         </div>
-    
+
                                         <div className="col-12 col-lg-6  text-center text-lg-start mb-5 mt-5" style={{ color: "#A4B3CB" }}>
                                             <div className="row">
                                                 <div className="col-12 col-lg-6">Terms of Service</div>
@@ -2983,7 +3091,7 @@ function MoreVideos() {
                                         </div>
                                     </div>
                                 </div>
-    
+
                             </div>
                         </div>
                     </div>
@@ -3001,7 +3109,7 @@ function MoreVideos() {
             }));
             handleNextStep();
         }
-    
+
         return (
             <>
                 <div className="h-100vh">
@@ -3068,11 +3176,11 @@ function MoreVideos() {
             </>
         );
     }
-    
+
 
     const Razorpay = () => {
         const [isScriptLoaded, setScriptLoaded] = useState(false);
-        const [businessId,setBusinessId] = useState('');
+        const [businessId, setBusinessId] = useState('');
         const loadRazorpayScript = () => {
             return new Promise((resolve) => {
                 const script = document.createElement('script');
@@ -3107,39 +3215,39 @@ function MoreVideos() {
                 description: 'Test Transaction',
                 image: formData.logo, // Dummy logo URL
                 handler: async function (response) {
-                    
-                        var paymentDetails = {
-                         "plan": formData.selectedPlan,
-                         "paymentId": response.razorpay_payment_id,
-                         "date": "2023-10-06T08:30:00.000Z",
-                         "paymentStatus": "success"
-                     }
-                        try {
-                            const response = await axios.post(
-                                'https://businessbazaarserver.auxxweb.in/api/v1/payment', 
-                                paymentDetails, 
-                                {
-                                    headers: {
-                                        'Content-Type': 'application/json',
-                                        'Authorization': `Bearer ${id}`,  // Sending businessId as bearer token
-                                    },
-                                }
-                            );
-                            console.log(response)
-                            if (response.status !== 200) {
-                                throw new Error(`HTTP error! Status: ${response.status}`);
-                            }
 
-                            const data = response.data;
-                            if (data.success) {
-                                return data; 
-                            } else {
-                                console.error('Failed to create business details:', data.message || 'Unknown error');
-                                throw new Error(data.message || 'Failed to create business details');
+                    var paymentDetails = {
+                        "plan": formData.selectedPlan,
+                        "paymentId": response.razorpay_payment_id,
+                        "date": "2023-10-06T08:30:00.000Z",
+                        "paymentStatus": "success"
+                    }
+                    try {
+                        const response = await axios.post(
+                            'https://businessbazaarserver.auxxweb.in/api/v1/payment',
+                            paymentDetails,
+                            {
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'Authorization': `Bearer ${id}`,  // Sending businessId as bearer token
+                                },
                             }
-                        } catch (error) {
-                            console.error("Error occurred while fetching business site details:", error.message);
-                            throw error; 
+                        );
+                        console.log(response)
+                        if (response.status !== 200) {
+                            throw new Error(`HTTP error! Status: ${response.status}`);
+                        }
+
+                        const data = response.data;
+                        if (data.success) {
+                            return data;
+                        } else {
+                            console.error('Failed to create business details:', data.message || 'Unknown error');
+                            throw new Error(data.message || 'Failed to create business details');
+                        }
+                    } catch (error) {
+                        console.error("Error occurred while fetching business site details:", error.message);
+                        throw error;
                     };
                 },
                 prefill: {
@@ -3159,7 +3267,7 @@ function MoreVideos() {
             rzp.open();
         };
         useEffect(() => {
-            const submitData =async () => {
+            const submitData = async () => {
                 const res = await CreateBusinessDetails(formData)
                 const id = res.data._id || res.data.data?._id;
                 setBusinessId(id)
@@ -3174,7 +3282,7 @@ function MoreVideos() {
 
     return (
         <>
-            {step === 1 && <AuthenticationDetails/>}
+            {step === 1 && <AuthenticationDetails />}
             {step === 2 && <BusinessDetails />}
             {step === 3 && <ContactDetails />}
             {step === 4 && <CategoryDetails />}
