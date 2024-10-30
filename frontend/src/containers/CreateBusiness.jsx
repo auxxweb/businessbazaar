@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react';
+/* eslint-disable react/prop-types */
+import { useEffect, useState } from 'react';
 import PhoneInput from 'react-phone-input-2';
 import 'react-phone-input-2/lib/style.css';
 import TextField from '@mui/material/TextField';
@@ -17,10 +18,6 @@ import { Rating } from 'primereact/rating';
 import { InputText } from "primereact/inputtext";
 import { InputTextarea } from "primereact/inputtextarea";
 import CircularProgress from '@mui/material/CircularProgress'; 
-
-
-
-
 
 export default function CreateBusiness() {
     const [step, setStep] = useState(1);
@@ -76,6 +73,8 @@ export default function CreateBusiness() {
         },
         description: '',
         theme: '',
+        secondaryTheme: '',
+        
         landingPageHero: {
             title: '',
             description: '',
@@ -106,8 +105,7 @@ export default function CreateBusiness() {
         },
         selectedPlan: ''
     });
-
-
+    
     const preRequestFun = async (file, position) => {
         const url = 'https://businessbazaarserver.auxxweb.in/api/v1/s3url';
         const requestBody = {
@@ -137,13 +135,6 @@ export default function CreateBusiness() {
             throw new Error('File upload failed');
         }
     };
-    
-    
-
-        
-    
-                
-
 
     useEffect(() => {
         const fetchData = async () => {
@@ -163,7 +154,7 @@ export default function CreateBusiness() {
 
 
 
-    function AuthenticationDetails() {
+    function AuthenticationDetails({formData}) {
         const [authData, setAuthData] = useState({
             email: '',
             password: '',
@@ -171,6 +162,14 @@ export default function CreateBusiness() {
         const { email, password } = authData;
         const [passwordError, setPasswordError] = useState('');
         const [emailError, setEmailError] = useState('');
+
+        useEffect(()=>{
+            setAuthData({
+                email:formData.email,
+                password:formData.password
+            })
+
+        },[formData])
     
         // Handles input change for both email and password
         function handleInputChange(e) {
@@ -270,9 +269,9 @@ export default function CreateBusiness() {
                 </div>
             </div>
         );
-    }   
+    }  
 
-    function BusinessDetails() {
+    function BusinessDetails({formData}) {
         const [logo, setLogo] = useState('');
         const [businessName, setBusinessName] = useState('');
         const [address, setAddress] = useState({
@@ -289,6 +288,13 @@ export default function CreateBusiness() {
         });
         const [isLoading, setIsLoading] = useState(false);
         const [error, setError] = useState('');
+
+        useEffect(()=>{
+            setLogo(formData?.logo)
+            setBusinessName(formData?.businessName)
+            setAddress(formData?.address)
+            setLocation(formData?.location)
+        },[formData])
     
         // Update address object
         const handleAddressChange = (event) => {
@@ -483,7 +489,7 @@ export default function CreateBusiness() {
         );
     }
 
-    function ContactDetails() {
+    function ContactDetails({formData}) {
         const [mobileNumbers, setMobileNumbers] = useState([{ id: 1, number: '', countryCode: 'us' }]);
         const [whatsappNumbers, setWhatsappNumbers] = useState([{ id: 1, number: '', countryCode: 'us' }]);
         const [emails, setEmails] = useState([{ id: 1, email: '' }]);
@@ -498,6 +504,24 @@ export default function CreateBusiness() {
         });
     
         const [errors, setErrors] = useState({});
+
+        useEffect(()=>{
+            if(formData?.contactDetails?.mobileNumbers)
+            setMobileNumbers(formData?.contactDetails?.mobileNumbers)
+
+            if(formData?.contactDetails?.whatsappNumbers)
+            setWhatsappNumbers(formData?.contactDetails?.whatsappNumbers)
+
+            if(formData?.contactDetails?.emails){
+                setEmails(formData?.contactDetails?.emails)
+            }
+
+            if(Object.keys(formData?.contactDetails)?.length)
+            setNewFormData({
+                contactDetails: formData?.contactDetails
+            })
+
+        },[formData])
     
         const handleContactChange = (event) => {
             const { name, value } = event.target;
@@ -926,6 +950,12 @@ export default function CreateBusiness() {
 
         const allDays = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
+        useEffect(()=>{
+            setDays(formData?.businessTiming?.workingDays)
+            setOpenTime(formData?.businessTiming?.openTime?.open)
+            setCloseTime(formData?.businessTiming?.openTime?.close)
+        },[])
+
         const toggleDay = (day) => {
             if (days.includes(day)) {
                 setDays(days.filter(d => d !== day));
@@ -1055,6 +1085,10 @@ export default function CreateBusiness() {
 
     function BusinessDesc() {
         const [description, setDescription] = useState('')
+
+        useEffect(()=>{
+            setDescription(formData?.description)
+        },[])
         const handleDescSubmit = () => {
             setFormData(prevFormData => ({
                 ...prevFormData,
@@ -1105,10 +1139,19 @@ export default function CreateBusiness() {
 
     function LandingPageDetails() {
         const [theme, setTheme] = useState('#6AA646');
+        const [secondaryTheme, setSecondaryTheme] = useState('#A8FF75');
+
         const [landingPageHero, setLandingPageHero] = useState({ title: "", description: "", coverImage: "" });
         const [welcomePart, setWelcomePart] = useState({ title: "", description: "", coverImage: "" });
         const [errors, setErrors] = useState({});
         const [loading, setLoading] = useState(false); // Loader state
+
+        useEffect(()=>{
+            setTheme(formData?.theme ? formData.theme : '#6AA646')
+            setSecondaryTheme(formData?.secondaryTheme ? formData.secondaryTheme : '#A8FF75')
+            setLandingPageHero(formData?.landingPageHero)
+            setWelcomePart(formData?.welcomePart)
+        },[])
     
         // Generic File Change Handler with Loader
         const handleFileChange = (name, e, sectionSetter) => {
@@ -1158,6 +1201,7 @@ export default function CreateBusiness() {
                     ...prevFormData,
                     landingPageHero,
                     theme,
+                    secondaryTheme,
                     welcomePart,
                 }));
                 handleNextStep();
@@ -1191,16 +1235,29 @@ export default function CreateBusiness() {
     
                             {/* Color Theme Section */}
                             <div className="col-12 p-3 p-md-5">
-                                <h5 className='fs-18 mb-4 p-1 text-center text-md-start text-dark fw-bold mt-3'>Color Theme</h5>
-                                <div className="col-6 col-md-3">
-                                    <label>Choose Color :</label>
-                                    <input
-                                        type="color"
-                                        name="color"
-                                        className='form-control form-control-lg'
-                                        value={theme}
-                                        onChange={(e) => setTheme(e.target.value)}
-                                    />
+                                <h5 className='fs-18 mb-4 p-1 text-start text-md-start text-dark fw-bold mt-3'>Color Theme</h5>
+                                <div className="col-6 col-md-3 d-flex w-100 gap-5">
+                                    <div>
+                                        <label>Choose Primary Color :</label>
+                                        <input
+                                            type="color"
+                                            name="color"
+                                            className='form-control form-control-lg'
+                                            value={theme}
+                                            onChange={(e) => setTheme(e.target.value)}
+                                        />
+                                    </div>
+
+                                    <div>
+                                        <label>Choose Secondary Color :</label>
+                                        <input
+                                            type="color"
+                                            name="color"
+                                            className='form-control form-control-lg'
+                                            value={secondaryTheme}
+                                            onChange={(e) => setSecondaryTheme(e.target.value)}
+                                        />                                    
+                                    </div>                                    
                                 </div>
     
                                 {/* Landing Page Hero Details */}
@@ -1296,6 +1353,13 @@ export default function CreateBusiness() {
         });
         const [services, setServices] = useState([{ title: "", description: "", image: "" }]);
         const [isLoading, setIsLoading] = useState({ specialService: {}, service: {} });
+
+        useEffect(()=>{
+            setSpecialService(formData?.specialServices)
+            setServices(formData?.service)
+        },[])
+
+        const [errors, setErrors] = useState([])
     
         // Handle change for individual special service fields
         const handleProductChange = (index, e) => {
@@ -1363,11 +1427,11 @@ export default function CreateBusiness() {
         // Submit function to store data
         const handleServiceSubmit = () => {
             if (!specialService.title || !specialService.description || !specialService.data[0].title) {
-                alert("Please fill in all required fields for Special Service.");
+                setErrors("Please fill in all required fields for Special Service")
                 return;
             }
             if (!services[0].title || !services[0].description) {
-                alert("Please fill in all required fields for Services.");
+                setErrors("Please fill in all required fields for Services.")
                 return;
             }
             setFormData((prevFormData) => ({
@@ -1428,6 +1492,7 @@ export default function CreateBusiness() {
                                         <input
                                             type="text"
                                             name="title"
+                                            value={specialService.title}
                                             onChange={handleChange}
                                             placeholder="Title"
                                             className="form-control form-control-lg mb-3"
@@ -1437,6 +1502,7 @@ export default function CreateBusiness() {
                                     <div className="col-12 text-center">
                                         <textarea
                                             name="description"
+                                            value={specialService.description}
                                             className="form-control form-control-lg"
                                             onChange={handleChange}
                                             placeholder="Description"
@@ -1580,6 +1646,7 @@ export default function CreateBusiness() {
                                     + Add More Service
                                 </a>
                                 </div>
+                                {errors && <p className="text-danger text-danger mt-3">{errors.toString()}</p>}
                             </div>
     
                             {/* Save & Next Button */}
@@ -3265,9 +3332,9 @@ function MoreVideos() {
 
     return (
         <>
-            {step === 1 && <AuthenticationDetails/>}
-            {step === 2 && <BusinessDetails />}
-            {step === 3 && <ContactDetails />}
+            {step === 1 && <AuthenticationDetails formData={formData}/>}
+            {step === 2 && <BusinessDetails formData={formData}/>}
+            {step === 3 && <ContactDetails formData={formData}/>}
             {step === 4 && <CategoryDetails />}
             {step === 5 && <ServicesOffering />}
             {step === 6 && <BusinessTiming />}
