@@ -80,17 +80,8 @@ export default function Business() {
                 <div className="container">
                     <div className="col-12">
                         <div className="row justify-content-center">
-                            <div className="col-6 col-md-2 mt-4">
-                                <select name="" id="" className='form-control'>
-                                    <option value="">Sort by</option>
-                                    <option value="price-asc">Price: Low to High</option>
-                                    <option value="price-desc">Price: High to Low</option>
-                                    <option value="rating">Highest Rated</option>
-                                    <option value="newest">Newest First</option>
-                                </select>
-                            </div>
 
-                            <div className="col-6 col-md-2 mt-4">
+                            <div className="col-6 col-md-4 mt-4">
                                 <select name="" id="" className='form-control'>
                                     <option value="">Ratings</option>
                                     <option value="5-star">5 Stars</option>
@@ -101,16 +92,6 @@ export default function Business() {
                                 </select>
                             </div>
 
-                            <div className="col-6 col-md-2 mt-4">
-                                <select name="" id="" className='form-control'>
-                                    <option value="">Amenities</option>
-                                    <option value="wifi">Free WiFi</option>
-                                    <option value="parking">Parking</option>
-                                    <option value="pool">Swimming Pool</option>
-                                    <option value="gym">Gym</option>
-                                    <option value="spa">Spa</option>
-                                </select>
-                            </div>
                         </div>
                     </div>
 
@@ -140,8 +121,41 @@ export default function Business() {
                                             <div className="col-11 text-center text-md-start">
                                                 <h2 style={{ fontSize: '28px' }}>Salad House</h2>
                                             </div>
-                                            <div className="col-1 text-end">
-                                                <i className="bi bi-heart fs-20"></i>
+                                        </div>
+                                    </div>
+                                    <div className="col-12 text-center text-md-start">
+                                        <span className='p-1 bg-success text-white pe-2 ps-2'>4.5 <i className="bi bi-star ms-2 text-white"></i></span>
+                                        <span className="ms-2 fs-12">3.5k reviews</span>
+                                    </div>
+                                    <div className="col-12 mt-3 text-center text-md-start">
+                                        <h3 className='fs-16'>
+                                            <i className="bi bi-crosshair"></i>
+                                            <span className='ms-1 fs-15'>No.12/3, Calicut South Beach, Kozhikode</span>
+                                        </h3>
+                                    </div>
+                                    <div className="col-12 mt-3 mb-5">
+                                        <div className="business-feature text-center text-md-start">
+                                            <span>Dine In</span>
+                                            <span className='ms-2'>Indian</span>
+                                            <span className='ms-2'>Delivery</span>
+                                        </div>
+                                    </div>
+                                    <div className="col-12 mt-3 text-center text-md-start">
+                                        <button className="btn" style={{ backgroundColor: "#228ae2", color: "white" }}>Contact Us</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </Link>
+                        <Link to='/template' className="text-decoration-none text-dark col-12 b-theme location-card mt-4">
+                            <div className="row p-3">
+                                <div className="col-12 col-md-4 mt-2 p-0 text-center">
+                                    <img src="/src/assets/images/business-view.png" alt="Business View" className='w-100 br-theme' />
+                                </div>
+                                <div className="col-12 col-md-8 p-3">
+                                    <div className="col-12 mb-2 mt-2">
+                                        <div className="row">
+                                            <div className="col-11 text-center text-md-start">
+                                                <h2 style={{ fontSize: '28px' }}>Salad House</h2>
                                             </div>
                                         </div>
                                     </div>
@@ -179,8 +193,41 @@ export default function Business() {
                                             <div className="col-11 text-center text-md-start">
                                                 <h2 style={{ fontSize: '28px' }}>Salad House</h2>
                                             </div>
-                                            <div className="col-1 text-end">
-                                                <i className="bi bi-heart fs-20"></i>
+                                        </div>
+                                    </div>
+                                    <div className="col-12 text-center text-md-start">
+                                        <span className='p-1 bg-success text-white pe-2 ps-2'>4.5 <i className="bi bi-star ms-2 text-white"></i></span>
+                                        <span className="ms-2 fs-12">3.5k reviews</span>
+                                    </div>
+                                    <div className="col-12 mt-3 text-center text-md-start">
+                                        <h3 className='fs-16'>
+                                            <i className="bi bi-crosshair"></i>
+                                            <span className='ms-1 fs-15'>No.12/3, Calicut South Beach, Kozhikode</span>
+                                        </h3>
+                                    </div>
+                                    <div className="col-12 mt-3 mb-5">
+                                        <div className="business-feature text-center text-md-start">
+                                            <span>Dine In</span>
+                                            <span className='ms-2'>Indian</span>
+                                            <span className='ms-2'>Delivery</span>
+                                        </div>
+                                    </div>
+                                    <div className="col-12 mt-3 text-center text-md-start">
+                                        <button className="btn" style={{ backgroundColor: "#228ae2", color: "white" }}>Contact Us</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </Link>
+                        <Link to='/template' className="text-decoration-none text-dark col-12 b-theme location-card mt-4">
+                            <div className="row p-3">
+                                <div className="col-12 col-md-4 mt-2 p-0 text-center">
+                                    <img src="/src/assets/images/business-view.png" alt="Business View" className='w-100 br-theme' />
+                                </div>
+                                <div className="col-12 col-md-8 p-3">
+                                    <div className="col-12 mb-2 mt-2">
+                                        <div className="row">
+                                            <div className="col-11 text-center text-md-start">
+                                                <h2 style={{ fontSize: '28px' }}>Salad House</h2>
                                             </div>
                                         </div>
                                     </div>
@@ -218,9 +265,6 @@ export default function Business() {
                                             <div className="col-11 text-center text-md-start">
                                                 <h2 style={{ fontSize: '28px' }}>Salad House</h2>
                                             </div>
-                                            <div className="col-1 text-end">
-                                                <i className="bi bi-heart fs-20"></i>
-                                            </div>
                                         </div>
                                     </div>
                                     <div className="col-12 text-center text-md-start">
@@ -257,9 +301,6 @@ export default function Business() {
                                             <div className="col-11 text-center text-md-start">
                                                 <h2 style={{ fontSize: '28px' }}>Salad House</h2>
                                             </div>
-                                            <div className="col-1 text-end">
-                                                <i className="bi bi-heart fs-20"></i>
-                                            </div>
                                         </div>
                                     </div>
                                     <div className="col-12 text-center text-md-start">
@@ -295,87 +336,6 @@ export default function Business() {
                                         <div className="row">
                                             <div className="col-11 text-center text-md-start">
                                                 <h2 style={{ fontSize: '28px' }}>Salad House</h2>
-                                            </div>
-                                            <div className="col-1 text-end">
-                                                <i className="bi bi-heart fs-20"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="col-12 text-center text-md-start">
-                                        <span className='p-1 bg-success text-white pe-2 ps-2'>4.5 <i className="bi bi-star ms-2 text-white"></i></span>
-                                        <span className="ms-2 fs-12">3.5k reviews</span>
-                                    </div>
-                                    <div className="col-12 mt-3 text-center text-md-start">
-                                        <h3 className='fs-16'>
-                                            <i className="bi bi-crosshair"></i>
-                                            <span className='ms-1 fs-15'>No.12/3, Calicut South Beach, Kozhikode</span>
-                                        </h3>
-                                    </div>
-                                    <div className="col-12 mt-3 mb-5">
-                                        <div className="business-feature text-center text-md-start">
-                                            <span>Dine In</span>
-                                            <span className='ms-2'>Indian</span>
-                                            <span className='ms-2'>Delivery</span>
-                                        </div>
-                                    </div>
-                                    <div className="col-12 mt-3 text-center text-md-start">
-                                        <button className="btn" style={{ backgroundColor: "#228ae2", color: "white" }}>Contact Us</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </Link>
-                        <Link to='/template' className="text-decoration-none text-dark col-12 b-theme location-card mt-4">
-                            <div className="row p-3">
-                                <div className="col-12 col-md-4 mt-2 p-0 text-center">
-                                    <img src="/src/assets/images/business-view.png" alt="Business View" className='w-100 br-theme' />
-                                </div>
-                                <div className="col-12 col-md-8 p-3">
-                                    <div className="col-12 mb-2 mt-2">
-                                        <div className="row">
-                                            <div className="col-11 text-center text-md-start">
-                                                <h2 style={{ fontSize: '28px' }}>Salad House</h2>
-                                            </div>
-                                            <div className="col-1 text-end">
-                                                <i className="bi bi-heart fs-20"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="col-12 text-center text-md-start">
-                                        <span className='p-1 bg-success text-white pe-2 ps-2'>4.5 <i className="bi bi-star ms-2 text-white"></i></span>
-                                        <span className="ms-2 fs-12">3.5k reviews</span>
-                                    </div>
-                                    <div className="col-12 mt-3 text-center text-md-start">
-                                        <h3 className='fs-16'>
-                                            <i className="bi bi-crosshair"></i>
-                                            <span className='ms-1 fs-15'>No.12/3, Calicut South Beach, Kozhikode</span>
-                                        </h3>
-                                    </div>
-                                    <div className="col-12 mt-3 mb-5">
-                                        <div className="business-feature text-center text-md-start">
-                                            <span>Dine In</span>
-                                            <span className='ms-2'>Indian</span>
-                                            <span className='ms-2'>Delivery</span>
-                                        </div>
-                                    </div>
-                                    <div className="col-12 mt-3 text-center text-md-start">
-                                        <button className="btn" style={{ backgroundColor: "#228ae2", color: "white" }}>Contact Us</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </Link>
-                        <Link to='/template' className="text-decoration-none text-dark col-12 b-theme location-card mt-4">
-                            <div className="row p-3">
-                                <div className="col-12 col-md-4 mt-2 p-0 text-center">
-                                    <img src="/src/assets/images/business-view.png" alt="Business View" className='w-100 br-theme' />
-                                </div>
-                                <div className="col-12 col-md-8 p-3">
-                                    <div className="col-12 mb-2 mt-2">
-                                        <div className="row">
-                                            <div className="col-11 text-center text-md-start">
-                                                <h2 style={{ fontSize: '28px' }}>Salad House</h2>
-                                            </div>
-                                            <div className="col-1 text-end">
-                                                <i className="bi bi-heart fs-20"></i>
                                             </div>
                                         </div>
                                     </div>

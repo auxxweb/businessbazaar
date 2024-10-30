@@ -16,6 +16,7 @@ import { Dialog } from 'primereact/dialog';
 import { Rating } from 'primereact/rating';
 import { InputText } from "primereact/inputtext";
 import { InputTextarea } from "primereact/inputtextarea";
+import CircularProgress from '@mui/material/CircularProgress'; 
 
 
 
@@ -162,15 +163,14 @@ export default function CreateBusiness() {
 
 
 
-
-    
     function AuthenticationDetails() {
         const [authData, setAuthData] = useState({
             email: '',
             password: '',
         });
-        const [passwordError, setPasswordError] = useState('');
         const { email, password } = authData;
+        const [passwordError, setPasswordError] = useState('');
+        const [emailError, setEmailError] = useState('');
     
         // Handles input change for both email and password
         function handleInputChange(e) {
@@ -181,9 +181,12 @@ export default function CreateBusiness() {
             }));
         }
     
-        // Validate password and handle submission
+        // Validate both fields and handle submission
         function handleAuthSubmit() {
-            if (validatePassword()) {
+            const isEmailValid = validateEmail();
+            const isPasswordValid = validatePassword();
+    
+            if (isEmailValid && isPasswordValid) {
                 // Set the email and password into formData and proceed to the next step
                 setFormData((prevFormData) => ({
                     ...prevFormData,
@@ -192,6 +195,16 @@ export default function CreateBusiness() {
                 }));
                 handleNextStep();
             }
+        }
+    
+        // Email validation function
+        function validateEmail() {
+            if (!email) {
+                setEmailError('Email is required.');
+                return false;
+            }
+            setEmailError('');
+            return true;
         }
     
         // Password validation function
@@ -230,6 +243,8 @@ export default function CreateBusiness() {
                                 name="email"
                                 value={authData.email}
                                 onChange={handleInputChange}
+                                error={!!emailError}
+                                helperText={emailError}
                             />
                         </div>
     
@@ -255,9 +270,7 @@ export default function CreateBusiness() {
                 </div>
             </div>
         );
-    }
-
-
+    }   
 
     function BusinessDetails() {
         const [logo, setLogo] = useState('');
@@ -270,11 +283,12 @@ export default function CreateBusiness() {
             state: '',
             pinCode: ''
         });
-    
         const [location, setLocation] = useState({
             lat: '',
             lon: '',
         });
+        const [isLoading, setIsLoading] = useState(false);
+        const [error, setError] = useState('');
     
         // Update address object
         const handleAddressChange = (event) => {
@@ -296,11 +310,10 @@ export default function CreateBusiness() {
     
         const handleLogoChange = async (event) => {
             const file = event.target.files[0];
-        
             
             if (file) {
+                setIsLoading(true);
                 const reader = new FileReader();
-                
                 reader.onload = async function (e) {
                     try {
                         const preReq = await preRequestFun(file, "Landing");
@@ -314,31 +327,36 @@ export default function CreateBusiness() {
                         setLogo(accessLink);
                     } catch (error) {
                         console.error('Error uploading logo:', error.message || error);
+                    } finally {
+                        setIsLoading(false);
                     }
                 };
-        
                 reader.onerror = function () {
                     console.error('Error reading file:', reader.error);
+                    setIsLoading(false);
                 };
                 reader.readAsDataURL(file);
             }
         };
-        
     
-
-
         const imageUpload = () => {
             document.getElementById('ImageLogo').click();
         };
     
-        // Handle form submission
+        // Handle form submission with validation
         const handleBusinessSubmit = () => {
+            if (!businessName || !address.buildingName || !address.streetName || !address.state || !address.pinCode || !location.lon) {
+                setError('All fields are mandatory.');
+                return;
+            }
+            
+            setError('');
             setFormData(prevFormData => ({
                 ...prevFormData,
                 businessName: businessName,
                 address: address,
                 location: location,
-                logo:logo
+                logo: logo
             }));
             handleNextStep();
         };
@@ -370,16 +388,16 @@ export default function CreateBusiness() {
                                     onChange={(e) => setBusinessName(e.target.value)}
                                     className="form-control form-control-lg"
                                 />
-    
                                 <input
                                     type="file"
                                     id="ImageLogo"
                                     style={{ display: 'none' }}
                                     onChange={handleLogoChange}
                                 />
-    
                                 <div onClick={imageUpload} className="p-2 mt-2 add-logo-div" id="businessMainDiv" style={{ cursor: 'pointer' }}>
-                                    {logo ? (
+                                    {isLoading ? (
+                                        <CircularProgress className='text-center' /> // Loader displayed while image loads
+                                    ) : logo ? (
                                         <img src={logo} alt="Business Logo" width="100" className="img-thumbnail" />
                                     ) : (
                                         <div className="text-center" id="addImageDiv">
@@ -391,6 +409,7 @@ export default function CreateBusiness() {
                                     )}
                                 </div>
     
+                                {/* Other input fields */}
                                 <input
                                     type="text"
                                     placeholder="Building Name"
@@ -450,6 +469,7 @@ export default function CreateBusiness() {
                                     </div>
                                 </div>
     
+                                {error && <div className="text-danger mt-2">{error}</div>} {/* Error message for validation */}
                                 <div className="col-12 mt-3">
                                     <button className="btn btn-success w-100" onClick={handleBusinessSubmit}>
                                         Save & Next
@@ -463,257 +483,266 @@ export default function CreateBusiness() {
         );
     }
 
-
     function ContactDetails() {
         const [mobileNumbers, setMobileNumbers] = useState([{ id: 1, number: '', countryCode: 'us' }]);
-    const [whatsappNumbers, setWhatsappNumbers] = useState([{ id: 1, number: '', countryCode: 'us' }]);
-    const [emails, setEmails] = useState([{ id: 1, email: '' }]);
-
-    const [newFormData, setNewFormData] = useState({
-        contactDetails: {
-            name: '',
-            mobileNumbers: [],
-            whatsappNumbers: [],
-            emails: [],
-            website: '',
-        },
-    });
-
-    // Handle contact details change
-    const handleContactChange = (event) => {
-        const { name, value } = event.target;
-        setNewFormData((prevData) => ({
-            ...prevData,
+        const [whatsappNumbers, setWhatsappNumbers] = useState([{ id: 1, number: '', countryCode: 'us' }]);
+        const [emails, setEmails] = useState([{ id: 1, email: '' }]);
+        const [newFormData, setNewFormData] = useState({
             contactDetails: {
-                ...prevData.contactDetails,
-                [name]: value,
+                name: '',
+                mobileNumbers: [],
+                whatsappNumbers: [],
+                emails: [],
+                website: '',
             },
-        }));
-    };
-
-    // Handle mobile number change with country code
-    const handleMobileNumberChange = (id, value, countryCode = 'us') => {
-        
-        const updatedMobileNumbers = mobileNumbers.map((number) =>
-            number.id === id ? { ...number, number: value, countryCode } : number
-        );
-        setMobileNumbers(updatedMobileNumbers);
-        updateContactDetails('mobileNumbers', updatedMobileNumbers);
-    };
-
-    // Handle WhatsApp number change with country code
-    const handleWhatsappNumberChange = (id, value, countryCode = 'us') => {
-        const updatedWhatsappNumbers = whatsappNumbers.map((number) =>
-            number.id === id ? { ...number, number: value, countryCode } : number
-        );
-        setWhatsappNumbers(updatedWhatsappNumbers);
-        updateContactDetails('whatsappNumbers', updatedWhatsappNumbers);
-    };
-
-    // Handle email change
-    const handleEmailChange = (id, value) => {
-        const updatedEmails = emails.map((email) =>
-            email.id === id ? { ...email, email: value } : email
-        );
-        setEmails(updatedEmails);
-        updateContactDetails('emails', updatedEmails);
-    };
-
-    const updateContactDetails = (field, updatedArray) => {
-        setNewFormData((prevFormData) => ({
-            ...prevFormData,
-            contactDetails: {
-                ...prevFormData.contactDetails,
-                [field]: updatedArray.map((item) => ({
-                    number: item.number || item.email,
-                    countryCode: item.countryCode || null
-                })),
-            },
-        }));
-    };
-
-    // Add and remove fields
-    const addMobileNumber = () => setMobileNumbers([...mobileNumbers, { id: mobileNumbers.length + 1, number: '', countryCode: 'us' }]);
-    const removeMobileNumber = (id) => setMobileNumbers(mobileNumbers.filter((number) => number.id !== id));
-
-    const addWhatsappNumber = () => setWhatsappNumbers([...whatsappNumbers, { id: whatsappNumbers.length + 1, number: '', countryCode: 'us' }]);
-    const removeWhatsappNumber = (id) => setWhatsappNumbers(whatsappNumbers.filter((number) => number.id !== id));
-
-    const addEmail = () => setEmails([...emails, { id: emails.length + 1, email: '' }]);
-    const removeEmail = (id) => setEmails(emails.filter((email) => email.id !== id));
-
-    // Submit handler
-    const contactSubmitHandler = () => {
-        setFormData((prevData) => ({
-            ...prevData,
-            contactDetails: newFormData.contactDetails,
-        }));
-        handleNextStep(); // Ensure this is defined elsewhere
-    };
-
-    return (
-        <div className='h-100vh'>
-            <div className="row h-100">
-                <div className="d-none d-md-block left-portion p-0 col-5">
-                    <img src="/src/assets/images/contact-details.jpg" alt="Contact Details" className='w-100 h-100' />
-                </div>
-                <div className="col-12 col-md-7 row align-items-center right-portion p-5">
-                    <div className="col-12 text-start">
-                        <button className="btn btn-dark w-auto float-start" onClick={handlePrevStep}>
-                            <i className="bi bi-arrow-left"></i>
-                        </button>
+        });
+    
+        const [errors, setErrors] = useState({});
+    
+        const handleContactChange = (event) => {
+            const { name, value } = event.target;
+            setNewFormData((prevData) => ({
+                ...prevData,
+                contactDetails: {
+                    ...prevData.contactDetails,
+                    [name]: value,
+                },
+            }));
+        };
+    
+        const handleMobileNumberChange = (id, value, countryCode = 'us') => {
+            const updatedMobileNumbers = mobileNumbers.map((number) =>
+                number.id === id ? { ...number, number: value, countryCode } : number
+            );
+            setMobileNumbers(updatedMobileNumbers);
+            updateContactDetails('mobileNumbers', updatedMobileNumbers);
+        };
+    
+        const handleWhatsappNumberChange = (id, value, countryCode = 'us') => {
+            const updatedWhatsappNumbers = whatsappNumbers.map((number) =>
+                number.id === id ? { ...number, number: value, countryCode } : number
+            );
+            setWhatsappNumbers(updatedWhatsappNumbers);
+            updateContactDetails('whatsappNumbers', updatedWhatsappNumbers);
+        };
+    
+        const handleEmailChange = (id, value) => {
+            const updatedEmails = emails.map((email) =>
+                email.id === id ? { ...email, email: value } : email
+            );
+            setEmails(updatedEmails);
+            updateContactDetails('emails', updatedEmails);
+        };
+    
+        const updateContactDetails = (field, updatedArray) => {
+            setNewFormData((prevFormData) => ({
+                ...prevFormData,
+                contactDetails: {
+                    ...prevFormData.contactDetails,
+                    [field]: updatedArray.map((item) => ({
+                        number: item.number || item.email,
+                        countryCode: item.countryCode || null,
+                    })),
+                },
+            }));
+        };
+    
+        const addMobileNumber = () => setMobileNumbers([...mobileNumbers, { id: mobileNumbers.length + 1, number: '', countryCode: 'us' }]);
+        const removeMobileNumber = (id) => setMobileNumbers(mobileNumbers.filter((number) => number.id !== id));
+    
+        const addWhatsappNumber = () => setWhatsappNumbers([...whatsappNumbers, { id: whatsappNumbers.length + 1, number: '', countryCode: 'us' }]);
+        const removeWhatsappNumber = (id) => setWhatsappNumbers(whatsappNumbers.filter((number) => number.id !== id));
+    
+        const addEmail = () => setEmails([...emails, { id: emails.length + 1, email: '' }]);
+        const removeEmail = (id) => setEmails(emails.filter((email) => email.id !== id));
+    
+        const validateForm = () => {
+            const newErrors = {};
+            if (!newFormData.contactDetails.name) newErrors.name = 'Name is required.';
+            if (mobileNumbers.some((number) => !number.number)) newErrors.mobileNumbers = 'All mobile numbers are required.';
+            if (whatsappNumbers.some((number) => !number.number)) newErrors.whatsappNumbers = 'All WhatsApp numbers are required.';
+            if (emails.some((email) => !email.email)) newErrors.emails = 'All emails are required.';
+            if (!newFormData.contactDetails.website) newErrors.website = 'Website is required.';
+    
+            setErrors(newErrors);
+            return Object.keys(newErrors).length === 0;
+        };
+    
+        const contactSubmitHandler = () => {
+            if (validateForm()) {
+                setFormData((prevData) => ({
+                    ...prevData,
+                    contactDetails: newFormData.contactDetails,
+                }));
+                handleNextStep(); // Ensure this is defined elsewhere
+            }
+        };
+    
+        return (
+            <div className="h-100vh">
+                <div className="row h-100">
+                    <div className="d-none d-md-block left-portion p-0 col-5">
+                        <img src="/src/assets/images/contact-details.jpg" alt="Contact Details" className="w-100 h-100" />
                     </div>
-                    <div className="col-12">
-                        <h1 className="fw-bold text-center text-md-start mb-2">Add Contact Details</h1>
-                    </div>
-                    <div className="col-12 p-5 p-sm-0 mt-3">
-                        <input
-                            type="text"
-                            name="name"
-                            placeholder="Name"
-                            onChange={handleContactChange}
-                            className="form-control form-control-lg"
-                        />
-
-                        {/* Mobile Numbers */}
-                        <div id="mobileNumberDiv" className="mt-4">
-                            {mobileNumbers.map((number) => (
-                                <div className="row mt-3" key={number.id}>
-                                    <div className="col-12 col-sm-3 col-md-2">
-                                        <PhoneInput
-                                            country={number.countryCode}
-                                            enableSearch={true}
-                                            value={number.number}
-                                            onChange={(phone, countryData) =>
-                                                handleMobileNumberChange(number.id, phone, countryData?.countryCode || 'us')
-                                            }
-                                            containerStyle={{ width: '100%' }}
-                                        />
-                                    </div>
-                                    <div className="col-12 col-sm-7 col-md-8 mt-2 mt-sm-0">
-                                        <input
-                                            type="text"
-                                            value={number.number}
-                                            onChange={(e) => handleMobileNumberChange(number.id, e.target.value)}
-                                            className="form-control form-control-lg w-100"
-                                            placeholder="Phone Number"
-                                        />
-                                    </div>
-                                    {number.id > 1 ? (
-                                        <div className="col-12 col-sm-2 mt-2 mt-sm-0">
-                                            <button className="btn btn-danger btn-sm w-100" onClick={() => removeMobileNumber(number.id)}>
-                                                <i className="bi bi-trash"></i>
-                                            </button>
-                                        </div>
-                                    ) : (
-                                        mobileNumbers.length<2?
-                                        <div className="col-12 col-sm-2 mt-2 mt-sm-0">
-                                            <button type="button" onClick={addMobileNumber} className="btn w-100 btn-success mt-2">
-                                                + Add
-                                            </button>
-                                        </div>
-                                        : ''
-                                    )}
-                                </div>
-                            ))}
+                    <div className="col-12 col-md-7 row align-items-center right-portion p-5">
+                        <div className="col-12 text-start">
+                            <button className="btn btn-dark w-auto float-start" onClick={handlePrevStep}>
+                                <i className="bi bi-arrow-left"></i>
+                            </button>
                         </div>
-
-                        {/* WhatsApp Numbers */}
-                        <div id="whatsappNumberDiv" className="mt-4">
-                            {whatsappNumbers.map((number) => (
-                                <div className="row mt-3" key={number.id}>
-                                    <div className="col-12 col-sm-3 col-md-2">
-                                        <PhoneInput
-                                            country={number.countryCode}
-                                            enableSearch={true}
-                                            value={number.number}
-                                            onChange={(phone, countryData) =>
-                                                handleWhatsappNumberChange(number.id, phone, countryData?.countryCode || 'us')
-                                            }
-                                            containerStyle={{ width: '100%' }}
-                                        />
-                                    </div>
-                                    <div className="col-12 col-sm-7 col-md-8 mt-2 mt-sm-0">
-                                        <input
-                                            type="text"
-                                            value={number.number}
-                                            onChange={(e) => handleWhatsappNumberChange(number.id, e.target.value)}
-                                            className="form-control form-control-lg w-100"
-                                            placeholder="WhatsApp Number"
-                                        />
-                                    </div>
-                                    {number.id > 1 ? (
-                                        <div className="col-12 col-sm-2 mt-2 mt-sm-0">
-                                            <button className="btn btn-danger btn-sm w-100" onClick={() => removeWhatsappNumber(number.id)}>
-                                                <i className="bi bi-trash"></i>
-                                            </button>
-                                        </div>
-                                    ) : (
-                                        whatsappNumbers.length <2 ?
-                                        <div className="col-12 col-sm-2 mt-2 mt-sm-0">
-                                            <button type="button" onClick={addWhatsappNumber} className="btn w-100 btn-success mt-2">
-                                                + Add
-                                            </button>
-                                        </div>
-                                        :""
-                                    )}
-                                </div>
-                            ))}
+                        <div className="col-12">
+                            <h1 className="fw-bold text-center text-md-start mb-2">Add Contact Details</h1>
                         </div>
-
-                        {/* Emails */}
-                        <div id="emailDiv" className="mt-4">
-                            {emails.map((email) => (
-                                <div className="row mt-3" key={email.id}>
-                                    <div className="col-12 col-md-10">
-                                        <input
-                                            type="email"
-                                            value={email.email}
-                                            onChange={(e) => handleEmailChange(email.id, e.target.value)}
-                                            className="form-control form-control-lg w-100"
-                                            placeholder="Email"
-                                        />
-                                    </div>
-                                    {email.id > 1 ? (
-                                        <div className="col-12 col-md-2 mt-2 mt-sm-0">
-                                            <button className="btn btn-danger btn-sm w-100" onClick={() => removeEmail(email.id)}>
-                                                <i className="bi bi-trash"></i>
-                                            </button>
-                                        </div>
-                                    ) : (
-                                        emails.length<3?
-                                        <div className="col-12 col-md-2 mt-2 mt-sm-0">
-                                            <button type="button" onClick={addEmail} className="btn w-100 btn-success mt-2">
-                                                + Add
-                                            </button>
-                                        </div>
-                                        :""
-                                    )}
-                                </div>
-                            ))}
-                        </div>
-
-                        <div className="mt-4">
+                        <div className="col-12 p-5 p-sm-0 mt-3">
                             <input
                                 type="text"
-                                name="website"
-                                placeholder="Additional Website Link"
+                                name="name"
+                                placeholder="Name"
                                 onChange={handleContactChange}
                                 className="form-control form-control-lg"
                             />
+                            {errors.name && <div className="text-danger">{errors.name}</div>}
+    
+                            <div id="mobileNumberDiv" className="mt-4">
+                                {mobileNumbers.map((number) => (
+                                    <div className="row mt-3" key={number.id}>
+                                        <div className="col-12 col-sm-3 col-md-2">
+                                            <PhoneInput
+                                                country={number.countryCode}
+                                                enableSearch={true}
+                                                value={number.number}
+                                                onChange={(phone, countryData) =>
+                                                    handleMobileNumberChange(number.id, phone, countryData?.countryCode || 'us')
+                                                }
+                                                containerStyle={{ width: '100%' }}
+                                            />
+                                        </div>
+                                        <div className="col-12 col-sm-7 col-md-8 mt-2 mt-sm-0">
+                                            <input
+                                                type="text"
+                                                value={number.number}
+                                                onChange={(e) => handleMobileNumberChange(number.id, e.target.value)}
+                                                className="form-control form-control-lg w-100"
+                                                placeholder="Phone Number"
+                                            />
+                                        </div>
+                                        {errors.mobileNumbers && <div className="text-danger">{errors.mobileNumbers}</div>}
+                                        {number.id > 1 ? (
+                                            <div className="col-12 col-sm-2 mt-2 mt-sm-0">
+                                                <button className="btn btn-danger btn-sm w-100" onClick={() => removeMobileNumber(number.id)}>
+                                                    <i className="bi bi-trash"></i>
+                                                </button>
+                                            </div>
+                                        ) : (
+                                            mobileNumbers.length < 2 && (
+                                                <div className="col-12 col-sm-2 mt-2 mt-sm-0">
+                                                    <button type="button" onClick={addMobileNumber} className="btn w-100 btn-success mt-2">
+                                                        + Add
+                                                    </button>
+                                                </div>
+                                            )
+                                        )}
+                                    </div>
+                                ))}
+                            </div>
+    
+                            <div id="whatsappNumberDiv" className="mt-4">
+                                {whatsappNumbers.map((number) => (
+                                    <div className="row mt-3" key={number.id}>
+                                        <div className="col-12 col-sm-3 col-md-2">
+                                            <PhoneInput
+                                                country={number.countryCode}
+                                                enableSearch={true}
+                                                value={number.number}
+                                                onChange={(phone, countryData) =>
+                                                    handleWhatsappNumberChange(number.id, phone, countryData?.countryCode || 'us')
+                                                }
+                                                containerStyle={{ width: '100%' }}
+                                            />
+                                        </div>
+                                        <div className="col-12 col-sm-7 col-md-8 mt-2 mt-sm-0">
+                                            <input
+                                                type="text"
+                                                value={number.number}
+                                                onChange={(e) => handleWhatsappNumberChange(number.id, e.target.value)}
+                                                className="form-control form-control-lg w-100"
+                                                placeholder="WhatsApp Number"
+                                            />
+                                        </div>
+                                        {errors.whatsappNumbers && <div className="text-danger">{errors.whatsappNumbers}</div>}
+                                        {number.id > 1 ? (
+                                            <div className="col-12 col-sm-2 mt-2 mt-sm-0">
+                                                <button className="btn btn-danger btn-sm w-100" onClick={() => removeWhatsappNumber(number.id)}>
+                                                    <i className="bi bi-trash"></i>
+                                                </button>
+                                            </div>
+                                        ) : (
+                                            whatsappNumbers.length < 2 && (
+                                                <div className="col-12 col-sm-2 mt-2 mt-sm-0">
+                                                    <button type="button" onClick={addWhatsappNumber} className="btn w-100 btn-success mt-2">
+                                                        + Add
+                                                    </button>
+                                                </div>
+                                            )
+                                        )}
+                                    </div>
+                                ))}
+                            </div>
+    
+                            <div id="emailDiv" className="mt-4">
+                                {emails.map((email) => (
+                                    <div className="row mt-3" key={email.id}>
+                                        <div className="col-12 col-sm-10">
+                                            <input
+                                                type="email"
+                                                value={email.email}
+                                                onChange={(e) => handleEmailChange(email.id, e.target.value)}
+                                                className="form-control form-control-lg"
+                                                placeholder="Email"
+                                            />
+                                        </div>
+                                        {errors.emails && <div className="text-danger">{errors.emails}</div>}
+                                        {email.id > 1 ? (
+                                            <div className="col-12 col-sm-2 mt-2 mt-sm-0">
+                                                <button className="btn btn-danger btn-sm w-100" onClick={() => removeEmail(email.id)}>
+                                                    <i className="bi bi-trash"></i>
+                                                </button>
+                                            </div>
+                                        ) : (
+                                            emails.length < 2 && (
+                                                <div className="col-12 col-sm-2 mt-2 mt-sm-0">
+                                                    <button type="button" onClick={addEmail} className="btn w-100 btn-success mt-2">
+                                                        + Add
+                                                    </button>
+                                                </div>
+                                            )
+                                        )}
+                                    </div>
+                                ))}
+                            </div>
+    
+                            <div className="mt-4">
+                                <input
+                                    type="text"
+                                    name="website"
+                                    placeholder="Website"
+                                    onChange={handleContactChange}
+                                    className="form-control form-control-lg"
+                                />
+                                {errors.website && <div className="text-danger">{errors.website}</div>}
+                            </div>
                         </div>
-
-                        <div className="mt-4">
-                            <button className="btn btn-success w-100 float-end" onClick={contactSubmitHandler}>
-                                Submit
+                        <div className="col-12 text-end">
+                            <button className="btn btn-success btn-lg w-100" onClick={contactSubmitHandler}>
+                                Save & Continue
                             </button>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    );
-}
+        );
+    }
+    
 
 
     function CategoryDetails() {
@@ -1071,27 +1100,23 @@ export default function CreateBusiness() {
             </>
         );
     }
+
+
+
     function LandingPageDetails() {
         const [theme, setTheme] = useState('#6AA646');
-        const [landingPageHero, setLandingPageHero] = useState({
-            title: "",
-            description: "",
-            coverImage: "",
-        });
-        const [welcomePart, setWelcomePart] = useState({
-            title: "",
-            description: "",
-            coverImage: "",
-        });
-        const [s3Files, setS3Files] = useState({});
+        const [landingPageHero, setLandingPageHero] = useState({ title: "", description: "", coverImage: "" });
+        const [welcomePart, setWelcomePart] = useState({ title: "", description: "", coverImage: "" });
+        const [errors, setErrors] = useState({});
+        const [loading, setLoading] = useState(false); // Loader state
     
-        // Generic File Change Handler
+        // Generic File Change Handler with Loader
         const handleFileChange = (name, e, sectionSetter) => {
             const file = e.target.files[0];
             if (file) {
+                setLoading(true); // Show loader
                 const reader = new FileReader();
                 reader.onload = async () => {
-
                     const preReq = await preRequestFun(file, name);
                     let accessLink = '';
                     if (preReq && preReq.accessLink) {
@@ -1104,8 +1129,9 @@ export default function CreateBusiness() {
                         console.error('Access link not found in response.');
                         return;
                     }
+                    setLoading(false); // Hide loader
                 };
-                reader.readAsDataURL(file); 
+                reader.readAsDataURL(file);
             }
         };
     
@@ -1114,17 +1140,30 @@ export default function CreateBusiness() {
             sectionSetter(prevData => ({ ...prevData, [name]: value }));
         };
     
-        const handleLandingSubmit = () => {
-            setFormData(prevFormData => ({
-                ...prevFormData,
-                landingPageHero,
-                theme,
-                welcomePart,
-            }));
-            handleNextStep();
+        const validateForm = () => {
+            const newErrors = {};
+            if (!landingPageHero.title) newErrors.landingPageHeroTitle = "Title is required";
+            if (!landingPageHero.description) newErrors.landingPageHeroDescription = "Description is required";
+            if (!landingPageHero.coverImage) newErrors.landingPageHeroCoverImage = "Cover image is required";
+            if (!welcomePart.title) newErrors.welcomePartTitle = "Title is required";
+            if (!welcomePart.description) newErrors.welcomePartDescription = "Description is required";
+            if (!welcomePart.coverImage) newErrors.welcomePartCoverImage = "Cover image is required";
+            setErrors(newErrors);
+            return Object.keys(newErrors).length === 0;
         };
     
-        // Dynamic Upload Trigger
+        const handleLandingSubmit = () => {
+            if (validateForm()) {
+                setFormData(prevFormData => ({
+                    ...prevFormData,
+                    landingPageHero,
+                    theme,
+                    welcomePart,
+                }));
+                handleNextStep();
+            }
+        };
+    
         const triggerFileUpload = (inputId) => {
             document.getElementById(inputId).click();
         };
@@ -1153,9 +1192,8 @@ export default function CreateBusiness() {
                             {/* Color Theme Section */}
                             <div className="col-12 p-3 p-md-5">
                                 <h5 className='fs-18 mb-4 p-1 text-center text-md-start text-dark fw-bold mt-3'>Color Theme</h5>
-                               
                                 <div className="col-6 col-md-3">
-                                    <label htmlFor="">Choose Color :</label>
+                                    <label>Choose Color :</label>
                                     <input
                                         type="color"
                                         name="color"
@@ -1166,10 +1204,8 @@ export default function CreateBusiness() {
                                 </div>
     
                                 {/* Landing Page Hero Details */}
-                                <div className="col-12 text-center mt-5 mb-3">
-                                <h5 className='fs-18 mb-2 p-1 text-center text-md-start text-dark fw-bold mt-3'>Add Landing Page Banner</h5>
-                                </div>
-                                <label htmlFor="">Title :</label>
+                                <h5 className='fs-18 mb-2 text-dark fw-bold mt-3'>Add Landing Page Banner</h5>
+                                <label>Title :</label>
                                 <input
                                     type="text"
                                     name="title"
@@ -1178,7 +1214,9 @@ export default function CreateBusiness() {
                                     value={landingPageHero.title}
                                     onChange={(e) => handleInputChange(e, setLandingPageHero)}
                                 />
-                                <label htmlFor="">Description :</label>
+                                {errors.landingPageHeroTitle && <div className="text-danger">{errors.landingPageHeroTitle}</div>}
+    
+                                <label>Description :</label>
                                 <textarea
                                     name="description"
                                     className='form-control form-control-lg mb-3'
@@ -1186,23 +1224,24 @@ export default function CreateBusiness() {
                                     value={landingPageHero.description}
                                     onChange={(e) => handleInputChange(e, setLandingPageHero)}
                                 />
+                                {errors.landingPageHeroDescription && <div className="text-danger">{errors.landingPageHeroDescription}</div>}
     
                                 {/* Hero Image Upload */}
                                 <input type="file" hidden id='LandingHeroImageInput' onChange={(e) => handleFileChange("landingPageHeroImage", e, setLandingPageHero)} />
                                 <div onClick={() => triggerFileUpload('LandingHeroImageInput')} className="p-2 mt-2 mb-3 add-logo-div">
                                     <div className="text-center">
-                                        <img src={landingPageHero.coverImage || "/src/assets/images/add_image.png"} width="50" alt="Add Hero Image" />
-                                        <div className="col-12">
-                                            <span>Add Image</span>
-                                        </div>
+                                        {loading ? (
+                                            <span>Loading...</span>
+                                        ) : (
+                                            <img src={landingPageHero.coverImage || "/src/assets/images/add_image.png"} width="50" alt="Add Hero Image" />
+                                        )}
                                     </div>
                                 </div>
+                                {errors.landingPageHeroCoverImage && <div className="text-danger">{errors.landingPageHeroCoverImage}</div>}
     
                                 {/* Welcome Part */}
-                                <div className="col-12 text-center mt-5 mb-3">
-                                <h5 className='fs-18 mb-2 p-1 text-center text-md-start text-dark fw-bold mt-3'>Add Welcome Part</h5>
-                                </div>
-                                <label htmlFor=""> Title :</label>
+                                <h5 className='fs-18 mb-2 text-dark fw-bold mt-3'>Add Welcome Part</h5>
+                                <label>Title :</label>
                                 <input
                                     type="text"
                                     name="title"
@@ -1211,7 +1250,9 @@ export default function CreateBusiness() {
                                     value={welcomePart.title}
                                     onChange={(e) => handleInputChange(e, setWelcomePart)}
                                 />
-                                <label htmlFor="">Description :</label>
+                                {errors.welcomePartTitle && <div className="text-danger">{errors.welcomePartTitle}</div>}
+    
+                                <label>Description :</label>
                                 <textarea
                                     name="description"
                                     className='form-control form-control-lg mb-3'
@@ -1219,17 +1260,20 @@ export default function CreateBusiness() {
                                     value={welcomePart.description}
                                     onChange={(e) => handleInputChange(e, setWelcomePart)}
                                 />
+                                {errors.welcomePartDescription && <div className="text-danger">{errors.welcomePartDescription}</div>}
     
                                 {/* Welcome Image Upload */}
                                 <input type="file" hidden id='WelcomeImageInput' onChange={(e) => handleFileChange("welcomePartImage", e, setWelcomePart)} />
                                 <div onClick={() => triggerFileUpload('WelcomeImageInput')} className="p-2 mt-2 mb-3 add-logo-div">
                                     <div className="text-center">
-                                        <img src={welcomePart.coverImage || "/src/assets/images/add_image.png"} width="50" alt="Add Welcome Image" />
-                                        <div className="col-12">
-                                            <span>Add Image</span>
-                                        </div>
+                                        {loading ? (
+                                            <span>Loading...</span>
+                                        ) : (
+                                            <img src={welcomePart.coverImage || "/src/assets/images/add_image.png"} width="50" alt="Add Welcome Image" />
+                                        )}
                                     </div>
                                 </div>
+                                {errors.welcomePartCoverImage && <div className="text-danger">{errors.welcomePartCoverImage}</div>}
     
                                 <div className='col-12 mt-4 text-center'>
                                     <button className='btn btn-success w-100' onClick={handleLandingSubmit}>
@@ -1243,15 +1287,15 @@ export default function CreateBusiness() {
             </div>
         );
     }
-    
+
     function CreateServices() {
         const [specialService, setSpecialService] = useState({
             title: "",
             description: "",
             data: [{ title: "", description: "", image: "" }],
         });
-    
-        const [services, setServices] = useState([{ title: "", description: "" }]);
+        const [services, setServices] = useState([{ title: "", description: "", image: "" }]);
+        const [isLoading, setIsLoading] = useState({ specialService: {}, service: {} });
     
         // Handle change for individual special service fields
         const handleProductChange = (index, e) => {
@@ -1273,44 +1317,59 @@ export default function CreateBusiness() {
             });
         };
     
-        // Handle file input change for special service images
-        const handleFileChange = (index, e) => {
+        const handleFileChange = async (type, index, e) => {
             const file = e.target.files[0];
-            if (file && index !== null) {
-                const reader = new FileReader();
-                reader.onload = async () => {
-                    const preReq = await preRequestFun(file, "service");
-                    let accessLink = '';
-                    if (preReq && preReq.accessLink) {
-                        accessLink = preReq.accessLink;
+            if (file) {
+                // Set loading state
+                setIsLoading((prevLoading) => ({
+                    ...prevLoading,
+                    [type]: { ...prevLoading[type], [index]: true }
+                }));
+    
+                const preReq = await preRequestFun(file, "service");
+                if (preReq && preReq.accessLink) {
+                    const imageUrl = preReq.accessLink;
+                    if (type === 'specialService') {
                         setSpecialService((prevData) => {
                             const updatedData = [...prevData.data];
-                            updatedData[index].image = accessLink; 
+                            updatedData[index].image = imageUrl;
                             return { ...prevData, data: updatedData };
                         });
                     } else {
-                        console.error('Access link not found in response.');
-                        return;
+                        setServices((prevServices) => {
+                            const updatedServices = [...prevServices];
+                            updatedServices[index].image = imageUrl;
+                            return updatedServices;
+                        });
                     }
-                   
-                };
-                reader.readAsDataURL(file);
+                } else {
+                    console.error('Access link not found in response.');
+                }
+    
+                // Remove loading state
+                setIsLoading((prevLoading) => ({
+                    ...prevLoading,
+                    [type]: { ...prevLoading[type], [index]: false }
+                }));
             }
         };
     
-        // Trigger file upload for specific image input fields
-        const uploadImage = (index) => {
-            document.querySelectorAll('.productImageInput')[index].click();
-        };
-    
-        // Handle general input changes
-        const handleChange = (e) => {
-            const { name, value } = e.target;
-            setSpecialService((prevData) => ({ ...prevData, [name]: value }));
+        // Trigger file upload for image input
+        const uploadImage = (type, index) => {
+            const inputClass = type === 'specialService' ? '.specialServiceImageInput' : '.serviceImageInput';
+            document.querySelectorAll(inputClass)[index].click();
         };
     
         // Submit function to store data
         const handleServiceSubmit = () => {
+            if (!specialService.title || !specialService.description || !specialService.data[0].title) {
+                alert("Please fill in all required fields for Special Service.");
+                return;
+            }
+            if (!services[0].title || !services[0].description) {
+                alert("Please fill in all required fields for Services.");
+                return;
+            }
             setFormData((prevFormData) => ({
                 ...prevFormData,
                 specialServices: specialService,
@@ -1318,27 +1377,27 @@ export default function CreateBusiness() {
             }));
             handleNextStep();
         };
-    
-        // Function to remove a special service
-        const removeSpecialService = (index) => {
-            if (specialService.data.length > 1) {
-                setSpecialService((prevData) => {
-                    const updatedData = [...prevData.data];
-                    updatedData.splice(index, 1);
-                    return { ...prevData, data: updatedData };
-                });
-            }
+
+        const handleChange = (e) => {
+            const { name, value } = e.target;
+            setSpecialService((prevData) => ({
+                ...prevData,
+                [name]: value,
+            }));
         };
-    
-        // Function to remove a service
+
+        const removeSpecialService = (index) => {
+            setSpecialService((prevData) => {
+                const updatedData = prevData.data.filter((_, i) => i !== index);
+                return { ...prevData, data: updatedData };
+            });
+        };
         const removeService = (index) => {
-            if (services.length > 1) {
-                setServices((prev) => {
-                    const updatedServices = [...prev];
-                    updatedServices.splice(index, 1);
-                    return updatedServices;
-                });
-            }
+            setServices((prevServices) => {
+                // Filter out the service at the specified index
+                const updatedServices = prevServices.filter((_, i) => i !== index);
+                return updatedServices;
+            });
         };
     
         return (
@@ -1364,9 +1423,7 @@ export default function CreateBusiness() {
                                 </div>
     
                                 <div className="col-12">
-                                    <div className="col-12 text-center">
-                                       <u> <h5 className='fs-18 mb-4 p-1 text-center text-md-start text-dark fw-bold mt-3'>Add Special Service Content</h5></u>
-                                    </div>
+                                    {/* Special Service Title */}
                                     <div className="col-12 text-center">
                                         <input
                                             type="text"
@@ -1374,6 +1431,7 @@ export default function CreateBusiness() {
                                             onChange={handleChange}
                                             placeholder="Title"
                                             className="form-control form-control-lg mb-3"
+                                            required
                                         />
                                     </div>
                                     <div className="col-12 text-center">
@@ -1382,20 +1440,18 @@ export default function CreateBusiness() {
                                             className="form-control form-control-lg"
                                             onChange={handleChange}
                                             placeholder="Description"
+                                            required
                                         ></textarea>
                                     </div>
     
                                     {/* Special Services List */}
                                     <div className="col-12 text-center">
-                                        <u><h5 className='fs-18 mb-4 p-1 text-center text-md-start text-dark fw-bold mt-3'>Add Special Services</h5></u>
+                                        <h5 className='fs-18 mb-4 p-1 text-center text-md-start text-dark fw-bold mt-3'>Add Special Services</h5>
                                     </div>
     
                                     {specialService.data.map((p, index) => (
                                         <div key={index} className="mt-2">
-                                            {index !=0 ? (
-                                                
-                                            <div className="divider"></div>
-                                            ):''}
+                                            {index !== 0 && <div className="divider"></div>}
                                             <input
                                                 type="text"
                                                 name="title"
@@ -1403,6 +1459,7 @@ export default function CreateBusiness() {
                                                 placeholder="Service Name"
                                                 value={p.title}
                                                 onChange={(e) => handleProductChange(index, e)}
+                                                required
                                             />
                                             <textarea
                                                 name="description"
@@ -1410,31 +1467,32 @@ export default function CreateBusiness() {
                                                 placeholder="Service Description"
                                                 value={p.description}
                                                 onChange={(e) => handleProductChange(index, e)}
+                                                required
                                             />
                                             <div className="col-12 col-md-3 mb-3">
                                                 <input
                                                     type="file"
                                                     hidden
-                                                    className="productImageInput"
-                                                    onChange={(e) => handleFileChange(index, e)}
+                                                    className="specialServiceImageInput"
+                                                    onChange={(e) => handleFileChange('specialService', index, e)}
                                                 />
-                                                <div onClick={() => uploadImage(index)} className="p-2 mt-2 add-logo-div">
+                                                <div onClick={() => uploadImage('specialService', index)} className="p-2 mt-2 add-logo-div">
                                                     <div className="text-center">
-                                                        <img
-                                                            src={p.image || "/src/assets/images/add_image.png"}
-                                                            width="50"
-                                                            alt="Add Service Image"
-                                                        />
-                                                        <div className="col-12">
-                                                            <span>Add Image</span>
-                                                        </div>
+                                                        {isLoading.specialService[index] ? (
+                                                            <div className="spinner-border text-primary" role="status"></div>
+                                                        ) : (
+                                                            <img
+                                                                src={p.image || "/src/assets/images/add_image.png"}
+                                                                width="50"
+                                                                alt="Add Service Image"
+                                                            />
+                                                        )}
                                                     </div>
                                                 </div>
-                                              
                                             </div>
-                                            {index > 0 && ( // Show remove button only if not the first element
+                                            {index > 0 && (
                                                 <div className="col-12 text-center">
-                                                        <button
+                                                    <button
                                                         type="button"
                                                         onClick={() => removeSpecialService(index)}
                                                         className="btn btn-danger mt-2 w-100 mb-2"
@@ -1442,69 +1500,93 @@ export default function CreateBusiness() {
                                                         Remove
                                                     </button>
                                                 </div>
-                                                )}
+                                            )}
                                         </div>
                                     ))}
     
+                                    {/* Add Service Button */}
                                     <a
                                         href="#"
-                                        onClick={() =>
-                                            setSpecialService((prevData) => ({
-                                                ...prevData,
-                                                data: [...prevData.data, { title: "", description: "", image: "" }],
-                                            }))
-                                        }
-                                        className="text-decoration-none btn btn-success w-100"
+                                        onClick={() => setSpecialService((prevData) => ({
+                                            ...prevData,
+                                            data: [...prevData.data, { title: "", description: "", image: "" }],
+                                        }))}
+                                        className="text-decoration-none btn btn-success w-100 mb-3"
                                     >
                                         + Add More Special Service
                                     </a>
     
                                     {/* Services List */}
-                                    <div className="col-12 text-center">
-                                        <h5 className='fs-18 mb-4 p-1 text-center text-md-start text-dark fw-bold mt-3'>Add Service Details</h5>
-                                    </div>
-    
                                     {services.map((service, index) => (
-                                        <div key={index} className="row align-items-center">
+                                    <div key={index} className="row align-items-center mb-3">
+                                        <input
+                                            type="text"
+                                            name="title"
+                                            className="form-control form-control-lg mb-3"
+                                            placeholder="Service Title"
+                                            value={service.title}
+                                            onChange={(e) => handleServiceChange(index, e)}
+                                            required
+                                        />
+                                        <textarea
+                                            name="description"
+                                            className="form-control form-control-lg mb-3"
+                                            placeholder="Service Description"
+                                            value={service.description}
+                                            onChange={(e) => handleServiceChange(index, e)}
+                                            required
+                                        />
+                                        <div className="col-12 col-md-3 mb-3">
                                             <input
-                                                type="text"
-                                                name="title"
-                                                className="form-control form-control-lg mb-3"
-                                                placeholder="Service Title"
-                                                value={service.title}
-                                                onChange={(e) => handleServiceChange(index, e)}
+                                                type="file"
+                                                hidden
+                                                className="serviceImageInput"
+                                                onChange={(e) => handleFileChange('service', index, e)}
                                             />
-                                            <textarea
-                                                name="description"
-                                                className="form-control form-control-lg mb-3"
-                                                placeholder="Service Description"
-                                                value={service.description}
-                                                onChange={(e) => handleServiceChange(index, e)}
-                                            />
-                                            {index > 0 && ( // Show remove button only if not the first element
-                                                <button
-                                                    type="button"
-                                                    onClick={() => removeService(index)}
-                                                    className="btn btn-danger mt-2 mb-2 w-100"
-                                                >
-                                                    Remove
-                                                </button>
-                                            )}
+                                            <div onClick={() => uploadImage('service', index)} className="p-2 mt-2 add-logo-div">
+                                                <div className="text-center">
+                                                    {isLoading.service[index] ? (
+                                                        <div className="spinner-border text-primary" role="status"></div>
+                                                    ) : (
+                                                        <img
+                                                            src={service.image || "/src/assets/images/add_image.png"}
+                                                            width="50"
+                                                            alt="Add Service Image"
+                                                        />
+                                                    )}
+                                                </div>
+                                            </div>
                                         </div>
-                                    ))}
-    
-                                    <a
-                                        href="#"
-                                        onClick={() => setServices((prev) => [...prev, { title: "", description: "" }])}
-                                        className="text-decoration-none btn btn-success w-100"
-                                    >
-                                        + Add More Service
-                                    </a>
+                                        {index > 0 && ( // Only show the remove button if it's not the first service
+                                        <div className="col-12 text-center">
+                                            <button
+                                                type="button"
+                                                onClick={() => removeService(index)}
+                                                className="btn btn-danger mt-2 w-100 mb-2"
+                                            >
+                                                Remove Service
+                                            </button>
+                                        </div>
+                                    )}
+                                    </div>
+                                ))}
+
+                                {/* Add More Service Button */}
+                                <a
+                                    href="#"
+                                    onClick={() => setServices((prev) => [...prev, { title: "", description: "", image: "" }])}
+                                    className="text-decoration-none btn btn-success w-100"
+                                >
+                                    + Add More Service
+                                </a>
                                 </div>
                             </div>
     
+                            {/* Save & Next Button */}
                             <div className='col-12 mt-4 text-center'>
-                                <button className='btn btn-success w-100 text-center' onClick={handleServiceSubmit}>Save & Next</button>
+                                <button className='btn btn-dark btn-lg w-100' onClick={handleServiceSubmit}>
+                                    Save & Next
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -1513,36 +1595,36 @@ export default function CreateBusiness() {
         );
     }
 
-
-
     function CreateProductPart() {
         const [productSection, setProductSection] = useState([{
             title: "",
             description: "",
             image: "",
             price: "",
+            loadingImage: false, // Loader state for image preview
         }]);
-    
-        const [s3Files, setS3Files] = useState({});
     
         const handleFileChange = (index, e) => {
             const file = e.target.files[0];
             if (file) {
+                const updatedProducts = [...productSection];
+                updatedProducts[index].loadingImage = true; // Start loader when the file is selected
+                setProductSection(updatedProducts);
+    
                 const reader = new FileReader();
                 reader.onload = async (e) => {
                     const preReq = await preRequestFun(file, name);
                     let accessLink = '';
                     if (preReq && preReq.accessLink) {
                         accessLink = preReq.accessLink;
-                        const updatedProducts = [...productSection];
-                        updatedProducts[index].image = accessLink; 
-                        setProductSection(updatedProducts);
+                        updatedProducts[index].image = accessLink; // Update image URL
                     } else {
                         console.error('Access link not found in response.');
-                        return;
                     }
-                    
+                    updatedProducts[index].loadingImage = false; // Stop loader after processing the image
+                    setProductSection([...updatedProducts]); // Trigger re-render with updated products
                 };
+    
                 reader.readAsDataURL(file);
             }
         };
@@ -1552,7 +1634,16 @@ export default function CreateBusiness() {
         };
     
         const handleProductSubmit = () => {
-            // Assuming formData is part of your state or props and is updated elsewhere
+            const isValid = productSection.every(product => 
+                product.title && product.description && (product.price || product.price === "")
+            );
+    
+            if (!isValid) {
+                alert("Please fill out all fields except for the product price.");
+                return;
+            }
+    
+            // Proceed with submission if all fields are filled
             setFormData((prevFormData) => ({
                 ...prevFormData,
                 productSection,
@@ -1561,108 +1652,103 @@ export default function CreateBusiness() {
         };
     
         return (
-            <>
-                <div className='h-100vh'>
-                    <div className="row h-100 justify-content-center">
-                        {/* Left Image Section */}
-                        <div className="d-none d-md-block left-portion p-0 col-md-5 h-100">
-                            <img src="/src/assets/images/landing-page.jpg" alt="" className='w-100 h-100' />
+            <div className='h-100vh'>
+                <div className="row h-100 justify-content-center">
+                    <div className="d-none d-md-block left-portion p-0 col-md-5 h-100">
+                        <img src="/src/assets/images/landing-page.jpg" alt="" className='w-100 h-100' />
+                    </div>
+    
+                    <div className="col-12 col-md-7 row align-items-end justify-content-center h-100 p-3 p-md-5 right-portion">
+                        <div className="col-12 text-start">
+                            <button className="btn btn-dark w-auto float-start" onClick={handlePrevStep}><i className="bi bi-arrow-left"></i></button>
                         </div>
-    
-                        {/* Right Form Section */}
-                        <div className="col-12 col-md-7 row align-items-end justify-content-center h-100 p-3 p-md-5 right-portion">
-                            <div className="col-12 text-start">
-                                <button className="btn btn-dark w-auto float-start" onClick={handlePrevStep}><i className="bi bi-arrow-left"></i></button>
+                        <div className='row justify-content-center'>
+                            <div className="col-12 text-center text-md-start mt-3">
+                                <h1 className="fw-bold">Add Product Details</h1>
                             </div>
-                            <div className='row justify-content-center'>
-                                <div className="col-12 text-center text-md-start mt-3">
-                                    <h1 className="fw-bold">Add Product Details</h1>
-                                </div>
     
-                                <div className="col-12 ">
+                            <div className="col-12">
                                 <div className="col-12 text-center">
-                                <u><h5 className='fs-18 mb-4 p-1 text-center text-md-start text-dark fw-bold mt-3'>Add Products</h5></u>
+                                    <u><h5 className='fs-18 mb-4 p-1 text-center text-md-start text-dark fw-bold mt-3'>Add Products</h5></u>
                                 </div>
-                                    {productSection.map((item, index) => (
-                                        <div key={index} className='row align-items-center'>
+                                {productSection.map((item, index) => (
+                                    <div key={index} className='row align-items-center'>
+                                        <input
+                                            type="text"
+                                            name="title"
+                                            className='form-control form-control-lg mb-3'
+                                            placeholder='Product Title'
+                                            value={item.title}
+                                            onChange={(e) => {
+                                                const updatedProducts = [...productSection];
+                                                updatedProducts[index].title = e.target.value;
+                                                setProductSection(updatedProducts);
+                                            }}
+                                            required
+                                        />
+                                        <textarea
+                                            name="description"
+                                            className='form-control form-control-lg mb-3'
+                                            placeholder='Description'
+                                            value={item.description}
+                                            onChange={(e) => {
+                                                const updatedProducts = [...productSection];
+                                                updatedProducts[index].description = e.target.value;
+                                                setProductSection(updatedProducts);
+                                            }}
+                                            required
+                                        />
+                                        <div className="col-12 col-md-3 mb-3">
                                             <input
-                                                type="text"
-                                                name="title"
-                                                className='form-control form-control-lg mb-3'
-                                                placeholder='Product Title'
-                                                value={item.title}
-                                                onChange={(e) => {
-                                                    const updatedProducts = [...productSection];
-                                                    updatedProducts[index].title = e.target.value;
-                                                    setProductSection(updatedProducts);
-                                                }}
+                                                type="file"
+                                                hidden
+                                                className='menuImageInput'
+                                                onChange={(e) => handleFileChange(index, e)}
                                             />
-                                            <textarea
-                                                name="description"
-                                                className='form-control form-control-lg mb-3'
-                                                placeholder='Description'
-                                                value={item.description}
-                                                onChange={(e) => {
-                                                    const updatedProducts = [...productSection];
-                                                    updatedProducts[index].description = e.target.value;
-                                                    setProductSection(updatedProducts);
-                                                }}
-                                            />
-    
-                                            <div className="col-12 col-md-3 mb-3">
-                                                <input
-                                                    type="file"
-                                                    hidden
-                                                    className='menuImageInput'
-                                                    onChange={(e) => handleFileChange(index, e)}
-                                                />
-                                                <div onClick={() => uploadImage(index)} className="p-2 mt-2 add-logo-div">
-                                                    <div className="text-center">
+                                            <div onClick={() => uploadImage(index)} className="p-2 mt-2 add-logo-div">
+                                                <div className="text-center">
+                                                    {item.loadingImage ? (
+                                                        <div className="spinner-border text-primary" role="status"></div>
+                                                    ) : (
                                                         <img
-                                                            src={item.image || "/src/assets/images/add_image.png"}
+                                                            src={item.image || "/src/assets/images/add_image.png"} // Use the latest image URL
                                                             width="50"
                                                             alt="Add Product Image"
                                                         />
-                                                        <div className="col-12">
-                                                            <span>Add Image</span>
-                                                        </div>
-                                                    </div>
+                                                    )}
                                                 </div>
                                             </div>
-    
-                                            <div className="mt-2">
-                                                <input
-                                                    type="number"
-                                                    name="price"
-                                                    className='form-control form-control-lg w-100 mb-3'
-                                                    placeholder='Price'
-                                                    value={item.price}
-                                                    onChange={(e) => {
-                                                        const updatedProducts = [...productSection];
-                                                        updatedProducts[index].price = e.target.value;
-                                                        setProductSection(updatedProducts);
-                                                    }}
-                                                />
-                                            </div>
                                         </div>
-                                    ))}
-                                    <a
-                                        href="#"
-                                        onClick={() => setProductSection((prev) => [...prev, { title: "", description: "", image: "", price: "" }])}
-                                        className="text-decoration-none btn btn-success w-100"
-                                    >
-                                        + Add More Product
-                                    </a>
-                                </div>
+                                        <input
+                                            type="number"
+                                            name="price"
+                                            className='form-control form-control-lg w-100 mb-3'
+                                            placeholder='Price'
+                                            value={item.price}
+                                            onChange={(e) => {
+                                                const updatedProducts = [...productSection];
+                                                updatedProducts[index].price = e.target.value;
+                                                setProductSection(updatedProducts);
+                                            }}
+                                        />
+                                    </div>
+                                ))}
+                                <a
+                                    href="#"
+                                    onClick={() => setProductSection((prev) => [...prev, { title: "", description: "", image: "", price: "", loadingImage: false }])}
+                                    className="text-decoration-none btn btn-success w-100"
+                                >
+                                    + Add More Product
+                                </a>
                             </div>
+                        </div>
     
-                            <div className='col-12 mt-4 text-center'>
-                                <button className='btn btn-success w-100 text-center' onClick={handleProductSubmit}>Save & Next</button>
-                            </div>
+                        <div className='col-12 mt-4 text-center'>
+                            <button className='btn btn-success w-100 text-center' onClick={handleProductSubmit}>Save & Next</button>
                         </div>
                     </div>
                 </div>
-            </>
+            </div>
         );
     }
     
@@ -1956,7 +2042,7 @@ export default function CreateBusiness() {
                                                             width="100"
                                                         />
                                                     ) : (
-                                                        <img src="/src/assets/images/add_image.png" width="50" alt="Add Image" />
+                                                        <img src="/src/assets/images/add_image.png" width="50" alt="Add Image" style={{height:'70px',objectFit:'contain'}}/>
                                                     )}
                                                 </div>
                                             </div>
@@ -2186,12 +2272,9 @@ function MoreVideos() {
             infinite: true,
             autoplay: true,
             arrows: false,
-            // centerMode: true,
             speed: 500,
-            slidesToShow: 2, // Number of dishes to show
-            // mobileFirst: true,
+            slidesToShow: 2, // Default number of dishes to show
             slidesToScroll: 1,
-    
             responsive: [
                 {
                     breakpoint: 1024,
@@ -2204,7 +2287,7 @@ function MoreVideos() {
                 {
                     breakpoint: 768,
                     settings: {
-                        slidesToShow: 1,
+                        slidesToShow: 2, // Show 2 slides on smaller screens
                         slidesToScroll: 1,
                     },
                 },
@@ -2229,8 +2312,9 @@ function MoreVideos() {
                         slidesToScroll: 1,
                     },
                 },
-            ]
+            ],
         };
+        
         const setting2 = {
             dots: false,
             arrows: false,
@@ -2613,13 +2697,21 @@ function MoreVideos() {
                             </div>
                         </div>
                         <div className="col-12">
-    
                             <div className="col-12 mb-5 row david-font">
                                 <Slider {...settings4}>
                                     {businessData.specialServices.data.map((dish, index) => (
-                                        <div key={index} className="dish-div col-12 text-center  p-3">
-                                            <div className="col-12 position-relative text-center" style={{ bottom: "60px" }}>
-                                                <img src={dish.image} alt={dish.title} style={{ width: '300px', height: '300px', objectFit: 'cover' }} />
+                                        <div key={index} className="dish-div text-center p-3">
+                                            <div className="col-12 position-relative">
+                                                <img
+                                                    src={dish.image}
+                                                    alt={dish.title}
+                                                    style={{
+                                                        width: '100%', // Adjust to fill the container
+                                                        height: 'auto', // Maintain aspect ratio
+                                                        maxWidth: '300px', // Optional: cap the width
+                                                        objectFit: 'cover',
+                                                    }}
+                                                />
                                             </div>
                                             <div className="col-12">
                                                 <h2 className="fs-20 fw-bold">{dish.title}</h2>
@@ -2631,7 +2723,6 @@ function MoreVideos() {
                                     ))}
                                 </Slider>
                             </div>
-    
                         </div>
                     </div>
                 </section>

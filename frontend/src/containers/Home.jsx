@@ -256,7 +256,7 @@ export default function Home() {
             <section className="home-spot h-auto mb-5">
             <div className="container padding" id='business'>
                 <div className="text-center mb-5">
-                    <h1 className='fw-bold'>Discover the Top Spots Around You:</h1>
+                    <h1 className='fw-bold'>Discover the Top Businesses</h1>
                     <p className="mt-3 text-center">
                         Explore the most popular destinations in your area, highly rated by locals and visitors alike.
                         Find out what makes these places stand out and start your next adventure right here!
