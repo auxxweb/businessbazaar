@@ -18,6 +18,7 @@ import { Rating } from 'primereact/rating';
 import { InputText } from "primereact/inputtext";
 import { InputTextarea } from "primereact/inputtextarea";
 import CircularProgress from '@mui/material/CircularProgress'; 
+import CloseIcon from '@mui/icons-material/Close';
 
 export default function CreateBusiness() {
     const [step, setStep] = useState(1);
@@ -1663,13 +1664,19 @@ export default function CreateBusiness() {
     }
 
     function CreateProductPart() {
-        const [productSection, setProductSection] = useState([{
+        const initialState = [{
             title: "",
             description: "",
             image: "",
             price: "",
             loadingImage: false, // Loader state for image preview
-        }]);
+        }]
+        const [productSection, setProductSection] = useState(initialState);
+        const [error, setError] = useState("")
+
+        useEffect(()=>{
+            setProductSection(formData?.productSection?.length ? formData.productSection : initialState)
+        },[])
     
         const handleFileChange = (index, e) => {
             const file = e.target.files[0];
@@ -1706,7 +1713,7 @@ export default function CreateBusiness() {
             );
     
             if (!isValid) {
-                alert("Please fill out all fields except for the product price.");
+                setError("Please fill out all fields except for the product price.")
                 return;
             }
     
@@ -1808,6 +1815,8 @@ export default function CreateBusiness() {
                                     + Add More Product
                                 </a>
                             </div>
+                            {error && <p className="text-danger text-danger mt-3">{error}</p>}
+
                         </div>
     
                         <div className='col-12 mt-4 text-center'>
@@ -1832,6 +1841,11 @@ export default function CreateBusiness() {
             description: '',
             metaTags: ['']
         });
+
+        useEffect(()=>{
+            setSocialMediaLinks(formData?.socialMediaLinks)
+            setSeoData(formData?.seoData)
+        },[])
 
         // Handle tag change
         const handleTagChange = (index, value) => {
@@ -2099,8 +2113,20 @@ export default function CreateBusiness() {
                                                 accept="image/*"
                                                 onChange={(e) => handleFileChange(index, e)}
                                             />
-                                            <div className="p-2 add-logo-div" onClick={() => handleAddImageClick(index)}>
-                                                <div className="text-center">
+                                            <div className="p-2 add-logo-div" >
+                                                  {/* Remove Button for all except the first image */}
+                                            {index > 0 ? (
+                                    
+                                                <div className='d-flex justify-content-end'>
+                                                    <CloseIcon
+                                                        onClick={() => removeImage(index)}
+                                                    />
+                                                </div>
+                                               
+                                            ) : (
+                                                <div style={{height:"1.5rem"}}></div>
+                                            )}
+                                                <div className="text-center" onClick={() => handleAddImageClick(index)}>
                                                     {image.file ? (
                                                         <img
                                                             src={URL.createObjectURL(image.file)}
@@ -2113,16 +2139,6 @@ export default function CreateBusiness() {
                                                     )}
                                                 </div>
                                             </div>
-    
-                                            {/* Remove Button for all except the first image */}
-                                            {index > 0 && (
-                                                <button
-                                                    className="btn btn-danger mt-2 w-100"
-                                                    onClick={() => removeImage(index)}
-                                                >
-                                                    Remove
-                                                </button>
-                                            )}
                                         </div>
                                     ))}
                                 </div>
