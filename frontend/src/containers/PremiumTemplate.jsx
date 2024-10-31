@@ -4,9 +4,11 @@ import useBusiness from "../Hooks/useBusiness";
 import BackdropLoader from "../components/BackdropLoader";
 import ContactSection from "../components/Business/ContactSection";
 import WelcomeCard from "../components/Business/WelcomeCard";
+import TemplateFooter from "../components/Business/TemplateFooter";
+import SpecialServices from "../components/Business/SpecialServices";
 
 const PremiumTemplate = () => {
-  const { businessData, loading } = useBusiness();
+  const { businessData, loading, closeDays } = useBusiness();
   return (
     <>
       <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -139,6 +141,12 @@ const PremiumTemplate = () => {
         <Box mt={{xs:"10rem", md:"5rem"}}>
           <WelcomeCard businessData={businessData}/>
         </Box>
+
+        <SpecialServices businessData={businessData}/>
+
+        <TemplateFooter businessData={businessData} closeDays={closeDays}/>
+
+
 
         <BackdropLoader open={loading} />
       </Box>

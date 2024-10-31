@@ -4,7 +4,7 @@ import { Box, Button, Typography } from "@mui/material";
 const WelcomeCard = ({ businessData }) => {
   return (
     <Box sx={{ display: "flex", flexDirection:{xs:"column", md:"row"} }}>
-      <Box width={{md:"25%"}} maxHeight={"600px"} display={"flex"} justifyContent={"center"} alignItems={"center"} marginBottom={"2rem"}>
+      <Box width={{md:"25%"}} maxHeight={"600px"} display={"flex"} justifyContent={"center"} alignItems={"center"} >
 
         <img
         //   src={businessData?.welcomePart?.coverImage}
@@ -14,7 +14,7 @@ const WelcomeCard = ({ businessData }) => {
           alt="welcome image"
         />
       </Box>
-      <Box width={{md:"75%"}} display={"flex"} justifyContent={"center"} alignItems={"center"} marginBottom={"2rem"}>
+      <Box width={{md:"75%"}} display={"flex"} justifyContent={"center"} alignItems={"center"}>
         <Box
           sx={{
             display: "flex",
