@@ -37,8 +37,12 @@ export default function CreateBusiness() {
 
     const [planData, setPlanData] = useState([]);
 
+    const [testData, setTestData] = useState([]);
 
-    const [formData, setFormData] = useState({
+    const [formData, setFormData] = useState(
+       
+        
+        {
         businessName: '',
         logo: '',
         ownerName: '',
@@ -105,7 +109,9 @@ export default function CreateBusiness() {
             metaTags: []
         },
         selectedPlan: ''
-    });
+    }
+);
+
     
     const preRequestFun = async (file, position) => {
         const url = 'https://businessbazaarserver.auxxweb.in/api/v1/s3url';
@@ -403,7 +409,7 @@ export default function CreateBusiness() {
                                 />
                                 <div onClick={imageUpload} className="p-2 mt-2 add-logo-div" id="businessMainDiv" style={{ cursor: 'pointer' }}>
                                     {isLoading ? (
-                                        <CircularProgress className='text-center' /> // Loader displayed while image loads
+                                        <div className="spinner-border text-primary" role="status"></div>
                                     ) : logo ? (
                                         <img src={logo} alt="Business Logo" width="100" className="img-thumbnail" />
                                     ) : (
@@ -1289,7 +1295,7 @@ export default function CreateBusiness() {
                                 <div onClick={() => triggerFileUpload('LandingHeroImageInput')} className="p-2 mt-2 mb-3 add-logo-div">
                                     <div className="text-center">
                                         {loading ? (
-                                            <span>Loading...</span>
+                                             <div className="spinner-border text-primary" role="status"></div>
                                         ) : (
                                             <img src={landingPageHero.coverImage || "/src/assets/images/add_image.png"} width="50" alt="Add Hero Image" />
                                         )}
@@ -1325,7 +1331,7 @@ export default function CreateBusiness() {
                                 <div onClick={() => triggerFileUpload('WelcomeImageInput')} className="p-2 mt-2 mb-3 add-logo-div">
                                     <div className="text-center">
                                         {loading ? (
-                                            <span>Loading...</span>
+                                             <div className="spinner-border text-primary" role="status"></div>
                                         ) : (
                                             <img src={welcomePart.coverImage || "/src/assets/images/add_image.png"} width="50" alt="Add Welcome Image" />
                                         )}
@@ -2133,6 +2139,8 @@ export default function CreateBusiness() {
                                                             alt={`Uploaded Preview ${index}`}
                                                             className='img-preview'
                                                             width="100"
+                                                            height="80"
+                                                            style={{objectFit: 'cover'}}
                                                         />
                                                     ) : (
                                                         <img src="/src/assets/images/add_image.png" width="50" alt="Add Image" style={{height:'70px',objectFit:'contain'}}/>
@@ -2331,10 +2339,12 @@ function MoreVideos() {
                 [name]: value,
             }));
         };
-    
+        console.log(formData)
         useEffect(() => {
             const fetchData = async () => {
                 setBusinessData(formData)
+
+                
                
                 setColorTheme(formData.theme)
                 setLoading(false);
@@ -2352,17 +2362,17 @@ function MoreVideos() {
     
         const settings4 = {
             dots: false,
-            infinite: true,
+            // infinite: true,
             autoplay: true,
             arrows: false,
             speed: 500,
-            slidesToShow: 2, // Default number of dishes to show
+            slidesToShow: 2,
             slidesToScroll: 1,
             responsive: [
                 {
                     breakpoint: 1024,
                     settings: {
-                        slidesToShow: 3,
+                        slidesToShow: 2,
                         slidesToScroll: 1,
                         infinite: true,
                     },
@@ -2370,7 +2380,7 @@ function MoreVideos() {
                 {
                     breakpoint: 768,
                     settings: {
-                        slidesToShow: 2, // Show 2 slides on smaller screens
+                        slidesToShow: 1,
                         slidesToScroll: 1,
                     },
                 },
@@ -2406,14 +2416,14 @@ function MoreVideos() {
             // centerMode: true,
             speed: 500,
             slidesToShow: 2,
-            slidesToScroll: 1,
+            slidesToScroll: 2,
             afterChange: (current) => setCurrentSlide(current),
             responsive: [
                 {
                     breakpoint: 1024,
                     settings: {
                         slidesToShow: 3,
-                        slidesToScroll: 1,
+                        slidesToScroll: 2,
                         infinite: true,
                     },
                 },
@@ -2780,18 +2790,43 @@ function MoreVideos() {
                             </div>
                         </div>
                         <div className="col-12">
-                            <div className="col-12 mb-5 row david-font">
-                                <Slider {...settings4}>
-                                    {businessData.specialServices.data.map((dish, index) => (
-                                        <div key={index} className="dish-div text-center p-3">
+                            <div className="col-12 mb-5 row justify-content-center david-font">
+                                {businessData.specialServices.data.length > 2 ? (
+                                    <Slider {...settings4}>
+                                        {businessData.specialServices.data.map((dish, index) => (
+                                            <div key={index} className="dish-div col-12 col-lg-6 text-center p-3">
+                                                <div className="col-12 position-relative">
+                                                    <img
+                                                        src={dish.image}
+                                                        alt={dish.title}
+                                                        style={{
+                                                            width: '100%',
+                                                            height: 'auto',
+                                                            maxWidth: '300px',
+                                                            objectFit: 'cover',
+                                                        }}
+                                                    />
+                                                </div>
+                                                <div className="col-12">
+                                                    <h2 className="fs-20 fw-bold">{dish.title}</h2>
+                                                </div>
+                                                <div className="col-12 mt-3 mb-3">
+                                                    <p>{dish.description}</p>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </Slider>
+                                ) : (
+                                    businessData.specialServices.data.map((dish, index) => (
+                                        <div key={index} className="dish-div col-12 col-lg-6 text-center p-3">
                                             <div className="col-12 position-relative">
                                                 <img
                                                     src={dish.image}
                                                     alt={dish.title}
                                                     style={{
-                                                        width: '100%', // Adjust to fill the container
-                                                        height: 'auto', // Maintain aspect ratio
-                                                        maxWidth: '300px', // Optional: cap the width
+                                                        width: '100%',
+                                                        height: 'auto',
+                                                        maxWidth: '300px',
                                                         objectFit: 'cover',
                                                     }}
                                                 />
@@ -2803,8 +2838,8 @@ function MoreVideos() {
                                                 <p>{dish.description}</p>
                                             </div>
                                         </div>
-                                    ))}
-                                </Slider>
+                                    ))
+                                )}
                             </div>
                         </div>
                     </div>
@@ -2822,7 +2857,7 @@ function MoreVideos() {
     
                         <div className="mt-5 david-font">
                             <div className="mb-5">
-                                <div className="row mb-3">
+                                <div className="row justify-content-center mb-3">
                                     {businessData.productSection.map((item, index) => (
                                         <div className="col-12 col-lg-6 mt-3" key={index}>
                                             <div className="row  product-section align-items-center">
@@ -2848,24 +2883,43 @@ function MoreVideos() {
     
                 <section className="h-auto david-font" style={{ backgroundColor: "#F3F3F4" }}>
                     <div className="container p-top">
-                        <div className="col-12 mt-5 text-center text-lg-start">
-                            <h1 className='fw-bold'>Services We Provide</h1>
+                        <div className="col-12 mt-5 text-center ">
+                            <h1 className='fw-bold text-center'>Services We Provide</h1>
                         </div>
-                        <div className="col-12 mb-5">
-                            <Slider {...setting2} className='mb-5'>
-                                {businessData.service.map((service, index) => (
-                                    <div key={index} className={`col-12 col-lg-4 service-design ${index === currentSlide ? 'active' : 'bg-white'}  mt-5 mb-5 text-center`}>
-                                        <div className="col-12 text-center">
-                                            <h3>{service.title}</h3>
+                        <div className="col-12 mb-5 row justify-content-center">
+                                {businessData.service.length > 3 ? (
+                                    <Slider {...setting2} className='mb-5'>
+                                        {businessData.service.map((service, index) => (
+                                            <div
+                                                key={index}
+                                                className={`col-12 col-lg-4 service-design ${index === currentSlide ? 'active' : ''} mt-5 mb-5 text-center`}
+                                            >
+                                                <div className="col-12 text-center">
+                                                    <h3>{service.title}</h3>
+                                                </div>
+                                                <div className="col-12 mt-5">
+                                                    <p className="text-center">{service.description}</p>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </Slider>
+                                ) : (
+                                    businessData.service.map((service, index) => (
+                                        <div
+                                            key={index}
+                                            className={`col-12 col-lg-4 service-design ${index === currentSlide ? 'active' : ''} mt-5 mb-5 text-center`}
+                                        >
+                                            <div className="col-12 text-center">
+                                                <h3>{service.title}</h3>
+                                            </div>
+                                            <div className="col-12 mt-5">
+                                                <p className="text-center">{service.description}</p>
+                                            </div>
                                         </div>
-                                        <div className="col-12 mt-5">
-                                            <p className='text-center'>{service.description}</p>
-                                        </div>
-                                        
-                                    </div>
-                                ))}
-                            </Slider>
-                        </div>
+                                    ))
+                                )}
+                            </div>
+
     
                         <div className="col-12 mb-5" id='gallery'>
                         <div className="col-12 mb-5 mt-5">
@@ -3052,7 +3106,7 @@ function MoreVideos() {
                     <div className="container pjs  p-top">
                         <div className="mt-5">
                             <div className="row">
-                                <div className="col-12 col-lg-4">
+                                <div className="col-12 col-lg-3">
                                     <div className="col-12 d-block d-lg-flex text-center text-lg-start text mt-5">
                                         <div className="nav-logo width-fit">
                                             <img src={businessData.logo} alt="" />
@@ -3066,11 +3120,8 @@ function MoreVideos() {
                                     </div>
                                 </div>
     
-                                <div className="col-12 col-lg-4">
+                                <div className="col-12 col-lg-2">
                                     <div className="col-12 mt-5">
-                                        <div className="col-12 mt-3 mb-3 text-center text-lg-start">
-                                            <a href="#" className=" fs-14 text-decoration-none text-orange">NAVIGATION</a>
-                                        </div>
                                         <div className="col-12 mt-3 mb-3  text-center text-lg-start">
                                             <a href="#" className="fs-14 text-decoration-none" style={{ color: "#A4B3CB" }}>Menu</a>
                                         </div>
@@ -3085,8 +3136,44 @@ function MoreVideos() {
                                         </div>
                                     </div>
                                 </div>
-    
+
+                                
                                 <div className="col-12 col-lg-4">
+                                    <div className="row">
+                                        <div className="col-lg-6">
+                                            <div className="col-12">
+                                                <div className="col-12 mt-3 mb-3 text-center text-lg-start">
+                                                    <a href="#" className=" fs-14 text-decoration-none text-orange">OPENING DAYS</a>
+                                                </div>
+                                                <div className="mt-3 text-center text-lg-start" style={{ color: "#A4B3CB" }}>
+                                                    {businessData.businessTiming.workingDays.map((day, index) => (
+                                                        <p>{day}</p>
+                                                    ))}
+                                                </div>
+                                                <div className="mt-3 text-center text-lg-start" style={{ color: "#A4B3CB" }}>
+                                                    <span>8:00 am to 9:00 pm</span>
+                                                </div>
+                                            </div>
+                                        </div>
+    
+    
+                                        <div className="col-lg-6">
+                                            <div className="col-12 mt-5 text-center text-lg-start">
+                                                <div className="mt-3" style={{ color: "#A4B3CB" }}>
+                                                   {closeDays.map((day,index) =>(
+                                                    <p>{day}</p>
+                                                   ))}
+                                                </div>
+                                                <div className="mt-3" style={{ color: "#A4B3CB" }}>
+                                                    <span>CLOSED</span>
+                                                </div>
+                                            </div>
+                                        </div>
+    
+                                    </div>
+                                </div>
+    
+                                <div className="col-12 col-lg-3">
                                     <div className="col-12 mt-5">
                                         <div className="col-12 mt-3 mb-3 text-center text-lg-start">
                                             <a href="#" className=" fs-14 text-decoration-none text-orange">Follow Us</a>
@@ -3108,52 +3195,18 @@ function MoreVideos() {
                                     </div>
                                 </div>
     
-                                <div className="col-12">
-                                    <div className="row">
-                                        <div className="col-lg-4">
-                                            <div className="col-12">
-                                                <div className="col-12 mt-3 mb-3 text-center text-lg-start">
-                                                    <a href="#" className=" fs-14 text-decoration-none text-orange">OPENING HOURS</a>
-                                                </div>
-                                                <div className="mt-3 text-center text-lg-start" style={{ color: "#A4B3CB" }}>
-                                                    {businessData.businessTiming.workingDays.map((day, index) => (
-                                                        <p>{day}</p>
-                                                    ))}
-                                                </div>
-                                                <div className="mt-3 text-center text-lg-start" style={{ color: "#A4B3CB" }}>
-                                                    <span>8:00 am to 9:00 pm</span>
-                                                </div>
-                                            </div>
-                                        </div>
-    
-    
-                                        <div className="col-lg-4">
-                                            <div className="col-12 mt-5 text-center text-lg-start">
-                                                <div className="mt-3" style={{ color: "#A4B3CB" }}>
-                                                   {closeDays.map((day,index) =>(
-                                                    <p>{day}</p>
-                                                   ))}
-                                                </div>
-                                                <div className="mt-3" style={{ color: "#A4B3CB" }}>
-                                                    <span>CLOSED</span>
-                                                </div>
-                                            </div>
-                                        </div>
-    
-                                    </div>
-                                </div>
     
                                 <div className="col-12">
                                     <div className="row">
-                                        <div className="col-12 col-lg-8 mt-5 text-center text-lg-start" style={{ color: "#A4B3CB" }}>
-                                            <span>© 2024 Business Bazaar. All Right Reserved</span>
-                                        </div>
     
                                         <div className="col-12 col-lg-6  text-center text-lg-start mb-5 mt-5" style={{ color: "#A4B3CB" }}>
                                             <div className="row">
                                                 <div className="col-12 col-lg-6">Terms of Service</div>
                                                 <div className="col-12 col-lg-6">Privacy Policy</div>
                                             </div>
+                                        </div>
+                                        <div className="col-12 col-lg-8 mt-5 text-center text-lg-start" style={{ color: "#A4B3CB" }}>
+                                            <span>© 2024 Business Bazaar. All Right Reserved</span>
                                         </div>
                                     </div>
                                 </div>
