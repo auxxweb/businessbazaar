@@ -6,6 +6,11 @@ import ContactSection from "../components/Business/ContactSection";
 import WelcomeCard from "../components/Business/WelcomeCard";
 import TemplateFooter from "../components/Business/TemplateFooter";
 import SpecialServices from "../components/Business/SpecialServices";
+import SubscribeSection from "../components/Business/SubscribeSection";
+import ReviewSection from "../components/Business/ReviewSection";
+import Gallery from "../components/Business/Gallery";
+import ServicesSection from "../components/Business/ServicesSection";
+import MenuSection from "../components/Business/MenuSection";
 
 const PremiumTemplate = () => {
   const { businessData, loading, closeDays } = useBusiness();
@@ -61,7 +66,7 @@ const PremiumTemplate = () => {
                     `}
       </style>
 
-      <Box sx={{overflowX:"hidden"}}>
+      <Box sx={{ overflowX: "hidden" }}>
         <TemplateHeader businessData={businessData} />
         <Box
           sx={{
@@ -138,16 +143,18 @@ const PremiumTemplate = () => {
             <ContactSection businessData={businessData} />
           </Box>
         </Box>
-        <Box mt={{xs:"10rem", md:"5rem"}}>
-          <WelcomeCard businessData={businessData}/>
+        <Box mt={{ xs: "10rem", md: "5rem" }}>
+          <WelcomeCard businessData={businessData} />
         </Box>
 
-        <SpecialServices businessData={businessData}/>
+        <SpecialServices businessData={businessData} />
+        <MenuSection businessData={businessData} />
+        <ServicesSection businessData={businessData} />
+        <Gallery businessData={businessData} />
+        <ReviewSection businessData={businessData} />
+        <SubscribeSection />
 
-        <TemplateFooter businessData={businessData} closeDays={closeDays}/>
-
-
-
+        <TemplateFooter businessData={businessData} closeDays={closeDays} />
         <BackdropLoader open={loading} />
       </Box>
     </>
