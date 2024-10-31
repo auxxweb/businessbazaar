@@ -18,8 +18,7 @@ export const fetchCategories = async () => {
 
         const data = response.data;
         if (data.success) {
-            console.log('first')
-            return data; // Return the data object
+            return data;
         } else {
             console.error("Failed to fetch categories");
         }
@@ -28,10 +27,10 @@ export const fetchCategories = async () => {
     }
 };
 
-export const fetchBusiness = async () => {
+export const fetchBusiness = async (page) => {
     try {
-        const response = await axios.get(`${baseUrl}/api/v1/business`, config); // Use backticks for template literals
-        console.log(response)
+        const response = await axios.get(`${baseUrl}/api/v1/business?page=${page}&limit=6`, config);
+        
         if (response.status !== 200) {
             throw new Error(`HTTP error! Status: ${response.status}`);
         }
@@ -126,12 +125,52 @@ export const FetchPlans = async () =>{
 
         const data = response.data;
         if (data.success) {
-            console.log(data)
             return data; 
         } else {
             console.error("Failed to fetch categories");
         }
     } catch (error) {
         console.error("Error fetching categories:", error.message);
+    }
+}
+
+
+export const getCategoryData = async (categoryId) =>{
+    try{
+        
+        const response = await axios.get(`${baseUrl}/api/v1/category/${categoryId}`, config);
+        
+        if (response.status !== 200){
+            throw new Error('HTTP status: ' + response.status);
+        }
+        const data = response.data;
+
+        if (data.success) {
+            return data
+        }else{
+            console.error("Failed to fetch category data");
+        }
+
+    }catch (error) {
+        console.log("Error fetching category",error.message);
+    }
+}
+
+export const getCategoryBusiness = async (page,categoryId)=>{
+    try{
+        const response = await axios.get(`${baseUrl}/api/v1/business/category/${categoryId}?page=${page}&&limit=6`);
+
+    if (response.status !== 200){
+        throw new Error('HTTP status: ' + response.status);
+    }
+    const data = response.data;
+
+    if (data.success) {
+        return data
+    }else{
+        console.log("Failed to fetch business based on category")
+    }
+    }catch(error){
+        console.log("Error fetching business",error.message);
     }
 }
