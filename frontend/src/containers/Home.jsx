@@ -10,6 +10,7 @@ import { Navigate } from 'react-router';
 import { Link } from 'react-router-dom';
 import axios from 'axios'
 import { fetchBusiness, fetchCategories, fetchSearchCategory } from '../Functions/functions';
+import Loader from '../components/Loader';
 
 export default function Home() {
     const [currentSlide, setCurrentSlide] = useState(0);
@@ -36,37 +37,41 @@ export default function Home() {
     const [categoryData, setCategoryData] = useState([]);
     const [businessData, setBusinessData] = useState([]);
     const [searchData, setSearchData] = useState('');
+    const [totalBusinessData, setTotalBusinessData] = useState(0)
+    const [loading, setLoading] = useState(true);
+    const [currentPage, setCurrentPage] = useState(1);
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const businessDetails = await fetchBusiness(); 
-                const categoryDetails = await fetchCategories(); 
+                setLoading(true);
+                const businessDetails = await fetchBusiness(currentPage);
+                const categoryDetails = await fetchCategories();
 
                 setCategoryData(categoryDetails.data.data)
                 setBusinessData(businessDetails.data.data)
 
-                console.log(businessDetails)
+                setTotalBusinessData(businessDetails.data.totalCount)
 
-               
-
-                
             } catch (error) {
-                console.error("Error fetching data:", error); 
+                console.error("Error fetching data:", error);
+            } finally {
+                setLoading(false);
             }
         };
 
         fetchData();
     }, []);
 
-    async function searchHandler(){
-        try{
+    async function searchHandler() {
+        try {
+            console.log(searchData)
             const searchValue = await fetchSearchCategory(searchData);
-            
+            console.log(searchValue)
             setCategoryData(searchValue.data.data)
 
-        }catch (error) {
-            console.error('Error fetching data:',error)
+        } catch (error) {
+            console.error('Error fetching data:', error)
         }
     }
 
@@ -98,20 +103,50 @@ export default function Home() {
     ];
 
 
-    const [currentPage, setCurrentPage] = useState(1);
-    const itemsPerPage = 6;
 
-    // Calculate the current page's items
-    const indexOfLastItem = currentPage * itemsPerPage;
-    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-    const currentItems = businessData.slice(indexOfFirstItem, indexOfLastItem);
+    const itemsPerPage = 6
 
-    // Calculate the total number of pages
-    const totalPages = Math.ceil(businessData.length / itemsPerPage);
 
-    // Functions to handle page change
-    const nextPage = () => setCurrentPage((prev) => Math.min(prev + 1, totalPages));
-    const prevPage = () => setCurrentPage((prev) => Math.max(prev - 1, 1));
+    const totalPages = Math.ceil(totalBusinessData / itemsPerPage);
+    const goToPreviousPage = async () => {
+        if (currentPage > 1) {
+            try {
+                setLoading(true);
+                const newPage = currentPage - 1;
+                setCurrentPage(newPage);
+                
+                const businessDetails = await fetchBusiness(newPage);
+                setBusinessData(businessDetails.data.data);
+                setTotalBusinessData(businessDetails.data.totalCount);
+            } catch (err) {
+                console.log("Failed to fetch business");
+            } finally {
+                setLoading(false);
+            }
+        }
+    };
+    
+    const goToNextPage = async () => {
+        if (currentPage < totalPages) {
+            try {
+                setLoading(true);
+                const newPage = currentPage + 1;
+                setCurrentPage(newPage);
+                
+                const businessDetails = await fetchBusiness(newPage);
+                setBusinessData(businessDetails.data.data);
+                setTotalBusinessData(businessDetails.data.totalCount);
+            } catch (err) {
+                console.log("Failed to fetch business");
+            } finally {
+                setLoading(false);
+            }
+        }
+    };
+    
+    if (loading) {
+        return <Loader />
+    }
 
     return (
         <Layout title="Home" navClass='home'>
@@ -167,7 +202,7 @@ export default function Home() {
                                         className="form-control custom-placeholder"
                                         placeholder="Search for Restaurants"
                                         value={searchData}
-                                        onInput={(e)=>{setSearchData(e.target.value)}}
+                                        onInput={(e) => { setSearchData(e.target.value) }}
                                         style={{
                                             borderLeft: 'none'
                                         }}
@@ -254,49 +289,49 @@ export default function Home() {
                 </div>
             </section>
             <section className="home-spot h-auto mb-5">
-            <div className="container padding" id='business'>
-                <div className="text-center mb-5">
-                    <h1 className='fw-bold'>Discover the Top Businesses</h1>
-                    <p className="mt-3 text-center">
-                        Explore the most popular destinations in your area, highly rated by locals and visitors alike.
-                        Find out what makes these places stand out and start your next adventure right here!
-                    </p>
-                </div>
-                <div className="row justify-content-around gap-2">
-                    {currentItems.map(business => (
-                        <Link to={`/template/${business._id}`} key={business._id} className="text-decoration-none text-dark col-12 col-md-5 b-theme location-card mt-3">
-                            <div className="row p-2">
-                                <div className="col-4 p-0">
-                                    <img src={business.logo} alt="" className='w-100 br-theme' />
+                <div className="container padding" id='business'>
+                    <div className="text-center mb-5">
+                        <h1 className='fw-bold'>Discover the Top Businesses</h1>
+                        <p className="mt-3 text-center">
+                            Explore the most popular destinations in your area, highly rated by locals and visitors alike.
+                            Find out what makes these places stand out and start your next adventure right here!
+                        </p>
+                    </div>
+                    <div className="row justify-content-around gap-2">
+                        {businessData.map(business => (
+                            <Link to={`/template/${business._id}`} key={business._id} className="text-decoration-none text-dark col-12 col-md-5 b-theme location-card mt-3">
+                                <div className="row p-2">
+                                    <div className="col-4 p-0">
+                                        <img src={business.logo} alt="" className='w-100 br-theme' />
+                                    </div>
+                                    <div className="col-8">
+                                        <div className="col-12 mb-2 mt-2">
+                                            <h2 style={{ fontSize: '28px' }}>{business.businessName}</h2>
+                                        </div>
+                                        <div className="col-12">
+                                            <span className='p-1 bg-success text-white pe-2 ps-2'>4.5 <i className="bi bi-star ms-2 text-white"></i></span>
+                                            <span className="ms-2 fs-12">3.5k reviews</span>
+                                        </div>
+                                        <div className="col-12 mt-3">
+                                            <h3 className='fs-16'>
+                                                <i className="bi bi-crosshair"></i>
+                                                <span className='ms-1 fs-15'>{business.address.buildingName}, {business.address.city}, {business.address.landMark}, {business.address.streetName}, {business.address.state}</span>
+                                            </h3>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div className="col-8">
-                                    <div className="col-12 mb-2 mt-2">
-                                        <h2 style={{ fontSize: '28px' }}>{business.businessName}</h2>
-                                    </div>
-                                    <div className="col-12">
-                                        <span className='p-1 bg-success text-white pe-2 ps-2 '>4.5 <i className="bi bi-star ms-2 text-white"></i></span>
-                                        <span className="ms-2 fs-12">3.5k reviews</span>
-                                    </div>
-                                    <div className="col-12 mt-3">
-                                        <h3 className='fs-16'>
-                                            <i className="bi bi-crosshair"></i>
-                                            <span className='ms-1 fs-15'>{business.address.buildingName}, {business.address.city}, {business.address.landMark}, {business.address.streetName}, {business.address.state}</span>
-                                        </h3>
-                                    </div>
-                                </div>
-                            </div>
-                        </Link>
-                    ))}
-                </div>
+                            </Link>
+                        ))}
+                    </div>
 
-                {/* Pagination Controls */}
-                <div className="d-flex justify-content-center mt-4">
-                    <button onClick={prevPage} disabled={currentPage === 1} className="btn btn-primary me-2">Previous</button>
-                    <span>Page {currentPage} of {totalPages}</span>
-                    <button onClick={nextPage} disabled={currentPage === totalPages} className="btn btn-primary ms-2">Next</button>
+                    {/* Pagination Controls */}
+                    <div className="d-flex justify-content-center mt-4">
+                        <button onClick={goToPreviousPage} disabled={currentPage === 1} className="btn btn-primary me-2">Previous</button>
+                        <span>Page {currentPage} of {totalPages}</span>
+                        <button onClick={goToNextPage} disabled={currentPage === totalPages} className="btn btn-primary ms-2">Next</button>
+                    </div>
                 </div>
-            </div>
-        </section>
+            </section>
             <section className="mb-5 mt-3 bg-light">
                 <div className="container">
                     <div className="mt-3 mb-3">
