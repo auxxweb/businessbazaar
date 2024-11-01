@@ -7,8 +7,7 @@ const WelcomeCard = ({ businessData }) => {
       <Box width={{md:"25%"}} maxHeight={"600px"} display={"flex"} justifyContent={"center"} alignItems={"center"} >
 
         <img
-        //   src={businessData?.welcomePart?.coverImage}
-          src={"/business/welcome.png"}
+          src={businessData?.welcomePart?.coverImage}
           width="100%"
           height={"auto"}
           alt="welcome image"
@@ -35,8 +34,8 @@ const WelcomeCard = ({ businessData }) => {
             marginBottom={"15px"}
             color={"#212529"}
           >
-            Welcome to{" "}
-            <Typography
+            {businessData?.welcomePart?.title}
+            {/* <Typography
               component="span"
               color={businessData?.theme}
               fontSize={"58px"}
@@ -44,13 +43,10 @@ const WelcomeCard = ({ businessData }) => {
               fontWeight={"bold"}
             >
               auxxweb
-            </Typography>
+            </Typography> */}
           </Typography>
           <Typography fontSize={"16px"} lineHeight={"24px"}>
-            We offer comprehensive software development and digital marketing
-            services to help your business thrive in the digital age. Our team
-            of experts is committed to delivering innovative solutions that
-            drive growth and success.
+          {businessData?.welcomePart?.description}
           </Typography>
           <Box marginTop={"30px"}>
             <Button
