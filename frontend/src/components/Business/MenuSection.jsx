@@ -77,8 +77,8 @@ const MenuSection = ({ businessData }) => {
             >
               <CardMedia
                 sx={{ width: 224, height: 203 }}
-                image="/business/menu.png"
-                // image={item?.image}
+                // image="/business/menu.png"
+                image={item?.image}
               />
               <CardContent>
                 <Typography
