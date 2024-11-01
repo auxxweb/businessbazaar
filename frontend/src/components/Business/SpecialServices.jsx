@@ -16,13 +16,13 @@ const CoreServices = ({ businessData }) => {
         >
           <Box
             display={"flex"}
-            justifyContent={"center"}
+            justifyContent={"flex-start"}
             flexDirection={{ xs: "column", md: "row" }}
-            alignItems={"center"}
-            gap={"2rem"}
+            alignItems={"flex-start"}
+            gap={{xs:"1rem",lg:"5rem"}}
             marginBottom={"5rem"}
           >
-            <Box maxWidth={"280px"}>
+            <Box >
               <Typography
                 sx={{
                   fontSize: "38px",

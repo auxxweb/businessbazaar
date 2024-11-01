@@ -66,7 +66,9 @@ const PremiumTemplate = () => {
                     `}
       </style>
 
-      <Box sx={{ overflowX: "hidden" }}>
+      <Box
+      sx={{ overflowX: "hidden" }}
+      >
         <TemplateHeader businessData={businessData} />
         <Box
           sx={{
