@@ -1,8 +1,17 @@
 /* eslint-disable react/prop-types */
+import Card from "@mui/material/Card";
+import CardMedia from "@mui/material/CardMedia";
+import Typography from "@mui/material/Typography";
+import { Box } from "@mui/material";
+
 import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+
 const settings = {
   dots: true,
   infinite: true,
+  arrows: false,
   speed: 500,
   slidesToShow: 3,
   slidesToScroll: 1,
@@ -23,27 +32,50 @@ const settings = {
     },
   ],
 };
+
 const Gallery = ({ businessData }) => {
   return (
-    <section
-      className="h-auto david-font"
-      style={{ backgroundColor: "#F3F3F4" }}
-    >
-      <div className="container p-top">
-        <div className="col-12 mb-5" id="gallery">
-          <div className="col-12 mb-5 mt-5">
-            <h1 className="fw-bold text-center">Gallery</h1>
-          </div>
-          <Slider {...settings} className="gallery-slider">
-            {businessData?.gallery?.map((image, index) => (
-              <div key={index} className="p-2">
-                <img src={image} alt="" className="w-100 gallery-img" />
-              </div>
-            ))}
-          </Slider>
-        </div>
-      </div>
-    </section>
+    <Box display={"flex"} justifyContent={"center"} marginBottom={"5rem"}>
+      <Box maxWidth={"lg"} margin={"2rem"} padding={"2rem"} width={"100vw"}>
+        <Box maxWidth={"280px"} mb={"2rem"}>
+          <Typography
+            sx={{
+              fontSize: "38px",
+              fontWeight: 700,
+              lineHeight: "54px",
+              letterSpacing: 0,
+              textTransform: "uppercase",
+            }}
+          >
+            Gallery
+          </Typography>
+          <Box
+            sx={{
+              border: `2px solid ${businessData?.theme}`,
+              width: "4rem",
+            }}
+          ></Box>
+        </Box>
+
+        <Slider {...settings}>
+          {businessData?.gallery?.map((image, index) => (
+            <Card
+              sx={{
+                maxWidth: 340,
+                borderRadius: "26px",
+              }}
+              key={index}
+            >
+              <CardMedia
+                sx={{ width: 340, height: 212 }}
+                // image="/business/menu.png"
+                image={image}
+              />
+            </Card>
+          ))}
+        </Slider>
+      </Box>
+    </Box>
   );
 };
 
