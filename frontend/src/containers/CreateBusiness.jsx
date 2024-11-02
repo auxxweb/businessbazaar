@@ -17,102 +17,101 @@ import { Dialog } from 'primereact/dialog';
 import { Rating } from 'primereact/rating';
 import { InputText } from "primereact/inputtext";
 import { InputTextarea } from "primereact/inputtextarea";
-import CircularProgress from '@mui/material/CircularProgress'; 
+import CircularProgress from '@mui/material/CircularProgress';
 import CloseIcon from '@mui/icons-material/Close';
 
 export default function CreateBusiness() {
-    const [step, setStep] = useState(1);
+    const [step, setStep] = useState(7);
 
     const handleNextStep = () => {
         setStep(prevStep => prevStep + 1);
     };
     const handlePrevStep = () => {
-        if (step != 1){
-        setStep(prevStep => prevStep - 1);
-    }
-};
+        if (step != 1) {
+            setStep(prevStep => prevStep - 1);
+        }
+    };
 
     const [categoryData, setCategoryData] = useState([]);
     const [loading, setLoading] = useState(true);
 
     const [planData, setPlanData] = useState([]);
 
-    const [testData, setTestData] = useState([]);
 
     const [formData, setFormData] = useState(
-       
-        
+
+
         {
-        businessName: '',
-        logo: '',
-        ownerName: '',
-        email: '',
-        password: '',
-        address: {
-            buildingName: '',
-            streetName: '',
-            landMark: '',
-            city: '',
-            state: '',
-            pinCode: ''
-        },
-        location: {
-            lat: '',
-            lon: '',
+            businessName: '',
+            logo: '',
+            ownerName: '',
+            email: '',
+            password: '',
+            address: {
+                buildingName: '',
+                streetName: '',
+                landMark: '',
+                city: '',
+                state: '',
+                pinCode: ''
+            },
+            location: {
+                lat: '',
+                lon: '',
 
-        },
-        contactDetails: {},
-        socialMediaLinks: [
-            { tag: 'facebook', link: '' },
-            { tag: 'instagram', link: '' },
-            { tag: 'twitter', link: '' }
-        ],
-        category: '',
-        services: [],
-        businessTiming: {
-            workingDays: [],
-            openTime: {
-                open: '',
-                close: ''
-            }
-        },
-        description: '',
-        theme: '',
-        secondaryTheme: '',
-        
-        landingPageHero: {
-            title: '',
+            },
+            contactDetails: {},
+            socialMediaLinks: [
+                { tag: 'facebook', link: '' },
+                { tag: 'instagram', link: '' },
+                { tag: 'twitter', link: '' }
+            ],
+            category: '',
+            services: [],
+            businessTiming: {
+                workingDays: [],
+                openTime: {
+                    open: '',
+                    close: ''
+                }
+            },
             description: '',
-            coverImage: ''
-        },
-        welcomePart: {
-            title: '',
-            description: '',
-            coverImage: ''
-        },
-        specialServices: {
-            title: '',
-            description: '',
-            data: []
-        },
-        productSection: [],
-        service: [],
-        testimonial: {
-            description: '',
-            reviews: []
-        },
-        gallery: [],
-        videos: [],
-        seoData: {
-            title: '',
-            description: '',
-            metaTags: []
-        },
-        selectedPlan: ''
-    }
-);
+            theme: '',
+            secondaryTheme: '',
 
-    
+            landingPageHero: {
+                title: '',
+                description: '',
+                coverImage: ''
+            },
+            welcomePart: {
+                title: '',
+                description: '',
+                coverImage: ''
+            },
+            specialServices: {
+                title: '',
+                description: '',
+                data: []
+            },
+            productSection: [],
+            service: [],
+            testimonial: {
+                description: '',
+                reviews: []
+            },
+            gallery: [],
+            videos: [],
+            seoData: {
+                title: '',
+                description: '',
+                metaTags: []
+            },
+            selectedPlan: ''
+        }
+    );
+
+
     const preRequestFun = async (file, position) => {
         const url = 'https://businessbazaarserver.auxxweb.in/api/v1/s3url';
         const requestBody = {
@@ -121,21 +120,21 @@ export default function CreateBusiness() {
                 file_type: file.type
             }]
         };
-        
+
         try {
             const response = await axios.post(url, requestBody, {
                 headers: { 'Content-Type': 'application/json' },
             });
             const preReq = response.data.data[0];
-        
-    
+
+
             if (!preReq.url) {
                 throw new Error('The URL is not defined in the response.');
             }
             await axios.put(preReq.url, file, {
-                headers: { 'Content-Type': file.type }, 
+                headers: { 'Content-Type': file.type },
             });
-    
+
             return preReq;
         } catch (error) {
             console.error('Error uploading file:', error.message || error);
@@ -161,7 +160,7 @@ export default function CreateBusiness() {
 
 
 
-    function AuthenticationDetails({formData}) {
+    function AuthenticationDetails({ formData }) {
         const [authData, setAuthData] = useState({
             email: '',
             password: '',
@@ -170,14 +169,14 @@ export default function CreateBusiness() {
         const [passwordError, setPasswordError] = useState('');
         const [emailError, setEmailError] = useState('');
 
-        useEffect(()=>{
+        useEffect(() => {
             setAuthData({
-                email:formData.email,
-                password:formData.password
+                email: formData.email,
+                password: formData.password
             })
 
-        },[formData])
-    
+        }, [formData])
+
         // Handles input change for both email and password
         function handleInputChange(e) {
             const { name, value } = e.target;
@@ -186,12 +185,12 @@ export default function CreateBusiness() {
                 [name]: value,
             }));
         }
-    
+
         // Validate both fields and handle submission
         function handleAuthSubmit() {
             const isEmailValid = validateEmail();
             const isPasswordValid = validatePassword();
-    
+
             if (isEmailValid && isPasswordValid) {
                 // Set the email and password into formData and proceed to the next step
                 setFormData((prevFormData) => ({
@@ -202,7 +201,7 @@ export default function CreateBusiness() {
                 handleNextStep();
             }
         }
-    
+
         // Email validation function
         function validateEmail() {
             if (!email) {
@@ -212,7 +211,7 @@ export default function CreateBusiness() {
             setEmailError('');
             return true;
         }
-    
+
         // Password validation function
         function validatePassword() {
             if (password.length < 8) {
@@ -222,14 +221,14 @@ export default function CreateBusiness() {
             setPasswordError('');
             return true;
         }
-    
+
         return (
             <div className="h-100vh">
                 <div className="row h-100 justify-content-center">
                     <div className="d-none d-md-block left-portion col-md-5 h-100 p-0">
                         <img src="/src/assets/images/login.jpg" alt="" className="w-100 h-100 object-fit-cover" />
                     </div>
-    
+
                     <div className="col-12 col-md-7 d-flex flex-column justify-content-between align-items-center right-portion h-100 p-5">
                         <div className="col-12 text-start">
                             <button className="btn btn-dark w-auto float-start" onClick={handlePrevStep}>
@@ -239,7 +238,7 @@ export default function CreateBusiness() {
                         <div className="col-12">
                             <h1 className="fw-bold text-center text-md-start">Add <br /> Authentication Details</h1>
                         </div>
-    
+
                         {/* Email Input */}
                         <div className="input-group mt-4 w-100 align-items-center">
                             <TextField
@@ -253,7 +252,7 @@ export default function CreateBusiness() {
                                 helperText={emailError}
                             />
                         </div>
-    
+
                         {/* Password Input */}
                         <div className="input-group w-100 align-items-center">
                             <TextField
@@ -268,7 +267,7 @@ export default function CreateBusiness() {
                                 helperText={passwordError}
                             />
                         </div>
-    
+
                         <div className="col-12 text-center mt-5">
                             <button className="btn btn-success w-100 text-white p-2" onClick={handleAuthSubmit}>Save & Next</button>
                         </div>
@@ -276,54 +275,25 @@ export default function CreateBusiness() {
                 </div>
             </div>
         );
-    }  
+    }
 
-    function BusinessDetails({formData}) {
+    function BusinessDetails({ formData }) {
         const [logo, setLogo] = useState('');
         const [businessName, setBusinessName] = useState('');
-        const [address, setAddress] = useState({
-            buildingName: '',
-            streetName: '',
-            landMark: '',
-            city: '',
-            state: '',
-            pinCode: ''
-        });
-        const [location, setLocation] = useState({
-            lat: '',
-            lon: '',
-        });
+
         const [isLoading, setIsLoading] = useState(false);
         const [error, setError] = useState('');
 
-        useEffect(()=>{
+        useEffect(() => {
             setLogo(formData?.logo)
             setBusinessName(formData?.businessName)
-            setAddress(formData?.address)
-            setLocation(formData?.location)
-        },[formData])
-    
-        // Update address object
-        const handleAddressChange = (event) => {
-            const { name, value } = event.target;
-            setAddress(prevAddress => ({
-                ...prevAddress,
-                [name]: value,
-            }));
-        };
-    
-        // Update location object
-        const handleLocationChange = (event) => {
-            const { name, value } = event.target;
-            setLocation(prevLocation => ({
-                ...prevLocation,
-                [name]: value,
-            }));
-        };
-    
+        }, [formData])
+
+
+
         const handleLogoChange = async (event) => {
             const file = event.target.files[0];
-            
+
             if (file) {
                 setIsLoading(true);
                 const reader = new FileReader();
@@ -351,36 +321,31 @@ export default function CreateBusiness() {
                 reader.readAsDataURL(file);
             }
         };
-    
+
         const imageUpload = () => {
             document.getElementById('ImageLogo').click();
         };
-    
+
         // Handle form submission with validation
         const handleBusinessSubmit = () => {
-            if (!businessName || !address.buildingName || !address.streetName || !address.state || !address.pinCode || !location.lon) {
+            if (!businessName) {
                 setError('All fields are mandatory.');
                 return;
             }
-            
+
             setError('');
             setFormData(prevFormData => ({
                 ...prevFormData,
                 businessName: businessName,
-                address: address,
-                location: location,
                 logo: logo
             }));
             handleNextStep();
         };
-    
+
         return (
             <div className='h-100vh'>
                 <div className="row justify-content-center h-100">
-                    <div className="d-none d-md-block left-portion p-0 col-5 h-100">
-                        <img src="/src/assets/images/business-details.jpg" alt="" className='w-100 h-100' />
-                    </div>
-                    <div className="col-12 col-md-7 row align-items-center right-portion p-5">
+                    <div className="col-12 col-md-6 row align-items-center right-portion p-5">
                         <div className="col-12 text-start">
                             <button className="btn btn-dark w-auto float-start" onClick={handlePrevStep}>
                                 <i className="bi bi-arrow-left"></i>
@@ -421,67 +386,9 @@ export default function CreateBusiness() {
                                         </div>
                                     )}
                                 </div>
-    
-                                {/* Other input fields */}
-                                <input
-                                    type="text"
-                                    placeholder="Building Name"
-                                    name="buildingName"
-                                    value={address.buildingName}
-                                    onChange={handleAddressChange}
-                                    className="form-control form-control-lg mt-3"
-                                />
-                                <input
-                                    type="text"
-                                    placeholder="Street / Colony Name"
-                                    name="streetName"
-                                    value={address.streetName}
-                                    onChange={handleAddressChange}
-                                    className="form-control form-control-lg mt-3"
-                                />
-                                <input
-                                    type="text"
-                                    placeholder="Landmark"
-                                    name="landMark"
-                                    value={address.landMark}
-                                    onChange={handleAddressChange}
-                                    className="form-control form-control-lg mt-3"
-                                />
-                                <div className="row">
-                                    <div className="col-12 col-md-6 mt-3">
-                                        <input
-                                            type="text"
-                                            className="form-control form-control-lg w-100"
-                                            name="state"
-                                            value={address.state}
-                                            onChange={handleAddressChange}
-                                            placeholder="State"
-                                        />
-                                    </div>
-                                    <div className="col-12 col-md-6 mt-3">
-                                        <input
-                                            type="number"
-                                            className="form-control form-control-lg w-100"
-                                            name="pinCode"
-                                            value={address.pinCode}
-                                            onChange={handleAddressChange}
-                                            placeholder="Pincode"
-                                        />
-                                    </div>
-                                </div>
-                                <div className="row">
-                                    <div className="col-12 mt-3">
-                                        <input
-                                            type="text"
-                                            className="form-control form-control-lg w-100"
-                                            name="lon"
-                                            value={location.lon}
-                                            onChange={handleLocationChange}
-                                            placeholder="Location"
-                                        />
-                                    </div>
-                                </div>
-    
+
+
+
                                 {error && <div className="text-danger mt-2">{error}</div>} {/* Error message for validation */}
                                 <div className="col-12 mt-3">
                                     <button className="btn btn-success w-100" onClick={handleBusinessSubmit}>
@@ -491,12 +398,74 @@ export default function CreateBusiness() {
                             </div>
                         </div>
                     </div>
+
+
+
+                    <div className="left-portion p-3 col-12 col-lg-6 h-100 row align-items-center">
+                        <link rel="preconnect" href="https://fonts.googleapis.com" />
+                        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+                        <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap" rel="stylesheet" />
+                        <style> {`
+                        ::-webkit-scrollbar {
+                            width: 12px; /* Width of the entire scrollbar */
+                        }
+    
+                        /* Scrollbar track */
+                        ::-webkit-scrollbar-track {
+                            background: rgb(243, 243, 244); /* Background of the scrollbar track */
+                        }::-webkit-scrollbar-thumb {
+                            background-color: black; /* Color of the scrollbar thumb */
+                            border-radius: 10px;     /* Rounded edges of the thumb */
+                            border: 3px solid  black; /* Padding around the thumb */
+                        }
+                    .theme
+                    {
+                        background-color: black;
+                        color: white;
+                        border: none;
+                    }.service-design.active{
+                        background-color: black;
+                    }.address-section{
+                    background-color:black;
+                    }.address-logo i{
+                    color: black;
+                    }.cat-option{
+                        border-right: 1px dashed black;
+                    }.text-orange{
+                            color: black;
+                        }.dish-div:hover{
+                            background-color: black;
+                            color:white;
+                        }
+                        `}
+                        </style>
+                        <div className="p-3" style={{ border: '1px dashed black', borderRadius: '16px' }}>
+                            <p className='text-center'>
+                                This section contains items for the navigation bar.
+                            </p>
+                            <Navbar expand="lg" className="bg-white pjs" style={{ paddingBlock: "5px" }}>
+                                <Container>
+                                    {/* Align Brand to the start (left side) */}
+                                    <Navbar.Brand href="/" className='fw-bold w-50 nav-logo' style={{ fontSize: '36px' }}>
+                                        <img src={logo} alt="" />
+                                        <span className="ms-2">{businessName}</span>
+                                    </Navbar.Brand>
+
+                                    <Navbar.Toggle aria-controls="basic-navbar-nav" style={{ color: 'black' }} />
+
+
+                                </Container>
+                            </Navbar>
+                        </div>
+                    </div>
+
+
                 </div>
             </div>
         );
     }
 
-    function ContactDetails({formData}) {
+    function ContactDetails({ formData }) {
         const [mobileNumbers, setMobileNumbers] = useState([{ id: 1, number: '', countryCode: 'us' }]);
         const [whatsappNumbers, setWhatsappNumbers] = useState([{ id: 1, number: '', countryCode: 'us' }]);
         const [emails, setEmails] = useState([{ id: 1, email: '' }]);
@@ -509,27 +478,41 @@ export default function CreateBusiness() {
                 website: '',
             },
         });
-    
+        const [address, setAddress] = useState({
+            buildingName: '',
+            streetName: '',
+            landMark: '',
+            city: '',
+            state: '',
+            pinCode: ''
+        });
+        const [location, setLocation] = useState({
+            lat: '',
+            lon: '',
+        });
+
         const [errors, setErrors] = useState({});
 
-        useEffect(()=>{
-            if(formData?.contactDetails?.mobileNumbers)
-            setMobileNumbers(formData?.contactDetails?.mobileNumbers)
+        useEffect(() => {
+            if (formData?.contactDetails?.mobileNumbers)
+                setMobileNumbers(formData?.contactDetails?.mobileNumbers)
 
-            if(formData?.contactDetails?.whatsappNumbers)
-            setWhatsappNumbers(formData?.contactDetails?.whatsappNumbers)
+            if (formData?.contactDetails?.whatsappNumbers)
+                setWhatsappNumbers(formData?.contactDetails?.whatsappNumbers)
 
-            if(formData?.contactDetails?.emails){
+            if (formData?.contactDetails?.emails) {
                 setEmails(formData?.contactDetails?.emails)
             }
 
-            if(Object.keys(formData?.contactDetails)?.length)
-            setNewFormData({
-                contactDetails: formData?.contactDetails
-            })
+            if (Object.keys(formData?.contactDetails)?.length)
+                setNewFormData({
+                    contactDetails: formData?.contactDetails
+                })
+            setAddress(formData?.address)
+            setLocation(formData?.location)
 
-        },[formData])
-    
+        }, [formData])
+
         const handleContactChange = (event) => {
             const { name, value } = event.target;
             setNewFormData((prevData) => ({
@@ -540,7 +523,7 @@ export default function CreateBusiness() {
                 },
             }));
         };
-    
+
         const handleMobileNumberChange = (id, value, countryCode = 'us') => {
             const updatedMobileNumbers = mobileNumbers.map((number) =>
                 number.id === id ? { ...number, number: value, countryCode } : number
@@ -548,7 +531,7 @@ export default function CreateBusiness() {
             setMobileNumbers(updatedMobileNumbers);
             updateContactDetails('mobileNumbers', updatedMobileNumbers);
         };
-    
+
         const handleWhatsappNumberChange = (id, value, countryCode = 'us') => {
             const updatedWhatsappNumbers = whatsappNumbers.map((number) =>
                 number.id === id ? { ...number, number: value, countryCode } : number
@@ -556,7 +539,7 @@ export default function CreateBusiness() {
             setWhatsappNumbers(updatedWhatsappNumbers);
             updateContactDetails('whatsappNumbers', updatedWhatsappNumbers);
         };
-    
+
         const handleEmailChange = (id, value) => {
             const updatedEmails = emails.map((email) =>
                 email.id === id ? { ...email, email: value } : email
@@ -564,7 +547,7 @@ export default function CreateBusiness() {
             setEmails(updatedEmails);
             updateContactDetails('emails', updatedEmails);
         };
-    
+
         const updateContactDetails = (field, updatedArray) => {
             setNewFormData((prevFormData) => ({
                 ...prevFormData,
@@ -577,16 +560,16 @@ export default function CreateBusiness() {
                 },
             }));
         };
-    
+
         const addMobileNumber = () => setMobileNumbers([...mobileNumbers, { id: mobileNumbers.length + 1, number: '', countryCode: 'us' }]);
         const removeMobileNumber = (id) => setMobileNumbers(mobileNumbers.filter((number) => number.id !== id));
-    
+
         const addWhatsappNumber = () => setWhatsappNumbers([...whatsappNumbers, { id: whatsappNumbers.length + 1, number: '', countryCode: 'us' }]);
         const removeWhatsappNumber = (id) => setWhatsappNumbers(whatsappNumbers.filter((number) => number.id !== id));
-    
+
         const addEmail = () => setEmails([...emails, { id: emails.length + 1, email: '' }]);
         const removeEmail = (id) => setEmails(emails.filter((email) => email.id !== id));
-    
+
         const validateForm = () => {
             const newErrors = {};
             if (!newFormData.contactDetails.name) newErrors.name = 'Name is required.';
@@ -594,28 +577,48 @@ export default function CreateBusiness() {
             if (whatsappNumbers.some((number) => !number.number)) newErrors.whatsappNumbers = 'All WhatsApp numbers are required.';
             if (emails.some((email) => !email.email)) newErrors.emails = 'All emails are required.';
             if (!newFormData.contactDetails.website) newErrors.website = 'Website is required.';
-    
+            if (!address.buildingName) newErrors.buildingName = 'Building name is required.';
+            if (!address.address) newErrors.emails = 'Address is required.';
+            if (!address.city) newErrors.city = 'City is required';
+            if (!address.state) newErrors.state = 'State is required';
+
+
             setErrors(newErrors);
             return Object.keys(newErrors).length === 0;
         };
-    
+
         const contactSubmitHandler = () => {
             if (validateForm()) {
                 setFormData((prevData) => ({
                     ...prevData,
                     contactDetails: newFormData.contactDetails,
+                    address: address,
+                    location: location,
                 }));
                 handleNextStep(); // Ensure this is defined elsewhere
             }
         };
-    
+
+        const handleAddressChange = (event) => {
+            const { name, value } = event.target;
+            setAddress(prevAddress => ({
+                ...prevAddress,
+                [name]: value,
+            }));
+        };
+        const handleLocationChange = (event) => {
+            const { name, value } = event.target;
+            setLocation(prevLocation => ({
+                ...prevLocation,
+                [name]: value,
+            }));
+        };
+
         return (
             <div className="h-100vh">
                 <div className="row h-100">
-                    <div className="d-none d-md-block left-portion p-0 col-5">
-                        <img src="/src/assets/images/contact-details.jpg" alt="Contact Details" className="w-100 h-100" />
-                    </div>
-                    <div className="col-12 col-md-7 row align-items-center right-portion p-5">
+
+                    <div className="col-12 col-md-5 row align-items-center right-portion p-5">
                         <div className="col-12 text-start">
                             <button className="btn btn-dark w-auto float-start" onClick={handlePrevStep}>
                                 <i className="bi bi-arrow-left"></i>
@@ -633,7 +636,67 @@ export default function CreateBusiness() {
                                 className="form-control form-control-lg"
                             />
                             {errors.name && <div className="text-danger">{errors.name}</div>}
-    
+
+                            {/* Other input fields */}
+                            <input
+                                type="text"
+                                placeholder="Building Name"
+                                name="buildingName"
+                                value={address.buildingName}
+                                onChange={handleAddressChange}
+                                className="form-control form-control-lg mt-3"
+                            />
+                            <input
+                                type="text"
+                                placeholder="Street / Colony Name"
+                                name="streetName"
+                                value={address.streetName}
+                                onChange={handleAddressChange}
+                                className="form-control form-control-lg mt-3"
+                            />
+                            <input
+                                type="text"
+                                placeholder="Landmark"
+                                name="landMark"
+                                value={address.landMark}
+                                onChange={handleAddressChange}
+                                className="form-control form-control-lg mt-3"
+                            />
+                            <div className="row">
+                                <div className="col-12 col-md-6 mt-3">
+                                    <input
+                                        type="text"
+                                        className="form-control form-control-lg w-100"
+                                        name="state"
+                                        value={address.state}
+                                        onChange={handleAddressChange}
+                                        placeholder="State"
+                                    />
+                                </div>
+                                <div className="col-12 col-md-6 mt-3">
+                                    <input
+                                        type="number"
+                                        className="form-control form-control-lg w-100"
+                                        name="pinCode"
+                                        value={address.pinCode}
+                                        onChange={handleAddressChange}
+                                        placeholder="Pincode"
+                                    />
+                                </div>
+                            </div>
+                            <div className="row">
+                                <div className="col-12 mt-3">
+                                    <input
+                                        type="text"
+                                        className="form-control form-control-lg w-100"
+                                        name="lon"
+                                        value={location.lon}
+                                        onChange={handleLocationChange}
+                                        placeholder="Location"
+                                    />
+                                </div>
+                            </div>
+
                             <div id="mobileNumberDiv" className="mt-4">
                                 {mobileNumbers.map((number) => (
                                     <div className="row mt-3" key={number.id}>
@@ -676,7 +739,7 @@ export default function CreateBusiness() {
                                     </div>
                                 ))}
                             </div>
-    
+
                             <div id="whatsappNumberDiv" className="mt-4">
                                 {whatsappNumbers.map((number) => (
                                     <div className="row mt-3" key={number.id}>
@@ -719,7 +782,7 @@ export default function CreateBusiness() {
                                     </div>
                                 ))}
                             </div>
-    
+
                             <div id="emailDiv" className="mt-4">
                                 {emails.map((email) => (
                                     <div className="row mt-3" key={email.id}>
@@ -751,7 +814,7 @@ export default function CreateBusiness() {
                                     </div>
                                 ))}
                             </div>
-    
+
                             <div className="mt-4">
                                 <input
                                     type="text"
@@ -769,81 +832,171 @@ export default function CreateBusiness() {
                             </button>
                         </div>
                     </div>
+
+
+                    <div className="left-portion p-3 col-12 col-lg-7 row align-items-center">
+                        <link rel="preconnect" href="https://fonts.googleapis.com" />
+                        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+                        <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap" rel="stylesheet" />
+                        <style> {`
+                    .theme
+                    {
+                        background-color: #FC791A;
+                        color: white;
+                        border: none;
+                    }.service-design.active{
+                        background-color: #FC791A;
+                    }.address-section{
+                    background-color:#FC791A;
+                    }.address-logo i{
+                    color: #FC791A;
+                    }.cat-option{
+                        border-right: 1px dashed #FC791A;
+                    }.text-orange{
+                            color: #FC791A;
+                        }.dish-div:hover{
+                            background-color: #FC791A;
+                            color:white;
+                        }
+                        `}
+                        </style>
+                        <div className="p-3" style={{ border: '1px dashed black', borderRadius: '16px' }}>
+                            <p className='text-center'>
+                                This section contains items for the Contact Information.
+                            </p>
+                            <div className="mt-5 mb-5">
+                                <div className="container p-top">
+                                    <div className="col-12 address-section">
+                                        <div className="row">
+                                            <div className="col-12 col-lg-4 mb-3 mb-lg-0">
+                                                <div className="row align-items-center justify-content-start">
+                                                    <div className="col-auto address-logo">
+                                                        <i className="bi bi-geo-alt-fill"></i>
+                                                    </div>
+                                                    <div className="col">
+                                                        <span className="fs-13">Address</span>
+                                                        <p className='fs-16'>{address.buildingName}, {address.city},{address.landMark},{address.streetName}, {address.state},{address.pinCode}</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div className="col-12 col-lg-4 mb-3 mb-lg-0">
+                                                <div className="row align-items-center justify-content-start">
+                                                    <div className="col-auto address-logo">
+                                                        <i className="bi bi-envelope-fill"></i>
+                                                    </div>
+                                                    <div className="col">
+                                                        <span className="fs-13">Send Email</span>
+                                                        {emails.map((email, index) => (
+                                                            <p className='fs-16' key={index}>{email.email}</p>
+                                                        ))}
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div className="col-12 col-lg-4 mb-3 mb-lg-0">
+                                                <div className="row align-items-center justify-content-start">
+                                                    <div className="col-auto address-logo">
+                                                        <i className="bi bi-telephone"></i>
+                                                    </div>
+                                                    <div className="col">
+                                                        <span className="fs-13">Contact</span>
+                                                        {mobileNumbers.map((number, index) => (
+                                                            <p className='fs-16' key={index}>{number.number}</p>
+                                                        ))}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         );
     }
-    
+
 
 
     function CategoryDetails() {
         const handleCategoryChange = (event, value) => {
             setFormData({
                 ...formData,
-                category: value ? value._id : '' 
+                category: value ? value._id : ''
             });
         };
-    
+
         return (
             <div className="h-100vh">
-            <div className="row h-100 justify-content-center">
-                <div className="d-none d-md-block left-portion col-md-5 h-100 p-0">
-                    <img src="/src/assets/images/add_category.jpg" alt="" className="w-100 h-100 object-fit-cover" />
-                </div>
+                <div className="row h-100 justify-content-center">
 
-                <div className="col-12 col-md-7 d-flex flex-column justify-content-between align-items-center right-portion h-100 p-5">
-                    <div className="col-12 text-start">
-                        <button className="btn btn-dark w-auto float-start" onClick={handlePrevStep}>
-                            <i className="bi bi-arrow-left"></i>
-                        </button>
-                    </div>
-                   <div className="col-12">
-                   <h1 className="fw-bold text-center text-md-start">Add <br /> Business Category</h1>
-                   </div>
+                    <div className="col-12 col-md-7 d-flex flex-column justify-content-between align-items-center right-portion h-100 p-5">
+                        <div className="col-12 text-start">
+                            <button className="btn btn-dark w-auto float-start" onClick={handlePrevStep}>
+                                <i className="bi bi-arrow-left"></i>
+                            </button>
+                        </div>
+                        <div className="col-12">
+                            <h1 className="fw-bold text-center text-md-start">Add <br /> Business Category</h1>
+                        </div>
 
-                    <div className="input-group mt-4 w-100 align-items-center">
-                        <span className="input-group-text bg-white p-3" style={{ flexBasis: '50px' }}>
-                            <i className="bi bi-search"></i>
-                        </span>
+                        <div className="input-group mt-4 w-100 align-items-center">
+                            <span className="input-group-text bg-white p-3" style={{ flexBasis: '50px' }}>
+                                <i className="bi bi-search"></i>
+                            </span>
 
-                        <div style={{ flexGrow: 1, position: 'relative' }}>
-                            {loading ? (
-                                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
-                                    <CircularProgress size={24} />
-                                </div>
-                            ) : (
-                                <Autocomplete
-                                    disablePortal
-                                    options={categoryData}
-                                    getOptionLabel={(option) => option.name}
-                                    isOptionEqualToValue={(option, value) => option._id === value._id}
-                                    renderInput={(params) => <TextField {...params} label="Categories" variant="outlined" />}
-                                    onChange={handleCategoryChange}
-                                    name='category'
-                                    value={categoryData.find(category => category._id === formData.category) || null} // Controlled component
-                                />
-                            )}
+                            <div style={{ flexGrow: 1, position: 'relative' }}>
+                                {loading ? (
+                                    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
+                                        <CircularProgress size={24} />
+                                    </div>
+                                ) : (
+                                    <Autocomplete
+                                        disablePortal
+                                        options={categoryData}
+                                        getOptionLabel={(option) => option.name}
+                                        isOptionEqualToValue={(option, value) => option._id === value._id}
+                                        renderInput={(params) => <TextField {...params} label="Categories" variant="outlined" />}
+                                        onChange={handleCategoryChange}
+                                        name='category'
+                                        value={categoryData.find(category => category._id === formData.category) || null} // Controlled component
+                                    />
+                                )}
+                            </div>
+                        </div>
+
+                        <div className="col-12 mt-5"></div>
+
+                        <div className="col-12 text-center mt-5">
+                            <button className="btn btn-success w-100 text-white p-2" onClick={handleNextStep}>Save & Next</button>
                         </div>
                     </div>
 
-                    <div className="col-12 mt-5"></div>
 
-                    <div className="col-12 text-center mt-5">
-                        <button className="btn btn-success w-100 text-white p-2" onClick={handleNextStep}>Save & Next</button>
+
+                    <div className="left-portion col-12 col-lg-5 h-100 p-3 row align-items-center">
+                        <div className="p-3" style={{ border: '1px dashed black', borderRadius: '16px' }}>
+                            <p className='text-center'>
+                                Please select the business category that best represents your company. This helps us tailor the services and features specifically to your industry needs.
+                            </p>
+                        </div>
                     </div>
+
                 </div>
             </div>
-        </div>
         );
     }
-    
+
 
 
 
     function ServicesOffering() {
         const [inputService, setInputService] = useState('');
         const [error, setError] = useState(''); // State for error message
-    
+
         // Add service to formData.services
         const addService = (e) => {
             e.preventDefault();
@@ -855,7 +1008,7 @@ export default function CreateBusiness() {
                 setInputService(''); // Clear input field
             }
         };
-    
+
         // Delete service from formData.services
         const deleteService = (indexToDelete) => {
             setFormData(prevFormData => ({
@@ -863,7 +1016,7 @@ export default function CreateBusiness() {
                 services: prevFormData.services.filter((_, index) => index !== indexToDelete)
             }));
         };
-    
+
         // Handle next step with validation
         const handleNextWithValidation = () => {
             if (formData.services.length < 2) {
@@ -873,7 +1026,7 @@ export default function CreateBusiness() {
                 handleNextStep();
             }
         };
-    
+
         return (
             <>
                 <div className="h-100vh">
@@ -918,7 +1071,7 @@ export default function CreateBusiness() {
                                             </button>
                                         </div>
                                     </div>
-    
+
                                     <div className="col-12 mt-4">
                                         <div className="row gap-2 justify-content-center">
                                             {formData.services.map((service, index) => (
@@ -934,7 +1087,7 @@ export default function CreateBusiness() {
                                             ))}
                                         </div>
                                     </div>
-    
+
                                     {error && <p className="text-danger text-danger mt-3">{error}</p>}
                                 </div>
                             </div>
@@ -957,11 +1110,11 @@ export default function CreateBusiness() {
 
         const allDays = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
-        useEffect(()=>{
+        useEffect(() => {
             setDays(formData?.businessTiming?.workingDays)
             setOpenTime(formData?.businessTiming?.openTime?.open)
             setCloseTime(formData?.businessTiming?.openTime?.close)
-        },[])
+        }, [])
 
         const toggleDay = (day) => {
             if (days.includes(day)) {
@@ -1006,15 +1159,12 @@ export default function CreateBusiness() {
                 <div className='h-100vh'>
                     <div className="row  h-100 justify-content-center">
                         {/* Left Image Section */}
-                        <div className="d-none d-md-block left-portion p-0 col-md-5 h-100">
-                            <img src="/src/assets/images/timing.jpg" alt="" className='w-100 h-100' />
-                        </div>
 
                         {/* Right Form Section */}
                         <div className="col-12 col-md-7 row align-items-end justify-content-center h-100 p-3 p-md-5 right-portion">
-                        <div className="col-12 text-start">
-                        <button className="btn btn-dark w-auto float-start" onClick={handlePrevStep}><i className="bi bi-arrow-left"></i></button>
-                        </div>
+                            <div className="col-12 text-start">
+                                <button className="btn btn-dark w-auto float-start" onClick={handlePrevStep}><i className="bi bi-arrow-left"></i></button>
+                            </div>
                             <div className='row  justify-content-center'>
                                 <div className='col-12 text-center text-md-start mt-5'>
                                     <h1 className='fw-bold'>Add <br /> Business Timing</h1>
@@ -1081,6 +1231,159 @@ export default function CreateBusiness() {
                                 </button>
                             </div>
                         </div>
+
+                        <div className="left-portion col-12 col-lg-5 h-100 p-3 row align-items-center">
+                        <link rel="preconnect" href="https://fonts.googleapis.com" />
+                <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+                <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap" rel="stylesheet" />
+                <style> {`
+                        ::-webkit-scrollbar {
+                            width: 12px; /* Width of the entire scrollbar */
+                        }
+    
+                        /* Scrollbar track */
+                        ::-webkit-scrollbar-track {
+                            background: rgb(243, 243, 244); /* Background of the scrollbar track */
+                        }::-webkit-scrollbar-thumb {
+                            background-color: white; /* Color of the scrollbar thumb */
+                            border-radius: 10px;     /* Rounded edges of the thumb */
+                            border: 3px solid  white; /* Padding around the thumb */
+                        }
+                    .theme
+                    {
+                        background-color: white;
+                        color: white;
+                        border: none;
+                    }.service-design.active{
+                        background-color: white;
+                    }.address-section{
+                    background-color:white;
+                    }.address-logo i{
+                    color: white;
+                    }.cat-option{
+                        border-right: 1px dashed white;
+                    }.text-orange{
+                            color: white;
+                        }.dish-div:hover{
+                            background-color: white;
+                            color:white;
+                        }
+                        `}
+                </style>
+                        <footer className='h-auto'>
+                    <div className="container pjs  p-top">
+                        <div className="mt-5">
+                            <div className="row">
+                                <div className="col-12 col-lg-4">
+                                    <div className="col-12 d-block d-lg-flex text-center text-lg-start text mt-5">
+                                        <div className="nav-logo width-fit">
+                                            <img src={formData.logo} alt="" />
+                                        </div>
+                                        <span className="ms-2 fs-30 text-white">{formData.businessName}</span>
+                                    </div>
+                                    <div className="col-12 mt-4  text-center text-lg-start" style={{ color: "#A4B3CB" }}>
+                                        <p>
+                                            business Description
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div className="col-12 col-lg-4">
+                                    <div className="col-12 mt-5">
+                                        <div className="col-12 mt-3 mb-3 text-center text-lg-start">
+                                            <a href="#" className=" fs-14 text-decoration-none text-orange">NAVIGATION</a>
+                                        </div>
+                                        <div className="col-12 mt-3 mb-3  text-center text-lg-start">
+                                            <a href="#" className="fs-14 text-decoration-none" style={{ color: "#A4B3CB" }}>Menu</a>
+                                        </div>
+                                        <div className="col-12 mt-3 mb-3  text-center text-lg-start">
+                                            <a href="#" className="fs-14 text-decoration-none" style={{ color: "#A4B3CB" }}>About Us</a>
+                                        </div>
+                                        <div className="col-12 mt-3 mb-3  text-center text-lg-start">
+                                            <a href="#" className="fs-14 text-decoration-none" style={{ color: "#A4B3CB" }}>Contact Us</a>
+                                        </div>
+                                        <div className="col-12 mt-3 mb-3  text-center text-lg-start">
+                                            <a href="#" className="fs-14 text-decoration-none" style={{ color: "#A4B3CB" }}>Main Dishes</a>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="col-12">
+                                    <div className="col-12 mt-5">
+                                        <div className="col-12 mt-3 mb-3 text-center text-lg-start">
+                                            <a href="#" className=" fs-14 text-decoration-none text-orange">Follow Us</a>
+                                        </div>
+
+                                        <div className="mt-5 col-12 row gap-3 jcc-md text-center text-lg-start">
+                                            <a className="contact-banner text-orange text-center text-lg-start">
+                                                <i className="bi bi-facebook text-orange"></i>
+                                            </a>
+                                            <a  className="contact-banner text-center text-lg-start">
+                                                <i className="bi bi-instagram text-orange"></i>
+                                            </a>
+                                            <a  className="contact-banner text-center text-lg-start">
+                                                <i className="bi bi-twitter text-orange"></i>
+                                            </a>
+                                            {/* <hr style={{width:"fit-content",opacity: 0.15,}}></hr> */}
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                                <div className="col-12">
+                                    <div className="row">
+                                        <div className="col-lg-6">
+                                            <div className="col-12">
+                                                <div className="col-12 mt-3 mb-3 text-center text-lg-start">
+                                                    <a href="#" className=" fs-14 text-decoration-none text-orange">OPENING HOURS</a>
+                                                </div>
+                                                <div className="mt-3 text-center text-lg-start" style={{ color: "#A4B3CB" }}>
+                                                    {days.map((day, index) => (
+                                                        <p>{day}</p>
+                                                    ))}
+                                                </div>
+                                                <div className="mt-3 text-center text-lg-start" style={{ color: "#A4B3CB" }}>
+                                                    <span>{openTime} to {closeTime}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+                                        <div className="col-lg-6">
+                                            <div className="col-12 mt-5 text-center text-lg-start">
+                                                <div className="mt-3" style={{ color: "#A4B3CB" }}>
+                                                    
+                                                </div>
+                                                <div className="mt-3" style={{ color: "#A4B3CB" }}>
+                                                    <span>CLOSED</span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                                <div className="col-12">
+                                    <div className="row">
+                                        <div className="col-12 mt-5 text-center text-lg-start" style={{ color: "#A4B3CB" }}>
+                                            <span>© 2024 Business Bazaar. All Right Reserved</span>
+                                        </div>
+
+                                        <div className="col-12  text-center text-lg-start mb-5 mt-5" style={{ color: "#A4B3CB" }}>
+                                            <div className="row">
+                                                <div className="col-12 col-lg-6">Terms of Service</div>
+                                                <div className="col-12 col-lg-6">Privacy Policy</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </footer>
+                        </div>
+
                     </div>
                 </div>
             </>
@@ -1093,9 +1396,9 @@ export default function CreateBusiness() {
     function BusinessDesc() {
         const [description, setDescription] = useState('')
 
-        useEffect(()=>{
+        useEffect(() => {
             setDescription(formData?.description)
-        },[])
+        }, [])
         const handleDescSubmit = () => {
             setFormData(prevFormData => ({
                 ...prevFormData,
@@ -1114,9 +1417,9 @@ export default function CreateBusiness() {
 
                         {/* Right Form Section */}
                         <div className="col-12 col-md-7 row align-items-end justify-content-center h-100 p-3 p-md-5 right-portion">
-                        <div className="col-12 text-start">
-                        <button className="btn btn-dark w-auto float-start" onClick={handlePrevStep}><i className="bi bi-arrow-left"></i></button>
-                        </div>
+                            <div className="col-12 text-start">
+                                <button className="btn btn-dark w-auto float-start" onClick={handlePrevStep}><i className="bi bi-arrow-left"></i></button>
+                            </div>
                             <div className='row  justify-content-center'>
                                 <div className='col-12 text-center text-md-start'>
                                     <h1 className='fw-bold'>Add <br /> Business Description</h1>
@@ -1153,13 +1456,13 @@ export default function CreateBusiness() {
         const [errors, setErrors] = useState({});
         const [loading, setLoading] = useState(false); // Loader state
 
-        useEffect(()=>{
+        useEffect(() => {
             setTheme(formData?.theme ? formData.theme : '#6AA646')
             setSecondaryTheme(formData?.secondaryTheme ? formData.secondaryTheme : '#A8FF75')
             setLandingPageHero(formData?.landingPageHero)
             setWelcomePart(formData?.welcomePart)
-        },[])
-    
+        }, [])
+
         // Generic File Change Handler with Loader
         const handleFileChange = (name, e, sectionSetter) => {
             const file = e.target.files[0];
@@ -1184,12 +1487,12 @@ export default function CreateBusiness() {
                 reader.readAsDataURL(file);
             }
         };
-    
+
         const handleInputChange = (e, sectionSetter) => {
             const { name, value } = e.target;
             sectionSetter(prevData => ({ ...prevData, [name]: value }));
         };
-    
+
         const validateForm = () => {
             const newErrors = {};
             if (!landingPageHero.title) newErrors.landingPageHeroTitle = "Title is required";
@@ -1201,7 +1504,7 @@ export default function CreateBusiness() {
             setErrors(newErrors);
             return Object.keys(newErrors).length === 0;
         };
-    
+
         const handleLandingSubmit = () => {
             if (validateForm()) {
                 setFormData(prevFormData => ({
@@ -1214,11 +1517,11 @@ export default function CreateBusiness() {
                 handleNextStep();
             }
         };
-    
+
         const triggerFileUpload = (inputId) => {
             document.getElementById(inputId).click();
         };
-    
+
         return (
             <div className='h-100vh'>
                 <div className="row h-100 justify-content-center">
@@ -1226,7 +1529,7 @@ export default function CreateBusiness() {
                     <div className="d-none d-md-block left-portion p-0 col-md-5 h-100">
                         <img src="/src/assets/images/landing-page.jpg" alt="" className='w-100 h-100' />
                     </div>
-    
+
                     {/* Right Form Section */}
                     <div className="col-12 col-md-7 row align-items-end justify-content-center h-100 p-3 p-md-5 right-portion">
                         <div className="col-12 text-start">
@@ -1234,12 +1537,12 @@ export default function CreateBusiness() {
                                 <i className="bi bi-arrow-left"></i>
                             </button>
                         </div>
-    
+
                         <div className='row justify-content-center'>
                             <div className='col-12 text-center text-md-start mt-5'>
                                 <h1 className='fw-bold'>Add Details <br /> About Landing Page</h1>
                             </div>
-    
+
                             {/* Color Theme Section */}
                             <div className="col-12 p-3 p-md-5">
                                 <h5 className='fs-18 mb-4 p-1 text-start text-md-start text-dark fw-bold mt-3'>Color Theme</h5>
@@ -1263,10 +1566,10 @@ export default function CreateBusiness() {
                                             className='form-control form-control-lg'
                                             value={secondaryTheme}
                                             onChange={(e) => setSecondaryTheme(e.target.value)}
-                                        />                                    
-                                    </div>                                    
+                                        />
+                                    </div>
                                 </div>
-    
+
                                 {/* Landing Page Hero Details */}
                                 <h5 className='fs-18 mb-2 text-dark fw-bold mt-3'>Add Landing Page Banner</h5>
                                 <label>Title :</label>
@@ -1279,7 +1582,7 @@ export default function CreateBusiness() {
                                     onChange={(e) => handleInputChange(e, setLandingPageHero)}
                                 />
                                 {errors.landingPageHeroTitle && <div className="text-danger">{errors.landingPageHeroTitle}</div>}
-    
+
                                 <label>Description :</label>
                                 <textarea
                                     name="description"
@@ -1289,20 +1592,20 @@ export default function CreateBusiness() {
                                     onChange={(e) => handleInputChange(e, setLandingPageHero)}
                                 />
                                 {errors.landingPageHeroDescription && <div className="text-danger">{errors.landingPageHeroDescription}</div>}
-    
+
                                 {/* Hero Image Upload */}
                                 <input type="file" hidden id='LandingHeroImageInput' onChange={(e) => handleFileChange("landingPageHeroImage", e, setLandingPageHero)} />
                                 <div onClick={() => triggerFileUpload('LandingHeroImageInput')} className="p-2 mt-2 mb-3 add-logo-div">
                                     <div className="text-center">
                                         {loading ? (
-                                             <div className="spinner-border text-primary" role="status"></div>
+                                            <div className="spinner-border text-primary" role="status"></div>
                                         ) : (
                                             <img src={landingPageHero.coverImage || "/src/assets/images/add_image.png"} width="50" alt="Add Hero Image" />
                                         )}
                                     </div>
                                 </div>
                                 {errors.landingPageHeroCoverImage && <div className="text-danger">{errors.landingPageHeroCoverImage}</div>}
-    
+
                                 {/* Welcome Part */}
                                 <h5 className='fs-18 mb-2 text-dark fw-bold mt-3'>Add Welcome Part</h5>
                                 <label>Title :</label>
@@ -1315,7 +1618,7 @@ export default function CreateBusiness() {
                                     onChange={(e) => handleInputChange(e, setWelcomePart)}
                                 />
                                 {errors.welcomePartTitle && <div className="text-danger">{errors.welcomePartTitle}</div>}
-    
+
                                 <label>Description :</label>
                                 <textarea
                                     name="description"
@@ -1325,20 +1628,20 @@ export default function CreateBusiness() {
                                     onChange={(e) => handleInputChange(e, setWelcomePart)}
                                 />
                                 {errors.welcomePartDescription && <div className="text-danger">{errors.welcomePartDescription}</div>}
-    
+
                                 {/* Welcome Image Upload */}
                                 <input type="file" hidden id='WelcomeImageInput' onChange={(e) => handleFileChange("welcomePartImage", e, setWelcomePart)} />
                                 <div onClick={() => triggerFileUpload('WelcomeImageInput')} className="p-2 mt-2 mb-3 add-logo-div">
                                     <div className="text-center">
                                         {loading ? (
-                                             <div className="spinner-border text-primary" role="status"></div>
+                                            <div className="spinner-border text-primary" role="status"></div>
                                         ) : (
                                             <img src={welcomePart.coverImage || "/src/assets/images/add_image.png"} width="50" alt="Add Welcome Image" />
                                         )}
                                     </div>
                                 </div>
                                 {errors.welcomePartCoverImage && <div className="text-danger">{errors.welcomePartCoverImage}</div>}
-    
+
                                 <div className='col-12 mt-4 text-center'>
                                     <button className='btn btn-success w-100' onClick={handleLandingSubmit}>
                                         Save & Next
@@ -1361,13 +1664,13 @@ export default function CreateBusiness() {
         const [services, setServices] = useState([{ title: "", description: "", image: "" }]);
         const [isLoading, setIsLoading] = useState({ specialService: {}, service: {} });
 
-        useEffect(()=>{
+        useEffect(() => {
             setSpecialService(formData?.specialServices)
             setServices(formData?.service)
-        },[])
+        }, [])
 
         const [errors, setErrors] = useState([])
-    
+
         // Handle change for individual special service fields
         const handleProductChange = (index, e) => {
             const { name, value } = e.target;
@@ -1377,7 +1680,7 @@ export default function CreateBusiness() {
                 return { ...prevData, data: updatedData };
             });
         };
-    
+
         // Handle change for services
         const handleServiceChange = (index, e) => {
             const { name, value } = e.target;
@@ -1387,7 +1690,7 @@ export default function CreateBusiness() {
                 return updatedServices;
             });
         };
-    
+
         const handleFileChange = async (type, index, e) => {
             const file = e.target.files[0];
             if (file) {
@@ -1396,7 +1699,7 @@ export default function CreateBusiness() {
                     ...prevLoading,
                     [type]: { ...prevLoading[type], [index]: true }
                 }));
-    
+
                 const preReq = await preRequestFun(file, "service");
                 if (preReq && preReq.accessLink) {
                     const imageUrl = preReq.accessLink;
@@ -1416,7 +1719,7 @@ export default function CreateBusiness() {
                 } else {
                     console.error('Access link not found in response.');
                 }
-    
+
                 // Remove loading state
                 setIsLoading((prevLoading) => ({
                     ...prevLoading,
@@ -1424,13 +1727,13 @@ export default function CreateBusiness() {
                 }));
             }
         };
-    
+
         // Trigger file upload for image input
         const uploadImage = (type, index) => {
             const inputClass = type === 'specialService' ? '.specialServiceImageInput' : '.serviceImageInput';
             document.querySelectorAll(inputClass)[index].click();
         };
-    
+
         // Submit function to store data
         const handleServiceSubmit = () => {
             if (!specialService.title || !specialService.description || !specialService.data[0].title) {
@@ -1470,7 +1773,7 @@ export default function CreateBusiness() {
                 return updatedServices;
             });
         };
-    
+
         return (
             <>
                 <div className='h-100vh'>
@@ -1479,7 +1782,7 @@ export default function CreateBusiness() {
                         <div className="d-none d-md-block left-portion p-0 col-md-5 h-100">
                             <img src="/src/assets/images/landing-page.jpg" alt="" className='w-100 h-100' />
                         </div>
-    
+
                         {/* Right Form Section */}
                         <div className="col-12 col-md-7 row align-items-end justify-content-center h-100 p-3 p-md-5 right-portion">
                             <div className="col-12 text-start">
@@ -1487,12 +1790,12 @@ export default function CreateBusiness() {
                                     <i className="bi bi-arrow-left"></i>
                                 </button>
                             </div>
-    
+
                             <div className='row justify-content-center'>
                                 <div className="col-12 mt-5 text-center text-md-start">
                                     <h1 className="fw-bold">Add Service Details</h1>
                                 </div>
-    
+
                                 <div className="col-12">
                                     {/* Special Service Title */}
                                     <div className="col-12 text-center">
@@ -1516,12 +1819,12 @@ export default function CreateBusiness() {
                                             required
                                         ></textarea>
                                     </div>
-    
+
                                     {/* Special Services List */}
                                     <div className="col-12 text-center">
                                         <h5 className='fs-18 mb-4 p-1 text-center text-md-start text-dark fw-bold mt-3'>Add Special Services</h5>
                                     </div>
-    
+
                                     {specialService.data.map((p, index) => (
                                         <div key={index} className="mt-2">
                                             {index !== 0 && <div className="divider"></div>}
@@ -1576,7 +1879,7 @@ export default function CreateBusiness() {
                                             )}
                                         </div>
                                     ))}
-    
+
                                     {/* Add Service Button */}
                                     <a
                                         href="#"
@@ -1588,74 +1891,74 @@ export default function CreateBusiness() {
                                     >
                                         + Add More Special Service
                                     </a>
-    
+
                                     {/* Services List */}
                                     {services.map((service, index) => (
-                                    <div key={index} className="row align-items-center mb-3">
-                                        <input
-                                            type="text"
-                                            name="title"
-                                            className="form-control form-control-lg mb-3"
-                                            placeholder="Service Title"
-                                            value={service.title}
-                                            onChange={(e) => handleServiceChange(index, e)}
-                                            required
-                                        />
-                                        <textarea
-                                            name="description"
-                                            className="form-control form-control-lg mb-3"
-                                            placeholder="Service Description"
-                                            value={service.description}
-                                            onChange={(e) => handleServiceChange(index, e)}
-                                            required
-                                        />
-                                        <div className="col-12 col-md-3 mb-3">
+                                        <div key={index} className="row align-items-center mb-3">
                                             <input
-                                                type="file"
-                                                hidden
-                                                className="serviceImageInput"
-                                                onChange={(e) => handleFileChange('service', index, e)}
+                                                type="text"
+                                                name="title"
+                                                className="form-control form-control-lg mb-3"
+                                                placeholder="Service Title"
+                                                value={service.title}
+                                                onChange={(e) => handleServiceChange(index, e)}
+                                                required
                                             />
-                                            <div onClick={() => uploadImage('service', index)} className="p-2 mt-2 add-logo-div">
-                                                <div className="text-center">
-                                                    {isLoading.service[index] ? (
-                                                        <div className="spinner-border text-primary" role="status"></div>
-                                                    ) : (
-                                                        <img
-                                                            src={service.image || "/src/assets/images/add_image.png"}
-                                                            width="50"
-                                                            alt="Add Service Image"
-                                                        />
-                                                    )}
+                                            <textarea
+                                                name="description"
+                                                className="form-control form-control-lg mb-3"
+                                                placeholder="Service Description"
+                                                value={service.description}
+                                                onChange={(e) => handleServiceChange(index, e)}
+                                                required
+                                            />
+                                            <div className="col-12 col-md-3 mb-3">
+                                                <input
+                                                    type="file"
+                                                    hidden
+                                                    className="serviceImageInput"
+                                                    onChange={(e) => handleFileChange('service', index, e)}
+                                                />
+                                                <div onClick={() => uploadImage('service', index)} className="p-2 mt-2 add-logo-div">
+                                                    <div className="text-center">
+                                                        {isLoading.service[index] ? (
+                                                            <div className="spinner-border text-primary" role="status"></div>
+                                                        ) : (
+                                                            <img
+                                                                src={service.image || "/src/assets/images/add_image.png"}
+                                                                width="50"
+                                                                alt="Add Service Image"
+                                                            />
+                                                        )}
+                                                    </div>
                                                 </div>
                                             </div>
+                                            {index > 0 && ( // Only show the remove button if it's not the first service
+                                                <div className="col-12 text-center">
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => removeService(index)}
+                                                        className="btn btn-danger mt-2 w-100 mb-2"
+                                                    >
+                                                        Remove Service
+                                                    </button>
+                                                </div>
+                                            )}
                                         </div>
-                                        {index > 0 && ( // Only show the remove button if it's not the first service
-                                        <div className="col-12 text-center">
-                                            <button
-                                                type="button"
-                                                onClick={() => removeService(index)}
-                                                className="btn btn-danger mt-2 w-100 mb-2"
-                                            >
-                                                Remove Service
-                                            </button>
-                                        </div>
-                                    )}
-                                    </div>
-                                ))}
+                                    ))}
 
-                                {/* Add More Service Button */}
-                                <a
-                                    href="#"
-                                    onClick={() => setServices((prev) => [...prev, { title: "", description: "", image: "" }])}
-                                    className="text-decoration-none btn btn-success w-100"
-                                >
-                                    + Add More Service
-                                </a>
+                                    {/* Add More Service Button */}
+                                    <a
+                                        href="#"
+                                        onClick={() => setServices((prev) => [...prev, { title: "", description: "", image: "" }])}
+                                        className="text-decoration-none btn btn-success w-100"
+                                    >
+                                        + Add More Service
+                                    </a>
                                 </div>
                                 {errors && <p className="text-danger text-danger mt-3">{errors.toString()}</p>}
                             </div>
-    
+
                             {/* Save & Next Button */}
                             <div className='col-12 mt-4 text-center'>
                                 <button className='btn btn-dark btn-lg w-100' onClick={handleServiceSubmit}>
@@ -1680,17 +1983,17 @@ export default function CreateBusiness() {
         const [productSection, setProductSection] = useState(initialState);
         const [error, setError] = useState("")
 
-        useEffect(()=>{
+        useEffect(() => {
             setProductSection(formData?.productSection?.length ? formData.productSection : initialState)
-        },[])
-    
+        }, [])
+
         const handleFileChange = (index, e) => {
             const file = e.target.files[0];
             if (file) {
                 const updatedProducts = [...productSection];
                 updatedProducts[index].loadingImage = true; // Start loader when the file is selected
                 setProductSection(updatedProducts);
-    
+
                 const reader = new FileReader();
                 reader.onload = async (e) => {
                     const preReq = await preRequestFun(file, name);
@@ -1704,25 +2007,25 @@ export default function CreateBusiness() {
                     updatedProducts[index].loadingImage = false; // Stop loader after processing the image
                     setProductSection([...updatedProducts]); // Trigger re-render with updated products
                 };
-    
+
                 reader.readAsDataURL(file);
             }
         };
-    
+
         const uploadImage = (index) => {
             document.querySelectorAll('.menuImageInput')[index].click();
         };
-    
+
         const handleProductSubmit = () => {
-            const isValid = productSection.every(product => 
+            const isValid = productSection.every(product =>
                 product.title && product.description && (product.price || product.price === "")
             );
-    
+
             if (!isValid) {
                 setError("Please fill out all fields except for the product price.")
                 return;
             }
-    
+
             // Proceed with submission if all fields are filled
             setFormData((prevFormData) => ({
                 ...prevFormData,
@@ -1730,14 +2033,14 @@ export default function CreateBusiness() {
             }));
             handleNextStep();
         };
-    
+
         return (
             <div className='h-100vh'>
                 <div className="row h-100 justify-content-center">
                     <div className="d-none d-md-block left-portion p-0 col-md-5 h-100">
                         <img src="/src/assets/images/landing-page.jpg" alt="" className='w-100 h-100' />
                     </div>
-    
+
                     <div className="col-12 col-md-7 row align-items-end justify-content-center h-100 p-3 p-md-5 right-portion">
                         <div className="col-12 text-start">
                             <button className="btn btn-dark w-auto float-start" onClick={handlePrevStep}><i className="bi bi-arrow-left"></i></button>
@@ -1746,7 +2049,7 @@ export default function CreateBusiness() {
                             <div className="col-12 text-center text-md-start mt-3">
                                 <h1 className="fw-bold">Add Product Details</h1>
                             </div>
-    
+
                             <div className="col-12">
                                 <div className="col-12 text-center">
                                     <u><h5 className='fs-18 mb-4 p-1 text-center text-md-start text-dark fw-bold mt-3'>Add Products</h5></u>
@@ -1824,7 +2127,7 @@ export default function CreateBusiness() {
                             {error && <p className="text-danger text-danger mt-3">{error}</p>}
 
                         </div>
-    
+
                         <div className='col-12 mt-4 text-center'>
                             <button className='btn btn-success w-100 text-center' onClick={handleProductSubmit}>Save & Next</button>
                         </div>
@@ -1833,7 +2136,7 @@ export default function CreateBusiness() {
             </div>
         );
     }
-    
+
 
     function SeoDetails() {
         const [socialMediaLinks, setSocialMediaLinks] = useState([
@@ -1848,10 +2151,10 @@ export default function CreateBusiness() {
             metaTags: ['']
         });
 
-        useEffect(()=>{
+        useEffect(() => {
             setSocialMediaLinks(formData?.socialMediaLinks)
             setSeoData(formData?.seoData)
-        },[])
+        }, [])
 
         // Handle tag change
         const handleTagChange = (index, value) => {
@@ -1906,7 +2209,7 @@ export default function CreateBusiness() {
         };
 
         return (
-                <div className='h-100vh'>
+            <div className='h-100vh'>
                 <div className="row h-100 justify-content-center">
                     {/* Left Image Section - Hidden on small screens */}
                     <div className="d-none d-md-block left-portion p-0 col-md-5 h-100">
@@ -1915,8 +2218,8 @@ export default function CreateBusiness() {
 
                     {/* Right Form Section */}
                     <div className="col-12 col-md-7 row align-items-end justify-content-center h-100 p-3 p-md-5 right-portion">
-                    <div className="col-12 text-start">
-                        <button className="btn btn-dark w-auto float-start" onClick={handlePrevStep}><i className="bi bi-arrow-left"></i></button>
+                        <div className="col-12 text-start">
+                            <button className="btn btn-dark w-auto float-start" onClick={handlePrevStep}><i className="bi bi-arrow-left"></i></button>
                         </div>
                         <div className='row justify-content-center'>
                             <div className='col-12 text-center text-md-start mt-4'>
@@ -1958,20 +2261,20 @@ export default function CreateBusiness() {
                                                 onChange={(e) => handleTagChange(index, e.target.value)}
                                             />
                                             {index > 0 ? (
-                                            <button
-                                                className="btn btn-danger"
-                                                onClick={() => removeTag(index)}
-                                                type="button"
-                                            >
-                                                Remove
-                                            </button>
-                                            ):
-                                            <button
-                                                className="btn btn-success" type='button'
-                                                onClick={addTag}
-                                            >
-                                                Add More
-                                            </button>
+                                                <button
+                                                    className="btn btn-danger"
+                                                    onClick={() => removeTag(index)}
+                                                    type="button"
+                                                >
+                                                    Remove
+                                                </button>
+                                            ) :
+                                                <button
+                                                    className="btn btn-success" type='button'
+                                                    onClick={addTag}
+                                                >
+                                                    Add More
+                                                </button>
                                             }
                                         </div>
                                     ))}
@@ -2009,7 +2312,7 @@ export default function CreateBusiness() {
         const [images, setImages] = useState([{ file: null, fileType: '', fileName: '' }]);
         // const [formData, setFormData] = useState({});
         const [s3PreRequest, setS3PreRequest] = useState([]);
-    
+
         const handleFileChange = (index, event) => {
             const file = event.target.files[0];
             if (file) {
@@ -2018,23 +2321,23 @@ export default function CreateBusiness() {
                 setImages(updatedImages);
             }
         };
-    
+
         const addImageInput = () => {
             setImages((prevImages) => [...prevImages, { file: null, fileType: '', fileName: '' }]);
         };
-    
+
         const handleAddImageClick = (index) => {
             document.getElementById(`file-input-${index}`).click();
         };
-    
+
         const removeImage = (index) => {
             const updatedImages = images.filter((_, i) => i !== index);
             setImages(updatedImages);
         };
-    
+
         const handleGallerySubmit = async () => {
             const imageFiles = images.map((image) => image?.file);
-    
+
             if (imageFiles.length > 0) {
                 setLoading(true);
                 const requestBody = {
@@ -2043,39 +2346,39 @@ export default function CreateBusiness() {
                         file_type: file.type
                     }))
                 };
-    
+
                 try {
                     const url = 'https://businessbazaarserver.auxxweb.in/api/v1/s3url';
-    
+
                     // Fetch pre-signed S3 URLs
                     const response = await axios.post(url, requestBody, {
                         headers: {
                             'Content-Type': 'application/json',
                         },
                     });
-    
+
                     const s3Urls = response.data.data;
-    
+
                     // Upload each file to its respective S3 URL
                     await Promise.all(
                         s3Urls.map(async (data, index) => {
                             const { url } = data;
                             const file = imageFiles[index];
-    
+
                             await axios.put(url, file, {
                                 headers: { 'Content-Type': file.type },
                             });
                         })
                     );
-    
+
                     // Collect access links and store them in formData
                     const accessLinks = s3Urls.map(s3Data => s3Data.accessLink);
-    
+
                     setFormData(prevFormData => ({
                         ...prevFormData,
                         gallery: accessLinks,
                     }));
-                    handleNextStep(); 
+                    handleNextStep();
                 } catch (error) {
                     console.error('Error fetching S3 URLs or uploading files:', error);
                 } finally {
@@ -2085,7 +2388,7 @@ export default function CreateBusiness() {
                 handleNextStep(); // Proceed to the next step if there are no files to upload
             }
         };
-    
+
         return (
             <div className='h-100vh'>
                 <div className="row h-100 justify-content-center">
@@ -2093,7 +2396,7 @@ export default function CreateBusiness() {
                     <div className="d-none d-md-block left-portion p-0 col-md-5 h-100">
                         <img src="/src/assets/images/landing-page.jpg" alt="Landing Page" className='w-100 h-100' />
                     </div>
-    
+
                     {/* Right Form Section */}
                     <div className="col-12 col-md-7 row align-items-end justify-content-center h-100 p-3 p-md-5 right-portion">
                         <div className="col-12 text-start">
@@ -2101,12 +2404,12 @@ export default function CreateBusiness() {
                                 <i className="bi bi-arrow-left"></i>
                             </button>
                         </div>
-    
+
                         <div className='row justify-content-center'>
                             <div className='col-12 text-center text-md-start'>
                                 <h1 className='fw-bold'>Add Gallery</h1>
                             </div>
-    
+
                             {/* Image Upload Fields */}
                             <div className="col-12 p-md-5">
                                 <div className="row mb-3 gap-2">
@@ -2120,18 +2423,18 @@ export default function CreateBusiness() {
                                                 onChange={(e) => handleFileChange(index, e)}
                                             />
                                             <div className="p-2 add-logo-div" >
-                                                  {/* Remove Button for all except the first image */}
-                                            {index > 0 ? (
-                                    
-                                                <div className='d-flex justify-content-end'>
-                                                    <CloseIcon
-                                                        onClick={() => removeImage(index)}
-                                                    />
-                                                </div>
-                                               
-                                            ) : (
-                                                <div style={{height:"1.5rem"}}></div>
-                                            )}
+                                                {/* Remove Button for all except the first image */}
+                                                {index > 0 ? (
+
+                                                    <div className='d-flex justify-content-end'>
+                                                        <CloseIcon
+                                                            onClick={() => removeImage(index)}
+                                                        />
+                                                    </div>
+
+                                                ) : (
+                                                    <div style={{ height: "1.5rem" }}></div>
+                                                )}
                                                 <div className="text-center" onClick={() => handleAddImageClick(index)}>
                                                     {image.file ? (
                                                         <img
@@ -2140,10 +2443,10 @@ export default function CreateBusiness() {
                                                             className='img-preview'
                                                             width="100"
                                                             height="80"
-                                                            style={{objectFit: 'cover'}}
+                                                            style={{ objectFit: 'cover' }}
                                                         />
                                                     ) : (
-                                                        <img src="/src/assets/images/add_image.png" width="50" alt="Add Image" style={{height:'70px',objectFit:'contain'}}/>
+                                                        <img src="/src/assets/images/add_image.png" width="50" alt="Add Image" style={{ height: '70px', objectFit: 'contain' }} />
                                                     )}
                                                 </div>
                                             </div>
@@ -2157,7 +2460,7 @@ export default function CreateBusiness() {
                                 </div>
                             </div>
                         </div>
-    
+
                         {/* Save & Next Button */}
                         <div className="col-12 text-center p-3 p-md-5">
                             {loading ? (
@@ -2175,147 +2478,147 @@ export default function CreateBusiness() {
             </div>
         );
     }
-    
-function MoreVideos() {
-    const [videos, setVideos] = useState([{ file: null, fileType: '' }]);
-    const [s3PreRequest, setS3PreRequest] = useState([]);
 
-    const handleFileChange = (index, event) => {
-        const file = event.target.files[0];
-        if (file) {
-            const newVideos = [...videos];
-            newVideos[index] = { file, fileType: file.type };
-            setVideos(newVideos);
-        }
-    };
+    function MoreVideos() {
+        const [videos, setVideos] = useState([{ file: null, fileType: '' }]);
+        const [s3PreRequest, setS3PreRequest] = useState([]);
 
-    const addVideoInput = () => {
-        setVideos((prevVideos) => [...prevVideos, { file: null, fileType: '' }]);
-    };
+        const handleFileChange = (index, event) => {
+            const file = event.target.files[0];
+            if (file) {
+                const newVideos = [...videos];
+                newVideos[index] = { file, fileType: file.type };
+                setVideos(newVideos);
+            }
+        };
 
-    const removeVideoInput = (index) => {
-        const updatedVideos = videos.filter((_, i) => i !== index);
-        setVideos(updatedVideos);
-    };
+        const addVideoInput = () => {
+            setVideos((prevVideos) => [...prevVideos, { file: null, fileType: '' }]);
+        };
 
-    const handleAddVideoClick = (index) => {
-        document.getElementById(`file-input-${index}`).click();
-    };
+        const removeVideoInput = (index) => {
+            const updatedVideos = videos.filter((_, i) => i !== index);
+            setVideos(updatedVideos);
+        };
 
-    const handleGallerySubmit = async () => {
-        const videoFiles = videos.filter(video => video.file).map(video => video.file);
-        
-        // If there are no video files, skip uploading and move to the next step
-        if (videoFiles.length === 0) {
-            handleNextStep();
-            return;
-        }
+        const handleAddVideoClick = (index) => {
+            document.getElementById(`file-input-${index}`).click();
+        };
 
-        try {
-            const requestBody = {
-                files: videoFiles.map(file => ({
-                    position: 'Videos',
-                    file_type: file.type
-                }))
-            };
-            const url = 'https://businessbazaarserver.auxxweb.in/api/v1/s3url';
-            const response = await axios.post(url, requestBody, {
-                headers: { 'Content-Type': 'application/json' },
-            });
+        const handleGallerySubmit = async () => {
+            const videoFiles = videos.filter(video => video.file).map(video => video.file);
 
-            const s3Urls = response.data.data;
-            setS3PreRequest(s3Urls.map(url => url.url));
+            // If there are no video files, skip uploading and move to the next step
+            if (videoFiles.length === 0) {
+                handleNextStep();
+                return;
+            }
 
-            await Promise.all(
-                s3Urls.map(async (data, index) => {
-                    const { url } = data;
-                    const file = videoFiles[index];
-                    await axios.put(url, file, {
-                        headers: { 'Content-Type': file.type },
-                    });
-                })
-            );
-            const accessLinks = s3Urls.map(s3Data => s3Data.accessLink);
+            try {
+                const requestBody = {
+                    files: videoFiles.map(file => ({
+                        position: 'Videos',
+                        file_type: file.type
+                    }))
+                };
+                const url = 'https://businessbazaarserver.auxxweb.in/api/v1/s3url';
+                const response = await axios.post(url, requestBody, {
+                    headers: { 'Content-Type': 'application/json' },
+                });
 
-            setFormData(prevFormData => ({
-                ...prevFormData,
-                videos: accessLinks,
-            }));
+                const s3Urls = response.data.data;
+                setS3PreRequest(s3Urls.map(url => url.url));
 
-            handleNextStep();
-        } catch (error) {
-            console.error('Error uploading videos:', error);
-        }
-    };
+                await Promise.all(
+                    s3Urls.map(async (data, index) => {
+                        const { url } = data;
+                        const file = videoFiles[index];
+                        await axios.put(url, file, {
+                            headers: { 'Content-Type': file.type },
+                        });
+                    })
+                );
+                const accessLinks = s3Urls.map(s3Data => s3Data.accessLink);
 
-    return (
-        <div className='h-100vh'>
-            <div className="row h-100 justify-content-center">
-                <div className="d-none d-md-block left-portion p-0 col-md-5 h-100">
-                    <img src="/src/assets/images/landing-page.jpg" alt="Landing Page" className='w-100 h-100' />
-                </div>
+                setFormData(prevFormData => ({
+                    ...prevFormData,
+                    videos: accessLinks,
+                }));
 
-                <div className="col-12 col-md-7 row align-items-end justify-content-center h-100 p-3 p-md-5 right-portion">
-                    <div className="col-12 text-start">
-                        <button className="btn btn-dark w-auto float-start" onClick={handlePrevStep}><i className="bi bi-arrow-left"></i></button>
+                handleNextStep();
+            } catch (error) {
+                console.error('Error uploading videos:', error);
+            }
+        };
+
+        return (
+            <div className='h-100vh'>
+                <div className="row h-100 justify-content-center">
+                    <div className="d-none d-md-block left-portion p-0 col-md-5 h-100">
+                        <img src="/src/assets/images/landing-page.jpg" alt="Landing Page" className='w-100 h-100' />
                     </div>
-                    <div className='row justify-content-center'>
-                        <div className='col-12 text-center text-md-start mt-2'>
-                            <h1 className='fw-bold'>Add Video (Optional)</h1>
-                        </div>
 
-                        <div className="col-12">
-                            <div className="row mb-3">
-                                {videos.map((video, index) => (
-                                    <div className="col-6 col-lg-3 mb-3" key={index}>
-                                        <input
-                                            type="file"
-                                            hidden
-                                            id={`file-input-${index}`}
-                                            accept="video/*"
-                                            onChange={(e) => handleFileChange(index, e)}
-                                        />
-                                        <div className="p-2 add-logo-div" onClick={() => handleAddVideoClick(index)}>
-                                            <div className="text-center">
-                                                {video.file ? (
-                                                    <video width="100%" controls className='video-preview'>
-                                                        <source src={URL.createObjectURL(video.file)} type={video.file.type} />
-                                                        Your browser does not support the video tag.
-                                                    </video>
-                                                ) : (
-                                                    <img src="/src/assets/images/add-video.png" width="50" alt="Add Video" />
-                                                )}
-                                                <div className="col-12">
-                                                    <span>Add Video</span>
+                    <div className="col-12 col-md-7 row align-items-end justify-content-center h-100 p-3 p-md-5 right-portion">
+                        <div className="col-12 text-start">
+                            <button className="btn btn-dark w-auto float-start" onClick={handlePrevStep}><i className="bi bi-arrow-left"></i></button>
+                        </div>
+                        <div className='row justify-content-center'>
+                            <div className='col-12 text-center text-md-start mt-2'>
+                                <h1 className='fw-bold'>Add Video (Optional)</h1>
+                            </div>
+
+                            <div className="col-12">
+                                <div className="row mb-3">
+                                    {videos.map((video, index) => (
+                                        <div className="col-6 col-lg-3 mb-3" key={index}>
+                                            <input
+                                                type="file"
+                                                hidden
+                                                id={`file-input-${index}`}
+                                                accept="video/*"
+                                                onChange={(e) => handleFileChange(index, e)}
+                                            />
+                                            <div className="p-2 add-logo-div" onClick={() => handleAddVideoClick(index)}>
+                                                <div className="text-center">
+                                                    {video.file ? (
+                                                        <video width="100%" controls className='video-preview'>
+                                                            <source src={URL.createObjectURL(video.file)} type={video.file.type} />
+                                                            Your browser does not support the video tag.
+                                                        </video>
+                                                    ) : (
+                                                        <img src="/src/assets/images/add-video.png" width="50" alt="Add Video" />
+                                                    )}
+                                                    <div className="col-12">
+                                                        <span>Add Video</span>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
 
-                                        {index > 0 && (
-                                            <div className="text-center mt-2">
-                                                <button className="btn btn-danger btn-sm" onClick={() => removeVideoInput(index)}>
-                                                    Remove
-                                                </button>
-                                            </div>
-                                        )}
-                                    </div>
-                                ))}
+                                            {index > 0 && (
+                                                <div className="text-center mt-2">
+                                                    <button className="btn btn-danger btn-sm" onClick={() => removeVideoInput(index)}>
+                                                        Remove
+                                                    </button>
+                                                </div>
+                                            )}
+                                        </div>
+                                    ))}
+                                </div>
                             </div>
                         </div>
-                    </div>
 
-                    <div className="col-12 text-center p-3 p-md-5">
-                        <button className="btn btn-success w-100 text-white p-2" onClick={handleGallerySubmit}>
-                            Save & Next
-                        </button>
+                        <div className="col-12 text-center p-3 p-md-5">
+                            <button className="btn btn-success w-100 text-white p-2" onClick={handleGallerySubmit}>
+                                Save & Next
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    );
-}
-    
-    
+        );
+    }
+
+
 
     function PreviewTemplates() {
         const [currentSlide, setCurrentSlide] = useState(0);
@@ -2325,13 +2628,13 @@ function MoreVideos() {
         const [colorTheme, setColorTheme] = useState('')
         const [visible, setVisible] = useState(false);
         const [review, setReview] = useState([{
-            rating:'',
-            name:'',
-            description:'',
+            rating: '',
+            name: '',
+            description: '',
         }]);
         const [closeDays, setCloseDays] = useState([]);
         const allDays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-    
+
         const handleInputChange = (e) => {
             const { name, value } = e.target;
             setReview((prevState) => ({
@@ -2344,22 +2647,22 @@ function MoreVideos() {
             const fetchData = async () => {
                 setBusinessData(formData)
 
-                
-               
+
+
                 setColorTheme(formData.theme)
                 setLoading(false);
-                const closed = allDays.filter(day => 
+                const closed = allDays.filter(day =>
                     !formData.businessTiming.workingDays.map(d => d.toLowerCase()).includes(day)
                 );
                 setCloseDays(closed);
-                
+
             }
-    
-    
+
+
             fetchData()
-    
+
         }, [id])
-    
+
         const settings4 = {
             dots: false,
             // infinite: true,
@@ -2407,7 +2710,7 @@ function MoreVideos() {
                 },
             ],
         };
-        
+
         const setting2 = {
             dots: false,
             arrows: false,
@@ -2457,8 +2760,8 @@ function MoreVideos() {
                 },
             ]
         };
-    
-    
+
+
         const settings3 = {
             dots: false,
             infinite: true,
@@ -2507,8 +2810,8 @@ function MoreVideos() {
                 },
             ]
         };
-    
-    
+
+
         const gallery = {
             dots: true,
             infinite: true,
@@ -2535,19 +2838,19 @@ function MoreVideos() {
         if (loading) {
             return <div className='h-100vh text-center '>
                 <div className='row h-100 justify-content-center align-items-center'>
-    
+
                     <div className='col-3 '>Loading...</div>
                 </div>
             </div>;
         }
-    
+
         // If there's no business data (e.g., fetch failed), show an error message
         if (!businessData) {
             return <div>Error loading business data.</div>;
         }
-    
-    
-    
+
+
+
         return (
             <>
                 <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -2601,9 +2904,9 @@ function MoreVideos() {
                             <img src={businessData.logo} alt="" />
                             <span className="ms-2">{businessData.businessName}</span>
                         </Navbar.Brand>
-    
+
                         <Navbar.Toggle aria-controls="basic-navbar-nav" style={{ color: 'black' }} />
-    
+
                         <Navbar.Collapse id="basic-navbar-nav">
                             <Nav className="ms-auto w-100 justify-content-evenly jcc">
                                 <NavLink href="#menu" className='text-black text-center text-lg-start  text-decoration-none fs-14' style={{ color: 'black' }}>
@@ -2646,7 +2949,7 @@ function MoreVideos() {
                                     <img src="/src/assets/images/baner-image2.png" alt="" />
                                 </div>
                             </div>
-    
+
                             {/* Text Content */}
                             <div className="col-12 col-lg-6">
                                 <div className="row align-items-center">
@@ -2661,16 +2964,16 @@ function MoreVideos() {
                                         </p>
                                     </div>
                                     <div className="mt-3 col-12">
-                                    <div className="row">
-                                        <div className="col-6 col-lg-3 mb-2">
-                                            <NavLink
-                                                to='#about' className="btn btn-dark text-white radius-theme box-shadow w-100 p-1" style={{ backgroundColor: '#212529' }}>View More</NavLink>
+                                        <div className="row">
+                                            <div className="col-6 col-lg-3 mb-2">
+                                                <NavLink
+                                                    to='#about' className="btn btn-dark text-white radius-theme box-shadow w-100 p-1" style={{ backgroundColor: '#212529' }}>View More</NavLink>
+                                            </div>
+                                            <div className="col-6 col-lg-3 mb-2">
+                                                <NavLink
+                                                    to='#service' className="btn btn-dark text-white radius-theme box-shadow theme w-100 p-1">Services</NavLink>
+                                            </div>
                                         </div>
-                                        <div className="col-6 col-lg-3 mb-2">
-                                            <NavLink
-                                                to='#service' className="btn btn-dark text-white radius-theme box-shadow theme w-100 p-1">Services</NavLink>
-                                        </div>
-                                    </div>
                                     </div>
                                     <div className="mt-5 col-12 social-media gap-3">
                                         <a href={businessData.socialMediaLinks[0].link} target='_blank' className="contact-banner text-dark">
@@ -2685,7 +2988,7 @@ function MoreVideos() {
                                     </div>
                                 </div>
                             </div>
-    
+
                             {/* Right Image for Desktop View */}
                             <div className="col-12 col-lg-6 text-end d-none d-lg-block">
                                 <img src={businessData.landingPageHero.coverImage} alt="" className='banner-image' />
@@ -2696,7 +2999,7 @@ function MoreVideos() {
                         </div>
                     </div>
                 </section>
-    
+
                 <div className="mt-5 mb-5">
                     <div className="container p-top">
                         <div className="col-12 address-section">
@@ -2712,7 +3015,7 @@ function MoreVideos() {
                                         </div>
                                     </div>
                                 </div>
-    
+
                                 <div className="col-12 col-lg-4 mb-3 mb-lg-0">
                                     <div className="row align-items-center justify-content-start">
                                         <div className="col-auto address-logo">
@@ -2721,12 +3024,12 @@ function MoreVideos() {
                                         <div className="col">
                                             <span className="fs-13">Send Email</span>
                                             {businessData.contactDetails.emails.map((email, index) => (
-    <p className='fs-16' key={index}>{email.number}</p>
-))}
+                                                <p className='fs-16' key={index}>{email.number}</p>
+                                            ))}
                                         </div>
                                     </div>
                                 </div>
-    
+
                                 <div className="col-12 col-lg-4 mb-3 mb-lg-0">
                                     <div className="row align-items-center justify-content-start">
                                         <div className="col-auto address-logo">
@@ -2735,8 +3038,8 @@ function MoreVideos() {
                                         <div className="col">
                                             <span className="fs-13">Contact</span>
                                             {businessData.contactDetails.mobileNumbers.map((mobile, index) => (
-    <p className='fs-16' key={index}>{mobile.number}</p>
-))}
+                                                <p className='fs-16' key={index}>{mobile.number}</p>
+                                            ))}
                                         </div>
                                     </div>
                                 </div>
@@ -2744,8 +3047,8 @@ function MoreVideos() {
                         </div>
                     </div>
                 </div>
-    
-    
+
+
                 <section className=' h-auto' style={{ backgroundColor: "#F3F3F4" }} id='about'>
                     <div className="container p-top">
                         <div className="row mt-5 align-items-center mb-5">
@@ -2755,7 +3058,7 @@ function MoreVideos() {
                                     className="img-fluid"
                                     alt=""
                                 />
-    
+
                             </div>
                             <div className="col-12 col-lg-6">
                                 <div className="col-12 mb-3">
@@ -2768,11 +3071,11 @@ function MoreVideos() {
                                 </div>
                             </div>
                         </div>
-    
-    
+
+
                     </div>
                 </section>
-    
+
                 <section className="h-auto" style={{ backgroundColor: "#F3F3F4" }}>
                     <div className="container p-top">
                         <div className="col-12 mb-5">
@@ -2853,8 +3156,8 @@ function MoreVideos() {
                                 </div>
                             </div>
                         </div>
-    
-    
+
+
                         <div className="mt-5 david-font">
                             <div className="mb-5">
                                 <div className="row justify-content-center mb-3">
@@ -2879,32 +3182,17 @@ function MoreVideos() {
                         </div>
                     </div>
                 </section>
-    
-    
+
+
                 <section className="h-auto david-font" style={{ backgroundColor: "#F3F3F4" }}>
                     <div className="container p-top">
                         <div className="col-12 mt-5 text-center ">
                             <h1 className='fw-bold text-center'>Services We Provide</h1>
                         </div>
                         <div className="col-12 mb-5 row justify-content-center">
-                                {businessData.service.length > 3 ? (
-                                    <Slider {...setting2} className='mb-5'>
-                                        {businessData.service.map((service, index) => (
-                                            <div
-                                                key={index}
-                                                className={`col-12 col-lg-4 service-design ${index === currentSlide ? 'active' : ''} mt-5 mb-5 text-center`}
-                                            >
-                                                <div className="col-12 text-center">
-                                                    <h3>{service.title}</h3>
-                                                </div>
-                                                <div className="col-12 mt-5">
-                                                    <p className="text-center">{service.description}</p>
-                                                </div>
-                                            </div>
-                                        ))}
-                                    </Slider>
-                                ) : (
-                                    businessData.service.map((service, index) => (
+                            {businessData.service.length > 3 ? (
+                                <Slider {...setting2} className='mb-5'>
+                                    {businessData.service.map((service, index) => (
                                         <div
                                             key={index}
                                             className={`col-12 col-lg-4 service-design ${index === currentSlide ? 'active' : ''} mt-5 mb-5 text-center`}
@@ -2916,24 +3204,39 @@ function MoreVideos() {
                                                 <p className="text-center">{service.description}</p>
                                             </div>
                                         </div>
-                                    ))
-                                )}
-                            </div>
-
-    
-                        <div className="col-12 mb-5" id='gallery'>
-                        <div className="col-12 mb-5 mt-5">
-                            <h1 className="fw-bold text-center">Gallery</h1>
+                                    ))}
+                                </Slider>
+                            ) : (
+                                businessData.service.map((service, index) => (
+                                    <div
+                                        key={index}
+                                        className={`col-12 col-lg-4 service-design ${index === currentSlide ? 'active' : ''} mt-5 mb-5 text-center`}
+                                    >
+                                        <div className="col-12 text-center">
+                                            <h3>{service.title}</h3>
+                                        </div>
+                                        <div className="col-12 mt-5">
+                                            <p className="text-center">{service.description}</p>
+                                        </div>
+                                    </div>
+                                ))
+                            )}
                         </div>
-                        <Slider {...gallery} className="gallery-slider">
-                            {businessData?.gallery?.map((image, index) => (
-                                <div key={index} className="p-2">
-                                    <img src={image} alt="" className='w-100 gallery-img' />
-                                </div>
-                            ))}
-                        </Slider>
-                    </div>
-    
+
+
+                        <div className="col-12 mb-5" id='gallery'>
+                            <div className="col-12 mb-5 mt-5">
+                                <h1 className="fw-bold text-center">Gallery</h1>
+                            </div>
+                            <Slider {...gallery} className="gallery-slider">
+                                {businessData?.gallery?.map((image, index) => (
+                                    <div key={index} className="p-2">
+                                        <img src={image} alt="" className='w-100 gallery-img' />
+                                    </div>
+                                ))}
+                            </Slider>
+                        </div>
+
                     </div>
                 </section>
                 <section className='bg-white d-none'>
@@ -2959,15 +3262,15 @@ function MoreVideos() {
                                     </div>
                                 </div>
                             </div>
-    
+
                             <div className="col-12 col-lg-6">
                                 <div className="col-12 text-center">
                                     <img src="/src/assets/images/chef.png" alt="" className='chef-div img-fluid w-100' />
-    
+
                                 </div>
                             </div>
-    
-    
+
+
                         </div>
                     </div>
                 </section>
@@ -2981,7 +3284,7 @@ function MoreVideos() {
                                 At Our Restaurant, we strive to provide the best dining experience possible. Our loyal customers have been satisfied with our culinary skills, service, and overall ambiance. Our positive feedback has helped us continuously improve our dining experience. If you're a loyal customer, we'd love to hear from you!
                             </p>
                         </div>
-    
+
                         <div className="mt-5">
                             <Slider {...settings3}>
                                 {businessData.testimonial.reviews.map((testimonial, index) => (
@@ -2989,18 +3292,18 @@ function MoreVideos() {
                                         <div className="col-12 text-center test-button-img-div">
                                             <img src="/src/assets/images/user.png" alt={testimonial.name} className="img-fluid" />
                                         </div>
-    
+
                                         <div className='text-warning text-center mt-0 m-0'>
                                             {[...Array(Math.floor(testimonial.rating))].map((star, i) => (
                                                 <i key={i} className="bi bi-star-fill"></i>
                                             ))}
                                             {testimonial.rating % 1 !== 0 && <i className="bi bi-star-half"></i>}
                                         </div>
-    
+
                                         <div className="col-12 mt-3">
                                             <p>{testimonial.review}</p>
                                         </div>
-    
+
                                         <div className="col-12 text-center mb-5">
                                             <span className='fw-bold david-font'>{testimonial.name}</span>
                                         </div>
@@ -3011,57 +3314,57 @@ function MoreVideos() {
                         <div className="col-12">
                             <div className="col-12 text-center mb-3">
                                 <button className="btn btn-dark text-white radius-theme box-shadow theme mt-5" onClick={() => setVisible(true)} >Write Review</button>
-    
+
                             </div>
                         </div>
                     </div>
                 </section>
                 <Dialog
-                header="Write a Review"
-                visible={visible}
-                onHide={() => { if (!visible) return; setVisible(false); }}
-                style={{ width: '50vw' }}
-                breakpoints={{ '960px': '75vw', '641px': '100vw' }}
-            >
-                <div className="container">
-                    <div className="p-3 justify-content-center">
-                        <Rating
-                            value={review.rating}  
-                            onChange={(e) => setReview({ ...review, rating: e.value })} 
-                            cancel={false}
-                        />
-                    </div>
-                    <div className="col-12">
-                        <InputText
-                            keyfilter="text"
-                            placeholder="Full Name"
-                            className='w-100'
-                            value={review.name}  
-                            name="name"  
-                            onChange={handleInputChange} 
-                        />
-                    </div>
-    
-                    {/* Description Input Field */}
-                    <div className="col-12 mt-3">
-                        <div className="card flex justify-content-center">
-                            <InputTextarea
-                                value={review.description}  // Bind the description from state
-                                onChange={handleInputChange}  // Update description in state
-                                rows={5}
-                                cols={30}
-                                name="description"  // Important: use `name` for targeting in handleInputChange
-                                placeholder="Write your review here..."
+                    header="Write a Review"
+                    visible={visible}
+                    onHide={() => { if (!visible) return; setVisible(false); }}
+                    style={{ width: '50vw' }}
+                    breakpoints={{ '960px': '75vw', '641px': '100vw' }}
+                >
+                    <div className="container">
+                        <div className="p-3 justify-content-center">
+                            <Rating
+                                value={review.rating}
+                                onChange={(e) => setReview({ ...review, rating: e.value })}
+                                cancel={false}
                             />
                         </div>
-                    </div>
-                    <div className="col-12 mt-3">
-                        <div className="row">
-                            <button className="btn-theme2 btn theme radius">Submit Review</button>
+                        <div className="col-12">
+                            <InputText
+                                keyfilter="text"
+                                placeholder="Full Name"
+                                className='w-100'
+                                value={review.name}
+                                name="name"
+                                onChange={handleInputChange}
+                            />
+                        </div>
+
+                        {/* Description Input Field */}
+                        <div className="col-12 mt-3">
+                            <div className="card flex justify-content-center">
+                                <InputTextarea
+                                    value={review.description}  // Bind the description from state
+                                    onChange={handleInputChange}  // Update description in state
+                                    rows={5}
+                                    cols={30}
+                                    name="description"  // Important: use `name` for targeting in handleInputChange
+                                    placeholder="Write your review here..."
+                                />
+                            </div>
+                        </div>
+                        <div className="col-12 mt-3">
+                            <div className="row">
+                                <button className="btn-theme2 btn theme radius">Submit Review</button>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </Dialog>
+                </Dialog>
                 <section className="h-auto david-font" id='contact'>
                     <div className="container p-top">
                         <div className="col-12 newsletter position-relative">
@@ -3081,7 +3384,7 @@ function MoreVideos() {
                                         </div>
                                     </div>
                                 </div>
-    
+
                                 <div className='d-block d-lg-none'>
                                     <h2 className="fs-16 fw-bold text-white">
                                         Create Your Own Business <br />
@@ -3100,8 +3403,8 @@ function MoreVideos() {
                         </div>
                     </div>
                 </section>
-    
-    
+
+
                 <footer className='h-auto'>
                     <div className="container pjs  p-top">
                         <div className="mt-5">
@@ -3119,7 +3422,7 @@ function MoreVideos() {
                                         </p>
                                     </div>
                                 </div>
-    
+
                                 <div className="col-12 col-lg-2">
                                     <div className="col-12 mt-5">
                                         <div className="col-12 mt-3 mb-3  text-center text-lg-start">
@@ -3137,7 +3440,7 @@ function MoreVideos() {
                                     </div>
                                 </div>
 
-                                
+
                                 <div className="col-12 col-lg-4">
                                     <div className="row">
                                         <div className="col-lg-6">
@@ -3155,30 +3458,30 @@ function MoreVideos() {
                                                 </div>
                                             </div>
                                         </div>
-    
-    
+
+
                                         <div className="col-lg-6">
                                             <div className="col-12 mt-5 text-center text-lg-start">
                                                 <div className="mt-3" style={{ color: "#A4B3CB" }}>
-                                                   {closeDays.map((day,index) =>(
-                                                    <p>{day}</p>
-                                                   ))}
+                                                    {closeDays.map((day, index) => (
+                                                        <p>{day}</p>
+                                                    ))}
                                                 </div>
                                                 <div className="mt-3" style={{ color: "#A4B3CB" }}>
                                                     <span>CLOSED</span>
                                                 </div>
                                             </div>
                                         </div>
-    
+
                                     </div>
                                 </div>
-    
+
                                 <div className="col-12 col-lg-3">
                                     <div className="col-12 mt-5">
                                         <div className="col-12 mt-3 mb-3 text-center text-lg-start">
                                             <a href="#" className=" fs-14 text-decoration-none text-orange">Follow Us</a>
                                         </div>
-    
+
                                         <div className="mt-5 col-12 row gap-3 jcc-md text-center text-lg-start">
                                             <a href={businessData.socialMediaLinks[0].link} className="contact-banner text-orange text-center text-lg-start">
                                                 <i className="bi bi-facebook text-orange"></i>
@@ -3191,14 +3494,14 @@ function MoreVideos() {
                                             </a>
                                             {/* <hr style={{width:"fit-content",opacity: 0.15,}}></hr> */}
                                         </div>
-    
+
                                     </div>
                                 </div>
-    
-    
+
+
                                 <div className="col-12">
                                     <div className="row">
-    
+
                                         <div className="col-12 col-lg-6  text-center text-lg-start mb-5 mt-5" style={{ color: "#A4B3CB" }}>
                                             <div className="row">
                                                 <div className="col-12 col-lg-6">Terms of Service</div>
@@ -3210,7 +3513,7 @@ function MoreVideos() {
                                         </div>
                                     </div>
                                 </div>
-    
+
                             </div>
                         </div>
                     </div>
@@ -3228,7 +3531,7 @@ function MoreVideos() {
             }));
             handleNextStep();
         }
-    
+
         return (
             <>
                 <div className="h-100vh">
@@ -3295,11 +3598,11 @@ function MoreVideos() {
             </>
         );
     }
-    
+
 
     const Razorpay = () => {
         const [isScriptLoaded, setScriptLoaded] = useState(false);
-        const [businessId,setBusinessId] = useState('');
+        const [businessId, setBusinessId] = useState('');
         const loadRazorpayScript = () => {
             return new Promise((resolve) => {
                 const script = document.createElement('script');
@@ -3334,39 +3637,39 @@ function MoreVideos() {
                 description: 'Test Transaction',
                 image: formData.logo, // Dummy logo URL
                 handler: async function (response) {
-                    
-                        var paymentDetails = {
-                         "plan": formData.selectedPlan,
-                         "paymentId": response.razorpay_payment_id,
-                         "date": "2023-10-06T08:30:00.000Z",
-                         "paymentStatus": "success"
-                     }
-                        try {
-                            const response = await axios.post(
-                                'https://businessbazaarserver.auxxweb.in/api/v1/payment', 
-                                paymentDetails, 
-                                {
-                                    headers: {
-                                        'Content-Type': 'application/json',
-                                        'Authorization': `Bearer ${id}`,  // Sending businessId as bearer token
-                                    },
-                                }
-                            );
-                            console.log(response)
-                            if (response.status !== 200) {
-                                throw new Error(`HTTP error! Status: ${response.status}`);
-                            }
 
-                            const data = response.data;
-                            if (data.success) {
-                                return data; 
-                            } else {
-                                console.error('Failed to create business details:', data.message || 'Unknown error');
-                                throw new Error(data.message || 'Failed to create business details');
+                    var paymentDetails = {
+                        "plan": formData.selectedPlan,
+                        "paymentId": response.razorpay_payment_id,
+                        "date": "2023-10-06T08:30:00.000Z",
+                        "paymentStatus": "success"
+                    }
+                    try {
+                        const response = await axios.post(
+                            'https://businessbazaarserver.auxxweb.in/api/v1/payment',
+                            paymentDetails,
+                            {
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'Authorization': `Bearer ${id}`,  // Sending businessId as bearer token
+                                },
                             }
-                        } catch (error) {
-                            console.error("Error occurred while fetching business site details:", error.message);
-                            throw error; 
+                        );
+                        console.log(response)
+                        if (response.status !== 200) {
+                            throw new Error(`HTTP error! Status: ${response.status}`);
+                        }
+
+                        const data = response.data;
+                        if (data.success) {
+                            return data;
+                        } else {
+                            console.error('Failed to create business details:', data.message || 'Unknown error');
+                            throw new Error(data.message || 'Failed to create business details');
+                        }
+                    } catch (error) {
+                        console.error("Error occurred while fetching business site details:", error.message);
+                        throw error;
                     };
                 },
                 prefill: {
@@ -3386,7 +3689,7 @@ function MoreVideos() {
             rzp.open();
         };
         useEffect(() => {
-            const submitData =async () => {
+            const submitData = async () => {
                 const res = await CreateBusinessDetails(formData)
                 const id = res.data._id || res.data.data?._id;
                 setBusinessId(id)
@@ -3401,9 +3704,9 @@ function MoreVideos() {
 
     return (
         <>
-            {step === 1 && <AuthenticationDetails formData={formData}/>}
-            {step === 2 && <BusinessDetails formData={formData}/>}
-            {step === 3 && <ContactDetails formData={formData}/>}
+            {step === 1 && <AuthenticationDetails formData={formData} />}
+            {step === 2 && <BusinessDetails formData={formData} />}
+            {step === 3 && <ContactDetails formData={formData} />}
             {step === 4 && <CategoryDetails />}
             {step === 5 && <ServicesOffering />}
             {step === 6 && <BusinessTiming />}
