@@ -7,17 +7,28 @@ const useBusiness = () => {
   const [loading, setLoading] = useState(false);
   const [businessData, setBusinessData] = useState({});
   const [closeDays, setCloseDays] = useState([]);
-  const allDays = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
+  const allDays = [
+    "monday",
+    "tuesday",
+    "wednesday",
+    "thursday",
+    "friday",
+    "saturday",
+    "sunday",
+  ];
 
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
       const businessDetails = await fetchBusinessTemplate(id);
       setBusinessData(businessDetails?.data);
-      const closed = allDays.filter(day =>
-        !businessDetails.data.businessTiming.workingDays.map(d => d.toLowerCase()).includes(day)
-    );
-    setCloseDays(closed);
+      const closed = allDays.filter(
+        (day) =>
+          !businessDetails.data.businessTiming.workingDays
+            .map((d) => d.toLowerCase())
+            .includes(day)
+      );
+      setCloseDays(closed);
 
       setLoading(false);
     };
@@ -28,7 +39,7 @@ const useBusiness = () => {
   return {
     loading,
     businessData,
-    closeDays
+    closeDays,
   };
 };
 

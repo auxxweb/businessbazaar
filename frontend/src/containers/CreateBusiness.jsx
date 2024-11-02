@@ -9,7 +9,6 @@ import axios from 'axios';
 
 import { Container, Nav, Navbar, NavLink } from 'react-bootstrap'
 import '/src/assets/css/template.css';
-import Slider from 'react-slick';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { useParams } from 'react-router-dom';
@@ -19,6 +18,9 @@ import { InputText } from "primereact/inputtext";
 import { InputTextarea } from "primereact/inputtextarea";
 import CircularProgress from '@mui/material/CircularProgress';
 import CloseIcon from '@mui/icons-material/Close';
+import { Box, FormControlLabel, Switch } from '@mui/material';
+import BusinessPreview from '../components/BusinessPreview';
+import PremiumPreview from '../components/PremiumPreview';
 
 export default function CreateBusiness() {
     const [step, setStep] = useState(7);
@@ -36,7 +38,6 @@ export default function CreateBusiness() {
     const [loading, setLoading] = useState(true);
 
     const [planData, setPlanData] = useState([]);
-
 
     const [formData, setFormData] = useState(
 
@@ -1736,14 +1737,14 @@ export default function CreateBusiness() {
 
         // Submit function to store data
         const handleServiceSubmit = () => {
-            if (!specialService.title || !specialService.description || !specialService.data[0].title) {
-                setErrors("Please fill in all required fields for Special Service")
-                return;
-            }
-            if (!services[0].title || !services[0].description) {
-                setErrors("Please fill in all required fields for Services.")
-                return;
-            }
+            // if (!specialService.title || !specialService.description || !specialService.data[0].title) {
+            //     setErrors("Please fill in all required fields for Special Service")
+            //     return;
+            // }
+            // if (!services[0].title || !services[0].description) {
+            //     setErrors("Please fill in all required fields for Services.")
+            //     return;
+            // }
             setFormData((prevFormData) => ({
                 ...prevFormData,
                 specialServices: specialService,
@@ -2311,8 +2312,7 @@ export default function CreateBusiness() {
         const [loading, setLoading] = useState(false);
         const [images, setImages] = useState([{ file: null, fileType: '', fileName: '' }]);
         // const [formData, setFormData] = useState({});
-        const [s3PreRequest, setS3PreRequest] = useState([]);
-
+    
         const handleFileChange = (index, event) => {
             const file = event.target.files[0];
             if (file) {
@@ -2852,11 +2852,16 @@ export default function CreateBusiness() {
 
 
         return (
-            <>
-                <link rel="preconnect" href="https://fonts.googleapis.com" />
-                <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-                <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap" rel="stylesheet" />
-                <style> {`
+           <>
+            <link rel="preconnect" href="https://fonts.googleapis.com" />
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin />
+      <link
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap"
+        rel="stylesheet"
+      />
+      <style>
+        {" "}
+        {`
                         ::-webkit-scrollbar {
                             width: 12px; /* Width of the entire scrollbar */
                         }
@@ -2865,36 +2870,36 @@ export default function CreateBusiness() {
                         ::-webkit-scrollbar-track {
                             background: rgb(243, 243, 244); /* Background of the scrollbar track */
                         }::-webkit-scrollbar-thumb {
-                            background-color: ${colorTheme}; /* Color of the scrollbar thumb */
+                            background-color: ${formData?.theme}; /* Color of the scrollbar thumb */
                             border-radius: 10px;     /* Rounded edges of the thumb */
-                            border: 3px solid  ${colorTheme}; /* Padding around the thumb */
+                            border: 3px solid  ${formData?.theme}; /* Padding around the thumb */
                         }
                     .theme
                     {
-                        background-color: ${colorTheme};
+                        background-color: ${formData?.theme};
                         color: white;
                         border: none;
                     }.service-design.active{
-                        background-color: ${colorTheme};
+                        background-color: ${formData?.theme};
                     }.address-section{
-                    background-color:${colorTheme};
+                    background-color:${formData?.theme};
                     }.address-logo i{
-                    color: ${colorTheme};
+                    color: ${formData?.theme};
                     }.cat-option{
-                        border-right: 1px dashed ${colorTheme};
+                        border-right: 1px dashed ${formData?.theme};
                     }.text-orange{
-                            color: ${colorTheme};
+                            color: ${formData?.theme};
                         }.dish-div:hover{
-                            background-color: ${colorTheme};
+                            background-color: ${formData?.theme};
                             color:white;
                         }.product-section{
-                    padding:20px;
-                    border:1px solid ${colorTheme};
-                    border-radius:16px;
-                        }.slick-dots .slick-active button{
-                            background-color: ${colorTheme};
-                            border-radius: 16px;
-                        }
+                        padding:20px;
+                        border:1px solid ${formData?.theme};
+                        border-radius:16px;
+                            }.slick-dots .slick-active button{
+                                background-color: ${formData?.theme};
+                                border-radius: 16px;
+                            }
                         `}
                 </style>
                 <Navbar expand="lg" className="bg-white pjs fixed-top" style={{ paddingBlock: "5px" }}>

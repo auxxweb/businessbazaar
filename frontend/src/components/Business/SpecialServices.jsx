@@ -19,10 +19,10 @@ const CoreServices = ({ businessData }) => {
             justifyContent={"flex-start"}
             flexDirection={{ xs: "column", md: "row" }}
             alignItems={"flex-start"}
-            gap={{xs:"1rem",lg:"5rem"}}
+            gap={{ xs: "1rem", lg: "5rem" }}
             marginBottom={"5rem"}
           >
-            <Box >
+            <Box>
               <Typography
                 sx={{
                   fontSize: "38px",
@@ -67,9 +67,16 @@ const CoreServices = ({ businessData }) => {
                 >
                   <Avatar
                     alt={item?.title}
-                    // src={item?.image}
-                    src={"/business/special_service.png"}
-                    sx={{ width: 107, height: 90, marginLeft: "3rem" }}
+                    src={item?.image}
+                    // src={"/business/special_service.png"}
+                    sx={{
+                      width: 107,
+                      height: 90,
+                      marginLeft: "3rem",
+                      "&:hover": {
+                        backgroundColor: businessData?.theme
+                      },
+                    }}
                   />
                   <Box marginTop={"1rem"}>
                     <Typography fontWeight={"bold"}>{item?.title}</Typography>

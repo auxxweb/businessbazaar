@@ -114,7 +114,7 @@ export default function Home() {
                 setLoading(true);
                 const newPage = currentPage - 1;
                 setCurrentPage(newPage);
-                
+
                 const businessDetails = await fetchBusiness(newPage);
                 setBusinessData(businessDetails.data.data);
                 setTotalBusinessData(businessDetails.data.totalCount);
@@ -125,14 +125,14 @@ export default function Home() {
             }
         }
     };
-    
+
     const goToNextPage = async () => {
         if (currentPage < totalPages) {
             try {
                 setLoading(true);
                 const newPage = currentPage + 1;
                 setCurrentPage(newPage);
-                
+
                 const businessDetails = await fetchBusiness(newPage);
                 setBusinessData(businessDetails.data.data);
                 setTotalBusinessData(businessDetails.data.totalCount);
@@ -143,10 +143,10 @@ export default function Home() {
             }
         }
     };
-    
-    if (loading) {
-        return <Loader />
-    }
+
+    // if (loading) {
+    //     return <Loader />
+    // }
 
     return (
         <Layout title="Home" navClass='home'>
@@ -298,8 +298,12 @@ export default function Home() {
                         </p>
                     </div>
                     <div className="row justify-content-around gap-2">
-                        {businessData.map(business => (
-                            <Link to={`/template/${business._id}`} key={business._id} className="text-decoration-none text-dark col-12 col-md-5 b-theme location-card mt-3">
+                        {
+                            loading && <Loader />
+                        }
+
+                        {!loading && businessData?.map(business => (
+                            <Link to={`/template/${business?._id}`} key={business._id} className="text-decoration-none text-dark col-12 col-md-5 b-theme location-card mt-3">
                                 <div className="row p-2">
                                     <div className="col-4 p-0">
                                         <img src={business.logo} alt="" className='w-100 br-theme' />

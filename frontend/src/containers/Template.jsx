@@ -231,18 +231,15 @@ export default function Template() {
     if (loading) {
         return <div className='h-100vh text-center '>
             <div className='row h-100 justify-content-center align-items-center'>
-
                 <div className='col-3 '>Loading...</div>
             </div>
         </div>;
     }
-
+    
     // If there's no business data (e.g., fetch failed), show an error message
     if (!businessData) {
         return <div>Error loading business data.</div>;
     }
-
-
 
     return (
         <>

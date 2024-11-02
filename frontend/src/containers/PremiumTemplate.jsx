@@ -11,6 +11,7 @@ import ReviewSection from "../components/Business/ReviewSection";
 import Gallery from "../components/Business/Gallery";
 import ServicesSection from "../components/Business/ServicesSection";
 import MenuSection from "../components/Business/MenuSection";
+import { width } from "@fortawesome/free-brands-svg-icons/fa42Group";
 
 const PremiumTemplate = () => {
   const { businessData, loading, closeDays } = useBusiness();
@@ -66,14 +67,12 @@ const PremiumTemplate = () => {
                     `}
       </style>
 
-      <Box
-      sx={{ overflowX: "hidden" }}
-      >
+      <Box sx={{ overflowX: "hidden" }}>
         <TemplateHeader businessData={businessData} />
         <Box
           sx={{
-            // backgroundImage:`url(${businessData?.landingPageHero?.coverImage})`,
-            backgroundImage: `url(/business/dm.png)`,
+            backgroundImage: `url(${businessData?.landingPageHero?.coverImage})`,
+            // backgroundImage: `url(/business/dm.png)`,
             backgroundSize: "cover",
             objectFit: "fill",
             backgroundRepeat: "no-repeat",
@@ -103,13 +102,10 @@ const PremiumTemplate = () => {
               fontWeight={"bold"}
               marginBottom={"15px"}
             >
-              we are auxxweb
+              {businessData?.landingPageHero?.title}
             </Typography>
             <Typography fontSize={"16px"} lineHeight={"24px"}>
-              We offer comprehensive software development and digital marketing
-              services to help your business thrive in the digital age. Our team
-              of experts is committed to delivering innovative solutions that
-              drive growth and success.
+              {businessData?.landingPageHero?.description}
             </Typography>
             <Box marginTop={"30px"}>
               <Button
@@ -142,7 +138,9 @@ const PremiumTemplate = () => {
           <Box
             sx={{ position: "absolute", bottom: { xs: "-30%", md: "-21%" } }}
           >
-            <ContactSection businessData={businessData} />
+            <ContactSection 
+            
+            businessData={businessData} />
           </Box>
         </Box>
         <Box mt={{ xs: "10rem", md: "5rem" }}>
