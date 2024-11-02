@@ -1428,14 +1428,14 @@ export default function CreateBusiness() {
     
         // Submit function to store data
         const handleServiceSubmit = () => {
-            if (!specialService.title || !specialService.description || !specialService.data[0].title) {
-                setErrors("Please fill in all required fields for Special Service")
-                return;
-            }
-            if (!services[0].title || !services[0].description) {
-                setErrors("Please fill in all required fields for Services.")
-                return;
-            }
+            // if (!specialService.title || !specialService.description || !specialService.data[0].title) {
+            //     setErrors("Please fill in all required fields for Special Service")
+            //     return;
+            // }
+            // if (!services[0].title || !services[0].description) {
+            //     setErrors("Please fill in all required fields for Services.")
+            //     return;
+            // }
             setFormData((prevFormData) => ({
                 ...prevFormData,
                 specialServices: specialService,

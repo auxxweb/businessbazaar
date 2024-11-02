@@ -12,6 +12,7 @@ import { Dialog } from "primereact/dialog";
 import { Rating } from "primereact/rating";
 import { InputText } from "primereact/inputtext";
 import { InputTextarea } from "primereact/inputtextarea";
+import { width } from "@fortawesome/free-brands-svg-icons/fa42Group";
 
 function BusinessPreview({ formData }) {
   console.log(formData, "data");

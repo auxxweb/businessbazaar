@@ -11,6 +11,7 @@ import ReviewSection from "../components/Business/ReviewSection";
 import Gallery from "../components/Business/Gallery";
 import ServicesSection from "../components/Business/ServicesSection";
 import MenuSection from "../components/Business/MenuSection";
+import { width } from "@fortawesome/free-brands-svg-icons/fa42Group";
 
 const PremiumTemplate = () => {
   const { businessData, loading, closeDays } = useBusiness();
@@ -137,7 +138,9 @@ const PremiumTemplate = () => {
           <Box
             sx={{ position: "absolute", bottom: { xs: "-30%", md: "-21%" } }}
           >
-            <ContactSection businessData={businessData} />
+            <ContactSection 
+            
+            businessData={businessData} />
           </Box>
         </Box>
         <Box mt={{ xs: "10rem", md: "5rem" }}>
