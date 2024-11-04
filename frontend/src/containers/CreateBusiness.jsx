@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react';
+/* eslint-disable react/prop-types */
+import { useEffect, useState } from 'react';
 import PhoneInput from 'react-phone-input-2';
 import 'react-phone-input-2/lib/style.css';
 import TextField from '@mui/material/TextField';
@@ -8,7 +9,6 @@ import axios from 'axios';
 
 import { Container, Nav, Navbar, NavLink } from 'react-bootstrap'
 import '/src/assets/css/template.css';
-import Slider from 'react-slick';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { useParams } from 'react-router-dom';
@@ -16,95 +16,101 @@ import { Dialog } from 'primereact/dialog';
 import { Rating } from 'primereact/rating';
 import { InputText } from "primereact/inputtext";
 import { InputTextarea } from "primereact/inputtextarea";
-
-
-
-
+import CircularProgress from '@mui/material/CircularProgress';
+import CloseIcon from '@mui/icons-material/Close';
+import { Box, FormControlLabel, Switch } from '@mui/material';
+import BusinessPreview from '../components/BusinessPreview';
+import PremiumPreview from '../components/PremiumPreview';
 
 export default function CreateBusiness() {
-    const [step, setStep] = useState(1);
+    const [step, setStep] = useState(7);
 
     const handleNextStep = () => {
         setStep(prevStep => prevStep + 1);
     };
     const handlePrevStep = () => {
-        if (step != 1){
-        setStep(prevStep => prevStep - 1);
-    }
-};
+        if (step != 1) {
+            setStep(prevStep => prevStep - 1);
+        }
+    };
 
     const [categoryData, setCategoryData] = useState([]);
     const [loading, setLoading] = useState(true);
 
     const [planData, setPlanData] = useState([]);
 
+    const [formData, setFormData] = useState(
 
-    const [formData, setFormData] = useState({
-        businessName: '',
-        logo: '',
-        ownerName: '',
-        email: '',
-        password: '',
-        address: {
-            buildingName: '',
-            streetName: '',
-            landMark: '',
-            city: '',
-            state: '',
-            pinCode: ''
-        },
-        location: {
-            lat: '',
-            lon: '',
 
-        },
-        contactDetails: {},
-        socialMediaLinks: [
-            { tag: 'facebook', link: '' },
-            { tag: 'instagram', link: '' },
-            { tag: 'twitter', link: '' }
-        ],
-        category: '',
-        services: [],
-        businessTiming: {
-            workingDays: [],
-            openTime: {
-                open: '',
-                close: ''
-            }
-        },
-        description: '',
-        theme: '',
-        landingPageHero: {
-            title: '',
+        {
+            businessName: '',
+            logo: '',
+            ownerName: '',
+            email: '',
+            password: '',
+            address: {
+                buildingName: '',
+                streetName: '',
+                landMark: '',
+                city: '',
+                state: '',
+                pinCode: ''
+            },
+            location: {
+                lat: '',
+                lon: '',
+
+            },
+            contactDetails: {},
+            socialMediaLinks: [
+                { tag: 'facebook', link: '' },
+                { tag: 'instagram', link: '' },
+                { tag: 'twitter', link: '' }
+            ],
+            category: '',
+            services: [],
+            businessTiming: {
+                workingDays: [],
+                openTime: {
+                    open: '',
+                    close: ''
+                }
+            },
             description: '',
-            coverImage: ''
-        },
-        welcomePart: {
-            title: '',
-            description: '',
-            coverImage: ''
-        },
-        specialServices: {
-            title: '',
-            description: '',
-            data: []
-        },
-        productSection: [],
-        service: [],
-        testimonial: {
-            description: '',
-            reviews: []
-        },
-        gallery: [],
-        videos: [],
-        seoData: {
-            title: '',
-            description: '',
-            metaTags: []
-        },
-        selectedPlan: ''
-    });
+            theme: '',
+            secondaryTheme: '',
+
+            landingPageHero: {
+                title: '',
+                description: '',
+                coverImage: ''
+            },
+            welcomePart: {
+                title: '',
+                description: '',
+                coverImage: ''
+            },
+            specialServices: {
+                title: '',
+                description: '',
+                data: []
+            },
+            productSection: [],
+            service: [],
+            testimonial: {
+                description: '',
+                reviews: []
+            },
+            gallery: [],
+            videos: [],
+            seoData: {
+                title: '',
+                description: '',
+                metaTags: []
+            },
+            selectedPlan: ''
+        }
+    );
 
 
     const preRequestFun = async (file, position) => {
@@ -115,34 +121,27 @@ export default function CreateBusiness() {
                 file_type: file.type
             }]
         };
-        
+
         try {
             const response = await axios.post(url, requestBody, {
                 headers: { 'Content-Type': 'application/json' },
             });
             const preReq = response.data.data[0];
-        
-    
+
+
             if (!preReq.url) {
                 throw new Error('The URL is not defined in the response.');
             }
             await axios.put(preReq.url, file, {
-                headers: { 'Content-Type': file.type }, 
+                headers: { 'Content-Type': file.type },
             });
-    
+
             return preReq;
         } catch (error) {
             console.error('Error uploading file:', error.message || error);
             throw new Error('File upload failed');
         }
     };
-    
-    
-
-        
-    
-                
-
 
     useEffect(() => {
         const fetchData = async () => {
@@ -162,16 +161,23 @@ export default function CreateBusiness() {
 
 
 
-
-    
-    function AuthenticationDetails() {
+    function AuthenticationDetails({ formData }) {
         const [authData, setAuthData] = useState({
             email: '',
             password: '',
         });
-        const [passwordError, setPasswordError] = useState('');
         const { email, password } = authData;
-    
+        const [passwordError, setPasswordError] = useState('');
+        const [emailError, setEmailError] = useState('');
+
+        useEffect(() => {
+            setAuthData({
+                email: formData.email,
+                password: formData.password
+            })
+
+        }, [formData])
+
         // Handles input change for both email and password
         function handleInputChange(e) {
             const { name, value } = e.target;
@@ -180,10 +186,13 @@ export default function CreateBusiness() {
                 [name]: value,
             }));
         }
-    
-        // Validate password and handle submission
+
+        // Validate both fields and handle submission
         function handleAuthSubmit() {
-            if (validatePassword()) {
+            const isEmailValid = validateEmail();
+            const isPasswordValid = validatePassword();
+
+            if (isEmailValid && isPasswordValid) {
                 // Set the email and password into formData and proceed to the next step
                 setFormData((prevFormData) => ({
                     ...prevFormData,
@@ -193,7 +202,17 @@ export default function CreateBusiness() {
                 handleNextStep();
             }
         }
-    
+
+        // Email validation function
+        function validateEmail() {
+            if (!email) {
+                setEmailError('Email is required.');
+                return false;
+            }
+            setEmailError('');
+            return true;
+        }
+
         // Password validation function
         function validatePassword() {
             if (password.length < 8) {
@@ -203,14 +222,14 @@ export default function CreateBusiness() {
             setPasswordError('');
             return true;
         }
-    
+
         return (
             <div className="h-100vh">
                 <div className="row h-100 justify-content-center">
                     <div className="d-none d-md-block left-portion col-md-5 h-100 p-0">
                         <img src="/src/assets/images/login.jpg" alt="" className="w-100 h-100 object-fit-cover" />
                     </div>
-    
+
                     <div className="col-12 col-md-7 d-flex flex-column justify-content-between align-items-center right-portion h-100 p-5">
                         <div className="col-12 text-start">
                             <button className="btn btn-dark w-auto float-start" onClick={handlePrevStep}>
@@ -220,7 +239,7 @@ export default function CreateBusiness() {
                         <div className="col-12">
                             <h1 className="fw-bold text-center text-md-start">Add <br /> Authentication Details</h1>
                         </div>
-    
+
                         {/* Email Input */}
                         <div className="input-group mt-4 w-100 align-items-center">
                             <TextField
@@ -230,9 +249,11 @@ export default function CreateBusiness() {
                                 name="email"
                                 value={authData.email}
                                 onChange={handleInputChange}
+                                error={!!emailError}
+                                helperText={emailError}
                             />
                         </div>
-    
+
                         {/* Password Input */}
                         <div className="input-group w-100 align-items-center">
                             <TextField
@@ -247,7 +268,7 @@ export default function CreateBusiness() {
                                 helperText={passwordError}
                             />
                         </div>
-    
+
                         <div className="col-12 text-center mt-5">
                             <button className="btn btn-success w-100 text-white p-2" onClick={handleAuthSubmit}>Save & Next</button>
                         </div>
@@ -257,50 +278,26 @@ export default function CreateBusiness() {
         );
     }
 
-
-
-    function BusinessDetails() {
+    function BusinessDetails({ formData }) {
         const [logo, setLogo] = useState('');
         const [businessName, setBusinessName] = useState('');
-        const [address, setAddress] = useState({
-            buildingName: '',
-            streetName: '',
-            landMark: '',
-            city: '',
-            state: '',
-            pinCode: ''
-        });
-    
-        const [location, setLocation] = useState({
-            lat: '',
-            lon: '',
-        });
-    
-        // Update address object
-        const handleAddressChange = (event) => {
-            const { name, value } = event.target;
-            setAddress(prevAddress => ({
-                ...prevAddress,
-                [name]: value,
-            }));
-        };
-    
-        // Update location object
-        const handleLocationChange = (event) => {
-            const { name, value } = event.target;
-            setLocation(prevLocation => ({
-                ...prevLocation,
-                [name]: value,
-            }));
-        };
-    
+
+        const [isLoading, setIsLoading] = useState(false);
+        const [error, setError] = useState('');
+
+        useEffect(() => {
+            setLogo(formData?.logo)
+            setBusinessName(formData?.businessName)
+        }, [formData])
+
+
+
         const handleLogoChange = async (event) => {
             const file = event.target.files[0];
-        
-            
+
             if (file) {
+                setIsLoading(true);
                 const reader = new FileReader();
-                
                 reader.onload = async function (e) {
                     try {
                         const preReq = await preRequestFun(file, "Landing");
@@ -314,42 +311,42 @@ export default function CreateBusiness() {
                         setLogo(accessLink);
                     } catch (error) {
                         console.error('Error uploading logo:', error.message || error);
+                    } finally {
+                        setIsLoading(false);
                     }
                 };
-        
                 reader.onerror = function () {
                     console.error('Error reading file:', reader.error);
+                    setIsLoading(false);
                 };
                 reader.readAsDataURL(file);
             }
         };
-        
-    
-
 
         const imageUpload = () => {
             document.getElementById('ImageLogo').click();
         };
-    
-        // Handle form submission
+
+        // Handle form submission with validation
         const handleBusinessSubmit = () => {
+            if (!businessName) {
+                setError('All fields are mandatory.');
+                return;
+            }
+
+            setError('');
             setFormData(prevFormData => ({
                 ...prevFormData,
                 businessName: businessName,
-                address: address,
-                location: location,
-                logo:logo
+                logo: logo
             }));
             handleNextStep();
         };
-    
+
         return (
             <div className='h-100vh'>
                 <div className="row justify-content-center h-100">
-                    <div className="d-none d-md-block left-portion p-0 col-5 h-100">
-                        <img src="/src/assets/images/business-details.jpg" alt="" className='w-100 h-100' />
-                    </div>
-                    <div className="col-12 col-md-7 row align-items-center right-portion p-5">
+                    <div className="col-12 col-md-6 row align-items-center right-portion p-5">
                         <div className="col-12 text-start">
                             <button className="btn btn-dark w-auto float-start" onClick={handlePrevStep}>
                                 <i className="bi bi-arrow-left"></i>
@@ -370,16 +367,16 @@ export default function CreateBusiness() {
                                     onChange={(e) => setBusinessName(e.target.value)}
                                     className="form-control form-control-lg"
                                 />
-    
                                 <input
                                     type="file"
                                     id="ImageLogo"
                                     style={{ display: 'none' }}
                                     onChange={handleLogoChange}
                                 />
-    
                                 <div onClick={imageUpload} className="p-2 mt-2 add-logo-div" id="businessMainDiv" style={{ cursor: 'pointer' }}>
-                                    {logo ? (
+                                    {isLoading ? (
+                                        <div className="spinner-border text-primary" role="status"></div>
+                                    ) : logo ? (
                                         <img src={logo} alt="Business Logo" width="100" className="img-thumbnail" />
                                     ) : (
                                         <div className="text-center" id="addImageDiv">
@@ -390,66 +387,10 @@ export default function CreateBusiness() {
                                         </div>
                                     )}
                                 </div>
-    
-                                <input
-                                    type="text"
-                                    placeholder="Building Name"
-                                    name="buildingName"
-                                    value={address.buildingName}
-                                    onChange={handleAddressChange}
-                                    className="form-control form-control-lg mt-3"
-                                />
-                                <input
-                                    type="text"
-                                    placeholder="Street / Colony Name"
-                                    name="streetName"
-                                    value={address.streetName}
-                                    onChange={handleAddressChange}
-                                    className="form-control form-control-lg mt-3"
-                                />
-                                <input
-                                    type="text"
-                                    placeholder="Landmark"
-                                    name="landMark"
-                                    value={address.landMark}
-                                    onChange={handleAddressChange}
-                                    className="form-control form-control-lg mt-3"
-                                />
-                                <div className="row">
-                                    <div className="col-12 col-md-6 mt-3">
-                                        <input
-                                            type="text"
-                                            className="form-control form-control-lg w-100"
-                                            name="state"
-                                            value={address.state}
-                                            onChange={handleAddressChange}
-                                            placeholder="State"
-                                        />
-                                    </div>
-                                    <div className="col-12 col-md-6 mt-3">
-                                        <input
-                                            type="number"
-                                            className="form-control form-control-lg w-100"
-                                            name="pinCode"
-                                            value={address.pinCode}
-                                            onChange={handleAddressChange}
-                                            placeholder="Pincode"
-                                        />
-                                    </div>
-                                </div>
-                                <div className="row">
-                                    <div className="col-12 mt-3">
-                                        <input
-                                            type="text"
-                                            className="form-control form-control-lg w-100"
-                                            name="lon"
-                                            value={location.lon}
-                                            onChange={handleLocationChange}
-                                            placeholder="Location"
-                                        />
-                                    </div>
-                                </div>
-    
+
+
+
+                                {error && <div className="text-danger mt-2">{error}</div>} {/* Error message for validation */}
                                 <div className="col-12 mt-3">
                                     <button className="btn btn-success w-100" onClick={handleBusinessSubmit}>
                                         Save & Next
@@ -458,332 +399,605 @@ export default function CreateBusiness() {
                             </div>
                         </div>
                     </div>
+
+
+
+                    <div className="left-portion p-3 col-12 col-lg-6 h-100 row align-items-center">
+                        <link rel="preconnect" href="https://fonts.googleapis.com" />
+                        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+                        <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap" rel="stylesheet" />
+                        <style> {`
+                        ::-webkit-scrollbar {
+                            width: 12px; /* Width of the entire scrollbar */
+                        }
+    
+                        /* Scrollbar track */
+                        ::-webkit-scrollbar-track {
+                            background: rgb(243, 243, 244); /* Background of the scrollbar track */
+                        }::-webkit-scrollbar-thumb {
+                            background-color: black; /* Color of the scrollbar thumb */
+                            border-radius: 10px;     /* Rounded edges of the thumb */
+                            border: 3px solid  black; /* Padding around the thumb */
+                        }
+                    .theme
+                    {
+                        background-color: black;
+                        color: white;
+                        border: none;
+                    }.service-design.active{
+                        background-color: black;
+                    }.address-section{
+                    background-color:black;
+                    }.address-logo i{
+                    color: black;
+                    }.cat-option{
+                        border-right: 1px dashed black;
+                    }.text-orange{
+                            color: black;
+                        }.dish-div:hover{
+                            background-color: black;
+                            color:white;
+                        }
+                        `}
+                        </style>
+                        <div className="p-3" style={{ border: '1px dashed black', borderRadius: '16px' }}>
+                            <p className='text-center'>
+                                This section contains items for the navigation bar.
+                            </p>
+                            <Navbar expand="lg" className="bg-white pjs" style={{ paddingBlock: "5px" }}>
+                                <Container>
+                                    {/* Align Brand to the start (left side) */}
+                                    <Navbar.Brand href="/" className='fw-bold w-50 nav-logo' style={{ fontSize: '36px' }}>
+                                        <img src={logo} alt="" />
+                                        <span className="ms-2">{businessName}</span>
+                                    </Navbar.Brand>
+
+                                    <Navbar.Toggle aria-controls="basic-navbar-nav" style={{ color: 'black' }} />
+
+
+                                </Container>
+                            </Navbar>
+                        </div>
+                    </div>
+
+
                 </div>
             </div>
         );
     }
 
-
-    function ContactDetails() {
+    function ContactDetails({ formData }) {
         const [mobileNumbers, setMobileNumbers] = useState([{ id: 1, number: '', countryCode: 'us' }]);
-    const [whatsappNumbers, setWhatsappNumbers] = useState([{ id: 1, number: '', countryCode: 'us' }]);
-    const [emails, setEmails] = useState([{ id: 1, email: '' }]);
-
-    const [newFormData, setNewFormData] = useState({
-        contactDetails: {
-            name: '',
-            mobileNumbers: [],
-            whatsappNumbers: [],
-            emails: [],
-            website: '',
-        },
-    });
-
-    // Handle contact details change
-    const handleContactChange = (event) => {
-        const { name, value } = event.target;
-        setNewFormData((prevData) => ({
-            ...prevData,
+        const [whatsappNumbers, setWhatsappNumbers] = useState([{ id: 1, number: '', countryCode: 'us' }]);
+        const [emails, setEmails] = useState([{ id: 1, email: '' }]);
+        const [newFormData, setNewFormData] = useState({
             contactDetails: {
-                ...prevData.contactDetails,
+                name: '',
+                mobileNumbers: [],
+                whatsappNumbers: [],
+                emails: [],
+                website: '',
+            },
+        });
+        const [address, setAddress] = useState({
+            buildingName: '',
+            streetName: '',
+            landMark: '',
+            city: '',
+            state: '',
+            pinCode: ''
+        });
+        const [location, setLocation] = useState({
+            lat: '',
+            lon: '',
+        });
+
+        const [errors, setErrors] = useState({});
+
+        useEffect(() => {
+            if (formData?.contactDetails?.mobileNumbers)
+                setMobileNumbers(formData?.contactDetails?.mobileNumbers)
+
+            if (formData?.contactDetails?.whatsappNumbers)
+                setWhatsappNumbers(formData?.contactDetails?.whatsappNumbers)
+
+            if (formData?.contactDetails?.emails) {
+                setEmails(formData?.contactDetails?.emails)
+            }
+
+            if (Object.keys(formData?.contactDetails)?.length)
+                setNewFormData({
+                    contactDetails: formData?.contactDetails
+                })
+            setAddress(formData?.address)
+            setLocation(formData?.location)
+
+        }, [formData])
+
+        const handleContactChange = (event) => {
+            const { name, value } = event.target;
+            setNewFormData((prevData) => ({
+                ...prevData,
+                contactDetails: {
+                    ...prevData.contactDetails,
+                    [name]: value,
+                },
+            }));
+        };
+
+        const handleMobileNumberChange = (id, value, countryCode = 'us') => {
+            const updatedMobileNumbers = mobileNumbers.map((number) =>
+                number.id === id ? { ...number, number: value, countryCode } : number
+            );
+            setMobileNumbers(updatedMobileNumbers);
+            updateContactDetails('mobileNumbers', updatedMobileNumbers);
+        };
+
+        const handleWhatsappNumberChange = (id, value, countryCode = 'us') => {
+            const updatedWhatsappNumbers = whatsappNumbers.map((number) =>
+                number.id === id ? { ...number, number: value, countryCode } : number
+            );
+            setWhatsappNumbers(updatedWhatsappNumbers);
+            updateContactDetails('whatsappNumbers', updatedWhatsappNumbers);
+        };
+
+        const handleEmailChange = (id, value) => {
+            const updatedEmails = emails.map((email) =>
+                email.id === id ? { ...email, email: value } : email
+            );
+            setEmails(updatedEmails);
+            updateContactDetails('emails', updatedEmails);
+        };
+
+        const updateContactDetails = (field, updatedArray) => {
+            setNewFormData((prevFormData) => ({
+                ...prevFormData,
+                contactDetails: {
+                    ...prevFormData.contactDetails,
+                    [field]: updatedArray.map((item) => ({
+                        number: item.number || item.email,
+                        countryCode: item.countryCode || null,
+                    })),
+                },
+            }));
+        };
+
+        const addMobileNumber = () => setMobileNumbers([...mobileNumbers, { id: mobileNumbers.length + 1, number: '', countryCode: 'us' }]);
+        const removeMobileNumber = (id) => setMobileNumbers(mobileNumbers.filter((number) => number.id !== id));
+
+        const addWhatsappNumber = () => setWhatsappNumbers([...whatsappNumbers, { id: whatsappNumbers.length + 1, number: '', countryCode: 'us' }]);
+        const removeWhatsappNumber = (id) => setWhatsappNumbers(whatsappNumbers.filter((number) => number.id !== id));
+
+        const addEmail = () => setEmails([...emails, { id: emails.length + 1, email: '' }]);
+        const removeEmail = (id) => setEmails(emails.filter((email) => email.id !== id));
+
+        const validateForm = () => {
+            const newErrors = {};
+            if (!newFormData.contactDetails.name) newErrors.name = 'Name is required.';
+            if (mobileNumbers.some((number) => !number.number)) newErrors.mobileNumbers = 'All mobile numbers are required.';
+            if (whatsappNumbers.some((number) => !number.number)) newErrors.whatsappNumbers = 'All WhatsApp numbers are required.';
+            if (emails.some((email) => !email.email)) newErrors.emails = 'All emails are required.';
+            if (!newFormData.contactDetails.website) newErrors.website = 'Website is required.';
+            if (!address.buildingName) newErrors.buildingName = 'Building name is required.';
+            if (!address.address) newErrors.emails = 'Address is required.';
+            if (!address.city) newErrors.city = 'City is required';
+            if (!address.state) newErrors.state = 'State is required';
+
+
+            setErrors(newErrors);
+            return Object.keys(newErrors).length === 0;
+        };
+
+        const contactSubmitHandler = () => {
+            if (validateForm()) {
+                setFormData((prevData) => ({
+                    ...prevData,
+                    contactDetails: newFormData.contactDetails,
+                    address: address,
+                    location: location,
+                }));
+                handleNextStep(); // Ensure this is defined elsewhere
+            }
+        };
+
+        const handleAddressChange = (event) => {
+            const { name, value } = event.target;
+            setAddress(prevAddress => ({
+                ...prevAddress,
                 [name]: value,
-            },
-        }));
-    };
+            }));
+        };
+        const handleLocationChange = (event) => {
+            const { name, value } = event.target;
+            setLocation(prevLocation => ({
+                ...prevLocation,
+                [name]: value,
+            }));
+        };
 
-    // Handle mobile number change with country code
-    const handleMobileNumberChange = (id, value, countryCode = 'us') => {
-        
-        const updatedMobileNumbers = mobileNumbers.map((number) =>
-            number.id === id ? { ...number, number: value, countryCode } : number
-        );
-        setMobileNumbers(updatedMobileNumbers);
-        updateContactDetails('mobileNumbers', updatedMobileNumbers);
-    };
+        return (
+            <div className="h-100vh">
+                <div className="row h-100">
 
-    // Handle WhatsApp number change with country code
-    const handleWhatsappNumberChange = (id, value, countryCode = 'us') => {
-        const updatedWhatsappNumbers = whatsappNumbers.map((number) =>
-            number.id === id ? { ...number, number: value, countryCode } : number
-        );
-        setWhatsappNumbers(updatedWhatsappNumbers);
-        updateContactDetails('whatsappNumbers', updatedWhatsappNumbers);
-    };
-
-    // Handle email change
-    const handleEmailChange = (id, value) => {
-        const updatedEmails = emails.map((email) =>
-            email.id === id ? { ...email, email: value } : email
-        );
-        setEmails(updatedEmails);
-        updateContactDetails('emails', updatedEmails);
-    };
-
-    const updateContactDetails = (field, updatedArray) => {
-        setNewFormData((prevFormData) => ({
-            ...prevFormData,
-            contactDetails: {
-                ...prevFormData.contactDetails,
-                [field]: updatedArray.map((item) => ({
-                    number: item.number || item.email,
-                    countryCode: item.countryCode || null
-                })),
-            },
-        }));
-    };
-
-    // Add and remove fields
-    const addMobileNumber = () => setMobileNumbers([...mobileNumbers, { id: mobileNumbers.length + 1, number: '', countryCode: 'us' }]);
-    const removeMobileNumber = (id) => setMobileNumbers(mobileNumbers.filter((number) => number.id !== id));
-
-    const addWhatsappNumber = () => setWhatsappNumbers([...whatsappNumbers, { id: whatsappNumbers.length + 1, number: '', countryCode: 'us' }]);
-    const removeWhatsappNumber = (id) => setWhatsappNumbers(whatsappNumbers.filter((number) => number.id !== id));
-
-    const addEmail = () => setEmails([...emails, { id: emails.length + 1, email: '' }]);
-    const removeEmail = (id) => setEmails(emails.filter((email) => email.id !== id));
-
-    // Submit handler
-    const contactSubmitHandler = () => {
-        setFormData((prevData) => ({
-            ...prevData,
-            contactDetails: newFormData.contactDetails,
-        }));
-        handleNextStep(); // Ensure this is defined elsewhere
-    };
-
-    return (
-        <div className='h-100vh'>
-            <div className="row h-100">
-                <div className="d-none d-md-block left-portion p-0 col-5">
-                    <img src="/src/assets/images/contact-details.jpg" alt="Contact Details" className='w-100 h-100' />
-                </div>
-                <div className="col-12 col-md-7 row align-items-center right-portion p-5">
-                    <div className="col-12 text-start">
-                        <button className="btn btn-dark w-auto float-start" onClick={handlePrevStep}>
-                            <i className="bi bi-arrow-left"></i>
-                        </button>
-                    </div>
-                    <div className="col-12">
-                        <h1 className="fw-bold text-center text-md-start mb-2">Add Contact Details</h1>
-                    </div>
-                    <div className="col-12 p-5 p-sm-0 mt-3">
-                        <input
-                            type="text"
-                            name="name"
-                            placeholder="Name"
-                            onChange={handleContactChange}
-                            className="form-control form-control-lg"
-                        />
-
-                        {/* Mobile Numbers */}
-                        <div id="mobileNumberDiv" className="mt-4">
-                            {mobileNumbers.map((number) => (
-                                <div className="row mt-3" key={number.id}>
-                                    <div className="col-12 col-sm-3 col-md-2">
-                                        <PhoneInput
-                                            country={number.countryCode}
-                                            enableSearch={true}
-                                            value={number.number}
-                                            onChange={(phone, countryData) =>
-                                                handleMobileNumberChange(number.id, phone, countryData?.countryCode || 'us')
-                                            }
-                                            containerStyle={{ width: '100%' }}
-                                        />
-                                    </div>
-                                    <div className="col-12 col-sm-7 col-md-8 mt-2 mt-sm-0">
-                                        <input
-                                            type="text"
-                                            value={number.number}
-                                            onChange={(e) => handleMobileNumberChange(number.id, e.target.value)}
-                                            className="form-control form-control-lg w-100"
-                                            placeholder="Phone Number"
-                                        />
-                                    </div>
-                                    {number.id > 1 ? (
-                                        <div className="col-12 col-sm-2 mt-2 mt-sm-0">
-                                            <button className="btn btn-danger btn-sm w-100" onClick={() => removeMobileNumber(number.id)}>
-                                                <i className="bi bi-trash"></i>
-                                            </button>
-                                        </div>
-                                    ) : (
-                                        mobileNumbers.length<2?
-                                        <div className="col-12 col-sm-2 mt-2 mt-sm-0">
-                                            <button type="button" onClick={addMobileNumber} className="btn w-100 btn-success mt-2">
-                                                + Add
-                                            </button>
-                                        </div>
-                                        : ''
-                                    )}
-                                </div>
-                            ))}
+                    <div className="col-12 col-md-5 row align-items-center right-portion p-5">
+                        <div className="col-12 text-start">
+                            <button className="btn btn-dark w-auto float-start" onClick={handlePrevStep}>
+                                <i className="bi bi-arrow-left"></i>
+                            </button>
                         </div>
-
-                        {/* WhatsApp Numbers */}
-                        <div id="whatsappNumberDiv" className="mt-4">
-                            {whatsappNumbers.map((number) => (
-                                <div className="row mt-3" key={number.id}>
-                                    <div className="col-12 col-sm-3 col-md-2">
-                                        <PhoneInput
-                                            country={number.countryCode}
-                                            enableSearch={true}
-                                            value={number.number}
-                                            onChange={(phone, countryData) =>
-                                                handleWhatsappNumberChange(number.id, phone, countryData?.countryCode || 'us')
-                                            }
-                                            containerStyle={{ width: '100%' }}
-                                        />
-                                    </div>
-                                    <div className="col-12 col-sm-7 col-md-8 mt-2 mt-sm-0">
-                                        <input
-                                            type="text"
-                                            value={number.number}
-                                            onChange={(e) => handleWhatsappNumberChange(number.id, e.target.value)}
-                                            className="form-control form-control-lg w-100"
-                                            placeholder="WhatsApp Number"
-                                        />
-                                    </div>
-                                    {number.id > 1 ? (
-                                        <div className="col-12 col-sm-2 mt-2 mt-sm-0">
-                                            <button className="btn btn-danger btn-sm w-100" onClick={() => removeWhatsappNumber(number.id)}>
-                                                <i className="bi bi-trash"></i>
-                                            </button>
-                                        </div>
-                                    ) : (
-                                        whatsappNumbers.length <2 ?
-                                        <div className="col-12 col-sm-2 mt-2 mt-sm-0">
-                                            <button type="button" onClick={addWhatsappNumber} className="btn w-100 btn-success mt-2">
-                                                + Add
-                                            </button>
-                                        </div>
-                                        :""
-                                    )}
-                                </div>
-                            ))}
+                        <div className="col-12">
+                            <h1 className="fw-bold text-center text-md-start mb-2">Add Contact Details</h1>
                         </div>
-
-                        {/* Emails */}
-                        <div id="emailDiv" className="mt-4">
-                            {emails.map((email) => (
-                                <div className="row mt-3" key={email.id}>
-                                    <div className="col-12 col-md-10">
-                                        <input
-                                            type="email"
-                                            value={email.email}
-                                            onChange={(e) => handleEmailChange(email.id, e.target.value)}
-                                            className="form-control form-control-lg w-100"
-                                            placeholder="Email"
-                                        />
-                                    </div>
-                                    {email.id > 1 ? (
-                                        <div className="col-12 col-md-2 mt-2 mt-sm-0">
-                                            <button className="btn btn-danger btn-sm w-100" onClick={() => removeEmail(email.id)}>
-                                                <i className="bi bi-trash"></i>
-                                            </button>
-                                        </div>
-                                    ) : (
-                                        emails.length<3?
-                                        <div className="col-12 col-md-2 mt-2 mt-sm-0">
-                                            <button type="button" onClick={addEmail} className="btn w-100 btn-success mt-2">
-                                                + Add
-                                            </button>
-                                        </div>
-                                        :""
-                                    )}
-                                </div>
-                            ))}
-                        </div>
-
-                        <div className="mt-4">
+                        <div className="col-12 p-5 p-sm-0 mt-3">
                             <input
                                 type="text"
-                                name="website"
-                                placeholder="Additional Website Link"
+                                name="name"
+                                placeholder="Name"
                                 onChange={handleContactChange}
                                 className="form-control form-control-lg"
                             />
-                        </div>
+                            {errors.name && <div className="text-danger">{errors.name}</div>}
 
-                        <div className="mt-4">
-                            <button className="btn btn-success w-100 float-end" onClick={contactSubmitHandler}>
-                                Submit
+                            {/* Other input fields */}
+                            <input
+                                type="text"
+                                placeholder="Building Name"
+                                name="buildingName"
+                                value={address.buildingName}
+                                onChange={handleAddressChange}
+                                className="form-control form-control-lg mt-3"
+                            />
+                            <input
+                                type="text"
+                                placeholder="Street / Colony Name"
+                                name="streetName"
+                                value={address.streetName}
+                                onChange={handleAddressChange}
+                                className="form-control form-control-lg mt-3"
+                            />
+                            <input
+                                type="text"
+                                placeholder="Landmark"
+                                name="landMark"
+                                value={address.landMark}
+                                onChange={handleAddressChange}
+                                className="form-control form-control-lg mt-3"
+                            />
+                            <div className="row">
+                                <div className="col-12 col-md-6 mt-3">
+                                    <input
+                                        type="text"
+                                        className="form-control form-control-lg w-100"
+                                        name="state"
+                                        value={address.state}
+                                        onChange={handleAddressChange}
+                                        placeholder="State"
+                                    />
+                                </div>
+                                <div className="col-12 col-md-6 mt-3">
+                                    <input
+                                        type="number"
+                                        className="form-control form-control-lg w-100"
+                                        name="pinCode"
+                                        value={address.pinCode}
+                                        onChange={handleAddressChange}
+                                        placeholder="Pincode"
+                                    />
+                                </div>
+                            </div>
+                            <div className="row">
+                                <div className="col-12 mt-3">
+                                    <input
+                                        type="text"
+                                        className="form-control form-control-lg w-100"
+                                        name="lon"
+                                        value={location.lon}
+                                        onChange={handleLocationChange}
+                                        placeholder="Location"
+                                    />
+                                </div>
+                            </div>
+
+                            <div id="mobileNumberDiv" className="mt-4">
+                                {mobileNumbers.map((number) => (
+                                    <div className="row mt-3" key={number.id}>
+                                        <div className="col-12 col-sm-3 col-md-2">
+                                            <PhoneInput
+                                                country={number.countryCode}
+                                                enableSearch={true}
+                                                value={number.number}
+                                                onChange={(phone, countryData) =>
+                                                    handleMobileNumberChange(number.id, phone, countryData?.countryCode || 'us')
+                                                }
+                                                containerStyle={{ width: '100%' }}
+                                            />
+                                        </div>
+                                        <div className="col-12 col-sm-7 col-md-8 mt-2 mt-sm-0">
+                                            <input
+                                                type="text"
+                                                value={number.number}
+                                                onChange={(e) => handleMobileNumberChange(number.id, e.target.value)}
+                                                className="form-control form-control-lg w-100"
+                                                placeholder="Phone Number"
+                                            />
+                                        </div>
+                                        {errors.mobileNumbers && <div className="text-danger">{errors.mobileNumbers}</div>}
+                                        {number.id > 1 ? (
+                                            <div className="col-12 col-sm-2 mt-2 mt-sm-0">
+                                                <button className="btn btn-danger btn-sm w-100" onClick={() => removeMobileNumber(number.id)}>
+                                                    <i className="bi bi-trash"></i>
+                                                </button>
+                                            </div>
+                                        ) : (
+                                            mobileNumbers.length < 2 && (
+                                                <div className="col-12 col-sm-2 mt-2 mt-sm-0">
+                                                    <button type="button" onClick={addMobileNumber} className="btn w-100 btn-success mt-2">
+                                                        + Add
+                                                    </button>
+                                                </div>
+                                            )
+                                        )}
+                                    </div>
+                                ))}
+                            </div>
+
+                            <div id="whatsappNumberDiv" className="mt-4">
+                                {whatsappNumbers.map((number) => (
+                                    <div className="row mt-3" key={number.id}>
+                                        <div className="col-12 col-sm-3 col-md-2">
+                                            <PhoneInput
+                                                country={number.countryCode}
+                                                enableSearch={true}
+                                                value={number.number}
+                                                onChange={(phone, countryData) =>
+                                                    handleWhatsappNumberChange(number.id, phone, countryData?.countryCode || 'us')
+                                                }
+                                                containerStyle={{ width: '100%' }}
+                                            />
+                                        </div>
+                                        <div className="col-12 col-sm-7 col-md-8 mt-2 mt-sm-0">
+                                            <input
+                                                type="text"
+                                                value={number.number}
+                                                onChange={(e) => handleWhatsappNumberChange(number.id, e.target.value)}
+                                                className="form-control form-control-lg w-100"
+                                                placeholder="WhatsApp Number"
+                                            />
+                                        </div>
+                                        {errors.whatsappNumbers && <div className="text-danger">{errors.whatsappNumbers}</div>}
+                                        {number.id > 1 ? (
+                                            <div className="col-12 col-sm-2 mt-2 mt-sm-0">
+                                                <button className="btn btn-danger btn-sm w-100" onClick={() => removeWhatsappNumber(number.id)}>
+                                                    <i className="bi bi-trash"></i>
+                                                </button>
+                                            </div>
+                                        ) : (
+                                            whatsappNumbers.length < 2 && (
+                                                <div className="col-12 col-sm-2 mt-2 mt-sm-0">
+                                                    <button type="button" onClick={addWhatsappNumber} className="btn w-100 btn-success mt-2">
+                                                        + Add
+                                                    </button>
+                                                </div>
+                                            )
+                                        )}
+                                    </div>
+                                ))}
+                            </div>
+
+                            <div id="emailDiv" className="mt-4">
+                                {emails.map((email) => (
+                                    <div className="row mt-3" key={email.id}>
+                                        <div className="col-12 col-sm-10">
+                                            <input
+                                                type="email"
+                                                value={email.email}
+                                                onChange={(e) => handleEmailChange(email.id, e.target.value)}
+                                                className="form-control form-control-lg"
+                                                placeholder="Email"
+                                            />
+                                        </div>
+                                        {errors.emails && <div className="text-danger">{errors.emails}</div>}
+                                        {email.id > 1 ? (
+                                            <div className="col-12 col-sm-2 mt-2 mt-sm-0">
+                                                <button className="btn btn-danger btn-sm w-100" onClick={() => removeEmail(email.id)}>
+                                                    <i className="bi bi-trash"></i>
+                                                </button>
+                                            </div>
+                                        ) : (
+                                            emails.length < 2 && (
+                                                <div className="col-12 col-sm-2 mt-2 mt-sm-0">
+                                                    <button type="button" onClick={addEmail} className="btn w-100 btn-success mt-2">
+                                                        + Add
+                                                    </button>
+                                                </div>
+                                            )
+                                        )}
+                                    </div>
+                                ))}
+                            </div>
+
+                            <div className="mt-4">
+                                <input
+                                    type="text"
+                                    name="website"
+                                    placeholder="Website"
+                                    onChange={handleContactChange}
+                                    className="form-control form-control-lg"
+                                />
+                                {errors.website && <div className="text-danger">{errors.website}</div>}
+                            </div>
+                        </div>
+                        <div className="col-12 text-end">
+                            <button className="btn btn-success btn-lg w-100" onClick={contactSubmitHandler}>
+                                Save & Continue
                             </button>
                         </div>
                     </div>
+
+
+                    <div className="left-portion p-3 col-12 col-lg-7 row align-items-center">
+                        <link rel="preconnect" href="https://fonts.googleapis.com" />
+                        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+                        <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap" rel="stylesheet" />
+                        <style> {`
+                    .theme
+                    {
+                        background-color: #FC791A;
+                        color: white;
+                        border: none;
+                    }.service-design.active{
+                        background-color: #FC791A;
+                    }.address-section{
+                    background-color:#FC791A;
+                    }.address-logo i{
+                    color: #FC791A;
+                    }.cat-option{
+                        border-right: 1px dashed #FC791A;
+                    }.text-orange{
+                            color: #FC791A;
+                        }.dish-div:hover{
+                            background-color: #FC791A;
+                            color:white;
+                        }
+                        `}
+                        </style>
+                        <div className="p-3" style={{ border: '1px dashed black', borderRadius: '16px' }}>
+                            <p className='text-center'>
+                                This section contains items for the Contact Information.
+                            </p>
+                            <div className="mt-5 mb-5">
+                                <div className="container p-top">
+                                    <div className="col-12 address-section">
+                                        <div className="row">
+                                            <div className="col-12 col-lg-4 mb-3 mb-lg-0">
+                                                <div className="row align-items-center justify-content-start">
+                                                    <div className="col-auto address-logo">
+                                                        <i className="bi bi-geo-alt-fill"></i>
+                                                    </div>
+                                                    <div className="col">
+                                                        <span className="fs-13">Address</span>
+                                                        <p className='fs-16'>{address.buildingName}, {address.city},{address.landMark},{address.streetName}, {address.state},{address.pinCode}</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div className="col-12 col-lg-4 mb-3 mb-lg-0">
+                                                <div className="row align-items-center justify-content-start">
+                                                    <div className="col-auto address-logo">
+                                                        <i className="bi bi-envelope-fill"></i>
+                                                    </div>
+                                                    <div className="col">
+                                                        <span className="fs-13">Send Email</span>
+                                                        {emails.map((email, index) => (
+                                                            <p className='fs-16' key={index}>{email.email}</p>
+                                                        ))}
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div className="col-12 col-lg-4 mb-3 mb-lg-0">
+                                                <div className="row align-items-center justify-content-start">
+                                                    <div className="col-auto address-logo">
+                                                        <i className="bi bi-telephone"></i>
+                                                    </div>
+                                                    <div className="col">
+                                                        <span className="fs-13">Contact</span>
+                                                        {mobileNumbers.map((number, index) => (
+                                                            <p className='fs-16' key={index}>{number.number}</p>
+                                                        ))}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
-        </div>
-    );
-}
+        );
+    }
+
 
 
     function CategoryDetails() {
         const handleCategoryChange = (event, value) => {
             setFormData({
                 ...formData,
-                category: value ? value._id : '' 
+                category: value ? value._id : ''
             });
         };
-    
+
         return (
             <div className="h-100vh">
-            <div className="row h-100 justify-content-center">
-                <div className="d-none d-md-block left-portion col-md-5 h-100 p-0">
-                    <img src="/src/assets/images/add_category.jpg" alt="" className="w-100 h-100 object-fit-cover" />
-                </div>
+                <div className="row h-100 justify-content-center">
 
-                <div className="col-12 col-md-7 d-flex flex-column justify-content-between align-items-center right-portion h-100 p-5">
-                    <div className="col-12 text-start">
-                        <button className="btn btn-dark w-auto float-start" onClick={handlePrevStep}>
-                            <i className="bi bi-arrow-left"></i>
-                        </button>
-                    </div>
-                   <div className="col-12">
-                   <h1 className="fw-bold text-center text-md-start">Add <br /> Business Category</h1>
-                   </div>
+                    <div className="col-12 col-md-7 d-flex flex-column justify-content-between align-items-center right-portion h-100 p-5">
+                        <div className="col-12 text-start">
+                            <button className="btn btn-dark w-auto float-start" onClick={handlePrevStep}>
+                                <i className="bi bi-arrow-left"></i>
+                            </button>
+                        </div>
+                        <div className="col-12">
+                            <h1 className="fw-bold text-center text-md-start">Add <br /> Business Category</h1>
+                        </div>
 
-                    <div className="input-group mt-4 w-100 align-items-center">
-                        <span className="input-group-text bg-white p-3" style={{ flexBasis: '50px' }}>
-                            <i className="bi bi-search"></i>
-                        </span>
+                        <div className="input-group mt-4 w-100 align-items-center">
+                            <span className="input-group-text bg-white p-3" style={{ flexBasis: '50px' }}>
+                                <i className="bi bi-search"></i>
+                            </span>
 
-                        <div style={{ flexGrow: 1, position: 'relative' }}>
-                            {loading ? (
-                                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
-                                    <CircularProgress size={24} />
-                                </div>
-                            ) : (
-                                <Autocomplete
-                                    disablePortal
-                                    options={categoryData}
-                                    getOptionLabel={(option) => option.name}
-                                    isOptionEqualToValue={(option, value) => option._id === value._id}
-                                    renderInput={(params) => <TextField {...params} label="Categories" variant="outlined" />}
-                                    onChange={handleCategoryChange}
-                                    name='category'
-                                    value={categoryData.find(category => category._id === formData.category) || null} // Controlled component
-                                />
-                            )}
+                            <div style={{ flexGrow: 1, position: 'relative' }}>
+                                {loading ? (
+                                    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
+                                        <CircularProgress size={24} />
+                                    </div>
+                                ) : (
+                                    <Autocomplete
+                                        disablePortal
+                                        options={categoryData}
+                                        getOptionLabel={(option) => option.name}
+                                        isOptionEqualToValue={(option, value) => option._id === value._id}
+                                        renderInput={(params) => <TextField {...params} label="Categories" variant="outlined" />}
+                                        onChange={handleCategoryChange}
+                                        name='category'
+                                        value={categoryData.find(category => category._id === formData.category) || null} // Controlled component
+                                    />
+                                )}
+                            </div>
+                        </div>
+
+                        <div className="col-12 mt-5"></div>
+
+                        <div className="col-12 text-center mt-5">
+                            <button className="btn btn-success w-100 text-white p-2" onClick={handleNextStep}>Save & Next</button>
                         </div>
                     </div>
 
-                    <div className="col-12 mt-5"></div>
 
-                    <div className="col-12 text-center mt-5">
-                        <button className="btn btn-success w-100 text-white p-2" onClick={handleNextStep}>Save & Next</button>
+
+                    <div className="left-portion col-12 col-lg-5 h-100 p-3 row align-items-center">
+                        <div className="p-3" style={{ border: '1px dashed black', borderRadius: '16px' }}>
+                            <p className='text-center'>
+                                Please select the business category that best represents your company. This helps us tailor the services and features specifically to your industry needs.
+                            </p>
+                        </div>
                     </div>
+
                 </div>
             </div>
-        </div>
         );
     }
-    
+
 
 
 
     function ServicesOffering() {
         const [inputService, setInputService] = useState('');
         const [error, setError] = useState(''); // State for error message
-    
+
         // Add service to formData.services
         const addService = (e) => {
             e.preventDefault();
@@ -795,7 +1009,7 @@ export default function CreateBusiness() {
                 setInputService(''); // Clear input field
             }
         };
-    
+
         // Delete service from formData.services
         const deleteService = (indexToDelete) => {
             setFormData(prevFormData => ({
@@ -803,7 +1017,7 @@ export default function CreateBusiness() {
                 services: prevFormData.services.filter((_, index) => index !== indexToDelete)
             }));
         };
-    
+
         // Handle next step with validation
         const handleNextWithValidation = () => {
             if (formData.services.length < 2) {
@@ -813,7 +1027,7 @@ export default function CreateBusiness() {
                 handleNextStep();
             }
         };
-    
+
         return (
             <>
                 <div className="h-100vh">
@@ -858,7 +1072,7 @@ export default function CreateBusiness() {
                                             </button>
                                         </div>
                                     </div>
-    
+
                                     <div className="col-12 mt-4">
                                         <div className="row gap-2 justify-content-center">
                                             {formData.services.map((service, index) => (
@@ -874,7 +1088,7 @@ export default function CreateBusiness() {
                                             ))}
                                         </div>
                                     </div>
-    
+
                                     {error && <p className="text-danger text-danger mt-3">{error}</p>}
                                 </div>
                             </div>
@@ -896,6 +1110,12 @@ export default function CreateBusiness() {
         const [closeTime, setCloseTime] = useState('');
 
         const allDays = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+
+        useEffect(() => {
+            setDays(formData?.businessTiming?.workingDays)
+            setOpenTime(formData?.businessTiming?.openTime?.open)
+            setCloseTime(formData?.businessTiming?.openTime?.close)
+        }, [])
 
         const toggleDay = (day) => {
             if (days.includes(day)) {
@@ -940,15 +1160,12 @@ export default function CreateBusiness() {
                 <div className='h-100vh'>
                     <div className="row  h-100 justify-content-center">
                         {/* Left Image Section */}
-                        <div className="d-none d-md-block left-portion p-0 col-md-5 h-100">
-                            <img src="/src/assets/images/timing.jpg" alt="" className='w-100 h-100' />
-                        </div>
 
                         {/* Right Form Section */}
                         <div className="col-12 col-md-7 row align-items-end justify-content-center h-100 p-3 p-md-5 right-portion">
-                        <div className="col-12 text-start">
-                        <button className="btn btn-dark w-auto float-start" onClick={handlePrevStep}><i className="bi bi-arrow-left"></i></button>
-                        </div>
+                            <div className="col-12 text-start">
+                                <button className="btn btn-dark w-auto float-start" onClick={handlePrevStep}><i className="bi bi-arrow-left"></i></button>
+                            </div>
                             <div className='row  justify-content-center'>
                                 <div className='col-12 text-center text-md-start mt-5'>
                                     <h1 className='fw-bold'>Add <br /> Business Timing</h1>
@@ -1015,6 +1232,159 @@ export default function CreateBusiness() {
                                 </button>
                             </div>
                         </div>
+
+                        <div className="left-portion col-12 col-lg-5 h-100 p-3 row align-items-center">
+                        <link rel="preconnect" href="https://fonts.googleapis.com" />
+                <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+                <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap" rel="stylesheet" />
+                <style> {`
+                        ::-webkit-scrollbar {
+                            width: 12px; /* Width of the entire scrollbar */
+                        }
+    
+                        /* Scrollbar track */
+                        ::-webkit-scrollbar-track {
+                            background: rgb(243, 243, 244); /* Background of the scrollbar track */
+                        }::-webkit-scrollbar-thumb {
+                            background-color: white; /* Color of the scrollbar thumb */
+                            border-radius: 10px;     /* Rounded edges of the thumb */
+                            border: 3px solid  white; /* Padding around the thumb */
+                        }
+                    .theme
+                    {
+                        background-color: white;
+                        color: white;
+                        border: none;
+                    }.service-design.active{
+                        background-color: white;
+                    }.address-section{
+                    background-color:white;
+                    }.address-logo i{
+                    color: white;
+                    }.cat-option{
+                        border-right: 1px dashed white;
+                    }.text-orange{
+                            color: white;
+                        }.dish-div:hover{
+                            background-color: white;
+                            color:white;
+                        }
+                        `}
+                </style>
+                        <footer className='h-auto'>
+                    <div className="container pjs  p-top">
+                        <div className="mt-5">
+                            <div className="row">
+                                <div className="col-12 col-lg-4">
+                                    <div className="col-12 d-block d-lg-flex text-center text-lg-start text mt-5">
+                                        <div className="nav-logo width-fit">
+                                            <img src={formData.logo} alt="" />
+                                        </div>
+                                        <span className="ms-2 fs-30 text-white">{formData.businessName}</span>
+                                    </div>
+                                    <div className="col-12 mt-4  text-center text-lg-start" style={{ color: "#A4B3CB" }}>
+                                        <p>
+                                            business Description
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div className="col-12 col-lg-4">
+                                    <div className="col-12 mt-5">
+                                        <div className="col-12 mt-3 mb-3 text-center text-lg-start">
+                                            <a href="#" className=" fs-14 text-decoration-none text-orange">NAVIGATION</a>
+                                        </div>
+                                        <div className="col-12 mt-3 mb-3  text-center text-lg-start">
+                                            <a href="#" className="fs-14 text-decoration-none" style={{ color: "#A4B3CB" }}>Menu</a>
+                                        </div>
+                                        <div className="col-12 mt-3 mb-3  text-center text-lg-start">
+                                            <a href="#" className="fs-14 text-decoration-none" style={{ color: "#A4B3CB" }}>About Us</a>
+                                        </div>
+                                        <div className="col-12 mt-3 mb-3  text-center text-lg-start">
+                                            <a href="#" className="fs-14 text-decoration-none" style={{ color: "#A4B3CB" }}>Contact Us</a>
+                                        </div>
+                                        <div className="col-12 mt-3 mb-3  text-center text-lg-start">
+                                            <a href="#" className="fs-14 text-decoration-none" style={{ color: "#A4B3CB" }}>Main Dishes</a>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="col-12">
+                                    <div className="col-12 mt-5">
+                                        <div className="col-12 mt-3 mb-3 text-center text-lg-start">
+                                            <a href="#" className=" fs-14 text-decoration-none text-orange">Follow Us</a>
+                                        </div>
+
+                                        <div className="mt-5 col-12 row gap-3 jcc-md text-center text-lg-start">
+                                            <a className="contact-banner text-orange text-center text-lg-start">
+                                                <i className="bi bi-facebook text-orange"></i>
+                                            </a>
+                                            <a  className="contact-banner text-center text-lg-start">
+                                                <i className="bi bi-instagram text-orange"></i>
+                                            </a>
+                                            <a  className="contact-banner text-center text-lg-start">
+                                                <i className="bi bi-twitter text-orange"></i>
+                                            </a>
+                                            {/* <hr style={{width:"fit-content",opacity: 0.15,}}></hr> */}
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                                <div className="col-12">
+                                    <div className="row">
+                                        <div className="col-lg-6">
+                                            <div className="col-12">
+                                                <div className="col-12 mt-3 mb-3 text-center text-lg-start">
+                                                    <a href="#" className=" fs-14 text-decoration-none text-orange">OPENING HOURS</a>
+                                                </div>
+                                                <div className="mt-3 text-center text-lg-start" style={{ color: "#A4B3CB" }}>
+                                                    {days.map((day, index) => (
+                                                        <p>{day}</p>
+                                                    ))}
+                                                </div>
+                                                <div className="mt-3 text-center text-lg-start" style={{ color: "#A4B3CB" }}>
+                                                    <span>{openTime} to {closeTime}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+                                        <div className="col-lg-6">
+                                            <div className="col-12 mt-5 text-center text-lg-start">
+                                                <div className="mt-3" style={{ color: "#A4B3CB" }}>
+                                                    
+                                                </div>
+                                                <div className="mt-3" style={{ color: "#A4B3CB" }}>
+                                                    <span>CLOSED</span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                                <div className="col-12">
+                                    <div className="row">
+                                        <div className="col-12 mt-5 text-center text-lg-start" style={{ color: "#A4B3CB" }}>
+                                            <span>© 2024 Business Bazaar. All Right Reserved</span>
+                                        </div>
+
+                                        <div className="col-12  text-center text-lg-start mb-5 mt-5" style={{ color: "#A4B3CB" }}>
+                                            <div className="row">
+                                                <div className="col-12 col-lg-6">Terms of Service</div>
+                                                <div className="col-12 col-lg-6">Privacy Policy</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </footer>
+                        </div>
+
                     </div>
                 </div>
             </>
@@ -1026,6 +1396,10 @@ export default function CreateBusiness() {
 
     function BusinessDesc() {
         const [description, setDescription] = useState('')
+
+        useEffect(() => {
+            setDescription(formData?.description)
+        }, [])
         const handleDescSubmit = () => {
             setFormData(prevFormData => ({
                 ...prevFormData,
@@ -1044,9 +1418,9 @@ export default function CreateBusiness() {
 
                         {/* Right Form Section */}
                         <div className="col-12 col-md-7 row align-items-end justify-content-center h-100 p-3 p-md-5 right-portion">
-                        <div className="col-12 text-start">
-                        <button className="btn btn-dark w-auto float-start" onClick={handlePrevStep}><i className="bi bi-arrow-left"></i></button>
-                        </div>
+                            <div className="col-12 text-start">
+                                <button className="btn btn-dark w-auto float-start" onClick={handlePrevStep}><i className="bi bi-arrow-left"></i></button>
+                            </div>
                             <div className='row  justify-content-center'>
                                 <div className='col-12 text-center text-md-start'>
                                     <h1 className='fw-bold'>Add <br /> Business Description</h1>
@@ -1071,27 +1445,32 @@ export default function CreateBusiness() {
             </>
         );
     }
+
+
+
     function LandingPageDetails() {
         const [theme, setTheme] = useState('#6AA646');
-        const [landingPageHero, setLandingPageHero] = useState({
-            title: "",
-            description: "",
-            coverImage: "",
-        });
-        const [welcomePart, setWelcomePart] = useState({
-            title: "",
-            description: "",
-            coverImage: "",
-        });
-        const [s3Files, setS3Files] = useState({});
-    
-        // Generic File Change Handler
+        const [secondaryTheme, setSecondaryTheme] = useState('#A8FF75');
+
+        const [landingPageHero, setLandingPageHero] = useState({ title: "", description: "", coverImage: "" });
+        const [welcomePart, setWelcomePart] = useState({ title: "", description: "", coverImage: "" });
+        const [errors, setErrors] = useState({});
+        const [loading, setLoading] = useState(false); // Loader state
+
+        useEffect(() => {
+            setTheme(formData?.theme ? formData.theme : '#6AA646')
+            setSecondaryTheme(formData?.secondaryTheme ? formData.secondaryTheme : '#A8FF75')
+            setLandingPageHero(formData?.landingPageHero)
+            setWelcomePart(formData?.welcomePart)
+        }, [])
+
+        // Generic File Change Handler with Loader
         const handleFileChange = (name, e, sectionSetter) => {
             const file = e.target.files[0];
             if (file) {
+                setLoading(true); // Show loader
                 const reader = new FileReader();
                 reader.onload = async () => {
-
                     const preReq = await preRequestFun(file, name);
                     let accessLink = '';
                     if (preReq && preReq.accessLink) {
@@ -1104,31 +1483,46 @@ export default function CreateBusiness() {
                         console.error('Access link not found in response.');
                         return;
                     }
+                    setLoading(false); // Hide loader
                 };
-                reader.readAsDataURL(file); 
+                reader.readAsDataURL(file);
             }
         };
-    
+
         const handleInputChange = (e, sectionSetter) => {
             const { name, value } = e.target;
             sectionSetter(prevData => ({ ...prevData, [name]: value }));
         };
-    
-        const handleLandingSubmit = () => {
-            setFormData(prevFormData => ({
-                ...prevFormData,
-                landingPageHero,
-                theme,
-                welcomePart,
-            }));
-            handleNextStep();
+
+        const validateForm = () => {
+            const newErrors = {};
+            if (!landingPageHero.title) newErrors.landingPageHeroTitle = "Title is required";
+            if (!landingPageHero.description) newErrors.landingPageHeroDescription = "Description is required";
+            if (!landingPageHero.coverImage) newErrors.landingPageHeroCoverImage = "Cover image is required";
+            if (!welcomePart.title) newErrors.welcomePartTitle = "Title is required";
+            if (!welcomePart.description) newErrors.welcomePartDescription = "Description is required";
+            if (!welcomePart.coverImage) newErrors.welcomePartCoverImage = "Cover image is required";
+            setErrors(newErrors);
+            return Object.keys(newErrors).length === 0;
         };
-    
-        // Dynamic Upload Trigger
+
+        const handleLandingSubmit = () => {
+            if (validateForm()) {
+                setFormData(prevFormData => ({
+                    ...prevFormData,
+                    landingPageHero,
+                    theme,
+                    secondaryTheme,
+                    welcomePart,
+                }));
+                handleNextStep();
+            }
+        };
+
         const triggerFileUpload = (inputId) => {
             document.getElementById(inputId).click();
         };
-    
+
         return (
             <div className='h-100vh'>
                 <div className="row h-100 justify-content-center">
@@ -1136,7 +1530,7 @@ export default function CreateBusiness() {
                     <div className="d-none d-md-block left-portion p-0 col-md-5 h-100">
                         <img src="/src/assets/images/landing-page.jpg" alt="" className='w-100 h-100' />
                     </div>
-    
+
                     {/* Right Form Section */}
                     <div className="col-12 col-md-7 row align-items-end justify-content-center h-100 p-3 p-md-5 right-portion">
                         <div className="col-12 text-start">
@@ -1144,32 +1538,42 @@ export default function CreateBusiness() {
                                 <i className="bi bi-arrow-left"></i>
                             </button>
                         </div>
-    
+
                         <div className='row justify-content-center'>
                             <div className='col-12 text-center text-md-start mt-5'>
                                 <h1 className='fw-bold'>Add Details <br /> About Landing Page</h1>
                             </div>
-    
+
                             {/* Color Theme Section */}
                             <div className="col-12 p-3 p-md-5">
-                                <h5 className='fs-18 mb-4 p-1 text-center text-md-start text-dark fw-bold mt-3'>Color Theme</h5>
-                               
-                                <div className="col-6 col-md-3">
-                                    <label htmlFor="">Choose Color :</label>
-                                    <input
-                                        type="color"
-                                        name="color"
-                                        className='form-control form-control-lg'
-                                        value={theme}
-                                        onChange={(e) => setTheme(e.target.value)}
-                                    />
+                                <h5 className='fs-18 mb-4 p-1 text-start text-md-start text-dark fw-bold mt-3'>Color Theme</h5>
+                                <div className="col-6 col-md-3 d-flex w-100 gap-5">
+                                    <div>
+                                        <label>Choose Primary Color :</label>
+                                        <input
+                                            type="color"
+                                            name="color"
+                                            className='form-control form-control-lg'
+                                            value={theme}
+                                            onChange={(e) => setTheme(e.target.value)}
+                                        />
+                                    </div>
+
+                                    <div>
+                                        <label>Choose Secondary Color :</label>
+                                        <input
+                                            type="color"
+                                            name="color"
+                                            className='form-control form-control-lg'
+                                            value={secondaryTheme}
+                                            onChange={(e) => setSecondaryTheme(e.target.value)}
+                                        />
+                                    </div>
                                 </div>
-    
+
                                 {/* Landing Page Hero Details */}
-                                <div className="col-12 text-center mt-5 mb-3">
-                                <h5 className='fs-18 mb-2 p-1 text-center text-md-start text-dark fw-bold mt-3'>Add Landing Page Banner</h5>
-                                </div>
-                                <label htmlFor="">Title :</label>
+                                <h5 className='fs-18 mb-2 text-dark fw-bold mt-3'>Add Landing Page Banner</h5>
+                                <label>Title :</label>
                                 <input
                                     type="text"
                                     name="title"
@@ -1178,7 +1582,9 @@ export default function CreateBusiness() {
                                     value={landingPageHero.title}
                                     onChange={(e) => handleInputChange(e, setLandingPageHero)}
                                 />
-                                <label htmlFor="">Description :</label>
+                                {errors.landingPageHeroTitle && <div className="text-danger">{errors.landingPageHeroTitle}</div>}
+
+                                <label>Description :</label>
                                 <textarea
                                     name="description"
                                     className='form-control form-control-lg mb-3'
@@ -1186,23 +1592,24 @@ export default function CreateBusiness() {
                                     value={landingPageHero.description}
                                     onChange={(e) => handleInputChange(e, setLandingPageHero)}
                                 />
-    
+                                {errors.landingPageHeroDescription && <div className="text-danger">{errors.landingPageHeroDescription}</div>}
+
                                 {/* Hero Image Upload */}
                                 <input type="file" hidden id='LandingHeroImageInput' onChange={(e) => handleFileChange("landingPageHeroImage", e, setLandingPageHero)} />
                                 <div onClick={() => triggerFileUpload('LandingHeroImageInput')} className="p-2 mt-2 mb-3 add-logo-div">
                                     <div className="text-center">
-                                        <img src={landingPageHero.coverImage || "/src/assets/images/add_image.png"} width="50" alt="Add Hero Image" />
-                                        <div className="col-12">
-                                            <span>Add Image</span>
-                                        </div>
+                                        {loading ? (
+                                            <div className="spinner-border text-primary" role="status"></div>
+                                        ) : (
+                                            <img src={landingPageHero.coverImage || "/src/assets/images/add_image.png"} width="50" alt="Add Hero Image" />
+                                        )}
                                     </div>
                                 </div>
-    
+                                {errors.landingPageHeroCoverImage && <div className="text-danger">{errors.landingPageHeroCoverImage}</div>}
+
                                 {/* Welcome Part */}
-                                <div className="col-12 text-center mt-5 mb-3">
-                                <h5 className='fs-18 mb-2 p-1 text-center text-md-start text-dark fw-bold mt-3'>Add Welcome Part</h5>
-                                </div>
-                                <label htmlFor=""> Title :</label>
+                                <h5 className='fs-18 mb-2 text-dark fw-bold mt-3'>Add Welcome Part</h5>
+                                <label>Title :</label>
                                 <input
                                     type="text"
                                     name="title"
@@ -1211,7 +1618,9 @@ export default function CreateBusiness() {
                                     value={welcomePart.title}
                                     onChange={(e) => handleInputChange(e, setWelcomePart)}
                                 />
-                                <label htmlFor="">Description :</label>
+                                {errors.welcomePartTitle && <div className="text-danger">{errors.welcomePartTitle}</div>}
+
+                                <label>Description :</label>
                                 <textarea
                                     name="description"
                                     className='form-control form-control-lg mb-3'
@@ -1219,18 +1628,21 @@ export default function CreateBusiness() {
                                     value={welcomePart.description}
                                     onChange={(e) => handleInputChange(e, setWelcomePart)}
                                 />
-    
+                                {errors.welcomePartDescription && <div className="text-danger">{errors.welcomePartDescription}</div>}
+
                                 {/* Welcome Image Upload */}
                                 <input type="file" hidden id='WelcomeImageInput' onChange={(e) => handleFileChange("welcomePartImage", e, setWelcomePart)} />
                                 <div onClick={() => triggerFileUpload('WelcomeImageInput')} className="p-2 mt-2 mb-3 add-logo-div">
                                     <div className="text-center">
-                                        <img src={welcomePart.coverImage || "/src/assets/images/add_image.png"} width="50" alt="Add Welcome Image" />
-                                        <div className="col-12">
-                                            <span>Add Image</span>
-                                        </div>
+                                        {loading ? (
+                                            <div className="spinner-border text-primary" role="status"></div>
+                                        ) : (
+                                            <img src={welcomePart.coverImage || "/src/assets/images/add_image.png"} width="50" alt="Add Welcome Image" />
+                                        )}
                                     </div>
                                 </div>
-    
+                                {errors.welcomePartCoverImage && <div className="text-danger">{errors.welcomePartCoverImage}</div>}
+
                                 <div className='col-12 mt-4 text-center'>
                                     <button className='btn btn-success w-100' onClick={handleLandingSubmit}>
                                         Save & Next
@@ -1243,16 +1655,23 @@ export default function CreateBusiness() {
             </div>
         );
     }
-    
+
     function CreateServices() {
         const [specialService, setSpecialService] = useState({
             title: "",
             description: "",
             data: [{ title: "", description: "", image: "" }],
         });
-    
-        const [services, setServices] = useState([{ title: "", description: "" }]);
-    
+        const [services, setServices] = useState([{ title: "", description: "", image: "" }]);
+        const [isLoading, setIsLoading] = useState({ specialService: {}, service: {} });
+
+        useEffect(() => {
+            setSpecialService(formData?.specialServices)
+            setServices(formData?.service)
+        }, [])
+
+        const [errors, setErrors] = useState([])
+
         // Handle change for individual special service fields
         const handleProductChange = (index, e) => {
             const { name, value } = e.target;
@@ -1262,7 +1681,7 @@ export default function CreateBusiness() {
                 return { ...prevData, data: updatedData };
             });
         };
-    
+
         // Handle change for services
         const handleServiceChange = (index, e) => {
             const { name, value } = e.target;
@@ -1272,45 +1691,60 @@ export default function CreateBusiness() {
                 return updatedServices;
             });
         };
-    
-        // Handle file input change for special service images
-        const handleFileChange = (index, e) => {
+
+        const handleFileChange = async (type, index, e) => {
             const file = e.target.files[0];
-            if (file && index !== null) {
-                const reader = new FileReader();
-                reader.onload = async () => {
-                    const preReq = await preRequestFun(file, "service");
-                    let accessLink = '';
-                    if (preReq && preReq.accessLink) {
-                        accessLink = preReq.accessLink;
+            if (file) {
+                // Set loading state
+                setIsLoading((prevLoading) => ({
+                    ...prevLoading,
+                    [type]: { ...prevLoading[type], [index]: true }
+                }));
+
+                const preReq = await preRequestFun(file, "service");
+                if (preReq && preReq.accessLink) {
+                    const imageUrl = preReq.accessLink;
+                    if (type === 'specialService') {
                         setSpecialService((prevData) => {
                             const updatedData = [...prevData.data];
-                            updatedData[index].image = accessLink; 
+                            updatedData[index].image = imageUrl;
                             return { ...prevData, data: updatedData };
                         });
                     } else {
-                        console.error('Access link not found in response.');
-                        return;
+                        setServices((prevServices) => {
+                            const updatedServices = [...prevServices];
+                            updatedServices[index].image = imageUrl;
+                            return updatedServices;
+                        });
                     }
-                   
-                };
-                reader.readAsDataURL(file);
+                } else {
+                    console.error('Access link not found in response.');
+                }
+
+                // Remove loading state
+                setIsLoading((prevLoading) => ({
+                    ...prevLoading,
+                    [type]: { ...prevLoading[type], [index]: false }
+                }));
             }
         };
-    
-        // Trigger file upload for specific image input fields
-        const uploadImage = (index) => {
-            document.querySelectorAll('.productImageInput')[index].click();
+
+        // Trigger file upload for image input
+        const uploadImage = (type, index) => {
+            const inputClass = type === 'specialService' ? '.specialServiceImageInput' : '.serviceImageInput';
+            document.querySelectorAll(inputClass)[index].click();
         };
-    
-        // Handle general input changes
-        const handleChange = (e) => {
-            const { name, value } = e.target;
-            setSpecialService((prevData) => ({ ...prevData, [name]: value }));
-        };
-    
+
         // Submit function to store data
         const handleServiceSubmit = () => {
+            // if (!specialService.title || !specialService.description || !specialService.data[0].title) {
+            //     setErrors("Please fill in all required fields for Special Service")
+            //     return;
+            // }
+            // if (!services[0].title || !services[0].description) {
+            //     setErrors("Please fill in all required fields for Services.")
+            //     return;
+            // }
             setFormData((prevFormData) => ({
                 ...prevFormData,
                 specialServices: specialService,
@@ -1318,29 +1752,29 @@ export default function CreateBusiness() {
             }));
             handleNextStep();
         };
-    
-        // Function to remove a special service
+
+        const handleChange = (e) => {
+            const { name, value } = e.target;
+            setSpecialService((prevData) => ({
+                ...prevData,
+                [name]: value,
+            }));
+        };
+
         const removeSpecialService = (index) => {
-            if (specialService.data.length > 1) {
-                setSpecialService((prevData) => {
-                    const updatedData = [...prevData.data];
-                    updatedData.splice(index, 1);
-                    return { ...prevData, data: updatedData };
-                });
-            }
+            setSpecialService((prevData) => {
+                const updatedData = prevData.data.filter((_, i) => i !== index);
+                return { ...prevData, data: updatedData };
+            });
         };
-    
-        // Function to remove a service
         const removeService = (index) => {
-            if (services.length > 1) {
-                setServices((prev) => {
-                    const updatedServices = [...prev];
-                    updatedServices.splice(index, 1);
-                    return updatedServices;
-                });
-            }
+            setServices((prevServices) => {
+                // Filter out the service at the specified index
+                const updatedServices = prevServices.filter((_, i) => i !== index);
+                return updatedServices;
+            });
         };
-    
+
         return (
             <>
                 <div className='h-100vh'>
@@ -1349,7 +1783,7 @@ export default function CreateBusiness() {
                         <div className="d-none d-md-block left-portion p-0 col-md-5 h-100">
                             <img src="/src/assets/images/landing-page.jpg" alt="" className='w-100 h-100' />
                         </div>
-    
+
                         {/* Right Form Section */}
                         <div className="col-12 col-md-7 row align-items-end justify-content-center h-100 p-3 p-md-5 right-portion">
                             <div className="col-12 text-start">
@@ -1357,45 +1791,44 @@ export default function CreateBusiness() {
                                     <i className="bi bi-arrow-left"></i>
                                 </button>
                             </div>
-    
+
                             <div className='row justify-content-center'>
                                 <div className="col-12 mt-5 text-center text-md-start">
                                     <h1 className="fw-bold">Add Service Details</h1>
                                 </div>
-    
+
                                 <div className="col-12">
-                                    <div className="col-12 text-center">
-                                       <u> <h5 className='fs-18 mb-4 p-1 text-center text-md-start text-dark fw-bold mt-3'>Add Special Service Content</h5></u>
-                                    </div>
+                                    {/* Special Service Title */}
                                     <div className="col-12 text-center">
                                         <input
                                             type="text"
                                             name="title"
+                                            value={specialService.title}
                                             onChange={handleChange}
                                             placeholder="Title"
                                             className="form-control form-control-lg mb-3"
+                                            required
                                         />
                                     </div>
                                     <div className="col-12 text-center">
                                         <textarea
                                             name="description"
+                                            value={specialService.description}
                                             className="form-control form-control-lg"
                                             onChange={handleChange}
                                             placeholder="Description"
+                                            required
                                         ></textarea>
                                     </div>
-    
+
                                     {/* Special Services List */}
                                     <div className="col-12 text-center">
-                                        <u><h5 className='fs-18 mb-4 p-1 text-center text-md-start text-dark fw-bold mt-3'>Add Special Services</h5></u>
+                                        <h5 className='fs-18 mb-4 p-1 text-center text-md-start text-dark fw-bold mt-3'>Add Special Services</h5>
                                     </div>
-    
+
                                     {specialService.data.map((p, index) => (
                                         <div key={index} className="mt-2">
-                                            {index !=0 ? (
-                                                
-                                            <div className="divider"></div>
-                                            ):''}
+                                            {index !== 0 && <div className="divider"></div>}
                                             <input
                                                 type="text"
                                                 name="title"
@@ -1403,6 +1836,7 @@ export default function CreateBusiness() {
                                                 placeholder="Service Name"
                                                 value={p.title}
                                                 onChange={(e) => handleProductChange(index, e)}
+                                                required
                                             />
                                             <textarea
                                                 name="description"
@@ -1410,31 +1844,32 @@ export default function CreateBusiness() {
                                                 placeholder="Service Description"
                                                 value={p.description}
                                                 onChange={(e) => handleProductChange(index, e)}
+                                                required
                                             />
                                             <div className="col-12 col-md-3 mb-3">
                                                 <input
                                                     type="file"
                                                     hidden
-                                                    className="productImageInput"
-                                                    onChange={(e) => handleFileChange(index, e)}
+                                                    className="specialServiceImageInput"
+                                                    onChange={(e) => handleFileChange('specialService', index, e)}
                                                 />
-                                                <div onClick={() => uploadImage(index)} className="p-2 mt-2 add-logo-div">
+                                                <div onClick={() => uploadImage('specialService', index)} className="p-2 mt-2 add-logo-div">
                                                     <div className="text-center">
-                                                        <img
-                                                            src={p.image || "/src/assets/images/add_image.png"}
-                                                            width="50"
-                                                            alt="Add Service Image"
-                                                        />
-                                                        <div className="col-12">
-                                                            <span>Add Image</span>
-                                                        </div>
+                                                        {isLoading.specialService[index] ? (
+                                                            <div className="spinner-border text-primary" role="status"></div>
+                                                        ) : (
+                                                            <img
+                                                                src={p.image || "/src/assets/images/add_image.png"}
+                                                                width="50"
+                                                                alt="Add Service Image"
+                                                            />
+                                                        )}
                                                     </div>
                                                 </div>
-                                              
                                             </div>
-                                            {index > 0 && ( // Show remove button only if not the first element
+                                            {index > 0 && (
                                                 <div className="col-12 text-center">
-                                                        <button
+                                                    <button
                                                         type="button"
                                                         onClick={() => removeSpecialService(index)}
                                                         className="btn btn-danger mt-2 w-100 mb-2"
@@ -1442,30 +1877,25 @@ export default function CreateBusiness() {
                                                         Remove
                                                     </button>
                                                 </div>
-                                                )}
+                                            )}
                                         </div>
                                     ))}
-    
+
+                                    {/* Add Service Button */}
                                     <a
                                         href="#"
-                                        onClick={() =>
-                                            setSpecialService((prevData) => ({
-                                                ...prevData,
-                                                data: [...prevData.data, { title: "", description: "", image: "" }],
-                                            }))
-                                        }
-                                        className="text-decoration-none btn btn-success w-100"
+                                        onClick={() => setSpecialService((prevData) => ({
+                                            ...prevData,
+                                            data: [...prevData.data, { title: "", description: "", image: "" }],
+                                        }))}
+                                        className="text-decoration-none btn btn-success w-100 mb-3"
                                     >
                                         + Add More Special Service
                                     </a>
-    
+
                                     {/* Services List */}
-                                    <div className="col-12 text-center">
-                                        <h5 className='fs-18 mb-4 p-1 text-center text-md-start text-dark fw-bold mt-3'>Add Service Details</h5>
-                                    </div>
-    
                                     {services.map((service, index) => (
-                                        <div key={index} className="row align-items-center">
+                                        <div key={index} className="row align-items-center mb-3">
                                             <input
                                                 type="text"
                                                 name="title"
@@ -1473,6 +1903,7 @@ export default function CreateBusiness() {
                                                 placeholder="Service Title"
                                                 value={service.title}
                                                 onChange={(e) => handleServiceChange(index, e)}
+                                                required
                                             />
                                             <textarea
                                                 name="description"
@@ -1480,31 +1911,60 @@ export default function CreateBusiness() {
                                                 placeholder="Service Description"
                                                 value={service.description}
                                                 onChange={(e) => handleServiceChange(index, e)}
+                                                required
                                             />
-                                            {index > 0 && ( // Show remove button only if not the first element
-                                                <button
-                                                    type="button"
-                                                    onClick={() => removeService(index)}
-                                                    className="btn btn-danger mt-2 mb-2 w-100"
-                                                >
-                                                    Remove
-                                                </button>
+                                            <div className="col-12 col-md-3 mb-3">
+                                                <input
+                                                    type="file"
+                                                    hidden
+                                                    className="serviceImageInput"
+                                                    onChange={(e) => handleFileChange('service', index, e)}
+                                                />
+                                                <div onClick={() => uploadImage('service', index)} className="p-2 mt-2 add-logo-div">
+                                                    <div className="text-center">
+                                                        {isLoading.service[index] ? (
+                                                            <div className="spinner-border text-primary" role="status"></div>
+                                                        ) : (
+                                                            <img
+                                                                src={service.image || "/src/assets/images/add_image.png"}
+                                                                width="50"
+                                                                alt="Add Service Image"
+                                                            />
+                                                        )}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            {index > 0 && ( // Only show the remove button if it's not the first service
+                                                <div className="col-12 text-center">
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => removeService(index)}
+                                                        className="btn btn-danger mt-2 w-100 mb-2"
+                                                    >
+                                                        Remove Service
+                                                    </button>
+                                                </div>
                                             )}
                                         </div>
                                     ))}
-    
+
+                                    {/* Add More Service Button */}
                                     <a
                                         href="#"
-                                        onClick={() => setServices((prev) => [...prev, { title: "", description: "" }])}
+                                        onClick={() => setServices((prev) => [...prev, { title: "", description: "", image: "" }])}
                                         className="text-decoration-none btn btn-success w-100"
                                     >
                                         + Add More Service
                                     </a>
                                 </div>
+                                {errors && <p className="text-danger text-danger mt-3">{errors.toString()}</p>}
                             </div>
-    
+
+                            {/* Save & Next Button */}
                             <div className='col-12 mt-4 text-center'>
-                                <button className='btn btn-success w-100 text-center' onClick={handleServiceSubmit}>Save & Next</button>
+                                <button className='btn btn-dark btn-lg w-100' onClick={handleServiceSubmit}>
+                                    Save & Next
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -1513,159 +1973,171 @@ export default function CreateBusiness() {
         );
     }
 
-
-
     function CreateProductPart() {
-        const [productSection, setProductSection] = useState([{
+        const initialState = [{
             title: "",
             description: "",
             image: "",
             price: "",
-        }]);
-    
-        const [s3Files, setS3Files] = useState({});
-    
+            loadingImage: false, // Loader state for image preview
+        }]
+        const [productSection, setProductSection] = useState(initialState);
+        const [error, setError] = useState("")
+
+        useEffect(() => {
+            setProductSection(formData?.productSection?.length ? formData.productSection : initialState)
+        }, [])
+
         const handleFileChange = (index, e) => {
             const file = e.target.files[0];
             if (file) {
+                const updatedProducts = [...productSection];
+                updatedProducts[index].loadingImage = true; // Start loader when the file is selected
+                setProductSection(updatedProducts);
+
                 const reader = new FileReader();
                 reader.onload = async (e) => {
                     const preReq = await preRequestFun(file, name);
                     let accessLink = '';
                     if (preReq && preReq.accessLink) {
                         accessLink = preReq.accessLink;
-                        const updatedProducts = [...productSection];
-                        updatedProducts[index].image = accessLink; 
-                        setProductSection(updatedProducts);
+                        updatedProducts[index].image = accessLink; // Update image URL
                     } else {
                         console.error('Access link not found in response.');
-                        return;
                     }
-                    
+                    updatedProducts[index].loadingImage = false; // Stop loader after processing the image
+                    setProductSection([...updatedProducts]); // Trigger re-render with updated products
                 };
+
                 reader.readAsDataURL(file);
             }
         };
-    
+
         const uploadImage = (index) => {
             document.querySelectorAll('.menuImageInput')[index].click();
         };
-    
+
         const handleProductSubmit = () => {
-            // Assuming formData is part of your state or props and is updated elsewhere
+            const isValid = productSection.every(product =>
+                product.title && product.description && (product.price || product.price === "")
+            );
+
+            if (!isValid) {
+                setError("Please fill out all fields except for the product price.")
+                return;
+            }
+
+            // Proceed with submission if all fields are filled
             setFormData((prevFormData) => ({
                 ...prevFormData,
                 productSection,
             }));
             handleNextStep();
         };
-    
+
         return (
-            <>
-                <div className='h-100vh'>
-                    <div className="row h-100 justify-content-center">
-                        {/* Left Image Section */}
-                        <div className="d-none d-md-block left-portion p-0 col-md-5 h-100">
-                            <img src="/src/assets/images/landing-page.jpg" alt="" className='w-100 h-100' />
+            <div className='h-100vh'>
+                <div className="row h-100 justify-content-center">
+                    <div className="d-none d-md-block left-portion p-0 col-md-5 h-100">
+                        <img src="/src/assets/images/landing-page.jpg" alt="" className='w-100 h-100' />
+                    </div>
+
+                    <div className="col-12 col-md-7 row align-items-end justify-content-center h-100 p-3 p-md-5 right-portion">
+                        <div className="col-12 text-start">
+                            <button className="btn btn-dark w-auto float-start" onClick={handlePrevStep}><i className="bi bi-arrow-left"></i></button>
                         </div>
-    
-                        {/* Right Form Section */}
-                        <div className="col-12 col-md-7 row align-items-end justify-content-center h-100 p-3 p-md-5 right-portion">
-                            <div className="col-12 text-start">
-                                <button className="btn btn-dark w-auto float-start" onClick={handlePrevStep}><i className="bi bi-arrow-left"></i></button>
+                        <div className='row justify-content-center'>
+                            <div className="col-12 text-center text-md-start mt-3">
+                                <h1 className="fw-bold">Add Product Details</h1>
                             </div>
-                            <div className='row justify-content-center'>
-                                <div className="col-12 text-center text-md-start mt-3">
-                                    <h1 className="fw-bold">Add Product Details</h1>
-                                </div>
-    
-                                <div className="col-12 ">
+
+                            <div className="col-12">
                                 <div className="col-12 text-center">
-                                <u><h5 className='fs-18 mb-4 p-1 text-center text-md-start text-dark fw-bold mt-3'>Add Products</h5></u>
+                                    <u><h5 className='fs-18 mb-4 p-1 text-center text-md-start text-dark fw-bold mt-3'>Add Products</h5></u>
                                 </div>
-                                    {productSection.map((item, index) => (
-                                        <div key={index} className='row align-items-center'>
+                                {productSection.map((item, index) => (
+                                    <div key={index} className='row align-items-center'>
+                                        <input
+                                            type="text"
+                                            name="title"
+                                            className='form-control form-control-lg mb-3'
+                                            placeholder='Product Title'
+                                            value={item.title}
+                                            onChange={(e) => {
+                                                const updatedProducts = [...productSection];
+                                                updatedProducts[index].title = e.target.value;
+                                                setProductSection(updatedProducts);
+                                            }}
+                                            required
+                                        />
+                                        <textarea
+                                            name="description"
+                                            className='form-control form-control-lg mb-3'
+                                            placeholder='Description'
+                                            value={item.description}
+                                            onChange={(e) => {
+                                                const updatedProducts = [...productSection];
+                                                updatedProducts[index].description = e.target.value;
+                                                setProductSection(updatedProducts);
+                                            }}
+                                            required
+                                        />
+                                        <div className="col-12 col-md-3 mb-3">
                                             <input
-                                                type="text"
-                                                name="title"
-                                                className='form-control form-control-lg mb-3'
-                                                placeholder='Product Title'
-                                                value={item.title}
-                                                onChange={(e) => {
-                                                    const updatedProducts = [...productSection];
-                                                    updatedProducts[index].title = e.target.value;
-                                                    setProductSection(updatedProducts);
-                                                }}
+                                                type="file"
+                                                hidden
+                                                className='menuImageInput'
+                                                onChange={(e) => handleFileChange(index, e)}
                                             />
-                                            <textarea
-                                                name="description"
-                                                className='form-control form-control-lg mb-3'
-                                                placeholder='Description'
-                                                value={item.description}
-                                                onChange={(e) => {
-                                                    const updatedProducts = [...productSection];
-                                                    updatedProducts[index].description = e.target.value;
-                                                    setProductSection(updatedProducts);
-                                                }}
-                                            />
-    
-                                            <div className="col-12 col-md-3 mb-3">
-                                                <input
-                                                    type="file"
-                                                    hidden
-                                                    className='menuImageInput'
-                                                    onChange={(e) => handleFileChange(index, e)}
-                                                />
-                                                <div onClick={() => uploadImage(index)} className="p-2 mt-2 add-logo-div">
-                                                    <div className="text-center">
+                                            <div onClick={() => uploadImage(index)} className="p-2 mt-2 add-logo-div">
+                                                <div className="text-center">
+                                                    {item.loadingImage ? (
+                                                        <div className="spinner-border text-primary" role="status"></div>
+                                                    ) : (
                                                         <img
-                                                            src={item.image || "/src/assets/images/add_image.png"}
+                                                            src={item.image || "/src/assets/images/add_image.png"} // Use the latest image URL
                                                             width="50"
                                                             alt="Add Product Image"
                                                         />
-                                                        <div className="col-12">
-                                                            <span>Add Image</span>
-                                                        </div>
-                                                    </div>
+                                                    )}
                                                 </div>
                                             </div>
-    
-                                            <div className="mt-2">
-                                                <input
-                                                    type="number"
-                                                    name="price"
-                                                    className='form-control form-control-lg w-100 mb-3'
-                                                    placeholder='Price'
-                                                    value={item.price}
-                                                    onChange={(e) => {
-                                                        const updatedProducts = [...productSection];
-                                                        updatedProducts[index].price = e.target.value;
-                                                        setProductSection(updatedProducts);
-                                                    }}
-                                                />
-                                            </div>
                                         </div>
-                                    ))}
-                                    <a
-                                        href="#"
-                                        onClick={() => setProductSection((prev) => [...prev, { title: "", description: "", image: "", price: "" }])}
-                                        className="text-decoration-none btn btn-success w-100"
-                                    >
-                                        + Add More Product
-                                    </a>
-                                </div>
+                                        <input
+                                            type="number"
+                                            name="price"
+                                            className='form-control form-control-lg w-100 mb-3'
+                                            placeholder='Price'
+                                            value={item.price}
+                                            onChange={(e) => {
+                                                const updatedProducts = [...productSection];
+                                                updatedProducts[index].price = e.target.value;
+                                                setProductSection(updatedProducts);
+                                            }}
+                                        />
+                                    </div>
+                                ))}
+                                <a
+                                    href="#"
+                                    onClick={() => setProductSection((prev) => [...prev, { title: "", description: "", image: "", price: "", loadingImage: false }])}
+                                    className="text-decoration-none btn btn-success w-100"
+                                >
+                                    + Add More Product
+                                </a>
                             </div>
-    
-                            <div className='col-12 mt-4 text-center'>
-                                <button className='btn btn-success w-100 text-center' onClick={handleProductSubmit}>Save & Next</button>
-                            </div>
+                            {error && <p className="text-danger text-danger mt-3">{error}</p>}
+
+                        </div>
+
+                        <div className='col-12 mt-4 text-center'>
+                            <button className='btn btn-success w-100 text-center' onClick={handleProductSubmit}>Save & Next</button>
                         </div>
                     </div>
                 </div>
-            </>
+            </div>
         );
     }
-    
+
 
     function SeoDetails() {
         const [socialMediaLinks, setSocialMediaLinks] = useState([
@@ -1679,6 +2151,11 @@ export default function CreateBusiness() {
             description: '',
             metaTags: ['']
         });
+
+        useEffect(() => {
+            setSocialMediaLinks(formData?.socialMediaLinks)
+            setSeoData(formData?.seoData)
+        }, [])
 
         // Handle tag change
         const handleTagChange = (index, value) => {
@@ -1733,7 +2210,7 @@ export default function CreateBusiness() {
         };
 
         return (
-                <div className='h-100vh'>
+            <div className='h-100vh'>
                 <div className="row h-100 justify-content-center">
                     {/* Left Image Section - Hidden on small screens */}
                     <div className="d-none d-md-block left-portion p-0 col-md-5 h-100">
@@ -1742,8 +2219,8 @@ export default function CreateBusiness() {
 
                     {/* Right Form Section */}
                     <div className="col-12 col-md-7 row align-items-end justify-content-center h-100 p-3 p-md-5 right-portion">
-                    <div className="col-12 text-start">
-                        <button className="btn btn-dark w-auto float-start" onClick={handlePrevStep}><i className="bi bi-arrow-left"></i></button>
+                        <div className="col-12 text-start">
+                            <button className="btn btn-dark w-auto float-start" onClick={handlePrevStep}><i className="bi bi-arrow-left"></i></button>
                         </div>
                         <div className='row justify-content-center'>
                             <div className='col-12 text-center text-md-start mt-4'>
@@ -1785,20 +2262,20 @@ export default function CreateBusiness() {
                                                 onChange={(e) => handleTagChange(index, e.target.value)}
                                             />
                                             {index > 0 ? (
-                                            <button
-                                                className="btn btn-danger"
-                                                onClick={() => removeTag(index)}
-                                                type="button"
-                                            >
-                                                Remove
-                                            </button>
-                                            ):
-                                            <button
-                                                className="btn btn-success" type='button'
-                                                onClick={addTag}
-                                            >
-                                                Add More
-                                            </button>
+                                                <button
+                                                    className="btn btn-danger"
+                                                    onClick={() => removeTag(index)}
+                                                    type="button"
+                                                >
+                                                    Remove
+                                                </button>
+                                            ) :
+                                                <button
+                                                    className="btn btn-success" type='button'
+                                                    onClick={addTag}
+                                                >
+                                                    Add More
+                                                </button>
                                             }
                                         </div>
                                     ))}
@@ -1835,7 +2312,6 @@ export default function CreateBusiness() {
         const [loading, setLoading] = useState(false);
         const [images, setImages] = useState([{ file: null, fileType: '', fileName: '' }]);
         // const [formData, setFormData] = useState({});
-        const [s3PreRequest, setS3PreRequest] = useState([]);
     
         const handleFileChange = (index, event) => {
             const file = event.target.files[0];
@@ -1845,23 +2321,23 @@ export default function CreateBusiness() {
                 setImages(updatedImages);
             }
         };
-    
+
         const addImageInput = () => {
             setImages((prevImages) => [...prevImages, { file: null, fileType: '', fileName: '' }]);
         };
-    
+
         const handleAddImageClick = (index) => {
             document.getElementById(`file-input-${index}`).click();
         };
-    
+
         const removeImage = (index) => {
             const updatedImages = images.filter((_, i) => i !== index);
             setImages(updatedImages);
         };
-    
+
         const handleGallerySubmit = async () => {
             const imageFiles = images.map((image) => image?.file);
-    
+
             if (imageFiles.length > 0) {
                 setLoading(true);
                 const requestBody = {
@@ -1870,39 +2346,39 @@ export default function CreateBusiness() {
                         file_type: file.type
                     }))
                 };
-    
+
                 try {
                     const url = 'https://businessbazaarserver.auxxweb.in/api/v1/s3url';
-    
+
                     // Fetch pre-signed S3 URLs
                     const response = await axios.post(url, requestBody, {
                         headers: {
                             'Content-Type': 'application/json',
                         },
                     });
-    
+
                     const s3Urls = response.data.data;
-    
+
                     // Upload each file to its respective S3 URL
                     await Promise.all(
                         s3Urls.map(async (data, index) => {
                             const { url } = data;
                             const file = imageFiles[index];
-    
+
                             await axios.put(url, file, {
                                 headers: { 'Content-Type': file.type },
                             });
                         })
                     );
-    
+
                     // Collect access links and store them in formData
                     const accessLinks = s3Urls.map(s3Data => s3Data.accessLink);
-    
+
                     setFormData(prevFormData => ({
                         ...prevFormData,
                         gallery: accessLinks,
                     }));
-                    handleNextStep(); 
+                    handleNextStep();
                 } catch (error) {
                     console.error('Error fetching S3 URLs or uploading files:', error);
                 } finally {
@@ -1912,7 +2388,7 @@ export default function CreateBusiness() {
                 handleNextStep(); // Proceed to the next step if there are no files to upload
             }
         };
-    
+
         return (
             <div className='h-100vh'>
                 <div className="row h-100 justify-content-center">
@@ -1920,7 +2396,7 @@ export default function CreateBusiness() {
                     <div className="d-none d-md-block left-portion p-0 col-md-5 h-100">
                         <img src="/src/assets/images/landing-page.jpg" alt="Landing Page" className='w-100 h-100' />
                     </div>
-    
+
                     {/* Right Form Section */}
                     <div className="col-12 col-md-7 row align-items-end justify-content-center h-100 p-3 p-md-5 right-portion">
                         <div className="col-12 text-start">
@@ -1928,12 +2404,12 @@ export default function CreateBusiness() {
                                 <i className="bi bi-arrow-left"></i>
                             </button>
                         </div>
-    
+
                         <div className='row justify-content-center'>
                             <div className='col-12 text-center text-md-start'>
                                 <h1 className='fw-bold'>Add Gallery</h1>
                             </div>
-    
+
                             {/* Image Upload Fields */}
                             <div className="col-12 p-md-5">
                                 <div className="row mb-3 gap-2">
@@ -1946,30 +2422,34 @@ export default function CreateBusiness() {
                                                 accept="image/*"
                                                 onChange={(e) => handleFileChange(index, e)}
                                             />
-                                            <div className="p-2 add-logo-div" onClick={() => handleAddImageClick(index)}>
-                                                <div className="text-center">
+                                            <div className="p-2 add-logo-div" >
+                                                {/* Remove Button for all except the first image */}
+                                                {index > 0 ? (
+
+                                                    <div className='d-flex justify-content-end'>
+                                                        <CloseIcon
+                                                            onClick={() => removeImage(index)}
+                                                        />
+                                                    </div>
+
+                                                ) : (
+                                                    <div style={{ height: "1.5rem" }}></div>
+                                                )}
+                                                <div className="text-center" onClick={() => handleAddImageClick(index)}>
                                                     {image.file ? (
                                                         <img
                                                             src={URL.createObjectURL(image.file)}
                                                             alt={`Uploaded Preview ${index}`}
                                                             className='img-preview'
                                                             width="100"
+                                                            height="80"
+                                                            style={{ objectFit: 'cover' }}
                                                         />
                                                     ) : (
-                                                        <img src="/src/assets/images/add_image.png" width="50" alt="Add Image" />
+                                                        <img src="/src/assets/images/add_image.png" width="50" alt="Add Image" style={{ height: '70px', objectFit: 'contain' }} />
                                                     )}
                                                 </div>
                                             </div>
-    
-                                            {/* Remove Button for all except the first image */}
-                                            {index > 0 && (
-                                                <button
-                                                    className="btn btn-danger mt-2 w-100"
-                                                    onClick={() => removeImage(index)}
-                                                >
-                                                    Remove
-                                                </button>
-                                            )}
                                         </div>
                                     ))}
                                 </div>
@@ -1980,7 +2460,7 @@ export default function CreateBusiness() {
                                 </div>
                             </div>
                         </div>
-    
+
                         {/* Save & Next Button */}
                         <div className="col-12 text-center p-3 p-md-5">
                             {loading ? (
@@ -1998,147 +2478,147 @@ export default function CreateBusiness() {
             </div>
         );
     }
-    
-function MoreVideos() {
-    const [videos, setVideos] = useState([{ file: null, fileType: '' }]);
-    const [s3PreRequest, setS3PreRequest] = useState([]);
 
-    const handleFileChange = (index, event) => {
-        const file = event.target.files[0];
-        if (file) {
-            const newVideos = [...videos];
-            newVideos[index] = { file, fileType: file.type };
-            setVideos(newVideos);
-        }
-    };
+    function MoreVideos() {
+        const [videos, setVideos] = useState([{ file: null, fileType: '' }]);
+        const [s3PreRequest, setS3PreRequest] = useState([]);
 
-    const addVideoInput = () => {
-        setVideos((prevVideos) => [...prevVideos, { file: null, fileType: '' }]);
-    };
+        const handleFileChange = (index, event) => {
+            const file = event.target.files[0];
+            if (file) {
+                const newVideos = [...videos];
+                newVideos[index] = { file, fileType: file.type };
+                setVideos(newVideos);
+            }
+        };
 
-    const removeVideoInput = (index) => {
-        const updatedVideos = videos.filter((_, i) => i !== index);
-        setVideos(updatedVideos);
-    };
+        const addVideoInput = () => {
+            setVideos((prevVideos) => [...prevVideos, { file: null, fileType: '' }]);
+        };
 
-    const handleAddVideoClick = (index) => {
-        document.getElementById(`file-input-${index}`).click();
-    };
+        const removeVideoInput = (index) => {
+            const updatedVideos = videos.filter((_, i) => i !== index);
+            setVideos(updatedVideos);
+        };
 
-    const handleGallerySubmit = async () => {
-        const videoFiles = videos.filter(video => video.file).map(video => video.file);
-        
-        // If there are no video files, skip uploading and move to the next step
-        if (videoFiles.length === 0) {
-            handleNextStep();
-            return;
-        }
+        const handleAddVideoClick = (index) => {
+            document.getElementById(`file-input-${index}`).click();
+        };
 
-        try {
-            const requestBody = {
-                files: videoFiles.map(file => ({
-                    position: 'Videos',
-                    file_type: file.type
-                }))
-            };
-            const url = 'https://businessbazaarserver.auxxweb.in/api/v1/s3url';
-            const response = await axios.post(url, requestBody, {
-                headers: { 'Content-Type': 'application/json' },
-            });
+        const handleGallerySubmit = async () => {
+            const videoFiles = videos.filter(video => video.file).map(video => video.file);
 
-            const s3Urls = response.data.data;
-            setS3PreRequest(s3Urls.map(url => url.url));
+            // If there are no video files, skip uploading and move to the next step
+            if (videoFiles.length === 0) {
+                handleNextStep();
+                return;
+            }
 
-            await Promise.all(
-                s3Urls.map(async (data, index) => {
-                    const { url } = data;
-                    const file = videoFiles[index];
-                    await axios.put(url, file, {
-                        headers: { 'Content-Type': file.type },
-                    });
-                })
-            );
-            const accessLinks = s3Urls.map(s3Data => s3Data.accessLink);
+            try {
+                const requestBody = {
+                    files: videoFiles.map(file => ({
+                        position: 'Videos',
+                        file_type: file.type
+                    }))
+                };
+                const url = 'https://businessbazaarserver.auxxweb.in/api/v1/s3url';
+                const response = await axios.post(url, requestBody, {
+                    headers: { 'Content-Type': 'application/json' },
+                });
 
-            setFormData(prevFormData => ({
-                ...prevFormData,
-                videos: accessLinks,
-            }));
+                const s3Urls = response.data.data;
+                setS3PreRequest(s3Urls.map(url => url.url));
 
-            handleNextStep();
-        } catch (error) {
-            console.error('Error uploading videos:', error);
-        }
-    };
+                await Promise.all(
+                    s3Urls.map(async (data, index) => {
+                        const { url } = data;
+                        const file = videoFiles[index];
+                        await axios.put(url, file, {
+                            headers: { 'Content-Type': file.type },
+                        });
+                    })
+                );
+                const accessLinks = s3Urls.map(s3Data => s3Data.accessLink);
 
-    return (
-        <div className='h-100vh'>
-            <div className="row h-100 justify-content-center">
-                <div className="d-none d-md-block left-portion p-0 col-md-5 h-100">
-                    <img src="/src/assets/images/landing-page.jpg" alt="Landing Page" className='w-100 h-100' />
-                </div>
+                setFormData(prevFormData => ({
+                    ...prevFormData,
+                    videos: accessLinks,
+                }));
 
-                <div className="col-12 col-md-7 row align-items-end justify-content-center h-100 p-3 p-md-5 right-portion">
-                    <div className="col-12 text-start">
-                        <button className="btn btn-dark w-auto float-start" onClick={handlePrevStep}><i className="bi bi-arrow-left"></i></button>
+                handleNextStep();
+            } catch (error) {
+                console.error('Error uploading videos:', error);
+            }
+        };
+
+        return (
+            <div className='h-100vh'>
+                <div className="row h-100 justify-content-center">
+                    <div className="d-none d-md-block left-portion p-0 col-md-5 h-100">
+                        <img src="/src/assets/images/landing-page.jpg" alt="Landing Page" className='w-100 h-100' />
                     </div>
-                    <div className='row justify-content-center'>
-                        <div className='col-12 text-center text-md-start mt-2'>
-                            <h1 className='fw-bold'>Add Video (Optional)</h1>
-                        </div>
 
-                        <div className="col-12">
-                            <div className="row mb-3">
-                                {videos.map((video, index) => (
-                                    <div className="col-6 col-lg-3 mb-3" key={index}>
-                                        <input
-                                            type="file"
-                                            hidden
-                                            id={`file-input-${index}`}
-                                            accept="video/*"
-                                            onChange={(e) => handleFileChange(index, e)}
-                                        />
-                                        <div className="p-2 add-logo-div" onClick={() => handleAddVideoClick(index)}>
-                                            <div className="text-center">
-                                                {video.file ? (
-                                                    <video width="100%" controls className='video-preview'>
-                                                        <source src={URL.createObjectURL(video.file)} type={video.file.type} />
-                                                        Your browser does not support the video tag.
-                                                    </video>
-                                                ) : (
-                                                    <img src="/src/assets/images/add-video.png" width="50" alt="Add Video" />
-                                                )}
-                                                <div className="col-12">
-                                                    <span>Add Video</span>
+                    <div className="col-12 col-md-7 row align-items-end justify-content-center h-100 p-3 p-md-5 right-portion">
+                        <div className="col-12 text-start">
+                            <button className="btn btn-dark w-auto float-start" onClick={handlePrevStep}><i className="bi bi-arrow-left"></i></button>
+                        </div>
+                        <div className='row justify-content-center'>
+                            <div className='col-12 text-center text-md-start mt-2'>
+                                <h1 className='fw-bold'>Add Video (Optional)</h1>
+                            </div>
+
+                            <div className="col-12">
+                                <div className="row mb-3">
+                                    {videos.map((video, index) => (
+                                        <div className="col-6 col-lg-3 mb-3" key={index}>
+                                            <input
+                                                type="file"
+                                                hidden
+                                                id={`file-input-${index}`}
+                                                accept="video/*"
+                                                onChange={(e) => handleFileChange(index, e)}
+                                            />
+                                            <div className="p-2 add-logo-div" onClick={() => handleAddVideoClick(index)}>
+                                                <div className="text-center">
+                                                    {video.file ? (
+                                                        <video width="100%" controls className='video-preview'>
+                                                            <source src={URL.createObjectURL(video.file)} type={video.file.type} />
+                                                            Your browser does not support the video tag.
+                                                        </video>
+                                                    ) : (
+                                                        <img src="/src/assets/images/add-video.png" width="50" alt="Add Video" />
+                                                    )}
+                                                    <div className="col-12">
+                                                        <span>Add Video</span>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
 
-                                        {index > 0 && (
-                                            <div className="text-center mt-2">
-                                                <button className="btn btn-danger btn-sm" onClick={() => removeVideoInput(index)}>
-                                                    Remove
-                                                </button>
-                                            </div>
-                                        )}
-                                    </div>
-                                ))}
+                                            {index > 0 && (
+                                                <div className="text-center mt-2">
+                                                    <button className="btn btn-danger btn-sm" onClick={() => removeVideoInput(index)}>
+                                                        Remove
+                                                    </button>
+                                                </div>
+                                            )}
+                                        </div>
+                                    ))}
+                                </div>
                             </div>
                         </div>
-                    </div>
 
-                    <div className="col-12 text-center p-3 p-md-5">
-                        <button className="btn btn-success w-100 text-white p-2" onClick={handleGallerySubmit}>
-                            Save & Next
-                        </button>
+                        <div className="col-12 text-center p-3 p-md-5">
+                            <button className="btn btn-success w-100 text-white p-2" onClick={handleGallerySubmit}>
+                                Save & Next
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    );
-}
-    
-    
+        );
+    }
+
+
 
     function PreviewTemplates() {
         const [currentSlide, setCurrentSlide] = useState(0);
@@ -2148,13 +2628,13 @@ function MoreVideos() {
         const [colorTheme, setColorTheme] = useState('')
         const [visible, setVisible] = useState(false);
         const [review, setReview] = useState([{
-            rating:'',
-            name:'',
-            description:'',
+            rating: '',
+            name: '',
+            description: '',
         }]);
         const [closeDays, setCloseDays] = useState([]);
         const allDays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-    
+
         const handleInputChange = (e) => {
             const { name, value } = e.target;
             setReview((prevState) => ({
@@ -2162,41 +2642,40 @@ function MoreVideos() {
                 [name]: value,
             }));
         };
-    
+        console.log(formData)
         useEffect(() => {
             const fetchData = async () => {
                 setBusinessData(formData)
-               
+
+
+
                 setColorTheme(formData.theme)
                 setLoading(false);
-                const closed = allDays.filter(day => 
+                const closed = allDays.filter(day =>
                     !formData.businessTiming.workingDays.map(d => d.toLowerCase()).includes(day)
                 );
                 setCloseDays(closed);
-                
+
             }
-    
-    
+
+
             fetchData()
-    
+
         }, [id])
-    
+
         const settings4 = {
             dots: false,
-            infinite: true,
+            // infinite: true,
             autoplay: true,
             arrows: false,
-            // centerMode: true,
             speed: 500,
-            slidesToShow: 2, // Number of dishes to show
-            // mobileFirst: true,
+            slidesToShow: 2,
             slidesToScroll: 1,
-    
             responsive: [
                 {
                     breakpoint: 1024,
                     settings: {
-                        slidesToShow: 3,
+                        slidesToShow: 2,
                         slidesToScroll: 1,
                         infinite: true,
                     },
@@ -2229,8 +2708,9 @@ function MoreVideos() {
                         slidesToScroll: 1,
                     },
                 },
-            ]
+            ],
         };
+
         const setting2 = {
             dots: false,
             arrows: false,
@@ -2239,14 +2719,14 @@ function MoreVideos() {
             // centerMode: true,
             speed: 500,
             slidesToShow: 2,
-            slidesToScroll: 1,
+            slidesToScroll: 2,
             afterChange: (current) => setCurrentSlide(current),
             responsive: [
                 {
                     breakpoint: 1024,
                     settings: {
                         slidesToShow: 3,
-                        slidesToScroll: 1,
+                        slidesToScroll: 2,
                         infinite: true,
                     },
                 },
@@ -2280,8 +2760,8 @@ function MoreVideos() {
                 },
             ]
         };
-    
-    
+
+
         const settings3 = {
             dots: false,
             infinite: true,
@@ -2330,8 +2810,8 @@ function MoreVideos() {
                 },
             ]
         };
-    
-    
+
+
         const gallery = {
             dots: true,
             infinite: true,
@@ -2358,25 +2838,30 @@ function MoreVideos() {
         if (loading) {
             return <div className='h-100vh text-center '>
                 <div className='row h-100 justify-content-center align-items-center'>
-    
+
                     <div className='col-3 '>Loading...</div>
                 </div>
             </div>;
         }
-    
+
         // If there's no business data (e.g., fetch failed), show an error message
         if (!businessData) {
             return <div>Error loading business data.</div>;
         }
-    
-    
-    
+
+
+
         return (
-            <>
-                <link rel="preconnect" href="https://fonts.googleapis.com" />
-                <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-                <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap" rel="stylesheet" />
-                <style> {`
+           <>
+            <link rel="preconnect" href="https://fonts.googleapis.com" />
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin />
+      <link
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap"
+        rel="stylesheet"
+      />
+      <style>
+        {" "}
+        {`
                         ::-webkit-scrollbar {
                             width: 12px; /* Width of the entire scrollbar */
                         }
@@ -2385,36 +2870,36 @@ function MoreVideos() {
                         ::-webkit-scrollbar-track {
                             background: rgb(243, 243, 244); /* Background of the scrollbar track */
                         }::-webkit-scrollbar-thumb {
-                            background-color: ${colorTheme}; /* Color of the scrollbar thumb */
+                            background-color: ${formData?.theme}; /* Color of the scrollbar thumb */
                             border-radius: 10px;     /* Rounded edges of the thumb */
-                            border: 3px solid  ${colorTheme}; /* Padding around the thumb */
+                            border: 3px solid  ${formData?.theme}; /* Padding around the thumb */
                         }
                     .theme
                     {
-                        background-color: ${colorTheme};
+                        background-color: ${formData?.theme};
                         color: white;
                         border: none;
                     }.service-design.active{
-                        background-color: ${colorTheme};
+                        background-color: ${formData?.theme};
                     }.address-section{
-                    background-color:${colorTheme};
+                    background-color:${formData?.theme};
                     }.address-logo i{
-                    color: ${colorTheme};
+                    color: ${formData?.theme};
                     }.cat-option{
-                        border-right: 1px dashed ${colorTheme};
+                        border-right: 1px dashed ${formData?.theme};
                     }.text-orange{
-                            color: ${colorTheme};
+                            color: ${formData?.theme};
                         }.dish-div:hover{
-                            background-color: ${colorTheme};
+                            background-color: ${formData?.theme};
                             color:white;
                         }.product-section{
-                    padding:20px;
-                    border:1px solid ${colorTheme};
-                    border-radius:16px;
-                        }.slick-dots .slick-active button{
-                            background-color: ${colorTheme};
-                            border-radius: 16px;
-                        }
+                        padding:20px;
+                        border:1px solid ${formData?.theme};
+                        border-radius:16px;
+                            }.slick-dots .slick-active button{
+                                background-color: ${formData?.theme};
+                                border-radius: 16px;
+                            }
                         `}
                 </style>
                 <Navbar expand="lg" className="bg-white pjs fixed-top" style={{ paddingBlock: "5px" }}>
@@ -2424,9 +2909,9 @@ function MoreVideos() {
                             <img src={businessData.logo} alt="" />
                             <span className="ms-2">{businessData.businessName}</span>
                         </Navbar.Brand>
-    
+
                         <Navbar.Toggle aria-controls="basic-navbar-nav" style={{ color: 'black' }} />
-    
+
                         <Navbar.Collapse id="basic-navbar-nav">
                             <Nav className="ms-auto w-100 justify-content-evenly jcc">
                                 <NavLink href="#menu" className='text-black text-center text-lg-start  text-decoration-none fs-14' style={{ color: 'black' }}>
@@ -2469,7 +2954,7 @@ function MoreVideos() {
                                     <img src="/src/assets/images/baner-image2.png" alt="" />
                                 </div>
                             </div>
-    
+
                             {/* Text Content */}
                             <div className="col-12 col-lg-6">
                                 <div className="row align-items-center">
@@ -2484,16 +2969,16 @@ function MoreVideos() {
                                         </p>
                                     </div>
                                     <div className="mt-3 col-12">
-                                    <div className="row">
-                                        <div className="col-6 col-lg-3 mb-2">
-                                            <NavLink
-                                                to='#about' className="btn btn-dark text-white radius-theme box-shadow w-100 p-1" style={{ backgroundColor: '#212529' }}>View More</NavLink>
+                                        <div className="row">
+                                            <div className="col-6 col-lg-3 mb-2">
+                                                <NavLink
+                                                    to='#about' className="btn btn-dark text-white radius-theme box-shadow w-100 p-1" style={{ backgroundColor: '#212529' }}>View More</NavLink>
+                                            </div>
+                                            <div className="col-6 col-lg-3 mb-2">
+                                                <NavLink
+                                                    to='#service' className="btn btn-dark text-white radius-theme box-shadow theme w-100 p-1">Services</NavLink>
+                                            </div>
                                         </div>
-                                        <div className="col-6 col-lg-3 mb-2">
-                                            <NavLink
-                                                to='#service' className="btn btn-dark text-white radius-theme box-shadow theme w-100 p-1">Services</NavLink>
-                                        </div>
-                                    </div>
                                     </div>
                                     <div className="mt-5 col-12 social-media gap-3">
                                         <a href={businessData.socialMediaLinks[0].link} target='_blank' className="contact-banner text-dark">
@@ -2508,7 +2993,7 @@ function MoreVideos() {
                                     </div>
                                 </div>
                             </div>
-    
+
                             {/* Right Image for Desktop View */}
                             <div className="col-12 col-lg-6 text-end d-none d-lg-block">
                                 <img src={businessData.landingPageHero.coverImage} alt="" className='banner-image' />
@@ -2519,7 +3004,7 @@ function MoreVideos() {
                         </div>
                     </div>
                 </section>
-    
+
                 <div className="mt-5 mb-5">
                     <div className="container p-top">
                         <div className="col-12 address-section">
@@ -2535,7 +3020,7 @@ function MoreVideos() {
                                         </div>
                                     </div>
                                 </div>
-    
+
                                 <div className="col-12 col-lg-4 mb-3 mb-lg-0">
                                     <div className="row align-items-center justify-content-start">
                                         <div className="col-auto address-logo">
@@ -2544,12 +3029,12 @@ function MoreVideos() {
                                         <div className="col">
                                             <span className="fs-13">Send Email</span>
                                             {businessData.contactDetails.emails.map((email, index) => (
-    <p className='fs-16' key={index}>{email.number}</p>
-))}
+                                                <p className='fs-16' key={index}>{email.number}</p>
+                                            ))}
                                         </div>
                                     </div>
                                 </div>
-    
+
                                 <div className="col-12 col-lg-4 mb-3 mb-lg-0">
                                     <div className="row align-items-center justify-content-start">
                                         <div className="col-auto address-logo">
@@ -2558,8 +3043,8 @@ function MoreVideos() {
                                         <div className="col">
                                             <span className="fs-13">Contact</span>
                                             {businessData.contactDetails.mobileNumbers.map((mobile, index) => (
-    <p className='fs-16' key={index}>{mobile.number}</p>
-))}
+                                                <p className='fs-16' key={index}>{mobile.number}</p>
+                                            ))}
                                         </div>
                                     </div>
                                 </div>
@@ -2567,8 +3052,8 @@ function MoreVideos() {
                         </div>
                     </div>
                 </div>
-    
-    
+
+
                 <section className=' h-auto' style={{ backgroundColor: "#F3F3F4" }} id='about'>
                     <div className="container p-top">
                         <div className="row mt-5 align-items-center mb-5">
@@ -2578,7 +3063,7 @@ function MoreVideos() {
                                     className="img-fluid"
                                     alt=""
                                 />
-    
+
                             </div>
                             <div className="col-12 col-lg-6">
                                 <div className="col-12 mb-3">
@@ -2591,11 +3076,11 @@ function MoreVideos() {
                                 </div>
                             </div>
                         </div>
-    
-    
+
+
                     </div>
                 </section>
-    
+
                 <section className="h-auto" style={{ backgroundColor: "#F3F3F4" }}>
                     <div className="container p-top">
                         <div className="col-12 mb-5">
@@ -2613,13 +3098,46 @@ function MoreVideos() {
                             </div>
                         </div>
                         <div className="col-12">
-    
-                            <div className="col-12 mb-5 row david-font">
-                                <Slider {...settings4}>
-                                    {businessData.specialServices.data.map((dish, index) => (
-                                        <div key={index} className="dish-div col-12 text-center  p-3">
-                                            <div className="col-12 position-relative text-center" style={{ bottom: "60px" }}>
-                                                <img src={dish.image} alt={dish.title} style={{ width: '300px', height: '300px', objectFit: 'cover' }} />
+                            <div className="col-12 mb-5 row justify-content-center david-font">
+                                {businessData.specialServices.data.length > 2 ? (
+                                    <Slider {...settings4}>
+                                        {businessData.specialServices.data.map((dish, index) => (
+                                            <div key={index} className="dish-div col-12 col-lg-6 text-center p-3">
+                                                <div className="col-12 position-relative">
+                                                    <img
+                                                        src={dish.image}
+                                                        alt={dish.title}
+                                                        style={{
+                                                            width: '100%',
+                                                            height: 'auto',
+                                                            maxWidth: '300px',
+                                                            objectFit: 'cover',
+                                                        }}
+                                                    />
+                                                </div>
+                                                <div className="col-12">
+                                                    <h2 className="fs-20 fw-bold">{dish.title}</h2>
+                                                </div>
+                                                <div className="col-12 mt-3 mb-3">
+                                                    <p>{dish.description}</p>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </Slider>
+                                ) : (
+                                    businessData.specialServices.data.map((dish, index) => (
+                                        <div key={index} className="dish-div col-12 col-lg-6 text-center p-3">
+                                            <div className="col-12 position-relative">
+                                                <img
+                                                    src={dish.image}
+                                                    alt={dish.title}
+                                                    style={{
+                                                        width: '100%',
+                                                        height: 'auto',
+                                                        maxWidth: '300px',
+                                                        objectFit: 'cover',
+                                                    }}
+                                                />
                                             </div>
                                             <div className="col-12">
                                                 <h2 className="fs-20 fw-bold">{dish.title}</h2>
@@ -2628,10 +3146,9 @@ function MoreVideos() {
                                                 <p>{dish.description}</p>
                                             </div>
                                         </div>
-                                    ))}
-                                </Slider>
+                                    ))
+                                )}
                             </div>
-    
                         </div>
                     </div>
                 </section>
@@ -2644,11 +3161,11 @@ function MoreVideos() {
                                 </div>
                             </div>
                         </div>
-    
-    
+
+
                         <div className="mt-5 david-font">
                             <div className="mb-5">
-                                <div className="row mb-3">
+                                <div className="row justify-content-center mb-3">
                                     {businessData.productSection.map((item, index) => (
                                         <div className="col-12 col-lg-6 mt-3" key={index}>
                                             <div className="row  product-section align-items-center">
@@ -2670,42 +3187,61 @@ function MoreVideos() {
                         </div>
                     </div>
                 </section>
-    
-    
+
+
                 <section className="h-auto david-font" style={{ backgroundColor: "#F3F3F4" }}>
                     <div className="container p-top">
-                        <div className="col-12 mt-5 text-center text-lg-start">
-                            <h1 className='fw-bold'>Services We Provide</h1>
+                        <div className="col-12 mt-5 text-center ">
+                            <h1 className='fw-bold text-center'>Services We Provide</h1>
                         </div>
-                        <div className="col-12 mb-5">
-                            <Slider {...setting2} className='mb-5'>
-                                {businessData.service.map((service, index) => (
-                                    <div key={index} className={`col-12 col-lg-4 service-design ${index === currentSlide ? 'active' : 'bg-white'}  mt-5 mb-5 text-center`}>
+                        <div className="col-12 mb-5 row justify-content-center">
+                            {businessData.service.length > 3 ? (
+                                <Slider {...setting2} className='mb-5'>
+                                    {businessData.service.map((service, index) => (
+                                        <div
+                                            key={index}
+                                            className={`col-12 col-lg-4 service-design ${index === currentSlide ? 'active' : ''} mt-5 mb-5 text-center`}
+                                        >
+                                            <div className="col-12 text-center">
+                                                <h3>{service.title}</h3>
+                                            </div>
+                                            <div className="col-12 mt-5">
+                                                <p className="text-center">{service.description}</p>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </Slider>
+                            ) : (
+                                businessData.service.map((service, index) => (
+                                    <div
+                                        key={index}
+                                        className={`col-12 col-lg-4 service-design ${index === currentSlide ? 'active' : ''} mt-5 mb-5 text-center`}
+                                    >
                                         <div className="col-12 text-center">
                                             <h3>{service.title}</h3>
                                         </div>
                                         <div className="col-12 mt-5">
-                                            <p className='text-center'>{service.description}</p>
+                                            <p className="text-center">{service.description}</p>
                                         </div>
-                                        
+                                    </div>
+                                ))
+                            )}
+                        </div>
+
+
+                        <div className="col-12 mb-5" id='gallery'>
+                            <div className="col-12 mb-5 mt-5">
+                                <h1 className="fw-bold text-center">Gallery</h1>
+                            </div>
+                            <Slider {...gallery} className="gallery-slider">
+                                {businessData?.gallery?.map((image, index) => (
+                                    <div key={index} className="p-2">
+                                        <img src={image} alt="" className='w-100 gallery-img' />
                                     </div>
                                 ))}
                             </Slider>
                         </div>
-    
-                        <div className="col-12 mb-5" id='gallery'>
-                        <div className="col-12 mb-5 mt-5">
-                            <h1 className="fw-bold text-center">Gallery</h1>
-                        </div>
-                        <Slider {...gallery} className="gallery-slider">
-                            {businessData?.gallery?.map((image, index) => (
-                                <div key={index} className="p-2">
-                                    <img src={image} alt="" className='w-100 gallery-img' />
-                                </div>
-                            ))}
-                        </Slider>
-                    </div>
-    
+
                     </div>
                 </section>
                 <section className='bg-white d-none'>
@@ -2731,15 +3267,15 @@ function MoreVideos() {
                                     </div>
                                 </div>
                             </div>
-    
+
                             <div className="col-12 col-lg-6">
                                 <div className="col-12 text-center">
                                     <img src="/src/assets/images/chef.png" alt="" className='chef-div img-fluid w-100' />
-    
+
                                 </div>
                             </div>
-    
-    
+
+
                         </div>
                     </div>
                 </section>
@@ -2753,7 +3289,7 @@ function MoreVideos() {
                                 At Our Restaurant, we strive to provide the best dining experience possible. Our loyal customers have been satisfied with our culinary skills, service, and overall ambiance. Our positive feedback has helped us continuously improve our dining experience. If you're a loyal customer, we'd love to hear from you!
                             </p>
                         </div>
-    
+
                         <div className="mt-5">
                             <Slider {...settings3}>
                                 {businessData.testimonial.reviews.map((testimonial, index) => (
@@ -2761,18 +3297,18 @@ function MoreVideos() {
                                         <div className="col-12 text-center test-button-img-div">
                                             <img src="/src/assets/images/user.png" alt={testimonial.name} className="img-fluid" />
                                         </div>
-    
+
                                         <div className='text-warning text-center mt-0 m-0'>
                                             {[...Array(Math.floor(testimonial.rating))].map((star, i) => (
                                                 <i key={i} className="bi bi-star-fill"></i>
                                             ))}
                                             {testimonial.rating % 1 !== 0 && <i className="bi bi-star-half"></i>}
                                         </div>
-    
+
                                         <div className="col-12 mt-3">
                                             <p>{testimonial.review}</p>
                                         </div>
-    
+
                                         <div className="col-12 text-center mb-5">
                                             <span className='fw-bold david-font'>{testimonial.name}</span>
                                         </div>
@@ -2783,57 +3319,57 @@ function MoreVideos() {
                         <div className="col-12">
                             <div className="col-12 text-center mb-3">
                                 <button className="btn btn-dark text-white radius-theme box-shadow theme mt-5" onClick={() => setVisible(true)} >Write Review</button>
-    
+
                             </div>
                         </div>
                     </div>
                 </section>
                 <Dialog
-                header="Write a Review"
-                visible={visible}
-                onHide={() => { if (!visible) return; setVisible(false); }}
-                style={{ width: '50vw' }}
-                breakpoints={{ '960px': '75vw', '641px': '100vw' }}
-            >
-                <div className="container">
-                    <div className="p-3 justify-content-center">
-                        <Rating
-                            value={review.rating}  
-                            onChange={(e) => setReview({ ...review, rating: e.value })} 
-                            cancel={false}
-                        />
-                    </div>
-                    <div className="col-12">
-                        <InputText
-                            keyfilter="text"
-                            placeholder="Full Name"
-                            className='w-100'
-                            value={review.name}  
-                            name="name"  
-                            onChange={handleInputChange} 
-                        />
-                    </div>
-    
-                    {/* Description Input Field */}
-                    <div className="col-12 mt-3">
-                        <div className="card flex justify-content-center">
-                            <InputTextarea
-                                value={review.description}  // Bind the description from state
-                                onChange={handleInputChange}  // Update description in state
-                                rows={5}
-                                cols={30}
-                                name="description"  // Important: use `name` for targeting in handleInputChange
-                                placeholder="Write your review here..."
+                    header="Write a Review"
+                    visible={visible}
+                    onHide={() => { if (!visible) return; setVisible(false); }}
+                    style={{ width: '50vw' }}
+                    breakpoints={{ '960px': '75vw', '641px': '100vw' }}
+                >
+                    <div className="container">
+                        <div className="p-3 justify-content-center">
+                            <Rating
+                                value={review.rating}
+                                onChange={(e) => setReview({ ...review, rating: e.value })}
+                                cancel={false}
                             />
                         </div>
-                    </div>
-                    <div className="col-12 mt-3">
-                        <div className="row">
-                            <button className="btn-theme2 btn theme radius">Submit Review</button>
+                        <div className="col-12">
+                            <InputText
+                                keyfilter="text"
+                                placeholder="Full Name"
+                                className='w-100'
+                                value={review.name}
+                                name="name"
+                                onChange={handleInputChange}
+                            />
+                        </div>
+
+                        {/* Description Input Field */}
+                        <div className="col-12 mt-3">
+                            <div className="card flex justify-content-center">
+                                <InputTextarea
+                                    value={review.description}  // Bind the description from state
+                                    onChange={handleInputChange}  // Update description in state
+                                    rows={5}
+                                    cols={30}
+                                    name="description"  // Important: use `name` for targeting in handleInputChange
+                                    placeholder="Write your review here..."
+                                />
+                            </div>
+                        </div>
+                        <div className="col-12 mt-3">
+                            <div className="row">
+                                <button className="btn-theme2 btn theme radius">Submit Review</button>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </Dialog>
+                </Dialog>
                 <section className="h-auto david-font" id='contact'>
                     <div className="container p-top">
                         <div className="col-12 newsletter position-relative">
@@ -2853,7 +3389,7 @@ function MoreVideos() {
                                         </div>
                                     </div>
                                 </div>
-    
+
                                 <div className='d-block d-lg-none'>
                                     <h2 className="fs-16 fw-bold text-white">
                                         Create Your Own Business <br />
@@ -2872,13 +3408,13 @@ function MoreVideos() {
                         </div>
                     </div>
                 </section>
-    
-    
+
+
                 <footer className='h-auto'>
                     <div className="container pjs  p-top">
                         <div className="mt-5">
                             <div className="row">
-                                <div className="col-12 col-lg-4">
+                                <div className="col-12 col-lg-3">
                                     <div className="col-12 d-block d-lg-flex text-center text-lg-start text mt-5">
                                         <div className="nav-logo width-fit">
                                             <img src={businessData.logo} alt="" />
@@ -2891,12 +3427,9 @@ function MoreVideos() {
                                         </p>
                                     </div>
                                 </div>
-    
-                                <div className="col-12 col-lg-4">
+
+                                <div className="col-12 col-lg-2">
                                     <div className="col-12 mt-5">
-                                        <div className="col-12 mt-3 mb-3 text-center text-lg-start">
-                                            <a href="#" className=" fs-14 text-decoration-none text-orange">NAVIGATION</a>
-                                        </div>
                                         <div className="col-12 mt-3 mb-3  text-center text-lg-start">
                                             <a href="#" className="fs-14 text-decoration-none" style={{ color: "#A4B3CB" }}>Menu</a>
                                         </div>
@@ -2911,13 +3444,49 @@ function MoreVideos() {
                                         </div>
                                     </div>
                                 </div>
-    
+
+
                                 <div className="col-12 col-lg-4">
+                                    <div className="row">
+                                        <div className="col-lg-6">
+                                            <div className="col-12">
+                                                <div className="col-12 mt-3 mb-3 text-center text-lg-start">
+                                                    <a href="#" className=" fs-14 text-decoration-none text-orange">OPENING DAYS</a>
+                                                </div>
+                                                <div className="mt-3 text-center text-lg-start" style={{ color: "#A4B3CB" }}>
+                                                    {businessData.businessTiming.workingDays.map((day, index) => (
+                                                        <p>{day}</p>
+                                                    ))}
+                                                </div>
+                                                <div className="mt-3 text-center text-lg-start" style={{ color: "#A4B3CB" }}>
+                                                    <span>8:00 am to 9:00 pm</span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+                                        <div className="col-lg-6">
+                                            <div className="col-12 mt-5 text-center text-lg-start">
+                                                <div className="mt-3" style={{ color: "#A4B3CB" }}>
+                                                    {closeDays.map((day, index) => (
+                                                        <p>{day}</p>
+                                                    ))}
+                                                </div>
+                                                <div className="mt-3" style={{ color: "#A4B3CB" }}>
+                                                    <span>CLOSED</span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                                <div className="col-12 col-lg-3">
                                     <div className="col-12 mt-5">
                                         <div className="col-12 mt-3 mb-3 text-center text-lg-start">
                                             <a href="#" className=" fs-14 text-decoration-none text-orange">Follow Us</a>
                                         </div>
-    
+
                                         <div className="mt-5 col-12 row gap-3 jcc-md text-center text-lg-start">
                                             <a href={businessData.socialMediaLinks[0].link} className="contact-banner text-orange text-center text-lg-start">
                                                 <i className="bi bi-facebook text-orange"></i>
@@ -2930,60 +3499,26 @@ function MoreVideos() {
                                             </a>
                                             {/* <hr style={{width:"fit-content",opacity: 0.15,}}></hr> */}
                                         </div>
-    
+
                                     </div>
                                 </div>
-    
+
+
                                 <div className="col-12">
                                     <div className="row">
-                                        <div className="col-lg-4">
-                                            <div className="col-12">
-                                                <div className="col-12 mt-3 mb-3 text-center text-lg-start">
-                                                    <a href="#" className=" fs-14 text-decoration-none text-orange">OPENING HOURS</a>
-                                                </div>
-                                                <div className="mt-3 text-center text-lg-start" style={{ color: "#A4B3CB" }}>
-                                                    {businessData.businessTiming.workingDays.map((day, index) => (
-                                                        <p>{day}</p>
-                                                    ))}
-                                                </div>
-                                                <div className="mt-3 text-center text-lg-start" style={{ color: "#A4B3CB" }}>
-                                                    <span>8:00 am to 9:00 pm</span>
-                                                </div>
-                                            </div>
-                                        </div>
-    
-    
-                                        <div className="col-lg-4">
-                                            <div className="col-12 mt-5 text-center text-lg-start">
-                                                <div className="mt-3" style={{ color: "#A4B3CB" }}>
-                                                   {closeDays.map((day,index) =>(
-                                                    <p>{day}</p>
-                                                   ))}
-                                                </div>
-                                                <div className="mt-3" style={{ color: "#A4B3CB" }}>
-                                                    <span>CLOSED</span>
-                                                </div>
-                                            </div>
-                                        </div>
-    
-                                    </div>
-                                </div>
-    
-                                <div className="col-12">
-                                    <div className="row">
-                                        <div className="col-12 col-lg-8 mt-5 text-center text-lg-start" style={{ color: "#A4B3CB" }}>
-                                            <span>© 2024 Business Bazaar. All Right Reserved</span>
-                                        </div>
-    
+
                                         <div className="col-12 col-lg-6  text-center text-lg-start mb-5 mt-5" style={{ color: "#A4B3CB" }}>
                                             <div className="row">
                                                 <div className="col-12 col-lg-6">Terms of Service</div>
                                                 <div className="col-12 col-lg-6">Privacy Policy</div>
                                             </div>
                                         </div>
+                                        <div className="col-12 col-lg-8 mt-5 text-center text-lg-start" style={{ color: "#A4B3CB" }}>
+                                            <span>© 2024 Business Bazaar. All Right Reserved</span>
+                                        </div>
                                     </div>
                                 </div>
-    
+
                             </div>
                         </div>
                     </div>
@@ -3001,7 +3536,7 @@ function MoreVideos() {
             }));
             handleNextStep();
         }
-    
+
         return (
             <>
                 <div className="h-100vh">
@@ -3068,11 +3603,11 @@ function MoreVideos() {
             </>
         );
     }
-    
+
 
     const Razorpay = () => {
         const [isScriptLoaded, setScriptLoaded] = useState(false);
-        const [businessId,setBusinessId] = useState('');
+        const [businessId, setBusinessId] = useState('');
         const loadRazorpayScript = () => {
             return new Promise((resolve) => {
                 const script = document.createElement('script');
@@ -3107,39 +3642,39 @@ function MoreVideos() {
                 description: 'Test Transaction',
                 image: formData.logo, // Dummy logo URL
                 handler: async function (response) {
-                    
-                        var paymentDetails = {
-                         "plan": formData.selectedPlan,
-                         "paymentId": response.razorpay_payment_id,
-                         "date": "2023-10-06T08:30:00.000Z",
-                         "paymentStatus": "success"
-                     }
-                        try {
-                            const response = await axios.post(
-                                'https://businessbazaarserver.auxxweb.in/api/v1/payment', 
-                                paymentDetails, 
-                                {
-                                    headers: {
-                                        'Content-Type': 'application/json',
-                                        'Authorization': `Bearer ${id}`,  // Sending businessId as bearer token
-                                    },
-                                }
-                            );
-                            console.log(response)
-                            if (response.status !== 200) {
-                                throw new Error(`HTTP error! Status: ${response.status}`);
-                            }
 
-                            const data = response.data;
-                            if (data.success) {
-                                return data; 
-                            } else {
-                                console.error('Failed to create business details:', data.message || 'Unknown error');
-                                throw new Error(data.message || 'Failed to create business details');
+                    var paymentDetails = {
+                        "plan": formData.selectedPlan,
+                        "paymentId": response.razorpay_payment_id,
+                        "date": "2023-10-06T08:30:00.000Z",
+                        "paymentStatus": "success"
+                    }
+                    try {
+                        const response = await axios.post(
+                            'https://businessbazaarserver.auxxweb.in/api/v1/payment',
+                            paymentDetails,
+                            {
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'Authorization': `Bearer ${id}`,  // Sending businessId as bearer token
+                                },
                             }
-                        } catch (error) {
-                            console.error("Error occurred while fetching business site details:", error.message);
-                            throw error; 
+                        );
+                        console.log(response)
+                        if (response.status !== 200) {
+                            throw new Error(`HTTP error! Status: ${response.status}`);
+                        }
+
+                        const data = response.data;
+                        if (data.success) {
+                            return data;
+                        } else {
+                            console.error('Failed to create business details:', data.message || 'Unknown error');
+                            throw new Error(data.message || 'Failed to create business details');
+                        }
+                    } catch (error) {
+                        console.error("Error occurred while fetching business site details:", error.message);
+                        throw error;
                     };
                 },
                 prefill: {
@@ -3159,7 +3694,7 @@ function MoreVideos() {
             rzp.open();
         };
         useEffect(() => {
-            const submitData =async () => {
+            const submitData = async () => {
                 const res = await CreateBusinessDetails(formData)
                 const id = res.data._id || res.data.data?._id;
                 setBusinessId(id)
@@ -3174,9 +3709,9 @@ function MoreVideos() {
 
     return (
         <>
-            {step === 1 && <AuthenticationDetails/>}
-            {step === 2 && <BusinessDetails />}
-            {step === 3 && <ContactDetails />}
+            {step === 1 && <AuthenticationDetails formData={formData} />}
+            {step === 2 && <BusinessDetails formData={formData} />}
+            {step === 3 && <ContactDetails formData={formData} />}
             {step === 4 && <CategoryDetails />}
             {step === 5 && <ServicesOffering />}
             {step === 6 && <BusinessTiming />}

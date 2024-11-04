@@ -10,14 +10,16 @@ import 'primereact/resources/primereact.min.css';          // Core CSS for Prime
 import 'primeicons/primeicons.css';         
 import '/src/assets/css/style.css';
 import Template from './containers/Template';
+import PremiumTemplate from './containers/PremiumTemplate';
 function App() {
   return (
     <Router>
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/create-business" element={<CreateBusiness />} />
-        <Route path="/business" element={<Business />} />
+        <Route path="/business/:id" element={<Business />} />
         <Route path="/template/:id" element={<Template />} />
+        <Route path="/template/premium/:id" element={<PremiumTemplate />} />
       </Routes>
     </Router>
   );
