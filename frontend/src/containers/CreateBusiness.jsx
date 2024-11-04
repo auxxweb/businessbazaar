@@ -18,12 +18,10 @@ import { InputText } from "primereact/inputtext";
 import { InputTextarea } from "primereact/inputtextarea";
 import CircularProgress from '@mui/material/CircularProgress';
 import CloseIcon from '@mui/icons-material/Close';
-import { Box, FormControlLabel, Switch } from '@mui/material';
-import BusinessPreview from '../components/BusinessPreview';
-import PremiumPreview from '../components/PremiumPreview';
+import Slider from 'react-slick';
 
 export default function CreateBusiness() {
-    const [step, setStep] = useState(7);
+    const [step, setStep] = useState(12);
 
     const handleNextStep = () => {
         setStep(prevStep => prevStep + 1);
@@ -732,7 +730,7 @@ export default function CreateBusiness() {
                                             mobileNumbers.length < 2 && (
                                                 <div className="col-12 col-sm-2 mt-2 mt-sm-0">
                                                     <button type="button" onClick={addMobileNumber} className="btn w-100 btn-success mt-2">
-                                                        + Add
+                                                        Add
                                                     </button>
                                                 </div>
                                             )
@@ -775,7 +773,7 @@ export default function CreateBusiness() {
                                             whatsappNumbers.length < 2 && (
                                                 <div className="col-12 col-sm-2 mt-2 mt-sm-0">
                                                     <button type="button" onClick={addWhatsappNumber} className="btn w-100 btn-success mt-2">
-                                                        + Add
+                                                        Add
                                                     </button>
                                                 </div>
                                             )
@@ -807,7 +805,7 @@ export default function CreateBusiness() {
                                             emails.length < 2 && (
                                                 <div className="col-12 col-sm-2 mt-2 mt-sm-0">
                                                     <button type="button" onClick={addEmail} className="btn w-100 btn-success mt-2">
-                                                        + Add
+                                                        Add
                                                     </button>
                                                 </div>
                                             )
@@ -827,7 +825,7 @@ export default function CreateBusiness() {
                                 {errors.website && <div className="text-danger">{errors.website}</div>}
                             </div>
                         </div>
-                        <div className="col-12 text-end">
+                        <div className="col-12 mt-3 text-end">
                             <button className="btn btn-success btn-lg w-100" onClick={contactSubmitHandler}>
                                 Save & Continue
                             </button>
@@ -1234,10 +1232,10 @@ export default function CreateBusiness() {
                         </div>
 
                         <div className="left-portion col-12 col-lg-5 h-100 p-3 row align-items-center">
-                        <link rel="preconnect" href="https://fonts.googleapis.com" />
-                <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-                <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap" rel="stylesheet" />
-                <style> {`
+                            <link rel="preconnect" href="https://fonts.googleapis.com" />
+                            <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+                            <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap" rel="stylesheet" />
+                            <style> {`
                         ::-webkit-scrollbar {
                             width: 12px; /* Width of the entire scrollbar */
                         }
@@ -1270,119 +1268,119 @@ export default function CreateBusiness() {
                             color:white;
                         }
                         `}
-                </style>
-                        <footer className='h-auto'>
-                    <div className="container pjs  p-top">
-                        <div className="mt-5">
-                            <div className="row">
-                                <div className="col-12 col-lg-4">
-                                    <div className="col-12 d-block d-lg-flex text-center text-lg-start text mt-5">
-                                        <div className="nav-logo width-fit">
-                                            <img src={formData.logo} alt="" />
-                                        </div>
-                                        <span className="ms-2 fs-30 text-white">{formData.businessName}</span>
-                                    </div>
-                                    <div className="col-12 mt-4  text-center text-lg-start" style={{ color: "#A4B3CB" }}>
-                                        <p>
-                                            business Description
-                                        </p>
-                                    </div>
-                                </div>
+                            </style>
+                            <footer className='h-auto'>
+                                <div className="container pjs  p-top">
+                                    <div className="mt-5">
+                                        <div className="row">
+                                            <div className="col-12 col-lg-4">
+                                                <div className="col-12 d-block d-lg-flex text-center text-lg-start text mt-5">
+                                                    <div className="nav-logo width-fit">
+                                                        <img src={formData.logo} alt="" />
+                                                    </div>
+                                                    <span className="ms-2 fs-30 text-white">{formData.businessName}</span>
+                                                </div>
+                                                <div className="col-12 mt-4  text-center text-lg-start" style={{ color: "#A4B3CB" }}>
+                                                    <p>
+                                                        business Description
+                                                    </p>
+                                                </div>
+                                            </div>
 
-                                <div className="col-12 col-lg-4">
-                                    <div className="col-12 mt-5">
-                                        <div className="col-12 mt-3 mb-3 text-center text-lg-start">
-                                            <a href="#" className=" fs-14 text-decoration-none text-orange">NAVIGATION</a>
-                                        </div>
-                                        <div className="col-12 mt-3 mb-3  text-center text-lg-start">
-                                            <a href="#" className="fs-14 text-decoration-none" style={{ color: "#A4B3CB" }}>Menu</a>
-                                        </div>
-                                        <div className="col-12 mt-3 mb-3  text-center text-lg-start">
-                                            <a href="#" className="fs-14 text-decoration-none" style={{ color: "#A4B3CB" }}>About Us</a>
-                                        </div>
-                                        <div className="col-12 mt-3 mb-3  text-center text-lg-start">
-                                            <a href="#" className="fs-14 text-decoration-none" style={{ color: "#A4B3CB" }}>Contact Us</a>
-                                        </div>
-                                        <div className="col-12 mt-3 mb-3  text-center text-lg-start">
-                                            <a href="#" className="fs-14 text-decoration-none" style={{ color: "#A4B3CB" }}>Main Dishes</a>
-                                        </div>
-                                    </div>
-                                </div>
+                                            <div className="col-12 col-lg-4">
+                                                <div className="col-12 mt-5">
+                                                    <div className="col-12 mt-3 mb-3 text-center text-lg-start">
+                                                        <a href="#" className=" fs-14 text-decoration-none text-orange">NAVIGATION</a>
+                                                    </div>
+                                                    <div className="col-12 mt-3 mb-3  text-center text-lg-start">
+                                                        <a href="#" className="fs-14 text-decoration-none" style={{ color: "#A4B3CB" }}>Menu</a>
+                                                    </div>
+                                                    <div className="col-12 mt-3 mb-3  text-center text-lg-start">
+                                                        <a href="#" className="fs-14 text-decoration-none" style={{ color: "#A4B3CB" }}>About Us</a>
+                                                    </div>
+                                                    <div className="col-12 mt-3 mb-3  text-center text-lg-start">
+                                                        <a href="#" className="fs-14 text-decoration-none" style={{ color: "#A4B3CB" }}>Contact Us</a>
+                                                    </div>
+                                                    <div className="col-12 mt-3 mb-3  text-center text-lg-start">
+                                                        <a href="#" className="fs-14 text-decoration-none" style={{ color: "#A4B3CB" }}>Main Dishes</a>
+                                                    </div>
+                                                </div>
+                                            </div>
 
-                                <div className="col-12">
-                                    <div className="col-12 mt-5">
-                                        <div className="col-12 mt-3 mb-3 text-center text-lg-start">
-                                            <a href="#" className=" fs-14 text-decoration-none text-orange">Follow Us</a>
-                                        </div>
-
-                                        <div className="mt-5 col-12 row gap-3 jcc-md text-center text-lg-start">
-                                            <a className="contact-banner text-orange text-center text-lg-start">
-                                                <i className="bi bi-facebook text-orange"></i>
-                                            </a>
-                                            <a  className="contact-banner text-center text-lg-start">
-                                                <i className="bi bi-instagram text-orange"></i>
-                                            </a>
-                                            <a  className="contact-banner text-center text-lg-start">
-                                                <i className="bi bi-twitter text-orange"></i>
-                                            </a>
-                                            {/* <hr style={{width:"fit-content",opacity: 0.15,}}></hr> */}
-                                        </div>
-
-                                    </div>
-                                </div>
-
-                                <div className="col-12">
-                                    <div className="row">
-                                        <div className="col-lg-6">
                                             <div className="col-12">
-                                                <div className="col-12 mt-3 mb-3 text-center text-lg-start">
-                                                    <a href="#" className=" fs-14 text-decoration-none text-orange">OPENING HOURS</a>
-                                                </div>
-                                                <div className="mt-3 text-center text-lg-start" style={{ color: "#A4B3CB" }}>
-                                                    {days.map((day, index) => (
-                                                        <p>{day}</p>
-                                                    ))}
-                                                </div>
-                                                <div className="mt-3 text-center text-lg-start" style={{ color: "#A4B3CB" }}>
-                                                    <span>{openTime} to {closeTime}</span>
+                                                <div className="col-12 mt-5">
+                                                    <div className="col-12 mt-3 mb-3 text-center text-lg-start">
+                                                        <a href="#" className=" fs-14 text-decoration-none text-orange">Follow Us</a>
+                                                    </div>
+
+                                                    <div className="mt-5 col-12 row gap-3 jcc-md text-center text-lg-start">
+                                                        <a className="contact-banner text-orange text-center text-lg-start">
+                                                            <i className="bi bi-facebook text-orange"></i>
+                                                        </a>
+                                                        <a className="contact-banner text-center text-lg-start">
+                                                            <i className="bi bi-instagram text-orange"></i>
+                                                        </a>
+                                                        <a className="contact-banner text-center text-lg-start">
+                                                            <i className="bi bi-twitter text-orange"></i>
+                                                        </a>
+                                                        {/* <hr style={{width:"fit-content",opacity: 0.15,}}></hr> */}
+                                                    </div>
+
                                                 </div>
                                             </div>
-                                        </div>
+
+                                            <div className="col-12">
+                                                <div className="row">
+                                                    <div className="col-lg-6">
+                                                        <div className="col-12">
+                                                            <div className="col-12 mt-3 mb-3 text-center text-lg-start">
+                                                                <a href="#" className=" fs-14 text-decoration-none text-orange">OPENING HOURS</a>
+                                                            </div>
+                                                            <div className="mt-3 text-center text-lg-start" style={{ color: "#A4B3CB" }}>
+                                                                {days.map((day, index) => (
+                                                                    <p>{day}</p>
+                                                                ))}
+                                                            </div>
+                                                            <div className="mt-3 text-center text-lg-start" style={{ color: "#A4B3CB" }}>
+                                                                <span>{openTime} to {closeTime}</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
 
 
-                                        <div className="col-lg-6">
-                                            <div className="col-12 mt-5 text-center text-lg-start">
-                                                <div className="mt-3" style={{ color: "#A4B3CB" }}>
-                                                    
-                                                </div>
-                                                <div className="mt-3" style={{ color: "#A4B3CB" }}>
-                                                    <span>CLOSED</span>
+                                                    <div className="col-lg-6">
+                                                        <div className="col-12 mt-5 text-center text-lg-start">
+                                                            <div className="mt-3" style={{ color: "#A4B3CB" }}>
+
+                                                            </div>
+                                                            <div className="mt-3" style={{ color: "#A4B3CB" }}>
+                                                                <span>CLOSED</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
                                                 </div>
                                             </div>
-                                        </div>
 
+                                            <div className="col-12">
+                                                <div className="row">
+                                                    <div className="col-12 mt-5 text-center text-lg-start" style={{ color: "#A4B3CB" }}>
+                                                        <span>© 2024 Business Bazaar. All Right Reserved</span>
+                                                    </div>
+
+                                                    <div className="col-12  text-center text-lg-start mb-5 mt-5" style={{ color: "#A4B3CB" }}>
+                                                        <div className="row">
+                                                            <div className="col-12 col-lg-6">Terms of Service</div>
+                                                            <div className="col-12 col-lg-6">Privacy Policy</div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
                                     </div>
                                 </div>
-
-                                <div className="col-12">
-                                    <div className="row">
-                                        <div className="col-12 mt-5 text-center text-lg-start" style={{ color: "#A4B3CB" }}>
-                                            <span>© 2024 Business Bazaar. All Right Reserved</span>
-                                        </div>
-
-                                        <div className="col-12  text-center text-lg-start mb-5 mt-5" style={{ color: "#A4B3CB" }}>
-                                            <div className="row">
-                                                <div className="col-12 col-lg-6">Terms of Service</div>
-                                                <div className="col-12 col-lg-6">Privacy Policy</div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div>
-                    </div>
-                </footer>
+                            </footer>
                         </div>
 
                     </div>
@@ -1412,12 +1410,10 @@ export default function CreateBusiness() {
                 <div className='h-100vh'>
                     <div className="row  h-100 justify-content-center">
                         {/* Left Image Section */}
-                        <div className="d-none d-md-block left-portion p-0 col-md-5 h-100">
-                            <img src="/src/assets/images/business-description.jpg" alt="" className='w-100 h-100' />
-                        </div>
+
 
                         {/* Right Form Section */}
-                        <div className="col-12 col-md-7 row align-items-end justify-content-center h-100 p-3 p-md-5 right-portion">
+                        <div className="col-12 col-md-6 row align-items-end justify-content-center h-100 p-3 p-md-5 right-portion">
                             <div className="col-12 text-start">
                                 <button className="btn btn-dark w-auto float-start" onClick={handlePrevStep}><i className="bi bi-arrow-left"></i></button>
                             </div>
@@ -1439,6 +1435,157 @@ export default function CreateBusiness() {
                                 </button>
                             </div>
                         </div>
+
+                        <div className="d-none d-md-block left-portion p-0 col-md-6 h-100">
+                            <link rel="preconnect" href="https://fonts.googleapis.com" />
+                            <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+                            <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap" rel="stylesheet" />
+                            <style> {`
+                        ::-webkit-scrollbar {
+                            width: 12px; /* Width of the entire scrollbar */
+                        }
+    
+                        /* Scrollbar track */
+                        ::-webkit-scrollbar-track {
+                            background: rgb(243, 243, 244); /* Background of the scrollbar track */
+                        }::-webkit-scrollbar-thumb {
+                            background-color: white; /* Color of the scrollbar thumb */
+                            border-radius: 10px;     /* Rounded edges of the thumb */
+                            border: 3px solid  white; /* Padding around the thumb */
+                        }
+                    .theme
+                    {
+                        background-color: white;
+                        color: white;
+                        border: none;
+                    }.service-design.active{
+                        background-color: white;
+                    }.address-section{
+                    background-color:white;
+                    }.address-logo i{
+                    color: white;
+                    }.cat-option{
+                        border-right: 1px dashed white;
+                    }.text-orange{
+                            color: white;
+                        }.dish-div:hover{
+                            background-color: white;
+                            color:white;
+                        }
+                        `}
+                            </style>
+                            <footer className='h-auto'>
+                                <div className="container pjs  p-top">
+                                    <div className="mt-5">
+                                        <div className="row">
+                                            <div className="col-12 col-lg-4">
+                                                <div className="col-12 d-block d-lg-flex text-center text-lg-start text mt-5">
+                                                    <div className="nav-logo width-fit">
+                                                        <img src={formData.logo} alt="" />
+                                                    </div>
+                                                    <span className="ms-2 fs-30 text-white">{formData.businessName}</span>
+                                                </div>
+                                                <div className="col-12 mt-4  text-center text-lg-start" style={{ color: "#A4B3CB" }}>
+                                                    <p>
+                                                        {description}
+                                                    </p>
+                                                </div>
+                                            </div>
+
+                                            <div className="col-12 col-lg-4">
+                                                <div className="col-12 mt-5">
+                                                    <div className="col-12 mt-3 mb-3 text-center text-lg-start">
+                                                        <a href="#" className=" fs-14 text-decoration-none text-orange">NAVIGATION</a>
+                                                    </div>
+                                                    <div className="col-12 mt-3 mb-3  text-center text-lg-start">
+                                                        <a href="#" className="fs-14 text-decoration-none" style={{ color: "#A4B3CB" }}>Menu</a>
+                                                    </div>
+                                                    <div className="col-12 mt-3 mb-3  text-center text-lg-start">
+                                                        <a href="#" className="fs-14 text-decoration-none" style={{ color: "#A4B3CB" }}>About Us</a>
+                                                    </div>
+                                                    <div className="col-12 mt-3 mb-3  text-center text-lg-start">
+                                                        <a href="#" className="fs-14 text-decoration-none" style={{ color: "#A4B3CB" }}>Contact Us</a>
+                                                    </div>
+                                                    <div className="col-12 mt-3 mb-3  text-center text-lg-start">
+                                                        <a href="#" className="fs-14 text-decoration-none" style={{ color: "#A4B3CB" }}>Main Dishes</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div className="col-12">
+                                                <div className="col-12 mt-5">
+                                                    <div className="col-12 mt-3 mb-3 text-center text-lg-start">
+                                                        <a href="#" className=" fs-14 text-decoration-none text-orange">Follow Us</a>
+                                                    </div>
+
+                                                    <div className="mt-5 col-12 row gap-3 jcc-md text-center text-lg-start">
+                                                        <a className="contact-banner text-orange text-center text-lg-start">
+                                                            <i className="bi bi-facebook text-orange"></i>
+                                                        </a>
+                                                        <a className="contact-banner text-center text-lg-start">
+                                                            <i className="bi bi-instagram text-orange"></i>
+                                                        </a>
+                                                        <a className="contact-banner text-center text-lg-start">
+                                                            <i className="bi bi-twitter text-orange"></i>
+                                                        </a>
+                                                        {/* <hr style={{width:"fit-content",opacity: 0.15,}}></hr> */}
+                                                    </div>
+
+                                                </div>
+                                            </div>
+
+                                            <div className="col-12">
+                                                <div className="row">
+                                                    <div className="col-lg-6">
+                                                        <div className="col-12">
+                                                            <div className="col-12 mt-3 mb-3 text-center text-lg-start">
+                                                                <a href="#" className=" fs-14 text-decoration-none text-orange">OPENING HOURS</a>
+                                                            </div>
+                                                            <div className="mt-3 text-center text-lg-start" style={{ color: "#A4B3CB" }}>
+
+                                                            </div>
+                                                            <div className="mt-3 text-center text-lg-start" style={{ color: "#A4B3CB" }}>
+                                                                <span>{formData.businessTiming.openTime.open} to {formData.businessTiming.openTime.close}</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+
+                                                    <div className="col-lg-6">
+                                                        <div className="col-12 mt-5 text-center text-lg-start">
+                                                            <div className="mt-3" style={{ color: "#A4B3CB" }}>
+
+                                                            </div>
+                                                            <div className="mt-3" style={{ color: "#A4B3CB" }}>
+                                                                <span>CLOSED</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+
+                                            <div className="col-12">
+                                                <div className="row">
+                                                    <div className="col-12 mt-5 text-center text-lg-start" style={{ color: "#A4B3CB" }}>
+                                                        <span>© 2024 Business Bazaar. All Right Reserved</span>
+                                                    </div>
+
+                                                    <div className="col-12  text-center text-lg-start mb-5 mt-5" style={{ color: "#A4B3CB" }}>
+                                                        <div className="row">
+                                                            <div className="col-12 col-lg-6">Terms of Service</div>
+                                                            <div className="col-12 col-lg-6">Privacy Policy</div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </footer>
+                        </div>
+
                     </div>
                 </div>
 
@@ -1527,12 +1674,10 @@ export default function CreateBusiness() {
             <div className='h-100vh'>
                 <div className="row h-100 justify-content-center">
                     {/* Left Image Section */}
-                    <div className="d-none d-md-block left-portion p-0 col-md-5 h-100">
-                        <img src="/src/assets/images/landing-page.jpg" alt="" className='w-100 h-100' />
-                    </div>
+
 
                     {/* Right Form Section */}
-                    <div className="col-12 col-md-7 row align-items-end justify-content-center h-100 p-3 p-md-5 right-portion">
+                    <div className="col-12 col-md-6 row align-items-end justify-content-center h-100 p-3 p-md-5 right-portion">
                         <div className="col-12 text-start">
                             <button className="btn btn-dark w-auto float-start" onClick={handlePrevStep}>
                                 <i className="bi bi-arrow-left"></i>
@@ -1651,6 +1796,226 @@ export default function CreateBusiness() {
                             </div>
                         </div>
                     </div>
+
+
+                    <div className="d-none d-md-block left-portion p-0 col-md-6 h-100">
+                        <link rel="preconnect" href="https://fonts.googleapis.com" />
+                        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin />
+                        <link
+                            href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap"
+                            rel="stylesheet"
+                        />
+                        <style>
+                            {" "}
+                            {`
+                        ::-webkit-scrollbar {
+                            width: 12px; /* Width of the entire scrollbar */
+                        }
+    
+                        /* Scrollbar track */
+                        ::-webkit-scrollbar-track {
+                            background: rgb(243, 243, 244); /* Background of the scrollbar track */
+                        }::-webkit-scrollbar-thumb {
+                            background-color: ${theme}; /* Color of the scrollbar thumb */
+                            border-radius: 10px;     /* Rounded edges of the thumb */
+                            border: 3px solid  ${theme}; /* Padding around the thumb */
+                        }
+                    .theme
+                    {
+                        background-color: ${theme};
+                        color: white;
+                        border: none;
+                    }.service-design.active{
+                        background-color: ${theme};
+                    }.address-section{
+                    background-color:${theme};
+                    }.address-logo i{
+                    color: ${theme};
+                    }.cat-option{
+                        border-right: 1px dashed ${theme};
+                    }.text-orange{
+                            color: ${theme};
+                        }.dish-div:hover{
+                            background-color: ${theme};
+                            color:white;
+                        }.product-section{
+                        padding:20px;
+                        border:1px solid ${theme};
+                        border-radius:16px;
+                            }.slick-dots .slick-active button{
+                                background-color: ${theme};
+                                border-radius: 16px;
+                            }
+                        `}
+                        </style>
+                        <Navbar expand="lg" className="bg-white pjs fixed-top" style={{ paddingBlock: "5px" }}>
+                            <Container>
+                                {/* Align Brand to the start (left side) */}
+                                <Navbar.Brand href="/" className='fw-bold w-50 nav-logo' style={{ fontSize: '36px' }}>
+                                    <img src={formData.logo} alt="" />
+                                    <span className="ms-2">{formData.businessName}</span>
+                                </Navbar.Brand>
+
+                                <Navbar.Toggle aria-controls="basic-navbar-nav" style={{ color: 'black' }} />
+
+                                <Navbar.Collapse id="basic-navbar-nav">
+                                    <Nav className="ms-auto w-100 justify-content-evenly jcc">
+                                        <NavLink href="#menu" className='text-black text-center text-lg-start  text-decoration-none fs-14' style={{ color: 'black' }}>
+                                            Menu
+                                        </NavLink>
+                                        <NavLink href="#gallery" className='text-black text-center text-lg-start  text-decoration-none fs-14' style={{ color: 'black' }}>
+                                            Gallery
+                                        </NavLink>
+                                        <NavLink href="#about" className='text-black text-center text-lg-start  text-decoration-none fs-14' style={{ color: 'black' }}>
+                                            About
+                                        </NavLink>
+                                        <NavLink href="#contact" className='text-black text-center text-lg-start  text-decoration-none fs-14' style={{ color: 'black' }}>
+                                            Contact
+                                        </NavLink>
+
+                                    </Nav>
+                                </Navbar.Collapse>
+                            </Container>
+                        </Navbar>
+                        <section className='h-auto'>
+                            <div className="container p-top">
+                                <div className="row align-items-center banner-section">
+                                    {/* Left Image for Mobile View */}
+                                    <div className="col-12 col-lg-6 text-end d-block d-lg-none">
+                                        <img src={landingPageHero.coverImage} alt="" className='banner-image' />
+                                        <div className='banner-image-2 d-none'>
+                                            <img src="/src/assets/images/baner-image2.png" alt="" />
+                                        </div>
+                                    </div>
+
+                                    {/* Text Content */}
+                                    <div className="col-12 col-lg-6">
+                                        <div className="row align-items-center">
+                                            <div className="col-12">
+                                                <h1 className="text-start text-dark fw-bold david-font fw-bold banner-title text-center text-lg-start">
+                                                    {landingPageHero.title}
+                                                </h1>
+                                            </div>
+                                            <div className="col-12">
+                                                <p className='text-secondary text-center text-lg-start david-font'>
+                                                    {landingPageHero.description}
+                                                </p>
+                                            </div>
+                                            <div className="mt-3 col-12">
+                                                <div className="row">
+                                                    <div className="col-6 col-lg-3 mb-2">
+                                                        <NavLink
+                                                            to='#about' className="btn btn-dark text-white radius-theme box-shadow w-100 p-1" style={{ backgroundColor: '#212529' }}>View More</NavLink>
+                                                    </div>
+                                                    <div className="col-6 col-lg-3 mb-2">
+                                                        <NavLink
+                                                            to='#service' className="btn btn-dark text-white radius-theme box-shadow theme w-100 p-1">Services</NavLink>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div className="mt-5 col-12 social-media gap-3">
+                                                <a href={formData.socialMediaLinks[0].link} target='_blank' className="contact-banner text-dark">
+                                                    <i className="bi bi-facebook"></i>
+                                                </a>
+                                                <a href={formData.socialMediaLinks[1].link} target='_blank' className="contact-banner text-dark">
+                                                    <i className="bi bi-instagram"></i>
+                                                </a>
+                                                <a href={formData.socialMediaLinks[2].link} target='_blank' className="contact-banner text-dark">
+                                                    <i className="bi bi-twitter"></i>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {/* Right Image for Desktop View */}
+                                    <div className="col-12 col-lg-6 text-end d-none d-lg-block">
+                                        <img src={landingPageHero.coverImage} alt="" className='banner-image' />
+                                        <div className='banner-image-2 d-none'>
+                                            <img src="/src/assets/images/baner-image2.png" alt="" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+
+                        <div className="mt-5 mb-5">
+                            <div className="container p-top">
+                                <div className="col-12 address-section">
+                                    <div className="row">
+                                        <div className="col-12 col-lg-4 mb-3 mb-lg-0">
+                                            <div className="row align-items-center justify-content-start">
+                                                <div className="col-auto address-logo">
+                                                    <i className="bi bi-geo-alt-fill"></i>
+                                                </div>
+                                                <div className="col">
+                                                    <span className="fs-13">Address</span>
+                                                    <p className='fs-16'>{formData.address.buildingName}, {formData.address.city},{formData.address.landMark},{formData.address.streetName}, {formData.address.state}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+                                        <div className="col-12 col-lg-4 mb-3 mb-lg-0">
+                                            <div className="row align-items-center justify-content-start">
+                                                <div className="col-auto address-logo">
+                                                    <i className="bi bi-envelope-fill"></i>
+                                                </div>
+                                                <div className="col">
+                                                    <span className="fs-13">Send Email</span>
+                                                    {formData?.emails?.map((email, index) => (
+                                                        <p className='fs-16' key={index}>{email.email}</p>
+                                                    ))}
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div className="col-12 col-lg-4 mb-3 mb-lg-0">
+                                            <div className="row align-items-center justify-content-start">
+                                                <div className="col-auto address-logo">
+                                                    <i className="bi bi-telephone"></i>
+                                                </div>
+                                                <div className="col">
+                                                    <span className="fs-13">Contact</span>
+                                                    {formData?.mobileNumbers?.map((number, index) => (
+                                                        <p className='fs-16' key={index}>{number.number}</p>
+                                                    ))}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <section className=' h-auto' style={{ backgroundColor: "#F3F3F4" }} id='about'>
+                            <div className="container p-top">
+                                <div className="row mt-5 align-items-center mb-5">
+                                    <div className="col-12 col-lg-6 mt-2 text-center text-lg-start about-image">
+                                        <img
+                                            src={welcomePart.coverImage}
+                                            className="img-fluid"
+                                            alt=""
+                                        />
+
+                                    </div>
+                                    <div className="col-12 col-lg-6">
+                                        <div className="col-12 mb-3">
+                                            <h1 className="text-center text-lg-start text-dark fw-bold david-font fw-bold banner-title">{welcomePart.title}</h1>
+                                        </div>
+                                        <div className="col-12 mt-4">
+                                            <p className='text-secondary text-center text-lg-start david-font mt-4'>
+                                                {welcomePart.description}
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                            </div>
+                        </section>
+                    </div>
+
                 </div>
             </div>
         );
@@ -1737,14 +2102,6 @@ export default function CreateBusiness() {
 
         // Submit function to store data
         const handleServiceSubmit = () => {
-            // if (!specialService.title || !specialService.description || !specialService.data[0].title) {
-            //     setErrors("Please fill in all required fields for Special Service")
-            //     return;
-            // }
-            // if (!services[0].title || !services[0].description) {
-            //     setErrors("Please fill in all required fields for Services.")
-            //     return;
-            // }
             setFormData((prevFormData) => ({
                 ...prevFormData,
                 specialServices: specialService,
@@ -1774,18 +2131,122 @@ export default function CreateBusiness() {
                 return updatedServices;
             });
         };
+        const [currentSlide, setCurrentSlide] = useState(0);
+
+
+
+
+        const settings4 = {
+            dots: false,
+            // infinite: true,
+            autoplay: true,
+            arrows: false,
+            speed: 500,
+            slidesToShow: 2,
+            slidesToScroll: 1,
+            responsive: [
+                {
+                    breakpoint: 1024,
+                    settings: {
+                        slidesToShow: 2,
+                        slidesToScroll: 1,
+                        infinite: true,
+                    },
+                },
+                {
+                    breakpoint: 768,
+                    settings: {
+                        slidesToShow: 1,
+                        slidesToScroll: 1,
+                    },
+                },
+                {
+                    breakpoint: 600,
+                    settings: {
+                        slidesToShow: 1,
+                        slidesToScroll: 1,
+                    },
+                },
+                {
+                    breakpoint: 480,
+                    settings: {
+                        slidesToShow: 1,
+                        slidesToScroll: 1,
+                    },
+                },
+                {
+                    breakpoint: 390,
+                    settings: {
+                        slidesToShow: 1,
+                        slidesToScroll: 1,
+                    },
+                },
+            ],
+        };
+
+        const setting2 = {
+            dots: false,
+            arrows: false,
+            infinite: true,
+            autoplay: true,
+            // centerMode: true,
+            speed: 500,
+            slidesToShow: 2,
+            slidesToScroll: 2,
+            afterChange: (current) => setCurrentSlide(current),
+            responsive: [
+                {
+                    breakpoint: 1024,
+                    settings: {
+                        slidesToShow: 3,
+                        slidesToScroll: 2,
+                        infinite: true,
+                    },
+                },
+                {
+                    breakpoint: 768,
+                    settings: {
+                        slidesToShow: 1,
+                        slidesToScroll: 1,
+                    },
+                },
+                {
+                    breakpoint: 600,
+                    settings: {
+                        slidesToShow: 1,
+                        slidesToScroll: 1,
+                    },
+                },
+                {
+                    breakpoint: 480,
+                    settings: {
+                        slidesToShow: 1,
+                        slidesToScroll: 1,
+                    },
+                },
+                {
+                    breakpoint: 390,
+                    settings: {
+                        slidesToShow: 1,
+                        slidesToScroll: 1,
+                    },
+                },
+            ]
+        };
+
+
+
+
 
         return (
             <>
                 <div className='h-100vh'>
                     <div className="row h-100 justify-content-center">
                         {/* Left Image Section */}
-                        <div className="d-none d-md-block left-portion p-0 col-md-5 h-100">
-                            <img src="/src/assets/images/landing-page.jpg" alt="" className='w-100 h-100' />
-                        </div>
+
 
                         {/* Right Form Section */}
-                        <div className="col-12 col-md-7 row align-items-end justify-content-center h-100 p-3 p-md-5 right-portion">
+                        <div className="col-12 col-md-6 row align-items-end justify-content-center h-100 p-3 p-md-5 right-portion">
                             <div className="col-12 text-start">
                                 <button className="btn btn-dark w-auto float-start" onClick={handlePrevStep}>
                                     <i className="bi bi-arrow-left"></i>
@@ -1962,11 +2423,188 @@ export default function CreateBusiness() {
 
                             {/* Save & Next Button */}
                             <div className='col-12 mt-4 text-center'>
-                                <button className='btn btn-dark btn-lg w-100' onClick={handleServiceSubmit}>
+                                <button className='btn btn-success btn-md w-100' onClick={handleServiceSubmit}>
                                     Save & Next
                                 </button>
                             </div>
                         </div>
+
+
+
+                        <div className="d-none d-md-block left-portion p-0 col-md-6 h-100">
+                            <link rel="preconnect" href="https://fonts.googleapis.com" />
+                            <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin />
+                            <link
+                                href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap"
+                                rel="stylesheet"
+                            />
+                            <style>
+                                {" "}
+                                {`
+                                ::-webkit-scrollbar {
+                                    width: 12px; /* Width of the entire scrollbar */
+                                }
+            
+                                /* Scrollbar track */
+                                ::-webkit-scrollbar-track {
+                                    background: rgb(243, 243, 244); /* Background of the scrollbar track */
+                                }::-webkit-scrollbar-thumb {
+                                    background-color: ${formData.theme}; /* Color of the scrollbar thumb */
+                                    border-radius: 10px;     /* Rounded edges of the thumb */
+                                    border: 3px solid  ${formData.theme}; /* Padding around the thumb */
+                                }
+                            .theme
+                            {
+                                background-color: ${formData.theme};
+                                color: white;
+                                border: none;
+                            }.service-design.active{
+                                background-color: ${formData.theme};
+                            }.address-section{
+                            background-color:${formData.theme};
+                            }.address-logo i{
+                            color: ${formData.theme};
+                            }.cat-option{
+                                border-right: 1px dashed ${formData.theme};
+                            }.text-orange{
+                                    color: ${formData.theme};
+                                }.dish-div:hover{
+                                    background-color: ${formData.theme};
+                                    color:white;
+                                }.product-section{
+                                padding:20px;
+                                border:1px solid ${formData.theme};
+                                border-radius:16px;
+                                    }.slick-dots .slick-active button{
+                                        background-color: ${formData.theme};
+                                        border-radius: 16px;
+                                    }
+                                `}
+                            </style>
+                            <section className="h-auto" style={{ backgroundColor: "#F3F3F4" }}>
+                                <div className="container p-top">
+                                    <div className="col-12 mb-5">
+                                        <div className="mt-5 text-center">
+                                            <div className="col-12">
+                                                <h1 className="text-center text-dark fw-bold david-font fw-bold banner-title fs-45">{specialService.title}</h1>
+                                            </div>
+                                            <div className="row justify-content-center">
+                                                <div className="col-6 mb-1">
+                                                    <p className='text-secondary text-center'>
+                                                        {specialService.description}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="col-12">
+                                        <div className="col-12 mb-5 row justify-content-center david-font">
+                                            {specialService.data.length > 2 ? (
+                                                <Slider {...settings4}>
+                                                    {specialService.data.map((dish, index) => (
+                                                        <div key={index} className="dish-div col-12 col-lg-6 text-center p-3">
+                                                            <div className="col-12 position-relative">
+                                                                <img
+                                                                    src={dish.image}
+                                                                    alt={dish.title}
+                                                                    style={{
+                                                                        width: '100%',
+                                                                        height: 'auto',
+                                                                        maxWidth: '300px',
+                                                                        objectFit: 'cover',
+                                                                    }}
+                                                                />
+                                                            </div>
+                                                            <div className="col-12">
+                                                                <h2 className="fs-20 fw-bold">{dish.title}</h2>
+                                                            </div>
+                                                            <div className="col-12 mt-3 mb-3">
+                                                                <p>{dish.description}</p>
+                                                            </div>
+                                                        </div>
+                                                    ))}
+                                                </Slider>
+                                            ) : (
+                                                specialService.data.map((dish, index) => (
+                                                    <div key={index} className="dish-div col-12 col-lg-6 text-center p-3">
+                                                        <div className="col-12 position-relative">
+                                                            <img
+                                                                src={dish.image}
+                                                                alt={dish.title}
+                                                                style={{
+                                                                    width: '100%',
+                                                                    height: 'auto',
+                                                                    maxWidth: '300px',
+                                                                    objectFit: 'cover',
+                                                                }}
+                                                            />
+                                                        </div>
+                                                        <div className="col-12">
+                                                            <h2 className="fs-20 fw-bold">{dish.title}</h2>
+                                                        </div>
+                                                        <div className="col-12 mt-3 mb-3">
+                                                            <p>{dish.description}</p>
+                                                        </div>
+                                                    </div>
+                                                ))
+                                            )}
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+
+                            <section className="h-auto david-font" style={{ backgroundColor: "#F3F3F4" }}>
+                                <div className="container p-top">
+                                    <div className="col-12 mt-5 text-center ">
+                                        <h1 className='fw-bold text-center'>Services We Provide</h1>
+                                    </div>
+                                    <div className="col-12 mb-5 row justify-content-center">
+                                        {services.length > 3 ? (
+                                            <Slider {...setting2} className='mb-5'>
+                                                {services.map((service, index) => (
+                                                    <div
+                                                        key={index}
+                                                        className={`col-12 col-lg-4 service-design ${index === currentSlide ? 'active' : ''} mt-5 mb-5 text-center`}
+                                                    >
+                                                        <div className="col-12 text-center">
+                                                            <h3>{service.title}</h3>
+                                                        </div>
+                                                        <div className="col-12 mt-5">
+                                                            <p className="text-center">{service.description}</p>
+                                                        </div>
+                                                        <div className="col-12 text-center" style={{ height: "100px" }}>
+                                                            <img src={service.image} alt={service.title} className='h-100' />
+                                                        </div>
+                                                    </div>
+                                                ))}
+                                            </Slider>
+                                        ) : (
+                                            services.map((service, index) => (
+                                                <div
+                                                    key={index}
+                                                    className={`col-12 col-lg-4 service-design ${index === currentSlide ? 'active' : ''} mt-5 mb-5 text-center`}
+                                                >
+                                                    <div className="col-12 text-center">
+                                                        <h3>{service.title}</h3>
+                                                    </div>
+                                                    <div className="col-12 mt-5">
+                                                        <p className="text-center">{service.description}</p>
+                                                    </div>
+                                                    <div className="col-12 text-center" style={{ height: "100px" }}>
+                                                        <img src={service.image} alt={service.title} className='h-100' />
+                                                    </div>
+                                                </div>
+                                            ))
+                                        )}
+                                    </div>
+
+                                </div>
+                            </section>
+
+                        </div>
+
+
+
                     </div>
                 </div>
             </>
@@ -2038,11 +2676,8 @@ export default function CreateBusiness() {
         return (
             <div className='h-100vh'>
                 <div className="row h-100 justify-content-center">
-                    <div className="d-none d-md-block left-portion p-0 col-md-5 h-100">
-                        <img src="/src/assets/images/landing-page.jpg" alt="" className='w-100 h-100' />
-                    </div>
 
-                    <div className="col-12 col-md-7 row align-items-end justify-content-center h-100 p-3 p-md-5 right-portion">
+                    <div className="col-12 col-md-6 row align-items-end justify-content-center h-100 p-3 p-md-5 right-portion">
                         <div className="col-12 text-start">
                             <button className="btn btn-dark w-auto float-start" onClick={handlePrevStep}><i className="bi bi-arrow-left"></i></button>
                         </div>
@@ -2133,6 +2768,97 @@ export default function CreateBusiness() {
                             <button className='btn btn-success w-100 text-center' onClick={handleProductSubmit}>Save & Next</button>
                         </div>
                     </div>
+
+
+                    <div className="d-none d-md-block left-portion p-0 col-md-6 h-100">
+                        <link rel="preconnect" href="https://fonts.googleapis.com" />
+                        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin />
+                        <link
+                            href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap"
+                            rel="stylesheet"
+                        />
+                        <style>
+                            {" "}
+                            {`
+                                ::-webkit-scrollbar {
+                                    width: 12px; /* Width of the entire scrollbar */
+                                }
+            
+                                /* Scrollbar track */
+                                ::-webkit-scrollbar-track {
+                                    background: rgb(243, 243, 244); /* Background of the scrollbar track */
+                                }::-webkit-scrollbar-thumb {
+                                    background-color: ${formData.theme}; /* Color of the scrollbar thumb */
+                                    border-radius: 10px;     /* Rounded edges of the thumb */
+                                    border: 3px solid  ${formData.theme}; /* Padding around the thumb */
+                                }
+                            .theme
+                            {
+                                background-color: ${formData.theme};
+                                color: white;
+                                border: none;
+                            }.service-design.active{
+                                background-color: ${formData.theme};
+                            }.address-section{
+                            background-color:${formData.theme};
+                            }.address-logo i{
+                            color: ${formData.theme};
+                            }.cat-option{
+                                border-right: 1px dashed ${formData.theme};
+                            }.text-orange{
+                                    color: ${formData.theme};
+                                }.dish-div:hover{
+                                    background-color: ${formData.theme};
+                                    color:white;
+                                }.product-section{
+                                padding:20px;
+                                border:1px solid ${formData.theme};
+                                border-radius:16px;
+                                    }.slick-dots .slick-active button{
+                                        background-color: ${formData.theme};
+                                        border-radius: 16px;
+                                    }
+                                `}
+                        </style>
+
+                        <section className="bg-white h-auto david-font" id='menu'>
+                            <div className="container  p-top">
+                                <div className="col-12 mb-5">
+                                    <div className="row justify-content-center">
+                                        <div className="col-6 text-center">
+                                            <h1 className="text-dark fw-bold david-font banner-title fs-45">Products</h1>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <div className="mt-5 david-font">
+                                    <div className="mb-5">
+                                        <div className="row justify-content-center mb-3">
+                                            {productSection.map((item, index) => (
+                                                <div className="col-12 col-lg-6 mt-3" key={index}>
+                                                    <div className="row  product-section align-items-center">
+                                                        <div className="col-2">
+                                                            <img src={item.image} alt="" className='w-100' />
+                                                        </div>
+                                                        <div className="col-8">
+                                                            <h1 className='fs-20 fw-bold'>{item.title}</h1>
+                                                            <p className="mt-2">{item.description}</p>
+                                                        </div>
+                                                        <div className="col-2 p-0">
+                                                            <span className='fw-bold'>{item.price}</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+
+
+                    </div>
                 </div>
             </div>
         );
@@ -2212,13 +2938,10 @@ export default function CreateBusiness() {
         return (
             <div className='h-100vh'>
                 <div className="row h-100 justify-content-center">
-                    {/* Left Image Section - Hidden on small screens */}
-                    <div className="d-none d-md-block left-portion p-0 col-md-5 h-100">
-                        <img src="/src/assets/images/landing-page.jpg" alt="" className='w-100 h-100' />
-                    </div>
+
 
                     {/* Right Form Section */}
-                    <div className="col-12 col-md-7 row align-items-end justify-content-center h-100 p-3 p-md-5 right-portion">
+                    <div className="col-12 col-md-6 row align-items-end justify-content-center h-100 p-3 p-md-5 right-portion">
                         <div className="col-12 text-start">
                             <button className="btn btn-dark w-auto float-start" onClick={handlePrevStep}><i className="bi bi-arrow-left"></i></button>
                         </div>
@@ -2304,6 +3027,16 @@ export default function CreateBusiness() {
                             </button>
                         </div>
                     </div>
+
+                    <div className="left-portion col-12 col-lg-6 h-100 p-3 row align-items-center">
+                        <div className="p-3" style={{ border: '1px dashed black', borderRadius: '16px' }}>
+                            <p className='text-center'>
+                                Please provide the SEO information and social media links to enhance your business's online visibility.
+                                Accurate SEO data and active social media profiles can help improve your reach and engagement.
+                            </p>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         );
@@ -2312,7 +3045,7 @@ export default function CreateBusiness() {
         const [loading, setLoading] = useState(false);
         const [images, setImages] = useState([{ file: null, fileType: '', fileName: '' }]);
         // const [formData, setFormData] = useState({});
-    
+
         const handleFileChange = (index, event) => {
             const file = event.target.files[0];
             if (file) {
@@ -2389,16 +3122,37 @@ export default function CreateBusiness() {
             }
         };
 
+        const gallery = {
+            dots: true,
+            infinite: true,
+            speed: 500,
+            slidesToShow: 3,
+            slidesToScroll: 1,
+            responsive: [
+                {
+                    breakpoint: 1024,
+                    settings: {
+                        slidesToShow: 2,
+                        slidesToScroll: 1,
+                    }
+                },
+                {
+                    breakpoint: 600,
+                    settings: {
+                        slidesToShow: 1,
+                        slidesToScroll: 1,
+                    }
+                }
+            ]
+        };
+
         return (
             <div className='h-100vh'>
                 <div className="row h-100 justify-content-center">
-                    {/* Left Image Section - Hidden on small screens */}
-                    <div className="d-none d-md-block left-portion p-0 col-md-5 h-100">
-                        <img src="/src/assets/images/landing-page.jpg" alt="Landing Page" className='w-100 h-100' />
-                    </div>
+
 
                     {/* Right Form Section */}
-                    <div className="col-12 col-md-7 row align-items-end justify-content-center h-100 p-3 p-md-5 right-portion">
+                    <div className="col-12 col-md-6 row align-items-end justify-content-center h-100 p-3 p-md-5 right-portion">
                         <div className="col-12 text-start">
                             <button className="btn btn-dark w-auto float-start" onClick={handlePrevStep}>
                                 <i className="bi bi-arrow-left"></i>
@@ -2474,6 +3228,85 @@ export default function CreateBusiness() {
                             )}
                         </div>
                     </div>
+
+
+                    {/* Left Image Section - Hidden on small screens */}
+                    <div className="d-none d-md-block left-portion p-0 col-md-6 h-100">
+                        <link rel="preconnect" href="https://fonts.googleapis.com" />
+                        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin />
+                        <link
+                            href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap"
+                            rel="stylesheet"
+                        />
+                        <style>
+                            {" "}
+                            {`
+                                ::-webkit-scrollbar {
+                                    width: 12px; /* Width of the entire scrollbar */
+                                }
+            
+                                /* Scrollbar track */
+                                ::-webkit-scrollbar-track {
+                                    background: rgb(243, 243, 244); /* Background of the scrollbar track */
+                                }::-webkit-scrollbar-thumb {
+                                    background-color: ${formData.theme}; /* Color of the scrollbar thumb */
+                                    border-radius: 10px;     /* Rounded edges of the thumb */
+                                    border: 3px solid  ${formData.theme}; /* Padding around the thumb */
+                                }
+                            .theme
+                            {
+                                background-color: ${formData.theme};
+                                color: white;
+                                border: none;
+                            }.service-design.active{
+                                background-color: ${formData.theme};
+                            }.address-section{
+                            background-color:${formData.theme};
+                            }.address-logo i{
+                            color: ${formData.theme};
+                            }.cat-option{
+                                border-right: 1px dashed ${formData.theme};
+                            }.text-orange{
+                                    color: ${formData.theme};
+                                }.dish-div:hover{
+                                    background-color: ${formData.theme};
+                                    color:white;
+                                }.product-section{
+                                padding:20px;
+                                border:1px solid ${formData.theme};
+                                border-radius:16px;
+                                    }.slick-dots .slick-active button{
+                                        background-color: ${formData.theme};
+                                        border-radius: 16px;
+                                    }
+                                `}
+                        </style>
+                        <section className="h-auto david-font" style={{ backgroundColor: "#F3F3F4" }}>
+                            <div className="container p-top">
+
+                            <div className="col-12 mb-5" id="gallery">
+                                <div className="col-12 mb-5 mt-5">
+                                    <h1 className="fw-bold text-center">Gallery</h1>
+                                </div>
+                                {images.length > 0 ? (
+                                    <Slider {...gallery} className="gallery-slider">
+                                        {images.map((image, index) =>
+                                            image.file ? (
+                                                <div key={index} className="p-2">
+                                                    <img src={URL.createObjectURL(image.file)} alt="" className="w-100 gallery-img" />
+                                                </div>
+                                            ) : null
+                                        )}
+                                    </Slider>
+                                ) : null}
+                            </div>
+
+
+                            </div>
+                        </section>
+                    </div>
+
+
                 </div>
             </div>
         );
@@ -2852,16 +3685,16 @@ export default function CreateBusiness() {
 
 
         return (
-           <>
-            <link rel="preconnect" href="https://fonts.googleapis.com" />
-      <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin />
-      <link
-        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap"
-        rel="stylesheet"
-      />
-      <style>
-        {" "}
-        {`
+            <>
+                <link rel="preconnect" href="https://fonts.googleapis.com" />
+                <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin />
+                <link
+                    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap"
+                    rel="stylesheet"
+                />
+                <style>
+                    {" "}
+                    {`
                         ::-webkit-scrollbar {
                             width: 12px; /* Width of the entire scrollbar */
                         }
@@ -3223,6 +4056,9 @@ export default function CreateBusiness() {
                                         <div className="col-12 mt-5">
                                             <p className="text-center">{service.description}</p>
                                         </div>
+                                        <div className="col-12 text-center" style={{ height: "100px" }}>
+                                        <img src={service.image} alt={service.title} className='h-100' />
+                                    </div>
                                     </div>
                                 ))
                             )}

@@ -3,14 +3,16 @@ import Layout from '../components/Layout';
 import { Carousel } from 'react-bootstrap'; // Import Carousel component
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import Slider from 'react-slick'; // Import Slider component
+import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
-import { Navigate } from 'react-router';
 import { Link } from 'react-router-dom';
-import axios from 'axios'
 import { fetchBusiness, fetchCategories, fetchSearchCategory } from '../Functions/functions';
 import Loader from '../components/Loader';
+import { InputTextarea } from 'primereact/inputtextarea';
+import { InputText } from 'primereact/inputtext';
+import { Rating } from 'primereact/rating';
+import { Dialog } from 'primereact/dialog';
 
 export default function Home() {
     const [currentSlide, setCurrentSlide] = useState(0);
@@ -40,6 +42,12 @@ export default function Home() {
     const [totalBusinessData, setTotalBusinessData] = useState(0)
     const [loading, setLoading] = useState(true);
     const [currentPage, setCurrentPage] = useState(1);
+    const [visible, setVisible] = useState(false);
+    const [review, setReview] = useState([{
+        rating: '',
+        name: '',
+        description: '',
+    }]);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -142,6 +150,14 @@ export default function Home() {
                 setLoading(false);
             }
         }
+    };
+
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setReview((prevState) => ({
+            ...prevState,
+            [name]: value,
+        }));
     };
 
     // if (loading) {
@@ -347,6 +363,12 @@ export default function Home() {
                             Read their stories and see why we’re a trusted choice for so many.
                             Their feedback is a testament to our commitment to excellence!
                         </p>
+                        <div className="col-12">
+                            <div className="col-12 text-center mb-3">
+                                <button className="btn btn-dark text-white radius-theme box-shadow theme mt-5" onClick={() => setVisible(true)} >Write Review</button>
+
+                            </div>
+                        </div>
                     </div>
 
                     <div className="col-12">
@@ -376,6 +398,52 @@ export default function Home() {
                     </div>
                 </div>
             </section>
+            <Dialog
+                    header="Write a Review"
+                    visible={visible}
+                    onHide={() => { if (!visible) return; setVisible(false); }}
+                    style={{ width: '50vw' }}
+                    breakpoints={{ '960px': '75vw', '641px': '100vw' }}
+                >
+                    <div className="container">
+                        <div className="p-3 justify-content-center">
+                            <Rating
+                                value={review.rating}
+                                onChange={(e) => setReview({ ...review, rating: e.value })}
+                                cancel={false}
+                            />
+                        </div>
+                        <div className="col-12">
+                            <InputText
+                                keyfilter="text"
+                                placeholder="Full Name"
+                                className='w-100'
+                                value={review.name}
+                                name="name"
+                                onChange={handleInputChange}
+                            />
+                        </div>
+
+                        {/* Description Input Field */}
+                        <div className="col-12 mt-3">
+                            <div className="card flex justify-content-center">
+                                <InputTextarea
+                                    value={review.description}  // Bind the description from state
+                                    onChange={handleInputChange}  // Update description in state
+                                    rows={5}
+                                    cols={30}
+                                    name="description"  // Important: use `name` for targeting in handleInputChange
+                                    placeholder="Write your review here..."
+                                />
+                            </div>
+                        </div>
+                        <div className="col-12 mt-3">
+                            <div className="row">
+                                <button className="btn-dark btn theme radius">Submit Review</button>
+                            </div>
+                        </div>
+                    </div>
+                </Dialog>
             <footer className='mt-3 h-auto footer-section'>
                 <div className="container">
                     <div className="p-4 mt-0 mt-md-5 pt-5" >
