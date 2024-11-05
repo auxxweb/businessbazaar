@@ -25,7 +25,7 @@ import CloseIcon from '@mui/icons-material/Close'
 import Slider from 'react-slick'
 
 export default function CreateBusiness() {
-  const [step, setStep] = useState(1)
+  const [step, setStep] = useState(8)
 
   const handleNextStep = () => {
     setStep((prevStep) => prevStep + 1)
@@ -1975,11 +1975,13 @@ export default function CreateBusiness() {
       title: '',
       description: '',
       coverImage: '',
+      loading:'',
     })
     const [welcomePart, setWelcomePart] = useState({
       title: '',
       description: '',
       coverImage: '',
+      loading:'',
     })
     const [errors, setErrors] = useState({})
     const [loading, setLoading] = useState(false) // Loader state
@@ -1996,6 +1998,17 @@ export default function CreateBusiness() {
     // Generic File Change Handler with Loader
     const handleFileChange = (name, e, sectionSetter) => {
       const file = e.target.files[0]
+      if (name === "landingPageHeroImage"){
+        setLandingPageHero((prevState) => ({
+            ...prevState,
+            loading: true,
+        }));
+      }else if (name === "welcomePartImage"){
+        setWelcomePart((prevState) => ({
+            ...prevState,
+            loading: true,
+        }));
+      }
       if (file) {
         setLoading(true) // Show loader
         const reader = new FileReader()
@@ -2012,7 +2025,17 @@ export default function CreateBusiness() {
             console.error('Access link not found in response.')
             return
           }
-          setLoading(false) // Hide loader
+          if (name === "landingPageHeroImage"){
+            setLandingPageHero((prevState) => ({
+                ...prevState,
+                loading: false,
+            }));
+          }else if (name === "welcomePartImage"){
+            setWelcomePart((prevState) => ({
+                ...prevState,
+                loading: false,
+            }));
+          }
         }
         reader.readAsDataURL(file)
       }
@@ -2054,6 +2077,7 @@ export default function CreateBusiness() {
     }
 
     const triggerFileUpload = (inputId) => {
+      
       document.getElementById(inputId).click()
     }
 
@@ -2160,7 +2184,7 @@ export default function CreateBusiness() {
                   className="p-2 mt-2 mb-3 add-logo-div"
                 >
                   <div className="text-center">
-                    {loading ? (
+                    {landingPageHero.loading ? (
                       <div
                         className="spinner-border text-primary"
                         role="status"
@@ -2228,7 +2252,7 @@ export default function CreateBusiness() {
                   className="p-2 mt-2 mb-3 add-logo-div"
                 >
                   <div className="text-center">
-                    {loading ? (
+                    {welcomePart.loading ? (
                       <div
                         className="spinner-border text-primary"
                         role="status"
@@ -4838,7 +4862,7 @@ export default function CreateBusiness() {
                     <div className="col-12 mt-5">
                       <p className="text-center">{service.description}</p>
                     </div>
-                    
+
                     <div
                       className="col-12 text-center"
                       style={{ height: '100px' }}
