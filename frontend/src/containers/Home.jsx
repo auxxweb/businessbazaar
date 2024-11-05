@@ -525,7 +525,6 @@ export default function Home() {
           </div>
         </div>
       </Dialog>
-      <ContactSection/>
       <footer className="mt-3 h-auto footer-section">
         <div className="container">
           <div className="p-4 mt-0 mt-md-5 pt-5">
