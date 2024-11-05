@@ -178,11 +178,39 @@ export default function Business() {
                     ))}
                 </div>
 
-                <div className="d-flex justify-content-center mt-4">
-                    <button onClick={goToPreviousPage} disabled={currentPage === 1} className="btn btn-primary me-2">Previous</button>
-                    <span>Page {currentPage} of {totalPages}</span>
-                    <button onClick={goToNextPage} disabled={currentPage === totalPages} className="btn btn-primary ms-2">Next</button>
-                </div>
+                <div className="d-flex justify-content-center align-items-center mt-4">
+            <button
+              onClick={goToPreviousPage}
+              disabled={currentPage === 1}
+              className="btn btn-primary me-2"
+              style={{
+                borderTopLeftRadius: "50px",
+                borderBottomLeftRadius: "50px",
+                border: "none",
+                color: "#E5F0FD",
+                backgroundColor: "#228AE2",
+              }}
+            >
+              Prev.
+            </button>
+            <span>
+              Page {currentPage} of {totalPages}
+            </span>
+            <button
+              onClick={goToNextPage}
+              disabled={currentPage === totalPages}
+              className="btn btn-primary ms-2"
+              style={{
+                borderTopRightRadius: "50px",
+                borderBottomRightRadius: "50px",
+                border: "none",
+                color: "#E5F0FD",
+                backgroundColor: "#228AE2",
+              }}
+            >
+              Next
+            </button>
+          </div>
             </div>
         </section>
 
