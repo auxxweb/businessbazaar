@@ -1,17 +1,16 @@
 import { Box, Button, Typography } from "@mui/material";
-import TemplateHeader from "../components/Business/TemplateHeader";
-import useBusiness from "../Hooks/useBusiness";
-import BackdropLoader from "../components/BackdropLoader";
-import ContactSection from "../components/Business/ContactSection";
-import WelcomeCard from "../components/Business/WelcomeCard";
-import TemplateFooter from "../components/Business/TemplateFooter";
-import SpecialServices from "../components/Business/SpecialServices";
-import SubscribeSection from "../components/Business/SubscribeSection";
-import ReviewSection from "../components/Business/ReviewSection";
-import Gallery from "../components/Business/Gallery";
-import ServicesSection from "../components/Business/ServicesSection";
-import MenuSection from "../components/Business/MenuSection";
-import { width } from "@fortawesome/free-brands-svg-icons/fa42Group";
+import TemplateHeader from "/src/components/Business/TemplateHeader";
+import useBusiness from "/src/Hooks/useBusiness";
+import BackdropLoader from "/src/components/BackdropLoader";
+import ContactSection from "/src/components/Business/ContactSection";
+import WelcomeCard from "/src/components/Business/WelcomeCard";
+import TemplateFooter from "/src/components/Business/TemplateFooter";
+import SpecialServices from "/src/components/Business/SpecialServices";
+import SubscribeSection from "/src/components/Business/SubscribeSection";
+import ReviewSection from "/src/components/Business/ReviewSection";
+import Gallery from "/src/components/Business/Gallery";
+import ServicesSection from "/src/components/Business/ServicesSection";
+import MenuSection from "/src/components/Business/MenuSection";
 
 const PremiumTemplate = () => {
   const { businessData, loading, closeDays } = useBusiness();

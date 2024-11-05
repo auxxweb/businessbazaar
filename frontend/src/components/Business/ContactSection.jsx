@@ -1,6 +1,5 @@
 /* eslint-disable react/prop-types */
 
-import { width } from "@fortawesome/free-brands-svg-icons/fa42Group";
 
 const ContactSection = ({ businessData }) => {
   return (
