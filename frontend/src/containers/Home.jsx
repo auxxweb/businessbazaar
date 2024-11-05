@@ -503,15 +503,14 @@ export default function Home() {
             />
           </div>
 
-          {/* Description Input Field */}
           <div className="col-12 mt-3">
             <div className="card flex justify-content-center">
               <InputTextarea
-                value={review.description} // Bind the description from state
-                onChange={handleInputChange} // Update description in state
+                value={review.description}
+                onChange={handleInputChange}
                 rows={5}
                 cols={30}
-                name="description" // Important: use `name` for targeting in handleInputChange
+                name="description"
                 placeholder="Write your review here..."
               />
             </div>
@@ -525,7 +524,6 @@ export default function Home() {
           </div>
         </div>
       </Dialog>
-      <ContactSection/>
       <footer className="mt-3 h-auto footer-section">
         <div className="container">
           <div className="p-4 mt-0 mt-md-5 pt-5">

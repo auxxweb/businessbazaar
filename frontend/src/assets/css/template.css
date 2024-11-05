@@ -32,7 +32,7 @@
     padding: 20px 30px;
     border-radius: 100px 8px 50px 8px;
     border: 2px solid rgb(255, 255, 255);
-    width: 90% !important;
+    /* width: 90%; */
     transition: .5s ease-in-out;
 }
 .w-80{
@@ -179,4 +179,9 @@
     object-fit: cover;
 }.dish-div{
     height: 500px;
+}.create-business-div{
+    overflow: hidden;
+    overflow-y: scroll;
+}.left-portion{
+    border:1px dashed #ccc;
 }
