@@ -481,11 +481,11 @@ export default function Template() {
                         </div>
                     </div>
                     <div className="col-12">
-
-                        <div className="col-12 mb-5 david-font row gap-3">
+                    <div className="col-12 mb-5 david-font row justify-content-center gap-3">
+                        {businessData.specialServices.data.length > 2 ? (
                             <Slider {...settings}>
                                 {businessData?.specialServices?.data.map((dish, index) => (
-                                    <div key={index} className="dish-div col-12 text-center  p-3">
+                                    <div key={index} className="dish-div col-12 text-center p-3">
                                         <div className="col-12 position-relative text-center">
                                             <img src={dish.image} alt={dish.title} style={{ width: '300px', height: '300px', objectFit: 'cover' }} />
                                         </div>
@@ -498,9 +498,24 @@ export default function Template() {
                                     </div>
                                 ))}
                             </Slider>
-                        </div>
-
+                        ) : (
+                            businessData.specialServices.data.map((dish, index) => (
+                                <div key={index} className="dish-div col-12 col-lg-6 text-center p-3">
+                                    <div className="col-12 position-relative">
+                                        <img src={dish.image} alt={dish.title} style={{ width: '100%', height: 'auto', maxWidth: '300px', objectFit: 'cover' }} />
+                                    </div>
+                                    <div className="col-12">
+                                        <h2 className="fs-20 fw-bold">{dish.title}</h2>
+                                    </div>
+                                    <div className="col-12 mt-3 mb-3">
+                                        <p>{dish.description}</p>
+                                    </div>
+                                </div>
+                            ))
+                        )}
                     </div>
+                    </div>
+
                 </div>
             </section>
             <section className="bg-white h-auto david-font" id='menu'>
