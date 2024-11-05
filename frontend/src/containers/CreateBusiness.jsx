@@ -25,7 +25,7 @@ import CloseIcon from '@mui/icons-material/Close'
 import Slider from 'react-slick'
 
 export default function CreateBusiness() {
-  const [step, setStep] = useState(8)
+  const [step, setStep] = useState(1)
 
   const handleNextStep = () => {
     setStep((prevStep) => prevStep + 1)
