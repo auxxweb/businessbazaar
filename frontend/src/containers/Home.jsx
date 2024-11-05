@@ -1,29 +1,32 @@
-import React, { useEffect, useState } from "react";
-import Layout from "../components/Layout";
-import { Carousel } from "react-bootstrap"; // Import Carousel component
-import "bootstrap-icons/font/bootstrap-icons.css";
-import "bootstrap/dist/css/bootstrap.min.css";
-import Slider from "react-slick";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from 'react'
+import Layout from '../components/Layout'
+import { Carousel } from 'react-bootstrap' // Import Carousel component
+import 'bootstrap-icons/font/bootstrap-icons.css'
+import 'bootstrap/dist/css/bootstrap.min.css'
+import Slider from 'react-slick'
+import 'slick-carousel/slick/slick.css'
+import 'slick-carousel/slick/slick-theme.css'
+import { Link } from 'react-router-dom'
+import { toast } from 'react-toastify'
 import {
+  createReveiw,
   fetchBusiness,
   fetchCategories,
   fetchSearchCategory,
-} from "../Functions/functions";
-import Loader from "../components/Loader";
-import { InputTextarea } from "primereact/inputtextarea";
-import { InputText } from "primereact/inputtext";
-import { Rating } from "primereact/rating";
-import { Dialog } from "primereact/dialog";
-import ContactSection from "/src/components/Business/ContactSection";
+  getAllReviews,
+} from '../Functions/functions'
+import Loader from '../components/Loader'
+import { InputTextarea } from 'primereact/inputtextarea'
+import { InputText } from 'primereact/inputtext'
+import { Rating } from 'primereact/rating'
+import { Dialog } from 'primereact/dialog'
+import ContactSection from '/src/components/Business/ContactSection'
 
 export default function Home() {
-  const [currentSlide, setCurrentSlide] = useState(0);
+  const [currentSlide, setCurrentSlide] = useState(0)
   const settings = {
     centerMode: true,
-    centerPadding: "50px",
+    centerPadding: '50px',
     slidesToShow: 3,
     autoplay: true,
     autoplaySpeed: 3000,
@@ -40,126 +43,189 @@ export default function Home() {
         },
       },
     ],
-  };
-  const [categoryData, setCategoryData] = useState([]);
-  const [businessData, setBusinessData] = useState([]);
-  const [searchData, setSearchData] = useState("");
-  const [totalBusinessData, setTotalBusinessData] = useState(0);
-  const [loading, setLoading] = useState(true);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [visible, setVisible] = useState(false);
+  }
+  const [categoryData, setCategoryData] = useState([])
+  const [page, setPage] = useState(1)
+  const [limit, setLimit] = useState(10)
+  const [businessData, setBusinessData] = useState([])
+  const [searchData, setSearchData] = useState('')
+  const [totalBusinessData, setTotalBusinessData] = useState(0)
+  const [loading, setLoading] = useState(true)
+  const [currentPage, setCurrentPage] = useState(1)
+  const [visible, setVisible] = useState(false)
+  const [isReviewed, setIsReviewed] = useState(false)
+  const [reviews, setReviews] = useState([])
   const [review, setReview] = useState([
     {
-      rating: "",
-      name: "",
-      description: "",
+      rating: '',
+      name: '',
+      review: '',
     },
-  ]);
+  ])
+
+  useEffect(() => {
+    const fetchReviews = async () => {
+      try {
+        const data = await getAllReviews({ page, limit })
+        console.log(data?.data?.data, 'dataaaaa-a-a--a-a-')
+
+        setReviews(data?.data?.data)
+      } catch (error) {
+        toast.error(
+          error?.response?.data?.message ??
+            'An error occurred. Please try again.',
+          {
+            position: 'top-right',
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            theme: 'colored',
+            style: {
+              backgroundColor: '#e74c3c', // Custom red color for error
+              color: '#FFFFFF', // White text
+            },
+          },
+        )
+      }
+    }
+    fetchReviews()
+  }, [isReviewed])
+
+  const handleReviewSubmit = async () => {
+    try {
+      await createReveiw(review)
+      setVisible(false)
+      setIsReviewed(!isReviewed)
+    } catch (error) {
+      toast.error(
+        error?.response?.data?.message ??
+          'An error occurred. Please try again.',
+        {
+          position: 'top-right',
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          theme: 'colored',
+          style: {
+            backgroundColor: '#e74c3c', // Custom red color for error
+            color: '#FFFFFF', // White text
+          },
+        },
+      )
+    }
+  }
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        setLoading(true);
-        const businessDetails = await fetchBusiness(currentPage);
-        const categoryDetails = await fetchCategories();
+        setLoading(true)
+        const businessDetails = await fetchBusiness(currentPage)
+        const categoryDetails = await fetchCategories()
 
-        setCategoryData(categoryDetails.data.data);
-        setBusinessData(businessDetails.data.data);
+        setCategoryData(categoryDetails.data.data)
+        setBusinessData(businessDetails.data.data)
 
-        setTotalBusinessData(businessDetails.data.totalCount);
+        setTotalBusinessData(businessDetails.data.totalCount)
       } catch (error) {
-        console.error("Error fetching data:", error);
+        console.error('Error fetching data:', error)
       } finally {
-        setLoading(false);
+        setLoading(false)
       }
-    };
-    fetchData();
-  }, []);
+    }
+    fetchData()
+  }, [])
 
   async function searchHandler() {
     try {
-      console.log(searchData);
-      const searchValue = await fetchSearchCategory(searchData);
-      console.log(searchValue);
-      setCategoryData(searchValue.data.data);
+      console.log(searchData)
+      const searchValue = await fetchSearchCategory(searchData)
+      console.log(searchValue)
+      setCategoryData(searchValue.data.data)
     } catch (error) {
-      console.error("Error fetching data:", error);
+      console.error('Error fetching data:', error)
     }
   }
 
-  const testimonials = [
-    {
-      name: "Brett Heimann",
-      company: "MarketingAgency.com",
-      text: "Great service, great communication, great finished product. will continue to use for our business.",
-      img: "/src/assets/images/testi.jpg",
-    },
-    {
-      name: "John Doe",
-      company: "TechSolutions",
-      text: "Amazing experience. The team is very professional and delivers on time.",
-      img: "/src/assets/images/testi.jpg",
-    },
-    {
-      name: "Jane Smith",
-      company: "DesignCo",
-      text: "Very satisfied with the quality of work. Highly recommend.",
-      img: "/src/assets/images/testi.jpg",
-    },
-    {
-      name: "Alice Brown",
-      company: "CreativeAgency",
-      text: "Exceptional service and support. They really understand our needs.",
-      img: "/src/assets/images/testi.jpg",
-    },
-  ];
+  // const testimonials = [
+  //   {
+  //     name: 'Brett Heimann',
+  //     company: 'MarketingAgency.com',
+  //     text:
+  //       'Great service, great communication, great finished product. will continue to use for our business.',
+  //     img: '/src/assets/images/testi.jpg',
+  //   },
+  //   {
+  //     name: 'John Doe',
+  //     company: 'TechSolutions',
+  //     text:
+  //       'Amazing experience. The team is very professional and delivers on time.',
+  //     img: '/src/assets/images/testi.jpg',
+  //   },
+  //   {
+  //     name: 'Jane Smith',
+  //     company: 'DesignCo',
+  //     text: 'Very satisfied with the quality of work. Highly recommend.',
+  //     img: '/src/assets/images/testi.jpg',
+  //   },
+  //   {
+  //     name: 'Alice Brown',
+  //     company: 'CreativeAgency',
+  //     text:
+  //       'Exceptional service and support. They really understand our needs.',
+  //     img: '/src/assets/images/testi.jpg',
+  //   },
+  // ]
 
-  const itemsPerPage = 6;
+  const itemsPerPage = 6
 
-  const totalPages = Math.ceil(totalBusinessData / itemsPerPage);
+  const totalPages = Math.ceil(totalBusinessData / itemsPerPage)
   const goToPreviousPage = async () => {
     if (currentPage > 1) {
       try {
-        setLoading(true);
-        const newPage = currentPage - 1;
-        setCurrentPage(newPage);
+        setLoading(true)
+        const newPage = currentPage - 1
+        setCurrentPage(newPage)
 
-        const businessDetails = await fetchBusiness(newPage);
-        setBusinessData(businessDetails.data.data);
-        setTotalBusinessData(businessDetails.data.totalCount);
+        const businessDetails = await fetchBusiness(newPage)
+        setBusinessData(businessDetails.data.data)
+        setTotalBusinessData(businessDetails.data.totalCount)
       } catch (err) {
-        console.log("Failed to fetch business");
+        console.log('Failed to fetch business')
       } finally {
-        setLoading(false);
+        setLoading(false)
       }
     }
-  };
+  }
 
   const goToNextPage = async () => {
     if (currentPage < totalPages) {
       try {
-        setLoading(true);
-        const newPage = currentPage + 1;
-        setCurrentPage(newPage);
+        setLoading(true)
+        const newPage = currentPage + 1
+        setCurrentPage(newPage)
 
-        const businessDetails = await fetchBusiness(newPage);
-        setBusinessData(businessDetails.data.data);
-        setTotalBusinessData(businessDetails.data.totalCount);
+        const businessDetails = await fetchBusiness(newPage)
+        setBusinessData(businessDetails.data.data)
+        setTotalBusinessData(businessDetails.data.totalCount)
       } catch (err) {
-        console.log("Failed to fetch business");
+        console.log('Failed to fetch business')
       } finally {
-        setLoading(false);
+        setLoading(false)
       }
     }
-  };
+  }
 
   const handleInputChange = (e) => {
-    const { name, value } = e.target;
+    const { name, value } = e.target
     setReview((prevState) => ({
       ...prevState,
       [name]: value,
-    }));
-  };
+    }))
+  }
 
   // if (loading) {
   //     return <Loader />
@@ -177,14 +243,14 @@ export default function Home() {
                   <span
                     className="input-group-text"
                     style={{
-                      backgroundColor: "white",
-                      borderTopLeftRadius: "50px",
-                      borderBottomLeftRadius: "50px",
-                      border: "1px solid #ced4da",
-                      color: "#228AE2",
+                      backgroundColor: 'white',
+                      borderTopLeftRadius: '50px',
+                      borderBottomLeftRadius: '50px',
+                      border: '1px solid #ced4da',
+                      color: '#228AE2',
                     }}
                   >
-                    <i className="bi bi-crosshair2"></i>{" "}
+                    <i className="bi bi-crosshair2"></i>{' '}
                     {/* Use an alternative location icon */}
                   </span>
                   <input
@@ -192,10 +258,10 @@ export default function Home() {
                     className="form-control custom-placeholder"
                     placeholder="location"
                     style={{
-                      borderTopRightRadius: "50px",
-                      borderBottomRightRadius: "50px",
-                      borderLeft: "none",
-                      color: "#E5F0FD",
+                      borderTopRightRadius: '50px',
+                      borderBottomRightRadius: '50px',
+                      borderLeft: 'none',
+                      color: '#E5F0FD',
                     }}
                   />
                 </div>
@@ -207,10 +273,10 @@ export default function Home() {
                   <span
                     className="input-group-text"
                     style={{
-                      backgroundColor: "white",
-                      borderTopLeftRadius: "50px",
-                      borderBottomLeftRadius: "50px",
-                      border: "1px solid #ced4da",
+                      backgroundColor: 'white',
+                      borderTopLeftRadius: '50px',
+                      borderBottomLeftRadius: '50px',
+                      border: '1px solid #ced4da',
                     }}
                   >
                     <i className="bi bi-search fw-bold"></i>
@@ -221,10 +287,10 @@ export default function Home() {
                     placeholder="Search for Restaurants"
                     value={searchData}
                     onInput={(e) => {
-                      setSearchData(e.target.value);
+                      setSearchData(e.target.value)
                     }}
                     style={{
-                      borderLeft: "none",
+                      borderLeft: 'none',
                     }}
                   />
                   <button
@@ -255,7 +321,7 @@ export default function Home() {
                   className="d-block w-100"
                   src="/src/assets/images/1.jpg"
                   alt="First slide"
-                  style={{ objectFit: "cover", height: "400px" }}
+                  style={{ objectFit: 'cover', height: '400px' }}
                 />
               </Carousel.Item>
               <Carousel.Item>
@@ -263,7 +329,7 @@ export default function Home() {
                   className="d-block w-100"
                   src="/src/assets/images/2.jpg"
                   alt="Second slide"
-                  style={{ objectFit: "cover", height: "400px" }}
+                  style={{ objectFit: 'cover', height: '400px' }}
                 />
               </Carousel.Item>
               <Carousel.Item>
@@ -271,7 +337,7 @@ export default function Home() {
                   className="d-block w-100"
                   src="/src/assets/images/3.jpg"
                   alt="Third slide"
-                  style={{ objectFit: "cover", height: "400px" }}
+                  style={{ objectFit: 'cover', height: '400px' }}
                 />
               </Carousel.Item>
               <Carousel.Item>
@@ -279,7 +345,7 @@ export default function Home() {
                   className="d-block w-100"
                   src="/src/assets/images/4.jpg"
                   alt="Fourth slide"
-                  style={{ objectFit: "cover", height: "400px" }}
+                  style={{ objectFit: 'cover', height: '400px' }}
                 />
               </Carousel.Item>
             </Carousel>
@@ -288,11 +354,11 @@ export default function Home() {
       </div>
 
       <section className="mt-4 bg-light h-auto">
-        <div className="container" style={{ width: "90%" }}>
+        <div className="container" style={{ width: '90%' }}>
           <div className="mb-5 p-4">
             <h1
               className="text-center fw-bold mt-4"
-              style={{ marginTop: "20px" }}
+              style={{ marginTop: '20px' }}
             >
               Discover Diverse Categories
             </h1>
@@ -311,11 +377,11 @@ export default function Home() {
                   key={category._id} // Add a unique key for each category
                 >
                   <div className="cat-img">
-                    <img src={category.image} alt={category.name} />{" "}
+                    <img src={category.image} alt={category.name} />{' '}
                     {/* Dynamically render category image */}
                   </div>
                   <div className="text-center">
-                    <p>{category.name}</p>{" "}
+                    <p>{category.name}</p>{' '}
                     {/* Dynamically render category name */}
                   </div>
                 </Link>
@@ -354,7 +420,7 @@ export default function Home() {
                     </div>
                     <div className="col-8">
                       <div className="col-12 mb-2 mt-2">
-                        <h2 style={{ fontSize: "28px" }}>
+                        <h2 style={{ fontSize: '28px' }}>
                           {business.businessName}
                         </h2>
                       </div>
@@ -368,9 +434,9 @@ export default function Home() {
                         <h3 className="fs-16">
                           <i className="bi bi-crosshair"></i>
                           <span className="ms-1 fs-15">
-                            {business.address.buildingName},{" "}
+                            {business.address.buildingName},{' '}
                             {business.address.city}, {business.address.landMark}
-                            , {business.address.streetName},{" "}
+                            , {business.address.streetName},{' '}
                             {business.address.state}
                           </span>
                         </h3>
@@ -388,11 +454,11 @@ export default function Home() {
               disabled={currentPage === 1}
               className="btn btn-primary me-2"
               style={{
-                borderTopLeftRadius: "50px",
-                borderBottomLeftRadius: "50px",
-                border: "none",
-                color: "#E5F0FD",
-                backgroundColor: "#228AE2",
+                borderTopLeftRadius: '50px',
+                borderBottomLeftRadius: '50px',
+                border: 'none',
+                color: '#E5F0FD',
+                backgroundColor: '#228AE2',
               }}
             >
               Prev.
@@ -405,11 +471,11 @@ export default function Home() {
               disabled={currentPage === totalPages}
               className="btn btn-primary ms-2"
               style={{
-                borderTopRightRadius: "50px",
-                borderBottomRightRadius: "50px",
-                border: "none",
-                color: "#E5F0FD",
-                backgroundColor: "#228AE2",
+                borderTopRightRadius: '50px',
+                borderBottomRightRadius: '50px',
+                border: 'none',
+                color: '#E5F0FD',
+                backgroundColor: '#228AE2',
               }}
             >
               Next
@@ -417,7 +483,6 @@ export default function Home() {
           </div>
         </div>
       </section>
-     
 
       <section className="mb-5 mt-3 bg-light">
         <div className="container" id="review">
@@ -444,28 +509,39 @@ export default function Home() {
 
           <div className="col-12">
             <Slider {...settings}>
-              {testimonials.map((testimonial, index) => (
+              {reviews?.map((testimonial, index) => (
                 <div key={index} className="testi-slide">
                   <div
                     className={`testi-div p-5 ${
-                      index === currentSlide ? "testi-theme" : ""
+                      index === currentSlide ? 'testi-theme' : ''
                     }`}
                   >
                     <div className="row ">
                       <div className="col-2">
-                        <img src="/src/assets/images/user.png" alt={testimonial.name} style={{objectFit:"cover"}} />
+                        <img
+                          src="/src/assets/images/user.png"
+                          alt={testimonial?.name}
+                          style={{ objectFit: 'cover' }}
+                        />
                       </div>
                       <div className="col-10">
                         <h3 className="fs-20 p-0 m-0 ms-4">
-                          {testimonial.name}
+                          {testimonial?.name}
                         </h3>
-                        <span className="fs-13 ms-4">
-                          {testimonial.company}
-                        </span>
+                        <div className="text-warning text-center mt-0 m-0">
+                          {[...Array(Math.floor(testimonial?.rating))].map(
+                            (star, i) => (
+                              <i key={i} className="bi bi-star-fill"></i>
+                            ),
+                          )}
+                          {testimonial?.rating % 1 !== 0 && (
+                            <i className="bi bi-star-half"></i>
+                          )}
+                        </div>
                       </div>
                     </div>
                     <div className="col-12 mt-4">
-                      <p>{testimonial.text}</p>
+                      <p>{testimonial?.review}</p>
                     </div>
                   </div>
                 </div>
@@ -478,11 +554,11 @@ export default function Home() {
         header="Write a Review"
         visible={visible}
         onHide={() => {
-          if (!visible) return;
-          setVisible(false);
+          if (!visible) return
+          setVisible(false)
         }}
-        style={{ width: "50vw" }}
-        breakpoints={{ "960px": "75vw", "641px": "100vw" }}
+        style={{ width: '50vw' }}
+        breakpoints={{ '960px': '75vw', '641px': '100vw' }}
       >
         <div className="container">
           <div className="p-3 justify-content-center">
@@ -510,14 +586,17 @@ export default function Home() {
                 onChange={handleInputChange}
                 rows={5}
                 cols={30}
-                name="description"
+                name="review"
                 placeholder="Write your review here..."
               />
             </div>
           </div>
           <div className="col-12 mt-3">
             <div className="row">
-              <button className="btn-dark btn theme radius">
+              <button
+                onClick={handleReviewSubmit}
+                className="btn-dark btn theme radius"
+              >
                 Submit Review
               </button>
             </div>
@@ -587,7 +666,7 @@ export default function Home() {
                         className=" fs-20 text-decoration-none text-white"
                       >
                         <span>
-                          <i className="bi bi-telephone text-white me-1"></i>{" "}
+                          <i className="bi bi-telephone text-white me-1"></i>{' '}
                           +91 7994085695
                         </span>
                       </a>
@@ -622,5 +701,5 @@ export default function Home() {
         </div>
       </footer>
     </Layout>
-  );
+  )
 }

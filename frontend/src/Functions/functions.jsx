@@ -93,6 +93,20 @@ export const fetchBusinessTemplate = async (id) => {
   }
 }
 
+export const getAllReviews = async ({ page = 1, limit = 10 }) => {
+  try {
+    const response = await axios.get(`${baseUrl}/api/v1/review`, config)
+
+    if (response.status !== 200) {
+      throw new Error(`HTTP error! Status: ${response.status}`)
+    }
+    const data = response.data
+    return data
+  } catch (error) {
+    console.error('Failed to fetch reviews')
+  }
+}
+
 export const CreateBusinessDetails = async (formData) => {
   try {
     const response = await axios.post(`${baseUrl}/api/v1/business/`, formData, {
@@ -123,9 +137,9 @@ export const CreateBusinessDetails = async (formData) => {
     throw error // Propagate the error
   }
 }
-export const checkBusinessExists = async (formData) => {
+export const createReveiw = async (formData) => {
   try {
-    const response = await axios.post(`${baseUrl}/api/v1/business/check`, formData, {
+    const response = await axios.post(`${baseUrl}/api/v1/review/`, formData, {
       headers: {
         'Content-Type': 'application/json',
       },
@@ -134,6 +148,34 @@ export const checkBusinessExists = async (formData) => {
     // if (response.status !== 200) {
     //     throw new Error(`HTTP error! Status: ${response.status}`);
     // }
+
+    const data = response.data
+    if (data.success) {
+      return data // Successfully created business details
+    } else {
+      console.error('Failed to add review:', data.message || 'Unknown error')
+      throw new Error(data.message || 'Failed to add review')
+    }
+  } catch (error) {
+    console.error('failed add review:', error.message)
+    throw error // Propagate the error
+  }
+}
+export const checkBusinessExists = async (formData) => {
+  try {
+    const response = await axios.post(
+      `${baseUrl}/api/v1/business/check`,
+      formData,
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      },
+    )
+
+    if (response.status !== 200) {
+      throw new Error(`HTTP error! Status: ${response.status}`)
+    }
 
     const data = response.data
     if (data.success) {
