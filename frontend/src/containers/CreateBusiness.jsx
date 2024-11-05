@@ -5428,7 +5428,6 @@ export default function CreateBusiness() {
                 },
               },
             )
-            console.log(response)
             if (response.status !== 200) {
               throw new Error(`HTTP error! Status: ${response.status}`)
             }
@@ -5469,7 +5468,6 @@ export default function CreateBusiness() {
       const rzp = new window.Razorpay(options)
       rzp.open()
     }
-    useEffect(() => {
       const submitData = async () => {
         const res = await CreateBusinessDetails(formData)
         const id = res.data._id || res.data.data?._id
@@ -5477,7 +5475,6 @@ export default function CreateBusiness() {
         handlePayment(id)
       }
       submitData()
-    }, [])
   }
 
   return (
