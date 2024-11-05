@@ -179,4 +179,9 @@
     object-fit: cover;
 }.dish-div{
     height: 500px;
+}.create-business-div{
+    overflow: hidden;
+    overflow-y: scroll;
+}.left-portion{
+    border:1px dashed #ccc;
 }

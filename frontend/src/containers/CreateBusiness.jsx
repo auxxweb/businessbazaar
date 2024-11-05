@@ -218,7 +218,7 @@ export default function CreateBusiness() {
     }
 
     return (
-      <div className="h-100vh">
+      <div className="h-100vh create-business-div">
         <div className="row h-100 justify-content-center">
           <div className="d-none d-md-block left-portion col-md-5 h-100 p-0">
             <img
@@ -352,7 +352,7 @@ export default function CreateBusiness() {
     }
 
     return (
-      <div className="h-100vh">
+      <div className="h-100vh create-business-div">
         <div className="row justify-content-center h-100">
           <div className="col-12 col-md-6 row align-items-center right-portion p-5">
             <div className="col-12 text-start">
@@ -640,7 +640,7 @@ export default function CreateBusiness() {
       if (whatsappNumbers.some((number) => !number.number))
         newErrors.whatsappNumbers = 'All WhatsApp numbers are required.'
       if (emails.some((email) => !email.email))
-        newErrors.emails = 'All emails are required.'
+        newErrors.emails = 'email is required.'
       if (!newFormData.contactDetails.website)
         newErrors.website = 'Website is required.'
       if (!address.buildingName)
@@ -682,7 +682,7 @@ export default function CreateBusiness() {
     }
 
     return (
-      <div className="h-100vh">
+      <div className="h-100vh create-business-div">
         <div className="row h-100">
           <div className="col-12 col-md-5 row align-items-center right-portion p-5">
             <div className="col-12 text-start">
@@ -1065,7 +1065,7 @@ export default function CreateBusiness() {
     }
 
     return (
-      <div className="h-100vh">
+      <div className="h-100vh create-business-div">
         <div className="row h-100 justify-content-center">
           <div className="col-12 col-md-7 d-flex flex-column justify-content-between align-items-center right-portion h-100 p-5">
             <div className="col-12 text-start">
@@ -1196,7 +1196,7 @@ export default function CreateBusiness() {
 
     return (
       <>
-        <div className="h-100vh">
+        <div className="h-100vh create-business-div">
           <div className="row h-100 justify-content-center">
             <div className="col-12 col-md-5 row align-items-end justify-content-center h-100 p-3 p-md-5 right-portion">
               <div className="col-12 text-start">
@@ -1346,7 +1346,7 @@ export default function CreateBusiness() {
 
     return (
       <>
-        <div className="h-100vh">
+        <div className="h-100vh create-business-div">
           <div className="row  h-100 justify-content-center">
             {/* Left Image Section */}
 
@@ -1692,7 +1692,7 @@ export default function CreateBusiness() {
     }
     return (
       <>
-        <div className="h-100vh">
+        <div className="h-100vh create-business-div">
           <div className="row  h-100 justify-content-center">
             {/* Left Image Section */}
 
@@ -2082,7 +2082,7 @@ export default function CreateBusiness() {
     }
 
     return (
-      <div className="h-100vh">
+      <div className="h-100vh create-business-div">
         <div className="row h-100 justify-content-center">
           {/* Left Image Section */}
 
@@ -2779,7 +2779,7 @@ export default function CreateBusiness() {
 
     return (
       <>
-        <div className="h-100vh">
+        <div className="h-100vh create-business-div">
           <div className="row h-100 justify-content-center">
             {/* Left Image Section */}
 
@@ -3295,7 +3295,7 @@ export default function CreateBusiness() {
     }
 
     return (
-      <div className="h-100vh">
+      <div className="h-100vh create-business-div">
         <div className="row h-100 justify-content-center">
           <div className="col-12 col-md-6 row align-items-end justify-content-center h-100 p-3 p-md-5 right-portion">
             <div className="col-12 text-start">
@@ -3589,7 +3589,7 @@ export default function CreateBusiness() {
     }
 
     return (
-      <div className="h-100vh">
+      <div className="h-100vh create-business-div">
         <div className="row h-100 justify-content-center">
           {/* Right Form Section */}
           <div className="col-12 col-md-6 row align-items-end justify-content-center h-100 p-3 p-md-5 right-portion">
@@ -3822,7 +3822,7 @@ export default function CreateBusiness() {
     }
 
     return (
-      <div className="h-100vh">
+      <div className="h-100vh create-business-div">
         <div className="row h-100 justify-content-center">
           {/* Right Form Section */}
           <div className="col-12 col-md-6 row align-items-end justify-content-center h-100 p-3 p-md-5 right-portion">
@@ -4077,7 +4077,7 @@ export default function CreateBusiness() {
     }
 
     return (
-      <div className="h-100vh">
+      <div className="h-100vh create-business-div">
         <div className="row h-100 justify-content-center">
           <div className="d-none d-md-block left-portion p-0 col-md-5 h-100">
             <img
@@ -5291,7 +5291,7 @@ export default function CreateBusiness() {
 
     return (
       <>
-        <div className="h-100vh">
+        <div className="h-100vh create-business-div">
           <div className="row h-100 justify-content-center">
             {/* Left Image Section - Hidden on small screens */}
             <div className="d-none d-md-block left-portion p-0 col-md-5 h-100">
