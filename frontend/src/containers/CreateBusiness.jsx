@@ -335,6 +335,7 @@ export default function CreateBusiness() {
 
     // Handle form submission with validation
     const handleBusinessSubmit = () => {
+        console.log('asss')
       if (!businessName) {
         setError('All fields are mandatory.')
         return
@@ -346,6 +347,7 @@ export default function CreateBusiness() {
         businessName: businessName,
         logo: logo,
       }))
+      console.log('asss')
       handleNextStep()
     }
 
@@ -643,11 +645,12 @@ export default function CreateBusiness() {
         newErrors.website = 'Website is required.'
       if (!address.buildingName)
         newErrors.buildingName = 'Building name is required.'
-      if (!address.address) newErrors.emails = 'Address is required.'
-      if (!address.city) newErrors.city = 'City is required'
+    //   if (!address.address) newErrors.address = 'Emailaddress is required.'
+    //   if (!address.city) newErrors.city = 'City is required'
       if (!address.state) newErrors.state = 'State is required'
 
       setErrors(newErrors)
+      console.log(newErrors)
       return Object.keys(newErrors).length === 0
     }
 
@@ -659,7 +662,7 @@ export default function CreateBusiness() {
           address: address,
           location: location,
         }))
-        handleNextStep() // Ensure this is defined elsewhere
+        handleNextStep()
       }
     }
 
@@ -785,7 +788,7 @@ export default function CreateBusiness() {
                     </div>
                     <div className="col-12 col-sm-7 col-md-8 mt-2 mt-sm-0">
                       <input
-                        type="text"
+                        type="number"
                         value={number.number}
                         onChange={(e) =>
                           handleMobileNumberChange(number.id, e.target.value)
@@ -843,7 +846,7 @@ export default function CreateBusiness() {
                     </div>
                     <div className="col-12 col-sm-7 col-md-8 mt-2 mt-sm-0">
                       <input
-                        type="text"
+                        type="number"
                         value={number.number}
                         onChange={(e) =>
                           handleWhatsappNumberChange(number.id, e.target.value)
@@ -1348,7 +1351,7 @@ export default function CreateBusiness() {
             {/* Left Image Section */}
 
             {/* Right Form Section */}
-            <div className="col-12 col-md-7 row align-items-end justify-content-center h-100 p-3 p-md-5 right-portion">
+            <div className="col-12 col-md-5 row align-items-end justify-content-center h-100 p-3 p-md-5 right-portion">
               <div className="col-12 text-start">
                 <button
                   className="btn btn-dark w-auto float-start"
@@ -1446,7 +1449,7 @@ export default function CreateBusiness() {
               </div>
             </div>
 
-            <div className="left-portion col-12 col-lg-5 h-100 p-3 row align-items-center">
+            <div className="left-portion col-12 col-lg-7 h-100 p-3 row align-items-center">
               <link rel="preconnect" href="https://fonts.googleapis.com" />
               <link
                 rel="preconnect"
@@ -1496,7 +1499,7 @@ export default function CreateBusiness() {
               <footer className="h-auto">
                 <div className="container pjs  p-top">
                   <div className="mt-5">
-                    <div className="row">
+                    <div className="row justify-content-between">
                       <div className="col-12 col-lg-4">
                         <div className="col-12 d-block d-lg-flex text-center text-lg-start text mt-5">
                           <div className="nav-logo width-fit">
@@ -1694,7 +1697,7 @@ export default function CreateBusiness() {
             {/* Left Image Section */}
 
             {/* Right Form Section */}
-            <div className="col-12 col-md-6 row align-items-end justify-content-center h-100 p-3 p-md-5 right-portion">
+            <div className="col-12 col-md-5 row align-items-end justify-content-center h-100 p-3 p-md-5 right-portion">
               <div className="col-12 text-start">
                 <button
                   className="btn btn-dark w-auto float-start"
@@ -1739,7 +1742,7 @@ export default function CreateBusiness() {
               </div>
             </div>
 
-            <div className="d-none d-md-block left-portion p-0 col-md-6 h-100">
+            <div className="d-none d-md-block left-portion p-0 col-md-7 h-100">
               <link rel="preconnect" href="https://fonts.googleapis.com" />
               <link
                 rel="preconnect"
@@ -1789,7 +1792,7 @@ export default function CreateBusiness() {
               <footer className="h-auto">
                 <div className="container pjs  p-top">
                   <div className="mt-5">
-                    <div className="row">
+                    <div className="row justify-content-between">
                       <div className="col-12 col-lg-4">
                         <div className="col-12 d-block d-lg-flex text-center text-lg-start text mt-5">
                           <div className="nav-logo width-fit">
@@ -2316,7 +2319,7 @@ export default function CreateBusiness() {
             </style>
             <Navbar
               expand="lg"
-              className="bg-white pjs fixed-top"
+              className="bg-white pjs "
               style={{ paddingBlock: '5px' }}
             >
               <Container>
@@ -2336,36 +2339,17 @@ export default function CreateBusiness() {
                 />
 
                 <Navbar.Collapse id="basic-navbar-nav">
-                  <Nav className="ms-auto w-100 justify-content-evenly jcc">
-                    <NavLink
-                      href="#menu"
-                      className="text-black text-center text-lg-start  text-decoration-none fs-14"
-                      style={{ color: 'black' }}
+                <Nav className="ms-auto w-100 justify-content-evenly jcc">
+                    <button
+                    className="hamburger-btn text-black bg-transparent border-0 d-flex flex-column justify-content-center align-items-center"
+                    style={{ cursor: 'pointer' }}
+                    onClick={() => console.log('Hamburger button clicked')}
                     >
-                      Menu
-                    </NavLink>
-                    <NavLink
-                      href="#gallery"
-                      className="text-black text-center text-lg-start  text-decoration-none fs-14"
-                      style={{ color: 'black' }}
-                    >
-                      Gallery
-                    </NavLink>
-                    <NavLink
-                      href="#about"
-                      className="text-black text-center text-lg-start  text-decoration-none fs-14"
-                      style={{ color: 'black' }}
-                    >
-                      About
-                    </NavLink>
-                    <NavLink
-                      href="#contact"
-                      className="text-black text-center text-lg-start  text-decoration-none fs-14"
-                      style={{ color: 'black' }}
-                    >
-                      Contact
-                    </NavLink>
-                  </Nav>
+                    <div style={{ width: '25px', height: '3px', backgroundColor: 'black', margin: '4px 0' }}></div>
+                    <div style={{ width: '25px', height: '3px', backgroundColor: 'black', margin: '4px 0' }}></div>
+                    <div style={{ width: '25px', height: '3px', backgroundColor: 'black', margin: '4px 0' }}></div>
+                    </button>
+                </Nav>
                 </Navbar.Collapse>
               </Container>
             </Navbar>
@@ -2399,7 +2383,7 @@ export default function CreateBusiness() {
                       </div>
                       <div className="mt-3 col-12">
                         <div className="row">
-                          <div className="col-6 col-lg-3 mb-2">
+                          <div className="col-6 col-lg-5 mb-2">
                             <NavLink
                               to="#about"
                               className="btn btn-dark text-white radius-theme box-shadow w-100 p-1"
@@ -2408,7 +2392,7 @@ export default function CreateBusiness() {
                               View More
                             </NavLink>
                           </div>
-                          <div className="col-6 col-lg-3 mb-2">
+                          <div className="col-6 col-lg-5 mb-2">
                             <NavLink
                               to="#service"
                               className="btn btn-dark text-white radius-theme box-shadow theme w-100 p-1"
@@ -4834,6 +4818,9 @@ export default function CreateBusiness() {
                       <div className="col-12 mt-5">
                         <p className="text-center">{service.description}</p>
                       </div>
+                      <div className="col-12 text-center" style={{ height: "100px" }}>
+                                        <img src={service.image} alt={service.title} className='h-100' />
+                                    </div>
                     </div>
                   ))}
                 </Slider>
@@ -4851,6 +4838,7 @@ export default function CreateBusiness() {
                     <div className="col-12 mt-5">
                       <p className="text-center">{service.description}</p>
                     </div>
+                    
                     <div
                       className="col-12 text-center"
                       style={{ height: '100px' }}

@@ -2,7 +2,7 @@ import React from 'react';
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
-import { Navigate, NavLink } from 'react-router-dom';
+import { Link, Navigate, NavLink } from 'react-router-dom';
 
 export default function Header() {
   return (
@@ -17,18 +17,15 @@ export default function Header() {
 
         <Navbar.Collapse id="basic-navbar-nav" className='text-center'>
           <Nav className="ms-auto w-100 justify-content-evenly">
-            <NavLink to="/" className='text-black  text-decoration-none' style={{color:'black'}}>
-              Home
-            </NavLink>
-            <NavLink to="#category" className='text-black  text-decoration-none' style={{color:'black'}}>
-              Categories
-            </NavLink>
-            <NavLink to="#business" className='text-black  text-decoration-none' style={{color:'black'}}>
-              Business
-            </NavLink>
-            <NavLink to="#review" className='text-black  text-decoration-none' style={{color:'black'}}>
-              Review
-            </NavLink>
+          <a href="#category" className="text-black text-decoration-none" style={{ color: 'black' }}>
+            Categories
+          </a>
+          <a href="#business" className="text-black text-decoration-none" style={{ color: 'black' }}>
+            Business
+          </a>
+          <a href="#review" className="text-black text-decoration-none" style={{ color: 'black' }}>
+            Review
+          </a>
             <NavLink
               to='/create-business'
               style={{

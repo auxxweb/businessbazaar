@@ -17,6 +17,7 @@ import { InputTextarea } from "primereact/inputtextarea";
 import { InputText } from "primereact/inputtext";
 import { Rating } from "primereact/rating";
 import { Dialog } from "primereact/dialog";
+import ContactSection from "/src/components/Business/ContactSection";
 
 export default function Home() {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -416,51 +417,7 @@ export default function Home() {
           </div>
         </div>
       </section>
-      <section className="mb-5 mt-3 bg-light">
-        <div className="container">
-          <div className="mt-3 mb-3">
-            <h1 className="text-center fw-bold ">
-              What Our Customers Are Saying
-            </h1>
-            <p className="mt-3 text-center">
-              Hear from those who have experienced our services firsthand. Read
-              their stories and see why we’re a trusted choice for so many.
-              Their feedback is a testament to our commitment to excellence!
-            </p>
-          </div>
-
-          <div className="col-12">
-            <Slider {...settings}>
-              {testimonials.map((testimonial, index) => (
-                <div key={index} className="testi-slide">
-                  <div
-                    className={`testi-div p-5 ${
-                      index === currentSlide ? "testi-theme" : ""
-                    }`}
-                  >
-                    <div className="row ">
-                      <div className="col-2">
-                        <img src={testimonial.img} alt={testimonial.name} />
-                      </div>
-                      <div className="col-10">
-                        <h3 className="fs-20 p-0 m-0 ms-4">
-                          {testimonial.name}
-                        </h3>
-                        <span className="fs-13 ms-4">
-                          {testimonial.company}
-                        </span>
-                      </div>
-                    </div>
-                    <div className="col-12 mt-4">
-                      <p>{testimonial.text}</p>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </Slider>
-          </div>
-        </div>
-      </section>
+     
 
       <section className="mb-5 mt-3 bg-light">
         <div className="container" id="review">
@@ -496,7 +453,7 @@ export default function Home() {
                   >
                     <div className="row ">
                       <div className="col-2">
-                        <img src={testimonial.img} alt={testimonial.name} />
+                        <img src="/src/assets/images/user.png" alt={testimonial.name} style={{objectFit:"cover"}} />
                       </div>
                       <div className="col-10">
                         <h3 className="fs-20 p-0 m-0 ms-4">
@@ -568,6 +525,7 @@ export default function Home() {
           </div>
         </div>
       </Dialog>
+      <ContactSection/>
       <footer className="mt-3 h-auto footer-section">
         <div className="container">
           <div className="p-4 mt-0 mt-md-5 pt-5">
