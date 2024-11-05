@@ -21,7 +21,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import Slider from 'react-slick';
 
 export default function CreateBusiness() {
-    const [step, setStep] = useState(12);
+    const [step, setStep] = useState(5);
 
     const handleNextStep = () => {
         setStep(prevStep => prevStep + 1);
@@ -1030,10 +1030,7 @@ export default function CreateBusiness() {
             <>
                 <div className="h-100vh">
                     <div className="row h-100 justify-content-center">
-                        <div className="d-none d-md-block left-portion p-0 col-md-5 h-100">
-                            <img src="/src/assets/images/service_offering.jpg" alt="" className="w-100 h-100" />
-                        </div>
-                        <div className="col-12 col-md-7 row align-items-end justify-content-center h-100 p-3 p-md-5 right-portion">
+                        <div className="col-12 col-md-5 row align-items-end justify-content-center h-100 p-3 p-md-5 right-portion">
                             <div className="col-12 text-start">
                                 <button className="btn btn-dark w-auto float-start" onClick={handlePrevStep}>
                                     <i className="bi bi-arrow-left"></i>
@@ -1096,6 +1093,16 @@ export default function CreateBusiness() {
                                 </button>
                             </div>
                         </div>
+
+
+                        <div className="left-portion col-12 col-lg-6 h-100 p-3 row align-items-center">
+                        <div className="p-3" style={{ border: '1px dashed black', borderRadius: '16px' }}>
+                            <p className='text-center'>
+                               Add Offering Services Here.
+                            </p>
+                        </div>
+                    </div>
+
                     </div>
                 </div>
             </>
@@ -3341,7 +3348,6 @@ export default function CreateBusiness() {
         const handleGallerySubmit = async () => {
             const videoFiles = videos.filter(video => video.file).map(video => video.file);
 
-            // If there are no video files, skip uploading and move to the next step
             if (videoFiles.length === 0) {
                 handleNextStep();
                 return;

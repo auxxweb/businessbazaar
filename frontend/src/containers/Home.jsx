@@ -42,6 +42,12 @@ export default function Home() {
   const [totalBusinessData, setTotalBusinessData] = useState(0);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
+  const [visible, setVisible] = useState(false);
+  const [review, setReview] = useState([{
+      rating: '',
+      name: '',
+      description: '',
+  }]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -60,19 +66,6 @@ export default function Home() {
         setLoading(false);
       }
     };
-    const [categoryData, setCategoryData] = useState([]);
-    const [businessData, setBusinessData] = useState([]);
-    const [searchData, setSearchData] = useState('');
-    const [totalBusinessData, setTotalBusinessData] = useState(0)
-    const [loading, setLoading] = useState(true);
-    const [currentPage, setCurrentPage] = useState(1);
-    const [visible, setVisible] = useState(false);
-    const [review, setReview] = useState([{
-        rating: '',
-        name: '',
-        description: '',
-    }]);
-
     fetchData();
   }, []);
 
@@ -122,6 +115,24 @@ export default function Home() {
       try {
         setLoading(true);
         const newPage = currentPage - 1;
+        setCurrentPage(newPage);
+
+        const businessDetails = await fetchBusiness(newPage);
+        setBusinessData(businessDetails.data.data);
+        setTotalBusinessData(businessDetails.data.totalCount);
+      } catch (err) {
+        console.log("Failed to fetch business");
+      } finally {
+        setLoading(false);
+      }
+    }
+  };
+
+  const goToNextPage = async () => {
+    if (currentPage < totalPages) {
+      try {
+        setLoading(true);
+        const newPage = currentPage + 1;
         setCurrentPage(newPage);
 
         const businessDetails = await fetchBusiness(newPage);
@@ -222,7 +233,7 @@ export default function Home() {
         </div>
       </div> */}
 
-      <div>
+      <div id='#home'>
         <div className="container">
           <div className="border-1 surface-border border-round m-2 text-center py-5 px-3">
             <Carousel className="banner-slick">
@@ -440,7 +451,7 @@ export default function Home() {
       </section>
     
             <section className="mb-5 mt-3 bg-light">
-                <div className="container">
+                <div className="container" id='review'>
                     <div className="mt-3 mb-3">
                         <h1 className="text-center fw-bold ">
                             What Our Customers Are Saying

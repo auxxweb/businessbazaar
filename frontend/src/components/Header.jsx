@@ -17,16 +17,16 @@ export default function Header() {
 
         <Navbar.Collapse id="basic-navbar-nav" className='text-center'>
           <Nav className="ms-auto w-100 justify-content-evenly">
-            <NavLink href="/" className='text-black  text-decoration-none' style={{color:'black'}}>
+            <NavLink to="/" className='text-black  text-decoration-none' style={{color:'black'}}>
               Home
             </NavLink>
-            <NavLink href="#category" className='text-black  text-decoration-none' style={{color:'black'}}>
+            <NavLink to="#category" className='text-black  text-decoration-none' style={{color:'black'}}>
               Categories
             </NavLink>
-            <NavLink href="#business" className='text-black  text-decoration-none' style={{color:'black'}}>
+            <NavLink to="#business" className='text-black  text-decoration-none' style={{color:'black'}}>
               Business
             </NavLink>
-            <NavLink href="#review" className='text-black  text-decoration-none' style={{color:'black'}}>
+            <NavLink to="#review" className='text-black  text-decoration-none' style={{color:'black'}}>
               Review
             </NavLink>
             <NavLink
