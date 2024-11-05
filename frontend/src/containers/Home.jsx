@@ -21,6 +21,7 @@ import { InputText } from 'primereact/inputtext'
 import { Rating } from 'primereact/rating'
 import { Dialog } from 'primereact/dialog'
 import ContactSection from '/src/components/Business/ContactSection'
+import { formatDate } from '../utils/app.utils';
 
 export default function Home() {
   const [currentSlide, setCurrentSlide] = useState(0)
@@ -542,6 +543,9 @@ export default function Home() {
                     </div>
                     <div className="col-12 mt-4">
                       <p>{testimonial?.review}</p>
+                    </div>
+                    <div className="col-12 mt-4">
+                      <p>{formatDate(testimonial?.createdAt ??"")}</p>
                     </div>
                   </div>
                 </div>
