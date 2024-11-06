@@ -6,7 +6,8 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import { Link } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 import {
   fetchBusiness,
   fetchCategories,
@@ -20,6 +21,7 @@ import { Dialog } from "primereact/dialog";
 import ContactSection from "/src/components/Business/ContactSection";
 
 export default function Home() {
+  const navigate = useNavigate();
   const [currentSlide, setCurrentSlide] = useState(0);
   const settings = {
     centerMode: true,
@@ -417,7 +419,6 @@ export default function Home() {
           </div>
         </div>
       </section>
-     
 
       <section className="mb-5 mt-3 bg-light">
         <div className="container" id="review">
@@ -453,7 +454,11 @@ export default function Home() {
                   >
                     <div className="row ">
                       <div className="col-2">
-                        <img src="/src/assets/images/user.png" alt={testimonial.name} style={{objectFit:"cover"}} />
+                        <img
+                          src="/src/assets/images/user.png"
+                          alt={testimonial.name}
+                          style={{ objectFit: "cover" }}
+                        />
                       </div>
                       <div className="col-10">
                         <h3 className="fs-20 p-0 m-0 ms-4">
@@ -534,7 +539,12 @@ export default function Home() {
                 </h1>
               </div>
               <div className="col-12 col-md-6 text-center text-md-end">
-                <button className="btn btn-theme mt-3">Create Now</button>
+                <button
+                  className="btn btn-theme mt-3"
+                  onClick={() => navigate("/create-business")}
+                >
+                  Create Now
+                </button>
               </div>
             </div>
           </div>
