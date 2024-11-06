@@ -7,16 +7,6 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { useNavigate, Link } from "react-router-dom";
-// import { useNavigate } from "react-router-dom";
-import React, { useEffect, useState } from 'react'
-import Layout from '../components/Layout'
-import { Carousel } from 'react-bootstrap' // Import Carousel component
-import 'bootstrap-icons/font/bootstrap-icons.css'
-import 'bootstrap/dist/css/bootstrap.min.css'
-import Slider from 'react-slick'
-import 'slick-carousel/slick/slick.css'
-import 'slick-carousel/slick/slick-theme.css'
-import { Link } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import {
   createReveiw,
