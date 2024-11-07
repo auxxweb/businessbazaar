@@ -1098,7 +1098,7 @@ export default function Template() {
                 <div class="footer-bottom">
                   <div class="row w-full justify-content-between">
                     <div class="col-sm-4 text-left">
-                      <a href="">Terms and Conditions</a>
+                      <a href="/terms-and-conditions">Terms and Conditions</a>
                     </div>
                     <div class="col-sm-4 text-right">
                       <div style={{ color: "#A4B3CB" }} class="text-right">
