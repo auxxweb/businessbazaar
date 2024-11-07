@@ -8,6 +8,8 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { useNavigate, Link } from "react-router-dom";
 import { toast } from 'react-toastify'
+import ContactForm from "/src/components/Business/contactForm";
+
 import {
   createReveiw,
   fetchBusiness,
@@ -485,7 +487,7 @@ export default function Home() {
           </div>
         </div>
       </section>
-
+      <div/> 
       <section className="mb-5 mt-3 bg-light">
         <div className="container" id="review">
           <div className="mt-3 mb-3">
@@ -608,6 +610,7 @@ export default function Home() {
           </div>
         </div>
       </Dialog>
+ <ContactForm></ContactForm>
       <footer className="mt-3 h-auto footer-section">
         <div className="container">
           <div className="p-4 mt-0 mt-md-5 pt-5">
