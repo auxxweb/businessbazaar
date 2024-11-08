@@ -214,6 +214,24 @@ export const FetchPlans = async () => {
     console.error('Error fetching categories:', error.message)
   }
 }
+export const fetchBanners = async () => {
+  try {
+    const response = await axios.get(`${baseUrl}/api/v1/banner`, config) // Use backticks for template literals
+
+    if (response.status !== 200) {
+      throw new Error(`HTTP error! Status: ${response.status}`)
+    }
+
+    const data = response.data
+    if (data.success) {
+      return data?.data
+    } else {
+      console.error('Failed to fetch categories')
+    }
+  } catch (error) {
+    console.error('Error fetching categories:', error.message)
+  }
+}
 
 export const getCategoryData = async (categoryId) => {
   try {
