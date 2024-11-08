@@ -251,7 +251,7 @@ export default function Home() {
                       borderTopLeftRadius: "50px",
                       borderBottomLeftRadius: "50px",
                       border: "1px solid #ced4da",
-                      color: "#228AE2",
+                      color: "#105193",
                     }}
                   >
                     <i className="bi bi-crosshair2"></i>{" "}
@@ -462,7 +462,7 @@ export default function Home() {
                 borderBottomLeftRadius: "50px",
                 border: "none",
                 color: "#E5F0FD",
-                backgroundColor: "#228AE2",
+                backgroundColor: "#105193",
               }}
             >
               Prev.
@@ -479,7 +479,7 @@ export default function Home() {
                 borderBottomRightRadius: "50px",
                 border: "none",
                 color: "#E5F0FD",
-                backgroundColor: "#228AE2",
+                backgroundColor: "#105193",
               }}
             >
               Next

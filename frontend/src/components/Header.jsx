@@ -10,7 +10,7 @@ export default function Header() {
       <Container>
         {/* Align Brand to the start (left side) */}
         <Navbar.Brand href="/" className='fw-bold w-50' style={{ fontSize: '36px' }}>
-          Business Bazar
+          <img src="/src/assets/images/logo.jpeg" alt="" style={{ width: '100px' }} />
         </Navbar.Brand>
 
         <Navbar.Toggle aria-controls="basic-navbar-nav"  style={{color:'black'}}/>
@@ -29,7 +29,8 @@ export default function Header() {
             <NavLink
               to='/create-business'
               style={{
-                backgroundColor: '#228AE2',
+                backgroundColor: '#105193',
+                hoverColor: '#107D93',
                 color: 'white',
                 borderRadius: '50px',
                 padding: '8px 20px',
