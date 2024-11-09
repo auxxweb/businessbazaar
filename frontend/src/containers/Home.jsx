@@ -370,7 +370,6 @@ export default function Home() {
             )}
           </Carousel>
         </div>
->>>>>>> 2c2a87bd0b8acb9b9e238a0422b5a2e9f30e4a70
       </div>
     </div>
 
