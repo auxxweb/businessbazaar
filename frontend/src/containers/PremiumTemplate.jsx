@@ -11,6 +11,7 @@ import ReviewSection from "/src/components/Business/ReviewSection";
 import Gallery from "/src/components/Business/Gallery";
 import ServicesSection from "/src/components/Business/ServicesSection";
 import MenuSection from "/src/components/Business/MenuSection";
+import ContactForm from "/src/components/Business/contactForm";
 
 const PremiumTemplate = () => {
   const { businessData, loading, closeDays } = useBusiness();
@@ -151,6 +152,7 @@ const PremiumTemplate = () => {
         <ServicesSection businessData={businessData} />
         <Gallery businessData={businessData} />
         <ReviewSection businessData={businessData} />
+        <ContactForm businessData={businessData} />
         <SubscribeSection />
 
         <TemplateFooter businessData={businessData} closeDays={closeDays} />

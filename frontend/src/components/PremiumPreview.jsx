@@ -10,6 +10,7 @@ import Gallery from "../components/Business/Gallery";
 import ServicesSection from "../components/Business/ServicesSection";
 import MenuSection from "../components/Business/MenuSection";
 import { useEffect, useState } from "react";
+import ContactForm from "./Business/contactForm";
 
 const PremiumPreview = ({ formData }) => {
   const allDays = [
@@ -120,6 +121,7 @@ const PremiumPreview = ({ formData }) => {
         <ServicesSection businessData={formData} />
         <Gallery businessData={formData} />
         <ReviewSection businessData={formData} />
+        <ContactForm businessData={formData} />
         <SubscribeSection />
 
         <TemplateFooter businessData={formData} closeDays={closeDays} />

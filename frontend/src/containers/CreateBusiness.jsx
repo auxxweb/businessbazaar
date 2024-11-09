@@ -5,11 +5,13 @@ import 'react-phone-input-2/lib/style.css'
 import TextField from '@mui/material/TextField'
 import Autocomplete from '@mui/material/Autocomplete'
 import {
+  checkBusinessExists,
   CreateBusinessDetails,
   fetchCategories,
   FetchPlans,
 } from '../Functions/functions'
 import axios from 'axios'
+import { toast } from 'react-toastify'
 
 import { Container, Nav, Navbar, NavLink } from 'react-bootstrap'
 import '/src/assets/css/template.css'
@@ -182,18 +184,44 @@ export default function CreateBusiness() {
     }
 
     // Validate both fields and handle submission
-    function handleAuthSubmit() {
+    const handleAuthSubmit = async () => {
       const isEmailValid = validateEmail()
       const isPasswordValid = validatePassword()
 
       if (isEmailValid && isPasswordValid) {
-        // Set the email and password into formData and proceed to the next step
-        setFormData((prevFormData) => ({
-          ...prevFormData,
-          email: email,
-          password: password,
-        }))
-        handleNextStep()
+        try {
+          const business = await checkBusinessExists({ email, password })
+          console.log(business, 'business---')
+
+          if (business?.data) {
+            setFormData((prevFormData) => ({
+              ...prevFormData,
+              email: email,
+              password: password,
+            }))
+            handleNextStep()
+          }
+        } catch (error) {
+          console.log(error, 'error-----------')
+
+          toast.error(
+            error?.response?.data?.message ??
+              'An error occurred. Please try again.',
+            {
+              position: 'top-right',
+              autoClose: 3000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              theme: 'colored',
+              style: {
+                backgroundColor: '#e74c3c', // Custom red color for error
+                color: '#FFFFFF', // White text
+              },
+            },
+          )
+        }
       }
     }
 
@@ -335,7 +363,7 @@ export default function CreateBusiness() {
 
     // Handle form submission with validation
     const handleBusinessSubmit = () => {
-        console.log('asss')
+      console.log('asss')
       if (!businessName) {
         setError('All fields are mandatory.')
         return
@@ -645,8 +673,8 @@ export default function CreateBusiness() {
         newErrors.website = 'Website is required.'
       if (!address.buildingName)
         newErrors.buildingName = 'Building name is required.'
-    //   if (!address.address) newErrors.address = 'Emailaddress is required.'
-    //   if (!address.city) newErrors.city = 'City is required'
+      //   if (!address.address) newErrors.address = 'Emailaddress is required.'
+      //   if (!address.city) newErrors.city = 'City is required'
       if (!address.state) newErrors.state = 'State is required'
 
       setErrors(newErrors)
@@ -2363,17 +2391,38 @@ export default function CreateBusiness() {
                 />
 
                 <Navbar.Collapse id="basic-navbar-nav">
-                <Nav className="ms-auto w-100 justify-content-evenly jcc">
+                  <Nav className="ms-auto w-100 justify-content-evenly jcc">
                     <button
-                    className="hamburger-btn text-black bg-transparent border-0 d-flex flex-column justify-content-center align-items-center"
-                    style={{ cursor: 'pointer' }}
-                    onClick={() => console.log('Hamburger button clicked')}
+                      className="hamburger-btn text-black bg-transparent border-0 d-flex flex-column justify-content-center align-items-center"
+                      style={{ cursor: 'pointer' }}
+                      onClick={() => console.log('Hamburger button clicked')}
                     >
-                    <div style={{ width: '25px', height: '3px', backgroundColor: 'black', margin: '4px 0' }}></div>
-                    <div style={{ width: '25px', height: '3px', backgroundColor: 'black', margin: '4px 0' }}></div>
-                    <div style={{ width: '25px', height: '3px', backgroundColor: 'black', margin: '4px 0' }}></div>
+                      <div
+                        style={{
+                          width: '25px',
+                          height: '3px',
+                          backgroundColor: 'black',
+                          margin: '4px 0',
+                        }}
+                      ></div>
+                      <div
+                        style={{
+                          width: '25px',
+                          height: '3px',
+                          backgroundColor: 'black',
+                          margin: '4px 0',
+                        }}
+                      ></div>
+                      <div
+                        style={{
+                          width: '25px',
+                          height: '3px',
+                          backgroundColor: 'black',
+                          margin: '4px 0',
+                        }}
+                      ></div>
                     </button>
-                </Nav>
+                  </Nav>
                 </Navbar.Collapse>
               </Container>
             </Navbar>
@@ -4842,9 +4891,16 @@ export default function CreateBusiness() {
                       <div className="col-12 mt-5">
                         <p className="text-center">{service.description}</p>
                       </div>
-                      <div className="col-12 text-center" style={{ height: "100px" }}>
-                                        <img src={service.image} alt={service.title} className='h-100' />
-                                    </div>
+                      <div
+                        className="col-12 text-center"
+                        style={{ height: '100px' }}
+                      >
+                        <img
+                          src={service.image}
+                          alt={service.title}
+                          className="h-100"
+                        />
+                      </div>
                     </div>
                   ))}
                 </Slider>
@@ -5414,7 +5470,7 @@ export default function CreateBusiness() {
           var paymentDetails = {
             plan: formData.selectedPlan,
             paymentId: response.razorpay_payment_id,
-            date: '2023-10-06T08:30:00.000Z',
+            date: new Date(),
             paymentStatus: 'success',
           }
           try {

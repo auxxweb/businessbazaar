@@ -3,7 +3,7 @@ const TemplateFooter = ({ businessData, closeDays }) => {
   return (
     <footer className="h-auto">
       <div className="container pjs  p-top">
-        <div className="mt-5">
+        <div className="mt-1">
           <div className="row">
             <div className="col-12 col-lg-3">
               <div className="col-12 d-block d-lg-flex text-center text-lg-start text mt-5">
@@ -71,6 +71,38 @@ const TemplateFooter = ({ businessData, closeDays }) => {
               </div>
             </div>
 
+            <div className="col-4">
+              <div className="row mt-5">
+                <div className="col-lg-6">
+                  <div className="col-12">
+                    <div className="col-12 mb-3 text-center text-lg-start">
+                      <a
+                        href="#"
+                        className=" fs-14 text-decoration-none text-orange"
+                      >
+                        OPENING HOURS
+                      </a>
+                    </div>
+                    <div
+                      className="mt-3 text-center text-lg-start"
+                      style={{ color: "#A4B3CB" }}
+                    >
+                      {businessData?.businessTiming?.workingDays?.map(
+                        (day, index) => (
+                          <p key={index}>{day}</p>
+                        )
+                      )}
+                    </div>
+                    <div
+                      className="mt-3 text-center text-lg-start"
+                      style={{ color: "#A4B3CB" }}
+                    >
+                      <span>8:00 am to 9:00 pm</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
             <div className="col-12 col-lg-3">
               <div className="col-12 mt-5">
                 <div className="col-12 mt-3 mb-3 text-center text-lg-start">
@@ -78,7 +110,7 @@ const TemplateFooter = ({ businessData, closeDays }) => {
                     href="#"
                     className=" fs-14 text-decoration-none text-orange"
                   >
-                    Follow Us
+                    FOLLOW US
                   </a>
                 </div>
 
@@ -114,73 +146,21 @@ const TemplateFooter = ({ businessData, closeDays }) => {
                 </div>
               </div>
             </div>
-
-            <div className="col-4">
-              <div className="row mt-5">
-                <div className="col-lg-6">
-                  <div className="col-12">
-                    <div className="col-12 mb-3 text-center text-lg-start">
-                      <a
-                        href="#"
-                        className=" fs-14 text-decoration-none text-orange"
-                      >
-                        OPENING HOURS
-                      </a>
-                    </div>
-                    <div
-                      className="mt-3 text-center text-lg-start"
-                      style={{ color: "#A4B3CB" }}
-                    >
-                      {businessData?.businessTiming?.workingDays?.map(
-                        (day, index) => (
-                          <p key={index}>{day}</p>
-                        )
-                      )}
-                    </div>
-                    <div
-                      className="mt-3 text-center text-lg-start"
-                      style={{ color: "#A4B3CB" }}
-                    >
-                      <span>8:00 am to 9:00 pm</span>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="col-lg-6">
-                  <a
-                    href="#"
-                    className=" fs-14 text-decoration-none text-orange mt-8"
-                  >
-                    CLOSED
-                  </a>
-
-                  <div className="col-12 mt-2 text-center text-lg-start">
-                    <div className="mt-3" style={{ color: "#A4B3CB" }}>
-                      {closeDays?.map((day, index) => (
-                        <p key={index}>{day}</p>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
             <div className="col-12">
-              <div className="row">
-                <div
-                  className="col-12 col-lg-8 mt-5 text-center text-lg-start"
-                  style={{ color: "#A4B3CB" }}
-                >
-                  <span>© 2024 Business Bazaar. All Right Reserved</span>
-                </div>
-
-                <div
-                  className="col-12 col-lg-6  text-center text-lg-start mb-5 mt-5"
-                  style={{ color: "#A4B3CB" }}
-                >
-                  <div className="row">
-                    <div className="col-12 col-lg-6">Terms of Service</div>
-                    <div className="col-12 col-lg-6">Privacy Policy</div>
+              <hr style={{ width: "100%", opacity: 0.25, color: "white" }} />
+              <div class="footer-bottom">
+                <div class="row w-full justify-content-between">
+                  <div class="col-sm-4 text-left">
+                    <a href={`/terms-and-conditions/${businessData?._id}`}>Terms and Conditions</a>
+                  </div>
+                  <div class="col-sm-4 text-right">
+                    <div style={{ color: "#A4B3CB" }} class="text-right">
+                      <span>
+                        Copyright &copy;
+                        {new Date().getFullYear()} In Connect. All Rights
+                        Reserved
+                      </span>
+                    </div>
                   </div>
                 </div>
               </div>
