@@ -8,6 +8,7 @@ import 'slick-carousel/slick/slick.css'
 import 'slick-carousel/slick/slick-theme.css'
 import { useNavigate, Link } from 'react-router-dom'
 import { toast } from 'react-toastify'
+import "./Home.css"
 import ContactForm from '/src/components/Business/contactForm'
 
 import {
@@ -73,7 +74,7 @@ export default function Home() {
     const fetchReviews = async () => {
       try {
         const data = await getAllReviews({ page, limit })
-        console.log(data,'aaaaa')
+        console.log(data, 'aaaaa')
         console.log(data?.data?.data, 'dataaaaa-a-a--a-a-')
 
         setReviews(data?.data?.data)
@@ -167,7 +168,6 @@ export default function Home() {
     }
   }
 
-
   const itemsPerPage = 6
 
   const totalPages = Math.ceil(totalBusinessData / itemsPerPage)
@@ -214,241 +214,154 @@ export default function Home() {
       [name]: value,
     }))
   }
-  const testimonials = [
-    {
-      name: "Brett Heimann",
-      company: "MarketingAgency.com",
-      text: "Great service, great communication, great finished product. Will continue to use for our business.",
-      img: "/src/assets/images/testi.jpg",
-    },
-    {
-      name: "John Doe",
-      company: "TechSolutions",
-      text: "Amazing experience. The team is very professional and delivers on time.",
-      img: "/src/assets/images/testi.jpg",
-    },
-    {
-      name: "Jane Smith",
-      company: "DesignCo",
-      text: "Very satisfied with the quality of work. Highly recommend.",
-      img: "/src/assets/images/testi.jpg",
-    },
-    {
-      name: "Alice Brown",
-      company: "CreativeAgency",
-      text: "Exceptional service and support. They really understand our needs.",
-      img: "/src/assets/images/testi.jpg",
-    },
-    {
-      name: "Michael Johnson",
-      company: "FinanceExperts",
-      text: "Professional and efficient team. Helped our business grow significantly!",
-      img: "/src/assets/images/testi.jpg",
-    },
-    {
-      name: "Sarah Parker",
-      company: "EcoSolutions",
-      text: "The team is knowledgeable and very responsive. Highly impressed.",
-      img: "/src/assets/images/testi.jpg",
-    },
-    {
-      name: "Tom Wilson",
-      company: "Webify",
-      text: "Delivered exactly what we needed, with excellent attention to detail.",
-      img: "/src/assets/images/testi.jpg",
-    },
-    {
-      name: "Emily Davis",
-      company: "GreenLeaf",
-      text: "Their work exceeded our expectations. Very dependable and easy to work with.",
-      img: "/src/assets/images/testi.jpg",
-    },
-    {
-      name: "James Carter",
-      company: "BizBoosters",
-      text: "Great quality and service. Our go-to team for all projects.",
-      img: "/src/assets/images/testi.jpg",
-    },
-    {
-      name: "Sophia Lee",
-      company: "InnovateLab",
-      text: "Very professional and detail-oriented. We’re thrilled with the results.",
-      img: "/src/assets/images/testi.jpg",
-    },
-    {
-      name: "David Rodriguez",
-      company: "SuccessCorp",
-      text: "Exceptional quality and fast turnaround. Very happy with the outcome.",
-      img: "/src/assets/images/testi.jpg",
-    },
-    {
-      name: "Olivia Martinez",
-      company: "DigitalWave",
-      text: "Highly recommend! The team is attentive, talented, and efficient.",
-      img: "/src/assets/images/testi.jpg",
-    },
-  ];
 
   return (
     <Layout title="Home" navClass="home">
-      
-
       <div id="#home" className="h-100vh">
-
         <div className="h-100">
           <div className="border-1 surface-border border-round text-center h-100">
             <Carousel className="banner-slick h-100">
-              <Carousel.Item className=" h-100">
-                <img
-                  className="d-block w-100"
-                  src="/src/assets/images/1.jpg"
-                  alt="First slide"
-                  style={{ objectFit: "cover", height: "100%",filter:"brightness(0.3)" }}
-                />
-              </Carousel.Item>
-              <Carousel.Item className=" h-100">
-                <img
-                  className="d-block w-100"
-                  src="/src/assets/images/2.jpg"
-                  alt="Second slide"
-                  style={{ objectFit: "cover", height: "100%",filter:"brightness(0.3)" }}
-                />
-              </Carousel.Item>
-              <Carousel.Item className=" h-100">
-                <img
-                  className="d-block w-100"
-                  src="/src/assets/images/3.jpg"
-                  alt="Third slide"
-                  style={{ objectFit: "cover", height: "100%",filter:"brightness(0.3)" }}
-                />
-              </Carousel.Item>
-              <Carousel.Item className=" h-100">
-                <img
-                  className="d-block w-100"
-                  src="/src/assets/images/4.jpg"
-                  alt="Fourth slide"
-                  style={{ objectFit: "cover", height: "100%",filter:"brightness(0.3)" }}
-                />
-              </Carousel.Item>
+              {bannerData && bannerData.length > 0 ? (
+                bannerData?.map((banner) => (
+                  <Carousel.Item key={`key-${banner?._id}`} className=" h-100">
+                    <img
+                      className="d-block w-100"
+                      src={banner?.image || '/src/assets/images/1.jpg'} // Use banner image or fallback
+                      alt="First slide"
+                      style={{
+                        objectFit: 'cover',
+                        height: '100%',
+                        filter: 'brightness(0.3)',
+                      }}
+                    />
+                  </Carousel.Item>
+                ))
+              ) : (
+                <Carousel.Item className=" h-100">
+                  <img
+                    className="d-block w-100"
+                    src="/src/assets/images/1.jpg"
+                    alt="First slide"
+                    style={{
+                      objectFit: 'cover',
+                      height: '100%',
+                      filter: 'brightness(0.3)',
+                    }}
+                  />
+                </Carousel.Item>
+              )}
             </Carousel>
           </div>
         </div>
         <div className="search-bar-div position-absolute">
           <div className="container">
-         <div className="row banner-main-div">
-         <div className="col-12 col-md-6 banner-head-text ">
-            <h1 className="head-line fw-bold" data-aos="fade-right">
-            The <span className="text-theme2">Lorem Ipsum</span>, <br />
-               used since the 1500s
-            </h1>
-            <p className="text-white" data-aos="zoom-in">Lorem ipsum dolor sit amet, consectetur adipiscing elit, 
-              sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. 
-              Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
-          </div>
-            <div className="row justify-content-center search-div col-12 col-md-6">
-              {/* Location Input with Crosshair Icon */}
-              <div className="col-12 mt-3 col-md-5">
-                <div className="input-group">
-                  <span
-                    className="input-group-text"
-                    style={{
-                      backgroundColor: "white",
-                      border: "1px solid #ced4da",
-                      color: "#228AE2",
-                      padding:10,
-                    }}
-                  >
-                    <i className="bi bi-crosshair2"></i>{' '}
-                    {/* Use an alternative location icon */}
-                  </span>
-                  <input
-                    type="text"
-                    className="form-control custom-placeholder"
-                    placeholder="location"
-                    style={{
-                      borderLeft: "none",
-                      color: "#E5F0FD",
-                      padding:10,
-                    }}
-                  />
-                </div>
+            <div className="row banner-main-div">
+              <div className="col-12 col-md-6 banner-head-text ">
+                <h1 className="head-line fw-bold" data-aos="fade-right">
+                  The <span className="text-theme2">Lorem Ipsum</span>, <br />
+                  used since the 1500s
+                </h1>
+                <p className="text-white" data-aos="zoom-in">
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
+                  do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                  Ut enim ad minim veniam, quis nostrud exercitation ullamco
+                  laboris nisi ut aliquip ex ea commodo consequat. Duis aute
+                  irure dolor in reprehenderit in voluptate velit esse cillum
+                  dolore eu fugiat nulla pariatur.
+                </p>
               </div>
+              <div className="row justify-content-center search-div col-12 col-md-6">
+                {/* Location Input with Crosshair Icon */}
+                <div className="col-12 mt-3 col-md-5">
+                  <div
+                    className="input-group"
+                    style={{
+                      border: '1px solid #ced4da',
+                      borderRadius: '8px',
+                      overflow: 'hidden',
+                    }}
+                  >
+                    <span
+                      className="input-group-text"
+                      style={{
+                        backgroundColor: 'white',
+                        border: 'none',
+                        padding: '0 12px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        color: '#228AE2',
+                      }}
+                    >
+                      <i
+                        className="bi bi-crosshair2"
+                        style={{ fontSize: '1.2em' }}
+                      ></i>
+                    </span>
+                    <input
+                      type="text"
+                      className="form-control custom-placeholder"
+                      placeholder="Location"
+                      style={{
+                        border: 'none',
+                        boxShadow: 'none',
+                        paddingLeft: '0',
+                        fontSize: '1em',
+                        color: '#495057',
+                      }}
+                    />
+                  </div>
+                </div>
 
-              {/* Search Input */}
-              <div className="col-12 mt-3 col-md-7">
-                <div className="input-group">
-                  <span
-                    className="input-group-text"
+                {/* Search Input with Search Icon */}
+                <div className="col-12 mt-3 col-md-7">
+                  <div
+                    className="input-group"
                     style={{
-                      backgroundColor: "white",
-                      border: "1px solid #ced4da",
-                      padding:10,
+                      border: '1px solid #ced4da',
+                      borderRadius: '8px',
+                      overflow: 'hidden',
                     }}
                   >
-                    <i className="bi bi-search fw-bold"></i>
-                  </span>
-                  <input
-                    type="text"
-                    className="form-control custom-placeholder"
-                    placeholder="Search for Restaurants"
-                    value={searchData}
-                    onInput={(e) => {
-                      setSearchData(e.target.value)
-                    }}
-                    style={{
-                      borderLeft: 'none',
-                    }}
-                  />
-                  <button
-                    type="button"
-                    onClick={searchHandler}
-                    className="btn btn-theme text-white custom-button"
-                  >
-                    Search
-                  </button>
+                    <span
+                      className="input-group-text"
+                      style={{
+                        backgroundColor: 'white',
+                        border: 'none',
+                        padding: '0 12px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        color: '#228AE2',
+                      }}
+                    >
+                      <i
+                        className="bi bi-search fw-bold"
+                        style={{ fontSize: '1.2em' }}
+                      ></i>
+                    </span>
+                    <input
+                      type="text"
+                      className="form-control custom-placeholder"
+                      placeholder="Search for Restaurants"
+                      value={searchData}
+                      onInput={(e) => setSearchData(e.target.value)}
+                      style={{
+                        border: 'none',
+                        boxShadow: 'none',
+                        paddingLeft: '0',
+                        fontSize: '1em',
+                        color: '#495057',
+                      }}
+                    />
+                  </div>
                 </div>
               </div>
             </div>
-        </div>
-         </div>
           </div>
         </div>
-
-<div id="home">
-      <div className="container">
-        <div className="border-1 surface-border border-round m-2 text-center py-5 px-3">
-          <Carousel className="banner-slick">
-            {bannerData && bannerData.length > 0 ? (
-              bannerData.map((banner) => (
-                <Carousel.Item key={`key-${banner?._id}`}>
-                  <img
-                    className="d-block w-100"
-                    src={banner?.image || "/src/assets/images/1.jpg"} // Use banner image or fallback
-                    alt="Banner slide"
-                    style={{ objectFit: 'cover', height: '400px' }}
-                  />
-                </Carousel.Item>
-              ))
-            ) : (
-              <Carousel.Item>
-                <img
-                  className="d-block w-100"
-                  src="/src/assets/images/1.jpg"
-                  alt="Default slide"
-                  style={{ objectFit: 'cover', height: '400px' }}
-                />
-              </Carousel.Item>
-            )}
-          </Carousel>
-        </div>
       </div>
-    </div>
-
-
-        
 
       <section className=" bg-light h-auto" data-aos="fade-up">
-        <div className="container" style={{ width: "90%" }}>
+        <div className="container" style={{ width: '90%' }}>
           <div className="mb-5 p-4">
             <h1
               className="text-center fw-bold mt-4"
@@ -466,15 +379,19 @@ export default function Home() {
             <div className="home-category-div">
               {categoryData.map((category) => (
                 <Link
-                  className="cat-div text-decoration-none" data-aos="zoom-in"
+                  className="cat-div text-decoration-none"
+                  data-aos="zoom-in"
                   to={`/business/${category._id}`} // Dynamically generate the URL with the category ID
                   key={category._id} // Add a unique key for each category
                 >
-                    <img src={category.image} alt={category.name}  className="cat-img"/>
-                    {category.name}
+                  <img
+                    src={category.image}
+                    alt={category.name}
+                    className="cat-img"
+                  />
+                  {category.name}
                 </Link>
               ))}
-           
             </div>
           </div>
         </div>
@@ -482,7 +399,9 @@ export default function Home() {
       <section className="home-spot h-auto mb-5">
         <div className="container padding" id="business">
           <div className="text-center mb-5">
-            <h1 className="fw-bold" data-aos="fade-right">Discover the Top Businesses</h1>
+            <h1 className="fw-bold" data-aos="fade-right">
+              Discover the Top Businesses
+            </h1>
             <p className="mt-3 text-center" data-aos="fade-left">
               Explore the most popular destinations in your area, highly rated
               by locals and visitors alike. Find out what makes these places
@@ -502,7 +421,7 @@ export default function Home() {
                   <div className="row p-2">
                     <div className="col-4 p-0">
                       <img
-                        src={business?.logo }
+                        src={business?.logo}
                         alt=""
                         className="w-100 br-theme"
                       />
@@ -572,7 +491,6 @@ export default function Home() {
           </div>
         </div>
       </section>
-     
 
       <section className="mt-3 bg-light" data-aos="fade-up">
         <div className="container" id="review">
@@ -597,7 +515,6 @@ export default function Home() {
             </div>
           </div>
 
-         
           <div className="col-12">
             <Slider {...settings}>
               {reviews?.map((testimonial, index) => (
@@ -642,7 +559,9 @@ export default function Home() {
               ))}
             </Slider>
             <div className="text-center mt-3 mb-5">
-              <a href="/reviews" class="text-decoration-none text-theme2">View more <i className="bi bi-arrow-right"></i></a>
+              <a href="/reviews" className="text-decoration-none text-theme2">
+                View more <i className="bi bi-arrow-right"></i>
+              </a>
             </div>
           </div>
         </div>
