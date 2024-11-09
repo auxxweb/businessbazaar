@@ -73,6 +73,7 @@ export default function Home() {
     const fetchReviews = async () => {
       try {
         const data = await getAllReviews({ page, limit })
+        console.log(data,'aaaaa')
         console.log(data?.data?.data, 'dataaaaa-a-a--a-a-')
 
         setReviews(data?.data?.data)
@@ -213,10 +214,80 @@ export default function Home() {
       [name]: value,
     }))
   }
-
-  // if (loading) {
-  //     return <Loader />
-  // }
+  const testimonials = [
+    {
+      name: "Brett Heimann",
+      company: "MarketingAgency.com",
+      text: "Great service, great communication, great finished product. Will continue to use for our business.",
+      img: "/src/assets/images/testi.jpg",
+    },
+    {
+      name: "John Doe",
+      company: "TechSolutions",
+      text: "Amazing experience. The team is very professional and delivers on time.",
+      img: "/src/assets/images/testi.jpg",
+    },
+    {
+      name: "Jane Smith",
+      company: "DesignCo",
+      text: "Very satisfied with the quality of work. Highly recommend.",
+      img: "/src/assets/images/testi.jpg",
+    },
+    {
+      name: "Alice Brown",
+      company: "CreativeAgency",
+      text: "Exceptional service and support. They really understand our needs.",
+      img: "/src/assets/images/testi.jpg",
+    },
+    {
+      name: "Michael Johnson",
+      company: "FinanceExperts",
+      text: "Professional and efficient team. Helped our business grow significantly!",
+      img: "/src/assets/images/testi.jpg",
+    },
+    {
+      name: "Sarah Parker",
+      company: "EcoSolutions",
+      text: "The team is knowledgeable and very responsive. Highly impressed.",
+      img: "/src/assets/images/testi.jpg",
+    },
+    {
+      name: "Tom Wilson",
+      company: "Webify",
+      text: "Delivered exactly what we needed, with excellent attention to detail.",
+      img: "/src/assets/images/testi.jpg",
+    },
+    {
+      name: "Emily Davis",
+      company: "GreenLeaf",
+      text: "Their work exceeded our expectations. Very dependable and easy to work with.",
+      img: "/src/assets/images/testi.jpg",
+    },
+    {
+      name: "James Carter",
+      company: "BizBoosters",
+      text: "Great quality and service. Our go-to team for all projects.",
+      img: "/src/assets/images/testi.jpg",
+    },
+    {
+      name: "Sophia Lee",
+      company: "InnovateLab",
+      text: "Very professional and detail-oriented. We’re thrilled with the results.",
+      img: "/src/assets/images/testi.jpg",
+    },
+    {
+      name: "David Rodriguez",
+      company: "SuccessCorp",
+      text: "Exceptional quality and fast turnaround. Very happy with the outcome.",
+      img: "/src/assets/images/testi.jpg",
+    },
+    {
+      name: "Olivia Martinez",
+      company: "DigitalWave",
+      text: "Highly recommend! The team is attentive, talented, and efficient.",
+      img: "/src/assets/images/testi.jpg",
+    },
+  ];
 
   return (
     <Layout title="Home" navClass="home">
@@ -526,10 +597,11 @@ export default function Home() {
             </div>
           </div>
 
+         
           <div className="col-12">
             <Slider {...settings}>
-              {testimonials.map((testimonial, index) => (
-                <div key={index} className="testi-slide mb-3">
+              {reviews?.map((testimonial, index) => (
+                <div key={index} className="testi-slide">
                   <div
                     className={`testi-div p-5 ${
                       index === currentSlide ? 'testi-theme' : ''

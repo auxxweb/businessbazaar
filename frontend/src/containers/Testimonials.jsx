@@ -1,9 +1,10 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Layout from '../components/Layout'
 import { InputTextarea } from "primereact/inputtextarea";
 import { InputText } from "primereact/inputtext";
 import { Rating } from "primereact/rating";
 import { Dialog } from "primereact/dialog";
+import { toast } from 'react-toastify'
 
 export default function Testimonials() {
     const [visible,setVisible] = useState(false);
@@ -14,80 +15,8 @@ export default function Testimonials() {
         description: "",
       },
     ]);
-    const testimonials = [
-        {
-          name: "Brett Heimann",
-          company: "MarketingAgency.com",
-          text: "Great service, great communication, great finished product. Will continue to use for our business.",
-          img: "/src/assets/images/testi.jpg",
-        },
-        {
-          name: "John Doe",
-          company: "TechSolutions",
-          text: "Amazing experience. The team is very professional and delivers on time.",
-          img: "/src/assets/images/testi.jpg",
-        },
-        {
-          name: "Jane Smith",
-          company: "DesignCo",
-          text: "Very satisfied with the quality of work. Highly recommend.",
-          img: "/src/assets/images/testi.jpg",
-        },
-        {
-          name: "Alice Brown",
-          company: "CreativeAgency",
-          text: "Exceptional service and support. They really understand our needs.",
-          img: "/src/assets/images/testi.jpg",
-        },
-        {
-          name: "Michael Johnson",
-          company: "FinanceExperts",
-          text: "Professional and efficient team. Helped our business grow significantly!",
-          img: "/src/assets/images/testi.jpg",
-        },
-        {
-          name: "Sarah Parker",
-          company: "EcoSolutions",
-          text: "The team is knowledgeable and very responsive. Highly impressed.",
-          img: "/src/assets/images/testi.jpg",
-        },
-        {
-          name: "Tom Wilson",
-          company: "Webify",
-          text: "Delivered exactly what we needed, with excellent attention to detail.",
-          img: "/src/assets/images/testi.jpg",
-        },
-        {
-          name: "Emily Davis",
-          company: "GreenLeaf",
-          text: "Their work exceeded our expectations. Very dependable and easy to work with.",
-          img: "/src/assets/images/testi.jpg",
-        },
-        {
-          name: "James Carter",
-          company: "BizBoosters",
-          text: "Great quality and service. Our go-to team for all projects.",
-          img: "/src/assets/images/testi.jpg",
-        },
-        {
-          name: "Sophia Lee",
-          company: "InnovateLab",
-          text: "Very professional and detail-oriented. We’re thrilled with the results.",
-          img: "/src/assets/images/testi.jpg",
-        },
-        {
-          name: "David Rodriguez",
-          company: "SuccessCorp",
-          text: "Exceptional quality and fast turnaround. Very happy with the outcome.",
-          img: "/src/assets/images/testi.jpg",
-        },
-        {
-          name: "Olivia Martinez",
-          company: "DigitalWave",
-          text: "Highly recommend! The team is attentive, talented, and efficient.",
-          img: "/src/assets/images/testi.jpg",
-        },
-      ];
+    const [reviews, setReviews] = useState([])
+    const [isReviewed, setIsReviewed] = useState(false)
       const handleInputChange = (e) => {
         const { name, value } = e.target;
         setReview((prevState) => ({
@@ -95,6 +24,36 @@ export default function Testimonials() {
           [name]: value,
         }));
       };
+      useEffect(() => {
+        const fetchReviews = async () => {
+          try {
+            const data = await getAllReviews({ page, limit })
+            console.log(data,'aaaaa')
+            console.log(data?.data?.data, 'dataaaaa-a-a--a-a-')
+    
+            setReviews(data?.data?.data)
+          } catch (error) {
+            toast.error(
+              error?.response?.data?.message ??
+                'An error occurred. Please try again.',
+              {
+                position: 'top-right',
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                theme: 'colored',
+                style: {
+                  backgroundColor: '#e74c3c', // Custom red color for error
+                  color: '#FFFFFF', // White text
+                },
+              },
+            )
+          }
+        }
+        fetchReviews()
+      }, [isReviewed])
       
   return (
     <Layout title="Reviews" navClass='home'>
@@ -124,26 +83,40 @@ export default function Testimonials() {
           </div>
 
           <div className="col-12 row">
-              {testimonials.map((testimonial, index) => (
-                <div key={index} className="testi-slide mb-3 col-12 col-md-4" style={{boxShadow:"rgba(0, 0, 0, 0.04) 0px 3px 5px"}}>
+          {reviews?.map((testimonial, index) => (
+                <div key={index} className="testi-slide">
                   <div
                     className={`testi-div p-5 `}
                   >
                     <div className="row ">
                       <div className="col-2">
-                        <img src="/src/assets/images/user.png" alt={testimonial.name} style={{objectFit:"cover"}} />
+                        <img
+                          src="/src/assets/images/user.png"
+                          alt={testimonial?.name}
+                          style={{ objectFit: 'cover' }}
+                        />
                       </div>
                       <div className="col-10">
                         <h3 className="fs-20 p-0 m-0 ms-4">
-                          {testimonial.name}
+                          {testimonial?.name}
                         </h3>
-                        <span className="fs-13 ms-4">
-                          {testimonial.company}
-                        </span>
+                        <div className="text-warning text-center mt-0 m-0">
+                          {[...Array(Math.floor(testimonial?.rating))].map(
+                            (star, i) => (
+                              <i key={i} className="bi bi-star-fill"></i>
+                            ),
+                          )}
+                          {testimonial?.rating % 1 !== 0 && (
+                            <i className="bi bi-star-half"></i>
+                          )}
+                        </div>
                       </div>
                     </div>
                     <div className="col-12 mt-4">
-                      <p>{testimonial.text}</p>
+                      <p>{testimonial?.review}</p>
+                    </div>
+                    <div className="col-12 mt-4">
+                      <p>{formatDate(testimonial?.createdAt ?? '')}</p>
                     </div>
                   </div>
                 </div>
