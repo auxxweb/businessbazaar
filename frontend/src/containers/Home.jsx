@@ -167,21 +167,71 @@ export default function Home() {
 
   return (
     <Layout title="Home" navClass="home">
-      <div className="container">
-        <div className="row">
-          <div className="col-md-6">
-            <div className="row justify-content-between">
+      
+
+      <div id="#home" className="h-100vh">
+
+        <div className="h-100">
+          <div className="border-1 surface-border border-round text-center h-100">
+            <Carousel className="banner-slick h-100">
+              <Carousel.Item className=" h-100">
+                <img
+                  className="d-block w-100"
+                  src="/src/assets/images/1.jpg"
+                  alt="First slide"
+                  style={{ objectFit: "cover", height: "100%",filter:"brightness(0.3)" }}
+                />
+              </Carousel.Item>
+              <Carousel.Item className=" h-100">
+                <img
+                  className="d-block w-100"
+                  src="/src/assets/images/2.jpg"
+                  alt="Second slide"
+                  style={{ objectFit: "cover", height: "100%",filter:"brightness(0.3)" }}
+                />
+              </Carousel.Item>
+              <Carousel.Item className=" h-100">
+                <img
+                  className="d-block w-100"
+                  src="/src/assets/images/3.jpg"
+                  alt="Third slide"
+                  style={{ objectFit: "cover", height: "100%",filter:"brightness(0.3)" }}
+                />
+              </Carousel.Item>
+              <Carousel.Item className=" h-100">
+                <img
+                  className="d-block w-100"
+                  src="/src/assets/images/4.jpg"
+                  alt="Fourth slide"
+                  style={{ objectFit: "cover", height: "100%",filter:"brightness(0.3)" }}
+                />
+              </Carousel.Item>
+            </Carousel>
+          </div>
+        </div>
+        <div className="search-bar-div position-absolute">
+          <div className="container">
+         <div className="row banner-main-div">
+         <div className="col-12 col-md-6 banner-head-text ">
+            <h1 className="head-line fw-bold" data-aos="fade-right">
+            The <span className="text-theme2">Lorem Ipsum</span>, <br />
+               used since the 1500s
+            </h1>
+            <p className="text-white" data-aos="zoom-in">Lorem ipsum dolor sit amet, consectetur adipiscing elit, 
+              sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. 
+              Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
+          </div>
+            <div className="row justify-content-center search-div col-12 col-md-6">
               {/* Location Input with Crosshair Icon */}
-              <div className="col-12 mt-3 col-md-4">
+              <div className="col-12 mt-3 col-md-5">
                 <div className="input-group">
                   <span
                     className="input-group-text"
                     style={{
                       backgroundColor: "white",
-                      borderTopLeftRadius: "50px",
-                      borderBottomLeftRadius: "50px",
                       border: "1px solid #ced4da",
                       color: "#228AE2",
+                      padding:10,
                     }}
                   >
                     <i className="bi bi-crosshair2"></i>{" "}
@@ -192,25 +242,23 @@ export default function Home() {
                     className="form-control custom-placeholder"
                     placeholder="location"
                     style={{
-                      borderTopRightRadius: "50px",
-                      borderBottomRightRadius: "50px",
                       borderLeft: "none",
                       color: "#E5F0FD",
+                      padding:10,
                     }}
                   />
                 </div>
               </div>
 
               {/* Search Input */}
-              <div className="col-12 mt-3 col-md-8">
+              <div className="col-12 mt-3 col-md-7">
                 <div className="input-group">
                   <span
                     className="input-group-text"
                     style={{
                       backgroundColor: "white",
-                      borderTopLeftRadius: "50px",
-                      borderBottomLeftRadius: "50px",
                       border: "1px solid #ced4da",
+                      padding:10,
                     }}
                   >
                     <i className="bi bi-search fw-bold"></i>
@@ -237,57 +285,15 @@ export default function Home() {
                 </div>
               </div>
             </div>
-          </div>
         </div>
-      </div>
-      {/* 
-            </div>
+         </div>
           </div>
-        </div>
-      </div> */}
-
-      <div id="#home">
-        <div className="container">
-          <div className="border-1 surface-border border-round m-2 text-center py-5 px-3">
-            <Carousel className="banner-slick">
-              <Carousel.Item>
-                <img
-                  className="d-block w-100"
-                  src="/src/assets/images/1.jpg"
-                  alt="First slide"
-                  style={{ objectFit: "cover", height: "400px" }}
-                />
-              </Carousel.Item>
-              <Carousel.Item>
-                <img
-                  className="d-block w-100"
-                  src="/src/assets/images/2.jpg"
-                  alt="Second slide"
-                  style={{ objectFit: "cover", height: "400px" }}
-                />
-              </Carousel.Item>
-              <Carousel.Item>
-                <img
-                  className="d-block w-100"
-                  src="/src/assets/images/3.jpg"
-                  alt="Third slide"
-                  style={{ objectFit: "cover", height: "400px" }}
-                />
-              </Carousel.Item>
-              <Carousel.Item>
-                <img
-                  className="d-block w-100"
-                  src="/src/assets/images/4.jpg"
-                  alt="Fourth slide"
-                  style={{ objectFit: "cover", height: "400px" }}
-                />
-              </Carousel.Item>
-            </Carousel>
-          </div>
-        </div>
       </div>
 
-      <section className="mt-4 bg-light h-auto">
+
+        
+
+      <section className=" bg-light h-auto" data-aos="fade-up">
         <div className="container" style={{ width: "90%" }}>
           <div className="mb-5 p-4">
             <h1
@@ -302,24 +308,19 @@ export default function Home() {
               exactly what you're looking for!
             </p>
           </div>
-          <div className="mb-2 mt-2" id="category">
-            <div className="row justify-content-center">
+          <div className="mb-5 mt-2" id="category">
+            <div className="home-category-div">
               {categoryData.map((category) => (
                 <Link
-                  className="cat-div text-decoration-none"
+                  className="cat-div text-decoration-none" data-aos="zoom-in"
                   to={`/business/${category._id}`} // Dynamically generate the URL with the category ID
                   key={category._id} // Add a unique key for each category
                 >
-                  <div className="cat-img">
-                    <img src={category.image} alt={category.name} />{" "}
-                    {/* Dynamically render category image */}
-                  </div>
-                  <div className="text-center">
-                    <p>{category.name}</p>{" "}
-                    {/* Dynamically render category name */}
-                  </div>
+                    <img src={category.image} alt={category.name}  className="cat-img"/>
+                    {category.name}
                 </Link>
               ))}
+           
             </div>
           </div>
         </div>
@@ -327,8 +328,8 @@ export default function Home() {
       <section className="home-spot h-auto mb-5">
         <div className="container padding" id="business">
           <div className="text-center mb-5">
-            <h1 className="fw-bold">Discover the Top Businesses</h1>
-            <p className="mt-3 text-center">
+            <h1 className="fw-bold" data-aos="fade-right">Discover the Top Businesses</h1>
+            <p className="mt-3 text-center" data-aos="fade-left">
               Explore the most popular destinations in your area, highly rated
               by locals and visitors alike. Find out what makes these places
               stand out and start your next adventure right here!
@@ -342,7 +343,7 @@ export default function Home() {
                 <Link
                   to={`/template/${business?._id}`}
                   key={business._id}
-                  className="text-decoration-none text-dark col-12 col-md-5 b-theme location-card mt-3"
+                  className="text-decoration-none text-dark col-12 col-md-5 b-theme location-card mt-3 business-card"
                 >
                   <div className="row p-2">
                     <div className="col-4 p-0">
@@ -419,13 +420,13 @@ export default function Home() {
       </section>
      
 
-      <section className="mb-5 mt-3 bg-light">
+      <section className="mt-3 bg-light" data-aos="fade-up">
         <div className="container" id="review">
           <div className="mt-3 mb-3">
-            <h1 className="text-center fw-bold ">
+            <h1 className="text-center p-3 pt-5 fw-bold " data-aos="zoom-out">
               What Our Customers Are Saying
             </h1>
-            <p className="mt-3 text-center">
+            <p className="mt-3 text-center" data-aos="zoom-in">
               Hear from those who have experienced our services firsthand. Read
               their stories and see why we’re a trusted choice for so many.
               Their feedback is a testament to our commitment to excellence!
@@ -445,7 +446,7 @@ export default function Home() {
           <div className="col-12">
             <Slider {...settings}>
               {testimonials.map((testimonial, index) => (
-                <div key={index} className="testi-slide">
+                <div key={index} className="testi-slide mb-3">
                   <div
                     className={`testi-div p-5 ${
                       index === currentSlide ? "testi-theme" : ""
@@ -471,6 +472,9 @@ export default function Home() {
                 </div>
               ))}
             </Slider>
+            <div className="text-center mt-3 mb-5">
+              <a href="/reviews" class="text-decoration-none text-theme2">View more <i className="bi bi-arrow-right"></i></a>
+            </div>
           </div>
         </div>
       </section>
@@ -524,7 +528,7 @@ export default function Home() {
           </div>
         </div>
       </Dialog>
-      <footer className="mt-3 h-auto footer-section">
+      <footer className=" h-auto footer-section">
         <div className="container">
           <div className="p-4 mt-0 mt-md-5 pt-5">
             <div className="row ">

@@ -27,12 +27,13 @@ export default function Layout({ title, children, sidebar = 'true' }) {
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
 <link href="https://fonts.googleapis.com/css2?family=David+Libre:wght@400;500;700&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap" rel="stylesheet"/>
         {/* Other meta and link tags... */}
+        <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
       </Helmet>
 
       {sidebar === 'true' ? (
         <div className="layout-sidebar">
           <Header />
-          <div className="mt-4">{children}</div>
+          <div className="">{children}</div>
         </div>
       ) : (
         <div className="layout-children container mt-4">{children}</div>
@@ -58,8 +59,9 @@ export default function Layout({ title, children, sidebar = 'true' }) {
           integrity="sha512-HGOnQO9+SP1V92SrtZfjqxxtLmVzqZpjFFekvzZVWoiASSQgSr4cw9Kqd2+l8Llp4Gm0G8GIFJ4ddwZilcdb8A=="
           crossorigin="anonymous"
           referrerpolicy="no-referrer"></script>
-        <script src='../assets/js/main.js'></script>
-        {/* Additional scripts... */}
+          <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+        <script src='/src/assets/js/main.js'></script>
+
       </Helmet>
     </>
   );

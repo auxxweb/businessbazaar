@@ -44,12 +44,23 @@ export default function Business() {
     const goToNextPage = () => {
         if (currentPage < totalPages) setCurrentPage(prevPage => prevPage + 1);
     };
+    const [searchData, setSearchData] = useState("");
     if (loading){
         return <Loader/>
     }
     return (
         <Layout title="Business" navClass='home'>
-            <div className="container">
+            
+            
+
+            <section className='business-view-banner'>
+                <img src={categoryData.coverImage} className='w-100 h-100' alt="" />
+                <div className="text-center image-title">
+                    <h2>{categoryData.name}</h2>
+                </div>
+
+            </section>
+            <div className="container mt-4">
                 <div className="row">
                     <div className="col-md-6">
                         <div className="row justify-content-center">
@@ -112,14 +123,6 @@ export default function Business() {
                     </div>
                 </div>
             </div>
-
-            <section className='mt-5 business-view-banner'>
-                <img src={categoryData.coverImage} className='w-100 h-100' alt="" />
-                <div className="text-center image-title">
-                    <h2>{categoryData.name}</h2>
-                </div>
-
-            </section>
             <section className='h-auto mt-5'>
                 <div className="container">
                     <div className="col-12">

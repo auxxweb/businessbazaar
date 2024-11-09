@@ -13,18 +13,6 @@ body{
     opacity: 0.5;
 }.text-theme{
     color: #E5F0FD !important;
-}.cat-img{
-    padding: 15px 12px !important;
-    border: #E5F0FD solid 1.5px !important;
-    text-align: center !important;
-    border-radius: 8px;
-}.cat-img img {
-    width: 45px;
-    height: 60px;
-}.cat-div{
-    width: 11.11% !important;
-    cursor: pointer;
-    color: #111111;
 }.b-theme{
     border: 1.5px solid #E5F0FD !important;
 }.br-theme{
@@ -431,4 +419,6 @@ footer .btn-theme{
     border: 2px dashed #000000;
     border-radius: 8px !important;
     width: fit-content;
+}.h-50-vh{
+    height: 50vh !important;
 }

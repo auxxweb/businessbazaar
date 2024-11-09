@@ -1,56 +1,36 @@
-$(document).ready(function () {
-    $(".banner-slick").slick({
-      slidesToShow: 1,
-      autoplay: true,
-      infinite: false,
-      // speed: 5000,
-      // autoplaySpeed: 0,
-      swipeToSlide: true,
-      centerMode: false,
-      // cssEase: "linear",
-      dots: false,
-      focusOnSelect: true,
-      mobileFirst: true,
-      slidesToScroll: 1,
-      prevArrow: false,
-      nextArrow: false,
-      responsive: [
-        {
-          breakpoint: 1024,
-          settings: {
-            slidesToShow: 3,
-            slidesToScroll: 1,
-            infinite: true,
-          },
-        },
-        {
-          breakpoint: 768,
-          settings: {
-            slidesToShow: 1,
-            slidesToScroll: 1,
-          },
-        },
-        {
-          breakpoint: 600,
-          settings: {
-            slidesToShow: 1,
-            slidesToScroll: 1,
-          },
-        },
-        {
-          breakpoint: 480,
-          settings: {
-            slidesToShow: 1,
-            slidesToScroll: 1,
-          },
-        },
-        {
-          breakpoint: 390,
-          settings: {
-            slidesToShow: 1,
-            slidesToScroll: 1,
-          },
-        },
-      ],
-    });
+
+
+  $(".navbar-toggler").click(function () {
+    if ($(this).hasClass("collapsed")) {
+      $(".navbar").removeClass("navbar-active");
+    } else {
+      $(".navbar").addClass("navbar-active");
+    }
   });
+
+
+  $(document).scroll(function () {
+    if ($(document).scrollTop() >= 50) {
+      console.log('ssss')
+      $(".navbar").addClass("navbar-active");
+    } else {
+      $(".navbar").removeClass("navbar-active");
+    }
+  
+    if (checkScreenSize() == true) {
+      if ($(".navbar-collapse").hasClass("show")) {
+        $(".navbar").addClass("navbar-active");
+      }
+    }
+  });
+  
+  function checkScreenSize() {
+    var newWindowWidth = $(window).width();
+    if (newWindowWidth < 481) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  AOS.init();
