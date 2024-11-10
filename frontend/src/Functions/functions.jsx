@@ -164,6 +164,47 @@ export const createReveiw = async (formData) => {
     throw error // Propagate the error
   }
 }
+export const submitContactForm = async (formData) => {
+  try {
+    const response = await axios.post(`${baseUrl}/api/v1/contact_forms`, formData, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+
+    const data = response.data
+    if (data.success) {
+      return data // Successfully created business details
+    } else {
+      console.error('Failed to submit form:', data.message || 'Unknown error')
+      throw new Error(data.message || 'Failed to submit form')
+    }
+  } catch (error) {
+    console.error('failed to submit form:', error.message)
+    throw error // Propagate the error
+  }
+}
+export const submitNewsLetter = async (formData) => {
+  try {
+    const response = await axios.post(`${baseUrl}/api/v1/contact_forms/news-letter`, formData, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+
+    const data = response.data
+    if (data.success) {
+      return data // Successfully created business details
+    } else {
+      console.error('Failed to submit form:', data.message || 'Unknown error')
+      throw new Error(data.message || 'Failed to submit form')
+    }
+  } catch (error) {
+    console.error('failed to submit form:', error.message)
+    throw error // Propagate the error
+  }
+}
+
 export const createBusinessReview = async (formData) => {
   try {
     const response = await axios.post(`${baseUrl}/api/v1/business-review`, formData, {

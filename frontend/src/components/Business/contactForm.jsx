@@ -1,30 +1,36 @@
-import React, { useState } from 'react';
+/* eslint-disable react/prop-types */
+import React, { useState } from 'react'
 // import 'src/ContactForm.css'; // Import the CSS file
-import "react-phone-input-2/lib/style.css";
-function ContactForm() {
+import 'react-phone-input-2/lib/style.css'
+import { useParams } from 'react-router'
+function ContactForm({ handleFormSubmit }) {
+  const { id } = useParams()
   const [formData, setFormData] = useState({
     name: '',
     email: '',
-    phone: '',
+    phoneNumber: '',
     message: '',
-  });
+  })
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
+    setFormData({ ...formData, [e.target.name]: e.target.value })
+  }
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const handleSubmit = async (e) => {
+    e.preventDefault()
     // Add your form submission logic here, e.g., sending data to a server
-    console.log(formData);
+    console.log(formData)
+    const success = await handleFormSubmit(e, formData)
     // Reset form after submission
-    setFormData({
-      name: '',
-      email: '',
-      phone: '',
-      message: '',
-    });
-  };
+    if (success) {
+      setFormData({
+        name: '',
+        email: '',
+        phoneNumber: '',
+        message: '',
+      })
+    }
+  }
 
   return (
     <div className="contact-form-container bg-light">
@@ -59,12 +65,12 @@ function ContactForm() {
           </div>
         </div>
         <div className="form-group">
-          <label htmlFor="phone">Phone Number</label>
+          <label htmlFor="phoneNumber">Phone Number</label>
           <input
             type="tel"
-            id="phone"
-            name="phone"
-            value={formData.phone}
+            id="phoneNumber"
+            name="phoneNumber"
+            value={formData.phoneNumber}
             onChange={handleChange}
             required
             className="form-control"
@@ -81,20 +87,23 @@ function ContactForm() {
             className="form-control"
           ></textarea>
         </div>
-        <div  className="d-flex justify-content-center align-items-center mt-4">
-        <button type="submit" className="submit-button"         style={{
-                      backgroundColor: "black",
-                      borderRadius: "10px",
-                    //   borderBottomLeftRadius: "50px",
-                      border: "1px solid #ced4da",
-                    }}>
-          Send Message
-        </button>
-    </div>
-
+        <div className="d-flex justify-content-center align-items-center mt-4">
+          <button
+            type="submit"
+            className="submit-button"
+            style={{
+              backgroundColor: 'black',
+              borderRadius: '10px',
+              //   borderBottomLeftRadius: "50px",
+              border: '1px solid #ced4da',
+            }}
+          >
+            Send Message
+          </button>
+        </div>
       </form>
     </div>
-  );
+  )
 }
 
-export default ContactForm;
+export default ContactForm

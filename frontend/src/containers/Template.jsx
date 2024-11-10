@@ -9,14 +9,16 @@ import {
   createBusinessReview,
   fetchBusinessTemplate,
   getAllBusinessReviews,
+  submitContactForm,
+  submitNewsLetter,
 } from '../Functions/functions'
 import { Dialog } from 'primereact/dialog'
 import { Rating } from 'primereact/rating'
 import { InputText } from 'primereact/inputtext'
 import { InputTextarea } from 'primereact/inputtextarea'
 import ContactForm from '/src/components/Business/contactForm'
-import { formatDate } from '../utils/app.utils';
-import { toast } from 'react-toastify';
+import { formatDate } from '../utils/app.utils'
+import { toast } from 'react-toastify'
 
 export default function Template() {
   const [currentSlide, setCurrentSlide] = useState(0)
@@ -25,14 +27,14 @@ export default function Template() {
   const [loading, setLoading] = useState(true)
   const [colorTheme, setColorTheme] = useState('')
   const [visible, setVisible] = useState(false)
-  const [reviewFetch,setreviewFetch]=useState(false)
+  const [reviewFetch, setreviewFetch] = useState(false)
   const [review, setReview] = useState({
     rating: '',
     name: '',
     review: '',
   })
 
-  const [reviews,setReviews]=useState([])
+  const [reviews, setReviews] = useState([])
 
   const [closeDays, setCloseDays] = useState([])
   const allDays = [
@@ -44,6 +46,86 @@ export default function Template() {
     'saturday',
     'sunday',
   ]
+  const [newsLetterEmail, setNewsLetterEmail] = useState('')
+
+  const handleFormSubmit = async (e, formData) => {
+    e.preventDefault()
+
+    const response = await submitContactForm({
+      ...formData,
+      businessId: id,
+    })
+    if (response?.data) {
+      toast.success('Form submitted successfully!', {
+        position: 'top-right',
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        theme: 'colored',
+        style: {
+          backgroundColor: '#38a20e', // Custom red color for error
+          color: '#FFFFFF', // White text
+        },
+      })
+      return true
+    } else {
+      toast.success('Failed submission failed!', {
+        position: 'top-right',
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        theme: 'colored',
+        style: {
+          backgroundColor: '#aa0808', // Custom red color for error
+          color: '#FFFFFF', // White text
+        },
+      })
+      return false
+    }
+  }
+  const handleNewsLetterSubmit = async (e) => {
+    e.preventDefault()
+    console.log("newsLetterEmail",newsLetterEmail);
+    
+
+    const response = await submitNewsLetter({
+      email:newsLetterEmail
+    })
+    if (response?.data) {
+      toast.success('Subscribed successfully!', {
+        position: 'top-right',
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        theme: 'colored',
+        style: {
+          backgroundColor: '#38a20e', // Custom red color for error
+          color: '#FFFFFF', // White text
+        },
+      })
+      setNewsLetterEmail("")
+    } else {
+      toast.success('Failed to Subscribe!', {
+        position: 'top-right',
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        theme: 'colored',
+        style: {
+          backgroundColor: '#aa0808', // Custom red color for error
+          color: '#FFFFFF', // White text
+        },
+      })
+    }
+  }
 
   const handleInputChange = (e) => {
     const { name, value } = e.target
@@ -60,7 +142,7 @@ export default function Template() {
       setReviews(response?.data?.data)
     }
     fetchReview()
-  }, [id ,reviewFetch])
+  }, [id, reviewFetch])
 
   const handleReviewSubmit = async (e) => {
     e.preventDefault()
@@ -71,27 +153,23 @@ export default function Template() {
       businessId: id,
     })
 
-    if(response?.data){
-      toast.success(
-        "Thank you for your review!",
-        {
-          position: 'top-right',
-          autoClose: 3000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          theme: 'colored',
-          style: {
-            backgroundColor: '#38a20e', // Custom red color for error
-            color: '#FFFFFF', // White text
-          },
+    if (response?.data) {
+      toast.success('Thank you for your review!', {
+        position: 'top-right',
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        theme: 'colored',
+        style: {
+          backgroundColor: '#38a20e', // Custom red color for error
+          color: '#FFFFFF', // White text
         },
-      )
+      })
       setreviewFetch(!reviewFetch)
       setVisible(false)
     }
-   
   }
 
   useEffect(() => {
@@ -1027,7 +1105,7 @@ export default function Template() {
         </div>
       </Dialog>
 
-      <ContactForm businessData={businessData} />
+      <ContactForm handleFormSubmit={handleFormSubmit} />
 
       <section className="h-auto david-font" id="contact">
         <div className="container p-top">
@@ -1048,11 +1126,16 @@ export default function Template() {
                     <input
                       type="email"
                       style={{ border: '0 !important' }}
+                      required
+                      value={newsLetterEmail}
+                      onChange={(e) =>
+                        setNewsLetterEmail(e.target?.value?.trim())
+                      }
                       className="form-control form-control-lg"
                     />
                   </div>
                   <div className="col-lg-4">
-                    <button className="btn theme btn-lg w-100">
+                    <button onClick={handleNewsLetterSubmit} className="btn theme btn-lg w-100">
                       Subscribe
                     </button>
                   </div>
@@ -1065,18 +1148,23 @@ export default function Template() {
                   Subscribing To Our Newsletter
                 </h2>
                 <div className="row">
+                 
                   <div className="col-12">
                     <input
                       type="email"
+                      name="email"
+                      
+                    
                       style={{ border: '0 !important' }}
                       className="form-control form-control-sm"
                     />
                   </div>
                   <div className="col-12">
-                    <button className="btn theme btn-sm mt-1 w-100">
+                    <button type='button' className="btn theme btn-sm mt-1 w-100">
                       Subscribe
                     </button>
                   </div>
+                 
                 </div>
               </div>
             </div>
