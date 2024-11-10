@@ -1,68 +1,72 @@
-import React, { useEffect, useState } from "react";
-import { Container, Nav, Navbar, NavLink } from "react-bootstrap";
-import "/src/assets/css/template.css";
-import Slider from "react-slick";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
-import { useParams } from "react-router-dom";
-import { fetchBusinessTemplate } from "../Functions/functions";
-import { Dialog } from "primereact/dialog";
-import { Rating } from "primereact/rating";
-import { InputText } from "primereact/inputtext";
-import { InputTextarea } from "primereact/inputtextarea";
-import ContactForm from "/src/components/Business/contactForm";
+import React, { useEffect, useState } from 'react'
+import { Container, Nav, Navbar, NavLink } from 'react-bootstrap'
+import '/src/assets/css/template.css'
+import Slider from 'react-slick'
+import 'slick-carousel/slick/slick.css'
+import 'slick-carousel/slick/slick-theme.css'
+import { useParams } from 'react-router-dom'
+import { fetchBusinessTemplate } from '../Functions/functions'
+import { Dialog } from 'primereact/dialog'
+import { Rating } from 'primereact/rating'
+import { InputText } from 'primereact/inputtext'
+import { InputTextarea } from 'primereact/inputtextarea'
+import ContactForm from '/src/components/Business/contactForm'
 
 export default function Template() {
-  const [currentSlide, setCurrentSlide] = useState(0);
-  const [businessData, setBusinessData] = useState(null);
-  const { id } = useParams();
-  const [loading, setLoading] = useState(true);
-  const [colorTheme, setColorTheme] = useState("");
-  const [visible, setVisible] = useState(false);
+  const [currentSlide, setCurrentSlide] = useState(0)
+  const [businessData, setBusinessData] = useState(null)
+  const { id } = useParams()
+  const [loading, setLoading] = useState(true)
+  const [colorTheme, setColorTheme] = useState('')
+  const [visible, setVisible] = useState(false)
   const [review, setReview] = useState([
     {
-      rating: "",
-      name: "",
-      description: "",
+      rating: '',
+      name: '',
+      description: '',
     },
-  ]);
-  const [closeDays, setCloseDays] = useState([]);
+  ])
+  const [closeDays, setCloseDays] = useState([])
   const allDays = [
-    "monday",
-    "tuesday",
-    "wednesday",
-    "thursday",
-    "friday",
-    "saturday",
-    "sunday",
-  ];
+    'monday',
+    'tuesday',
+    'wednesday',
+    'thursday',
+    'friday',
+    'saturday',
+    'sunday',
+  ]
 
   const handleInputChange = (e) => {
-    const { name, value } = e.target;
+    const { name, value } = e.target
     setReview((prevState) => ({
       ...prevState,
       [name]: value,
-    }));
-  };
+    }))
+  }
+
+  const handleReviewSubmit =async()=>{
+
+  }
 
   useEffect(() => {
     const fetchData = async () => {
-      const businessDetails = await fetchBusinessTemplate(id);
-      setBusinessData(businessDetails?.data);
-      console.log(businessDetails);
-      setColorTheme(businessDetails.data.theme);
-      setLoading(false);
+      const businessDetails = await fetchBusinessTemplate(id)
+      setBusinessData(businessDetails?.data)
+      console.log(businessDetails)
+      setColorTheme(businessDetails.data.theme)
+      setLoading(false)
       const closed = allDays.filter(
         (day) =>
           !businessDetails.data.businessTiming.workingDays
             .map((d) => d.toLowerCase())
-            .includes(day)
-      );
-      setCloseDays(closed);
-    };
+            .includes(day),
+      )
+      setCloseDays(closed)
+    }
 
-    fetchData();
-  }, [id]);
+    fetchData()
+  }, [id])
 
   const settings = {
     dots: false,
@@ -113,7 +117,7 @@ export default function Template() {
         },
       },
     ],
-  };
+  }
   const setting2 = {
     dots: false,
     arrows: false,
@@ -162,7 +166,7 @@ export default function Template() {
         },
       },
     ],
-  };
+  }
 
   const settings3 = {
     dots: false,
@@ -211,7 +215,7 @@ export default function Template() {
         },
       },
     ],
-  };
+  }
 
   const gallery = {
     dots: true,
@@ -235,7 +239,7 @@ export default function Template() {
         },
       },
     ],
-  };
+  }
 
   if (loading) {
     return (
@@ -244,24 +248,24 @@ export default function Template() {
           <div className="col-3 ">Loading...</div>
         </div>
       </div>
-    );
+    )
   }
 
   // If there's no business data (e.g., fetch failed), show an error message
   if (!businessData) {
-    return <div>Error loading business data.</div>;
+    return <div>Error loading business data.</div>
   }
 
   return (
     <>
       <link rel="preconnect" href="https://fonts.googleapis.com" />
-      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin />
       <link
         href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap"
         rel="stylesheet"
       />
       <style>
-        {" "}
+        {' '}
         {`
                     ::-webkit-scrollbar {
                         width: 12px; /* Width of the entire scrollbar */
@@ -306,14 +310,14 @@ export default function Template() {
       <Navbar
         expand="lg"
         className="bg-white pjs fixed-top"
-        style={{ paddingBlock: "5px" }}
+        style={{ paddingBlock: '5px' }}
       >
         <Container>
           {/* Align Brand to the start (left side) */}
           <Navbar.Brand
             href="/"
             className="fw-bold w-50 nav-logo"
-            style={{ fontSize: "36px" }}
+            style={{ fontSize: '36px' }}
           >
             <img src={businessData?.logo} alt="" />
             <span className="ms-2">{businessData?.businessName}</span>
@@ -321,7 +325,7 @@ export default function Template() {
 
           <Navbar.Toggle
             aria-controls="basic-navbar-nav"
-            style={{ color: "black" }}
+            style={{ color: 'black' }}
           />
 
           <Navbar.Collapse id="basic-navbar-nav">
@@ -329,28 +333,28 @@ export default function Template() {
               <NavLink
                 href="#"
                 className="text-black text-center text-lg-start  text-decoration-none fs-14"
-                style={{ color: "black" }}
+                style={{ color: 'black' }}
               >
                 Home
               </NavLink>
               <NavLink
                 href="#about"
                 className="text-black text-center text-lg-start  text-decoration-none fs-14"
-                style={{ color: "black" }}
+                style={{ color: 'black' }}
               >
                 About
               </NavLink>
               <NavLink
                 href="#gallery"
                 className="text-black text-center text-lg-start  text-decoration-none fs-14"
-                style={{ color: "black" }}
+                style={{ color: 'black' }}
               >
                 Gallery
               </NavLink>
               <NavLink
                 href="#contact"
                 className="text-black text-center text-lg-start  text-decoration-none fs-14"
-                style={{ color: "black" }}
+                style={{ color: 'black' }}
               >
                 Contact
               </NavLink>
@@ -358,11 +362,11 @@ export default function Template() {
                 to="/create-business"
                 style={{
                   backgroundColor: colorTheme,
-                  color: "white",
-                  borderRadius: "10px 0px",
-                  padding: "8px 20px",
-                  fontSize: "13px",
-                  boxShadow: "0px 15px 30px rgba(0, 0, 0, 0.15)",
+                  color: 'white',
+                  borderRadius: '10px 0px',
+                  padding: '8px 20px',
+                  fontSize: '13px',
+                  boxShadow: '0px 15px 30px rgba(0, 0, 0, 0.15)',
                 }}
                 className="fw-bold text-decoration-none text-center text-lg-start"
               >
@@ -406,7 +410,7 @@ export default function Template() {
                       <NavLink
                         to="#about"
                         className="btn btn-dark text-white radius-theme box-shadow w-100 p-1"
-                        style={{ backgroundColor: "#212529" }}
+                        style={{ backgroundColor: '#212529' }}
                       >
                         View More
                       </NavLink>
@@ -483,10 +487,10 @@ export default function Template() {
                   <div className="col">
                     <span className="fs-13">Address</span>
                     <p className="fs-16">
-                      {businessData?.address?.buildingName},{" "}
+                      {businessData?.address?.buildingName},{' '}
                       {businessData?.address?.city},
                       {businessData?.address?.landMark},
-                      {businessData?.address?.streetName},{" "}
+                      {businessData?.address?.streetName},{' '}
                       {businessData?.address?.state}
                     </p>
                   </div>
@@ -530,7 +534,7 @@ export default function Template() {
 
       <section
         className=" h-auto"
-        style={{ backgroundColor: "#F3F3F4" }}
+        style={{ backgroundColor: '#F3F3F4' }}
         id="about"
       >
         <div className="container p-top">
@@ -558,7 +562,7 @@ export default function Template() {
         </div>
       </section>
 
-      <section className="h-auto" style={{ backgroundColor: "#F3F3F4" }}>
+      <section className="h-auto" style={{ backgroundColor: '#F3F3F4' }}>
         <div className="container p-top">
           <div className="col-12 mb-5">
             <div className="mt-5 text-center">
@@ -590,9 +594,9 @@ export default function Template() {
                           src={dish.image}
                           alt={dish.title}
                           style={{
-                            width: "300px",
-                            height: "300px",
-                            objectFit: "cover",
+                            width: '300px',
+                            height: '300px',
+                            objectFit: 'cover',
                           }}
                         />
                       </div>
@@ -616,10 +620,10 @@ export default function Template() {
                         src={dish.image}
                         alt={dish.title}
                         style={{
-                          width: "100%",
-                          height: "auto",
-                          maxWidth: "300px",
-                          objectFit: "cover",
+                          width: '100%',
+                          height: 'auto',
+                          maxWidth: '300px',
+                          objectFit: 'cover',
                         }}
                       />
                     </div>
@@ -654,7 +658,7 @@ export default function Template() {
                 {businessData?.productSection?.map((item, index) => (
                   <div
                     className="col-12 col-lg-6 mt-3 "
-                    style={{ padding: "0 30px" }}
+                    style={{ padding: '0 30px' }}
                     key={index}
                   >
                     <div className="row  product-section align-items-center">
@@ -679,7 +683,7 @@ export default function Template() {
 
       <section
         className="h-auto david-font"
-        style={{ backgroundColor: "#F3F3F4" }}
+        style={{ backgroundColor: '#F3F3F4' }}
       >
         <div className="container p-top">
           <div className="col-12 mt-5 text-center text-lg-start">
@@ -691,7 +695,7 @@ export default function Template() {
                 <div
                   key={index}
                   className={`col-12 col-lg-4 service-design ${
-                    index === currentSlide ? "active" : "bg-white"
+                    index === currentSlide ? 'active' : 'bg-white'
                   }  mt-5 mb-5 text-center`}
                 >
                   <div className="col-12 text-center">
@@ -702,7 +706,7 @@ export default function Template() {
                   </div>
                   <div
                     className="col-12 text-center"
-                    style={{ height: "100px" }}
+                    style={{ height: '100px' }}
                   >
                     <img
                       src={service.image}
@@ -774,7 +778,7 @@ export default function Template() {
           </div>
         </div>
       </section>
-      <section className="" style={{ backgroundColor: "#F3F3F4" }}>
+      <section className="" style={{ backgroundColor: '#F3F3F4' }}>
         <div className="container david-font p-top">
           <div className="col-12 text-center">
             <h1>Our Happy Customers</h1>
@@ -808,7 +812,7 @@ export default function Template() {
                     {[...Array(Math.floor(testimonial?.rating))].map(
                       (star, i) => (
                         <i key={i} className="bi bi-star-fill"></i>
-                      )
+                      ),
                     )}
                     {testimonial?.rating % 1 !== 0 && (
                       <i className="bi bi-star-half"></i>
@@ -841,56 +845,61 @@ export default function Template() {
         </div>
       </section>
       <Dialog
-        header="Write a Review"
-        visible={visible}
-        onHide={() => {
-          if (!visible) return;
-          setVisible(false);
-        }}
-        style={{ width: "50vw" }}
-        breakpoints={{ "960px": "75vw", "641px": "100vw" }}
-      >
-        <div className="container">
-          <div className="p-3 justify-content-center">
-            <Rating
-              value={review.rating}
-              onChange={(e) => setReview({ ...review, rating: e.value })}
-              cancel={false}
-            />
-          </div>
-          <div className="col-12">
-            <InputText
-              keyfilter="text"
-              placeholder="Full Name"
-              className="w-100"
-              value={review.name}
-              name="name"
-              onChange={handleInputChange}
-            />
-          </div>
+  header="Write a Review"
+  visible={visible}
+  onHide={() => {
+    if (!visible) return
+    setVisible(false)
+  }}
+  style={{ width: '50vw' }}
+  breakpoints={{ '960px': '75vw', '641px': '100vw' }}
+>
+  <div className="container">
+    <form onSubmit={handleReviewSubmit}>
+      <div className="p-3 justify-content-center">
+        <Rating
+          value={review.rating}
+          onChange={(e) => setReview({ ...review, rating: e.value })}
+          cancel={false}
+        />
+      </div>
+      
+      <div className="col-12">
+        <InputText
+          keyfilter="text"
+          placeholder="Full Name"
+          className="w-100"
+          value={review.name}
+          name="name"
+          onChange={handleInputChange}
+        />
+      </div>
 
-          {/* Description Input Field */}
-          <div className="col-12 mt-3">
-            <div className="card flex justify-content-center">
-              <InputTextarea
-                value={review.description} // Bind the description from state
-                onChange={handleInputChange} // Update description in state
-                rows={5}
-                cols={30}
-                name="description" // Important: use `name` for targeting in handleInputChange
-                placeholder="Write your review here..."
-              />
-            </div>
-          </div>
-          <div className="col-12 mt-3">
-            <div className="row">
-              <button className="btn-theme2 btn theme radius">
-                Submit Review
-              </button>
-            </div>
-          </div>
+      {/* Description Input Field */}
+      <div className="col-12 mt-3">
+        <div className="card flex justify-content-center">
+          <InputTextarea
+            value={review.description} // Bind the description from state
+            onChange={handleInputChange} // Update description in state
+            rows={5}
+            cols={30}
+            name="description" // Important: use `name` for targeting in handleInputChange
+            placeholder="Write your review here..."
+          />
         </div>
-      </Dialog>
+      </div>
+
+      <div className="col-12 mt-3">
+        <div className="row">
+          <button type="submit" className="btn-theme2 btn theme radius">
+            Submit Review
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</Dialog>
+
       <ContactForm businessData={businessData} />
 
       <section className="h-auto david-font" id="contact">
@@ -911,7 +920,7 @@ export default function Template() {
                   <div className="col-lg-8">
                     <input
                       type="email"
-                      style={{ border: "0 !important" }}
+                      style={{ border: '0 !important' }}
                       className="form-control form-control-lg"
                     />
                   </div>
@@ -932,7 +941,7 @@ export default function Template() {
                   <div className="col-12">
                     <input
                       type="email"
-                      style={{ border: "0 !important" }}
+                      style={{ border: '0 !important' }}
                       className="form-control form-control-sm"
                     />
                   </div>
@@ -963,7 +972,7 @@ export default function Template() {
                 </div>
                 <div
                   className="col-12 mt-4  text-center text-lg-start"
-                  style={{ color: "#A4B3CB" }}
+                  style={{ color: '#A4B3CB' }}
                 >
                   <p>{businessData?.description}</p>
                 </div>
@@ -983,7 +992,7 @@ export default function Template() {
                     <a
                       href="#"
                       className="fs-14 text-decoration-none"
-                      style={{ color: "#A4B3CB" }}
+                      style={{ color: '#A4B3CB' }}
                     >
                       Menu
                     </a>
@@ -992,7 +1001,7 @@ export default function Template() {
                     <a
                       href="#"
                       className="fs-14 text-decoration-none"
-                      style={{ color: "#A4B3CB" }}
+                      style={{ color: '#A4B3CB' }}
                     >
                       About Us
                     </a>
@@ -1001,7 +1010,7 @@ export default function Template() {
                     <a
                       href="#"
                       className="fs-14 text-decoration-none"
-                      style={{ color: "#A4B3CB" }}
+                      style={{ color: '#A4B3CB' }}
                     >
                       Contact Us
                     </a>
@@ -1010,7 +1019,7 @@ export default function Template() {
                     <a
                       href="#"
                       className="fs-14 text-decoration-none"
-                      style={{ color: "#A4B3CB" }}
+                      style={{ color: '#A4B3CB' }}
                     >
                       Main Dishes
                     </a>
@@ -1032,17 +1041,17 @@ export default function Template() {
                       </div>
                       <div
                         className="mt-3 text-center text-lg-start"
-                        style={{ color: "#A4B3CB" }}
+                        style={{ color: '#A4B3CB' }}
                       >
                         {businessData?.businessTiming?.workingDays?.map(
                           (day, index) => (
                             <p key={index}>{day}</p>
-                          )
+                          ),
                         )}
                       </div>
                       <div
                         className="mt-3 text-center text-lg-start"
-                        style={{ color: "#A4B3CB" }}
+                        style={{ color: '#A4B3CB' }}
                       >
                         <span>8:00 am to 9:00 pm</span>
                       </div>
@@ -1094,14 +1103,14 @@ export default function Template() {
                 </div>
               </div>
               <div className="col-12">
-                <hr style={{ width: "100%", opacity: 0.25, color: "white" }} />
-                <div class="footer-bottom">
-                  <div class="row w-full justify-content-between">
-                    <div class="col-sm-4 text-left">
+                <hr style={{ width: '100%', opacity: 0.25, color: 'white' }} />
+                <div className="footer-bottom">
+                  <div className="row w-full justify-content-between">
+                    <div className="col-sm-4 text-left">
                       <a href="/terms-and-conditions">Terms and Conditions</a>
                     </div>
-                    <div class="col-sm-4 text-right">
-                      <div style={{ color: "#A4B3CB" }} class="text-right">
+                    <div className="col-sm-4 text-right">
+                      <div style={{ color: '#A4B3CB' }} className="text-right">
                         <span>
                           Copyright &copy;
                           {new Date().getFullYear()} In Connect. All Rights
@@ -1117,5 +1126,5 @@ export default function Template() {
         </div>
       </footer>
     </>
-  );
+  )
 }

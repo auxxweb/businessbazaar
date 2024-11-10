@@ -106,6 +106,19 @@ export const getAllReviews = async ({ page = 1, limit = 10 }) => {
     console.error('Failed to fetch reviews')
   }
 }
+export const getAllBusinessReviews = async ({ page = 1, limit = 10 }) => {
+  try {
+    const response = await axios.get(`${baseUrl}/api/v1/business-review`, config)
+
+    if (response.status !== 200) {
+      throw new Error(`HTTP error! Status: ${response.status}`)
+    }
+    const data = response.data
+    return data
+  } catch (error) {
+    console.error('Failed to fetch reviews')
+  }
+}
 
 export const CreateBusinessDetails = async (formData) => {
   try {
