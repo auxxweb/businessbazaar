@@ -10,7 +10,7 @@ export default function Header() {
       <Container>
         {/* Align Brand to the start (left side) */}
         <Navbar.Brand href="/" className='fw-bold w-50' style={{ fontSize: '36px' }}>
-          Business Bazar
+          InConnect
         </Navbar.Brand>
 
         <Navbar.Toggle aria-controls="basic-navbar-nav"  style={{color:'black'}}/>

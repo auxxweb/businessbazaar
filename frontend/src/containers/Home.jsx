@@ -711,7 +711,7 @@ export default function Home() {
             <div className="row ">
               <div className="col-12 col-md-6">
                 <h1 className="fs-45 text-white text-center text-md-start fw-bold mb-3">
-                  Business Bazaar
+                  InConnect
                 </h1>
                 <span className="fs-20 text-white text-center text-md-start">
                   where requirements are found
