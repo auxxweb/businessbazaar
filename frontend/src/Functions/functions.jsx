@@ -7,10 +7,8 @@ const config = {
   },
 }
 
- 
 // const baseUrl = "http://localhost:5000"
-const baseUrl = "https://server.instant-connect.in"
-
+const baseUrl = 'https://server.instant-connect.in'
 
 export const fetchCategories = async () => {
   try {
@@ -143,7 +141,6 @@ export const createReveiw = async (formData) => {
       },
     })
 
-
     const data = response.data
     if (data.success) {
       return data // Successfully created business details
@@ -228,10 +225,15 @@ export const fetchBanners = async () => {
   }
 }
 
-export const getCategoryData = async (categoryId) => {
+export const getCategoryData = async ({
+  categoryId,
+  searchTerm = '',
+  page = 1,
+  limit = 10,
+}) => {
   try {
     const response = await axios.get(
-      `${baseUrl}/api/v1/category/${categoryId}`,
+      `${baseUrl}/api/v1/category/${categoryId}?searchTerm=${searchTerm}&page=${page}&limit=${limit}`,
       config,
     )
 
