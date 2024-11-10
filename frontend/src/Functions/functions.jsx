@@ -1,5 +1,6 @@
 /* eslint-disable no-unused-vars */
 import axios from 'axios'
+import { appConfig } from '../config/appConfig'
 
 const config = {
   headers: {
@@ -7,8 +8,7 @@ const config = {
   },
 }
 
-// const baseUrl = 'https://businessbazaarserver.auxxweb.in'
-const baseUrl = 'http://localhost:5000'
+const baseUrl = appConfig.baseUrl
 
 export const fetchCategories = async () => {
   try {
@@ -115,10 +115,6 @@ export const CreateBusinessDetails = async (formData) => {
       },
     })
 
-    // if (response.status !== 200) {
-    //     throw new Error(`HTTP error! Status: ${response.status}`);
-    // }
-
     const data = response.data
     if (data.success) {
       return data // Successfully created business details
@@ -145,9 +141,6 @@ export const createReveiw = async (formData) => {
       },
     })
 
-    // if (response.status !== 200) {
-    //     throw new Error(`HTTP error! Status: ${response.status}`);
-    // }
 
     const data = response.data
     if (data.success) {
