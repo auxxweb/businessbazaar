@@ -559,9 +559,9 @@ export default function Home() {
               ))}
             </Slider>
             <div className="text-center mt-3 mb-5">
-              <a href="/reviews" className="text-decoration-none text-theme2">
+              {/* <a href="/reviews" className="text-decoration-none text-theme2">
                 View more <i className="bi bi-arrow-right"></i>
-              </a>
+              </a> */}
             </div>
           </div>
         </div>

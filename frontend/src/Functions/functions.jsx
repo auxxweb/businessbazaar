@@ -1,6 +1,5 @@
 /* eslint-disable no-unused-vars */
 import axios from 'axios'
-import { appConfig } from '../config/appConfig'
 
 const config = {
   headers: {
@@ -8,7 +7,10 @@ const config = {
   },
 }
 
-const baseUrl = appConfig.baseUrl
+ 
+// const baseUrl = "http://localhost:5000"
+const baseUrl = "https://server.instant-connect.in"
+
 
 export const fetchCategories = async () => {
   try {
