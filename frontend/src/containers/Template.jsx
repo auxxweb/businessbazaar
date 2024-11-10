@@ -5,12 +5,18 @@ import Slider from 'react-slick'
 import 'slick-carousel/slick/slick.css'
 import 'slick-carousel/slick/slick-theme.css'
 import { useParams } from 'react-router-dom'
-import { fetchBusinessTemplate } from '../Functions/functions'
+import {
+  createBusinessReview,
+  fetchBusinessTemplate,
+  getAllBusinessReviews,
+} from '../Functions/functions'
 import { Dialog } from 'primereact/dialog'
 import { Rating } from 'primereact/rating'
 import { InputText } from 'primereact/inputtext'
 import { InputTextarea } from 'primereact/inputtextarea'
 import ContactForm from '/src/components/Business/contactForm'
+import { formatDate } from '../utils/app.utils';
+import { toast } from 'react-toastify';
 
 export default function Template() {
   const [currentSlide, setCurrentSlide] = useState(0)
@@ -19,13 +25,15 @@ export default function Template() {
   const [loading, setLoading] = useState(true)
   const [colorTheme, setColorTheme] = useState('')
   const [visible, setVisible] = useState(false)
-  const [review, setReview] = useState([
-    {
-      rating: '',
-      name: '',
-      description: '',
-    },
-  ])
+  const [reviewFetch,setreviewFetch]=useState(false)
+  const [review, setReview] = useState({
+    rating: '',
+    name: '',
+    review: '',
+  })
+
+  const [reviews,setReviews]=useState([])
+
   const [closeDays, setCloseDays] = useState([])
   const allDays = [
     'monday',
@@ -45,8 +53,45 @@ export default function Template() {
     }))
   }
 
-  const handleReviewSubmit =async()=>{
+  useEffect(() => {
+    const fetchReview = async () => {
+      const response = await getAllBusinessReviews({ businessId: id })
+      console.log(response, 'data-validation')
+      setReviews(response?.data?.data)
+    }
+    fetchReview()
+  }, [id ,reviewFetch])
 
+  const handleReviewSubmit = async (e) => {
+    e.preventDefault()
+    console.log(review, 'review')
+
+    const response = await createBusinessReview({
+      ...review,
+      businessId: id,
+    })
+
+    if(response?.data){
+      toast.success(
+        "Thank you for your review!",
+        {
+          position: 'top-right',
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          theme: 'colored',
+          style: {
+            backgroundColor: '#38a20e', // Custom red color for error
+            color: '#FFFFFF', // White text
+          },
+        },
+      )
+      setreviewFetch(!reviewFetch)
+      setVisible(false)
+    }
+   
   }
 
   useEffect(() => {
@@ -793,44 +838,125 @@ export default function Template() {
             </p>
           </div>
 
-          <div className="mt-5">
-            <Slider {...settings3}>
-              {businessData?.testimonial?.reviews.map((testimonial, index) => (
-                <div
-                  key={index}
-                  className="bg-white col-12 p-3 mt-2 test-div-bottom"
-                >
-                  <div className="col-12 text-center test-button-img-div">
-                    <img
-                      src="/src/assets/images/user.png"
-                      alt={testimonial?.name}
-                      className="img-fluid"
-                    />
-                  </div>
-
-                  <div className="text-warning text-center mt-0 m-0">
-                    {[...Array(Math.floor(testimonial?.rating))].map(
-                      (star, i) => (
-                        <i key={i} className="bi bi-star-fill"></i>
-                      ),
-                    )}
-                    {testimonial?.rating % 1 !== 0 && (
-                      <i className="bi bi-star-half"></i>
-                    )}
-                  </div>
-
-                  <div className="col-12 mt-3">
-                    <p>{testimonial?.review}</p>
-                  </div>
-
-                  <div className="col-12 text-center mb-5">
-                    <span className="fw-bold david-font">
-                      {testimonial?.name}
-                    </span>
+          <div className="col-12">
+            <Slider {...settings}>
+              {reviews?.map((testimonial, index) => (
+                <div key={index} className="testi-slide">
+                  <div
+                    className={`testi-div p-4 ${
+                      index === currentSlide ? 'testi-theme' : ''
+                    }`}
+                    style={{
+                      backgroundColor:
+                        index === currentSlide ? '#f0f8ff' : '#fff', // Light blue background for the active card
+                      borderRadius: '12px', // Rounded corners
+                      boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', // Lighter shadow for premium feel
+                      padding: '16px', // Reduced padding for smaller card height
+                      transition:
+                        'transform 0.3s ease-in-out, background-color 0.3s ease', // Smooth hover effect and background color transition
+                      maxWidth: '100%', // Ensure card size is responsive
+                      margin: '10px', // Add margin between cards
+                      cursor: 'pointer', // Indicating that it's interactive
+                      transform: 'scale(1)', // Default scale
+                      minHeight: '250px', // Set the minHeight to 250px for further reduction
+                      display: 'flex',
+                      flexDirection: 'column', // Flexbox to manage content alignment
+                      justifyContent: 'space-between', // Space out elements evenly
+                    }}
+                    onMouseEnter={(e) =>
+                      (e.currentTarget.style.transform = 'scale(1.05)')
+                    } // Hover effect
+                    onMouseLeave={(e) =>
+                      (e.currentTarget.style.transform = 'scale(1)')
+                    } // Revert hover effect
+                  >
+                    <div className="row">
+                      <div className="col-2">
+                        <img
+                          src="/src/assets/images/user.png"
+                          alt={testimonial?.name}
+                          style={{
+                            objectFit: 'cover',
+                            width: '40px', // Adjusted image size
+                            height: '40px', // Adjusted image size
+                            borderRadius: '50%',
+                            border: '2px solid #ddd', // Premium border around the image
+                          }}
+                        />
+                      </div>
+                      <div className="col-10">
+                        <h3
+                          className="fs-20 p-0 m-0 ms-4"
+                          style={{
+                            fontSize: '16px', // Slightly smaller font size for name
+                            fontWeight: '600',
+                            color: '#333',
+                            marginBottom: '4px', // Reduced margin
+                          }}
+                        >
+                          {testimonial?.name}
+                        </h3>
+                        <div className="text-warning text-center mt-0 m-0">
+                          {[...Array(5)].map((star, i) => {
+                            const isFilled = i < Math.floor(testimonial?.rating)
+                            return (
+                              <i
+                                key={i}
+                                className={`bi ${
+                                  isFilled ? 'bi-star-fill' : 'bi-star'
+                                }`}
+                                style={{
+                                  fontSize: '14px', // Reduced star size
+                                  color: isFilled ? '#FFD700' : '#ddd',
+                                  transition: 'color 0.3s ease', // Smooth color transition for stars
+                                }}
+                              ></i>
+                            )
+                          })}
+                        </div>
+                      </div>
+                    </div>
+                    <div className="col-12 mt-3">
+                      <p
+                        style={{
+                          maxHeight: '60px', // Shortened max height for the review text
+                          overflow: 'hidden',
+                          textOverflow: 'ellipsis',
+                          display: '-webkit-box',
+                          WebkitLineClamp: 2, // Truncate after 2 lines
+                          WebkitBoxOrient: 'vertical',
+                          fontSize: '14px', // Smaller font size for review text
+                          color: '#555', // Slightly lighter text color
+                          lineHeight: '1.4',
+                          fontFamily: '"Roboto", sans-serif', // Modern font for better readability
+                          fontWeight: '400',
+                        }}
+                      >
+                        {testimonial?.review}
+                      </p>
+                    </div>
+                    <div className="col-12 mt-2">
+                      <p
+                        style={{
+                          fontSize: '12px',
+                          color: '#999',
+                          fontStyle: 'italic',
+                          textAlign: 'right', // Align date to the right for a clean look
+                          marginTop: '4px',
+                        }}
+                      >
+                        {formatDate(testimonial?.createdAt ?? '')}
+                      </p>
+                    </div>
                   </div>
                 </div>
               ))}
             </Slider>
+            <div className="text-center mt-3 mb-5">
+              {/* <a href="/reviews" className="text-decoration-none text-theme2">
+      View more <i className="bi bi-arrow-right"></i>
+    </a> */}
+            </div>
           </div>
           <div className="col-12">
             <div className="col-12 text-center mb-3">
@@ -845,60 +971,61 @@ export default function Template() {
         </div>
       </section>
       <Dialog
-  header="Write a Review"
-  visible={visible}
-  onHide={() => {
-    if (!visible) return
-    setVisible(false)
-  }}
-  style={{ width: '50vw' }}
-  breakpoints={{ '960px': '75vw', '641px': '100vw' }}
->
-  <div className="container">
-    <form onSubmit={handleReviewSubmit}>
-      <div className="p-3 justify-content-center">
-        <Rating
-          value={review.rating}
-          onChange={(e) => setReview({ ...review, rating: e.value })}
-          cancel={false}
-        />
-      </div>
-      
-      <div className="col-12">
-        <InputText
-          keyfilter="text"
-          placeholder="Full Name"
-          className="w-100"
-          value={review.name}
-          name="name"
-          onChange={handleInputChange}
-        />
-      </div>
+        header="Write a Review"
+        visible={visible}
+        onHide={() => {
+          if (!visible) return
+          setVisible(false)
+        }}
+        style={{ width: '50vw' }}
+        breakpoints={{ '960px': '75vw', '641px': '100vw' }}
+      >
+        <div className="container">
+          <form onSubmit={handleReviewSubmit}>
+            <div className="p-3 justify-content-center">
+              <Rating
+                value={review.rating}
+                onChange={(e) => setReview({ ...review, rating: e.value })}
+                cancel={false}
+              />
+            </div>
 
-      {/* Description Input Field */}
-      <div className="col-12 mt-3">
-        <div className="card flex justify-content-center">
-          <InputTextarea
-            value={review.description} // Bind the description from state
-            onChange={handleInputChange} // Update description in state
-            rows={5}
-            cols={30}
-            name="description" // Important: use `name` for targeting in handleInputChange
-            placeholder="Write your review here..."
-          />
-        </div>
-      </div>
+            <div className="col-12">
+              <InputText
+                keyfilter="text"
+                placeholder="Full Name"
+                className="w-100"
+                value={review.name}
+                name="name"
+                required
+                onChange={handleInputChange}
+              />
+            </div>
 
-      <div className="col-12 mt-3">
-        <div className="row">
-          <button type="submit" className="btn-theme2 btn theme radius">
-            Submit Review
-          </button>
+            {/* Description Input Field */}
+            <div className="col-12 mt-3">
+              <div className="card flex justify-content-center">
+                <InputTextarea
+                  value={review.review} // Bind the description from state
+                  onChange={handleInputChange} // Update description in state
+                  rows={5}
+                  cols={30}
+                  name="review" // Important: use `name` for targeting in handleInputChange
+                  placeholder="Write your review here..."
+                />
+              </div>
+            </div>
+
+            <div className="col-12 mt-3">
+              <div className="row">
+                <button type="submit" className="btn-theme2 btn theme radius">
+                  Submit Review
+                </button>
+              </div>
+            </div>
+          </form>
         </div>
-      </div>
-    </form>
-  </div>
-</Dialog>
+      </Dialog>
 
       <ContactForm businessData={businessData} />
 

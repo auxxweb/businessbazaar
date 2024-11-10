@@ -7,8 +7,8 @@ const config = {
   },
 }
 
-// const baseUrl = "http://localhost:5000"
-const baseUrl = 'https://server.instant-connect.in'
+const baseUrl = "http://localhost:5000"
+// const baseUrl = 'https://server.instant-connect.in'
 
 export const fetchCategories = async () => {
   try {
@@ -106,13 +106,11 @@ export const getAllReviews = async ({ page = 1, limit = 10 }) => {
     console.error('Failed to fetch reviews')
   }
 }
-export const getAllBusinessReviews = async ({ page = 1, limit = 10 }) => {
+export const getAllBusinessReviews = async ({ page = 1, limit = 10,businessId }) => {
   try {
-    const response = await axios.get(`${baseUrl}/api/v1/business-review`, config)
+    const response = await axios.get(`${baseUrl}/api/v1/business-review/${businessId}?page=${page}&limit=${limit}`, config)
+console.log(response,"reveiws---reviews");
 
-    if (response.status !== 200) {
-      throw new Error(`HTTP error! Status: ${response.status}`)
-    }
     const data = response.data
     return data
   } catch (error) {
@@ -149,6 +147,26 @@ export const CreateBusinessDetails = async (formData) => {
 export const createReveiw = async (formData) => {
   try {
     const response = await axios.post(`${baseUrl}/api/v1/review/`, formData, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+
+    const data = response.data
+    if (data.success) {
+      return data // Successfully created business details
+    } else {
+      console.error('Failed to add review:', data.message || 'Unknown error')
+      throw new Error(data.message || 'Failed to add review')
+    }
+  } catch (error) {
+    console.error('failed add review:', error.message)
+    throw error // Propagate the error
+  }
+}
+export const createBusinessReview = async (formData) => {
+  try {
+    const response = await axios.post(`${baseUrl}/api/v1/business-review`, formData, {
       headers: {
         'Content-Type': 'application/json',
       },
