@@ -256,20 +256,16 @@ export default function Home() {
         <div className="search-bar-div position-absolute">
           <div className="container">
             <div className="row banner-main-div">
-              <div className="col-12 col-md-6 banner-head-text ">
-                <h1 className="head-line fw-bold" data-aos="fade-right">
-                  The <span className="text-theme2">Lorem Ipsum</span>, <br />
-                  used since the 1500s
-                </h1>
-                <p className="text-white" data-aos="zoom-in">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-                  do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                  Ut enim ad minim veniam, quis nostrud exercitation ullamco
-                  laboris nisi ut aliquip ex ea commodo consequat. Duis aute
-                  irure dolor in reprehenderit in voluptate velit esse cillum
-                  dolore eu fugiat nulla pariatur.
-                </p>
-              </div>
+            <div className="col-12 col-md-6 banner-head-text" style={{ textAlign: 'left' }}>
+    <h1 className="head-line fw-bold" data-aos="fade-right">
+        In<span className="text-theme2">Connect</span> <br />
+        Your Digital Platform for Growing Your Business
+    </h1>
+    <p className="text-white" data-aos="zoom-in" style={{ textAlign: 'left' }}>
+        InConnect is your one-stop platform to create, showcase, and share your business online. Get a personalized NFC card to connect with clients instantly, boost referrals, and expand your reach. Build a professional online presence effortlessly with subscription-based tools. Connect and grow with InConnect!
+    </p>
+</div>
+
               <div className="row justify-content-center search-div col-12 col-md-6">
                 {/* Location Input with Crosshair Icon */}
                 <div className="col-12 mt-3 col-md-5">
