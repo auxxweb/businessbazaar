@@ -157,10 +157,7 @@ export default function Business() {
                       </h2>
                     </div>
                     <div className="col-12">
-                      <span className="p-1 bg-success text-white pe-2 ps-2">
-                        4.5 <i className="bi bi-star ms-2 text-white"></i>
-                      </span>
-                      <span className="ms-2 fs-12">3.5k reviews</span>
+                      <span>{business.category.name}</span>
                     </div>
                     <div className="col-12 mt-3">
                       <h3 className="fs-16">

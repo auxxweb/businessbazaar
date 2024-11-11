@@ -9,14 +9,12 @@ import 'slick-carousel/slick/slick-theme.css'
 import { useNavigate, Link } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import './Home.css'
-import ContactForm from '/src/components/Business/contactForm'
 
 import {
   createReveiw,
   fetchBanners,
   fetchBusiness,
   fetchCategories,
-  fetchSearchCategory,
   getAllReviews,
 } from '../Functions/functions'
 import Loader from '../components/Loader'
@@ -24,7 +22,6 @@ import { InputTextarea } from 'primereact/inputtextarea'
 import { InputText } from 'primereact/inputtext'
 import { Rating } from 'primereact/rating'
 import { Dialog } from 'primereact/dialog'
-import ContactSection from '/src/components/Business/ContactSection'
 import { formatDate } from '../utils/app.utils'
 
 export default function Home() {
@@ -81,7 +78,7 @@ export default function Home() {
       } catch (error) {
         toast.error(
           error?.response?.data?.message ??
-            'An error occurred. Please try again.',
+          'An error occurred. Please try again.',
           {
             position: 'top-right',
             autoClose: 3000,
@@ -105,7 +102,7 @@ export default function Home() {
     try {
       if (!review?.name?.trim()?.length) {
         toast.warning(
-            'Please enter your name!',
+          'Please enter your name!',
           {
             position: 'top-right',
             autoClose: 3000,
@@ -120,7 +117,7 @@ export default function Home() {
             },
           },
         )
-      }else{
+      } else {
 
         await createReveiw(review)
         setVisible(false)
@@ -129,7 +126,7 @@ export default function Home() {
     } catch (error) {
       toast.error(
         error?.response?.data?.message ??
-          'An error occurred. Please try again.',
+        'An error occurred. Please try again.',
         {
           position: 'top-right',
           autoClose: 3000,
@@ -179,13 +176,13 @@ export default function Home() {
 
 
   const loadMoreCategories = () => {
-    setVisibleCategories(prev => prev + 20); 
+    setVisibleCategories(prev => prev + 20);
   };
-  
+
   const loadMoreBusiness = () => {
-    setVisibleBusiness(prev => prev + 10); 
+    setVisibleBusiness(prev => prev + 10);
   };
-  
+
 
   const handleInputChange = (e) => {
     const { name, value } = e.target
@@ -267,7 +264,7 @@ export default function Home() {
                       border: '1px solid #ced4da',
                       borderRadius: '8px',
                       overflow: 'hidden',
-                      background:'none',
+                      background: 'none',
                     }}
                   >
                     <span
@@ -279,7 +276,7 @@ export default function Home() {
                         display: 'flex',
                         alignItems: 'center',
                         color: 'white',
-                      background:'none'
+                        background: 'none'
                       }}
                     >
                       <i
@@ -297,7 +294,7 @@ export default function Home() {
                         paddingLeft: '0',
                         fontSize: '1em',
                         color: 'white',
-                      background:'none'
+                        background: 'none'
                       }}
                     />
                   </div>
@@ -311,7 +308,7 @@ export default function Home() {
                       border: '1px solid #ced4da',
                       borderRadius: '8px',
                       overflow: 'hidden',
-                      background:'none'
+                      background: 'none'
                     }}
                   >
                     <span
@@ -323,7 +320,7 @@ export default function Home() {
                         display: 'flex',
                         alignItems: 'center',
                         color: 'white',
-                      background:'none'
+                        background: 'none'
                       }}
                     >
                       <i
@@ -343,7 +340,7 @@ export default function Home() {
                         paddingLeft: '0',
                         fontSize: '1em',
                         color: 'white',
-                      background:'none'
+                        background: 'none'
                       }}
                     />
                   </div>
@@ -370,31 +367,31 @@ export default function Home() {
             </p>
           </div>
           <div className="mb-5 mt-2" id="category">
-          <div className="home-category-div">
-        {categoryData.slice(0, visibleCategories).map((category) => (
-          <Link
-            className="cat-div text-decoration-none"
-            data-aos="zoom-in"
-            to={`/business/${category._id}`} // Dynamically generate the URL with the category ID
-            key={category._id} // Unique key for each category
-          >
-            <img
-              src={category.image}
-              alt={category.name}
-              className="cat-img"
-            />
-            {category.name}
-          </Link>
-        ))}
-      </div>
-      {visibleCategories < categoryData.length && ( // Check if more categories are available
-        <div className="mb-3 mt-5 text-center">
-          <button onClick={loadMoreCategories} className="btn btn-dark btn-md">
-            View More <i className="bi bi-arrow-right"></i>
-          </button>
-        </div>
+            <div className="home-category-div">
+              {categoryData.slice(0, visibleCategories).map((category) => (
+                <Link
+                  className="cat-div text-decoration-none"
+                  data-aos="zoom-in"
+                  to={`/business/${category._id}`} // Dynamically generate the URL with the category ID
+                  key={category._id} // Unique key for each category
+                >
+                  <img
+                    src={category.image}
+                    alt={category.name}
+                    className="cat-img"
+                  />
+                  {category.name}
+                </Link>
+              ))}
+            </div>
+            {visibleCategories < categoryData.length && ( // Check if more categories are available
+              <div className="mb-3 mt-5 text-center">
+                <button onClick={loadMoreCategories} className="btn btn-dark btn-md">
+                  View More <i className="bi bi-arrow-right"></i>
+                </button>
+              </div>
 
-      )}
+            )}
           </div>
         </div>
       </section>
@@ -416,7 +413,7 @@ export default function Home() {
             {!loading &&
               businessData.slice(0, visibleBusiness).map((business) => (
                 <Link
-                  to={business.selectedPlan?.isPremium? `/template/premium/${business?._id}` :`/template/${business?._id}`}
+                  to={business.selectedPlan?.isPremium ? `/template/premium/${business?._id}` : `/template/${business?._id}`}
                   key={business._id}
                   className="text-decoration-none text-dark col-12 col-md-5 b-theme location-card mt-3 business-card"
                 >
@@ -453,45 +450,12 @@ export default function Home() {
                 </Link>
               ))}
           </div>
-          {visibleBusiness < businessData.length && ( 
+          {visibleBusiness < businessData.length && (
             <div className="mt-5 text-center mb-1">
               <button onClick={loadMoreBusiness} className='btn btn-dark btn-md'>View More <i className="bi bi-arrow-right"></i></button>
             </div>
           )}
-          {/* Pagination Controls */}
-          {/* <div className="d-flex justify-content-center align-items-center mt-4">
-            <button
-              onClick={goToPreviousPage}
-              disabled={currentPage === 1}
-              className="btn btn-primary me-2"
-              style={{
-                borderTopLeftRadius: "50px",
-                borderBottomLeftRadius: "50px",
-                border: "none",
-                color: "#E5F0FD",
-                backgroundColor: "#105193",
-              }}
-            >
-              Prev.
-            </button>
-            <span>
-              Page {currentPage} of {totalPages}
-            </span>
-            <button
-              onClick={goToNextPage}
-              disabled={currentPage === totalPages}
-              className="btn btn-primary ms-2"
-              style={{
-                borderTopRightRadius: "50px",
-                borderBottomRightRadius: "50px",
-                border: "none",
-                color: "#E5F0FD",
-                backgroundColor: "#105193",
-              }}
-            >
-              Next
-            </button>
-          </div> */}
+
         </div>
       </section>
 
@@ -523,9 +487,8 @@ export default function Home() {
               {reviews?.map((testimonial, index) => (
                 <div key={index} className="testi-slide">
                   <div
-                    className={`testi-div p-4 ${
-                      index === currentSlide ? 'testi-theme' : ''
-                    }`}
+                    className={`testi-div p-4 ${index === currentSlide ? 'testi-theme' : ''
+                      }`}
                     style={{
                       backgroundColor:
                         index === currentSlide ? '#f0f8ff' : '#fff', // Light blue background for the active card
@@ -582,9 +545,8 @@ export default function Home() {
                             return (
                               <i
                                 key={i}
-                                className={`bi ${
-                                  isFilled ? 'bi-star-fill' : 'bi-star'
-                                }`}
+                                className={`bi ${isFilled ? 'bi-star-fill' : 'bi-star'
+                                  }`}
                                 style={{
                                   fontSize: '14px', // Reduced star size
                                   color: isFilled ? '#FFD700' : '#ddd',
@@ -632,10 +594,10 @@ export default function Home() {
                 </div>
               ))}
             </Slider>
-            <div className="text-center mt-3 mb-5">
-              {/* <a href="/reviews" className="text-decoration-none text-theme2">
-      View more <i className="bi bi-arrow-right"></i>
-    </a> */}
+            <div className="text-center mt-5 mb-5">
+              <a href="/reviews" className="btn btn-dark btn-md text-decoration-none text-theme2">
+                View more <i className="bi bi-arrow-right"></i>
+              </a>
             </div>
           </div>
         </div>
