@@ -177,16 +177,6 @@ export default function Home() {
     fetchBanner()
   }, [])
 
-  async function searchHandler() {
-    try {
-      console.log(searchData)
-      const searchValue = await fetchSearchCategory(searchData)
-      console.log(searchValue)
-      setCategoryData(searchValue.data.data)
-    } catch (error) {
-      console.error('Error fetching data:', error)
-    }
-  }
 
   const itemsPerPage = 6
 
@@ -273,7 +263,7 @@ export default function Home() {
             </Carousel>
           </div>
         </div>
-        <div className="search-bar-div position-absolute">
+        <div className="search-bar-div position-absolute" >
           <div className="container">
             <div className="row banner-main-div">
               <div
@@ -388,7 +378,7 @@ export default function Home() {
         </div>
       </div>
 
-      <section className=" bg-light h-auto" data-aos="fade-up">
+      <section id='category' className=" bg-light h-auto" data-aos="fade-up">
         <div className="container" style={{ width: '90%' }}>
           <div className="mb-5 p-4">
             <h1
