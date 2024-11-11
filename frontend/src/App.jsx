@@ -14,6 +14,7 @@ import '/src/assets/css/style.css'
 import Template from './containers/Template'
 import PremiumTemplate from './containers/PremiumTemplate'
 import TermsAndConditions from './components/Business/TermsAndConditions'
+import BusinessTermsAndConditions from './components/Business/BusinessTermsAndConditions'
 
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
@@ -65,7 +66,8 @@ function App() {
         <Route path="/business/:id" element={<Business />} />
         <Route path="/template/:id" element={<Template />} />
         <Route path="/template/premium/:id" element={<PremiumTemplate />} />
-        <Route path="/terms-and-conditions" element={<TermsAndConditions htmlContent={htmlContent}/>} />
+        <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
+        <Route path='/terms-and-conditions/:id' element={<BusinessTermsAndConditions />} />
       </Routes>
     </Router>
   )
