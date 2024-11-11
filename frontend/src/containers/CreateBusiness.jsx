@@ -162,7 +162,7 @@ export default function CreateBusiness() {
     fetchData()
   }, [])
 
-  function AuthenticationDetails({ formData, handleNextStep, handlePrevStep, setFormData, checkBusinessExists }) {
+  function AuthenticationDetails({ formData }) {
     const [authData, setAuthData] = useState({
       email: '',
       password: '',
