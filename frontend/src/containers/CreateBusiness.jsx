@@ -171,44 +171,44 @@ export default function CreateBusiness() {
     const [passwordError, setPasswordError] = useState('')
     const [emailError, setEmailError] = useState('')
     const [showPassword, setShowPassword] = useState(false)
-  
+
     useEffect(() => {
       setAuthData({
         email: formData.email,
         password: formData.password,
       })
     }, [formData])
-  
+
     function handleInputChange(e) {
       const { name, value } = e.target
       setAuthData((prevAuthData) => ({
         ...prevAuthData,
         [name]: value,
       }))
-  
+
       // Clear errors if the input becomes valid
       if (name === 'email' && value) {
         if (validateEmail(value)) {
           setEmailError('')
         }
       }
-  
+
       if (name === 'password' && value) {
         if (validatePassword(value)) {
           setPasswordError('')
         }
       }
     }
-  
+
     const handleAuthSubmit = async () => {
       const isEmailValid = validateEmail(email)
       const isPasswordValid = validatePassword(password)
-  
+
       if (isEmailValid && isPasswordValid) {
         try {
           const business = await checkBusinessExists({ email, password })
           console.log(business, 'business---')
-  
+
           if (business?.data) {
             setFormData((prevFormData) => ({
               ...prevFormData,
@@ -219,7 +219,7 @@ export default function CreateBusiness() {
           }
         } catch (error) {
           console.log(error, 'error-----------')
-  
+
           toast.error(
             error?.response?.data?.message ?? 'An error occurred. Please try again.',
             {
@@ -239,7 +239,7 @@ export default function CreateBusiness() {
         }
       }
     }
-  
+
     // Updated Email validation function
     function validateEmail(value = email) {
       if (!value) {
@@ -249,7 +249,7 @@ export default function CreateBusiness() {
       setEmailError('')
       return true
     }
-  
+
     // Updated Password validation function
     function validatePassword(value = password) {
       if (value.length < 8) {
@@ -259,11 +259,11 @@ export default function CreateBusiness() {
       setPasswordError('')
       return true
     }
-  
+
     const togglePasswordVisibility = () => {
       setShowPassword(!showPassword)
     }
-  
+
     return (
       <div className="h-100vh create-business-div">
         <div className="row h-100 justify-content-center">
@@ -274,21 +274,21 @@ export default function CreateBusiness() {
               className="w-100 h-100 object-fit-cover"
             />
           </div>
-  
+
           <div className="col-12 col-md-7 d-flex flex-column align-items-center right-portion h-100 p-4">
             <div className="back-button-container">
               <button className="btn btn-dark" onClick={handlePrevStep}>
                 <i className="bi bi-arrow-left"></i>
               </button>
             </div>
-  
+
             <div className="col-12 text-start mb-4">
               <h1 className="fw-bold title-text">
                 <span className="title-main">Add</span> <br />
                 <span className="title-highlight">Authentication Details</span>
               </h1>
             </div>
-  
+
             <div className="input-group mt-2 w-100">
               <TextField
                 fullWidth
@@ -301,7 +301,7 @@ export default function CreateBusiness() {
                 helperText={emailError}
               />
             </div>
-  
+
             <div className="input-group mt-3 w-100">
               <TextField
                 fullWidth
@@ -324,7 +324,7 @@ export default function CreateBusiness() {
                 }}
               />
             </div>
-  
+
             <div className="col-12 text-center mt-4">
               <button
                 className="btn btn-primary w-100 text-white p-2"
@@ -335,7 +335,7 @@ export default function CreateBusiness() {
             </div>
           </div>
         </div>
-  
+
         <style jsx>{`
           .h-100vh {
             height: 100vh;
@@ -402,15 +402,15 @@ export default function CreateBusiness() {
     const [businessName, setBusinessName] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState('');
-  
+
     useEffect(() => {
       setLogo(formData?.logo);
       setBusinessName(formData?.businessName);
     }, [formData]);
-  
+
     const handleLogoChange = async (event) => {
       const file = event.target.files[0];
-  
+
       if (file) {
         setIsLoading(true);
         const reader = new FileReader();
@@ -438,18 +438,18 @@ export default function CreateBusiness() {
         reader.readAsDataURL(file);
       }
     };
-  
+
     const imageUpload = () => {
       document.getElementById('ImageLogo').click();
     };
-  
+
     // Handle form submission with validation
     const handleBusinessSubmit = () => {
       if (!businessName) {
         setError('Business Name is required.');
         return;
       }
-  
+
       setError('');
       setFormData((prevFormData) => ({
         ...prevFormData,
@@ -458,7 +458,7 @@ export default function CreateBusiness() {
       }));
       handleNextStep();
     };
-  
+
     return (
       <div className="business-details-page">
         <div className="container-fluid">
@@ -473,7 +473,7 @@ export default function CreateBusiness() {
                   <i className="bi bi-arrow-left"></i>
                 </button>
                 <h2 className="fw-bold text-start mb-4"><span style={{ color: '#000000' }}>Enter Your</span> Business Details</h2>
-  
+
                 <div className="mb-4">
                   <label htmlFor="businessName" className="form-label">
                     Business Name
@@ -488,7 +488,7 @@ export default function CreateBusiness() {
                     className="form-control form-control-lg"
                   />
                 </div>
-  
+
                 <div className="mb-4">
                   <label htmlFor="ImageLogo" className="form-label">
                     Upload Business Logo
@@ -525,9 +525,9 @@ export default function CreateBusiness() {
                     )}
                   </div>
                 </div>
-  
+
                 {error && <div className="text-danger mb-4">{error}</div>}
-  
+
                 <button
                   className="btn btn-primary w-100 text-white p-2"
                   onClick={handleBusinessSubmit}
@@ -536,7 +536,7 @@ export default function CreateBusiness() {
                 </button>
               </div>
             </div>
-  
+
             {/* Right Section - Business Name Display */}
             <div className="col-12 col-md-6 p-5">
               <div className="business-preview">
@@ -615,8 +615,8 @@ export default function CreateBusiness() {
       </div>
     );
   }
-  
-  
+
+
 
   function ContactDetails({ formData }) {
     const [mobileNumbers, setMobileNumbers] = useState([
@@ -875,164 +875,130 @@ export default function CreateBusiness() {
               </div>
 
               <div id="mobileNumberDiv" className="mt-4">
-                {mobileNumbers.map((number) => (
+                {mobileNumbers.map((number, index) => (
                   <div className="row mt-3" key={number.id}>
-                    <div className="col-12 col-sm-3 col-md-2">
-                      <PhoneInput
-                        country={number.countryCode}
-                        enableSearch={true}
-                        value={number.number}
-                        onChange={(phone, countryData) =>
-                          handleMobileNumberChange(
-                            number.id,
-                            phone,
-                            countryData?.countryCode || 'us',
-                          )
-                        }
-                        containerStyle={{ width: '100%' }}
-                      />
-                    </div>
-                    <div className="col-12 col-sm-7 col-md-8 mt-2 mt-sm-0">
+                    <div className="col-10 mt-2 mt-sm-0">
                       <input
                         type="number"
                         value={number.number}
-                        onChange={(e) =>
-                          handleMobileNumberChange(number.id, e.target.value)
-                        }
+                        onChange={(e) => handleMobileNumberChange(number.id, e.target.value)}
                         className="form-control form-control-lg w-100"
                         placeholder="Phone Number"
                       />
                     </div>
+
                     {errors.mobileNumbers && (
                       <div className="text-danger">{errors.mobileNumbers}</div>
                     )}
-                    {number.id > 1 ? (
-                      <div className="col-12 col-sm-2 mt-2 mt-sm-0">
+
+                    <div className="col-12 col-sm-2 mt-2 mt-sm-0">
+                      {/* Render "Remove" button for all fields except the last one */}
+                      {index < mobileNumbers.length - 1 ? (
                         <button
                           className="btn btn-danger btn-sm w-100"
                           onClick={() => removeMobileNumber(number.id)}
                         >
                           <i className="bi bi-trash"></i>
                         </button>
-                      </div>
-                    ) : (
-                      mobileNumbers.length < 2 && (
-                        <div className="col-12 col-sm-2 mt-2 mt-sm-0">
-                          <button
-                            type="button"
-                            onClick={addMobileNumber}
-                            className="btn w-100 btn-success mt-2"
-                          >
-                            Add
-                          </button>
-                        </div>
-                      )
-                    )}
+                      ) : (
+                        // Render "Add" button on the last field only
+                        <button
+                          type="button"
+                          onClick={addMobileNumber}
+                          className="btn w-100 btn-success mt-2"
+                        >
+                          Add
+                        </button>
+                      )}
+                    </div>
                   </div>
                 ))}
-              </div>
 
+              </div>
+                <hr />
               <div id="whatsappNumberDiv" className="mt-4">
-                {whatsappNumbers.map((number) => (
-                  <div className="row mt-3" key={number.id}>
-                    <div className="col-12 col-sm-3 col-md-2">
-                      <PhoneInput
-                        country={number.countryCode}
-                        enableSearch={true}
-                        value={number.number}
-                        onChange={(phone, countryData) =>
-                          handleWhatsappNumberChange(
-                            number.id,
-                            phone,
-                            countryData?.countryCode || 'us',
-                          )
-                        }
-                        containerStyle={{ width: '100%' }}
-                      />
-                    </div>
-                    <div className="col-12 col-sm-7 col-md-8 mt-2 mt-sm-0">
+                {whatsappNumbers.map((number, index) => (
+                  <div className="row align-items-center mt-3" key={number.id}>
+                    <div className="col-10 mt-2 mt-sm-0">
                       <input
                         type="number"
                         value={number.number}
-                        onChange={(e) =>
-                          handleWhatsappNumberChange(number.id, e.target.value)
-                        }
+                        onChange={(e) => handleWhatsappNumberChange(number.id, e.target.value)}
                         className="form-control form-control-lg w-100"
                         placeholder="WhatsApp Number"
                       />
                     </div>
+
                     {errors.whatsappNumbers && (
                       <div className="text-danger">
                         {errors.whatsappNumbers}
                       </div>
                     )}
-                    {number.id > 1 ? (
-                      <div className="col-12 col-sm-2 mt-2 mt-sm-0">
+
+                    <div className="col-12 col-sm-2 mt-2 mt-sm-0">
+                      {/* Render the Remove button for all fields except the last one */}
+                      {index < whatsappNumbers.length - 1 ? (
                         <button
-                          className="btn btn-danger btn-sm w-100"
+                          className="btn btn-danger w-100 "
                           onClick={() => removeWhatsappNumber(number.id)}
                         >
-                          <i className="bi bi-trash"></i>
+                          X
                         </button>
-                      </div>
-                    ) : (
-                      whatsappNumbers.length < 2 && (
-                        <div className="col-12 col-sm-2 mt-2 mt-sm-0">
-                          <button
-                            type="button"
-                            onClick={addWhatsappNumber}
-                            className="btn w-100 btn-success mt-2"
-                          >
-                            Add
-                          </button>
-                        </div>
-                      )
-                    )}
+                      ) : (
+                        <button
+                          type="button"
+                          onClick={addWhatsappNumber}
+                          className="btn btn-success btn-md w-100 mt-2"
+                        >
+                          Add
+                        </button>
+                      )}
+                    </div>
                   </div>
                 ))}
-              </div>
 
+              </div>
+                <hr />
               <div id="emailDiv" className="mt-4">
-                {emails.map((email) => (
+                {emails.map((email, index) => (
                   <div className="row mt-3" key={email.id}>
                     <div className="col-12 col-sm-10">
                       <input
                         type="email"
                         value={email.email}
-                        onChange={(e) =>
-                          handleEmailChange(email.id, e.target.value)
-                        }
+                        onChange={(e) => handleEmailChange(email.id, e.target.value)}
                         className="form-control form-control-lg"
                         placeholder="Email"
                       />
                     </div>
+
                     {errors.emails && (
                       <div className="text-danger">{errors.emails}</div>
                     )}
-                    {email.id > 1 ? (
-                      <div className="col-12 col-sm-2 mt-2 mt-sm-0">
+
+                    <div className="col-12 col-sm-2 mt-2 mt-sm-0">
+                      {/* Render "Remove" button for all fields except the last one */}
+                      {index < emails.length - 1 ? (
                         <button
                           className="btn btn-danger btn-sm w-100"
                           onClick={() => removeEmail(email.id)}
                         >
                           <i className="bi bi-trash"></i>
                         </button>
-                      </div>
-                    ) : (
-                      emails.length < 2 && (
-                        <div className="col-12 col-sm-2 mt-2 mt-sm-0">
-                          <button
-                            type="button"
-                            onClick={addEmail}
-                            className="btn w-100 btn-success mt-2"
-                          >
-                            Add
-                          </button>
-                        </div>
-                      )
-                    )}
+                      ) : (
+                        // Render "Add" button on the last field only
+                        <button
+                          type="button"
+                          onClick={addEmail}
+                          className="btn w-100 btn-success mt-2"
+                        >
+                          Add
+                        </button>
+                      )}
+                    </div>
                   </div>
                 ))}
+
               </div>
 
               <div className="mt-4">
@@ -1482,9 +1448,8 @@ export default function CreateBusiness() {
                     {allDays.map((day) => (
                       <div
                         key={day}
-                        className={`day-div ${
-                          days.includes(day) ? 'active' : ''
-                        } p-2 text-center cursor-pointer`}
+                        className={`day-div ${days.includes(day) ? 'active' : ''
+                          } p-2 text-center cursor-pointer`}
                         style={{
                           width: '60px',
                           borderRadius: '8px',
@@ -2081,13 +2046,13 @@ export default function CreateBusiness() {
       title: '',
       description: '',
       coverImage: '',
-      loading:'',
+      loading: '',
     })
     const [welcomePart, setWelcomePart] = useState({
       title: '',
       description: '',
       coverImage: '',
-      loading:'',
+      loading: '',
     })
     const [errors, setErrors] = useState({})
     const [loading, setLoading] = useState(false) // Loader state
@@ -2104,15 +2069,15 @@ export default function CreateBusiness() {
     // Generic File Change Handler with Loader
     const handleFileChange = (name, e, sectionSetter) => {
       const file = e.target.files[0]
-      if (name === "landingPageHeroImage"){
+      if (name === "landingPageHeroImage") {
         setLandingPageHero((prevState) => ({
-            ...prevState,
-            loading: true,
+          ...prevState,
+          loading: true,
         }));
-      }else if (name === "welcomePartImage"){
+      } else if (name === "welcomePartImage") {
         setWelcomePart((prevState) => ({
-            ...prevState,
-            loading: true,
+          ...prevState,
+          loading: true,
         }));
       }
       if (file) {
@@ -2131,15 +2096,15 @@ export default function CreateBusiness() {
             console.error('Access link not found in response.')
             return
           }
-          if (name === "landingPageHeroImage"){
+          if (name === "landingPageHeroImage") {
             setLandingPageHero((prevState) => ({
-                ...prevState,
-                loading: false,
+              ...prevState,
+              loading: false,
             }));
-          }else if (name === "welcomePartImage"){
+          } else if (name === "welcomePartImage") {
             setWelcomePart((prevState) => ({
-                ...prevState,
-                loading: false,
+              ...prevState,
+              loading: false,
             }));
           }
         }
@@ -2183,7 +2148,7 @@ export default function CreateBusiness() {
     }
 
     const triggerFileUpload = (inputId) => {
-      
+
       document.getElementById(inputId).click()
     }
 
@@ -3288,9 +3253,8 @@ export default function CreateBusiness() {
                         {services.map((service, index) => (
                           <div
                             key={index}
-                            className={`col-12 col-lg-4 service-design ${
-                              index === currentSlide ? 'active' : ''
-                            } mt-5 mb-5 text-center`}
+                            className={`col-12 col-lg-4 service-design ${index === currentSlide ? 'active' : ''
+                              } mt-5 mb-5 text-center`}
                           >
                             <div className="col-12 text-center">
                               <h3>{service.title}</h3>
@@ -3317,9 +3281,8 @@ export default function CreateBusiness() {
                       services.map((service, index) => (
                         <div
                           key={index}
-                          className={`col-12 col-lg-4 service-design ${
-                            index === currentSlide ? 'active' : ''
-                          } mt-5 mb-5 text-center`}
+                          className={`col-12 col-lg-4 service-design ${index === currentSlide ? 'active' : ''
+                            } mt-5 mb-5 text-center`}
                         >
                           <div className="col-12 text-center">
                             <h3>{service.title}</h3>
@@ -4959,9 +4922,8 @@ export default function CreateBusiness() {
                   {businessData.service.map((service, index) => (
                     <div
                       key={index}
-                      className={`col-12 col-lg-4 service-design ${
-                        index === currentSlide ? 'active' : ''
-                      } mt-5 mb-5 text-center`}
+                      className={`col-12 col-lg-4 service-design ${index === currentSlide ? 'active' : ''
+                        } mt-5 mb-5 text-center`}
                     >
                       <div className="col-12 text-center">
                         <h3>{service.title}</h3>
@@ -4986,9 +4948,8 @@ export default function CreateBusiness() {
                 businessData.service.map((service, index) => (
                   <div
                     key={index}
-                    className={`col-12 col-lg-4 service-design ${
-                      index === currentSlide ? 'active' : ''
-                    } mt-5 mb-5 text-center`}
+                    className={`col-12 col-lg-4 service-design ${index === currentSlide ? 'active' : ''
+                      } mt-5 mb-5 text-center`}
                   >
                     <div className="col-12 text-center">
                       <h3>{service.title}</h3>
@@ -5602,13 +5563,13 @@ export default function CreateBusiness() {
       const rzp = new window.Razorpay(options)
       rzp.open()
     }
-      const submitData = async () => {
-        const res = await CreateBusinessDetails(formData)
-        const id = res.data._id || res.data.data?._id
-        setBusinessId(id)
-        handlePayment(id)
-      }
-      submitData()
+    const submitData = async () => {
+      const res = await CreateBusinessDetails(formData)
+      const id = res.data._id || res.data.data?._id
+      setBusinessId(id)
+      handlePayment(id)
+    }
+    submitData()
   }
 
   return (
