@@ -1,0 +1,66 @@
+.home-category-div {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem; /* Space between cards */
+  margin: 0 auto; /* Center the container */
+  max-width: 1200px; /* Optional: limit the max-width for better control */
+  padding: 0 1rem; /* Ensure consistent padding */
+}
+
+.cat-div {
+  text-align: center;
+  flex: 1 1 auto; /* Allow cards to grow based on content */
+  width: auto; /* Card width based on content length */
+  min-width: 150px; /* Minimum width for cards */
+  max-width: 250px; /* Maximum width for cards to prevent them from growing too large */
+  background-color: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+  word-wrap: break-word; /* Ensure text wraps correctly */
+}
+
+.cat-div:hover {
+  transform: translateY(-5px); /* Hover effect */
+}
+
+.cat-img {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+}
+
+.cat-text {
+  padding: 0.5rem;
+  font-size: 1rem;
+  font-weight: 500;
+  color: #333;
+  white-space: normal; /* Allow text wrapping */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  height: 3rem; /* Reduced height for the text block */
+  line-height: 1.5rem; /* Ensure proper line spacing */
+  display: -webkit-box;
+  -webkit-line-clamp: 2; /* Limit to 2 lines of text */
+  -webkit-box-orient: vertical;
+}
+
+@media (min-width: 576px) {
+  .cat-div {
+    flex: 1 1 auto; /* 3 cards per row on small screens with dynamic width based on content */
+  }
+}
+
+@media (min-width: 768px) {
+  .cat-div {
+    flex: 1 1 auto; /* 4 cards per row on medium screens with dynamic width based on content */
+  }
+}
+
+@media (min-width: 992px) {
+  .cat-div {
+    flex: 1 1 auto; /* 5 cards per row on large screens with dynamic width based on content */
+  }
+}

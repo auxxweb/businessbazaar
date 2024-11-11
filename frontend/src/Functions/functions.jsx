@@ -7,8 +7,8 @@ const config = {
   },
 }
 
-// const baseUrl = 'https://businessbazaarserver.auxxweb.in'
-const baseUrl = 'http://localhost:5000'
+// const baseUrl = "http://localhost:5000"
+const baseUrl = 'https://server.instant-connect.in'
 
 export const fetchCategories = async () => {
   try {
@@ -106,6 +106,17 @@ export const getAllReviews = async ({ page = 1, limit = 10 }) => {
     console.error('Failed to fetch reviews')
   }
 }
+export const getAllBusinessReviews = async ({ page = 1, limit = 10,businessId }) => {
+  try {
+    const response = await axios.get(`${baseUrl}/api/v1/business-review/${businessId}?page=${page}&limit=${limit}`, config)
+console.log(response,"reveiws---reviews");
+
+    const data = response.data
+    return data
+  } catch (error) {
+    console.error('Failed to fetch reviews')
+  }
+}
 
 export const CreateBusinessDetails = async (formData) => {
   try {
@@ -114,10 +125,6 @@ export const CreateBusinessDetails = async (formData) => {
         'Content-Type': 'application/json',
       },
     })
-
-    // if (response.status !== 200) {
-    //     throw new Error(`HTTP error! Status: ${response.status}`);
-    // }
 
     const data = response.data
     if (data.success) {
@@ -145,9 +152,66 @@ export const createReveiw = async (formData) => {
       },
     })
 
-    // if (response.status !== 200) {
-    //     throw new Error(`HTTP error! Status: ${response.status}`);
-    // }
+    const data = response.data
+    if (data.success) {
+      return data // Successfully created business details
+    } else {
+      console.error('Failed to add review:', data.message || 'Unknown error')
+      throw new Error(data.message || 'Failed to add review')
+    }
+  } catch (error) {
+    console.error('failed add review:', error.message)
+    throw error // Propagate the error
+  }
+}
+export const submitContactForm = async (formData) => {
+  try {
+    const response = await axios.post(`${baseUrl}/api/v1/contact_forms`, formData, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+
+    const data = response.data
+    if (data.success) {
+      return data // Successfully created business details
+    } else {
+      console.error('Failed to submit form:', data.message || 'Unknown error')
+      throw new Error(data.message || 'Failed to submit form')
+    }
+  } catch (error) {
+    console.error('failed to submit form:', error.message)
+    throw error // Propagate the error
+  }
+}
+export const submitNewsLetter = async (formData) => {
+  try {
+    const response = await axios.post(`${baseUrl}/api/v1/contact_forms/news-letter`, formData, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+
+    const data = response.data
+    if (data.success) {
+      return data // Successfully created business details
+    } else {
+      console.error('Failed to submit form:', data.message || 'Unknown error')
+      throw new Error(data.message || 'Failed to submit form')
+    }
+  } catch (error) {
+    console.error('failed to submit form:', error.message)
+    throw error // Propagate the error
+  }
+}
+
+export const createBusinessReview = async (formData) => {
+  try {
+    const response = await axios.post(`${baseUrl}/api/v1/business-review`, formData, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
 
     const data = response.data
     if (data.success) {
@@ -233,10 +297,15 @@ export const fetchBanners = async () => {
   }
 }
 
-export const getCategoryData = async (categoryId) => {
+export const getCategoryData = async ({
+  categoryId,
+  searchTerm = '',
+  page = 1,
+  limit = 10,
+}) => {
   try {
     const response = await axios.get(
-      `${baseUrl}/api/v1/category/${categoryId}`,
+      `${baseUrl}/api/v1/category/${categoryId}?searchTerm=${searchTerm}&page=${page}&limit=${limit}`,
       config,
     )
 

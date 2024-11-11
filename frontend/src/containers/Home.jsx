@@ -8,6 +8,7 @@ import 'slick-carousel/slick/slick.css'
 import 'slick-carousel/slick/slick-theme.css'
 import { useNavigate, Link } from 'react-router-dom'
 import { toast } from 'react-toastify'
+import './Home.css'
 import ContactForm from '/src/components/Business/contactForm'
 
 import {
@@ -73,6 +74,7 @@ export default function Home() {
     const fetchReviews = async () => {
       try {
         const data = await getAllReviews({ page, limit })
+        console.log(data, 'aaaaa')
         console.log(data?.data?.data, 'dataaaaa-a-a--a-a-')
 
         setReviews(data?.data?.data)
@@ -101,9 +103,29 @@ export default function Home() {
 
   const handleReviewSubmit = async () => {
     try {
-      await createReveiw(review)
-      setVisible(false)
-      setIsReviewed(!isReviewed)
+      if (!review?.name?.trim()?.length) {
+        toast.warning(
+            'Please enter your name!',
+          {
+            position: 'top-right',
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            theme: 'colored',
+            style: {
+              backgroundColor: '#d2e500', // Custom red color for error
+              color: '#FFFFFF', // White text
+            },
+          },
+        )
+      }else{
+
+        await createReveiw(review)
+        setVisible(false)
+        setIsReviewed(!isReviewed)
+      }
     } catch (error) {
       toast.error(
         error?.response?.data?.message ??
@@ -155,17 +177,6 @@ export default function Home() {
     fetchBanner()
   }, [])
 
-  async function searchHandler() {
-    try {
-      console.log(searchData)
-      const searchValue = await fetchSearchCategory(searchData)
-      console.log(searchValue)
-      setCategoryData(searchValue.data.data)
-    } catch (error) {
-      console.error('Error fetching data:', error)
-    }
-  }
-
 
   const itemsPerPage = 6
 
@@ -214,122 +225,160 @@ export default function Home() {
     }))
   }
 
-  // if (loading) {
-  //     return <Loader />
-  // }
-
   return (
     <Layout title="Home" navClass="home">
-      <div className="container">
-        <div className="row">
-          <div className="col-md-6">
-            <div className="row justify-content-between">
-              {/* Location Input with Crosshair Icon */}
-              <div className="col-12 mt-3 col-md-4">
-                <div className="input-group">
-                  <span
-                    className="input-group-text"
-                    style={{
-                      backgroundColor: "white",
-                      borderTopLeftRadius: "50px",
-                      borderBottomLeftRadius: "50px",
-                      border: "1px solid #ced4da",
-                      color: "#105193",
-                    }}
-                  >
-                    <i className="bi bi-crosshair2"></i>{' '}
-                    {/* Use an alternative location icon */}
-                  </span>
-                  <input
-                    type="text"
-                    className="form-control custom-placeholder"
-                    placeholder="location"
-                    style={{
-                      borderTopRightRadius: '50px',
-                      borderBottomRightRadius: '50px',
-                      borderLeft: 'none',
-                      color: '#E5F0FD',
-                    }}
-                  />
-                </div>
-              </div>
-
-              {/* Search Input */}
-              <div className="col-12 mt-3 col-md-8">
-                <div className="input-group">
-                  <span
-                    className="input-group-text"
-                    style={{
-                      backgroundColor: 'white',
-                      borderTopLeftRadius: '50px',
-                      borderBottomLeftRadius: '50px',
-                      border: '1px solid #ced4da',
-                    }}
-                  >
-                    <i className="bi bi-search fw-bold"></i>
-                  </span>
-                  <input
-                    type="text"
-                    className="form-control custom-placeholder"
-                    placeholder="Search for Restaurants"
-                    value={searchData}
-                    onInput={(e) => {
-                      setSearchData(e.target.value)
-                    }}
-                    style={{
-                      borderLeft: 'none',
-                    }}
-                  />
-                  <button
-                    type="button"
-                    onClick={searchHandler}
-                    className="btn btn-theme text-white custom-button"
-                  >
-                    Search
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      {/* 
-            </div>
-          </div>
-        </div>
-      </div> */}
-
-<div id="home">
-      <div className="container">
-        <div className="border-1 surface-border border-round m-2 text-center py-5 px-3">
-          <Carousel className="banner-slick">
-            {bannerData && bannerData.length > 0 ? (
-              bannerData.map((banner) => (
-                <Carousel.Item key={`key-${banner?._id}`}>
+      <div id="#home" className="h-100vh">
+        <div className="h-100 bg-red">
+          <div className="border-1 surface-border border-round text-center h-100">
+            <Carousel className="banner-slick h-100">
+              {bannerData && bannerData.length > 0 ? (
+                bannerData?.map((banner) => (
+                  <Carousel.Item key={`key-${banner?._id}`} className=" h-100">
+                    <img
+                      className="d-block w-100"
+                      src={banner?.image || '/src/assets/images/1.jpg'} // Use banner image or fallback
+                      alt="First slide"
+                      style={{
+                        objectFit: 'cover',
+                        height: '100%',
+                        filter: 'brightness(0.3)',
+                      }}
+                    />
+                  </Carousel.Item>
+                ))
+              ) : (
+                <Carousel.Item className=" h-100">
                   <img
                     className="d-block w-100"
-                    src={banner?.image || "/src/assets/images/1.jpg"} // Use banner image or fallback
-                    alt="Banner slide"
-                    style={{ objectFit: 'cover', height: '400px' }}
+                    src="/src/assets/images/1.jpg"
+                    alt="First slide"
+                    style={{
+                      objectFit: 'cover',
+                      height: '100%',
+                      filter: 'brightness(0.3)',
+                    }}
                   />
                 </Carousel.Item>
-              ))
-            ) : (
-              <Carousel.Item>
-                <img
-                  className="d-block w-100"
-                  src="/src/assets/images/1.jpg"
-                  alt="Default slide"
-                  style={{ objectFit: 'cover', height: '400px' }}
-                />
-              </Carousel.Item>
-            )}
-          </Carousel>
+              )}
+            </Carousel>
+          </div>
+        </div>
+        <div className="search-bar-div position-absolute" >
+          <div className="container">
+            <div className="row banner-main-div">
+              <div
+                className="col-12 col-md-6 banner-head-text"
+                style={{ textAlign: 'left' }}
+              >
+                <h1 className="head-line fw-bold" data-aos="fade-right">
+                  In<span className="text-theme2">Connect</span> <br />
+                  Your Digital Platform for Growing Your Business
+                </h1>
+                <p
+                  className="text-white"
+                  data-aos="zoom-in"
+                  style={{ textAlign: 'left' }}
+                >
+                  InConnect is your one-stop platform to create, showcase, and
+                  share your business online. Get a personalized NFC card to
+                  connect with clients instantly, boost referrals, and expand
+                  your reach. Build a professional online presence effortlessly
+                  with subscription-based tools. Connect and grow with
+                  InConnect!
+                </p>
+              </div>
+
+              <div className="row justify-content-center search-div col-12 col-md-6">
+                {/* Location Input with Crosshair Icon */}
+                <div className="col-12 mt-3 col-md-5">
+                  <div
+                    className="input-group"
+                    style={{
+                      border: '1px solid #ced4da',
+                      borderRadius: '8px',
+                      overflow: 'hidden',
+                    }}
+                  >
+                    <span
+                      className="input-group-text"
+                      style={{
+                        backgroundColor: 'white',
+                        border: 'none',
+                        padding: '0 12px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        color: '#228AE2',
+                      }}
+                    >
+                      <i
+                        className="bi bi-crosshair2"
+                        style={{ fontSize: '1.2em' }}
+                      ></i>
+                    </span>
+                    <input
+                      type="text"
+                      className="form-control custom-placeholder"
+                      placeholder="Location"
+                      style={{
+                        border: 'none',
+                        boxShadow: 'none',
+                        paddingLeft: '0',
+                        fontSize: '1em',
+                        color: '#495057',
+                      }}
+                    />
+                  </div>
+                </div>
+
+                {/* Search Input with Search Icon */}
+                <div className="col-12 mt-3 col-md-7">
+                  <div
+                    className="input-group"
+                    style={{
+                      border: '1px solid #ced4da',
+                      borderRadius: '8px',
+                      overflow: 'hidden',
+                    }}
+                  >
+                    <span
+                      className="input-group-text"
+                      style={{
+                        backgroundColor: 'white',
+                        border: 'none',
+                        padding: '0 12px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        color: '#228AE2',
+                      }}
+                    >
+                      <i
+                        className="bi bi-search fw-bold"
+                        style={{ fontSize: '1.2em' }}
+                      ></i>
+                    </span>
+                    <input
+                      type="text"
+                      className="form-control custom-placeholder"
+                      placeholder="Search for Restaurants"
+                      value={searchData}
+                      onInput={(e) => setSearchData(e.target.value)}
+                      style={{
+                        border: 'none',
+                        boxShadow: 'none',
+                        paddingLeft: '0',
+                        fontSize: '1em',
+                        color: '#495057',
+                      }}
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
 
-      <section className="mt-4 bg-light h-auto">
+      <section id='category' className=" bg-light h-auto" data-aos="fade-up">
         <div className="container" style={{ width: '90%' }}>
           <div className="mb-5 p-4">
             <h1
@@ -344,22 +393,21 @@ export default function Home() {
               exactly what you're looking for!
             </p>
           </div>
-          <div className="mb-2 mt-2" id="category">
-            <div className="row justify-content-center">
+          <div className="mb-5 mt-2" id="category">
+            <div className="home-category-div">
               {categoryData.map((category) => (
                 <Link
                   className="cat-div text-decoration-none"
+                  data-aos="zoom-in"
                   to={`/business/${category._id}`} // Dynamically generate the URL with the category ID
                   key={category._id} // Add a unique key for each category
                 >
-                  <div className="cat-img">
-                    <img src={category.image} alt={category.name} />{' '}
-                    {/* Dynamically render category image */}
-                  </div>
-                  <div className="text-center">
-                    <p>{category.name}</p>{' '}
-                    {/* Dynamically render category name */}
-                  </div>
+                  <img
+                    src={category.image}
+                    alt={category.name}
+                    className="cat-img"
+                  />
+                  {category.name}
                 </Link>
               ))}
             </div>
@@ -369,8 +417,10 @@ export default function Home() {
       <section className="home-spot h-auto mb-5">
         <div className="container padding" id="business">
           <div className="text-center mb-5">
-            <h1 className="fw-bold">Discover the Top Businesses</h1>
-            <p className="mt-3 text-center">
+            <h1 className="fw-bold" data-aos="fade-right">
+              Discover the Top Businesses
+            </h1>
+            <p className="mt-3 text-center" data-aos="fade-left">
               Explore the most popular destinations in your area, highly rated
               by locals and visitors alike. Find out what makes these places
               stand out and start your next adventure right here!
@@ -384,12 +434,12 @@ export default function Home() {
                 <Link
                   to={`/template/${business?._id}`}
                   key={business._id}
-                  className="text-decoration-none text-dark col-12 col-md-5 b-theme location-card mt-3"
+                  className="text-decoration-none text-dark col-12 col-md-5 b-theme location-card mt-3 business-card"
                 >
                   <div className="row p-2">
                     <div className="col-4 p-0">
                       <img
-                        src={business?.logo }
+                        src={business?.logo}
                         alt=""
                         className="w-100 br-theme"
                       />
@@ -459,14 +509,14 @@ export default function Home() {
           </div>
         </div>
       </section>
-      <div />
-      <section className="mb-5 mt-3 bg-light">
+
+      <section className="mt-3 bg-light" data-aos="fade-up">
         <div className="container" id="review">
           <div className="mt-3 mb-3">
-            <h1 className="text-center fw-bold ">
+            <h1 className="text-center p-3 pt-5 fw-bold " data-aos="zoom-out">
               What Our Customers Are Saying
             </h1>
-            <p className="mt-3 text-center">
+            <p className="mt-3 text-center" data-aos="zoom-in">
               Hear from those who have experienced our services firsthand. Read
               their stories and see why we’re a trusted choice for so many.
               Their feedback is a testament to our commitment to excellence!
@@ -488,44 +538,120 @@ export default function Home() {
               {reviews?.map((testimonial, index) => (
                 <div key={index} className="testi-slide">
                   <div
-                    className={`testi-div p-5 ${
+                    className={`testi-div p-4 ${
                       index === currentSlide ? 'testi-theme' : ''
                     }`}
+                    style={{
+                      backgroundColor:
+                        index === currentSlide ? '#f0f8ff' : '#fff', // Light blue background for the active card
+                      borderRadius: '12px', // Rounded corners
+                      boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', // Lighter shadow for premium feel
+                      padding: '16px', // Reduced padding for smaller card height
+                      transition:
+                        'transform 0.3s ease-in-out, background-color 0.3s ease', // Smooth hover effect and background color transition
+                      maxWidth: '100%', // Ensure card size is responsive
+                      margin: '10px', // Add margin between cards
+                      cursor: 'pointer', // Indicating that it's interactive
+                      transform: 'scale(1)', // Default scale
+                      minHeight: '250px', // Set the minHeight to 250px for further reduction
+                      display: 'flex',
+                      flexDirection: 'column', // Flexbox to manage content alignment
+                      justifyContent: 'space-between', // Space out elements evenly
+                    }}
+                    onMouseEnter={(e) =>
+                      (e.currentTarget.style.transform = 'scale(1.05)')
+                    } // Hover effect
+                    onMouseLeave={(e) =>
+                      (e.currentTarget.style.transform = 'scale(1)')
+                    } // Revert hover effect
                   >
-                    <div className="row ">
+                    <div className="row">
                       <div className="col-2">
                         <img
                           src="/src/assets/images/user.png"
                           alt={testimonial?.name}
-                          style={{ objectFit: 'cover' }}
+                          style={{
+                            objectFit: 'cover',
+                            width: '40px', // Adjusted image size
+                            height: '40px', // Adjusted image size
+                            borderRadius: '50%',
+                            border: '2px solid #ddd', // Premium border around the image
+                          }}
                         />
                       </div>
                       <div className="col-10">
-                        <h3 className="fs-20 p-0 m-0 ms-4">
+                        <h3
+                          className="fs-20 p-0 m-0 ms-4"
+                          style={{
+                            fontSize: '16px', // Slightly smaller font size for name
+                            fontWeight: '600',
+                            color: '#333',
+                            marginBottom: '4px', // Reduced margin
+                          }}
+                        >
                           {testimonial?.name}
                         </h3>
                         <div className="text-warning text-center mt-0 m-0">
-                          {[...Array(Math.floor(testimonial?.rating))].map(
-                            (star, i) => (
-                              <i key={i} className="bi bi-star-fill"></i>
-                            ),
-                          )}
-                          {testimonial?.rating % 1 !== 0 && (
-                            <i className="bi bi-star-half"></i>
-                          )}
+                          {[...Array(5)].map((star, i) => {
+                            const isFilled = i < Math.floor(testimonial?.rating)
+                            return (
+                              <i
+                                key={i}
+                                className={`bi ${
+                                  isFilled ? 'bi-star-fill' : 'bi-star'
+                                }`}
+                                style={{
+                                  fontSize: '14px', // Reduced star size
+                                  color: isFilled ? '#FFD700' : '#ddd',
+                                  transition: 'color 0.3s ease', // Smooth color transition for stars
+                                }}
+                              ></i>
+                            )
+                          })}
                         </div>
                       </div>
                     </div>
-                    <div className="col-12 mt-4">
-                      <p>{testimonial?.review}</p>
+                    <div className="col-12 mt-3">
+                      <p
+                        style={{
+                          maxHeight: '60px', // Shortened max height for the review text
+                          overflow: 'hidden',
+                          textOverflow: 'ellipsis',
+                          display: '-webkit-box',
+                          WebkitLineClamp: 2, // Truncate after 2 lines
+                          WebkitBoxOrient: 'vertical',
+                          fontSize: '14px', // Smaller font size for review text
+                          color: '#555', // Slightly lighter text color
+                          lineHeight: '1.4',
+                          fontFamily: '"Roboto", sans-serif', // Modern font for better readability
+                          fontWeight: '400',
+                        }}
+                      >
+                        {testimonial?.review}
+                      </p>
                     </div>
-                    <div className="col-12 mt-4">
-                      <p>{formatDate(testimonial?.createdAt ?? '')}</p>
+                    <div className="col-12 mt-2">
+                      <p
+                        style={{
+                          fontSize: '12px',
+                          color: '#999',
+                          fontStyle: 'italic',
+                          textAlign: 'right', // Align date to the right for a clean look
+                          marginTop: '4px',
+                        }}
+                      >
+                        {formatDate(testimonial?.createdAt ?? '')}
+                      </p>
                     </div>
                   </div>
                 </div>
               ))}
             </Slider>
+            <div className="text-center mt-3 mb-5">
+              {/* <a href="/reviews" className="text-decoration-none text-theme2">
+      View more <i className="bi bi-arrow-right"></i>
+    </a> */}
+            </div>
           </div>
         </div>
       </section>
@@ -554,6 +680,7 @@ export default function Home() {
               className="w-100"
               value={review.name}
               name="name"
+              required
               onChange={handleInputChange}
             />
           </div>
@@ -582,8 +709,7 @@ export default function Home() {
           </div>
         </div>
       </Dialog>
-      <ContactForm></ContactForm>
-      <footer className="mt-3 h-auto footer-section">
+      <footer className=" h-auto footer-section">
         <div className="container">
           <div className="p-4 mt-0 mt-md-5 pt-5">
             <div className="row ">
@@ -607,7 +733,7 @@ export default function Home() {
             <div className="row ">
               <div className="col-12 col-md-6">
                 <h1 className="fs-45 text-white text-center text-md-start fw-bold mb-3">
-                  Business Bazaar
+                  InConnect
                 </h1>
                 <span className="fs-20 text-white text-center text-md-start">
                   where requirements are found
