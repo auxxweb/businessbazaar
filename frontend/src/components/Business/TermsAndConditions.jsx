@@ -1,8 +1,8 @@
 import "/src/assets/css/TermsAndConditions.css";
 import { Box, Typography } from "@mui/material";
-import BackdropLoader from "../BackdropLoader";
 import useTerms from "../../Hooks/useTerms";
 import Header from "../Header";
+import Loader from '../Loader/Loader'
 
 const TermsAndConditions = () => {
   const { terms, termsLoading } = useTerms();
@@ -18,7 +18,7 @@ const TermsAndConditions = () => {
           // sx={{ fontSize: "1rem", color: "text.primary" }}
         />
       </Box>
-      <BackdropLoader open={termsLoading} />
+      {termsLoading && <Loader />}
     </Box>
   );
 };
