@@ -25,6 +25,10 @@ import { InputTextarea } from 'primereact/inputtextarea'
 import CircularProgress from '@mui/material/CircularProgress'
 import CloseIcon from '@mui/icons-material/Close'
 import Slider from 'react-slick'
+import IconButton from '@mui/material/IconButton'
+import InputAdornment from '@mui/material/InputAdornment'
+import Visibility from '@mui/icons-material/Visibility'
+import VisibilityOff from '@mui/icons-material/VisibilityOff'
 
 export default function CreateBusiness() {
   const [step, setStep] = useState(1)
@@ -166,33 +170,45 @@ export default function CreateBusiness() {
     const { email, password } = authData
     const [passwordError, setPasswordError] = useState('')
     const [emailError, setEmailError] = useState('')
-
+    const [showPassword, setShowPassword] = useState(false)
+  
     useEffect(() => {
       setAuthData({
         email: formData.email,
         password: formData.password,
       })
     }, [formData])
-
-    // Handles input change for both email and password
+  
     function handleInputChange(e) {
       const { name, value } = e.target
       setAuthData((prevAuthData) => ({
         ...prevAuthData,
         [name]: value,
       }))
+  
+      // Clear errors if the input becomes valid
+      if (name === 'email' && value) {
+        if (validateEmail(value)) {
+          setEmailError('')
+        }
+      }
+  
+      if (name === 'password' && value) {
+        if (validatePassword(value)) {
+          setPasswordError('')
+        }
+      }
     }
-
-    // Validate both fields and handle submission
+  
     const handleAuthSubmit = async () => {
-      const isEmailValid = validateEmail()
-      const isPasswordValid = validatePassword()
-
+      const isEmailValid = validateEmail(email)
+      const isPasswordValid = validatePassword(password)
+  
       if (isEmailValid && isPasswordValid) {
         try {
           const business = await checkBusinessExists({ email, password })
           console.log(business, 'business---')
-
+  
           if (business?.data) {
             setFormData((prevFormData) => ({
               ...prevFormData,
@@ -203,10 +219,9 @@ export default function CreateBusiness() {
           }
         } catch (error) {
           console.log(error, 'error-----------')
-
+  
           toast.error(
-            error?.response?.data?.message ??
-              'An error occurred. Please try again.',
+            error?.response?.data?.message ?? 'An error occurred. Please try again.',
             {
               position: 'top-right',
               autoClose: 3000,
@@ -216,63 +231,65 @@ export default function CreateBusiness() {
               draggable: true,
               theme: 'colored',
               style: {
-                backgroundColor: '#e74c3c', // Custom red color for error
-                color: '#FFFFFF', // White text
+                backgroundColor: '#e74c3c',
+                color: '#FFFFFF',
               },
-            },
+            }
           )
         }
       }
     }
-
-    // Email validation function
-    function validateEmail() {
-      if (!email) {
+  
+    // Updated Email validation function
+    function validateEmail(value = email) {
+      if (!value) {
         setEmailError('Email is required.')
         return false
       }
       setEmailError('')
       return true
     }
-
-    // Password validation function
-    function validatePassword() {
-      if (password.length < 8) {
+  
+    // Updated Password validation function
+    function validatePassword(value = password) {
+      if (value.length < 8) {
         setPasswordError('Password must be at least 8 characters long.')
         return false
       }
       setPasswordError('')
       return true
     }
-
+  
+    const togglePasswordVisibility = () => {
+      setShowPassword(!showPassword)
+    }
+  
     return (
       <div className="h-100vh create-business-div">
         <div className="row h-100 justify-content-center">
           <div className="d-none d-md-block left-portion col-md-5 h-100 p-0">
             <img
               src="/src/assets/images/login.jpg"
-              alt=""
+              alt="Login"
               className="w-100 h-100 object-fit-cover"
             />
           </div>
-
-          <div className="col-12 col-md-7 d-flex flex-column justify-content-between align-items-center right-portion h-100 p-5">
-            <div className="col-12 text-start">
-              <button
-                className="btn btn-dark w-auto float-start"
-                onClick={handlePrevStep}
-              >
+  
+          <div className="col-12 col-md-7 d-flex flex-column align-items-center right-portion h-100 p-4">
+            <div className="back-button-container">
+              <button className="btn btn-dark" onClick={handlePrevStep}>
                 <i className="bi bi-arrow-left"></i>
               </button>
             </div>
-            <div className="col-12">
-              <h1 className="fw-bold text-center text-md-start">
-                Add <br /> Authentication Details
+  
+            <div className="col-12 text-start mb-4">
+              <h1 className="fw-bold title-text">
+                <span className="title-main">Add</span> <br />
+                <span className="title-highlight">Authentication Details</span>
               </h1>
             </div>
-
-            {/* Email Input */}
-            <div className="input-group mt-4 w-100 align-items-center">
+  
+            <div className="input-group mt-2 w-100">
               <TextField
                 fullWidth
                 label="Email"
@@ -284,25 +301,33 @@ export default function CreateBusiness() {
                 helperText={emailError}
               />
             </div>
-
-            {/* Password Input */}
-            <div className="input-group w-100 align-items-center">
+  
+            <div className="input-group mt-3 w-100">
               <TextField
                 fullWidth
                 label="Password"
-                type="password"
+                type={showPassword ? 'text' : 'password'}
                 variant="outlined"
                 name="password"
                 value={authData.password}
                 onChange={handleInputChange}
                 error={!!passwordError}
                 helperText={passwordError}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton onClick={togglePasswordVisibility} edge="end">
+                        {showPassword ? <Visibility /> : <VisibilityOff />}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
               />
             </div>
-
-            <div className="col-12 text-center mt-5">
+  
+            <div className="col-12 text-center mt-4">
               <button
-                className="btn btn-success w-100 text-white p-2"
+                className="btn btn-primary w-100 text-white p-2"
                 onClick={handleAuthSubmit}
               >
                 Save & Next
@@ -310,235 +335,288 @@ export default function CreateBusiness() {
             </div>
           </div>
         </div>
+  
+        <style jsx>{`
+          .h-100vh {
+            height: 100vh;
+          }
+          .left-portion {
+            background-color: #f5f5f5;
+          }
+          .right-portion {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 2rem;
+            position: relative;
+          }
+          .back-button-container {
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            margin-top: 0.5rem;
+            margin-left: 0.5rem;
+          }
+          .title-text {
+            text-align: left;
+          }
+          .title-main {
+            color: black;
+          }
+          .title-highlight {
+            color: #105193;
+          }
+          .btn-primary {
+            background-color: #105193;
+            border-color: #105193;
+          }
+          .btn-primary:hover {
+            background-color: #107d93;
+            border-color: #107d93;
+          }
+          @media (max-width: 768px) {
+            .right-portion {
+              padding: 1rem;
+            }
+            .back-button-container {
+              margin-top: 0.75rem;
+              margin-left: 0.75rem;
+            }
+          }
+          @media (max-width: 576px) {
+            .right-portion {
+              padding: 0.5rem;
+            }
+            .back-button-container {
+              margin-top: 1rem;
+              margin-left: 1rem;
+            }
+          }
+        `}</style>
       </div>
     )
   }
 
   function BusinessDetails({ formData }) {
-    const [logo, setLogo] = useState('')
-    const [businessName, setBusinessName] = useState('')
-
-    const [isLoading, setIsLoading] = useState(false)
-    const [error, setError] = useState('')
-
+    const [logo, setLogo] = useState('');
+    const [businessName, setBusinessName] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState('');
+  
     useEffect(() => {
-      setLogo(formData?.logo)
-      setBusinessName(formData?.businessName)
-    }, [formData])
-
+      setLogo(formData?.logo);
+      setBusinessName(formData?.businessName);
+    }, [formData]);
+  
     const handleLogoChange = async (event) => {
-      const file = event.target.files[0]
-
+      const file = event.target.files[0];
+  
       if (file) {
-        setIsLoading(true)
-        const reader = new FileReader()
+        setIsLoading(true);
+        const reader = new FileReader();
         reader.onload = async function (e) {
           try {
-            const preReq = await preRequestFun(file, 'Landing')
-            let accessLink = ''
+            const preReq = await preRequestFun(file, 'Landing');
+            let accessLink = '';
             if (preReq && preReq.accessLink) {
-              accessLink = preReq.accessLink
+              accessLink = preReq.accessLink;
             } else {
-              console.error('Access link not found in response.')
-              return
+              console.error('Access link not found in response.');
+              return;
             }
-            setLogo(accessLink)
+            setLogo(accessLink);
           } catch (error) {
-            console.error('Error uploading logo:', error.message || error)
+            console.error('Error uploading logo:', error.message || error);
           } finally {
-            setIsLoading(false)
+            setIsLoading(false);
           }
-        }
+        };
         reader.onerror = function () {
-          console.error('Error reading file:', reader.error)
-          setIsLoading(false)
-        }
-        reader.readAsDataURL(file)
+          console.error('Error reading file:', reader.error);
+          setIsLoading(false);
+        };
+        reader.readAsDataURL(file);
       }
-    }
-
+    };
+  
     const imageUpload = () => {
-      document.getElementById('ImageLogo').click()
-    }
-
+      document.getElementById('ImageLogo').click();
+    };
+  
     // Handle form submission with validation
     const handleBusinessSubmit = () => {
-      console.log('asss')
       if (!businessName) {
-        setError('All fields are mandatory.')
-        return
+        setError('Business Name is required.');
+        return;
       }
-
-      setError('')
+  
+      setError('');
       setFormData((prevFormData) => ({
         ...prevFormData,
         businessName: businessName,
         logo: logo,
-      }))
-      console.log('asss')
-      handleNextStep()
-    }
-
+      }));
+      handleNextStep();
+    };
+  
     return (
-      <div className="h-100vh create-business-div">
-        <div className="row justify-content-center h-100">
-          <div className="col-12 col-md-6 row align-items-center right-portion p-5">
-            <div className="col-12 text-start">
-              <button
-                className="btn btn-dark w-auto float-start"
-                onClick={handlePrevStep}
-              >
-                <i className="bi bi-arrow-left"></i>
-              </button>
-            </div>
-            <div>
-              <div className="col-12 mt-5">
-                <h1 className="fw-bold text-center text-md-start">
-                  Enter your <br /> Business Details
-                </h1>
-              </div>
-              <div className="col-12 mt-3">
-                <input
-                  type="text"
-                  placeholder="Business Name"
-                  name="businessName"
-                  value={businessName}
-                  onChange={(e) => setBusinessName(e.target.value)}
-                  className="form-control form-control-lg"
-                />
-                <input
-                  type="file"
-                  id="ImageLogo"
-                  style={{ display: 'none' }}
-                  onChange={handleLogoChange}
-                />
-                <div
-                  onClick={imageUpload}
-                  className="p-2 mt-2 add-logo-div"
-                  id="businessMainDiv"
-                  style={{ cursor: 'pointer' }}
+      <div className="business-details-page">
+        <div className="container-fluid">
+          <div className="row justify-content-center align-items-center">
+            {/* Left Section - Form */}
+            <div className="col-12 col-md-6 p-5">
+              <div className="form-container">
+                <button
+                  className="btn btn-dark w-auto mb-4"
+                  onClick={handlePrevStep}
                 >
-                  {isLoading ? (
-                    <div
-                      className="spinner-border text-primary"
-                      role="status"
-                    ></div>
-                  ) : logo ? (
-                    <img
-                      src={logo}
-                      alt="Business Logo"
-                      width="100"
-                      className="img-thumbnail"
-                    />
-                  ) : (
-                    <div className="text-center" id="addImageDiv">
-                      <img
-                        src="/src/assets/images/add_image.png"
-                        width="50"
-                        alt="Add Logo"
-                      />
-                      <div className="col-12">
-                        <span>Add Logo</span>
-                      </div>
-                    </div>
-                  )}
+                  <i className="bi bi-arrow-left"></i>
+                </button>
+                <h2 className="fw-bold text-start mb-4"><span style={{ color: '#000000' }}>Enter Your</span> Business Details</h2>
+  
+                <div className="mb-4">
+                  <label htmlFor="businessName" className="form-label">
+                    Business Name
+                  </label>
+                  <input
+                    type="text"
+                    id="businessName"
+                    placeholder="Enter Business Name"
+                    name="businessName"
+                    value={businessName}
+                    onChange={(e) => setBusinessName(e.target.value)}
+                    className="form-control form-control-lg"
+                  />
                 </div>
-                {error && <div className="text-danger mt-2">{error}</div>}{' '}
-                {/* Error message for validation */}
-                <div className="col-12 mt-3">
-                  <button
-                    className="btn btn-success w-100"
-                    onClick={handleBusinessSubmit}
+  
+                <div className="mb-4">
+                  <label htmlFor="ImageLogo" className="form-label">
+                    Upload Business Logo
+                  </label>
+                  <input
+                    type="file"
+                    id="ImageLogo"
+                    style={{ display: 'none' }}
+                    onChange={handleLogoChange}
+                  />
+                  <div
+                    onClick={imageUpload}
+                    className="logo-upload p-4 text-center"
+                    style={{ cursor: 'pointer' }}
                   >
-                    Save & Next
-                  </button>
+                    {isLoading ? (
+                      <div className="spinner-border text-primary" role="status"></div>
+                    ) : logo ? (
+                      <img
+                        src={logo}
+                        alt="Business Logo"
+                        width="100"
+                        className="img-thumbnail"
+                      />
+                    ) : (
+                      <div>
+                        <img
+                          src="/src/assets/images/add_image.png"
+                          width="50"
+                          alt="Add Logo"
+                        />
+                        <div>Add Logo</div>
+                      </div>
+                    )}
+                  </div>
                 </div>
+  
+                {error && <div className="text-danger mb-4">{error}</div>}
+  
+                <button
+                  className="btn btn-primary w-100 text-white p-2"
+                  onClick={handleBusinessSubmit}
+                >
+                  Save & Next
+                </button>
               </div>
             </div>
-          </div>
-
-          <div className="left-portion p-3 col-12 col-lg-6 h-100 row align-items-center">
-            <link rel="preconnect" href="https://fonts.googleapis.com" />
-            <link
-              rel="preconnect"
-              href="https://fonts.gstatic.com"
-              crossOrigin
-            />
-            <link
-              href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap"
-              rel="stylesheet"
-            />
-            <style>
-              {' '}
-              {`
-                        ::-webkit-scrollbar {
-                            width: 12px; /* Width of the entire scrollbar */
-                        }
-    
-                        /* Scrollbar track */
-                        ::-webkit-scrollbar-track {
-                            background: rgb(243, 243, 244); /* Background of the scrollbar track */
-                        }::-webkit-scrollbar-thumb {
-                            background-color: black; /* Color of the scrollbar thumb */
-                            border-radius: 10px;     /* Rounded edges of the thumb */
-                            border: 3px solid  black; /* Padding around the thumb */
-                        }
-                    .theme
-                    {
-                        background-color: black;
-                        color: white;
-                        border: none;
-                    }.service-design.active{
-                        background-color: black;
-                    }.address-section{
-                    background-color:black;
-                    }.address-logo i{
-                    color: black;
-                    }.cat-option{
-                        border-right: 1px dashed black;
-                    }.text-orange{
-                            color: black;
-                        }.dish-div:hover{
-                            background-color: black;
-                            color:white;
-                        }
-                        `}
-            </style>
-            <div
-              className="p-3"
-              style={{ border: '1px dashed black', borderRadius: '16px' }}
-            >
-              <p className="text-center">
-                This section contains items for the navigation bar.
-              </p>
-              <Navbar
-                expand="lg"
-                className="bg-white pjs"
-                style={{ paddingBlock: '5px' }}
-              >
-                <Container>
-                  {/* Align Brand to the start (left side) */}
-                  <Navbar.Brand
-                    href="/"
-                    className="fw-bold w-50 nav-logo"
-                    style={{ fontSize: '36px' }}
-                  >
-                    <img src={logo} alt="" />
-                    <span className="ms-2">{businessName}</span>
-                  </Navbar.Brand>
-
-                  <Navbar.Toggle
-                    aria-controls="basic-navbar-nav"
-                    style={{ color: 'black' }}
-                  />
-                </Container>
-              </Navbar>
+  
+            {/* Right Section - Business Name Display */}
+            <div className="col-12 col-md-6 p-5">
+              <div className="business-preview">
+                <div className="text-center mb-4">
+                  <h3 className="fw-bold">Business Name Preview</h3>
+                </div>
+                <div className="preview-content text-center">
+                  {logo ? (
+                    <img src={logo} alt="Business Logo" width="120" />
+                  ) : (
+                    <div className="logo-placeholder">No Logo Uploaded</div>
+                  )}
+                  <h4 className="mt-4 text-uppercase">{businessName || 'Your Business Name'}</h4>
+                </div>
+              </div>
             </div>
           </div>
         </div>
+        <style jsx>{`
+          .h-100vh {
+            height: 100vh;
+          }
+          .left-portion {
+            background-color: #f5f5f5;
+          }
+          .right-portion {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 2rem;
+            position: relative;
+          }
+          .back-button-container {
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            margin-top: 0.5rem;
+            margin-left: 0.5rem;
+          }
+          .title-text {
+            text-align: left;
+          }
+          .title-main {
+            color: black;
+          }
+          .title-highlight {
+            color: #105193;
+          }
+          .btn-primary {
+            background-color: #105193;
+            border-color: #105193;
+          }
+          .btn-primary:hover {
+            background-color: #107d93;
+            border-color: #107d93;
+          }
+          @media (max-width: 768px) {
+            .right-portion {
+              padding: 1rem;
+            }
+            .back-button-container {
+              margin-top: 0.75rem;
+              margin-left: 0.75rem;
+            }
+          }
+          @media (max-width: 576px) {
+            .right-portion {
+              padding: 0.5rem;
+            }
+            .back-button-container {
+              margin-top: 1rem;
+              margin-left: 1rem;
+            }
+          }
+        `}</style>
       </div>
-    )
+    );
   }
+  
+  
 
   function ContactDetails({ formData }) {
     const [mobileNumbers, setMobileNumbers] = useState([
