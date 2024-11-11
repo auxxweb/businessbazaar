@@ -7,8 +7,8 @@ const config = {
   },
 }
 
-const baseUrl = "http://localhost:5000"
-// const baseUrl = 'https://server.instant-connect.in'
+// const baseUrl = "http://localhost:5000"
+const baseUrl = 'https://server.instant-connect.in'
 
 export const fetchCategories = async () => {
   try {
