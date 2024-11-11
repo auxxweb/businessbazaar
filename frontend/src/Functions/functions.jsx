@@ -10,9 +10,10 @@ const config = {
 // const baseUrl = "http://localhost:5000"
 const baseUrl = "https://server.instant-connect.in";
 
-export const fetchCategories = async () => {
+export const fetchCategories = async (limit) => {
   try {
-    const response = await axios.get(`${baseUrl}/api/v1/category`, config); // Use backticks for template literals
+    const response = await axios.get(`${baseUrl}/api/v1/category`, config);
+
 
     if (response.status !== 200) {
       throw new Error(`HTTP error! Status: ${response.status}`);

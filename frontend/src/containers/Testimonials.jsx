@@ -5,9 +5,13 @@ import { InputText } from "primereact/inputtext";
 import { Rating } from "primereact/rating";
 import { Dialog } from "primereact/dialog";
 import { toast } from 'react-toastify'
+import { getAllReviews } from '../Functions/functions';
+import { formatDate } from '../utils/app.utils'
 
 export default function Testimonials() {
     const [visible,setVisible] = useState(false);
+    const [page, setPage] = useState(1)
+    const [limit, setLimit] = useState(10)
     const [review, setReview] = useState([
       {
         rating: "",
@@ -28,9 +32,7 @@ export default function Testimonials() {
         const fetchReviews = async () => {
           try {
             const data = await getAllReviews({ page, limit })
-            console.log(data,'aaaaa')
-            console.log(data?.data?.data, 'dataaaaa-a-a--a-a-')
-    
+
             setReviews(data?.data?.data)
           } catch (error) {
             toast.error(
@@ -59,7 +61,7 @@ export default function Testimonials() {
     <Layout title="Reviews" navClass='home'>
     
     <section className="d-block bg-light">
-        <div className="col-12 h-50-vh"><img src="/src/assets/images/testi-banner.jpg" alt="" className='w-100 h-100' style={{objectFit:'cover'}}/></div>
+        <div className="col-12 h-50-vh"><img src="/src/assets/images/testi-banner.jpg" alt="" className='w-100 h-100' style={{objectFit:'cover',filter:"brightness(0.5)"}}/></div>
         <div className="container d-block" id="review">
           <div className="mt-3 mb-3">
             <h1 className="text-center p-3 pt-5 fw-bold " data-aos="zoom-out">
@@ -82,9 +84,9 @@ export default function Testimonials() {
             </div>
           </div>
 
-          <div className="col-12 row">
+          <div className="col-12">
           {reviews?.map((testimonial, index) => (
-                <div key={index} className="testi-slide">
+                <div data-aos="zoom-out" key={index} className="testi-slide col-12 col-md-6" style={{borderBottom:"0.5px solid #cdcdcd",marginInline:"auto"}}>
                   <div
                     className={`testi-div p-5 `}
                   >
@@ -112,8 +114,8 @@ export default function Testimonials() {
                         </div>
                       </div>
                     </div>
-                    <div className="col-12 mt-4">
-                      <p>{testimonial?.review}</p>
+                    <div className="w-100 mt-4">
+                      <p className='w-100' style={{whiteSpace:'pre'}}>{testimonial?.review} </p>
                     </div>
                     <div className="col-12 mt-4">
                       <p>{formatDate(testimonial?.createdAt ?? '')}</p>

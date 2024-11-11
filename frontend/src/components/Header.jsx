@@ -6,7 +6,7 @@ import { Link, Navigate, NavLink } from 'react-router-dom';
 
 export default function Header() {
   return (
-    <Navbar expand="lg" className=" fixed-top">
+    <Navbar expand="lg" className=" fixed-top home-navbar">
       <Container>
         {/* Align Brand to the start (left side) */}
         <Navbar.Brand href="/" className='fw-bold w-50' style={{ fontSize: '36px' }}>
