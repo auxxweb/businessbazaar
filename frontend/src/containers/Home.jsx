@@ -148,10 +148,9 @@ export default function Home() {
     const fetchData = async () => {
       try {
         setLoading(true)
-        const businessDetails = await fetchBusiness(currentPage)
+        const businessDetails = await fetchBusiness(currentPage,visibleBusiness)
 
-        console.log(businessDetails)
-        const categoryDetails = await fetchCategories()
+        const categoryDetails = await fetchCategories(visibleCategories)
 
         setCategoryData(categoryDetails.data.data)
         setBusinessData(businessDetails.data.data)
@@ -164,7 +163,7 @@ export default function Home() {
       }
     }
     fetchData()
-  }, [])
+  }, [visibleBusiness,visibleCategories])
 
   useEffect(() => {
     const fetchBanner = async () => {
@@ -190,6 +189,20 @@ export default function Home() {
       ...prevState,
       [name]: value,
     }))
+  }
+
+  const getSearchData = async () =>{
+    
+    try{
+      setLoading(true)
+      const businessDetails = await fetchBusiness(currentPage,visibleBusiness,searchData)
+      setBusinessData(businessDetails.data.data)
+      window.location.href="/#business"
+    } catch (error) {
+      console.log(error)
+    }finally{
+      setLoading(false)
+    }
   }
 
   return (
@@ -255,11 +268,11 @@ export default function Home() {
                 </p>
               </div>
 
-              <div className="row justify-content-center search-div col-12 col-md-6">
+              <div className=" row search-div text-end col-12 col-md-6" style={{display:'ruby'}}>
                 {/* Location Input with Crosshair Icon */}
-                <div className="col-12 mt-3 col-md-5">
+                <div className="col-12 col-md-9 mt-3 h-auto">
                   <div
-                    className="input-group  banner-input-div"
+                    className="input-group  banner-input-div w-100"
                     style={{
                       border: '1px solid #ced4da',
                       borderRadius: '8px',
@@ -301,7 +314,7 @@ export default function Home() {
                 </div>
 
                 {/* Search Input with Search Icon */}
-                <div className="col-12 mt-3 col-md-7">
+                <div className="col-12 col-md-9 mt-3">
                   <div
                     className="input-group banner-input-div"
                     style={{
@@ -343,6 +356,7 @@ export default function Home() {
                         background: 'none'
                       }}
                     />
+                    <button className="btn btn-md bg-theme" style={{border:'none'}} onClick={getSearchData}>Search</button>
                   </div>
                 </div>
               </div>
@@ -368,7 +382,7 @@ export default function Home() {
           </div>
           <div className="mb-5 mt-2" id="category">
             <div className="home-category-div">
-              {categoryData.slice(0, visibleCategories).map((category) => (
+              {categoryData.map((category) => (
                 <Link
                   className="cat-div text-decoration-none"
                   data-aos="zoom-in"
@@ -384,7 +398,7 @@ export default function Home() {
                 </Link>
               ))}
             </div>
-            {visibleCategories < categoryData.length && ( // Check if more categories are available
+            {visibleCategories <= categoryData.length && ( // Check if more categories are available
               <div className="mb-3 mt-5 text-center">
                 <button onClick={loadMoreCategories} className="btn btn-dark btn-md">
                   View More <i className="bi bi-arrow-right"></i>
@@ -411,7 +425,7 @@ export default function Home() {
             {loading && <Loader />}
 
             {!loading &&
-              businessData.slice(0, visibleBusiness).map((business) => (
+              businessData.map((business) => (
                 <Link
                   to={business.selectedPlan?.isPremium ? `/template/premium/${business?._id}` : `/template/${business?._id}`}
                   key={business._id}
@@ -450,7 +464,7 @@ export default function Home() {
                 </Link>
               ))}
           </div>
-          {visibleBusiness < businessData.length && (
+          {visibleBusiness < totalBusinessData && (
             <div className="mt-5 text-center mb-1">
               <button onClick={loadMoreBusiness} className='btn btn-dark btn-md'>View More <i className="bi bi-arrow-right"></i></button>
             </div>
@@ -459,7 +473,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="mt-3 bg-light" data-aos="fade-up">
+      <section className="mt-3 bg-light">
         <div className="container" id="review">
           <div className="mt-3 mb-3">
             <h1 className="text-center p-3 pt-5 fw-bold " data-aos="zoom-out">

@@ -12,7 +12,7 @@ const baseUrl = 'https://server.instant-connect.in'
 
 export const fetchCategories = async (limit) => {
   try {
-    const response = await axios.get(`${baseUrl}/api/v1/category`, config);
+    const response = await axios.get(`${baseUrl}/api/v1/category?limit=${limit}`, config);
 
 
     if (response.status !== 200) {
@@ -30,10 +30,11 @@ export const fetchCategories = async (limit) => {
   }
 }
 
-export const fetchBusiness = async (page) => {
+export const fetchBusiness = async (page,limit,search) => {
   try {
+    console.log(search)
     const response = await axios.get(
-      `${baseUrl}/api/v1/business?page=${page}&limit=6`,
+     `${baseUrl}/api/v1/business?page=${page}&limit=${limit}${search != null ? `&searchTerm=${search}` : ''}`,
       config,
     )
 

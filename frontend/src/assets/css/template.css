@@ -233,7 +233,7 @@
   /* border: 1px solid #ffffff52; */
   border-radius: 4px;
   overflow: hidden;
-  width: fit-content !important;
+  /* width: fit-content !important; */
 }.banner-main-div{
     padding-inline: 30px !important;
 }
