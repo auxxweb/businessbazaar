@@ -70,40 +70,53 @@ const PremiumTemplate = () => {
       <Box sx={{ overflowX: "hidden" }}>
         <TemplateHeader businessData={businessData} />
         <Box
-          sx={{
-            backgroundImage: `url(${businessData?.landingPageHero?.coverImage})`,
-            // backgroundImage: `url(/business/dm.png)`,
-            backgroundSize: "cover",
-            objectFit: "fill",
-            backgroundRepeat: "no-repeat",
-            width: "100vw",
-            height: "800px",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            position: "relative",
-          }}
+  sx={{
+    position: "relative",
+    width: "100vw",
+    height: "800px",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    overflow: "hidden",
+  }}
+>
+  {/* Background Image */}
+      <Box
+        sx={{
+          backgroundImage: `url(${businessData?.landingPageHero?.coverImage})`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          width: "100%",
+          height: "100%",
+          position: "absolute",
+          top: 0,
+          left: 0,
+          filter: "brightness(0.4)",
+          zIndex: 1,
+        }}
+      />
+
+      {/* Overlay Content */}
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center",
+          color: "#D3DFEB",
+          maxWidth: "611px",
+          textAlign: "center",
+          zIndex: 2, // Ensure content is above the background
+        }}
+      >
+        <Typography
+          fontSize={"64px"}
+          lineHeight={"76.8px"}
+          fontWeight={"bold"}
+          marginBottom={"15px"}
         >
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "center",
-              alignItems: "center",
-              color: "#D3DFEB",
-              maxWidth: "611px",
-              height: "100%",
-              textAlign: "center",
-            }}
-          >
-            <Typography
-              fontSize={"64px"}
-              lineHeight={"76.8px"}
-              fontWeight={"bold"}
-              marginBottom={"15px"}
-            >
-              {businessData?.landingPageHero?.title}
-            </Typography>
+          {businessData?.landingPageHero?.title}
+        </Typography>
             <Typography fontSize={"16px"} lineHeight={"24px"}>
               {businessData?.landingPageHero?.description}
             </Typography>

@@ -69,14 +69,14 @@ const MenuSection = ({ businessData }) => {
           {businessData?.productSection?.map((item, index) => (
             <Card
               sx={{
-                maxWidth: 224,
+                // maxWidth: 224,
                 marginTop: index % 2 !== 0 ? "8rem" : 0,
                 marginBottom: index % 2 === 0 ? "8rem" : 0,
               }}
               key={index}
             >
               <CardMedia
-                sx={{ width: 224, height: 203 }}
+                sx={{ width: 224, height: 203, marginInline:'auto' }}
                 // image="/business/menu.png"
                 image={item?.image}
               />
