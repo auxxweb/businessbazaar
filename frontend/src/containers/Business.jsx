@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import Layout from '../components/Layout'
 import { Link, useParams } from 'react-router-dom'
-import { getCategoryBusiness, getCategoryData } from '../Functions/functions'
+import { fetchBusiness, getCategoryBusiness, getCategoryData } from '../Functions/functions'
 import Loader from '../components/Loader'
 
 export default function Business() {
@@ -15,39 +15,60 @@ export default function Business() {
   const { id } = useParams()
 
   useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true)
-      try {
-        const category = await getCategoryData({
-          categoryId: id,
-          searchTerm,
-          page: currentPage,
-          limit,
-        })
-        setCategoryData(category.data)
+    if (id) {
+      const fetchData = async () => {
+        setLoading(true)
+        try {
+          const category = await getCategoryData({
+            categoryId: id,
+            searchTerm,
+            page: currentPage,
+            limit,
+          })
+          setCategoryData(category.data)
 
-        const business = await getCategoryBusiness(currentPage, id, searchTerm, limit)
-        setTotalBusinessData(business.data.totalCount)
-        setBusinessData(business.data.data)
-      } catch (error) {
-        console.error('Error fetching data:', error)
-      } finally {
-        setLoading(false)
+          const business = await getCategoryBusiness(currentPage, id, searchTerm, limit)
+          setTotalBusinessData(business.data.totalCount)
+          setBusinessData(business.data.data)
+        } catch (error) {
+          console.error('Error fetching data:', error)
+        } finally {
+          setLoading(false)
+        }
       }
-    }
 
-    fetchData()
+      fetchData()
+    }else{
+      const fetchData = async ()=>{
+        try {
+          setLoading(true)
+          const business = await fetchBusiness(currentPage)
+          console.log(business)
+          setTotalBusinessData(business.data.totalCount)
+          setBusinessData(business.data.data)
+        }catch(e){
+
+
+          console.error('Error fetching data:', error)
+        }
+        finally{
+          setLoading(false)
+        }
+      }
+      fetchData()
+    }
   }, [currentPage, id, searchTerm])
 
-  const totalPages = Math.ceil(totalBusinessData / limit)
+  const totalPages = Math.ceil(totalBusinessData / limit);
 
   const goToPreviousPage = () => {
-    if (currentPage > 1) setCurrentPage((prevPage) => prevPage - 1)
-  }
-
+    if (currentPage > 1) setCurrentPage(prevPage => prevPage - 1);
+  };
+  
   const goToNextPage = () => {
-    if (currentPage < totalPages) setCurrentPage((prevPage) => prevPage + 1)
-  }
+    if (currentPage < totalPages) setCurrentPage(prevPage => prevPage + 1);
+  };
+  
 
   const handleSearch = (e) => {
     setSearchTerm(e.target.value)
@@ -61,9 +82,9 @@ export default function Business() {
   return (
     <Layout title="Business" navClass="home">
       <section className="business-view-banner">
-        <img src={categoryData.coverImage} className="w-100 h-100" alt="" />
+        <img src={id?categoryData.coverImage:"/src/assets/images/businesses.jpg"} className="w-100 h-100" style={{filter:"brightness(0.4)"}} alt="" />
         <div className="text-center image-title">
-          <h2>{categoryData.name}</h2>
+          <h2 className='text-white'>{id?categoryData.name:"All Businesses"}</h2>
         </div>
       </section>
 
@@ -117,7 +138,7 @@ export default function Business() {
           <div className="row justify-content-around gap-2">
             {businessData.map((business) => (
               <Link
-                to={`/template/${business._id}`}
+                to={business.selectedPlan?.isPremium? `/template/premium/${business?._id}` :`/template/${business?._id}`}
                 key={business._id}
                 className="text-decoration-none text-dark col-12 col-md-5 b-theme location-card mt-3"
               >
@@ -159,38 +180,42 @@ export default function Business() {
           </div>
 
           <div className="d-flex justify-content-center align-items-center mt-4">
-            <button
-              onClick={goToPreviousPage}
-              disabled={currentPage === 1}
-              className="btn btn-primary me-2"
-              style={{
-                borderTopLeftRadius: '50px',
-                borderBottomLeftRadius: '50px',
-                border: 'none',
-                color: '#E5F0FD',
-                backgroundColor: '#228AE2',
-              }}
-            >
-              Prev.
-            </button>
-            <span>
-              Page {currentPage} of {totalPages}
-            </span>
-            <button
-              onClick={goToNextPage}
-              disabled={currentPage === totalPages}
-              className="btn btn-primary ms-2"
-              style={{
-                borderTopRightRadius: '50px',
-                borderBottomRightRadius: '50px',
-                border: 'none',
-                color: '#E5F0FD',
-                backgroundColor: '#228AE2',
-              }}
-            >
-              Next
-            </button>
-          </div>
+          <button
+            onClick={goToPreviousPage}
+            disabled={currentPage === 1}
+            className="btn btn-primary me-2"
+            style={{
+              borderTopLeftRadius: '50px',
+              borderBottomLeftRadius: '50px',
+              border: 'none',
+              color: '#E5F0FD',
+              backgroundColor: currentPage === 1 ? '#A0C4E7' : '#228AE2', // Lighter color when disabled
+              cursor: currentPage === 1 ? 'not-allowed' : 'pointer', // Change cursor for disabled state
+              opacity: currentPage === 1 ? 0.6 : 1,
+            }}
+          >
+            Prev.
+          </button>
+          <span>
+            Page {currentPage} of {totalPages}
+          </span>
+          <button
+            onClick={goToNextPage}
+            disabled={currentPage === totalPages}
+            className="btn btn-primary ms-2"
+            style={{
+              borderTopRightRadius: '50px',
+              borderBottomRightRadius: '50px',
+              border: 'none',
+              color: '#E5F0FD',
+              backgroundColor: currentPage === totalPages ? '#A0C4E7' : '#228AE2', // Lighter color when disabled
+              cursor: currentPage === totalPages ? 'not-allowed' : 'pointer',
+              opacity: currentPage === totalPages ? 0.6 : 1,
+            }}
+          >
+            Next
+          </button>
+        </div>
         </div>
       </section>
     </Layout>

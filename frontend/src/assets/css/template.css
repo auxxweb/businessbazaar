@@ -199,13 +199,13 @@
     height: 100% !important;
 }.navbar{
 
-}.navbar a{
+}.home-navbar.navbar a{
     color: white !important;
 }
-.navbar-active{
+.home-navbar.navbar-active{
     background-color: white !important;
 }
-.navbar-active a{
+.home-navbar.navbar-active a{
     color: rgb(0, 0, 0) !important;
 }#home{
     position: relative;

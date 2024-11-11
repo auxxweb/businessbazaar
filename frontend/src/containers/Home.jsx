@@ -62,6 +62,8 @@ export default function Home() {
   const [visible, setVisible] = useState(false)
   const [isReviewed, setIsReviewed] = useState(false)
   const [reviews, setReviews] = useState([])
+  const [visibleCategories, setVisibleCategories] = useState(20);
+  const [visibleBusiness, setVisibleBusiness] = useState(10);
   const [review, setReview] = useState([
     {
       rating: '',
@@ -74,8 +76,6 @@ export default function Home() {
     const fetchReviews = async () => {
       try {
         const data = await getAllReviews({ page, limit })
-        console.log(data, 'aaaaa')
-        console.log(data?.data?.data, 'dataaaaa-a-a--a-a-')
 
         setReviews(data?.data?.data)
       } catch (error) {
@@ -152,6 +152,8 @@ export default function Home() {
       try {
         setLoading(true)
         const businessDetails = await fetchBusiness(currentPage)
+
+        console.log(businessDetails)
         const categoryDetails = await fetchCategories()
 
         setCategoryData(categoryDetails.data.data)
@@ -170,52 +172,20 @@ export default function Home() {
   useEffect(() => {
     const fetchBanner = async () => {
       const data = await fetchBanners()
-
-      console.log(data, 'data-------')
       setBannerData(data?.data)
     }
     fetchBanner()
   }, [])
 
 
-  const itemsPerPage = 6
-
-  const totalPages = Math.ceil(totalBusinessData / itemsPerPage)
-  const goToPreviousPage = async () => {
-    if (currentPage > 1) {
-      try {
-        setLoading(true)
-        const newPage = currentPage - 1
-        setCurrentPage(newPage)
-
-        const businessDetails = await fetchBusiness(newPage)
-        setBusinessData(businessDetails.data.data)
-        setTotalBusinessData(businessDetails.data.totalCount)
-      } catch (err) {
-        console.log('Failed to fetch business')
-      } finally {
-        setLoading(false)
-      }
-    }
-  }
-
-  const goToNextPage = async () => {
-    if (currentPage < totalPages) {
-      try {
-        setLoading(true)
-        const newPage = currentPage + 1
-        setCurrentPage(newPage)
-
-        const businessDetails = await fetchBusiness(newPage)
-        setBusinessData(businessDetails.data.data)
-        setTotalBusinessData(businessDetails.data.totalCount)
-      } catch (err) {
-        console.log('Failed to fetch business')
-      } finally {
-        setLoading(false)
-      }
-    }
-  }
+  const loadMoreCategories = () => {
+    setVisibleCategories(prev => prev + 20); 
+  };
+  
+  const loadMoreBusiness = () => {
+    setVisibleBusiness(prev => prev + 10); 
+  };
+  
 
   const handleInputChange = (e) => {
     const { name, value } = e.target
@@ -270,7 +240,7 @@ export default function Home() {
                 className="col-12 col-md-6 banner-head-text"
                 style={{ textAlign: 'left' }}
               >
-                <h1 className="head-line fw-bold" data-aos="fade-right">
+                <h1 className="head-line fw-bold text-start" data-aos="fade-right">
                   In<span className="text-theme2">Connect</span> <br />
                   Your Digital Platform for Growing Your Business
                 </h1>
@@ -292,11 +262,12 @@ export default function Home() {
                 {/* Location Input with Crosshair Icon */}
                 <div className="col-12 mt-3 col-md-5">
                   <div
-                    className="input-group"
+                    className="input-group  banner-input-div"
                     style={{
                       border: '1px solid #ced4da',
                       borderRadius: '8px',
                       overflow: 'hidden',
+                      background:'none',
                     }}
                   >
                     <span
@@ -307,7 +278,8 @@ export default function Home() {
                         padding: '0 12px',
                         display: 'flex',
                         alignItems: 'center',
-                        color: '#228AE2',
+                        color: 'white',
+                      background:'none'
                       }}
                     >
                       <i
@@ -324,7 +296,8 @@ export default function Home() {
                         boxShadow: 'none',
                         paddingLeft: '0',
                         fontSize: '1em',
-                        color: '#495057',
+                        color: 'white',
+                      background:'none'
                       }}
                     />
                   </div>
@@ -333,11 +306,12 @@ export default function Home() {
                 {/* Search Input with Search Icon */}
                 <div className="col-12 mt-3 col-md-7">
                   <div
-                    className="input-group"
+                    className="input-group banner-input-div"
                     style={{
                       border: '1px solid #ced4da',
                       borderRadius: '8px',
                       overflow: 'hidden',
+                      background:'none'
                     }}
                   >
                     <span
@@ -348,7 +322,8 @@ export default function Home() {
                         padding: '0 12px',
                         display: 'flex',
                         alignItems: 'center',
-                        color: '#228AE2',
+                        color: 'white',
+                      background:'none'
                       }}
                     >
                       <i
@@ -367,7 +342,8 @@ export default function Home() {
                         boxShadow: 'none',
                         paddingLeft: '0',
                         fontSize: '1em',
-                        color: '#495057',
+                        color: 'white',
+                      background:'none'
                       }}
                     />
                   </div>
@@ -394,23 +370,31 @@ export default function Home() {
             </p>
           </div>
           <div className="mb-5 mt-2" id="category">
-            <div className="home-category-div">
-              {categoryData.map((category) => (
-                <Link
-                  className="cat-div text-decoration-none"
-                  data-aos="zoom-in"
-                  to={`/business/${category._id}`} // Dynamically generate the URL with the category ID
-                  key={category._id} // Add a unique key for each category
-                >
-                  <img
-                    src={category.image}
-                    alt={category.name}
-                    className="cat-img"
-                  />
-                  {category.name}
-                </Link>
-              ))}
-            </div>
+          <div className="home-category-div">
+        {categoryData.slice(0, visibleCategories).map((category) => (
+          <Link
+            className="cat-div text-decoration-none"
+            data-aos="zoom-in"
+            to={`/business/${category._id}`} // Dynamically generate the URL with the category ID
+            key={category._id} // Unique key for each category
+          >
+            <img
+              src={category.image}
+              alt={category.name}
+              className="cat-img"
+            />
+            {category.name}
+          </Link>
+        ))}
+      </div>
+      {visibleCategories < categoryData.length && ( // Check if more categories are available
+        <div className="mb-3 mt-5 text-center">
+          <button onClick={loadMoreCategories} className="btn btn-dark btn-md">
+            View More <i className="bi bi-arrow-right"></i>
+          </button>
+        </div>
+
+      )}
           </div>
         </div>
       </section>
@@ -430,9 +414,9 @@ export default function Home() {
             {loading && <Loader />}
 
             {!loading &&
-              businessData?.map((business) => (
+              businessData.slice(0, visibleBusiness).map((business) => (
                 <Link
-                  to={`/template/${business?._id}`}
+                  to={business.selectedPlan?.isPremium? `/template/premium/${business?._id}` :`/template/${business?._id}`}
                   key={business._id}
                   className="text-decoration-none text-dark col-12 col-md-5 b-theme location-card mt-3 business-card"
                 >
@@ -451,10 +435,7 @@ export default function Home() {
                         </h2>
                       </div>
                       <div className="col-12">
-                        <span className="p-1 bg-success text-white pe-2 ps-2">
-                          4.5 <i className="bi bi-star ms-2 text-white"></i>
-                        </span>
-                        <span className="ms-2 fs-12">3.5k reviews</span>
+                        <span>{business.category.name}</span>
                       </div>
                       <div className="col-12 mt-3">
                         <h3 className="fs-16">
@@ -472,9 +453,13 @@ export default function Home() {
                 </Link>
               ))}
           </div>
-
+          {visibleBusiness < businessData.length && ( 
+            <div className="mt-5 text-center mb-1">
+              <button onClick={loadMoreBusiness} className='btn btn-dark btn-md'>View More <i className="bi bi-arrow-right"></i></button>
+            </div>
+          )}
           {/* Pagination Controls */}
-          <div className="d-flex justify-content-center align-items-center mt-4">
+          {/* <div className="d-flex justify-content-center align-items-center mt-4">
             <button
               onClick={goToPreviousPage}
               disabled={currentPage === 1}
@@ -506,7 +491,7 @@ export default function Home() {
             >
               Next
             </button>
-          </div>
+          </div> */}
         </div>
       </section>
 

@@ -64,3 +64,10 @@
     flex: 1 1 auto; /* 5 cards per row on large screens with dynamic width based on content */
   }
 }
+.banner-input-div{
+  
+  backdrop-filter: blur(15px);
+}
+.banner-input-div input{
+  padding: 10px;
+}
