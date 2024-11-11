@@ -25,6 +25,10 @@ import { InputTextarea } from 'primereact/inputtextarea'
 import CircularProgress from '@mui/material/CircularProgress'
 import CloseIcon from '@mui/icons-material/Close'
 import Slider from 'react-slick'
+import IconButton from '@mui/material/IconButton'
+import InputAdornment from '@mui/material/InputAdornment'
+import Visibility from '@mui/icons-material/Visibility'
+import VisibilityOff from '@mui/icons-material/VisibilityOff'
 
 export default function CreateBusiness() {
   const [step, setStep] = useState(1)
@@ -158,7 +162,7 @@ export default function CreateBusiness() {
     fetchData()
   }, [])
 
-  function AuthenticationDetails({ formData }) {
+  function AuthenticationDetails({ formData, handleNextStep, handlePrevStep, setFormData, checkBusinessExists }) {
     const [authData, setAuthData] = useState({
       email: '',
       password: '',
@@ -166,33 +170,45 @@ export default function CreateBusiness() {
     const { email, password } = authData
     const [passwordError, setPasswordError] = useState('')
     const [emailError, setEmailError] = useState('')
-
+    const [showPassword, setShowPassword] = useState(false)
+  
     useEffect(() => {
       setAuthData({
         email: formData.email,
         password: formData.password,
       })
     }, [formData])
-
-    // Handles input change for both email and password
+  
     function handleInputChange(e) {
       const { name, value } = e.target
       setAuthData((prevAuthData) => ({
         ...prevAuthData,
         [name]: value,
       }))
+  
+      // Clear errors if the input becomes valid
+      if (name === 'email' && value) {
+        if (validateEmail(value)) {
+          setEmailError('')
+        }
+      }
+  
+      if (name === 'password' && value) {
+        if (validatePassword(value)) {
+          setPasswordError('')
+        }
+      }
     }
-
-    // Validate both fields and handle submission
+  
     const handleAuthSubmit = async () => {
-      const isEmailValid = validateEmail()
-      const isPasswordValid = validatePassword()
-
+      const isEmailValid = validateEmail(email)
+      const isPasswordValid = validatePassword(password)
+  
       if (isEmailValid && isPasswordValid) {
         try {
           const business = await checkBusinessExists({ email, password })
           console.log(business, 'business---')
-
+  
           if (business?.data) {
             setFormData((prevFormData) => ({
               ...prevFormData,
@@ -203,10 +219,9 @@ export default function CreateBusiness() {
           }
         } catch (error) {
           console.log(error, 'error-----------')
-
+  
           toast.error(
-            error?.response?.data?.message ??
-              'An error occurred. Please try again.',
+            error?.response?.data?.message ?? 'An error occurred. Please try again.',
             {
               position: 'top-right',
               autoClose: 3000,
@@ -216,63 +231,65 @@ export default function CreateBusiness() {
               draggable: true,
               theme: 'colored',
               style: {
-                backgroundColor: '#e74c3c', // Custom red color for error
-                color: '#FFFFFF', // White text
+                backgroundColor: '#e74c3c',
+                color: '#FFFFFF',
               },
-            },
+            }
           )
         }
       }
     }
-
-    // Email validation function
-    function validateEmail() {
-      if (!email) {
+  
+    // Updated Email validation function
+    function validateEmail(value = email) {
+      if (!value) {
         setEmailError('Email is required.')
         return false
       }
       setEmailError('')
       return true
     }
-
-    // Password validation function
-    function validatePassword() {
-      if (password.length < 8) {
+  
+    // Updated Password validation function
+    function validatePassword(value = password) {
+      if (value.length < 8) {
         setPasswordError('Password must be at least 8 characters long.')
         return false
       }
       setPasswordError('')
       return true
     }
-
+  
+    const togglePasswordVisibility = () => {
+      setShowPassword(!showPassword)
+    }
+  
     return (
       <div className="h-100vh create-business-div">
         <div className="row h-100 justify-content-center">
           <div className="d-none d-md-block left-portion col-md-5 h-100 p-0">
             <img
               src="/src/assets/images/login.jpg"
-              alt=""
+              alt="Login"
               className="w-100 h-100 object-fit-cover"
             />
           </div>
-
-          <div className="col-12 col-md-7 d-flex flex-column justify-content-between align-items-center right-portion h-100 p-5">
-            <div className="col-12 text-start">
-              <button
-                className="btn btn-dark w-auto float-start"
-                onClick={handlePrevStep}
-              >
+  
+          <div className="col-12 col-md-7 d-flex flex-column align-items-center right-portion h-100 p-4">
+            <div className="back-button-container">
+              <button className="btn btn-dark" onClick={handlePrevStep}>
                 <i className="bi bi-arrow-left"></i>
               </button>
             </div>
-            <div className="col-12">
-              <h1 className="fw-bold text-center text-md-start">
-                Add <br /> Authentication Details
+  
+            <div className="col-12 text-start mb-4">
+              <h1 className="fw-bold title-text">
+                <span className="title-main">Add</span> <br />
+                <span className="title-highlight">Authentication Details</span>
               </h1>
             </div>
-
-            {/* Email Input */}
-            <div className="input-group mt-4 w-100 align-items-center">
+  
+            <div className="input-group mt-2 w-100">
               <TextField
                 fullWidth
                 label="Email"
@@ -284,25 +301,33 @@ export default function CreateBusiness() {
                 helperText={emailError}
               />
             </div>
-
-            {/* Password Input */}
-            <div className="input-group w-100 align-items-center">
+  
+            <div className="input-group mt-3 w-100">
               <TextField
                 fullWidth
                 label="Password"
-                type="password"
+                type={showPassword ? 'text' : 'password'}
                 variant="outlined"
                 name="password"
                 value={authData.password}
                 onChange={handleInputChange}
                 error={!!passwordError}
                 helperText={passwordError}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton onClick={togglePasswordVisibility} edge="end">
+                        {showPassword ? <Visibility /> : <VisibilityOff />}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
               />
             </div>
-
-            <div className="col-12 text-center mt-5">
+  
+            <div className="col-12 text-center mt-4">
               <button
-                className="btn btn-success w-100 text-white p-2"
+                className="btn btn-primary w-100 text-white p-2"
                 onClick={handleAuthSubmit}
               >
                 Save & Next
@@ -310,6 +335,64 @@ export default function CreateBusiness() {
             </div>
           </div>
         </div>
+  
+        <style jsx>{`
+          .h-100vh {
+            height: 100vh;
+          }
+          .left-portion {
+            background-color: #f5f5f5;
+          }
+          .right-portion {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 2rem;
+            position: relative;
+          }
+          .back-button-container {
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            margin-top: 0.5rem;
+            margin-left: 0.5rem;
+          }
+          .title-text {
+            text-align: left;
+          }
+          .title-main {
+            color: black;
+          }
+          .title-highlight {
+            color: #105193;
+          }
+          .btn-primary {
+            background-color: #105193;
+            border-color: #105193;
+          }
+          .btn-primary:hover {
+            background-color: #107d93;
+            border-color: #107d93;
+          }
+          @media (max-width: 768px) {
+            .right-portion {
+              padding: 1rem;
+            }
+            .back-button-container {
+              margin-top: 0.75rem;
+              margin-left: 0.75rem;
+            }
+          }
+          @media (max-width: 576px) {
+            .right-portion {
+              padding: 0.5rem;
+            }
+            .back-button-container {
+              margin-top: 1rem;
+              margin-left: 1rem;
+            }
+          }
+        `}</style>
       </div>
     )
   }
