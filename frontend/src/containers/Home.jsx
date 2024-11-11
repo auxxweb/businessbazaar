@@ -17,7 +17,7 @@ import {
   fetchCategories,
   getAllReviews,
 } from '../Functions/functions'
-import Loader from '../components/Loader'
+import Loader from '../components/Loader/Loader'
 import { InputTextarea } from 'primereact/inputtextarea'
 import { InputText } from 'primereact/inputtext'
 import { Rating } from 'primereact/rating'
@@ -157,6 +157,7 @@ export default function Home() {
 
         setTotalBusinessData(businessDetails.data.totalCount)
       } catch (error) {
+        setLoading(false)
         console.error('Error fetching data:', error)
       } finally {
         setLoading(false)
@@ -382,7 +383,8 @@ export default function Home() {
           </div>
           <div className="mb-5 mt-2" id="category">
             <div className="home-category-div">
-              {categoryData.map((category) => (
+            {loading && <Loader />}
+              {!loading &&categoryData.map((category) => (
                 <Link
                   className="cat-div text-decoration-none"
                   data-aos="zoom-in"
@@ -609,7 +611,7 @@ export default function Home() {
               ))}
             </Slider>
             <div className="text-center mt-5 mb-5">
-              <a href="/reviews" className="btn btn-dark btn-md text-decoration-none text-theme2">
+              <a onClick={() => navigate('/reviews')} className="btn btn-dark btn-md text-decoration-none text-theme2">
                 View more <i className="bi bi-arrow-right"></i>
               </a>
             </div>

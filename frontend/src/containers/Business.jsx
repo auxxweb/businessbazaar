@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import Layout from '../components/Layout'
 import { Link, useParams } from 'react-router-dom'
 import { fetchBusiness, getCategoryBusiness, getCategoryData } from '../Functions/functions'
-import Loader from '../components/Loader'
+import Loader from '../components/Loader/Loader'
 
 export default function Business() {
   const [categoryData, setCategoryData] = useState([])
