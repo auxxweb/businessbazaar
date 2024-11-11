@@ -65,7 +65,7 @@ function App() {
         <Route path="/business/:id" element={<Business />} />
         <Route path="/template/:id" element={<Template />} />
         <Route path="/template/premium/:id" element={<PremiumTemplate />} />
-        <Route path="/terms-and-conditions/:id" element={<TermsAndConditions htmlContent={htmlContent}/>} />
+        <Route path="/terms-and-conditions" element={<TermsAndConditions htmlContent={htmlContent}/>} />
       </Routes>
     </Router>
   )

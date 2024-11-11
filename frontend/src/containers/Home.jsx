@@ -465,11 +465,11 @@ export default function Home() {
               disabled={currentPage === 1}
               className="btn btn-primary me-2"
               style={{
-                borderTopLeftRadius: '50px',
-                borderBottomLeftRadius: '50px',
-                border: 'none',
-                color: '#E5F0FD',
-                backgroundColor: '#228AE2',
+                borderTopLeftRadius: "50px",
+                borderBottomLeftRadius: "50px",
+                border: "none",
+                color: "#E5F0FD",
+                backgroundColor: "#105193",
               }}
             >
               Prev.
@@ -482,11 +482,11 @@ export default function Home() {
               disabled={currentPage === totalPages}
               className="btn btn-primary ms-2"
               style={{
-                borderTopRightRadius: '50px',
-                borderBottomRightRadius: '50px',
-                border: 'none',
-                color: '#E5F0FD',
-                backgroundColor: '#228AE2',
+                borderTopRightRadius: "50px",
+                borderBottomRightRadius: "50px",
+                border: "none",
+                color: "#E5F0FD",
+                backgroundColor: "#105193",
               }}
             >
               Next

@@ -151,7 +151,7 @@ const TemplateFooter = ({ businessData, closeDays }) => {
               <div class="footer-bottom">
                 <div class="row w-full justify-content-between">
                   <div class="col-sm-4 text-left">
-                    <a href={`/terms-and-conditions/${businessData?._id}`}>Terms and Conditions</a>
+                    <a href="/terms-and-conditions">Terms and Conditions</a>
                   </div>
                   <div class="col-sm-4 text-right">
                     <div style={{ color: "#A4B3CB" }} class="text-right">

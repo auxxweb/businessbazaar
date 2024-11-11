@@ -39,12 +39,12 @@ body{
   }
   
   .form-control:focus {
-    border-color: #007bff;
+    border-color: #105193;
     outline: none;
   }
   
   .submit-button {
-    background-color: #007bff;
+    background-color: #105193;
     color: #fff;
     padding: 10px 20px;
     border: none;
@@ -53,7 +53,7 @@ body{
   }
   
   .submit-button:hover {
-    background-color: #0056b3;
+    background-color: #107D93;
   }
 
 .custom-placeholder::placeholder {
@@ -135,7 +135,7 @@ body{
 }.footer-section{
     background-color: #111111;
 }.btn-theme{
-    background-color: #228ae2 !important;
+    background-color: #105193 !important;
     border-radius: 50px !important;
 }footer{
     font-family:  "Inter", sans-serif;
@@ -178,13 +178,13 @@ footer .btn-theme{
     border-right: none !important;
     border-radius: 5px 0 0 5px !important;
 }.form-text{
-    color: #238ae3;
+    color: #105193;
 }.bl-none{
     border-left: none;
 }.br-none{
     border-right: none;
 }.btn-theme2{
-    background-color: #238ae3;
+    background-color: #105193;
     color: white;
 }.btn-theme2:hover{
     background-color: #1869b2;
@@ -227,15 +227,15 @@ footer .btn-theme{
     cursor: pointer;
 }
 .services-list{
-    background-color: #238ae3;
+    background-color: #105193;
     color: white;
     width: fit-content;
     border-radius: 0;
     padding: 8px 15px;
 }.text-theme2{
-    color: #238ae3;
+    color: #105193;
 }.day-div.active{
-    background-color: #238ae3;
+    background-color: #105193;
     color: white;
     border: none;
 }.right-portion{
@@ -249,7 +249,7 @@ footer .btn-theme{
 }.react-tel-input .form-control {
     height: 48px !important;
 }.b-theme2{
-    border: 1px solid #228ae2;
+    border: 1px solid #105193;
 
 }
 .br-20{
@@ -261,7 +261,7 @@ footer .btn-theme{
     cursor: pointer;
 }.subscription-tick.active{
     color: white !important;
-    background-color: #228ae2 !important;
+    background-color: #105193 !important;
 }.business-view-banner{
     height: 600px !important;
 }.business-view-banner img{
@@ -317,7 +317,7 @@ footer .btn-theme{
     }
 }
 .business-feature span{
-    border: 1px solid #228ae2;
+    border: 1px solid #105193;
     border-radius: 5px;
     padding: 2px;
 }.business-view-div-main .location-card img{
