@@ -1,26 +1,24 @@
-// src/TermsAndConditions.js
-import React from "react";
 import "/src/assets/css/TermsAndConditions.css";
-import TemplateHeader from "/src/components/Business/TemplateHeader";
-import useBusiness from "/src/Hooks/useBusiness";
-import { Box } from "@mui/material";
+import { Box, Typography } from "@mui/material";
+import BackdropLoader from "../BackdropLoader";
+import useTerms from "../../Hooks/useTerms";
 
-const TermsAndConditions = ({ htmlContent }) => {
-    const { businessData, loading, closeDays } = useBusiness();
-    console.log(businessData,"businessData");
-    
+const TermsAndConditions = () => {
+  const { terms, termsLoading } = useTerms();
+
   return (
     <Box sx={{ overflowX: "hidden" }}>
-        <TemplateHeader businessData={businessData} />
-    <div className="terms-container">
-      <h1>Terms and Conditions</h1>
-      <div
-        className="terms-content"
-        dangerouslySetInnerHTML={{ __html: htmlContent }}
-      />
-    </div>
+      {/* <TemplateHeader businessData={businessData} /> */}
+      <div className="terms-container">
+        <h1>Terms and Conditions</h1>
+        <Typography
+          component="div"
+          dangerouslySetInnerHTML={{ __html: terms }}
+          // sx={{ fontSize: "1rem", color: "text.primary" }}
+        />
+      </div>
+      <BackdropLoader open={termsLoading} />
     </Box>
-
   );
 };
 

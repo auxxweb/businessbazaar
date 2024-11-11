@@ -799,7 +799,7 @@ export default function Home() {
           <div className="footer-bottom p-4">
             <div className="row w-full justify-content-between">
               <div className="col-sm-4 text-left">
-                <a href={`/terms-and-conditions/${businessData?._id}`}>
+                <a href={`/terms-and-conditions`}>
                   Terms and Conditions
                 </a>
               </div>
