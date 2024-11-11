@@ -2,21 +2,22 @@ import "/src/assets/css/TermsAndConditions.css";
 import { Box, Typography } from "@mui/material";
 import BackdropLoader from "../BackdropLoader";
 import useTerms from "../../Hooks/useTerms";
+import Header from "../Header";
 
 const TermsAndConditions = () => {
   const { terms, termsLoading } = useTerms();
 
   return (
     <Box sx={{ overflowX: "hidden" }}>
-      {/* <TemplateHeader businessData={businessData} /> */}
-      <div className="terms-container">
+      <Header />
+      <Box className="terms-container" mt={16} mb={20} zIndex={-11}>
         <h1>Terms and Conditions</h1>
         <Typography
           component="div"
           dangerouslySetInnerHTML={{ __html: terms }}
           // sx={{ fontSize: "1rem", color: "text.primary" }}
         />
-      </div>
+      </Box>
       <BackdropLoader open={termsLoading} />
     </Box>
   );
