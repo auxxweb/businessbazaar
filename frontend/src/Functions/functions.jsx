@@ -388,7 +388,7 @@ export const getTermsAndConditions = async () => {
 
 export const getBusinessTermsAndConditions = async (businessId) => {
   try {
-    const response = await axios.get(`${baseUrl}/api/v1/terms_and_conditions/${businessId}`);
+    const response = await axios.get(`${baseUrl}/api/v1/terms_and_conditions/business/${businessId}`);
     if (response.status !== 200) {
       throw new Error("HTTP status: " + response.status);
     }

@@ -16,7 +16,7 @@ const BusinessTermsAndConditions = () => {
   return (
     <Box sx={{ overflowX: "hidden" }}>
       <TemplateHeader businessData={businessData} />
-      <Box className="terms-container" mt={16}>
+      <Box className="terms-container" mt={16} px={5}>
         <h1>Terms and Conditions</h1>
         <Typography
           component="div"

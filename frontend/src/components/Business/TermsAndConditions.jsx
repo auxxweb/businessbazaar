@@ -10,7 +10,7 @@ const TermsAndConditions = () => {
   return (
     <Box sx={{ overflowX: "hidden" }}>
       <Header />
-      <Box className="terms-container" mt={16} mb={20} zIndex={-11}>
+      <Box className="terms-container" mt={16} px={5}>
         <h1>Terms and Conditions</h1>
         <Typography
           component="div"
