@@ -11,7 +11,6 @@
 
   $(document).scroll(function () {
     if ($(document).scrollTop() >= 50) {
-      console.log('ssss')
       $(".navbar").addClass("navbar-active");
     } else {
       $(".navbar").removeClass("navbar-active");
