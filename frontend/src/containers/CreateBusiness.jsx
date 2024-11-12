@@ -801,7 +801,8 @@ export default function CreateBusiness() {
             </div>
             <div className="col-12">
               <h1 className="fw-bold text-center text-md-start mb-2">
-                Add Contact Details
+                <span className="title-main">Add</span> <br />
+                <span className="title-highlight">Contact Details</span>
               </h1>
             </div>
             <div className="col-12 p-5 p-sm-0 mt-3">
@@ -817,7 +818,7 @@ export default function CreateBusiness() {
               {/* Other input fields */}
               <input
                 type="text"
-                placeholder="Building Name"
+                placeholder="Building name"
                 name="buildingName"
                 value={address.buildingName}
                 onChange={handleAddressChange}
@@ -825,7 +826,7 @@ export default function CreateBusiness() {
               />
               <input
                 type="text"
-                placeholder="Street / Colony Name"
+                placeholder="Street / Colony name"
                 name="streetName"
                 value={address.streetName}
                 onChange={handleAddressChange}
@@ -883,7 +884,7 @@ export default function CreateBusiness() {
                         value={number.number}
                         onChange={(e) => handleMobileNumberChange(number.id, e.target.value)}
                         className="form-control form-control-lg w-100"
-                        placeholder="Phone Number"
+                        placeholder="Phone number"
                       />
                     </div>
 
@@ -905,7 +906,7 @@ export default function CreateBusiness() {
                         <button
                           type="button"
                           onClick={addMobileNumber}
-                          className="btn w-100 btn-success mt-2"
+                          className="btn w-100 btn-primary mt-2"
                         >
                           Add
                         </button>
@@ -925,7 +926,7 @@ export default function CreateBusiness() {
                         value={number.number}
                         onChange={(e) => handleWhatsappNumberChange(number.id, e.target.value)}
                         className="form-control form-control-lg w-100"
-                        placeholder="WhatsApp Number"
+                        placeholder="WhatsApp number"
                       />
                     </div>
 
@@ -948,7 +949,7 @@ export default function CreateBusiness() {
                         <button
                           type="button"
                           onClick={addWhatsappNumber}
-                          className="btn btn-success btn-md w-100 mt-2"
+                          className="btn btn-primary btn-md w-100 mt-2"
                         >
                           Add
                         </button>
@@ -968,7 +969,7 @@ export default function CreateBusiness() {
                         value={email.email}
                         onChange={(e) => handleEmailChange(email.id, e.target.value)}
                         className="form-control form-control-lg"
-                        placeholder="Email"
+                        placeholder="Email address"
                       />
                     </div>
 
@@ -990,7 +991,7 @@ export default function CreateBusiness() {
                         <button
                           type="button"
                           onClick={addEmail}
-                          className="btn w-100 btn-success mt-2"
+                          className="btn w-100 btn-primary mt-2"
                         >
                           Add
                         </button>
@@ -1005,7 +1006,7 @@ export default function CreateBusiness() {
                 <input
                   type="text"
                   name="website"
-                  placeholder="Website"
+                  placeholder="Website link"
                   onChange={handleContactChange}
                   className="form-control form-control-lg"
                 />
@@ -1016,7 +1017,7 @@ export default function CreateBusiness() {
             </div>
             <div className="col-12 mt-3 text-end">
               <button
-                className="btn btn-success btn-lg w-100"
+                className="btn btn-primary btn-lg w-100 "
                 onClick={contactSubmitHandler}
               >
                 Save & Continue
@@ -1038,6 +1039,23 @@ export default function CreateBusiness() {
             <style>
               {' '}
               {`
+                        .btn-primary {
+            background-color: #105193;
+            border-color: #105193;
+          }
+          .btn-primary:hover {
+            background-color: #107d93;
+            border-color: #107d93;
+          }
+                     .title-text {
+            text-align: left;
+          }
+          .title-main {
+            color: black;
+          }
+          .title-highlight {
+            color: #105193;
+          }
                     .theme
                     {
                         background-color: #FC791A;
