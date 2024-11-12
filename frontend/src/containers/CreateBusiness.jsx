@@ -966,6 +966,7 @@ export default function CreateBusiness() {
                     <div className="col-12 col-sm-10">
                       <input
                         type="email"
+                        name='email'
                         value={email.email}
                         onChange={(e) => handleEmailChange(email.id, e.target.value)}
                         className="form-control form-control-lg"
@@ -1167,8 +1168,9 @@ export default function CreateBusiness() {
               </button>
             </div>
             <div className="col-12">
-              <h1 className="fw-bold text-center text-md-start">
-                Add <br /> Business Category
+            <h1 className="fw-bold title-text">
+                <span className="title-main">Select</span> <br />
+                <span className="title-highlight">Business Category</span>
               </h1>
             </div>
 
@@ -1223,7 +1225,7 @@ export default function CreateBusiness() {
 
             <div className="col-12 text-center mt-5">
               <button
-                className="btn btn-success w-100 text-white p-2"
+                className="btn btn-primary w-100 text-white p-2"
                 onClick={handleNextStep}
               >
                 Save & Next

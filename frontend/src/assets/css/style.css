@@ -471,3 +471,36 @@ footer .btn-theme{
 }.h-50-vh{
     height: 50vh !important;
 }
+.back-button-container {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    margin-top: 0.5rem;
+    margin-left: 0.5rem;
+  }
+  .title-text {
+    text-align: left;
+  }
+  .title-main {
+    color: black;
+  }
+  .title-highlight {
+    color: #105193;
+  }
+  .btn-primary {
+    background-color: #105193;
+    border-color: #105193;
+  }
+  .btn-primary:hover {
+    background-color: #107d93;
+    border-color: #107d93;
+  }
+  @media (max-width: 768px) {
+    .right-portion {
+      padding: 1rem;
+    }
+    .back-button-container {
+      margin-top: 0.75rem;
+      margin-left: 0.75rem;
+    }
+  }
