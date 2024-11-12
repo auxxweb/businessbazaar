@@ -463,20 +463,20 @@ export default function Home() {
                     <div className="col-8">
                       <div className="col-12 mb-2 mt-2">
                         <h2 style={{ fontSize: "28px" }}>
-                          {business.businessName}
+                          {business?.businessName}
                         </h2>
                       </div>
                       <div className="col-12">
-                        <span>{business.category.name}</span>
+                        <span>{business?.category?.name}</span>
                       </div>
                       <div className="col-12 mt-3">
                         <h3 className="fs-16">
                           <i className="bi bi-crosshair"></i>
                           <span className="ms-1 fs-15">
-                            {business.address.buildingName},{" "}
-                            {business.address.city}, {business.address.landMark}
-                            , {business.address.streetName},{" "}
-                            {business.address.state}
+                            {business?.address?.buildingName},{" "}
+                            {business?.address?.city}, {business?.address?.landMark}
+                            , {business?.address?.streetName},{" "}
+                            {business?.address?.state}
                           </span>
                         </h3>
                       </div>
