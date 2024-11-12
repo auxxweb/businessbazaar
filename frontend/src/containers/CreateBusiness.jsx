@@ -1445,9 +1445,10 @@ export default function CreateBusiness() {
               </div>
               <div className="row  justify-content-center">
                 <div className="col-12 text-center text-md-start mt-5">
-                  <h1 className="fw-bold">
-                    Add <br /> Business Timing
-                  </h1>
+                <h1 className="fw-bold title-text">
+                <span className="title-main">Add</span> <br />
+                <span className="title-highlight">Business Timing</span>
+              </h1>
                 </div>
 
                 {/* Working Days Selection */}
@@ -1465,8 +1466,8 @@ export default function CreateBusiness() {
                           width: '60px',
                           borderRadius: '8px',
                           background: days.includes(day)
-                            ? '#5cb85c'
-                            : '#f0f0f0',
+                            ? '#105193'
+                            : '#d4e0ec',
                         }}
                         onClick={() => toggleDay(day)}
                       >
@@ -1523,7 +1524,7 @@ export default function CreateBusiness() {
               {/* Save & Next Button */}
               <div className="col-12 text-center p-3 p-md-5">
                 <button
-                  className="btn btn-success w-100 text-white p-2"
+                  className="btn btn-primary w-100 text-white p-2"
                   onClick={handleSubmit}
                 >
                   Save & Next
