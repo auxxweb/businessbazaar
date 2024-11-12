@@ -415,55 +415,55 @@ export default function CreateBusiness() {
       setLogo(formData?.logo);
       setBusinessName(formData?.businessName);
     }, [formData]);
-
-    const handleLogoChange = async (event) => {
+    const handleLogoChange = (event) => {
       const file = event.target.files[0];
-
+    
       if (file) {
         setIsLoading(true);
         const reader = new FileReader();
-        reader.onload = async function (e) {
-          try {
-            const preReq = await preRequestFun(file, "Landing");
-            let accessLink = "";
-            if (preReq && preReq.accessLink) {
-              accessLink = preReq.accessLink;
-            } else {
-              console.error("Access link not found in response.");
-              return;
-            }
-            setLogo(accessLink);
-          } catch (error) {
-            console.error("Error uploading logo:", error.message || error);
-          } finally {
-            setIsLoading(false);
-          }
+    
+        reader.onload = function (e) {
+          setLogo(e.target.result); // Save the Base64 string in logo state
+          setIsLoading(false);
         };
+    
         reader.onerror = function () {
           console.error("Error reading file:", reader.error);
           setIsLoading(false);
         };
-        reader.readAsDataURL(file);
+    
+        reader.readAsDataURL(file); // Convert file to a Base64 string
       }
     };
+    
+    
 
     const imageUpload = () => {
       document.getElementById("ImageLogo").click();
     };
 
     // Handle form submission with validation
-    const handleBusinessSubmit = () => {
+    const handleBusinessSubmit = async () => {
       if (!businessName) {
         setError("Business Name is required.");
         return;
       }
 
       setError("");
+     try{
+      setLoading(true);
+      const preReq = await preRequestFun(logo, "Landing");
+     }catch(e){
+      console.error("")
+     }finally{
+      setLoading(false);
+     }
       setFormData((prevFormData) => ({
         ...prevFormData,
         businessName: businessName,
-        logo: logo,
+        logo: preReq.accessLink,
       }));
+      setLogo(preReq.accessLink);
       handleNextStep();
     };
 
@@ -633,6 +633,8 @@ export default function CreateBusiness() {
   }
 
   function ContactDetails({ formData }) {
+
+    console.log(formData)
 
   const [newFormData, setNewFormData] = useState({
     contactDetails: {
@@ -1973,6 +1975,7 @@ export default function CreateBusiness() {
     // Generic File Change Handler with Loader
     const handleFileChange = (name, e, sectionSetter) => {
       const file = e.target.files[0];
+    
       if (name === "landingPageHeroImage") {
         setLandingPageHero((prevState) => ({
           ...prevState,
@@ -1984,22 +1987,17 @@ export default function CreateBusiness() {
           loading: true,
         }));
       }
+    
       if (file) {
         setLoading(true); // Show loader
         const reader = new FileReader();
-        reader.onload = async () => {
-          const preReq = await preRequestFun(file, name);
-          let accessLink = "";
-          if (preReq && preReq.accessLink) {
-            accessLink = preReq.accessLink;
-            sectionSetter((prevData) => ({
-              ...prevData,
-              coverImage: accessLink,
-            }));
-          } else {
-            console.error("Access link not found in response.");
-            return;
-          }
+    
+        reader.onload = () => {
+          sectionSetter((prevData) => ({
+            ...prevData,
+            coverImage: reader.result, // Use reader.result to get Base64 string
+          }));
+    
           if (name === "landingPageHeroImage") {
             setLandingPageHero((prevState) => ({
               ...prevState,
@@ -2011,7 +2009,15 @@ export default function CreateBusiness() {
               loading: false,
             }));
           }
+          
+          setLoading(false); // Hide loader after image is set
         };
+    
+        reader.onerror = () => {
+          console.error("Error reading file:", reader.error);
+          setLoading(false); // Ensure loader hides on error
+        };
+    
         reader.readAsDataURL(file);
       }
     };
@@ -2038,7 +2044,20 @@ export default function CreateBusiness() {
       return Object.keys(newErrors).length === 0;
     };
 
-    const handleLandingSubmit = () => {
+    const handleLandingSubmit = async () => {
+      
+      try{
+        setLoading(true);
+        const landingPreReq = await preRequestFun(landingPageHero.coverImage, "Landing");
+      const welcomePreReq = await preRequestFun(welcomePart.coverImage, "Landing");
+      if (landingPreReq.accessLink){
+      landingPageHero.coverImage = landingPreReq.accessLink
+      setLandingPageHero(landingPreReq.accessLink)
+      }
+      if (welcomePreReq.accessLink){
+        welcomePart.coverImage = welcomePreReq.accessLink
+        setWelcomePart(welcomePreReq.accessLink)
+      }
       if (validateForm()) {
         setFormData((prevFormData) => ({
           ...prevFormData,
@@ -2049,11 +2068,26 @@ export default function CreateBusiness() {
         }));
         handleNextStep();
       }
+      }catch (e) {
+        console.log(e)
+      }finally{
+        setLoading(false);
+      }
     };
 
     const triggerFileUpload = (inputId) => {
       document.getElementById(inputId).click();
     };
+
+    if (loading){
+      return (
+        <div className="h-100vh">
+         <div className="d-flex h-100 justify-content-center align-items-center">
+          <span>Loading</span>
+         </div>
+        </div>
+      )
+    }
 
     return (
       <div className="h-100vh create-business-div">
