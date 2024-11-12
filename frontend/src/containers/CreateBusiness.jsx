@@ -308,7 +308,7 @@ export default function CreateBusiness() {
               <TextField
                 fullWidth
                 label="Email"
-                variant="outlined"
+                variant="filled"
                 name="email"
                 value={authData.email}
                 onChange={handleInputChange}
@@ -322,7 +322,7 @@ export default function CreateBusiness() {
                 fullWidth
                 label="Password"
                 type={showPassword ? 'text' : 'password'}
-                variant="outlined"
+                variant="filled"
                 name="password"
                 value={authData.password}
                 onChange={handleInputChange}
@@ -416,7 +416,10 @@ export default function CreateBusiness() {
     const [logo, setLogo] = useState('')
     const [businessName, setBusinessName] = useState('')
     const [isLoading, setIsLoading] = useState(false)
-    const [error, setError] = useState('')
+    const [error, setError] = useState({
+      logo:null,
+      name:null
+    })
     const [logoFile, setLogoFile] = useState(null)
     const [logoPrev, setLogoPrev] = useState(null)
 
@@ -425,28 +428,29 @@ export default function CreateBusiness() {
       setBusinessName(formData?.businessName)
     }, [formData])
     const handleLogoChange = (event) => {
-      const file = event.target.files[0]
-
+      const file = event.target.files[0];
+    
       if (file) {
-        setIsLoading(true)
-        setLogoFile(file)
-
-        const reader = new FileReader()
-
+        setIsLoading(true);
+        setLogoFile(file);
+    
+        const reader = new FileReader();
+    
         reader.onload = function (e) {
-          setLogoPrev(e.target.result)
-          // Save the Base64 string in logo state
-          setIsLoading(false)
-        }
-
+          setLogoPrev(e.target.result);
+          setLogo(e.target.result); // Set logo to Base64 string for preview consistency
+          setIsLoading(false);
+        };
+    
         reader.onerror = function () {
-          console.error('Error reading file:', reader.error)
-          setIsLoading(false)
-        }
-
-        reader.readAsDataURL(file) // Convert file to a Base64 string
+          console.error('Error reading file:', reader.error);
+          setIsLoading(false);
+        };
+    
+        reader.readAsDataURL(file); // Convert file to a Base64 string
       }
-    }
+    };
+    
 
     const imageUpload = () => {
       document.getElementById('ImageLogo').click()
@@ -454,33 +458,52 @@ export default function CreateBusiness() {
 
     // Handle form submission with validation
     const handleBusinessSubmit = async () => {
+      let hasError = false;
+    
+      // Check if Business Name is empty
       if (!businessName) {
-        setError('Business Name is required.')
-        return
+        setError({
+          ...error,
+          name:'Business Name is required.'
+        });
+        hasError = true;
       }
-
-      setError('')
+    
+      // Check if Logo is not uploaded
+      if (!logoFile) {
+        setError({
+          ...error,
+          logo:'Business Logo is required.'
+        });
+        hasError = true;
+      }
+    
+      if (hasError) return;
+    
+      setError('');
       try {
-        setLoading(true)
-        let preReq = null
+        setIsLoading(true);
+        let preReq = null;
+    
         if (logoFile) {
-          preReq = await preRequestFun(logo, 'Landing')
+          preReq = await preRequestFun(logoFile, 'Landing');
         }
-
+    
         setFormData((prevFormData) => ({
           ...prevFormData,
-          businessName: businessName,
+          businessName,
           ...(preReq && {
             logo: preReq.accessLink,
           }),
-        }))
-        handleNextStep()
+        }));
+        handleNextStep();
       } catch (e) {
-        console.error('')
+        console.error('An error occurred during submission', e);
       } finally {
-        setLoading(false)
+        setIsLoading(false);
       }
-    }
+    };
+    
 
     return (
       <div className="business-details-page">
@@ -500,18 +523,18 @@ export default function CreateBusiness() {
                   Details
                 </h2>
 
-                <div className="mb-4">
-                  <label htmlFor="businessName" className="form-label">
-                    Business Name
-                  </label>
-                  <input
-                    type="text"
+                <div className="input-group mb-4 mt-2 w-100">
+                  <TextField
+                    fullWidth
+                    label="Business Name"
                     id="businessName"
-                    placeholder="Enter Business Name"
+                    variant="filled"
                     name="businessName"
+                    autoComplete="businessName"
                     value={businessName}
                     onChange={(e) => setBusinessName(e.target.value)}
-                    className="form-control form-control-lg"
+                    error={!!error?.name}
+                    helperText={error?.name}
                   />
                 </div>
 
@@ -555,7 +578,7 @@ export default function CreateBusiness() {
                   </div>
                 </div>
 
-                {error && <div className="text-danger mb-4">{error}</div>}
+                {error?.logo && <div className="text-danger mb-4">{error?.logo}</div>}
 
                 <button
                   className="btn btn-primary w-100 text-white p-2"
@@ -648,7 +671,6 @@ export default function CreateBusiness() {
   }
 
   function ContactDetails({ formData }) {
-
     const [newFormData, setNewFormData] = useState({
       contactDetails: {
         name: '',
@@ -701,11 +723,17 @@ export default function CreateBusiness() {
       const newErrors = {}
       if (!newFormData.contactDetails.primaryNumber)
         newErrors.primaryNumber = 'Primary number is required.'
+      if (!newFormData.contactDetails.whatsappNumber)
+        newErrors.whatsappNumber = 'WhatsApp number is required.'
       if (!newFormData.contactDetails.email)
         newErrors.email = 'Email is required.'
       if (!address.buildingName)
         newErrors.buildingName = 'Building name is required.'
       if (!address.state) newErrors.state = 'State is required'
+      if (!address.city) newErrors.city = 'City is required'
+      if (!address?.streetName)
+        newErrors.streetName = 'Street / Colony name is required'
+      if (!address?.pinCode) newErrors.pinCode = 'Pincode is required'
 
       setErrors(newErrors)
       return Object.keys(newErrors).length === 0
@@ -719,8 +747,6 @@ export default function CreateBusiness() {
           address: address,
           location: location,
         }))
-        console.log(formData, 'form-data-form-data')
-
         handleNextStep()
       }
     }
@@ -743,8 +769,8 @@ export default function CreateBusiness() {
 
     return (
       <div className="h-100vh create-business-div">
-        <div className="row h-100">
-          <div className="col-12 col-md-5 row align-items-center right-portion p-5">
+        <div className="row px-4 h-100">
+          <div className="col-12 col-md-6 row align-items-center right-portion p-5">
             <div className="col-12 text-start">
               <button
                 className="btn btn-dark w-auto float-start"
@@ -760,167 +786,202 @@ export default function CreateBusiness() {
               </h1>
             </div>
             <div className="col-12 p-5 p-sm-0 mt-3">
-              <input
-                type="text"
-                name="buildingName"
-                value={address.buildingName}
-                placeholder="Building name"
-                onChange={handleAddressChange}
-                className="form-control form-control-lg"
-              />
-              {errors.name && <div className="text-danger">{errors.name}</div>}
-
-              {/* Other input fields */}
-              <input
-                type="text"
-                placeholder="City"
-                name="city"
-                value={address.city}
-                onChange={handleAddressChange}
-                className="form-control form-control-lg mt-3"
-              />
-              <input
-                type="text"
-                placeholder="Street / Colony name"
-                name="streetName"
-                value={address.streetName}
-                onChange={handleAddressChange}
-                className="form-control form-control-lg mt-3"
-              />
-              <input
-                type="text"
-                placeholder="Landmark"
-                name="landMark"
-                value={address.landMark}
-                onChange={handleAddressChange}
-                className="form-control form-control-lg mt-3"
-              />
-              <div className="row">
-                <div className="col-12 col-md-6 mt-3">
-                  <input
-                    type="text"
-                    className="form-control form-control-lg w-100"
-                    name="state"
-                    value={address.state}
-                    onChange={handleAddressChange}
-                    placeholder="State"
-                  />
-                </div>
-                <div className="col-12 col-md-6 mt-3">
-                  <input
-                    type="number"
-                    className="form-control form-control-lg w-100"
-                    name="pinCode"
-                    value={address.pinCode}
-                    onChange={handleAddressChange}
-                    placeholder="Pincode"
-                  />
-                </div>
-              </div>
-              <div className="row">
-                <div className="col-12 mt-3">
-                  <input
-                    type="text"
-                    className="form-control form-control-lg w-100"
-                    name="lon"
-                    value={location.lon}
-                    onChange={handleLocationChange}
-                    placeholder="Location"
-                  />
-                </div>
+              {/* Building Name */}
+              <div className="input-group mt-2 w-100">
+                <TextField
+                  fullWidth
+                  label="Building name"
+                  id="buildingName"
+                  variant="filled"
+                  name="buildingName"
+                  autoComplete="buildingName"
+                  value={address.buildingName}
+                  onChange={handleAddressChange}
+                  error={!!errors?.buildingName}
+                  helperText={errors?.buildingName}
+                />
               </div>
 
+              {/* City */}
+              <div className="input-group mt-2 w-100">
+                <TextField
+                  fullWidth
+                  label="City"
+                  variant="filled"
+                  name="city"
+                  value={address.city}
+                  onChange={handleAddressChange}
+                  error={!!errors?.city}
+                  helperText={errors?.city}
+                />
+              </div>
+
+              {/* Street Name */}
+              <div className="input-group mt-2 w-100">
+                <TextField
+                  fullWidth
+                  label="Street / Colony name"
+                  variant="filled"
+                  name="streetName"
+                  value={address.streetName}
+                  onChange={handleAddressChange}
+                  error={!!errors?.streetName}
+                  helperText={errors?.streetName}
+                />
+              </div>
+
+              {/* Landmark */}
+              <div className="input-group mt-2 w-100">
+                <TextField
+                  fullWidth
+                  label="Landmark"
+                  variant="filled"
+                  name="landMark"
+                  value={address.landMark}
+                  onChange={handleAddressChange}
+                />
+              </div>
+
+              {/* State and Pincode in the same row */}
+              <div className="row">
+                <div className="col-12 col-md-6 mt-3">
+                  <div className="input-group mt-2 w-100">
+                    <TextField
+                      fullWidth
+                      label="State"
+                      variant="filled"
+                      name="state"
+                      value={address.state}
+                      onChange={handleAddressChange}
+                      error={!!errors?.state}
+                      helperText={errors?.state}
+                    />
+                  </div>
+                </div>
+                <div className="col-12 col-md-6 mt-3">
+                  <div className="input-group mt-2 w-100">
+                    <TextField
+                      fullWidth
+                      label="Pincode"
+                      variant="filled"
+                      type="number"
+                      name="pinCode"
+                      value={address.pinCode}
+                      onChange={handleAddressChange}
+                      error={!!errors?.pinCode}
+                      helperText={errors?.pinCode}
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Location */}
+              <div className="input-group mt-2 w-100">
+                <TextField
+                  fullWidth
+                  label="Location"
+                  variant="filled"
+                  name="lon"
+                  value={location.lon}
+                  onChange={handleLocationChange}
+                />
+              </div>
+
+              {/* Contact Numbers */}
               <div id="mobileNumberDiv" className="mt-4">
                 <div className="row mt-3">
                   <div className="col-12 mt-2 mt-sm-0">
-                    <label className="form-label">Primary Number</label>
-                    <input
-                      type="text"
-                      name="primaryNumber"
-                      value={newFormData.contactDetails.primaryNumber}
-                      onChange={handleContactChange}
-                      className="form-control form-control-lg w-100"
-                      placeholder="Primary Phone Number"
-                    />
-                    {errors.primaryNumber && (
-                      <div className="text-danger">{errors.primaryNumber}</div>
-                    )}
+                    <div className="input-group mt-2 w-100">
+                      <TextField
+                        fullWidth
+                        label="Primary number"
+                        variant="filled"
+                        name="primaryNumber"
+                        value={newFormData.contactDetails.primaryNumber}
+                        onChange={handleContactChange}
+                        error={!!errors.primaryNumber}
+                        helperText={errors.primaryNumber}
+                      />
+                    </div>
                   </div>
                 </div>
 
                 <div className="row mt-3">
                   <div className="col-12 mt-2 mt-sm-0">
-                    <label className="form-label">Secondary Number</label>
-                    <input
-                      type="text"
-                      name="secondaryNumber"
-                      value={newFormData.contactDetails.secondaryNumber}
-                      onChange={handleContactChange}
-                      className="form-control form-control-lg w-100"
-                      placeholder="Secondary Phone Number"
-                    />
-                    {errors.secondaryNumber && (
-                      <div className="text-danger">
-                        {errors.secondaryNumber}
-                      </div>
-                    )}
+                    <div className="input-group mt-2 w-100">
+                      <TextField
+                        fullWidth
+                        label="Alternative number"
+                        variant="filled"
+                        name="secondaryNumber"
+                        value={newFormData.contactDetails.secondaryNumber}
+                        onChange={handleContactChange}
+                        error={!!errors.secondaryNumber}
+                        helperText={errors.secondaryNumber}
+                      />
+                    </div>
                   </div>
                 </div>
 
                 <div className="row mt-3">
                   <div className="col-12 mt-2 mt-sm-0">
-                    <label className="form-label">WhatsApp Number</label>
-                    <input
-                      type="text"
-                      name="whatsappNumber"
-                      value={newFormData.contactDetails?.whatsappNumber}
-                      onChange={handleContactChange}
-                      className="form-control form-control-lg w-100"
-                      placeholder="WhatsApp Number"
-                    />
-                    {errors?.whatsappNumber && (
-                      <div className="text-danger">{errors?.whatsappNumber}</div>
-                    )}
+                    <div className="input-group mt-2 w-100">
+                      <TextField
+                        fullWidth
+                        label="WhatsApp number"
+                        variant="filled"
+                        name="whatsappNumber"
+                        value={newFormData.contactDetails.whatsappNumber}
+                        onChange={handleContactChange}
+                        error={!!errors.whatsappNumber}
+                        helperText={errors.whatsappNumber}
+                      />
+                    </div>
                   </div>
                 </div>
               </div>
 
               <hr />
+              {/* Email Address */}
               <div id="emailDiv" className="mt-4">
                 <div className="row mt-3">
                   <div className="col-12">
-                    <input
-                      type="email"
-                      name="email"
-                      value={newFormData.contactDetails?.email}
-                      onChange={handleContactChange}
-                      className="form-control form-control-lg"
-                      placeholder="Email address"
-                    />
+                    <div className="input-group mt-2 w-100">
+                      <TextField
+                        fullWidth
+                        label="Email address"
+                        variant="filled"
+                        name="email"
+                        value={newFormData.contactDetails.email}
+                        onChange={handleContactChange}
+                        error={!!errors.email}
+                        helperText={errors.email}
+                      />
+                    </div>
                   </div>
-                  {errors?.email && (
-                    <div className="text-danger">{errors?.email}</div>
-                  )}
                 </div>
               </div>
 
+              {/* Website Link */}
               <div className="mt-4">
-                <input
-                  type="text"
-                  name="website"
-                  value={newFormData?.contactDetails?.website}
-                  placeholder="Website link"
-                  onChange={handleContactChange}
-                  className="form-control form-control-lg"
-                />
-                {errors.website && (
-                  <div className="text-danger">{errors?.website}</div>
-                )}
+                <div className="input-group mt-2 w-100">
+                  <TextField
+                    fullWidth
+                    label="Website link"
+                    variant="filled"
+                    name="website"
+                    value={newFormData.contactDetails.website}
+                    onChange={handleContactChange}
+                    error={!!errors.website}
+                    helperText={errors.website}
+                  />
+                </div>
               </div>
             </div>
+
             <div className="col-12 mt-3 text-end">
               <button
-                className="btn btn-primary btn-lg w-100 "
+                className="btn btn-primary btn-lg w-100"
                 onClick={contactSubmitHandler}
               >
                 Save & Continue
@@ -928,7 +989,7 @@ export default function CreateBusiness() {
             </div>
           </div>
 
-          <div className="left-portion p-3 col-12 col-lg-7 row align-items-center">
+          <div className="left-portion p-3 col-12 col-lg-6 row align-items-center">
             <link rel="preconnect" href="https://fonts.googleapis.com" />
             <link
               rel="preconnect"
@@ -999,9 +1060,9 @@ export default function CreateBusiness() {
                           <div className="col">
                             <span className="fs-13">Address</span>
                             <p className="fs-16">
-                              {address?.buildingName}, {address?.city},
-                              {address?.landMark},{address?.streetName},{' '}
-                              {address?.state},{address?.pinCode}
+                              {address.buildingName},{address.city},
+                              {address.landMark},{address.streetName},{' '}
+                              {address.state},{address.pinCode}
                             </p>
                           </div>
                         </div>
@@ -1015,7 +1076,7 @@ export default function CreateBusiness() {
                           <div className="col">
                             <span className="fs-13">Send Email</span>
                             <p className="fs-16">
-                              {newFormData?.contactDetails?.email}
+                              {newFormData.contactDetails.email}
                             </p>
                           </div>
                         </div>
@@ -1108,7 +1169,7 @@ export default function CreateBusiness() {
                       <TextField
                         {...params}
                         label="Categories"
-                        variant="outlined"
+                        variant="filled"
                       />
                     )}
                     onChange={handleCategoryChange}
@@ -3364,19 +3425,22 @@ export default function CreateBusiness() {
             </div>
             <div className="row justify-content-center">
               <div className="col-12 text-center text-md-start mt-3">
-                <h1 className="fw-bold">Add Product Details</h1>
+                <h1 className="fw-bold title-text">
+                  <span className="title-main">Add </span>
+                  <span className="title-highlight">Product Details</span>
+                </h1>
               </div>
 
               <div className="col-12">
                 <div className="col-12 text-center">
-                  <u>
-                    <h5 className="fs-18 mb-4 p-1 text-center text-md-start text-dark fw-bold mt-3">
-                      Add Products
-                    </h5>
-                  </u>
+                  <h5 className="fs-18 mb-4 p-1 text-center text-md-start text-dark fw-bold mt-3">
+                    Add Products
+                  </h5>
                 </div>
                 {productSection.map((item, index) => (
-                  <div key={index} className="row align-items-center">
+                  <div key={index} className="row align-items-start">
+                    <label className="form-label">Product Title</label>
+
                     <input
                       type="text"
                       name="title"
@@ -3390,6 +3454,8 @@ export default function CreateBusiness() {
                       }}
                       required
                     />
+                    <label className="form-label">Description</label>
+
                     <textarea
                       name="description"
                       className="form-control form-control-lg mb-3"
@@ -3431,6 +3497,8 @@ export default function CreateBusiness() {
                         </div>
                       </div>
                     </div>
+                    <label className="form-label">Price</label>
+
                     <input
                       type="number"
                       name="price"
@@ -3459,7 +3527,7 @@ export default function CreateBusiness() {
                       },
                     ])
                   }
-                  className="text-decoration-none btn btn-success w-100"
+                  className="text-decoration-none btn btn-primary w-100"
                 >
                   + Add More Product
                 </a>
@@ -3469,7 +3537,7 @@ export default function CreateBusiness() {
 
             <div className="col-12 mt-4 text-center">
               <button
-                className="btn btn-success w-100 text-center"
+                className="btn btn-primary w-100 text-center"
                 onClick={handleProductSubmit}
               >
                 Save & Next
@@ -3659,7 +3727,10 @@ export default function CreateBusiness() {
             </div>
             <div className="row justify-content-center">
               <div className="col-12 text-center text-md-start mt-4">
-                <h1 className="fw-bold">Add SEO</h1>
+                <h1 className="fw-bold title-text">
+                  <span className="title-main">Add </span>
+                  <span className="title-highlight">SEO Details</span>
+                </h1>
               </div>
 
               {/* Form Fields */}
@@ -3706,7 +3777,7 @@ export default function CreateBusiness() {
                         </button>
                       ) : (
                         <button
-                          className="btn btn-success"
+                          className="btn btn-primary"
                           type="button"
                           onClick={addTag}
                         >
@@ -3738,7 +3809,7 @@ export default function CreateBusiness() {
             {/* Save & Next Button */}
             <div className="col-12 text-center p-3 p-md-5">
               <button
-                className="btn btn-success w-100 text-white p-2"
+                className="btn btn-primary w-100 text-white p-2"
                 onClick={handleSeoSubmit}
               >
                 Save & Next
@@ -3944,7 +4015,7 @@ export default function CreateBusiness() {
                 </div>
                 <div className="col-12 mb-3 text-center">
                   <button
-                    className="btn w-100 btn btn-success"
+                    className="btn w-100 btn btn-primary"
                     onClick={addImageInput}
                   >
                     + Add another image
@@ -3961,7 +4032,7 @@ export default function CreateBusiness() {
                 </div>
               ) : (
                 <button
-                  className="btn btn-success w-100 text-white p-2"
+                  className="btn btn-primary w-100 text-white p-2"
                   onClick={handleGallerySubmit}
                 >
                   Save & Next
@@ -4215,7 +4286,7 @@ export default function CreateBusiness() {
 
             <div className="col-12 text-center p-3 p-md-5">
               <button
-                className="btn btn-success w-100 text-white p-2"
+                className="btn btn-primary w-100 text-white p-2"
                 onClick={handleGallerySubmit}
               >
                 Save & Next
