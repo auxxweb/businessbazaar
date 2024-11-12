@@ -2184,9 +2184,10 @@ export default function CreateBusiness() {
 
             <div className="row justify-content-center">
               <div className="col-12 text-center text-md-start mt-5">
-                <h1 className="fw-bold">
-                  Add Details <br /> About Landing Page
-                </h1>
+              <h1 className="fw-bold title-text">
+                <span className="title-main">Add</span> <br />
+                <span className="title-highlight">Landing Page Details</span>
+              </h1>
               </div>
 
               {/* Color Theme Section */}
@@ -2207,7 +2208,7 @@ export default function CreateBusiness() {
                   </div>
 
                   <div>
-                    <label>Choose Secondary Color :</label>
+                    <label>Choose Secondary Color</label>
                     <input
                       type="color"
                       name="color"
@@ -2222,7 +2223,7 @@ export default function CreateBusiness() {
                 <h5 className="fs-18 mb-2 text-dark fw-bold mt-3">
                   Add Landing Page Banner
                 </h5>
-                <label>Title :</label>
+                <label>Title</label>
                 <input
                   type="text"
                   name="title"
@@ -2237,7 +2238,7 @@ export default function CreateBusiness() {
                   </div>
                 )}
 
-                <label>Description :</label>
+                <label>Description</label>
                 <textarea
                   name="description"
                   className="form-control form-control-lg mb-3"
@@ -2296,7 +2297,7 @@ export default function CreateBusiness() {
                 <h5 className="fs-18 mb-2 text-dark fw-bold mt-3">
                   Add Welcome Part
                 </h5>
-                <label>Title :</label>
+                <label>Title</label>
                 <input
                   type="text"
                   name="title"
@@ -2309,7 +2310,7 @@ export default function CreateBusiness() {
                   <div className="text-danger">{errors.welcomePartTitle}</div>
                 )}
 
-                <label>Description :</label>
+                <label>Description</label>
                 <textarea
                   name="description"
                   className="form-control form-control-lg mb-3"
@@ -2362,7 +2363,7 @@ export default function CreateBusiness() {
 
                 <div className="col-12 mt-4 text-center">
                   <button
-                    className="btn btn-success w-100"
+                    className="btn btn-primary w-100"
                     onClick={handleLandingSubmit}
                   >
                     Save & Next
