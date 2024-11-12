@@ -1124,141 +1124,132 @@ export default function CreateBusiness() {
       </div>
     )
   }
-
   function ServicesOffering() {
-    const [inputService, setInputService] = useState('')
-    const [error, setError] = useState('') // State for error message
-
+    const [inputService, setInputService] = useState('');
+    const [error, setError] = useState('');
+  
     // Add service to formData.services
     const addService = (e) => {
-      e.preventDefault()
+      e.preventDefault();
       if (inputService.trim() !== '') {
         setFormData((prevFormData) => ({
           ...prevFormData,
           services: [...prevFormData.services, inputService],
-        }))
-        setInputService('') // Clear input field
+        }));
+        setInputService(''); // Clear input field
       }
-    }
-
+    };
+  
     // Delete service from formData.services
     const deleteService = (indexToDelete) => {
       setFormData((prevFormData) => ({
         ...prevFormData,
         services: prevFormData.services.filter(
-          (_, index) => index !== indexToDelete,
+          (_, index) => index !== indexToDelete
         ),
-      }))
-    }
-
+      }));
+    };
+  
     // Handle next step with validation
     const handleNextWithValidation = () => {
       if (formData.services.length < 2) {
-        setError('Please add at least 2 services before proceeding.')
+        setError('Please add at least 2 services before proceeding.');
       } else {
-        setError('')
-        handleNextStep()
+        setError('');
+        handleNextStep();
       }
-    }
-
+    };
+  
     return (
-      <>
-        <div className="h-100vh create-business-div">
-          <div className="row h-100 justify-content-center">
-            <div className="col-12 col-md-5 row align-items-end justify-content-center h-100 p-3 p-md-5 right-portion">
-              <div className="col-12 text-start">
+      <div className="h-100vh create-business-div">
+        <div className="container-fluid h-100">
+          <div className="row h-100 justify-content-center align-items-center">
+            {/* Right portion with service input and list */}
+            <div className="col-12 col-md-6 p-4 d-flex flex-column justify-content-start">
+              {/* Back Button */}
+              <button
+                className="btn btn-dark"
+                style={{ position: 'absolute', top: '20px', left: '20px' }}
+                onClick={handlePrevStep}
+              >
+                <i className="bi bi-arrow-left"></i>
+              </button>
+  
+              {/* Title */}
+              <div className="mt-4 pt-4">
+              <h1 className="fw-bold title-text">
+                <span className="title-main">Add</span> <br />
+                <span className="title-highlight">Service and Offerings</span>
+              </h1>
+              </div>
+  
+              {/* Input for adding services */}
+              <div className="input-group mt-4">
+                <span className="input-group-text bg-white">
+                  <i className="bi bi-bag-plus"></i>
+                </span>
+                <input
+                  type="text"
+                  className="form-control"
+                  onChange={(e) => setInputService(e.target.value)}
+                  value={inputService}
+                  placeholder="Add Service and Offering"
+                />
                 <button
-                  className="btn btn-dark w-auto float-start"
-                  onClick={handlePrevStep}
+                  className="btn btn-primary"
+                  onClick={addService}
+                  disabled={inputService.trim() === ''}
                 >
-                  <i className="bi bi-arrow-left"></i>
+                  Add
                 </button>
               </div>
-              <div className="row justify-content-center mt-2">
-                <div className="col-12 text-center text-md-start">
-                  <h1 className="fw-bold">
-                    Add <br /> Service and Offering
-                  </h1>
-                </div>
-                <div className="col-12 mt-4 mt-md-5">
-                  <div className="input-group">
-                    <div className="col-1 brl-none br-none d-flex align-items-center justify-content-center">
+  
+              {/* List of added services */}
+              <div className="services-container mt-4">
+                <div className="row gap-2 justify-content-center">
+                  {formData.services.map((service, index) => (
+                    <div
+                      key={index}
+                      className="service-item d-flex align-items-center p-2"
+                    >
+                      <span className="service-text">{service}</span>
                       <span
-                        className="input-group-text bg-white br-0"
-                        style={{ padding: '11px' }}
+                        className="ms-2 cursor-pointer"
+                        onClick={() => deleteService(index)}
                       >
-                        <i className="bi bi-bag-plus"></i>
+                        <i className="bi bi-x text-danger"></i>
                       </span>
                     </div>
-                    <div className="col-8 col-md-9 bl-none br-0">
-                      <input
-                        type="text"
-                        className="form-control form-control-lg w-100 bl-none br-0"
-                        onChange={(e) => setInputService(e.target.value)}
-                        value={inputService}
-                        placeholder="Add Service and Offering"
-                      />
-                    </div>
-                    <div className="col-3 col-md-2">
-                      <button
-                        className="btn w-100 btn-success brl-none br-0"
-                        style={{ padding: '11px' }}
-                        onClick={addService}
-                        disabled={inputService.trim() === ''}
-                      >
-                        Add
-                      </button>
-                    </div>
-                  </div>
-
-                  <div className="col-12 mt-4">
-                    <div className="row gap-2 justify-content-center">
-                      {formData.services.map((service, index) => (
-                        <div
-                          key={index}
-                          className="mt-2 text-center services-list p-2"
-                        >
-                          {service}
-                          <span
-                            className="ms-2 cursor-pointer"
-                            onClick={() => deleteService(index)}
-                          >
-                            <i className="bi bi-x text-white"></i>{' '}
-                            {/* Delete icon */}
-                          </span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-
-                  {error && (
-                    <p className="text-danger text-danger mt-3">{error}</p>
-                  )}
+                  ))}
                 </div>
               </div>
-              <div className="col-12 text-center mt-5 p-3 p-md-5">
+  
+              {/* Error message */}
+              {error && <p className="text-danger text-center">{error}</p>}
+  
+              {/* Save & Next Button */}
+              <div className="text-center mt-4">
                 <button
-                  className="btn btn-success w-100 text-white p-2"
+                  className="btn btn-primary w-100"
                   onClick={handleNextWithValidation}
                 >
                   Save & Next
                 </button>
               </div>
             </div>
-
-            <div className="left-portion col-12 col-lg-6 h-100 p-3 row align-items-center">
-              <div
-                className="p-3"
-                style={{ border: '1px dashed black', borderRadius: '16px' }}
-              >
-                <p className="text-center">Add Offering Services Here.</p>
+  
+            {/* Left portion with instructions */}
+            <div className="col-12 col-md-6 p-4 d-flex justify-content-center align-items-center">
+              <div className="instruction-box p-3 border border-dashed rounded text-center">
+                <p className="mb-0">Add Offering Services Here.</p>
               </div>
             </div>
           </div>
         </div>
-      </>
-    )
+      </div>
+    );
   }
+  
 
   function BusinessTiming() {
     const [days, setDays] = useState([])
@@ -1329,9 +1320,10 @@ export default function CreateBusiness() {
               </div>
               <div className="row  justify-content-center">
                 <div className="col-12 text-center text-md-start mt-5">
-                  <h1 className="fw-bold">
-                    Add <br /> Business Timing
-                  </h1>
+                <h1 className="fw-bold title-text">
+                <span className="title-main">Add</span> <br />
+                <span className="title-highlight">Business Timing</span>
+              </h1>
                 </div>
 
                 {/* Working Days Selection */}
@@ -1349,8 +1341,8 @@ export default function CreateBusiness() {
                           width: '60px',
                           borderRadius: '8px',
                           background: days.includes(day)
-                            ? '#5cb85c'
-                            : '#f0f0f0',
+                            ? '#105193'
+                            : '#d4e0ec',
                         }}
                         onClick={() => toggleDay(day)}
                       >
@@ -1407,7 +1399,7 @@ export default function CreateBusiness() {
               {/* Save & Next Button */}
               <div className="col-12 text-center p-3 p-md-5">
                 <button
-                  className="btn btn-success w-100 text-white p-2"
+                  className="btn btn-primary w-100 text-white p-2"
                   onClick={handleSubmit}
                 >
                   Save & Next
@@ -1674,13 +1666,15 @@ export default function CreateBusiness() {
               </div>
               <div className="row  justify-content-center">
                 <div className="col-12 text-center text-md-start">
-                  <h1 className="fw-bold">
-                    Add <br /> Business Description
-                  </h1>
+                <h1 className="fw-bold title-text">
+                <span className="title-main">Add</span> <br />
+                <span className="title-highlight">Business Description</span>
+              </h1>
                 </div>
 
                 {/* Text Editor Section */}
                 <div className="col-12  p-3 p-md-5">
+                <label>Business Description</label>
                   <textarea
                     name="description_main"
                     className="w-100 form-control form-control-lg"
@@ -1690,7 +1684,7 @@ export default function CreateBusiness() {
                     }}
                     id=""
                     value={description}
-                    placeholder="Business Description"
+                    placeholder="Business description"
                   >
                     {description}
                   </textarea>
@@ -1700,7 +1694,7 @@ export default function CreateBusiness() {
               {/* Save & Next Button */}
               <div className="col-12 text-center p-3 ">
                 <button
-                  className="btn btn-success w-100 text-white p-2"
+                  className="btn btn-primary w-100 text-white p-2"
                   onClick={handleDescSubmit}
                 >
                   Save & Next
@@ -2077,7 +2071,7 @@ export default function CreateBusiness() {
                 </h5>
                 <div className="col-6 col-md-3 d-flex w-100 gap-5">
                   <div>
-                    <label>Choose Primary Color :</label>
+                    <label>Choose Primary Color</label>
                     <input
                       type="color"
                       name="color"
