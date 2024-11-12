@@ -1791,13 +1791,15 @@ export default function CreateBusiness() {
               </div>
               <div className="row  justify-content-center">
                 <div className="col-12 text-center text-md-start">
-                  <h1 className="fw-bold">
-                    Add <br /> Business Description
-                  </h1>
+                <h1 className="fw-bold title-text">
+                <span className="title-main">Add</span> <br />
+                <span className="title-highlight">Business Description</span>
+              </h1>
                 </div>
 
                 {/* Text Editor Section */}
                 <div className="col-12  p-3 p-md-5">
+                <label>Business Description</label>
                   <textarea
                     name="description_main"
                     className="w-100 form-control form-control-lg"
@@ -1807,7 +1809,7 @@ export default function CreateBusiness() {
                     }}
                     id=""
                     value={description}
-                    placeholder="Business Description"
+                    placeholder="Business description"
                   >
                     {description}
                   </textarea>
@@ -1817,7 +1819,7 @@ export default function CreateBusiness() {
               {/* Save & Next Button */}
               <div className="col-12 text-center p-3 ">
                 <button
-                  className="btn btn-success w-100 text-white p-2"
+                  className="btn btn-primary w-100 text-white p-2"
                   onClick={handleDescSubmit}
                 >
                   Save & Next
@@ -2194,7 +2196,7 @@ export default function CreateBusiness() {
                 </h5>
                 <div className="col-6 col-md-3 d-flex w-100 gap-5">
                   <div>
-                    <label>Choose Primary Color :</label>
+                    <label>Choose Primary Color</label>
                     <input
                       type="color"
                       name="color"
