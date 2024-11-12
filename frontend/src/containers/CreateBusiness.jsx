@@ -3329,19 +3329,22 @@ export default function CreateBusiness() {
             </div>
             <div className="row justify-content-center">
               <div className="col-12 text-center text-md-start mt-3">
-                <h1 className="fw-bold">Add Product Details</h1>
+              <h1 className="fw-bold title-text">
+                <span className="title-main">Add </span> 
+                <span className="title-highlight">Product Details</span>
+              </h1>
               </div>
 
               <div className="col-12">
                 <div className="col-12 text-center">
-                  <u>
                     <h5 className="fs-18 mb-4 p-1 text-center text-md-start text-dark fw-bold mt-3">
                       Add Products
                     </h5>
-                  </u>
                 </div>
                 {productSection.map((item, index) => (
-                  <div key={index} className="row align-items-center">
+                  <div key={index} className="row align-items-start">
+                                      <label className="form-label">Product Title</label>
+
                     <input
                       type="text"
                       name="title"
@@ -3355,6 +3358,8 @@ export default function CreateBusiness() {
                       }}
                       required
                     />
+                                      <label className="form-label">Description</label>
+
                     <textarea
                       name="description"
                       className="form-control form-control-lg mb-3"
@@ -3396,6 +3401,8 @@ export default function CreateBusiness() {
                         </div>
                       </div>
                     </div>
+                    <label className="form-label">Price</label>
+
                     <input
                       type="number"
                       name="price"
@@ -3424,7 +3431,7 @@ export default function CreateBusiness() {
                       },
                     ])
                   }
-                  className="text-decoration-none btn btn-success w-100"
+                  className="text-decoration-none btn btn-primary w-100"
                 >
                   + Add More Product
                 </a>
@@ -3434,7 +3441,7 @@ export default function CreateBusiness() {
 
             <div className="col-12 mt-4 text-center">
               <button
-                className="btn btn-success w-100 text-center"
+                className="btn btn-primary w-100 text-center"
                 onClick={handleProductSubmit}
               >
                 Save & Next
