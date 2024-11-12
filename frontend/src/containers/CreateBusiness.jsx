@@ -72,7 +72,14 @@ export default function CreateBusiness() {
       lat: '',
       lon: '',
     },
-    contactDetails: {},
+    contactDetails: {
+      name: '',
+      primaryNumber: '',
+      secondaryNumber: '',
+      whatsappNumber: '',
+      email: '',
+      website: '',
+    },
     socialMediaLinks: [
       { tag: 'facebook', link: '' },
       { tag: 'instagram', link: '' },
@@ -641,7 +648,6 @@ export default function CreateBusiness() {
   }
 
   function ContactDetails({ formData }) {
-    console.log(formData, 'formData-----')
 
     const [newFormData, setNewFormData] = useState({
       contactDetails: {
@@ -693,17 +699,10 @@ export default function CreateBusiness() {
 
     const validateForm = () => {
       const newErrors = {}
-      if (!newFormData.contactDetails.name) newErrors.name = 'Name is required.'
       if (!newFormData.contactDetails.primaryNumber)
         newErrors.primaryNumber = 'Primary number is required.'
-      if (!newFormData.contactDetails.secondaryNumber)
-        newErrors.secondaryNumber = 'Secondary number is required.'
-      if (!newFormData.contactDetails.whatsappNumber)
-        newErrors.whatsappNumber = 'WhatsApp number is required.'
       if (!newFormData.contactDetails.email)
         newErrors.email = 'Email is required.'
-      if (!newFormData.contactDetails.website)
-        newErrors.website = 'Website is required.'
       if (!address.buildingName)
         newErrors.buildingName = 'Building name is required.'
       if (!address.state) newErrors.state = 'State is required'
@@ -720,6 +719,8 @@ export default function CreateBusiness() {
           address: address,
           location: location,
         }))
+        console.log(formData, 'form-data-form-data')
+
         handleNextStep()
       }
     }
@@ -761,9 +762,10 @@ export default function CreateBusiness() {
             <div className="col-12 p-5 p-sm-0 mt-3">
               <input
                 type="text"
-                name="name"
-                placeholder="Name"
-                onChange={handleContactChange}
+                name="buildingName"
+                value={address.buildingName}
+                placeholder="Building name"
+                onChange={handleAddressChange}
                 className="form-control form-control-lg"
               />
               {errors.name && <div className="text-danger">{errors.name}</div>}
@@ -771,9 +773,9 @@ export default function CreateBusiness() {
               {/* Other input fields */}
               <input
                 type="text"
-                placeholder="Building name"
-                name="buildingName"
-                value={address.buildingName}
+                placeholder="City"
+                name="city"
+                value={address.city}
                 onChange={handleAddressChange}
                 className="form-control form-control-lg mt-3"
               />
@@ -871,13 +873,13 @@ export default function CreateBusiness() {
                     <input
                       type="text"
                       name="whatsappNumber"
-                      value={newFormData.contactDetails.whatsappNumber}
+                      value={newFormData.contactDetails?.whatsappNumber}
                       onChange={handleContactChange}
                       className="form-control form-control-lg w-100"
                       placeholder="WhatsApp Number"
                     />
-                    {errors.whatsappNumber && (
-                      <div className="text-danger">{errors.whatsappNumber}</div>
+                    {errors?.whatsappNumber && (
+                      <div className="text-danger">{errors?.whatsappNumber}</div>
                     )}
                   </div>
                 </div>
@@ -890,14 +892,14 @@ export default function CreateBusiness() {
                     <input
                       type="email"
                       name="email"
-                      value={newFormData.contactDetails.email}
+                      value={newFormData.contactDetails?.email}
                       onChange={handleContactChange}
                       className="form-control form-control-lg"
                       placeholder="Email address"
                     />
                   </div>
-                  {errors.email && (
-                    <div className="text-danger">{errors.email}</div>
+                  {errors?.email && (
+                    <div className="text-danger">{errors?.email}</div>
                   )}
                 </div>
               </div>
@@ -906,12 +908,13 @@ export default function CreateBusiness() {
                 <input
                   type="text"
                   name="website"
+                  value={newFormData?.contactDetails?.website}
                   placeholder="Website link"
                   onChange={handleContactChange}
                   className="form-control form-control-lg"
                 />
                 {errors.website && (
-                  <div className="text-danger">{errors.website}</div>
+                  <div className="text-danger">{errors?.website}</div>
                 )}
               </div>
             </div>
@@ -996,9 +999,9 @@ export default function CreateBusiness() {
                           <div className="col">
                             <span className="fs-13">Address</span>
                             <p className="fs-16">
-                              {address.buildingName}, {address.city},
-                              {address.landMark},{address.streetName},{' '}
-                              {address.state},{address.pinCode}
+                              {address?.buildingName}, {address?.city},
+                              {address?.landMark},{address?.streetName},{' '}
+                              {address?.state},{address?.pinCode}
                             </p>
                           </div>
                         </div>
@@ -1012,7 +1015,7 @@ export default function CreateBusiness() {
                           <div className="col">
                             <span className="fs-13">Send Email</span>
                             <p className="fs-16">
-                              {newFormData.contactDetails.email}
+                              {newFormData?.contactDetails?.email}
                             </p>
                           </div>
                         </div>
@@ -1053,7 +1056,6 @@ export default function CreateBusiness() {
         category: value ? value._id : '',
       })
     }
-    console.log(formData)
 
     return (
       <div className="h-100vh create-business-div">
