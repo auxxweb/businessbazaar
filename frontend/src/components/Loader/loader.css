@@ -1,9 +1,9 @@
 :root {
   /* Colors */
-  --color-1: #0ab5be;
-  --color-3: #000000;
-  --color-2: #0ab5be;
-  --color-4: #000000;
+  --color-3: #107D93;
+  --color-1: #105193;
+  --color-2: #107D93;
+  --color-4: #105193;
 
   /* Sizes and Animation Durations */
   --ball-size: 20px;

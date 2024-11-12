@@ -1,14 +1,14 @@
-import React, { useEffect, useState } from 'react'
-import Layout from '../components/Layout'
-import { Carousel } from 'react-bootstrap' // Import Carousel component
-import 'bootstrap-icons/font/bootstrap-icons.css'
-import 'bootstrap/dist/css/bootstrap.min.css'
-import Slider from 'react-slick'
-import 'slick-carousel/slick/slick.css'
-import 'slick-carousel/slick/slick-theme.css'
-import { useNavigate, Link } from 'react-router-dom'
-import { toast } from 'react-toastify'
-import './Home.css'
+import React, { useEffect, useState } from "react";
+import Layout from "../components/Layout";
+import { Carousel } from "react-bootstrap"; // Import Carousel component
+import "bootstrap-icons/font/bootstrap-icons.css";
+import "bootstrap/dist/css/bootstrap.min.css";
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+import { useNavigate, Link } from "react-router-dom";
+import { toast } from "react-toastify";
+import "./Home.css";
 
 import {
   createReveiw,
@@ -16,20 +16,20 @@ import {
   fetchBusiness,
   fetchCategories,
   getAllReviews,
-} from '../Functions/functions'
-import Loader from '../components/Loader/Loader'
-import { InputTextarea } from 'primereact/inputtextarea'
-import { InputText } from 'primereact/inputtext'
-import { Rating } from 'primereact/rating'
-import { Dialog } from 'primereact/dialog'
-import { formatDate } from '../utils/app.utils'
+} from "../Functions/functions";
+import Loader from "../components/Loader/Loader";
+import { InputTextarea } from "primereact/inputtextarea";
+import { InputText } from "primereact/inputtext";
+import { Rating } from "primereact/rating";
+import { Dialog } from "primereact/dialog";
+import { formatDate } from "../utils/app.utils";
 
 export default function Home() {
-  const navigate = useNavigate()
-  const [currentSlide, setCurrentSlide] = useState(0)
+  const navigate = useNavigate();
+  const [currentSlide, setCurrentSlide] = useState(0);
   const settings = {
     centerMode: true,
-    centerPadding: '50px',
+    centerPadding: "50px",
     slidesToShow: 3,
     autoplay: true,
     autoplaySpeed: 3000,
@@ -46,165 +46,165 @@ export default function Home() {
         },
       },
     ],
-  }
-  const [categoryData, setCategoryData] = useState([])
-  const [bannerData, setBannerData] = useState([])
-  const [page, setPage] = useState(1)
-  const [limit, setLimit] = useState(10)
-  const [businessData, setBusinessData] = useState([])
-  const [searchData, setSearchData] = useState('')
-  const [totalBusinessData, setTotalBusinessData] = useState(0)
-  const [loading, setLoading] = useState(true)
-  const [currentPage, setCurrentPage] = useState(1)
-  const [visible, setVisible] = useState(false)
-  const [isReviewed, setIsReviewed] = useState(false)
-  const [reviews, setReviews] = useState([])
+  };
+  const [categoryData, setCategoryData] = useState([]);
+  const [bannerData, setBannerData] = useState([]);
+  const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(10);
+  const [businessData, setBusinessData] = useState([]);
+  const [searchData, setSearchData] = useState("");
+  const [totalBusinessData, setTotalBusinessData] = useState(0);
+  const [loading, setLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [visible, setVisible] = useState(false);
+  const [isReviewed, setIsReviewed] = useState(false);
+  const [reviews, setReviews] = useState([]);
   const [visibleCategories, setVisibleCategories] = useState(20);
   const [visibleBusiness, setVisibleBusiness] = useState(10);
   const [review, setReview] = useState([
     {
-      rating: '',
-      name: '',
-      review: '',
+      rating: "",
+      name: "",
+      review: "",
     },
-  ])
+  ]);
 
   useEffect(() => {
     const fetchReviews = async () => {
       try {
-        const data = await getAllReviews({ page, limit })
+        const data = await getAllReviews({ page, limit });
 
-        setReviews(data?.data?.data)
+        setReviews(data?.data?.data);
       } catch (error) {
         toast.error(
           error?.response?.data?.message ??
-          'An error occurred. Please try again.',
+            "An error occurred. Please try again.",
           {
-            position: 'top-right',
+            position: "top-right",
             autoClose: 3000,
             hideProgressBar: false,
             closeOnClick: true,
             pauseOnHover: true,
             draggable: true,
-            theme: 'colored',
+            theme: "colored",
             style: {
-              backgroundColor: '#e74c3c', // Custom red color for error
-              color: '#FFFFFF', // White text
+              backgroundColor: "#e74c3c", // Custom red color for error
+              color: "#FFFFFF", // White text
             },
-          },
-        )
+          }
+        );
       }
-    }
-    fetchReviews()
-  }, [isReviewed])
+    };
+    fetchReviews();
+  }, [isReviewed]);
 
   const handleReviewSubmit = async () => {
     try {
       if (!review?.name?.trim()?.length) {
-        toast.warning(
-          'Please enter your name!',
-          {
-            position: 'top-right',
-            autoClose: 3000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            theme: 'colored',
-            style: {
-              backgroundColor: '#d2e500', // Custom red color for error
-              color: '#FFFFFF', // White text
-            },
-          },
-        )
-      } else {
-
-        await createReveiw(review)
-        setVisible(false)
-        setIsReviewed(!isReviewed)
-      }
-    } catch (error) {
-      toast.error(
-        error?.response?.data?.message ??
-        'An error occurred. Please try again.',
-        {
-          position: 'top-right',
+        toast.warning("Please enter your name!", {
+          position: "top-right",
           autoClose: 3000,
           hideProgressBar: false,
           closeOnClick: true,
           pauseOnHover: true,
           draggable: true,
-          theme: 'colored',
+          theme: "colored",
           style: {
-            backgroundColor: '#e74c3c', // Custom red color for error
-            color: '#FFFFFF', // White text
+            backgroundColor: "#d2e500", // Custom red color for error
+            color: "#FFFFFF", // White text
           },
-        },
-      )
+        });
+      } else {
+        await createReveiw(review);
+        setVisible(false);
+        setIsReviewed(!isReviewed);
+      }
+    } catch (error) {
+      toast.error(
+        error?.response?.data?.message ??
+          "An error occurred. Please try again.",
+        {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          theme: "colored",
+          style: {
+            backgroundColor: "#e74c3c", // Custom red color for error
+            color: "#FFFFFF", // White text
+          },
+        }
+      );
     }
-  }
+  };
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        setLoading(true)
-        const businessDetails = await fetchBusiness(currentPage,visibleBusiness)
+        setLoading(true);
+        const businessDetails = await fetchBusiness(
+          currentPage,
+          visibleBusiness
+        );
 
-        const categoryDetails = await fetchCategories(visibleCategories)
+        const categoryDetails = await fetchCategories(visibleCategories);
 
-        setCategoryData(categoryDetails.data.data)
-        setBusinessData(businessDetails.data.data)
+        setCategoryData(categoryDetails.data.data);
+        setBusinessData(businessDetails.data.data);
 
-        setTotalBusinessData(businessDetails.data.totalCount)
+        setTotalBusinessData(businessDetails.data.totalCount);
       } catch (error) {
-        setLoading(false)
-        console.error('Error fetching data:', error)
+        setLoading(false);
+        console.error("Error fetching data:", error);
       } finally {
-        setLoading(false)
+        setLoading(false);
       }
-    }
-    fetchData()
-  }, [visibleBusiness,visibleCategories])
+    };
+    fetchData();
+  }, [visibleBusiness, visibleCategories]);
 
   useEffect(() => {
     const fetchBanner = async () => {
-      const data = await fetchBanners()
-      setBannerData(data?.data)
-    }
-    fetchBanner()
-  }, [])
-
+      const data = await fetchBanners();
+      setBannerData(data?.data);
+    };
+    fetchBanner();
+  }, []);
 
   const loadMoreCategories = () => {
-    setVisibleCategories(prev => prev + 20);
+    setVisibleCategories((prev) => prev + 20);
   };
 
   const loadMoreBusiness = () => {
-    setVisibleBusiness(prev => prev + 10);
+    setVisibleBusiness((prev) => prev + 10);
   };
 
-
   const handleInputChange = (e) => {
-    const { name, value } = e.target
+    const { name, value } = e.target;
     setReview((prevState) => ({
       ...prevState,
       [name]: value,
-    }))
-  }
+    }));
+  };
 
-  const getSearchData = async () =>{
-    
-    try{
-      setLoading(true)
-      const businessDetails = await fetchBusiness(currentPage,visibleBusiness,searchData)
-      setBusinessData(businessDetails.data.data)
-      window.location.href="/#business"
+  const getSearchData = async () => {
+    try {
+      setLoading(true);
+      const businessDetails = await fetchBusiness(
+        currentPage,
+        visibleBusiness,
+        searchData
+      );
+      setBusinessData(businessDetails.data.data);
+      window.location.href = "/#business";
     } catch (error) {
-      console.log(error)
-    }finally{
-      setLoading(false)
+      console.log(error);
+    } finally {
+      setLoading(false);
     }
-  }
+  };
 
   return (
     <Layout title="Home" navClass="home">
@@ -217,12 +217,12 @@ export default function Home() {
                   <Carousel.Item key={`key-${banner?._id}`} className=" h-100">
                     <img
                       className="d-block w-100"
-                      src={banner?.image || '/src/assets/images/1.jpg'} // Use banner image or fallback
+                      src={banner?.image || "/src/assets/images/1.jpg"} // Use banner image or fallback
                       alt="First slide"
                       style={{
-                        objectFit: 'cover',
-                        height: '100%',
-                        filter: 'brightness(0.3)',
+                        objectFit: "cover",
+                        height: "100%",
+                        filter: "brightness(0.3)",
                       }}
                     />
                   </Carousel.Item>
@@ -234,9 +234,9 @@ export default function Home() {
                     src="/src/assets/images/1.jpg"
                     alt="First slide"
                     style={{
-                      objectFit: 'cover',
-                      height: '100%',
-                      filter: 'brightness(0.3)',
+                      objectFit: "cover",
+                      height: "100%",
+                      filter: "brightness(0.3)",
                     }}
                   />
                 </Carousel.Item>
@@ -244,21 +244,24 @@ export default function Home() {
             </Carousel>
           </div>
         </div>
-        <div className="search-bar-div position-absolute" >
+        <div className="search-bar-div position-absolute">
           <div className="container">
             <div className="row banner-main-div">
               <div
                 className="col-12 col-md-6 banner-head-text"
-                style={{ textAlign: 'left' }}
+                style={{ textAlign: "left" }}
               >
-                <h1 className="head-line fw-bold text-start" data-aos="fade-right">
+                <h1
+                  className="head-line fw-bold text-start"
+                  data-aos="fade-right"
+                >
                   In<span className="text-theme2">Connect</span> <br />
                   Your Digital Platform for Growing Your Business
                 </h1>
                 <p
                   className="text-white"
                   data-aos="zoom-in"
-                  style={{ textAlign: 'left' }}
+                  style={{ textAlign: "left" }}
                 >
                   InConnect is your one-stop platform to create, showcase, and
                   share your business online. Get a personalized NFC card to
@@ -269,33 +272,36 @@ export default function Home() {
                 </p>
               </div>
 
-              <div className=" row search-div text-end col-12 col-md-6" style={{display:'ruby'}}>
+              <div
+                className=" row search-div text-end col-12 col-md-6"
+                style={{ display: "ruby" }}
+              >
                 {/* Location Input with Crosshair Icon */}
                 <div className="col-12 col-md-9 mt-3 h-auto">
                   <div
                     className="input-group  banner-input-div w-100"
                     style={{
-                      border: '1px solid #ced4da',
-                      borderRadius: '8px',
-                      overflow: 'hidden',
-                      background: 'none',
+                      border: "1px solid #ced4da",
+                      borderRadius: "8px",
+                      overflow: "hidden",
+                      background: "none",
                     }}
                   >
                     <span
                       className="input-group-text"
                       style={{
-                        backgroundColor: 'white',
-                        border: 'none',
-                        padding: '0 12px',
-                        display: 'flex',
-                        alignItems: 'center',
-                        color: 'white',
-                        background: 'none'
+                        backgroundColor: "white",
+                        border: "none",
+                        padding: "0 12px",
+                        display: "flex",
+                        alignItems: "center",
+                        color: "white",
+                        background: "none",
                       }}
                     >
                       <i
                         className="bi bi-crosshair2"
-                        style={{ fontSize: '1.2em' }}
+                        style={{ fontSize: "1.2em" }}
                       ></i>
                     </span>
                     <input
@@ -303,12 +309,12 @@ export default function Home() {
                       className="form-control custom-placeholder"
                       placeholder="Location"
                       style={{
-                        border: 'none',
-                        boxShadow: 'none',
-                        paddingLeft: '0',
-                        fontSize: '1em',
-                        color: 'white',
-                        background: 'none'
+                        border: "none",
+                        boxShadow: "none",
+                        paddingLeft: "0",
+                        fontSize: "1em",
+                        color: "white",
+                        background: "none",
                       }}
                     />
                   </div>
@@ -319,27 +325,27 @@ export default function Home() {
                   <div
                     className="input-group banner-input-div"
                     style={{
-                      border: '1px solid #ced4da',
-                      borderRadius: '8px',
-                      overflow: 'hidden',
-                      background: 'none'
+                      border: "1px solid #ced4da",
+                      borderRadius: "8px",
+                      overflow: "hidden",
+                      background: "none",
                     }}
                   >
                     <span
                       className="input-group-text"
                       style={{
-                        backgroundColor: 'white',
-                        border: 'none',
-                        padding: '0 12px',
-                        display: 'flex',
-                        alignItems: 'center',
-                        color: 'white',
-                        background: 'none'
+                        backgroundColor: "white",
+                        border: "none",
+                        padding: "0 12px",
+                        display: "flex",
+                        alignItems: "center",
+                        color: "white",
+                        background: "none",
                       }}
                     >
                       <i
                         className="bi bi-search fw-bold"
-                        style={{ fontSize: '1.2em' }}
+                        style={{ fontSize: "1.2em" }}
                       ></i>
                     </span>
                     <input
@@ -349,15 +355,21 @@ export default function Home() {
                       value={searchData}
                       onInput={(e) => setSearchData(e.target.value)}
                       style={{
-                        border: 'none',
-                        boxShadow: 'none',
-                        paddingLeft: '0',
-                        fontSize: '1em',
-                        color: 'white',
-                        background: 'none'
+                        border: "none",
+                        boxShadow: "none",
+                        paddingLeft: "0",
+                        fontSize: "1em",
+                        color: "white",
+                        background: "none",
                       }}
                     />
-                    <button className="btn btn-md bg-theme" style={{border:'none'}} onClick={getSearchData}>Search</button>
+                    <button
+                      className="btn btn-md bg-theme"
+                      style={{ border: "none" }}
+                      onClick={getSearchData}
+                    >
+                      Search
+                    </button>
                   </div>
                 </div>
               </div>
@@ -366,12 +378,12 @@ export default function Home() {
         </div>
       </div>
 
-      <section id='category' className=" bg-light h-auto" data-aos="fade-up">
-        <div className="container" style={{ width: '90%' }}>
+      <section id="category" className=" bg-light h-auto" data-aos="fade-up">
+        <div className="container" style={{ width: "90%" }}>
           <div className="mb-5 p-4">
             <h1
               className="text-center fw-bold mt-4"
-              style={{ marginTop: '20px' }}
+              style={{ marginTop: "20px" }}
             >
               Discover Diverse Categories
             </h1>
@@ -383,30 +395,33 @@ export default function Home() {
           </div>
           <div className="mb-5 mt-2" id="category">
             <div className="home-category-div">
-            {loading && <Loader />}
-              {!loading &&categoryData.map((category) => (
-                <Link
-                  className="cat-div text-decoration-none"
-                  data-aos="zoom-in"
-                  to={`/business/${category._id}`} // Dynamically generate the URL with the category ID
-                  key={category._id} // Unique key for each category
-                >
-                  <img
-                    src={category.image}
-                    alt={category.name}
-                    className="cat-img"
-                  />
-                  {category.name}
-                </Link>
-              ))}
+              {loading && <Loader />}
+              {!loading &&
+                categoryData.map((category) => (
+                  <Link
+                    className="cat-div text-decoration-none"
+                    data-aos="zoom-in"
+                    to={`/business/${category._id}`} // Dynamically generate the URL with the category ID
+                    key={category._id} // Unique key for each category
+                  >
+                    <img
+                      src={category.image}
+                      alt={category.name}
+                      className="cat-img"
+                    />
+                    {category.name}
+                  </Link>
+                ))}
             </div>
             {visibleCategories <= categoryData.length && ( // Check if more categories are available
               <div className="mb-3 mt-5 text-center">
-                <button onClick={loadMoreCategories} className="btn btn-dark btn-md">
+                <button
+                  onClick={loadMoreCategories}
+                  className="btn btn-dark btn-md"
+                >
                   View More <i className="bi bi-arrow-right"></i>
                 </button>
               </div>
-
             )}
           </div>
         </div>
@@ -429,7 +444,11 @@ export default function Home() {
             {!loading &&
               businessData.map((business) => (
                 <Link
-                  to={business.selectedPlan?.isPremium ? `/template/premium/${business?._id}` : `/template/${business?._id}`}
+                  to={
+                    business.selectedPlan?.isPremium
+                      ? `/template/premium/${business?._id}`
+                      : `/template/${business?._id}`
+                  }
                   key={business._id}
                   className="text-decoration-none text-dark col-12 col-md-5 b-theme location-card mt-3 business-card"
                 >
@@ -443,7 +462,7 @@ export default function Home() {
                     </div>
                     <div className="col-8">
                       <div className="col-12 mb-2 mt-2">
-                        <h2 style={{ fontSize: '28px' }}>
+                        <h2 style={{ fontSize: "28px" }}>
                           {business.businessName}
                         </h2>
                       </div>
@@ -454,9 +473,9 @@ export default function Home() {
                         <h3 className="fs-16">
                           <i className="bi bi-crosshair"></i>
                           <span className="ms-1 fs-15">
-                            {business.address.buildingName},{' '}
+                            {business.address.buildingName},{" "}
                             {business.address.city}, {business.address.landMark}
-                            , {business.address.streetName},{' '}
+                            , {business.address.streetName},{" "}
                             {business.address.state}
                           </span>
                         </h3>
@@ -468,10 +487,14 @@ export default function Home() {
           </div>
           {visibleBusiness < totalBusinessData && (
             <div className="mt-5 text-center mb-1">
-              <button onClick={loadMoreBusiness} className='btn btn-dark btn-md'>View More <i className="bi bi-arrow-right"></i></button>
+              <button
+                onClick={loadMoreBusiness}
+                className="btn btn-dark btn-md"
+              >
+                View More <i className="bi bi-arrow-right"></i>
+              </button>
             </div>
           )}
-
         </div>
       </section>
 
@@ -503,30 +526,31 @@ export default function Home() {
               {reviews?.map((testimonial, index) => (
                 <div key={index} className="testi-slide">
                   <div
-                    className={`testi-div p-4 ${index === currentSlide ? 'testi-theme' : ''
-                      }`}
+                    className={`testi-div p-4 ${
+                      index === currentSlide ? "testi-theme" : ""
+                    }`}
                     style={{
                       backgroundColor:
-                        index === currentSlide ? '#f0f8ff' : '#fff', // Light blue background for the active card
-                      borderRadius: '12px', // Rounded corners
-                      boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', // Lighter shadow for premium feel
-                      padding: '16px', // Reduced padding for smaller card height
+                        index === currentSlide ? "#f0f8ff" : "#fff", // Light blue background for the active card
+                      borderRadius: "12px", // Rounded corners
+                      boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)", // Lighter shadow for premium feel
+                      padding: "16px", // Reduced padding for smaller card height
                       transition:
-                        'transform 0.3s ease-in-out, background-color 0.3s ease', // Smooth hover effect and background color transition
-                      maxWidth: '100%', // Ensure card size is responsive
-                      margin: '10px', // Add margin between cards
-                      cursor: 'pointer', // Indicating that it's interactive
-                      transform: 'scale(1)', // Default scale
-                      minHeight: '250px', // Set the minHeight to 250px for further reduction
-                      display: 'flex',
-                      flexDirection: 'column', // Flexbox to manage content alignment
-                      justifyContent: 'space-between', // Space out elements evenly
+                        "transform 0.3s ease-in-out, background-color 0.3s ease", // Smooth hover effect and background color transition
+                      maxWidth: "100%", // Ensure card size is responsive
+                      margin: "10px", // Add margin between cards
+                      cursor: "pointer", // Indicating that it's interactive
+                      transform: "scale(1)", // Default scale
+                      minHeight: "250px", // Set the minHeight to 250px for further reduction
+                      display: "flex",
+                      flexDirection: "column", // Flexbox to manage content alignment
+                      justifyContent: "space-between", // Space out elements evenly
                     }}
                     onMouseEnter={(e) =>
-                      (e.currentTarget.style.transform = 'scale(1.05)')
+                      (e.currentTarget.style.transform = "scale(1.05)")
                     } // Hover effect
                     onMouseLeave={(e) =>
-                      (e.currentTarget.style.transform = 'scale(1)')
+                      (e.currentTarget.style.transform = "scale(1)")
                     } // Revert hover effect
                   >
                     <div className="row">
@@ -535,11 +559,11 @@ export default function Home() {
                           src="/src/assets/images/user.png"
                           alt={testimonial?.name}
                           style={{
-                            objectFit: 'cover',
-                            width: '40px', // Adjusted image size
-                            height: '40px', // Adjusted image size
-                            borderRadius: '50%',
-                            border: '2px solid #ddd', // Premium border around the image
+                            objectFit: "cover",
+                            width: "40px", // Adjusted image size
+                            height: "40px", // Adjusted image size
+                            borderRadius: "50%",
+                            border: "2px solid #ddd", // Premium border around the image
                           }}
                         />
                       </div>
@@ -547,29 +571,31 @@ export default function Home() {
                         <h3
                           className="fs-20 p-0 m-0 ms-4"
                           style={{
-                            fontSize: '16px', // Slightly smaller font size for name
-                            fontWeight: '600',
-                            color: '#333',
-                            marginBottom: '4px', // Reduced margin
+                            fontSize: "16px", // Slightly smaller font size for name
+                            fontWeight: "600",
+                            color: "#333",
+                            marginBottom: "4px", // Reduced margin
                           }}
                         >
                           {testimonial?.name}
                         </h3>
                         <div className="text-warning text-center mt-0 m-0">
                           {[...Array(5)].map((star, i) => {
-                            const isFilled = i < Math.floor(testimonial?.rating)
+                            const isFilled =
+                              i < Math.floor(testimonial?.rating);
                             return (
                               <i
                                 key={i}
-                                className={`bi ${isFilled ? 'bi-star-fill' : 'bi-star'
-                                  }`}
+                                className={`bi ${
+                                  isFilled ? "bi-star-fill" : "bi-star"
+                                }`}
                                 style={{
-                                  fontSize: '14px', // Reduced star size
-                                  color: isFilled ? '#FFD700' : '#ddd',
-                                  transition: 'color 0.3s ease', // Smooth color transition for stars
+                                  fontSize: "14px", // Reduced star size
+                                  color: isFilled ? "#FFD700" : "#ddd",
+                                  transition: "color 0.3s ease", // Smooth color transition for stars
                                 }}
                               ></i>
-                            )
+                            );
                           })}
                         </div>
                       </div>
@@ -577,17 +603,17 @@ export default function Home() {
                     <div className="col-12 mt-3">
                       <p
                         style={{
-                          maxHeight: '60px', // Shortened max height for the review text
-                          overflow: 'hidden',
-                          textOverflow: 'ellipsis',
-                          display: '-webkit-box',
+                          maxHeight: "60px", // Shortened max height for the review text
+                          overflow: "hidden",
+                          textOverflow: "ellipsis",
+                          display: "-webkit-box",
                           WebkitLineClamp: 2, // Truncate after 2 lines
-                          WebkitBoxOrient: 'vertical',
-                          fontSize: '14px', // Smaller font size for review text
-                          color: '#555', // Slightly lighter text color
-                          lineHeight: '1.4',
+                          WebkitBoxOrient: "vertical",
+                          fontSize: "14px", // Smaller font size for review text
+                          color: "#555", // Slightly lighter text color
+                          lineHeight: "1.4",
                           fontFamily: '"Roboto", sans-serif', // Modern font for better readability
-                          fontWeight: '400',
+                          fontWeight: "400",
                         }}
                       >
                         {testimonial?.review}
@@ -596,14 +622,14 @@ export default function Home() {
                     <div className="col-12 mt-2">
                       <p
                         style={{
-                          fontSize: '12px',
-                          color: '#999',
-                          fontStyle: 'italic',
-                          textAlign: 'right', // Align date to the right for a clean look
-                          marginTop: '4px',
+                          fontSize: "12px",
+                          color: "#999",
+                          fontStyle: "italic",
+                          textAlign: "right", // Align date to the right for a clean look
+                          marginTop: "4px",
                         }}
                       >
-                        {formatDate(testimonial?.createdAt ?? '')}
+                        {formatDate(testimonial?.createdAt ?? "")}
                       </p>
                     </div>
                   </div>
@@ -611,7 +637,10 @@ export default function Home() {
               ))}
             </Slider>
             <div className="text-center mt-5 mb-5">
-              <a onClick={() => navigate('/reviews')} className="btn btn-dark btn-md text-decoration-none text-theme2">
+              <a
+                onClick={() => navigate("/reviews")}
+                className="btn btn-dark btn-md text-decoration-none text-theme2"
+              >
                 View more <i className="bi bi-arrow-right"></i>
               </a>
             </div>
@@ -622,11 +651,11 @@ export default function Home() {
         header="Write a Review"
         visible={visible}
         onHide={() => {
-          if (!visible) return
-          setVisible(false)
+          if (!visible) return;
+          setVisible(false);
         }}
-        style={{ width: '50vw' }}
-        breakpoints={{ '960px': '75vw', '641px': '100vw' }}
+        style={{ width: "50vw" }}
+        breakpoints={{ "960px": "75vw", "641px": "100vw" }}
       >
         <div className="container">
           <div className="p-3 justify-content-center">
@@ -684,7 +713,7 @@ export default function Home() {
               <div className="col-12 col-md-6 text-center text-md-end">
                 <button
                   className="btn btn-theme mt-3"
-                  onClick={() => navigate('/create-business')}
+                  onClick={() => navigate("/create-business")}
                 >
                   Create Now
                 </button>
@@ -740,7 +769,7 @@ export default function Home() {
                         className=" fs-20 text-decoration-none text-white"
                       >
                         <span>
-                          <i className="bi bi-telephone text-white me-1"></i>{' '}
+                          <i className="bi bi-telephone text-white me-1"></i>{" "}
                           +91 7994085695
                         </span>
                       </a>
@@ -762,12 +791,10 @@ export default function Home() {
           <div className="footer-bottom p-4">
             <div className="row w-full justify-content-between">
               <div className="col-sm-4 text-left">
-                <a href={`/terms-and-conditions`}>
-                  Terms and Conditions
-                </a>
+                <a href={`/terms-and-conditions`}>Terms and Conditions</a>
               </div>
               <div className="col-sm-4 text-right">
-                <div style={{ color: '#A4B3CB' }} className="text-right">
+                <div style={{ color: "#A4B3CB" }} className="text-right">
                   <span>
                     Copyright &copy;
                     {new Date().getFullYear()} In Connect. All Rights Reserved
@@ -779,5 +806,5 @@ export default function Home() {
         </div>
       </footer>
     </Layout>
-  )
+  );
 }
