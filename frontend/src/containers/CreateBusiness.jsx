@@ -415,24 +415,14 @@ export default function CreateBusiness() {
 
       if (file) {
         setIsLoading(true);
-        const reader = new FileReader();
-        reader.onload = async function (e) {
           try {
-            const preReq = await preRequestFun(file, "Landing");
-            let accessLink = "";
-            if (preReq && preReq.accessLink) {
-              accessLink = preReq.accessLink;
-            } else {
-              console.error("Access link not found in response.");
-              return;
-            }
-            setLogo(accessLink);
+           
+            setLogo(file);
           } catch (error) {
             console.error("Error uploading logo:", error.message || error);
           } finally {
             setIsLoading(false);
           }
-        };
         reader.onerror = function () {
           console.error("Error reading file:", reader.error);
           setIsLoading(false);
