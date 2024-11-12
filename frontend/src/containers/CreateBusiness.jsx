@@ -13,25 +13,26 @@ import {
 import axios from "axios";
 import { toast } from "react-toastify";
 
-import { Container, Nav, Navbar, NavLink } from "react-bootstrap";
-import "/src/assets/css/template.css";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
-import { useParams } from "react-router-dom";
-import { Dialog } from "primereact/dialog";
-import { Rating } from "primereact/rating";
-import { InputText } from "primereact/inputtext";
-import { InputTextarea } from "primereact/inputtextarea";
-import CircularProgress from "@mui/material/CircularProgress";
-import CloseIcon from "@mui/icons-material/Close";
-import Slider from "react-slick";
-import IconButton from "@mui/material/IconButton";
-import InputAdornment from "@mui/material/InputAdornment";
-import Visibility from "@mui/icons-material/Visibility";
-import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import { Container, Nav, Navbar, NavLink } from 'react-bootstrap'
+import '/src/assets/css/template.css'
+import 'slick-carousel/slick/slick.css'
+import 'slick-carousel/slick/slick-theme.css'
+import { useParams } from 'react-router-dom'
+import { Dialog } from 'primereact/dialog'
+import { Rating } from 'primereact/rating'
+import { InputText } from 'primereact/inputtext'
+import { InputTextarea } from 'primereact/inputtextarea'
+import CircularProgress from '@mui/material/CircularProgress'
+import CloseIcon from '@mui/icons-material/Close'
+import Slider from 'react-slick'
+import IconButton from '@mui/material/IconButton'
+import InputAdornment from '@mui/material/InputAdornment'
+import Visibility from '@mui/icons-material/Visibility'
+import VisibilityOff from '@mui/icons-material/VisibilityOff'
+import { containerClasses } from '@mui/material'
 
 export default function CreateBusiness() {
-  const [step, setStep] = useState(1);
+  const [step, setStep] = useState(3)
 
   const handleNextStep = () => {
     setStep((prevStep) => prevStep + 1);
@@ -626,174 +627,103 @@ export default function CreateBusiness() {
   }
 
   function ContactDetails({ formData }) {
-    const [mobileNumbers, setMobileNumbers] = useState([
-      { id: 1, number: "", countryCode: "us" },
-    ]);
-    const [whatsappNumbers, setWhatsappNumbers] = useState([
-      { id: 1, number: "", countryCode: "us" },
-    ]);
-    const [emails, setEmails] = useState([{ id: 1, email: "" }]);
-    const [newFormData, setNewFormData] = useState({
+
+  const [newFormData, setNewFormData] = useState({
+    contactDetails: {
+      name: '',
+      primaryNumber: '',
+      secondaryNumber: '',
+      whatsappNumber: '',
+      email: '',
+      website: '',
+    },
+  });
+
+  const [address, setAddress] = useState({
+    buildingName: '',
+    streetName: '',
+    landMark: '',
+    city: '',
+    state: '',
+    pinCode: '',
+  });
+
+  const [location, setLocation] = useState({
+    lat: '',
+    lon: '',
+  });
+
+  const [errors, setErrors] = useState({});
+
+  useEffect(() => {
+    if (Object.keys(formData?.contactDetails)?.length) {
+      setNewFormData({
+        contactDetails: formData?.contactDetails,
+      });
+    }
+    setAddress(formData?.address);
+    setLocation(formData?.location);
+  }, [formData]);
+
+  const handleContactChange = (event) => {
+    const { name, value } = event.target;
+    setNewFormData((prevData) => ({
+      ...prevData,
       contactDetails: {
-        name: "",
-        mobileNumbers: [],
-        whatsappNumbers: [],
-        emails: [],
-        website: "",
+        ...prevData.contactDetails,
+        [name]: value,
       },
-    });
-    const [address, setAddress] = useState({
-      buildingName: "",
-      streetName: "",
-      landMark: "",
-      city: "",
-      state: "",
-      pinCode: "",
-    });
-    const [location, setLocation] = useState({
-      lat: "",
-      lon: "",
-    });
+    }));
+  };
 
-    const [errors, setErrors] = useState({});
+  const validateForm = () => {
+    const newErrors = {};
+    if (!newFormData.contactDetails.name) newErrors.name = 'Name is required.';
+    if (!newFormData.contactDetails.primaryNumber)
+      newErrors.primaryNumber = 'Primary number is required.';
+    if (!newFormData.contactDetails.secondaryNumber)
+      newErrors.secondaryNumber = 'Secondary number is required.';
+    if (!newFormData.contactDetails.whatsappNumber)
+      newErrors.whatsappNumber = 'WhatsApp number is required.';
+    if (!newFormData.contactDetails.email)
+      newErrors.email = 'Email is required.';
+    if (!newFormData.contactDetails.website)
+      newErrors.website = 'Website is required.';
+    if (!address.buildingName)
+      newErrors.buildingName = 'Building name is required.';
+    if (!address.state) newErrors.state = 'State is required';
 
-    useEffect(() => {
-      if (formData?.contactDetails?.mobileNumbers)
-        setMobileNumbers(formData?.contactDetails?.mobileNumbers);
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
 
-      if (formData?.contactDetails?.whatsappNumbers)
-        setWhatsappNumbers(formData?.contactDetails?.whatsappNumbers);
-
-      if (formData?.contactDetails?.emails) {
-        setEmails(formData?.contactDetails?.emails);
-      }
-
-      if (Object.keys(formData?.contactDetails)?.length)
-        setNewFormData({
-          contactDetails: formData?.contactDetails,
-        });
-      setAddress(formData?.address);
-      setLocation(formData?.location);
-    }, [formData]);
-
-    const handleContactChange = (event) => {
-      const { name, value } = event.target;
-      setNewFormData((prevData) => ({
+  const contactSubmitHandler = () => {
+    if (validateForm()) {
+      setFormData((prevData) => ({
         ...prevData,
-        contactDetails: {
-          ...prevData.contactDetails,
-          [name]: value,
-        },
+        contactDetails: newFormData.contactDetails,
+        address: address,
+        location: location,
       }));
-    };
+      handleNextStep();
+    }
+  };
 
-    const handleMobileNumberChange = (id, value, countryCode = "us") => {
-      const updatedMobileNumbers = mobileNumbers.map((number) =>
-        number.id === id ? { ...number, number: value, countryCode } : number
-      );
-      setMobileNumbers(updatedMobileNumbers);
-      updateContactDetails("mobileNumbers", updatedMobileNumbers);
-    };
+  const handleAddressChange = (event) => {
+    const { name, value } = event.target;
+    setAddress((prevAddress) => ({
+      ...prevAddress,
+      [name]: value,
+    }));
+  };
 
-    const handleWhatsappNumberChange = (id, value, countryCode = "us") => {
-      const updatedWhatsappNumbers = whatsappNumbers.map((number) =>
-        number.id === id ? { ...number, number: value, countryCode } : number
-      );
-      setWhatsappNumbers(updatedWhatsappNumbers);
-      updateContactDetails("whatsappNumbers", updatedWhatsappNumbers);
-    };
-
-    const handleEmailChange = (id, value) => {
-      const updatedEmails = emails.map((email) =>
-        email.id === id ? { ...email, email: value } : email
-      );
-      setEmails(updatedEmails);
-      updateContactDetails("emails", updatedEmails);
-    };
-
-    const updateContactDetails = (field, updatedArray) => {
-      setNewFormData((prevFormData) => ({
-        ...prevFormData,
-        contactDetails: {
-          ...prevFormData.contactDetails,
-          [field]: updatedArray.map((item) => ({
-            number: item.number || item.email,
-            countryCode: item.countryCode || null,
-          })),
-        },
-      }));
-    };
-
-    const addMobileNumber = () =>
-      setMobileNumbers([
-        ...mobileNumbers,
-        { id: mobileNumbers.length + 1, number: "", countryCode: "us" },
-      ]);
-    const removeMobileNumber = (id) =>
-      setMobileNumbers(mobileNumbers.filter((number) => number.id !== id));
-
-    const addWhatsappNumber = () =>
-      setWhatsappNumbers([
-        ...whatsappNumbers,
-        { id: whatsappNumbers.length + 1, number: "", countryCode: "us" },
-      ]);
-    const removeWhatsappNumber = (id) =>
-      setWhatsappNumbers(whatsappNumbers.filter((number) => number.id !== id));
-
-    const addEmail = () =>
-      setEmails([...emails, { id: emails.length + 1, email: "" }]);
-    const removeEmail = (id) =>
-      setEmails(emails.filter((email) => email.id !== id));
-
-    const validateForm = () => {
-      const newErrors = {};
-      if (!newFormData.contactDetails.name)
-        newErrors.name = "Name is required.";
-      if (mobileNumbers.some((number) => !number.number))
-        newErrors.mobileNumbers = "All mobile numbers are required.";
-      if (whatsappNumbers.some((number) => !number.number))
-        newErrors.whatsappNumbers = "All WhatsApp numbers are required.";
-      if (emails.some((email) => !email.email))
-        newErrors.emails = "email is required.";
-      if (!newFormData.contactDetails.website)
-        newErrors.website = "Website is required.";
-      if (!address.buildingName)
-        newErrors.buildingName = "Building name is required.";
-      //   if (!address.address) newErrors.address = 'Emailaddress is required.'
-      //   if (!address.city) newErrors.city = 'City is required'
-      if (!address.state) newErrors.state = "State is required";
-
-      setErrors(newErrors);
-      console.log(newErrors);
-      return Object.keys(newErrors).length === 0;
-    };
-
-    const contactSubmitHandler = () => {
-      if (validateForm()) {
-        setFormData((prevData) => ({
-          ...prevData,
-          contactDetails: newFormData.contactDetails,
-          address: address,
-          location: location,
-        }));
-        handleNextStep();
-      }
-    };
-
-    const handleAddressChange = (event) => {
-      const { name, value } = event.target;
-      setAddress((prevAddress) => ({
-        ...prevAddress,
-        [name]: value,
-      }));
-    };
-    const handleLocationChange = (event) => {
-      const { name, value } = event.target;
-      setLocation((prevLocation) => ({
-        ...prevLocation,
-        [name]: value,
-      }));
-    };
+  const handleLocationChange = (event) => {
+    const { name, value } = event.target;
+    setLocation((prevLocation) => ({
+      ...prevLocation,
+      [name]: value,
+    }));
+  };
 
     return (
       <div className="h-100vh create-business-div">
@@ -884,135 +814,75 @@ export default function CreateBusiness() {
               </div>
 
               <div id="mobileNumberDiv" className="mt-4">
-                {mobileNumbers.map((number, index) => (
-                  <div className="row mt-3" key={number.id}>
-                    <div className="col-10 mt-2 mt-sm-0">
-                      <input
-                        type="number"
-                        value={number.number}
-                        onChange={(e) =>
-                          handleMobileNumberChange(number.id, e.target.value)
-                        }
-                        className="form-control form-control-lg w-100"
-                        placeholder="Phone number"
-                      />
-                    </div>
-
-                    {errors.mobileNumbers && (
-                      <div className="text-danger">{errors.mobileNumbers}</div>
-                    )}
-
-                    <div className="col-12 col-sm-2 mt-2 mt-sm-0">
-                      {/* Render "Remove" button for all fields except the last one */}
-                      {index < mobileNumbers.length - 1 ? (
-                        <button
-                          className="btn btn-danger btn-sm w-100"
-                          onClick={() => removeMobileNumber(number.id)}
-                        >
-                          <i className="bi bi-trash"></i>
-                        </button>
-                      ) : (
-                        // Render "Add" button on the last field only
-                        <button
-                          type="button"
-                          onClick={addMobileNumber}
-                          className="btn w-100 btn-primary mt-2"
-                        >
-                          Add
-                        </button>
-                      )}
-                    </div>
-                  </div>
-                ))}
+  
+              <div className="row mt-3">
+                <div className="col-12 mt-2 mt-sm-0">
+                  <label className="form-label">Primary Number</label>
+                  <input
+                    type="text"
+                    name="primaryNumber"
+                    value={newFormData.contactDetails.primaryNumber}
+                    onChange={handleContactChange}
+                    className="form-control form-control-lg w-100"
+                    placeholder="Primary Phone Number"
+                  />
+                  {errors.primaryNumber && (
+                    <div className="text-danger">{errors.primaryNumber}</div>
+                  )}
+                </div>
               </div>
-              <hr />
-              <div id="whatsappNumberDiv" className="mt-4">
-                {whatsappNumbers.map((number, index) => (
-                  <div className="row align-items-center mt-3" key={number.id}>
-                    <div className="col-10 mt-2 mt-sm-0">
-                      <input
-                        type="number"
-                        value={number.number}
-                        onChange={(e) =>
-                          handleWhatsappNumberChange(number.id, e.target.value)
-                        }
-                        className="form-control form-control-lg w-100"
-                        placeholder="WhatsApp number"
-                      />
-                    </div>
 
-                    {errors.whatsappNumbers && (
-                      <div className="text-danger">
-                        {errors.whatsappNumbers}
-                      </div>
-                    )}
-
-                    <div className="col-12 col-sm-2 mt-2 mt-sm-0">
-                      {/* Render the Remove button for all fields except the last one */}
-                      {index < whatsappNumbers.length - 1 ? (
-                        <button
-                          className="btn btn-danger w-100 "
-                          onClick={() => removeWhatsappNumber(number.id)}
-                        >
-                          X
-                        </button>
-                      ) : (
-                        <button
-                          type="button"
-                          onClick={addWhatsappNumber}
-                          className="btn btn-primary btn-md w-100 mt-2"
-                        >
-                          Add
-                        </button>
-                      )}
-                    </div>
-                  </div>
-                ))}
+              <div className="row mt-3">
+                <div className="col-12 mt-2 mt-sm-0">
+                  <label className="form-label">Secondary Number</label>
+                  <input
+                    type="text"
+                    name="secondaryNumber"
+                    value={newFormData.contactDetails.secondaryNumber}
+                    onChange={handleContactChange}
+                    className="form-control form-control-lg w-100"
+                    placeholder="Secondary Phone Number"
+                  />
+                  {errors.secondaryNumber && (
+                    <div className="text-danger">{errors.secondaryNumber}</div>
+                  )}
+                </div>
               </div>
-              <hr />
-              <div id="emailDiv" className="mt-4">
-                {emails.map((email, index) => (
-                  <div className="row mt-3" key={email.id}>
-                    <div className="col-12 col-sm-10">
-                      <input
-                        type="email"
-                        name="email"
-                        value={email.email}
-                        onChange={(e) =>
-                          handleEmailChange(email.id, e.target.value)
-                        }
-                        className="form-control form-control-lg"
-                        placeholder="Email address"
-                      />
-                    </div>
 
-                    {errors.emails && (
-                      <div className="text-danger">{errors.emails}</div>
-                    )}
-
-                    <div className="col-12 col-sm-2 mt-2 mt-sm-0">
-                      {/* Render "Remove" button for all fields except the last one */}
-                      {index < emails.length - 1 ? (
-                        <button
-                          className="btn btn-danger btn-sm w-100"
-                          onClick={() => removeEmail(email.id)}
-                        >
-                          <i className="bi bi-trash"></i>
-                        </button>
-                      ) : (
-                        // Render "Add" button on the last field only
-                        <button
-                          type="button"
-                          onClick={addEmail}
-                          className="btn w-100 btn-primary mt-2"
-                        >
-                          Add
-                        </button>
-                      )}
-                    </div>
-                  </div>
-                ))}
+              <div className="row mt-3">
+                <div className="col-12 mt-2 mt-sm-0">
+                  <label className="form-label">WhatsApp Number</label>
+                  <input
+                    type="text"
+                    name="whatsappNumber"
+                    value={newFormData.contactDetails.whatsappNumber}
+                    onChange={handleContactChange}
+                    className="form-control form-control-lg w-100"
+                    placeholder="WhatsApp Number"
+                  />
+                  {errors.whatsappNumber && (
+                    <div className="text-danger">{errors.whatsappNumber}</div>
+                  )}
+                </div>
               </div>
+            </div>
+
+            <hr />
+            <div id="emailDiv" className="mt-4">
+              <div className="row mt-3">
+                <div className="col-12">
+                  <input
+                    type="email"
+                    name="email"
+                    value={newFormData.contactDetails.email}
+                    onChange={handleContactChange}
+                    className="form-control form-control-lg"
+                    placeholder="Email address"
+                  />
+                </div>
+                {errors.email && <div className="text-danger">{errors.email}</div>}
+              </div>
+            </div>
 
               <div className="mt-4">
                 <input
@@ -1123,11 +993,9 @@ export default function CreateBusiness() {
                           </div>
                           <div className="col">
                             <span className="fs-13">Send Email</span>
-                            {emails.map((email, index) => (
-                              <p className="fs-16" key={index}>
-                                {email.email}
+                              <p className="fs-16">
+                                {newFormData.contactDetails.email}
                               </p>
-                            ))}
                           </div>
                         </div>
                       </div>
@@ -1139,11 +1007,13 @@ export default function CreateBusiness() {
                           </div>
                           <div className="col">
                             <span className="fs-13">Contact</span>
-                            {mobileNumbers.map((number, index) => (
-                              <p className="fs-16" key={index}>
-                                {number.number}
+                            
+                              <p className="fs-16">
+                                {newFormData.contactDetails.primaryNumber}
                               </p>
-                            ))}
+                              <p className="fs-16">
+                                {newFormData.contactDetails.secondaryNumber}
+                              </p>
                           </div>
                         </div>
                       </div>
@@ -1162,9 +1032,10 @@ export default function CreateBusiness() {
     const handleCategoryChange = (event, value) => {
       setFormData({
         ...formData,
-        category: value ? value._id : "",
-      });
-    };
+        category: value ? value._id : '',
+      })
+    }
+    console.log(formData)
 
     return (
       <div className="h-100vh create-business-div">
