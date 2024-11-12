@@ -744,6 +744,7 @@ export default function CreateBusiness() {
               </h1>
             </div>
             <div className="col-12 p-5 p-sm-0 mt-3">
+              <label className="form-label">Name</label>
               <input
                 type="text"
                 name="name"
@@ -754,32 +755,39 @@ export default function CreateBusiness() {
               {errors.name && <div className="text-danger">{errors.name}</div>}
 
               {/* Other input fields */}
+              <label className="form-label  mt-3">Building name</label>
+               
               <input
                 type="text"
                 placeholder="Building name"
                 name="buildingName"
                 value={address.buildingName}
                 onChange={handleAddressChange}
-                className="form-control form-control-lg mt-3"
+                className="form-control form-control-lg"
               />
+                  <label className="form-label  mt-3">Street / Colony name</label>
+
               <input
                 type="text"
                 placeholder="Street / Colony name"
                 name="streetName"
                 value={address.streetName}
                 onChange={handleAddressChange}
-                className="form-control form-control-lg mt-3"
+                className="form-control form-control-lg"
               />
+                  <label className="form-label mt-3">Landmark</label>
+
               <input
                 type="text"
                 placeholder="Landmark"
                 name="landMark"
                 value={address.landMark}
                 onChange={handleAddressChange}
-                className="form-control form-control-lg mt-3"
+                className="form-control form-control-lg w-100"
               />
               <div className="row">
                 <div className="col-12 col-md-6 mt-3">
+                <label className="form-label">State</label>
                   <input
                     type="text"
                     className="form-control form-control-lg w-100"
@@ -790,6 +798,8 @@ export default function CreateBusiness() {
                   />
                 </div>
                 <div className="col-12 col-md-6 mt-3">
+                <label className="form-label">Pincode</label>
+
                   <input
                     type="number"
                     className="form-control form-control-lg w-100"
@@ -802,6 +812,8 @@ export default function CreateBusiness() {
               </div>
               <div className="row">
                 <div className="col-12 mt-3">
+                <label className="form-label">Location</label>
+
                   <input
                     type="text"
                     className="form-control form-control-lg w-100"
@@ -817,14 +829,14 @@ export default function CreateBusiness() {
   
               <div className="row mt-3">
                 <div className="col-12 mt-2 mt-sm-0">
-                  <label className="form-label">Primary Number</label>
+                  <label className="form-label">Primary number</label>
                   <input
                     type="text"
                     name="primaryNumber"
                     value={newFormData.contactDetails.primaryNumber}
                     onChange={handleContactChange}
                     className="form-control form-control-lg w-100"
-                    placeholder="Primary Phone Number"
+                    placeholder="Primary phone number"
                   />
                   {errors.primaryNumber && (
                     <div className="text-danger">{errors.primaryNumber}</div>
@@ -834,14 +846,14 @@ export default function CreateBusiness() {
 
               <div className="row mt-3">
                 <div className="col-12 mt-2 mt-sm-0">
-                  <label className="form-label">Secondary Number</label>
+                  <label className="form-label">Alternative number</label>
                   <input
                     type="text"
                     name="secondaryNumber"
                     value={newFormData.contactDetails.secondaryNumber}
                     onChange={handleContactChange}
                     className="form-control form-control-lg w-100"
-                    placeholder="Secondary Phone Number"
+                    placeholder="Alternative phone number"
                   />
                   {errors.secondaryNumber && (
                     <div className="text-danger">{errors.secondaryNumber}</div>
@@ -851,14 +863,14 @@ export default function CreateBusiness() {
 
               <div className="row mt-3">
                 <div className="col-12 mt-2 mt-sm-0">
-                  <label className="form-label">WhatsApp Number</label>
+                  <label className="form-label">WhatsApp number</label>
                   <input
                     type="text"
                     name="whatsappNumber"
                     value={newFormData.contactDetails.whatsappNumber}
                     onChange={handleContactChange}
                     className="form-control form-control-lg w-100"
-                    placeholder="WhatsApp Number"
+                    placeholder="WhatsApp number"
                   />
                   {errors.whatsappNumber && (
                     <div className="text-danger">{errors.whatsappNumber}</div>
@@ -871,6 +883,8 @@ export default function CreateBusiness() {
             <div id="emailDiv" className="mt-4">
               <div className="row mt-3">
                 <div className="col-12">
+                <label className="form-label">Email address</label>
+
                   <input
                     type="email"
                     name="email"
@@ -885,6 +899,8 @@ export default function CreateBusiness() {
             </div>
 
               <div className="mt-4">
+              <label className="form-label">Website link</label>
+
                 <input
                   type="text"
                   name="website"
