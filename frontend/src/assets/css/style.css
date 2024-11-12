@@ -191,7 +191,17 @@ footer .btn-theme{
     color: white;
 }input:focus{
     outline: none !important;
-}.css-1d3z3hw-MuiOutlinedInput-notchedOutline {
+    border: 2px solid #105193;
+}
+input:enabled{
+    outline: none !important;
+    border: 2px solid #d4e0ec;
+}
+textarea:enabled{
+    outline: none !important;
+    border: 2px solid #d4e0ec;
+}
+.css-1d3z3hw-MuiOutlinedInput-notchedOutline {
     text-align: left;
     position: absolute;
     bottom: 0;
