@@ -4642,8 +4642,6 @@ export default function CreateBusiness() {
                           <p className="fs-16" >
                             {businessData.contactDetails.email}
                           </p>
-                        ),
-                      )}
                     </div>
                   </div>
                 </div>
