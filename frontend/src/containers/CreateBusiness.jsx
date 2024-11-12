@@ -3677,7 +3677,10 @@ export default function CreateBusiness() {
             </div>
             <div className="row justify-content-center">
               <div className="col-12 text-center text-md-start mt-4">
-                <h1 className="fw-bold">Add SEO</h1>
+              <h1 className="fw-bold title-text">
+                <span className="title-main">Add </span>
+                <span className="title-highlight">SEO Details</span>
+              </h1>
               </div>
 
               {/* Form Fields */}
@@ -3724,7 +3727,7 @@ export default function CreateBusiness() {
                         </button>
                       ) : (
                         <button
-                          className="btn btn-success"
+                          className="btn btn-primary"
                           type="button"
                           onClick={addTag}
                         >
@@ -3756,7 +3759,7 @@ export default function CreateBusiness() {
             {/* Save & Next Button */}
             <div className="col-12 text-center p-3 p-md-5">
               <button
-                className="btn btn-success w-100 text-white p-2"
+                className="btn btn-primary w-100 text-white p-2"
                 onClick={handleSeoSubmit}
               >
                 Save & Next
@@ -3962,7 +3965,7 @@ export default function CreateBusiness() {
                 </div>
                 <div className="col-12 mb-3 text-center">
                   <button
-                    className="btn w-100 btn btn-success"
+                    className="btn w-100 btn btn-primary"
                     onClick={addImageInput}
                   >
                     + Add another image
@@ -3979,7 +3982,7 @@ export default function CreateBusiness() {
                 </div>
               ) : (
                 <button
-                  className="btn btn-success w-100 text-white p-2"
+                  className="btn btn-primary w-100 text-white p-2"
                   onClick={handleGallerySubmit}
                 >
                   Save & Next
@@ -4233,7 +4236,7 @@ export default function CreateBusiness() {
 
             <div className="col-12 text-center p-3 p-md-5">
               <button
-                className="btn btn-success w-100 text-white p-2"
+                className="btn btn-primary w-100 text-white p-2"
                 onClick={handleGallerySubmit}
               >
                 Save & Next
