@@ -29,10 +29,16 @@ import IconButton from '@mui/material/IconButton'
 import InputAdornment from '@mui/material/InputAdornment'
 import Visibility from '@mui/icons-material/Visibility'
 import VisibilityOff from '@mui/icons-material/VisibilityOff'
-import { containerClasses } from '@mui/material'
+import Razorpay from './Razorpay'
 
 export default function CreateBusiness() {
-  const [step, setStep] = useState(3)
+  const [step, setStep] = useState(1)
+
+  const [planDetails,setPlanDetails] = useState({
+    price:'',
+    name:'',
+
+  })
 
   const handleNextStep = () => {
     setStep((prevStep) => prevStep + 1)
@@ -49,71 +55,153 @@ export default function CreateBusiness() {
   const [planData, setPlanData] = useState([])
 
   const [formData, setFormData] = useState({
-    businessName: '',
-    logo: '',
-    ownerName: '',
-    email: '',
-    password: '',
-    address: {
-      buildingName: '',
-      streetName: '',
-      landMark: '',
-      city: '',
-      state: '',
-      pinCode: '',
+    "businessName": "Auxxweb solutions",
+    "logo": "https://static.vecteezy.com/system/resources/previews/011/883/296/non_2x/modern-graphic-leaf-abstrack-with-water-drop-colorful-logo-good-for-technology-logo-fruits-logo-fresh-logo-nature-logo-company-logo-dummy-logo-bussiness-logo-vector.jpg",
+    "ownerName": "Adarash Raj",
+    "email": "auxxweb3@gmail.com",
+    "password": "Pass@123#",
+    "address": {
+        "buildingName": "hilite business park",
+        "streetName": "palazhi",
+        "landMark": "hilite mall",
+        "city": "calicut",
+        "state": "kerala",
+        "pinCode": 688541
     },
-    location: {
-      lat: '',
-      lon: '',
+    "contactDetails": {
+        "primaryNumber": 9074306855,
+        "secondaryNumber": 9074306844,
+        "whatsAppNumber": 9074306855,
+        "email": "auxxweb@gmail.com",
+        "webSite": "auxxweb.in"
     },
-    contactDetails: {},
-    socialMediaLinks: [
-      { tag: 'facebook', link: '' },
-      { tag: 'instagram', link: '' },
-      { tag: 'twitter', link: '' },
+    "socialMediaLinks": [
+        {
+            "tag": "facebook",
+            "link": "https://www.instagram.com"
+        },
+        {
+            "tag": "instagram",
+            "link": "https://www.instagram.com"
+        },
+        {
+            "tag": "twitter",
+            "link": "https://www.instagram.com"
+        }
     ],
-    category: '',
-    services: [],
-    businessTiming: {
-      workingDays: [],
-      openTime: {
-        open: '',
-        close: '',
-      },
+    "category": "66fe5533d2bbc6f25c7ae03c",
+    "services": [
+        "website",
+        "mobileApplication"
+    ],
+    "businessTiming": {
+        "workingDays": [
+            "monday",
+            "friday"
+        ],
+        "openTime": {
+            "open": "09:00 Am",
+            "close": "08:00 Pm"
+        }
     },
-    description: '',
-    theme: '',
-    secondaryTheme: '',
-
-    landingPageHero: {
-      title: '',
-      description: '',
-      coverImage: '',
+    "description": "We offer comprehensive software development and digital marketing services to help your business thrive in the digital age. Our team of experts is committed to delivering innovative solutions that drive growth and success.",
+    "theme": "#549F84",
+    "landingPageHero": {
+        "title": "we are auxxweb",
+        "description": "We offer comprehensive software development and digital marketing services to help your business thrive in the digital age. Our team of experts is committed to delivering innovative solutions that drive growth and success.",
+        "coverImage": "https://www.auxxweb.in/assets/images/temp/dm.png"
     },
-    welcomePart: {
-      title: '',
-      description: '',
-      coverImage: '',
+    "welcomePart": {
+        "title": "welcome to auxxweb",
+        "description": "We offer comprehensive software development and digital marketing services to help your business thrive in the digital age. Our team of experts is committed to delivering innovative solutions that drive growth and success.",
+        "coverImage": "https://www.auxxweb.in/assets/images/temp/download.png"
     },
-    specialServices: {
-      title: '',
-      description: '',
-      data: [],
+    "specialServices": {
+        "title": "Out core services",
+        "description": "We offer comprehensive software development and digital marketing services to help your business thrive in the digital age. Our team of experts is committed to delivering innovative solutions that drive growth and success.",
+        "data": [
+            {
+                "image": "https://www.auxxweb.in/assets/images/clients/client_6.png",
+                "title": "aswassam",
+                "description": "health care clinic in alappuzha, we provide all the health services"
+            },
+            {
+                "image": "https://www.auxxweb.in/assets/images/clients/client_7.png",
+                "title": "k stories",
+                "description": "world best story writing and reading website, enjoy your free tym with k stories"
+            }
+        ]
     },
-    productSection: [],
-    service: [],
-    testimonial: {
-      description: '',
-      reviews: [],
+    "productSection": [
+        {
+            "title": "website",
+            "image": "https://www.auxxweb.in/assets/images/temp/img5.png",
+            "description": " we are providing best websites in minimal price and high quality , auxxweb solutions",
+            "price": 100
+        },
+        {
+            "title": "mobileApp",
+            "image": "https://www.auxxweb.in/assets/images/temp/img5.png",
+            "description": " we are providing best mogileapps in minimal price and high quality , auxxweb solutions",
+            "price": 500
+        },
+        {
+            "title": "ERP softwares",
+            "image": "https://www.auxxweb.in/assets/images/temp/img5.png",
+            "description": " we are providing best ero siftwares in minimal price and high quality , auxxweb solutions",
+            "price": 200
+        }
+    ],
+    "service": [
+        {
+            "title": "website service",
+            "image": "https://www.auxxweb.in/assets/images/temp/img5.png",
+            "description": " we are providing best websites in minimal price and high quality , auxxweb solutions"
+        },
+        {
+            "title": "mobileApp service",
+            "image": "https://www.auxxweb.in/assets/images/temp/img5.png",
+            "description": " we are providing best mogileapps in minimal price and high quality , auxxweb solutions"
+        },
+        {
+            "title": "ERP software service",
+            "image": "https://www.auxxweb.in/assets/images/temp/img5.png",
+            "description": " we are providing best ero siftwares in minimal price and high quality , auxxweb solutions"
+        }
+    ],
+    "testimonial": {
+        "description": "Our Happy Customers",
+        "reviews": [
+            {
+                "name": "adarsh",
+                "image": "https://www.auxxweb.in/assets/images/team/adarsh.jpeg",
+                "review": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non neque elit. Sed ut tellus ac neque fermentum tristique. Donec sed facilisis tellus, a vulputate turpis. Duis eget turpis non tellus tincidunt fermentum.",
+                "rating": 4
+            },
+            {
+                "name": "rahul",
+                "image": "https://www.auxxweb.in/assets/images/team/hari.png",
+                "review": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non neque elit. Sed ut tellus ac neque fermentum tristique. Donec sed facilisis tellus, a vulputate turpis. Duis eget turpis non tellus tincidunt fermentum.",
+                "rating": 3.5
+            }
+        ]
     },
-    gallery: [],
-    videos: [],
-    seoData: {
-      title: '',
-      description: '',
-      metaTags: [],
+    "gallery": [
+        "https://www.auxxweb.in/assets/images/temp/contact-tv.png",
+        "https://www.auxxweb.in/assets/images/temp/download.png",
+        "https://www.auxxweb.in/assets/images/temp/web7.png",
+        "https://www.auxxweb.in/assets/images/temp/dm.png"
+    ],
+    "seoData": {
+        "title": "best software company in kerala",
+        "description": " we are providing best ero siftwares in minimal price and high quality , auxxweb solutions",
+        "metaTags": [
+            "it company",
+            "software",
+            "website"
+        ]
     },
-    selectedPlan: '',
+    "selectedPlan": "66fc2808bc0c7a4d7a67bee4"
   })
 
   const preRequestFun = async (file, position) => {
@@ -3723,9 +3811,10 @@ export default function CreateBusiness() {
     }
 
     const handleGallerySubmit = async () => {
-      const imageFiles = images.map((image) => image?.file)
 
-      if (imageFiles.length > 0) {
+      if (images.length > 0&& images[0].file !=null) {
+        
+      const imageFiles = images.map((image) => image?.file)
         setLoading(true)
         const requestBody = {
           files: imageFiles.map((file) => ({
@@ -4618,13 +4707,10 @@ export default function CreateBusiness() {
                     </div>
                     <div className="col">
                       <span className="fs-13">Send Email</span>
-                      {businessData.contactDetails.emails.map(
-                        (email, index) => (
-                          <p className="fs-16" key={index}>
-                            {email.number}
+                     
+                          <p className="fs-16" >
+                            {businessData.contactDetails.email}
                           </p>
-                        ),
-                      )}
                     </div>
                   </div>
                 </div>
@@ -4636,13 +4722,12 @@ export default function CreateBusiness() {
                     </div>
                     <div className="col">
                       <span className="fs-13">Contact</span>
-                      {businessData.contactDetails.mobileNumbers.map(
-                        (mobile, index) => (
-                          <p className="fs-16" key={index}>
-                            {mobile.number}
+                          <p className="fs-16">
+                            {businessData.contactDetails.primaryNumber}
                           </p>
-                        ),
-                      )}
+                          <p className="fs-16">
+                            {businessData.contactDetails.secondaryNumber}
+                          </p>
                     </div>
                   </div>
                 </div>
@@ -5265,11 +5350,16 @@ export default function CreateBusiness() {
   }
 
   function Subscription() {
-    function planSubmit(id) {
+
+    function planSubmit(id,price,name) {
       setFormData((prevFormData) => ({
         ...prevFormData,
         selectedPlan: id,
       }))
+      setPlanDetails({
+        name: name,
+        price: price,
+      })
       handleNextStep()
     }
 
@@ -5338,7 +5428,7 @@ export default function CreateBusiness() {
                             <div className="mt-4">
                               <button
                                 className="btn w-100 text-white"
-                                onClick={() => planSubmit(plan._id)}
+                                onClick={() => planSubmit(plan._id,plan.amount,plan.plan)}
                                 style={{ backgroundColor: '#5b7ee88c' }}
                               >
                                 Choose Plan
@@ -5358,108 +5448,6 @@ export default function CreateBusiness() {
     )
   }
 
-  const Razorpay = () => {
-    const [isScriptLoaded, setScriptLoaded] = useState(false)
-    const [businessId, setBusinessId] = useState('')
-    const loadRazorpayScript = () => {
-      return new Promise((resolve) => {
-        const script = document.createElement('script')
-        script.src = 'https://checkout.razorpay.com/v1/checkout.js'
-        script.onload = () => {
-          setScriptLoaded(true)
-          resolve(true)
-        }
-        script.onerror = () => {
-          setScriptLoaded(false)
-          resolve(false)
-        }
-        document.body.appendChild(script)
-      })
-    }
-
-    // Function to open Razorpay payment window
-    const handlePayment = async (id) => {
-      if (!isScriptLoaded) {
-        const loaded = await loadRazorpayScript()
-        if (!loaded) {
-          alert('Razorpay SDK failed to load. Are you online?')
-          return
-        }
-      }
-
-      const options = {
-        key: 'rzp_test_SGRm1pfUuOFpzu', // Dummy Razorpay key ID for testing
-        amount: 50000, // Amount in paise (50000 paise = ₹500)
-        currency: 'INR',
-        name: 'Demo Company',
-        description: 'Test Transaction',
-        image: formData.logo, // Dummy logo URL
-        handler: async function (response) {
-          var paymentDetails = {
-            plan: formData.selectedPlan,
-            paymentId: response.razorpay_payment_id,
-            date: new Date(),
-            paymentStatus: 'success',
-          }
-          try {
-            const response = await axios.post(
-              'https://businessbazaarserver.auxxweb.in/api/v1/payment',
-              paymentDetails,
-              {
-                headers: {
-                  'Content-Type': 'application/json',
-                  Authorization: `Bearer ${id}`, // Sending businessId as bearer token
-                },
-              },
-            )
-            if (response.status !== 200) {
-              throw new Error(`HTTP error! Status: ${response.status}`)
-            }
-
-            const data = response.data
-            if (data.success) {
-              return data
-            } else {
-              console.error(
-                'Failed to create business details:',
-                data.message || 'Unknown error',
-              )
-              throw new Error(
-                data.message || 'Failed to create business details',
-              )
-            }
-          } catch (error) {
-            console.error(
-              'Error occurred while fetching business site details:',
-              error.message,
-            )
-            throw error
-          }
-        },
-        prefill: {
-          name: 'John Doe',
-          email: 'john.doe@example.com',
-          contact: '9999999999',
-        },
-        notes: {
-          address: 'Sample Address',
-        },
-        theme: {
-          color: '#F37254', // Customize theme color
-        },
-      }
-
-      const rzp = new window.Razorpay(options)
-      rzp.open()
-    }
-    const submitData = async () => {
-      const res = await CreateBusinessDetails(formData)
-      const id = res.data._id || res.data.data?._id
-      setBusinessId(id)
-      handlePayment(id)
-    }
-    submitData()
-  }
 
   return (
     <>
@@ -5475,10 +5463,9 @@ export default function CreateBusiness() {
       {step === 10 && <CreateProductPart />}
       {step === 11 && <SeoDetails />}
       {step === 12 && <MoreImages />}
-      {step === 13 && <MoreVideos />}
-      {step === 14 && <PreviewTemplates />}
-      {step === 15 && <Subscription />}
-      {step === 16 && <Razorpay />}
+      {step === 13 && <PreviewTemplates />}
+      {step === 14 && <Subscription />}
+      {step === 15 && <Razorpay formData={formData} planDetails={planDetails} />}
     </>
   )
 }
