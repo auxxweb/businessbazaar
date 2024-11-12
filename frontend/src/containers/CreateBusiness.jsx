@@ -29,10 +29,10 @@ import IconButton from '@mui/material/IconButton'
 import InputAdornment from '@mui/material/InputAdornment'
 import Visibility from '@mui/icons-material/Visibility'
 import VisibilityOff from '@mui/icons-material/VisibilityOff'
-import { containerClasses } from '@mui/material'
+import Razorpay from './Razorpay'
 
 export default function CreateBusiness() {
-  const [step, setStep] = useState(1)
+  const [step, setStep] = useState(3)
 
   const handleNextStep = () => {
     setStep((prevStep) => prevStep + 1);
@@ -49,72 +49,72 @@ export default function CreateBusiness() {
   const [planData, setPlanData] = useState([]);
 
   const [formData, setFormData] = useState({
-    businessName: "",
-    logo: "",
-    ownerName: "",
-    email: "",
-    password: "",
+    businessName: '',
+    logo: '',
+    ownerName: '',
+    email: '',
+    password: '',
     address: {
-      buildingName: "",
-      streetName: "",
-      landMark: "",
-      city: "",
-      state: "",
-      pinCode: "",
+      buildingName: '',
+      streetName: '',
+      landMark: '',
+      city: '',
+      state: '',
+      pinCode: '',
     },
     location: {
-      lat: "",
-      lon: "",
+      lat: '',
+      lon: '',
     },
     contactDetails: {},
     socialMediaLinks: [
-      { tag: "facebook", link: "" },
-      { tag: "instagram", link: "" },
-      { tag: "twitter", link: "" },
+      { tag: 'facebook', link: '' },
+      { tag: 'instagram', link: '' },
+      { tag: 'twitter', link: '' },
     ],
-    category: "",
+    category: '',
     services: [],
     businessTiming: {
       workingDays: [],
       openTime: {
-        open: "",
-        close: "",
+        open: '',
+        close: '',
       },
     },
-    description: "",
-    theme: "",
-    secondaryTheme: "",
+    description: '',
+    theme: '',
+    secondaryTheme: '',
 
     landingPageHero: {
-      title: "",
-      description: "",
-      coverImage: "",
+      title: '',
+      description: '',
+      coverImage: '',
     },
     welcomePart: {
-      title: "",
-      description: "",
-      coverImage: "",
+      title: '',
+      description: '',
+      coverImage: '',
     },
     specialServices: {
-      title: "",
-      description: "",
+      title: '',
+      description: '',
       data: [],
     },
     productSection: [],
     service: [],
     testimonial: {
-      description: "",
+      description: '',
       reviews: [],
     },
     gallery: [],
     videos: [],
     seoData: {
-      title: "",
-      description: "",
+      title: '',
+      description: '',
       metaTags: [],
     },
-    selectedPlan: "",
-  });
+    selectedPlan: '',
+  })
 
   const preRequestFun = async (file, position) => {
     const url = "https://businessbazaarserver.auxxweb.in/api/v1/s3url";
@@ -3743,10 +3743,10 @@ export default function CreateBusiness() {
     };
 
     const handleGallerySubmit = async () => {
-      const imageFiles = images.map((image) => image?.file);
+      const imageFiles = images.map((image) => image?.file)
 
       if (imageFiles.length > 0) {
-        setLoading(true);
+        setLoading(true)
         const requestBody = {
           files: imageFiles.map((file) => ({
             position: "gallery",
@@ -4638,13 +4638,10 @@ export default function CreateBusiness() {
                     </div>
                     <div className="col">
                       <span className="fs-13">Send Email</span>
-                      {businessData.contactDetails.emails.map(
-                        (email, index) => (
-                          <p className="fs-16" key={index}>
-                            {email.number}
+                     
+                          <p className="fs-16" >
+                            {businessData.contactDetails.email}
                           </p>
-                        )
-                      )}
                     </div>
                   </div>
                 </div>
@@ -4656,13 +4653,12 @@ export default function CreateBusiness() {
                     </div>
                     <div className="col">
                       <span className="fs-13">Contact</span>
-                      {businessData.contactDetails.mobileNumbers.map(
-                        (mobile, index) => (
-                          <p className="fs-16" key={index}>
-                            {mobile.number}
+                          <p className="fs-16">
+                            {businessData.contactDetails.primaryNumber}
                           </p>
-                        )
-                      )}
+                          <p className="fs-16">
+                            {businessData.contactDetails.secondaryNumber}
+                          </p>
                     </div>
                   </div>
                 </div>
@@ -5287,12 +5283,13 @@ export default function CreateBusiness() {
   }
 
   function Subscription() {
-    function planSubmit(id) {
+
+    function planSubmit(id,price,name) {
       setFormData((prevFormData) => ({
         ...prevFormData,
         selectedPlan: id,
-      }));
-      handleNextStep();
+      }))
+      handleNextStep()
     }
 
     return (
@@ -5361,7 +5358,7 @@ export default function CreateBusiness() {
                               <button
                                 className="btn w-100 text-white"
                                 onClick={() => planSubmit(plan._id)}
-                                style={{ backgroundColor: "#5b7ee88c" }}
+                                style={{ backgroundColor: '#5b7ee88c' }}
                               >
                                 Choose Plan
                               </button>
@@ -5381,107 +5378,107 @@ export default function CreateBusiness() {
   }
 
   const Razorpay = () => {
-    const [isScriptLoaded, setScriptLoaded] = useState(false);
-    const [businessId, setBusinessId] = useState("");
+    const [isScriptLoaded, setScriptLoaded] = useState(false)
+    const [businessId, setBusinessId] = useState('')
     const loadRazorpayScript = () => {
       return new Promise((resolve) => {
-        const script = document.createElement("script");
-        script.src = "https://checkout.razorpay.com/v1/checkout.js";
+        const script = document.createElement('script')
+        script.src = 'https://checkout.razorpay.com/v1/checkout.js'
         script.onload = () => {
-          setScriptLoaded(true);
-          resolve(true);
-        };
+          setScriptLoaded(true)
+          resolve(true)
+        }
         script.onerror = () => {
-          setScriptLoaded(false);
-          resolve(false);
-        };
-        document.body.appendChild(script);
-      });
-    };
+          setScriptLoaded(false)
+          resolve(false)
+        }
+        document.body.appendChild(script)
+      })
+    }
 
     // Function to open Razorpay payment window
     const handlePayment = async (id) => {
       if (!isScriptLoaded) {
-        const loaded = await loadRazorpayScript();
+        const loaded = await loadRazorpayScript()
         if (!loaded) {
-          alert("Razorpay SDK failed to load. Are you online?");
-          return;
+          alert('Razorpay SDK failed to load. Are you online?')
+          return
         }
       }
 
       const options = {
-        key: "rzp_test_SGRm1pfUuOFpzu", // Dummy Razorpay key ID for testing
+        key: 'rzp_test_SGRm1pfUuOFpzu', // Dummy Razorpay key ID for testing
         amount: 50000, // Amount in paise (50000 paise = ₹500)
-        currency: "INR",
-        name: "Demo Company",
-        description: "Test Transaction",
+        currency: 'INR',
+        name: 'Demo Company',
+        description: 'Test Transaction',
         image: formData.logo, // Dummy logo URL
         handler: async function (response) {
           var paymentDetails = {
             plan: formData.selectedPlan,
             paymentId: response.razorpay_payment_id,
             date: new Date(),
-            paymentStatus: "success",
-          };
+            paymentStatus: 'success',
+          }
           try {
             const response = await axios.post(
-              "https://businessbazaarserver.auxxweb.in/api/v1/payment",
+              'https://businessbazaarserver.auxxweb.in/api/v1/payment',
               paymentDetails,
               {
                 headers: {
-                  "Content-Type": "application/json",
+                  'Content-Type': 'application/json',
                   Authorization: `Bearer ${id}`, // Sending businessId as bearer token
                 },
-              }
-            );
+              },
+            )
             if (response.status !== 200) {
-              throw new Error(`HTTP error! Status: ${response.status}`);
+              throw new Error(`HTTP error! Status: ${response.status}`)
             }
 
-            const data = response.data;
+            const data = response.data
             if (data.success) {
-              return data;
+              return data
             } else {
               console.error(
-                "Failed to create business details:",
-                data.message || "Unknown error"
-              );
+                'Failed to create business details:',
+                data.message || 'Unknown error',
+              )
               throw new Error(
-                data.message || "Failed to create business details"
-              );
+                data.message || 'Failed to create business details',
+              )
             }
           } catch (error) {
             console.error(
-              "Error occurred while fetching business site details:",
-              error.message
-            );
-            throw error;
+              'Error occurred while fetching business site details:',
+              error.message,
+            )
+            throw error
           }
         },
         prefill: {
-          name: "John Doe",
-          email: "john.doe@example.com",
-          contact: "9999999999",
+          name: 'John Doe',
+          email: 'john.doe@example.com',
+          contact: '9999999999',
         },
         notes: {
-          address: "Sample Address",
+          address: 'Sample Address',
         },
         theme: {
-          color: "#F37254", // Customize theme color
+          color: '#F37254', // Customize theme color
         },
-      };
+      }
 
-      const rzp = new window.Razorpay(options);
-      rzp.open();
-    };
+      const rzp = new window.Razorpay(options)
+      rzp.open()
+    }
     const submitData = async () => {
-      const res = await CreateBusinessDetails(formData);
-      const id = res.data._id || res.data.data?._id;
-      setBusinessId(id);
-      handlePayment(id);
-    };
-    submitData();
-  };
+      const res = await CreateBusinessDetails(formData)
+      const id = res.data._id || res.data.data?._id
+      setBusinessId(id)
+      handlePayment(id)
+    }
+    submitData()
+  }
 
   return (
     <>
@@ -5497,10 +5494,9 @@ export default function CreateBusiness() {
       {step === 10 && <CreateProductPart />}
       {step === 11 && <SeoDetails />}
       {step === 12 && <MoreImages />}
-      {step === 13 && <MoreVideos />}
-      {step === 14 && <PreviewTemplates />}
-      {step === 15 && <Subscription />}
-      {step === 16 && <Razorpay />}
+      {step === 13 && <PreviewTemplates />}
+      {step === 14 && <Subscription />}
+      {step === 15 && <Razorpay formData={formData} planDetails={planDetails} />}
     </>
   );
 }
