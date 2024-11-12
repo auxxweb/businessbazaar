@@ -32,7 +32,7 @@ import VisibilityOff from '@mui/icons-material/VisibilityOff'
 import Razorpay from './Razorpay'
 
 export default function CreateBusiness() {
-  const [step, setStep] = useState(3)
+  const [step, setStep] = useState(1)
 
   const handleNextStep = () => {
     setStep((prevStep) => prevStep + 1);
