@@ -1,23 +1,23 @@
 /* eslint-disable react/prop-types */
-import { useEffect, useState } from "react";
-import PhoneInput from "react-phone-input-2";
-import "react-phone-input-2/lib/style.css";
-import TextField from "@mui/material/TextField";
-import Autocomplete from "@mui/material/Autocomplete";
+import { useEffect, useState } from 'react'
+import PhoneInput from 'react-phone-input-2'
+import 'react-phone-input-2/lib/style.css'
+import TextField from '@mui/material/TextField'
+import Autocomplete from '@mui/material/Autocomplete'
 import {
   checkBusinessExists,
   CreateBusinessDetails,
   fetchCategories,
   FetchPlans,
-} from "../Functions/functions";
-import axios from "axios";
-import { toast } from "react-toastify";
+} from '../Functions/functions'
+import axios from 'axios'
+import { toast } from 'react-toastify'
 
 import { Container, Nav, Navbar, NavLink } from 'react-bootstrap'
 import '/src/assets/css/template.css'
 import 'slick-carousel/slick/slick.css'
 import 'slick-carousel/slick/slick-theme.css'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { Dialog } from 'primereact/dialog'
 import { Rating } from 'primereact/rating'
 import { InputText } from 'primereact/inputtext'
@@ -33,97 +33,97 @@ import Razorpay from './Razorpay'
 
 export default function CreateBusiness() {
   const [step, setStep] = useState(1)
+  const navigate = useNavigate()
 
-  const [planDetails,setPlanDetails] = useState({
-    price:'',
-    name:'',
-
+  const [planDetails, setPlanDetails] = useState({
+    price: '',
+    name: '',
   })
 
   const handleNextStep = () => {
-    setStep((prevStep) => prevStep + 1);
-  };
+    setStep((prevStep) => prevStep + 1)
+  }
   const handlePrevStep = () => {
     if (step != 1) {
-      setStep((prevStep) => prevStep - 1);
+      setStep((prevStep) => prevStep - 1)
     }
-  };
+  }
 
-  const [categoryData, setCategoryData] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [categoryData, setCategoryData] = useState([])
+  const [loading, setLoading] = useState(true)
 
-  const [planData, setPlanData] = useState([]);
+  const [planData, setPlanData] = useState([])
 
   const [formData, setFormData] = useState({
-    businessName: "",
-    logo: "",
-    ownerName: "",
-    email: "",
-    password: "",
+    businessName: '',
+    logo: '',
+    ownerName: '',
+    email: '',
+    password: '',
     address: {
-      buildingName: "",
-      streetName: "",
-      landMark: "",
-      city: "",
-      state: "",
-      pinCode: "",
+      buildingName: '',
+      streetName: '',
+      landMark: '',
+      city: '',
+      state: '',
+      pinCode: '',
     },
     location: {
-      lat: "",
-      lon: "",
+      lat: '',
+      lon: '',
     },
     contactDetails: {},
     socialMediaLinks: [
-      { tag: "facebook", link: "" },
-      { tag: "instagram", link: "" },
-      { tag: "twitter", link: "" },
+      { tag: 'facebook', link: '' },
+      { tag: 'instagram', link: '' },
+      { tag: 'twitter', link: '' },
     ],
-    category: "",
+    category: '',
     services: [],
     businessTiming: {
       workingDays: [],
       openTime: {
-        open: "",
-        close: "",
+        open: '',
+        close: '',
       },
     },
-    description: "",
-    theme: "",
-    secondaryTheme: "",
+    description: '',
+    theme: '',
+    secondaryTheme: '',
 
     landingPageHero: {
-      title: "",
-      description: "",
-      coverImage: "",
+      title: '',
+      description: '',
+      coverImage: '',
     },
     welcomePart: {
-      title: "",
-      description: "",
-      coverImage: "",
+      title: '',
+      description: '',
+      coverImage: '',
     },
     specialServices: {
-      title: "",
-      description: "",
+      title: '',
+      description: '',
       data: [],
     },
     productSection: [],
     service: [],
     testimonial: {
-      description: "",
+      description: '',
       reviews: [],
     },
     gallery: [],
     videos: [],
     seoData: {
-      title: "",
-      description: "",
+      title: '',
+      description: '',
       metaTags: [],
     },
-    selectedPlan: "",
-  });
+    selectedPlan: '',
+  })
 
   const preRequestFun = async (file, position) => {
-    const url = "https://businessbazaarserver.auxxweb.in/api/v1/s3url";
+    const url = 'https://businessbazaarserver.auxxweb.in/api/v1/s3url'
     const requestBody = {
       files: [
         {
@@ -131,146 +131,146 @@ export default function CreateBusiness() {
           file_type: file.type,
         },
       ],
-    };
+    }
 
     try {
       const response = await axios.post(url, requestBody, {
-        headers: { "Content-Type": "application/json" },
-      });
-      const preReq = response.data.data[0];
+        headers: { 'Content-Type': 'application/json' },
+      })
+      const preReq = response.data.data[0]
 
       if (!preReq.url) {
-        throw new Error("The URL is not defined in the response.");
+        throw new Error('The URL is not defined in the response.')
       }
       await axios.put(preReq.url, file, {
-        headers: { "Content-Type": file.type },
-      });
+        headers: { 'Content-Type': file.type },
+      })
 
-      return preReq;
+      return preReq
     } catch (error) {
-      console.error("Error uploading file:", error.message || error);
-      throw new Error("File upload failed");
+      console.error('Error uploading file:', error.message || error)
+      throw new Error('File upload failed')
     }
-  };
+  }
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const categoryDetails = await fetchCategories();
-        const plans = await FetchPlans();
-        setPlanData(plans.data.data);
-        setCategoryData(categoryDetails.data.data);
+        const categoryDetails = await fetchCategories()
+        const plans = await FetchPlans()
+        setPlanData(plans.data.data)
+        setCategoryData(categoryDetails.data.data)
       } catch (error) {
-        console.error("Error fetching categories:", error);
+        console.error('Error fetching categories:', error)
       } finally {
-        setLoading(false);
+        setLoading(false)
       }
-    };
-    fetchData();
-  }, []);
+    }
+    fetchData()
+  }, [])
 
   function AuthenticationDetails({ formData }) {
     const [authData, setAuthData] = useState({
-      email: "",
-      password: "",
-    });
-    const { email, password } = authData;
-    const [passwordError, setPasswordError] = useState("");
-    const [emailError, setEmailError] = useState("");
-    const [showPassword, setShowPassword] = useState(false);
+      email: '',
+      password: '',
+    })
+    const { email, password } = authData
+    const [passwordError, setPasswordError] = useState('')
+    const [emailError, setEmailError] = useState('')
+    const [showPassword, setShowPassword] = useState(false)
 
     useEffect(() => {
       setAuthData({
         email: formData.email,
         password: formData.password,
-      });
-    }, [formData]);
+      })
+    }, [formData])
 
     function handleInputChange(e) {
-      const { name, value } = e.target;
+      const { name, value } = e.target
       setAuthData((prevAuthData) => ({
         ...prevAuthData,
         [name]: value,
-      }));
+      }))
 
       // Clear errors if the input becomes valid
-      if (name === "email" && value) {
+      if (name === 'email' && value) {
         if (validateEmail(value)) {
-          setEmailError("");
+          setEmailError('')
         }
       }
 
-      if (name === "password" && value) {
+      if (name === 'password' && value) {
         if (validatePassword(value)) {
-          setPasswordError("");
+          setPasswordError('')
         }
       }
     }
 
     const handleAuthSubmit = async () => {
-      const isEmailValid = validateEmail(email);
-      const isPasswordValid = validatePassword(password);
+      const isEmailValid = validateEmail(email)
+      const isPasswordValid = validatePassword(password)
 
       if (isEmailValid && isPasswordValid) {
         try {
-          const business = await checkBusinessExists({ email, password });
-          console.log(business, "business---");
+          const business = await checkBusinessExists({ email, password })
+          console.log(business, 'business---')
 
           if (business?.data) {
             setFormData((prevFormData) => ({
               ...prevFormData,
               email: email,
               password: password,
-            }));
-            handleNextStep();
+            }))
+            handleNextStep()
           }
         } catch (error) {
-          console.log(error, "error-----------");
+          console.log(error, 'error-----------')
 
           toast.error(
             error?.response?.data?.message ??
-              "An error occurred. Please try again.",
+              'An error occurred. Please try again.',
             {
-              position: "top-right",
+              position: 'top-right',
               autoClose: 3000,
               hideProgressBar: false,
               closeOnClick: true,
               pauseOnHover: true,
               draggable: true,
-              theme: "colored",
+              theme: 'colored',
               style: {
-                backgroundColor: "#e74c3c",
-                color: "#FFFFFF",
+                backgroundColor: '#e74c3c',
+                color: '#FFFFFF',
               },
-            }
-          );
+            },
+          )
         }
       }
-    };
+    }
 
     // Updated Email validation function
     function validateEmail(value = email) {
       if (!value) {
-        setEmailError("Email is required.");
-        return false;
+        setEmailError('Email is required.')
+        return false
       }
-      setEmailError("");
-      return true;
+      setEmailError('')
+      return true
     }
 
     // Updated Password validation function
     function validatePassword(value = password) {
       if (value.length < 8) {
-        setPasswordError("Password must be at least 8 characters long.");
-        return false;
+        setPasswordError('Password must be at least 8 characters long.')
+        return false
       }
-      setPasswordError("");
-      return true;
+      setPasswordError('')
+      return true
     }
 
     const togglePasswordVisibility = () => {
-      setShowPassword(!showPassword);
-    };
+      setShowPassword(!showPassword)
+    }
 
     return (
       <div className="h-100vh create-business-div">
@@ -314,7 +314,7 @@ export default function CreateBusiness() {
               <TextField
                 fullWidth
                 label="Password"
-                type={showPassword ? "text" : "password"}
+                type={showPassword ? 'text' : 'password'}
                 variant="outlined"
                 name="password"
                 value={authData.password}
@@ -402,70 +402,78 @@ export default function CreateBusiness() {
           }
         `}</style>
       </div>
-    );
+    )
   }
 
   function BusinessDetails({ formData }) {
-    const [logo, setLogo] = useState("");
-    const [businessName, setBusinessName] = useState("");
-    const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState("");
+    const [logo, setLogo] = useState('')
+    const [businessName, setBusinessName] = useState('')
+    const [isLoading, setIsLoading] = useState(false)
+    const [error, setError] = useState('')
+    const [logoFile, setLogoFile] = useState(null)
+    const [logoPrev, setLogoPrev] = useState(null)
 
     useEffect(() => {
-      setLogo(formData?.logo);
-      setBusinessName(formData?.businessName);
-    }, [formData]);
+      setLogo(formData?.logo)
+      setBusinessName(formData?.businessName)
+    }, [formData])
     const handleLogoChange = (event) => {
-      const file = event.target.files[0];
-    
+      const file = event.target.files[0]
+
       if (file) {
-        setIsLoading(true);
-        const reader = new FileReader();
-    
+        setIsLoading(true)
+        setLogoFile(file)
+
+        const reader = new FileReader()
+
         reader.onload = function (e) {
-          setLogo(e.target.result); // Save the Base64 string in logo state
-          setIsLoading(false);
-        };
-    
+          setLogoPrev(e.target.result)
+          // Save the Base64 string in logo state
+          setIsLoading(false)
+        }
+
         reader.onerror = function () {
-          console.error("Error reading file:", reader.error);
-          setIsLoading(false);
-        };
-    
-        reader.readAsDataURL(file); // Convert file to a Base64 string
+          console.error('Error reading file:', reader.error)
+          setIsLoading(false)
+        }
+
+        reader.readAsDataURL(file) // Convert file to a Base64 string
       }
-    };
-    
-    
+    }
 
     const imageUpload = () => {
-      document.getElementById("ImageLogo").click();
-    };
+      document.getElementById('ImageLogo').click()
+    }
 
     // Handle form submission with validation
     const handleBusinessSubmit = async () => {
       if (!businessName) {
-        setError("Business Name is required.");
-        return;
+        setError('Business Name is required.')
+        return
       }
 
-      setError("");
-     try{
-      setLoading(true);
-      const preReq = await preRequestFun(logo, "Landing");
-     }catch(e){
-      console.error("")
-     }finally{
-      setLoading(false);
-     }
-      setFormData((prevFormData) => ({
-        ...prevFormData,
-        businessName: businessName,
-        logo: preReq.accessLink,
-      }));
-      setLogo(preReq.accessLink);
-      handleNextStep();
-    };
+      setError('')
+      try {
+        setLoading(true)
+        let preReq = null
+        if (logoFile) {
+          preReq = await preRequestFun(logo, 'Landing')
+        }
+
+        setFormData((prevFormData) => ({
+          ...prevFormData,
+          businessName: businessName,
+          ...(preReq && {
+            logo: preReq.accessLink,
+          }),
+        }))
+        handleNextStep()
+      } catch (e) {
+        console.error('')
+      } finally {
+        setLoading(false)
+      }
+    }
 
     return (
       <div className="business-details-page">
@@ -481,7 +489,7 @@ export default function CreateBusiness() {
                   <i className="bi bi-arrow-left"></i>
                 </button>
                 <h2 className="fw-bold text-start mb-4">
-                  <span style={{ color: "#000000" }}>Enter Your</span> Business
+                  <span style={{ color: '#000000' }}>Enter Your</span> Business
                   Details
                 </h2>
 
@@ -507,22 +515,22 @@ export default function CreateBusiness() {
                   <input
                     type="file"
                     id="ImageLogo"
-                    style={{ display: "none" }}
+                    style={{ display: 'none' }}
                     onChange={handleLogoChange}
                   />
                   <div
                     onClick={imageUpload}
                     className="logo-upload p-4 text-center"
-                    style={{ cursor: "pointer" }}
+                    style={{ cursor: 'pointer' }}
                   >
                     {isLoading ? (
                       <div
                         className="spinner-border text-primary"
                         role="status"
                       ></div>
-                    ) : logo ? (
+                    ) : logo || logoPrev ? (
                       <img
-                        src={logo}
+                        src={logoPrev ?? logo}
                         alt="Business Logo"
                         width="100"
                         className="img-thumbnail"
@@ -564,7 +572,7 @@ export default function CreateBusiness() {
                     <div className="logo-placeholder">No Logo Uploaded</div>
                   )}
                   <h4 className="mt-4 text-uppercase">
-                    {businessName || "Your Business Name"}
+                    {businessName || 'Your Business Name'}
                   </h4>
                 </div>
               </div>
@@ -629,109 +637,108 @@ export default function CreateBusiness() {
           }
         `}</style>
       </div>
-    );
+    )
   }
 
   function ContactDetails({ formData }) {
+    console.log(formData, 'formData-----')
 
-    console.log(formData)
-
-  const [newFormData, setNewFormData] = useState({
-    contactDetails: {
-      name: '',
-      primaryNumber: '',
-      secondaryNumber: '',
-      whatsappNumber: '',
-      email: '',
-      website: '',
-    },
-  });
-
-  const [address, setAddress] = useState({
-    buildingName: '',
-    streetName: '',
-    landMark: '',
-    city: '',
-    state: '',
-    pinCode: '',
-  });
-
-  const [location, setLocation] = useState({
-    lat: '',
-    lon: '',
-  });
-
-  const [errors, setErrors] = useState({});
-
-  useEffect(() => {
-    if (Object.keys(formData?.contactDetails)?.length) {
-      setNewFormData({
-        contactDetails: formData?.contactDetails,
-      });
-    }
-    setAddress(formData?.address);
-    setLocation(formData?.location);
-  }, [formData]);
-
-  const handleContactChange = (event) => {
-    const { name, value } = event.target;
-    setNewFormData((prevData) => ({
-      ...prevData,
+    const [newFormData, setNewFormData] = useState({
       contactDetails: {
-        ...prevData.contactDetails,
-        [name]: value,
+        name: '',
+        primaryNumber: '',
+        secondaryNumber: '',
+        whatsappNumber: '',
+        email: '',
+        website: '',
       },
-    }));
-  };
+    })
 
-  const validateForm = () => {
-    const newErrors = {};
-    if (!newFormData.contactDetails.name) newErrors.name = 'Name is required.';
-    if (!newFormData.contactDetails.primaryNumber)
-      newErrors.primaryNumber = 'Primary number is required.';
-    if (!newFormData.contactDetails.secondaryNumber)
-      newErrors.secondaryNumber = 'Secondary number is required.';
-    if (!newFormData.contactDetails.whatsappNumber)
-      newErrors.whatsappNumber = 'WhatsApp number is required.';
-    if (!newFormData.contactDetails.email)
-      newErrors.email = 'Email is required.';
-    if (!newFormData.contactDetails.website)
-      newErrors.website = 'Website is required.';
-    if (!address.buildingName)
-      newErrors.buildingName = 'Building name is required.';
-    if (!address.state) newErrors.state = 'State is required';
+    const [address, setAddress] = useState({
+      buildingName: '',
+      streetName: '',
+      landMark: '',
+      city: '',
+      state: '',
+      pinCode: '',
+    })
 
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
+    const [location, setLocation] = useState({
+      lat: '',
+      lon: '',
+    })
 
-  const contactSubmitHandler = () => {
-    if (validateForm()) {
-      setFormData((prevData) => ({
+    const [errors, setErrors] = useState({})
+
+    useEffect(() => {
+      if (Object.keys(formData?.contactDetails)?.length) {
+        setNewFormData({
+          contactDetails: formData?.contactDetails,
+        })
+      }
+      setAddress(formData?.address)
+      setLocation(formData?.location)
+    }, [formData])
+
+    const handleContactChange = (event) => {
+      const { name, value } = event.target
+      setNewFormData((prevData) => ({
         ...prevData,
-        contactDetails: newFormData.contactDetails,
-        address: address,
-        location: location,
-      }));
-      handleNextStep();
+        contactDetails: {
+          ...prevData.contactDetails,
+          [name]: value,
+        },
+      }))
     }
-  };
 
-  const handleAddressChange = (event) => {
-    const { name, value } = event.target;
-    setAddress((prevAddress) => ({
-      ...prevAddress,
-      [name]: value,
-    }));
-  };
+    const validateForm = () => {
+      const newErrors = {}
+      if (!newFormData.contactDetails.name) newErrors.name = 'Name is required.'
+      if (!newFormData.contactDetails.primaryNumber)
+        newErrors.primaryNumber = 'Primary number is required.'
+      if (!newFormData.contactDetails.secondaryNumber)
+        newErrors.secondaryNumber = 'Secondary number is required.'
+      if (!newFormData.contactDetails.whatsappNumber)
+        newErrors.whatsappNumber = 'WhatsApp number is required.'
+      if (!newFormData.contactDetails.email)
+        newErrors.email = 'Email is required.'
+      if (!newFormData.contactDetails.website)
+        newErrors.website = 'Website is required.'
+      if (!address.buildingName)
+        newErrors.buildingName = 'Building name is required.'
+      if (!address.state) newErrors.state = 'State is required'
 
-  const handleLocationChange = (event) => {
-    const { name, value } = event.target;
-    setLocation((prevLocation) => ({
-      ...prevLocation,
-      [name]: value,
-    }));
-  };
+      setErrors(newErrors)
+      return Object.keys(newErrors).length === 0
+    }
+
+    const contactSubmitHandler = () => {
+      if (validateForm()) {
+        setFormData((prevData) => ({
+          ...prevData,
+          contactDetails: newFormData.contactDetails,
+          address: address,
+          location: location,
+        }))
+        handleNextStep()
+      }
+    }
+
+    const handleAddressChange = (event) => {
+      const { name, value } = event.target
+      setAddress((prevAddress) => ({
+        ...prevAddress,
+        [name]: value,
+      }))
+    }
+
+    const handleLocationChange = (event) => {
+      const { name, value } = event.target
+      setLocation((prevLocation) => ({
+        ...prevLocation,
+        [name]: value,
+      }))
+    }
 
     return (
       <div className="h-100vh create-business-div">
@@ -943,7 +950,7 @@ export default function CreateBusiness() {
               rel="stylesheet"
             />
             <style>
-              {" "}
+              {' '}
               {`
                         .btn-primary {
             background-color: #105193;
@@ -985,7 +992,7 @@ export default function CreateBusiness() {
             </style>
             <div
               className="p-3"
-              style={{ border: "1px dashed black", borderRadius: "16px" }}
+              style={{ border: '1px dashed black', borderRadius: '16px' }}
             >
               <p className="text-center">
                 This section contains items for the Contact Information.
@@ -1003,7 +1010,7 @@ export default function CreateBusiness() {
                             <span className="fs-13">Address</span>
                             <p className="fs-16">
                               {address.buildingName}, {address.city},
-                              {address.landMark},{address.streetName},{" "}
+                              {address.landMark},{address.streetName},{' '}
                               {address.state},{address.pinCode}
                             </p>
                           </div>
@@ -1017,9 +1024,9 @@ export default function CreateBusiness() {
                           </div>
                           <div className="col">
                             <span className="fs-13">Send Email</span>
-                              <p className="fs-16">
-                                {newFormData.contactDetails.email}
-                              </p>
+                            <p className="fs-16">
+                              {newFormData.contactDetails.email}
+                            </p>
                           </div>
                         </div>
                       </div>
@@ -1031,13 +1038,13 @@ export default function CreateBusiness() {
                           </div>
                           <div className="col">
                             <span className="fs-13">Contact</span>
-                            
-                              <p className="fs-16">
-                                {newFormData.contactDetails.primaryNumber}
-                              </p>
-                              <p className="fs-16">
-                                {newFormData.contactDetails.secondaryNumber}
-                              </p>
+
+                            <p className="fs-16">
+                              {newFormData.contactDetails.primaryNumber}
+                            </p>
+                            <p className="fs-16">
+                              {newFormData.contactDetails.secondaryNumber}
+                            </p>
                           </div>
                         </div>
                       </div>
@@ -1049,7 +1056,7 @@ export default function CreateBusiness() {
           </div>
         </div>
       </div>
-    );
+    )
   }
 
   function CategoryDetails() {
@@ -1083,19 +1090,19 @@ export default function CreateBusiness() {
             <div className="input-group mt-4 w-100 align-items-center">
               <span
                 className="input-group-text bg-white p-3"
-                style={{ flexBasis: "50px" }}
+                style={{ flexBasis: '50px' }}
               >
                 <i className="bi bi-search"></i>
               </span>
 
-              <div style={{ flexGrow: 1, position: "relative" }}>
+              <div style={{ flexGrow: 1, position: 'relative' }}>
                 {loading ? (
                   <div
                     style={{
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
-                      height: "100%",
+                      display: 'flex',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      height: '100%',
                     }}
                   >
                     <CircularProgress size={24} />
@@ -1119,7 +1126,7 @@ export default function CreateBusiness() {
                     name="category"
                     value={
                       categoryData.find(
-                        (category) => category._id === formData.category
+                        (category) => category._id === formData.category,
                       ) || null
                     } // Controlled component
                   />
@@ -1142,7 +1149,7 @@ export default function CreateBusiness() {
           <div className="left-portion col-12 col-lg-5 h-100 p-3 row align-items-center">
             <div
               className="p-3"
-              style={{ border: "1px dashed black", borderRadius: "16px" }}
+              style={{ border: '1px dashed black', borderRadius: '16px' }}
             >
               <p className="text-center">
                 Please select the business category that best represents your
@@ -1153,43 +1160,43 @@ export default function CreateBusiness() {
           </div>
         </div>
       </div>
-    );
+    )
   }
   function ServicesOffering() {
-    const [inputService, setInputService] = useState("");
-    const [error, setError] = useState("");
+    const [inputService, setInputService] = useState('')
+    const [error, setError] = useState('')
 
     // Add service to formData.services
     const addService = (e) => {
-      e.preventDefault();
-      if (inputService.trim() !== "") {
+      e.preventDefault()
+      if (inputService.trim() !== '') {
         setFormData((prevFormData) => ({
           ...prevFormData,
           services: [...prevFormData.services, inputService],
-        }));
-        setInputService(""); // Clear input field
+        }))
+        setInputService('') // Clear input field
       }
-    };
+    }
 
     // Delete service from formData.services
     const deleteService = (indexToDelete) => {
       setFormData((prevFormData) => ({
         ...prevFormData,
         services: prevFormData.services.filter(
-          (_, index) => index !== indexToDelete
+          (_, index) => index !== indexToDelete,
         ),
-      }));
-    };
+      }))
+    }
 
     // Handle next step with validation
     const handleNextWithValidation = () => {
       if (formData.services.length < 2) {
-        setError("Please add at least 2 services before proceeding.");
+        setError('Please add at least 2 services before proceeding.')
       } else {
-        setError("");
-        handleNextStep();
+        setError('')
+        handleNextStep()
       }
-    };
+    }
 
     return (
       <div className="h-100vh create-business-div">
@@ -1200,7 +1207,7 @@ export default function CreateBusiness() {
               {/* Back Button */}
               <button
                 className="btn btn-dark"
-                style={{ position: "absolute", top: "20px", left: "20px" }}
+                style={{ position: 'absolute', top: '20px', left: '20px' }}
                 onClick={handlePrevStep}
               >
                 <i className="bi bi-arrow-left"></i>
@@ -1229,7 +1236,7 @@ export default function CreateBusiness() {
                 <button
                   className="btn btn-primary"
                   onClick={addService}
-                  disabled={inputService.trim() === ""}
+                  disabled={inputService.trim() === ''}
                 >
                   Add
                 </button>
@@ -1278,45 +1285,45 @@ export default function CreateBusiness() {
           </div>
         </div>
       </div>
-    );
+    )
   }
 
   function BusinessTiming() {
-    const [days, setDays] = useState([]);
-    const [openTime, setOpenTime] = useState("");
-    const [closeTime, setCloseTime] = useState("");
+    const [days, setDays] = useState([])
+    const [openTime, setOpenTime] = useState('')
+    const [closeTime, setCloseTime] = useState('')
 
-    const allDays = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+    const allDays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
 
     useEffect(() => {
-      setDays(formData?.businessTiming?.workingDays);
-      setOpenTime(formData?.businessTiming?.openTime?.open);
-      setCloseTime(formData?.businessTiming?.openTime?.close);
-    }, []);
+      setDays(formData?.businessTiming?.workingDays)
+      setOpenTime(formData?.businessTiming?.openTime?.open)
+      setCloseTime(formData?.businessTiming?.openTime?.close)
+    }, [])
 
     const toggleDay = (day) => {
       if (days.includes(day)) {
-        setDays(days.filter((d) => d !== day));
+        setDays(days.filter((d) => d !== day))
       } else {
-        setDays([...days, day]);
+        setDays([...days, day])
       }
-    };
+    }
 
     const handleSelectAll = (e) => {
       if (e.target.checked) {
-        setDays(allDays);
+        setDays(allDays)
       } else {
-        setDays([]);
+        setDays([])
       }
-    };
+    }
 
     const handleOpenTimeChange = (e) => {
-      setOpenTime(e.target.value);
-    };
+      setOpenTime(e.target.value)
+    }
 
     const handleCloseTimeChange = (e) => {
-      setCloseTime(e.target.value);
-    };
+      setCloseTime(e.target.value)
+    }
 
     const handleSubmit = () => {
       setFormData((prevFormData) => ({
@@ -1328,9 +1335,9 @@ export default function CreateBusiness() {
             close: closeTime,
           },
         },
-      }));
-      handleNextStep();
-    };
+      }))
+      handleNextStep()
+    }
 
     return (
       <>
@@ -1366,14 +1373,14 @@ export default function CreateBusiness() {
                       <div
                         key={day}
                         className={`day-div ${
-                          days.includes(day) ? "active" : ""
+                          days.includes(day) ? 'active' : ''
                         } p-2 text-center cursor-pointer`}
                         style={{
-                          width: "60px",
-                          borderRadius: "8px",
+                          width: '60px',
+                          borderRadius: '8px',
                           background: days.includes(day)
-                            ? "#105193"
-                            : "#d4e0ec",
+                            ? '#105193'
+                            : '#d4e0ec',
                         }}
                         onClick={() => toggleDay(day)}
                       >
@@ -1450,7 +1457,7 @@ export default function CreateBusiness() {
                 rel="stylesheet"
               />
               <style>
-                {" "}
+                {' '}
                 {`
                         ::-webkit-scrollbar {
                             width: 12px; /* Width of the entire scrollbar */
@@ -1500,7 +1507,7 @@ export default function CreateBusiness() {
                         </div>
                         <div
                           className="col-12 mt-4  text-center text-lg-start"
-                          style={{ color: "#A4B3CB" }}
+                          style={{ color: '#A4B3CB' }}
                         >
                           <p>business Description</p>
                         </div>
@@ -1520,7 +1527,7 @@ export default function CreateBusiness() {
                             <a
                               href="#"
                               className="fs-14 text-decoration-none"
-                              style={{ color: "#A4B3CB" }}
+                              style={{ color: '#A4B3CB' }}
                             >
                               Menu
                             </a>
@@ -1529,7 +1536,7 @@ export default function CreateBusiness() {
                             <a
                               href="#"
                               className="fs-14 text-decoration-none"
-                              style={{ color: "#A4B3CB" }}
+                              style={{ color: '#A4B3CB' }}
                             >
                               About Us
                             </a>
@@ -1538,7 +1545,7 @@ export default function CreateBusiness() {
                             <a
                               href="#"
                               className="fs-14 text-decoration-none"
-                              style={{ color: "#A4B3CB" }}
+                              style={{ color: '#A4B3CB' }}
                             >
                               Contact Us
                             </a>
@@ -1547,7 +1554,7 @@ export default function CreateBusiness() {
                             <a
                               href="#"
                               className="fs-14 text-decoration-none"
-                              style={{ color: "#A4B3CB" }}
+                              style={{ color: '#A4B3CB' }}
                             >
                               Main Dishes
                             </a>
@@ -1595,7 +1602,7 @@ export default function CreateBusiness() {
                               </div>
                               <div
                                 className="mt-3 text-center text-lg-start"
-                                style={{ color: "#A4B3CB" }}
+                                style={{ color: '#A4B3CB' }}
                               >
                                 {days.map((day, index) => (
                                   <p>{day}</p>
@@ -1603,7 +1610,7 @@ export default function CreateBusiness() {
                               </div>
                               <div
                                 className="mt-3 text-center text-lg-start"
-                                style={{ color: "#A4B3CB" }}
+                                style={{ color: '#A4B3CB' }}
                               >
                                 <span>
                                   {openTime} to {closeTime}
@@ -1616,11 +1623,11 @@ export default function CreateBusiness() {
                             <div className="col-12 mt-5 text-center text-lg-start">
                               <div
                                 className="mt-3"
-                                style={{ color: "#A4B3CB" }}
+                                style={{ color: '#A4B3CB' }}
                               ></div>
                               <div
                                 className="mt-3"
-                                style={{ color: "#A4B3CB" }}
+                                style={{ color: '#A4B3CB' }}
                               >
                                 <span>CLOSED</span>
                               </div>
@@ -1633,7 +1640,7 @@ export default function CreateBusiness() {
                         <div className="row">
                           <div
                             className="col-12 mt-5 text-center text-lg-start"
-                            style={{ color: "#A4B3CB" }}
+                            style={{ color: '#A4B3CB' }}
                           >
                             <span>
                               © 2024 Business Bazaar. All Right Reserved
@@ -1642,7 +1649,7 @@ export default function CreateBusiness() {
 
                           <div
                             className="col-12  text-center text-lg-start mb-5 mt-5"
-                            style={{ color: "#A4B3CB" }}
+                            style={{ color: '#A4B3CB' }}
                           >
                             <div className="row">
                               <div className="col-12 col-lg-6">
@@ -1663,22 +1670,22 @@ export default function CreateBusiness() {
           </div>
         </div>
       </>
-    );
+    )
   }
 
   function BusinessDesc() {
-    const [description, setDescription] = useState("");
+    const [description, setDescription] = useState('')
 
     useEffect(() => {
-      setDescription(formData?.description);
-    }, []);
+      setDescription(formData?.description)
+    }, [])
     const handleDescSubmit = () => {
       setFormData((prevFormData) => ({
         ...prevFormData,
         description: description,
-      }));
-      handleNextStep();
-    };
+      }))
+      handleNextStep()
+    }
     return (
       <>
         <div className="h-100vh create-business-div">
@@ -1713,7 +1720,7 @@ export default function CreateBusiness() {
                     className="w-100 form-control form-control-lg"
                     rows={5}
                     onChange={(e) => {
-                      setDescription(e.target.value);
+                      setDescription(e.target.value)
                     }}
                     id=""
                     value={description}
@@ -1747,7 +1754,7 @@ export default function CreateBusiness() {
                 rel="stylesheet"
               />
               <style>
-                {" "}
+                {' '}
                 {`
                         ::-webkit-scrollbar {
                             width: 12px; /* Width of the entire scrollbar */
@@ -1797,7 +1804,7 @@ export default function CreateBusiness() {
                         </div>
                         <div
                           className="col-12 mt-4  text-center text-lg-start"
-                          style={{ color: "#A4B3CB" }}
+                          style={{ color: '#A4B3CB' }}
                         >
                           <p>{description}</p>
                         </div>
@@ -1817,7 +1824,7 @@ export default function CreateBusiness() {
                             <a
                               href="#"
                               className="fs-14 text-decoration-none"
-                              style={{ color: "#A4B3CB" }}
+                              style={{ color: '#A4B3CB' }}
                             >
                               Menu
                             </a>
@@ -1826,7 +1833,7 @@ export default function CreateBusiness() {
                             <a
                               href="#"
                               className="fs-14 text-decoration-none"
-                              style={{ color: "#A4B3CB" }}
+                              style={{ color: '#A4B3CB' }}
                             >
                               About Us
                             </a>
@@ -1835,7 +1842,7 @@ export default function CreateBusiness() {
                             <a
                               href="#"
                               className="fs-14 text-decoration-none"
-                              style={{ color: "#A4B3CB" }}
+                              style={{ color: '#A4B3CB' }}
                             >
                               Contact Us
                             </a>
@@ -1844,7 +1851,7 @@ export default function CreateBusiness() {
                             <a
                               href="#"
                               className="fs-14 text-decoration-none"
-                              style={{ color: "#A4B3CB" }}
+                              style={{ color: '#A4B3CB' }}
                             >
                               Main Dishes
                             </a>
@@ -1892,14 +1899,14 @@ export default function CreateBusiness() {
                               </div>
                               <div
                                 className="mt-3 text-center text-lg-start"
-                                style={{ color: "#A4B3CB" }}
+                                style={{ color: '#A4B3CB' }}
                               ></div>
                               <div
                                 className="mt-3 text-center text-lg-start"
-                                style={{ color: "#A4B3CB" }}
+                                style={{ color: '#A4B3CB' }}
                               >
                                 <span>
-                                  {formData.businessTiming.openTime.open} to{" "}
+                                  {formData.businessTiming.openTime.open} to{' '}
                                   {formData.businessTiming.openTime.close}
                                 </span>
                               </div>
@@ -1910,11 +1917,11 @@ export default function CreateBusiness() {
                             <div className="col-12 mt-5 text-center text-lg-start">
                               <div
                                 className="mt-3"
-                                style={{ color: "#A4B3CB" }}
+                                style={{ color: '#A4B3CB' }}
                               ></div>
                               <div
                                 className="mt-3"
-                                style={{ color: "#A4B3CB" }}
+                                style={{ color: '#A4B3CB' }}
                               >
                                 <span>CLOSED</span>
                               </div>
@@ -1927,7 +1934,7 @@ export default function CreateBusiness() {
                         <div className="row">
                           <div
                             className="col-12 mt-5 text-center text-lg-start"
-                            style={{ color: "#A4B3CB" }}
+                            style={{ color: '#A4B3CB' }}
                           >
                             <span>
                               © 2024 Business Bazaar. All Right Reserved
@@ -1936,7 +1943,7 @@ export default function CreateBusiness() {
 
                           <div
                             className="col-12  text-center text-lg-start mb-5 mt-5"
-                            style={{ color: "#A4B3CB" }}
+                            style={{ color: '#A4B3CB' }}
                           >
                             <div className="row">
                               <div className="col-12 col-lg-6">
@@ -1957,150 +1964,155 @@ export default function CreateBusiness() {
           </div>
         </div>
       </>
-    );
+    )
   }
 
   function LandingPageDetails() {
-    const [theme, setTheme] = useState("#6AA646");
-    const [secondaryTheme, setSecondaryTheme] = useState("#A8FF75");
+    const [theme, setTheme] = useState('#6AA646')
+    const [secondaryTheme, setSecondaryTheme] = useState('#A8FF75')
 
     const [landingPageHero, setLandingPageHero] = useState({
-      title: "",
-      description: "",
-      coverImage: "",
-      loading: "",
-    });
+      title: '',
+      description: '',
+      coverImage: '',
+      loading: '',
+    })
     const [welcomePart, setWelcomePart] = useState({
-      title: "",
-      description: "",
-      coverImage: "",
-      loading: "",
-    });
-    const [errors, setErrors] = useState({});
-    const [loading, setLoading] = useState(false); // Loader state
+      title: '',
+      description: '',
+      coverImage: '',
+      loading: '',
+    })
+    const [errors, setErrors] = useState({})
+    const [loading, setLoading] = useState(false) // Loader state
 
     useEffect(() => {
-      setTheme(formData?.theme ? formData.theme : "#6AA646");
+      setTheme(formData?.theme ? formData.theme : '#6AA646')
       setSecondaryTheme(
-        formData?.secondaryTheme ? formData.secondaryTheme : "#A8FF75"
-      );
-      setLandingPageHero(formData?.landingPageHero);
-      setWelcomePart(formData?.welcomePart);
-    }, []);
+        formData?.secondaryTheme ? formData.secondaryTheme : '#A8FF75',
+      )
+      setLandingPageHero(formData?.landingPageHero)
+      setWelcomePart(formData?.welcomePart)
+    }, [])
 
     // Generic File Change Handler with Loader
     const handleFileChange = (name, e, sectionSetter) => {
-      const file = e.target.files[0];
-    
-      if (name === "landingPageHeroImage") {
+      const file = e.target.files[0]
+
+      if (name === 'landingPageHeroImage') {
         setLandingPageHero((prevState) => ({
           ...prevState,
           loading: true,
-        }));
-      } else if (name === "welcomePartImage") {
+        }))
+      } else if (name === 'welcomePartImage') {
         setWelcomePart((prevState) => ({
           ...prevState,
           loading: true,
-        }));
+        }))
       }
-    
+
       if (file) {
-        setLoading(true); // Show loader
-        const reader = new FileReader();
-    
+        setLoading(true) // Show loader
+        const reader = new FileReader()
+
         reader.onload = () => {
           sectionSetter((prevData) => ({
             ...prevData,
             coverImage: reader.result, // Use reader.result to get Base64 string
-          }));
-    
-          if (name === "landingPageHeroImage") {
+          }))
+
+          if (name === 'landingPageHeroImage') {
             setLandingPageHero((prevState) => ({
               ...prevState,
               loading: false,
-            }));
-          } else if (name === "welcomePartImage") {
+            }))
+          } else if (name === 'welcomePartImage') {
             setWelcomePart((prevState) => ({
               ...prevState,
               loading: false,
-            }));
+            }))
           }
-          
-          setLoading(false); // Hide loader after image is set
-        };
-    
+
+          setLoading(false) // Hide loader after image is set
+        }
+
         reader.onerror = () => {
-          console.error("Error reading file:", reader.error);
-          setLoading(false); // Ensure loader hides on error
-        };
-    
-        reader.readAsDataURL(file);
+          console.error('Error reading file:', reader.error)
+          setLoading(false) // Ensure loader hides on error
+        }
+
+        reader.readAsDataURL(file)
       }
-    };
+    }
 
     const handleInputChange = (e, sectionSetter) => {
-      const { name, value } = e.target;
-      sectionSetter((prevData) => ({ ...prevData, [name]: value }));
-    };
+      const { name, value } = e.target
+      sectionSetter((prevData) => ({ ...prevData, [name]: value }))
+    }
 
     const validateForm = () => {
-      const newErrors = {};
+      const newErrors = {}
       if (!landingPageHero.title)
-        newErrors.landingPageHeroTitle = "Title is required";
+        newErrors.landingPageHeroTitle = 'Title is required'
       if (!landingPageHero.description)
-        newErrors.landingPageHeroDescription = "Description is required";
+        newErrors.landingPageHeroDescription = 'Description is required'
       if (!landingPageHero.coverImage)
-        newErrors.landingPageHeroCoverImage = "Cover image is required";
-      if (!welcomePart.title) newErrors.welcomePartTitle = "Title is required";
+        newErrors.landingPageHeroCoverImage = 'Cover image is required'
+      if (!welcomePart.title) newErrors.welcomePartTitle = 'Title is required'
       if (!welcomePart.description)
-        newErrors.welcomePartDescription = "Description is required";
+        newErrors.welcomePartDescription = 'Description is required'
       if (!welcomePart.coverImage)
-        newErrors.welcomePartCoverImage = "Cover image is required";
-      setErrors(newErrors);
-      return Object.keys(newErrors).length === 0;
-    };
+        newErrors.welcomePartCoverImage = 'Cover image is required'
+      setErrors(newErrors)
+      return Object.keys(newErrors).length === 0
+    }
 
     const handleLandingSubmit = async () => {
-      
-      try{
-        setLoading(true);
-        const landingPreReq = await preRequestFun(landingPageHero.coverImage, "Landing");
-      const welcomePreReq = await preRequestFun(welcomePart.coverImage, "Landing");
-      if (landingPreReq.accessLink){
-      landingPageHero.coverImage = landingPreReq.accessLink
-      setLandingPageHero(landingPreReq.accessLink)
-      }
-      if (welcomePreReq.accessLink){
-        welcomePart.coverImage = welcomePreReq.accessLink
-        setWelcomePart(welcomePreReq.accessLink)
-      }
-      if (validateForm()) {
-        setFormData((prevFormData) => ({
-          ...prevFormData,
-          landingPageHero,
-          theme,
-          secondaryTheme,
-          welcomePart,
-        }));
-        handleNextStep();
-      }
-      }catch (e) {
+      try {
+        setLoading(true)
+        const landingPreReq = await preRequestFun(
+          landingPageHero.coverImage,
+          'Landing',
+        )
+        const welcomePreReq = await preRequestFun(
+          welcomePart.coverImage,
+          'Landing',
+        )
+        if (landingPreReq.accessLink) {
+          landingPageHero.coverImage = landingPreReq.accessLink
+          setLandingPageHero(landingPreReq.accessLink)
+        }
+        if (welcomePreReq.accessLink) {
+          welcomePart.coverImage = welcomePreReq.accessLink
+          setWelcomePart(welcomePreReq.accessLink)
+        }
+        if (validateForm()) {
+          setFormData((prevFormData) => ({
+            ...prevFormData,
+            landingPageHero,
+            theme,
+            secondaryTheme,
+            welcomePart,
+          }))
+          handleNextStep()
+        }
+      } catch (e) {
         console.log(e)
-      }finally{
-        setLoading(false);
+      } finally {
+        setLoading(false)
       }
-    };
+    }
 
     const triggerFileUpload = (inputId) => {
-      document.getElementById(inputId).click();
-    };
+      document.getElementById(inputId).click()
+    }
 
-    if (loading){
+    if (loading) {
       return (
         <div className="h-100vh">
-         <div className="d-flex h-100 justify-content-center align-items-center">
-          <span>Loading</span>
-         </div>
+          <div className="d-flex h-100 justify-content-center align-items-center">
+            <span>Loading</span>
+          </div>
         </div>
       )
     }
@@ -2198,14 +2210,14 @@ export default function CreateBusiness() {
                   id="LandingHeroImageInput"
                   onChange={(e) =>
                     handleFileChange(
-                      "landingPageHeroImage",
+                      'landingPageHeroImage',
                       e,
-                      setLandingPageHero
+                      setLandingPageHero,
                     )
                   }
                 />
                 <div
-                  onClick={() => triggerFileUpload("LandingHeroImageInput")}
+                  onClick={() => triggerFileUpload('LandingHeroImageInput')}
                   className="p-2 mt-2 mb-3 add-logo-div"
                 >
                   <div className="text-center">
@@ -2218,7 +2230,7 @@ export default function CreateBusiness() {
                       <img
                         src={
                           landingPageHero.coverImage ||
-                          "/src/assets/images/add_image.png"
+                          '/src/assets/images/add_image.png'
                         }
                         width="50"
                         alt="Add Hero Image"
@@ -2269,11 +2281,11 @@ export default function CreateBusiness() {
                   hidden
                   id="WelcomeImageInput"
                   onChange={(e) =>
-                    handleFileChange("welcomePartImage", e, setWelcomePart)
+                    handleFileChange('welcomePartImage', e, setWelcomePart)
                   }
                 />
                 <div
-                  onClick={() => triggerFileUpload("WelcomeImageInput")}
+                  onClick={() => triggerFileUpload('WelcomeImageInput')}
                   className="p-2 mt-2 mb-3 add-logo-div"
                 >
                   <div className="text-center">
@@ -2286,7 +2298,7 @@ export default function CreateBusiness() {
                       <img
                         src={
                           welcomePart.coverImage ||
-                          "/src/assets/images/add_image.png"
+                          '/src/assets/images/add_image.png'
                         }
                         width="50"
                         alt="Add Welcome Image"
@@ -2324,7 +2336,7 @@ export default function CreateBusiness() {
               rel="stylesheet"
             />
             <style>
-              {" "}
+              {' '}
               {`
                         ::-webkit-scrollbar {
                             width: 12px; /* Width of the entire scrollbar */
@@ -2369,14 +2381,14 @@ export default function CreateBusiness() {
             <Navbar
               expand="lg"
               className="bg-white pjs "
-              style={{ paddingBlock: "5px" }}
+              style={{ paddingBlock: '5px' }}
             >
               <Container>
                 {/* Align Brand to the start (left side) */}
                 <Navbar.Brand
                   href="/"
                   className="fw-bold w-50 nav-logo"
-                  style={{ fontSize: "36px" }}
+                  style={{ fontSize: '36px' }}
                 >
                   <img src={formData.logo} alt="" />
                   <span className="ms-2">{formData.businessName}</span>
@@ -2384,38 +2396,38 @@ export default function CreateBusiness() {
 
                 <Navbar.Toggle
                   aria-controls="basic-navbar-nav"
-                  style={{ color: "black" }}
+                  style={{ color: 'black' }}
                 />
 
                 <Navbar.Collapse id="basic-navbar-nav">
                   <Nav className="ms-auto w-100 justify-content-evenly jcc">
                     <button
                       className="hamburger-btn text-black bg-transparent border-0 d-flex flex-column justify-content-center align-items-center"
-                      style={{ cursor: "pointer" }}
-                      onClick={() => console.log("Hamburger button clicked")}
+                      style={{ cursor: 'pointer' }}
+                      onClick={() => console.log('Hamburger button clicked')}
                     >
                       <div
                         style={{
-                          width: "25px",
-                          height: "3px",
-                          backgroundColor: "black",
-                          margin: "4px 0",
+                          width: '25px',
+                          height: '3px',
+                          backgroundColor: 'black',
+                          margin: '4px 0',
                         }}
                       ></div>
                       <div
                         style={{
-                          width: "25px",
-                          height: "3px",
-                          backgroundColor: "black",
-                          margin: "4px 0",
+                          width: '25px',
+                          height: '3px',
+                          backgroundColor: 'black',
+                          margin: '4px 0',
                         }}
                       ></div>
                       <div
                         style={{
-                          width: "25px",
-                          height: "3px",
-                          backgroundColor: "black",
-                          margin: "4px 0",
+                          width: '25px',
+                          height: '3px',
+                          backgroundColor: 'black',
+                          margin: '4px 0',
                         }}
                       ></div>
                     </button>
@@ -2457,7 +2469,7 @@ export default function CreateBusiness() {
                             <NavLink
                               to="#about"
                               className="btn btn-dark text-white radius-theme box-shadow w-100 p-1"
-                              style={{ backgroundColor: "#212529" }}
+                              style={{ backgroundColor: '#212529' }}
                             >
                               View More
                             </NavLink>
@@ -2525,9 +2537,9 @@ export default function CreateBusiness() {
                         <div className="col">
                           <span className="fs-13">Address</span>
                           <p className="fs-16">
-                            {formData.address.buildingName},{" "}
+                            {formData.address.buildingName},{' '}
                             {formData.address.city},{formData.address.landMark},
-                            {formData.address.streetName},{" "}
+                            {formData.address.streetName},{' '}
                             {formData.address.state}
                           </p>
                         </div>
@@ -2572,7 +2584,7 @@ export default function CreateBusiness() {
 
             <section
               className=" h-auto"
-              style={{ backgroundColor: "#F3F3F4" }}
+              style={{ backgroundColor: '#F3F3F4' }}
               id="about"
             >
               <div className="container p-top">
@@ -2602,95 +2614,95 @@ export default function CreateBusiness() {
           </div>
         </div>
       </div>
-    );
+    )
   }
 
   function CreateServices() {
     const [specialService, setSpecialService] = useState({
-      title: "",
-      description: "",
-      data: [{ title: "", description: "", image: "" }],
-    });
+      title: '',
+      description: '',
+      data: [{ title: '', description: '', image: '' }],
+    })
     const [services, setServices] = useState([
-      { title: "", description: "", image: "" },
-    ]);
+      { title: '', description: '', image: '' },
+    ])
     const [isLoading, setIsLoading] = useState({
       specialService: {},
       service: {},
-    });
+    })
 
     useEffect(() => {
-      setSpecialService(formData?.specialServices);
-      setServices(formData?.service);
-    }, []);
+      setSpecialService(formData?.specialServices)
+      setServices(formData?.service)
+    }, [])
 
-    const [errors, setErrors] = useState([]);
+    const [errors, setErrors] = useState([])
 
     // Handle change for individual special service fields
     const handleProductChange = (index, e) => {
-      const { name, value } = e.target;
+      const { name, value } = e.target
       setSpecialService((prevData) => {
-        const updatedData = [...prevData.data];
-        updatedData[index][name] = value;
-        return { ...prevData, data: updatedData };
-      });
-    };
+        const updatedData = [...prevData.data]
+        updatedData[index][name] = value
+        return { ...prevData, data: updatedData }
+      })
+    }
 
     // Handle change for services
     const handleServiceChange = (index, e) => {
-      const { name, value } = e.target;
+      const { name, value } = e.target
       setServices((prevServices) => {
-        const updatedServices = [...prevServices];
-        updatedServices[index][name] = value;
-        return updatedServices;
-      });
-    };
+        const updatedServices = [...prevServices]
+        updatedServices[index][name] = value
+        return updatedServices
+      })
+    }
 
     const handleFileChange = async (type, index, e) => {
-      const file = e.target.files[0];
+      const file = e.target.files[0]
       if (file) {
         // Set loading state
         setIsLoading((prevLoading) => ({
           ...prevLoading,
           [type]: { ...prevLoading[type], [index]: true },
-        }));
+        }))
 
-        const preReq = await preRequestFun(file, "service");
+        const preReq = await preRequestFun(file, 'service')
         if (preReq && preReq.accessLink) {
-          const imageUrl = preReq.accessLink;
-          if (type === "specialService") {
+          const imageUrl = preReq.accessLink
+          if (type === 'specialService') {
             setSpecialService((prevData) => {
-              const updatedData = [...prevData.data];
-              updatedData[index].image = imageUrl;
-              return { ...prevData, data: updatedData };
-            });
+              const updatedData = [...prevData.data]
+              updatedData[index].image = imageUrl
+              return { ...prevData, data: updatedData }
+            })
           } else {
             setServices((prevServices) => {
-              const updatedServices = [...prevServices];
-              updatedServices[index].image = imageUrl;
-              return updatedServices;
-            });
+              const updatedServices = [...prevServices]
+              updatedServices[index].image = imageUrl
+              return updatedServices
+            })
           }
         } else {
-          console.error("Access link not found in response.");
+          console.error('Access link not found in response.')
         }
 
         // Remove loading state
         setIsLoading((prevLoading) => ({
           ...prevLoading,
           [type]: { ...prevLoading[type], [index]: false },
-        }));
+        }))
       }
-    };
+    }
 
     // Trigger file upload for image input
     const uploadImage = (type, index) => {
       const inputClass =
-        type === "specialService"
-          ? ".specialServiceImageInput"
-          : ".serviceImageInput";
-      document.querySelectorAll(inputClass)[index].click();
-    };
+        type === 'specialService'
+          ? '.specialServiceImageInput'
+          : '.serviceImageInput'
+      document.querySelectorAll(inputClass)[index].click()
+    }
 
     // Submit function to store data
     const handleServiceSubmit = () => {
@@ -2698,32 +2710,32 @@ export default function CreateBusiness() {
         ...prevFormData,
         specialServices: specialService,
         service: services,
-      }));
-      handleNextStep();
-    };
+      }))
+      handleNextStep()
+    }
 
     const handleChange = (e) => {
-      const { name, value } = e.target;
+      const { name, value } = e.target
       setSpecialService((prevData) => ({
         ...prevData,
         [name]: value,
-      }));
-    };
+      }))
+    }
 
     const removeSpecialService = (index) => {
       setSpecialService((prevData) => {
-        const updatedData = prevData.data.filter((_, i) => i !== index);
-        return { ...prevData, data: updatedData };
-      });
-    };
+        const updatedData = prevData.data.filter((_, i) => i !== index)
+        return { ...prevData, data: updatedData }
+      })
+    }
     const removeService = (index) => {
       setServices((prevServices) => {
         // Filter out the service at the specified index
-        const updatedServices = prevServices.filter((_, i) => i !== index);
-        return updatedServices;
-      });
-    };
-    const [currentSlide, setCurrentSlide] = useState(0);
+        const updatedServices = prevServices.filter((_, i) => i !== index)
+        return updatedServices
+      })
+    }
+    const [currentSlide, setCurrentSlide] = useState(0)
 
     const settings4 = {
       dots: false,
@@ -2771,7 +2783,7 @@ export default function CreateBusiness() {
           },
         },
       ],
-    };
+    }
 
     const setting2 = {
       dots: false,
@@ -2821,7 +2833,7 @@ export default function CreateBusiness() {
           },
         },
       ],
-    };
+    }
 
     return (
       <>
@@ -2909,11 +2921,11 @@ export default function CreateBusiness() {
                           hidden
                           className="specialServiceImageInput"
                           onChange={(e) =>
-                            handleFileChange("specialService", index, e)
+                            handleFileChange('specialService', index, e)
                           }
                         />
                         <div
-                          onClick={() => uploadImage("specialService", index)}
+                          onClick={() => uploadImage('specialService', index)}
                           className="p-2 mt-2 add-logo-div"
                         >
                           <div className="text-center">
@@ -2925,7 +2937,7 @@ export default function CreateBusiness() {
                             ) : (
                               <img
                                 src={
-                                  p.image || "/src/assets/images/add_image.png"
+                                  p.image || '/src/assets/images/add_image.png'
                                 }
                                 width="50"
                                 alt="Add Service Image"
@@ -2956,7 +2968,7 @@ export default function CreateBusiness() {
                         ...prevData,
                         data: [
                           ...prevData.data,
-                          { title: "", description: "", image: "" },
+                          { title: '', description: '', image: '' },
                         ],
                       }))
                     }
@@ -2993,11 +3005,11 @@ export default function CreateBusiness() {
                           hidden
                           className="serviceImageInput"
                           onChange={(e) =>
-                            handleFileChange("service", index, e)
+                            handleFileChange('service', index, e)
                           }
                         />
                         <div
-                          onClick={() => uploadImage("service", index)}
+                          onClick={() => uploadImage('service', index)}
                           className="p-2 mt-2 add-logo-div"
                         >
                           <div className="text-center">
@@ -3010,7 +3022,7 @@ export default function CreateBusiness() {
                               <img
                                 src={
                                   service.image ||
-                                  "/src/assets/images/add_image.png"
+                                  '/src/assets/images/add_image.png'
                                 }
                                 width="50"
                                 alt="Add Service Image"
@@ -3039,7 +3051,7 @@ export default function CreateBusiness() {
                     onClick={() =>
                       setServices((prev) => [
                         ...prev,
-                        { title: "", description: "", image: "" },
+                        { title: '', description: '', image: '' },
                       ])
                     }
                     className="text-decoration-none btn btn-primary w-100"
@@ -3077,7 +3089,7 @@ export default function CreateBusiness() {
                 rel="stylesheet"
               />
               <style>
-                {" "}
+                {' '}
                 {`
                                 ::-webkit-scrollbar {
                                     width: 12px; /* Width of the entire scrollbar */
@@ -3121,7 +3133,7 @@ export default function CreateBusiness() {
               </style>
               <section
                 className="h-auto"
-                style={{ backgroundColor: "#F3F3F4" }}
+                style={{ backgroundColor: '#F3F3F4' }}
               >
                 <div className="container p-top">
                   <div className="col-12 mb-5">
@@ -3154,10 +3166,10 @@ export default function CreateBusiness() {
                                   src={dish.image}
                                   alt={dish.title}
                                   style={{
-                                    width: "100%",
-                                    height: "auto",
-                                    maxWidth: "300px",
-                                    objectFit: "cover",
+                                    width: '100%',
+                                    height: 'auto',
+                                    maxWidth: '300px',
+                                    objectFit: 'cover',
                                   }}
                                 />
                               </div>
@@ -3181,10 +3193,10 @@ export default function CreateBusiness() {
                                 src={dish.image}
                                 alt={dish.title}
                                 style={{
-                                  width: "100%",
-                                  height: "auto",
-                                  maxWidth: "300px",
-                                  objectFit: "cover",
+                                  width: '100%',
+                                  height: 'auto',
+                                  maxWidth: '300px',
+                                  objectFit: 'cover',
                                 }}
                               />
                             </div>
@@ -3204,7 +3216,7 @@ export default function CreateBusiness() {
 
               <section
                 className="h-auto david-font"
-                style={{ backgroundColor: "#F3F3F4" }}
+                style={{ backgroundColor: '#F3F3F4' }}
               >
                 <div className="container p-top">
                   <div className="col-12 mt-5 text-center ">
@@ -3217,7 +3229,7 @@ export default function CreateBusiness() {
                           <div
                             key={index}
                             className={`col-12 col-lg-4 service-design ${
-                              index === currentSlide ? "active" : ""
+                              index === currentSlide ? 'active' : ''
                             } mt-5 mb-5 text-center`}
                           >
                             <div className="col-12 text-center">
@@ -3230,7 +3242,7 @@ export default function CreateBusiness() {
                             </div>
                             <div
                               className="col-12 text-center"
-                              style={{ height: "100px" }}
+                              style={{ height: '100px' }}
                             >
                               <img
                                 src={service.image}
@@ -3246,7 +3258,7 @@ export default function CreateBusiness() {
                         <div
                           key={index}
                           className={`col-12 col-lg-4 service-design ${
-                            index === currentSlide ? "active" : ""
+                            index === currentSlide ? 'active' : ''
                           } mt-5 mb-5 text-center`}
                         >
                           <div className="col-12 text-center">
@@ -3257,7 +3269,7 @@ export default function CreateBusiness() {
                           </div>
                           <div
                             className="col-12 text-center"
-                            style={{ height: "100px" }}
+                            style={{ height: '100px' }}
                           >
                             <img
                               src={service.image}
@@ -3275,79 +3287,79 @@ export default function CreateBusiness() {
           </div>
         </div>
       </>
-    );
+    )
   }
 
   function CreateProductPart() {
     const initialState = [
       {
-        title: "",
-        description: "",
-        image: "",
-        price: "",
+        title: '',
+        description: '',
+        image: '',
+        price: '',
         loadingImage: false, // Loader state for image preview
       },
-    ];
-    const [productSection, setProductSection] = useState(initialState);
-    const [error, setError] = useState("");
+    ]
+    const [productSection, setProductSection] = useState(initialState)
+    const [error, setError] = useState('')
 
     useEffect(() => {
       setProductSection(
         formData?.productSection?.length
           ? formData.productSection
-          : initialState
-      );
-    }, []);
+          : initialState,
+      )
+    }, [])
 
     const handleFileChange = (index, e) => {
-      const file = e.target.files[0];
+      const file = e.target.files[0]
       if (file) {
-        const updatedProducts = [...productSection];
-        updatedProducts[index].loadingImage = true; // Start loader when the file is selected
-        setProductSection(updatedProducts);
+        const updatedProducts = [...productSection]
+        updatedProducts[index].loadingImage = true // Start loader when the file is selected
+        setProductSection(updatedProducts)
 
-        const reader = new FileReader();
+        const reader = new FileReader()
         reader.onload = async (e) => {
-          const preReq = await preRequestFun(file, name);
-          let accessLink = "";
+          const preReq = await preRequestFun(file, name)
+          let accessLink = ''
           if (preReq && preReq.accessLink) {
-            accessLink = preReq.accessLink;
-            updatedProducts[index].image = accessLink; // Update image URL
+            accessLink = preReq.accessLink
+            updatedProducts[index].image = accessLink // Update image URL
           } else {
-            console.error("Access link not found in response.");
+            console.error('Access link not found in response.')
           }
-          updatedProducts[index].loadingImage = false; // Stop loader after processing the image
-          setProductSection([...updatedProducts]); // Trigger re-render with updated products
-        };
+          updatedProducts[index].loadingImage = false // Stop loader after processing the image
+          setProductSection([...updatedProducts]) // Trigger re-render with updated products
+        }
 
-        reader.readAsDataURL(file);
+        reader.readAsDataURL(file)
       }
-    };
+    }
 
     const uploadImage = (index) => {
-      document.querySelectorAll(".menuImageInput")[index].click();
-    };
+      document.querySelectorAll('.menuImageInput')[index].click()
+    }
 
     const handleProductSubmit = () => {
       const isValid = productSection.every(
         (product) =>
           product.title &&
           product.description &&
-          (product.price || product.price === "")
-      );
+          (product.price || product.price === ''),
+      )
 
       if (!isValid) {
-        setError("Please fill out all fields except for the product price.");
-        return;
+        setError('Please fill out all fields except for the product price.')
+        return
       }
 
       // Proceed with submission if all fields are filled
       setFormData((prevFormData) => ({
         ...prevFormData,
         productSection,
-      }));
-      handleNextStep();
-    };
+      }))
+      handleNextStep()
+    }
 
     return (
       <div className="h-100vh create-business-div">
@@ -3386,9 +3398,9 @@ export default function CreateBusiness() {
                       placeholder="Product Title"
                       value={item.title}
                       onChange={(e) => {
-                        const updatedProducts = [...productSection];
-                        updatedProducts[index].title = e.target.value;
-                        setProductSection(updatedProducts);
+                        const updatedProducts = [...productSection]
+                        updatedProducts[index].title = e.target.value
+                        setProductSection(updatedProducts)
                       }}
                       required
                     />
@@ -3400,9 +3412,9 @@ export default function CreateBusiness() {
                       placeholder="Description"
                       value={item.description}
                       onChange={(e) => {
-                        const updatedProducts = [...productSection];
-                        updatedProducts[index].description = e.target.value;
-                        setProductSection(updatedProducts);
+                        const updatedProducts = [...productSection]
+                        updatedProducts[index].description = e.target.value
+                        setProductSection(updatedProducts)
                       }}
                       required
                     />
@@ -3426,7 +3438,7 @@ export default function CreateBusiness() {
                           ) : (
                             <img
                               src={
-                                item.image || "/src/assets/images/add_image.png"
+                                item.image || '/src/assets/images/add_image.png'
                               } // Use the latest image URL
                               width="50"
                               alt="Add Product Image"
@@ -3444,9 +3456,9 @@ export default function CreateBusiness() {
                       placeholder="Price"
                       value={item.price}
                       onChange={(e) => {
-                        const updatedProducts = [...productSection];
-                        updatedProducts[index].price = e.target.value;
-                        setProductSection(updatedProducts);
+                        const updatedProducts = [...productSection]
+                        updatedProducts[index].price = e.target.value
+                        setProductSection(updatedProducts)
                       }}
                     />
                   </div>
@@ -3457,10 +3469,10 @@ export default function CreateBusiness() {
                     setProductSection((prev) => [
                       ...prev,
                       {
-                        title: "",
-                        description: "",
-                        image: "",
-                        price: "",
+                        title: '',
+                        description: '',
+                        image: '',
+                        price: '',
                         loadingImage: false,
                       },
                     ])
@@ -3495,7 +3507,7 @@ export default function CreateBusiness() {
               rel="stylesheet"
             />
             <style>
-              {" "}
+              {' '}
               {`
                                 ::-webkit-scrollbar {
                                     width: 12px; /* Width of the entire scrollbar */
@@ -3577,68 +3589,68 @@ export default function CreateBusiness() {
           </div>
         </div>
       </div>
-    );
+    )
   }
 
   function SeoDetails() {
     const [socialMediaLinks, setSocialMediaLinks] = useState([
-      { tag: "instagram", link: "" },
-      { tag: "facebook", link: "" },
-      { tag: "twitter", link: "" },
-    ]);
+      { tag: 'instagram', link: '' },
+      { tag: 'facebook', link: '' },
+      { tag: 'twitter', link: '' },
+    ])
 
     const [seoData, setSeoData] = useState({
-      title: "",
-      description: "",
-      metaTags: [""],
-    });
+      title: '',
+      description: '',
+      metaTags: [''],
+    })
 
     useEffect(() => {
-      setSocialMediaLinks(formData?.socialMediaLinks);
-      setSeoData(formData?.seoData);
-    }, []);
+      setSocialMediaLinks(formData?.socialMediaLinks)
+      setSeoData(formData?.seoData)
+    }, [])
 
     // Handle tag change
     const handleTagChange = (index, value) => {
-      const updatedTags = [...seoData.metaTags];
-      updatedTags[index] = value;
+      const updatedTags = [...seoData.metaTags]
+      updatedTags[index] = value
       setSeoData((prevSeo) => ({
         ...prevSeo,
         metaTags: updatedTags,
-      }));
-    };
+      }))
+    }
 
     // Add more tags
     const addTag = () => {
       setSeoData((prevSeo) => ({
         ...prevSeo,
-        metaTags: [...prevSeo.metaTags, ""], // Add a new empty string for the new tag
-      }));
-    };
+        metaTags: [...prevSeo.metaTags, ''], // Add a new empty string for the new tag
+      }))
+    }
 
     // Remove a tag
     const removeTag = (index) => {
       setSeoData((prevSeo) => ({
         ...prevSeo,
         metaTags: prevSeo.metaTags.filter((_, i) => i !== index), // Remove tag at the specified index
-      }));
-    };
+      }))
+    }
 
     // Handle changes in SEO data fields
     const handleSeoInputChange = (e) => {
-      const { name, value } = e.target;
+      const { name, value } = e.target
       setSeoData((prevSeo) => ({
         ...prevSeo,
         [name]: value,
-      }));
-    };
+      }))
+    }
 
     // Handle social media input changes
     const handleSocialMediaChange = (index, value) => {
-      const updatedLinks = [...socialMediaLinks];
-      updatedLinks[index].link = value;
-      setSocialMediaLinks(updatedLinks);
-    };
+      const updatedLinks = [...socialMediaLinks]
+      updatedLinks[index].link = value
+      setSocialMediaLinks(updatedLinks)
+    }
 
     // Handle form submit and update formData with socialMediaLinks and seoData
     const handleSeoSubmit = () => {
@@ -3646,9 +3658,9 @@ export default function CreateBusiness() {
         ...prevFormData,
         socialMediaLinks: socialMediaLinks,
         seoData: seoData,
-      }));
-      handleNextStep();
-    };
+      }))
+      handleNextStep()
+    }
 
     return (
       <div className="h-100vh create-business-div">
@@ -3755,7 +3767,7 @@ export default function CreateBusiness() {
           <div className="left-portion col-12 col-lg-6 h-100 p-3 row align-items-center">
             <div
               className="p-3"
-              style={{ border: "1px dashed black", borderRadius: "16px" }}
+              style={{ border: '1px dashed black', borderRadius: '16px' }}
             >
               <p className="text-center">
                 Please provide the SEO information and social media links to
@@ -3767,98 +3779,96 @@ export default function CreateBusiness() {
           </div>
         </div>
       </div>
-    );
+    )
   }
   function MoreImages() {
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(false)
     const [images, setImages] = useState([
-      { file: null, fileType: "", fileName: "" },
-    ]);
+      { file: null, fileType: '', fileName: '' },
+    ])
     // const [formData, setFormData] = useState({});
 
     const handleFileChange = (index, event) => {
-      const file = event.target.files[0];
+      const file = event.target.files[0]
       if (file) {
-        const updatedImages = [...images];
+        const updatedImages = [...images]
         updatedImages[index] = {
           file,
           fileType: file.type,
           fileName: file.name,
-        };
-        setImages(updatedImages);
+        }
+        setImages(updatedImages)
       }
-    };
+    }
 
     const addImageInput = () => {
       setImages((prevImages) => [
         ...prevImages,
-        { file: null, fileType: "", fileName: "" },
-      ]);
-    };
+        { file: null, fileType: '', fileName: '' },
+      ])
+    }
 
     const handleAddImageClick = (index) => {
-      document.getElementById(`file-input-${index}`).click();
-    };
+      document.getElementById(`file-input-${index}`).click()
+    }
 
     const removeImage = (index) => {
-      const updatedImages = images.filter((_, i) => i !== index);
-      setImages(updatedImages);
-    };
+      const updatedImages = images.filter((_, i) => i !== index)
+      setImages(updatedImages)
+    }
 
     const handleGallerySubmit = async () => {
-
-      if (images.length > 0&& images[0].file !=null) {
-        
-      const imageFiles = images.map((image) => image?.file)
+      if (images.length > 0 && images[0].file != null) {
+        const imageFiles = images.map((image) => image?.file)
         setLoading(true)
         const requestBody = {
           files: imageFiles.map((file) => ({
-            position: "gallery",
+            position: 'gallery',
             file_type: file.type,
           })),
-        };
+        }
 
         try {
-          const url = "https://businessbazaarserver.auxxweb.in/api/v1/s3url";
+          const url = 'https://businessbazaarserver.auxxweb.in/api/v1/s3url'
 
           // Fetch pre-signed S3 URLs
           const response = await axios.post(url, requestBody, {
             headers: {
-              "Content-Type": "application/json",
+              'Content-Type': 'application/json',
             },
-          });
+          })
 
-          const s3Urls = response.data.data;
+          const s3Urls = response.data.data
 
           // Upload each file to its respective S3 URL
           await Promise.all(
             s3Urls.map(async (data, index) => {
-              const { url } = data;
-              const file = imageFiles[index];
+              const { url } = data
+              const file = imageFiles[index]
 
               await axios.put(url, file, {
-                headers: { "Content-Type": file.type },
-              });
-            })
-          );
+                headers: { 'Content-Type': file.type },
+              })
+            }),
+          )
 
           // Collect access links and store them in formData
-          const accessLinks = s3Urls.map((s3Data) => s3Data.accessLink);
+          const accessLinks = s3Urls.map((s3Data) => s3Data.accessLink)
 
           setFormData((prevFormData) => ({
             ...prevFormData,
             gallery: accessLinks,
-          }));
-          handleNextStep();
+          }))
+          handleNextStep()
         } catch (error) {
-          console.error("Error fetching S3 URLs or uploading files:", error);
+          console.error('Error fetching S3 URLs or uploading files:', error)
         } finally {
-          setLoading(false);
+          setLoading(false)
         }
       } else {
-        handleNextStep(); // Proceed to the next step if there are no files to upload
+        handleNextStep() // Proceed to the next step if there are no files to upload
       }
-    };
+    }
 
     const gallery = {
       dots: true,
@@ -3882,7 +3892,7 @@ export default function CreateBusiness() {
           },
         },
       ],
-    };
+    }
 
     return (
       <div className="h-100vh create-business-div">
@@ -3922,7 +3932,7 @@ export default function CreateBusiness() {
                             <CloseIcon onClick={() => removeImage(index)} />
                           </div>
                         ) : (
-                          <div style={{ height: "1.5rem" }}></div>
+                          <div style={{ height: '1.5rem' }}></div>
                         )}
                         <div
                           className="text-center"
@@ -3935,14 +3945,14 @@ export default function CreateBusiness() {
                               className="img-preview"
                               width="100"
                               height="80"
-                              style={{ objectFit: "cover" }}
+                              style={{ objectFit: 'cover' }}
                             />
                           ) : (
                             <img
                               src="/src/assets/images/add_image.png"
                               width="50"
                               alt="Add Image"
-                              style={{ height: "70px", objectFit: "contain" }}
+                              style={{ height: '70px', objectFit: 'contain' }}
                             />
                           )}
                         </div>
@@ -3991,7 +4001,7 @@ export default function CreateBusiness() {
               rel="stylesheet"
             />
             <style>
-              {" "}
+              {' '}
               {`
                                 ::-webkit-scrollbar {
                                     width: 12px; /* Width of the entire scrollbar */
@@ -4035,7 +4045,7 @@ export default function CreateBusiness() {
             </style>
             <section
               className="h-auto david-font"
-              style={{ backgroundColor: "#F3F3F4" }}
+              style={{ backgroundColor: '#F3F3F4' }}
             >
               <div className="container p-top">
                 <div className="col-12 mb-5" id="gallery">
@@ -4053,7 +4063,7 @@ export default function CreateBusiness() {
                               className="w-100 gallery-img"
                             />
                           </div>
-                        ) : null
+                        ) : null,
                       )}
                     </Slider>
                   ) : null}
@@ -4063,81 +4073,81 @@ export default function CreateBusiness() {
           </div>
         </div>
       </div>
-    );
+    )
   }
 
   function MoreVideos() {
-    const [videos, setVideos] = useState([{ file: null, fileType: "" }]);
-    const [s3PreRequest, setS3PreRequest] = useState([]);
+    const [videos, setVideos] = useState([{ file: null, fileType: '' }])
+    const [s3PreRequest, setS3PreRequest] = useState([])
 
     const handleFileChange = (index, event) => {
-      const file = event.target.files[0];
+      const file = event.target.files[0]
       if (file) {
-        const newVideos = [...videos];
-        newVideos[index] = { file, fileType: file.type };
-        setVideos(newVideos);
+        const newVideos = [...videos]
+        newVideos[index] = { file, fileType: file.type }
+        setVideos(newVideos)
       }
-    };
+    }
 
     const addVideoInput = () => {
-      setVideos((prevVideos) => [...prevVideos, { file: null, fileType: "" }]);
-    };
+      setVideos((prevVideos) => [...prevVideos, { file: null, fileType: '' }])
+    }
 
     const removeVideoInput = (index) => {
-      const updatedVideos = videos.filter((_, i) => i !== index);
-      setVideos(updatedVideos);
-    };
+      const updatedVideos = videos.filter((_, i) => i !== index)
+      setVideos(updatedVideos)
+    }
 
     const handleAddVideoClick = (index) => {
-      document.getElementById(`file-input-${index}`).click();
-    };
+      document.getElementById(`file-input-${index}`).click()
+    }
 
     const handleGallerySubmit = async () => {
       const videoFiles = videos
         .filter((video) => video.file)
-        .map((video) => video.file);
+        .map((video) => video.file)
 
       if (videoFiles.length === 0) {
-        handleNextStep();
-        return;
+        handleNextStep()
+        return
       }
 
       try {
         const requestBody = {
           files: videoFiles.map((file) => ({
-            position: "Videos",
+            position: 'Videos',
             file_type: file.type,
           })),
-        };
-        const url = "https://businessbazaarserver.auxxweb.in/api/v1/s3url";
+        }
+        const url = 'https://businessbazaarserver.auxxweb.in/api/v1/s3url'
         const response = await axios.post(url, requestBody, {
-          headers: { "Content-Type": "application/json" },
-        });
+          headers: { 'Content-Type': 'application/json' },
+        })
 
-        const s3Urls = response.data.data;
-        setS3PreRequest(s3Urls.map((url) => url.url));
+        const s3Urls = response.data.data
+        setS3PreRequest(s3Urls.map((url) => url.url))
 
         await Promise.all(
           s3Urls.map(async (data, index) => {
-            const { url } = data;
-            const file = videoFiles[index];
+            const { url } = data
+            const file = videoFiles[index]
             await axios.put(url, file, {
-              headers: { "Content-Type": file.type },
-            });
-          })
-        );
-        const accessLinks = s3Urls.map((s3Data) => s3Data.accessLink);
+              headers: { 'Content-Type': file.type },
+            })
+          }),
+        )
+        const accessLinks = s3Urls.map((s3Data) => s3Data.accessLink)
 
         setFormData((prevFormData) => ({
           ...prevFormData,
           videos: accessLinks,
-        }));
+        }))
 
-        handleNextStep();
+        handleNextStep()
       } catch (error) {
-        console.error("Error uploading videos:", error);
+        console.error('Error uploading videos:', error)
       }
-    };
+    }
 
     return (
       <div className="h-100vh create-business-div">
@@ -4232,51 +4242,59 @@ export default function CreateBusiness() {
           </div>
         </div>
       </div>
-    );
+    )
   }
 
   function PreviewTemplates() {
-    const [currentSlide, setCurrentSlide] = useState(0);
-    const [businessData, setBusinessData] = useState(null);
-    const { id } = useParams();
-    const [loading, setLoading] = useState(true);
-    const [colorTheme, setColorTheme] = useState("");
-    const [visible, setVisible] = useState(false);
+    const [currentSlide, setCurrentSlide] = useState(0)
+    const [businessData, setBusinessData] = useState(null)
+    const { id } = useParams()
+    const [loading, setLoading] = useState(true)
+    const [colorTheme, setColorTheme] = useState('')
+    const [visible, setVisible] = useState(false)
     const [review, setReview] = useState([
       {
-        rating: "",
-        name: "",
-        description: "",
+        rating: '',
+        name: '',
+        description: '',
       },
-    ]);
-    const [closeDays, setCloseDays] = useState([]);
-    const allDays = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+    ])
+    const [closeDays, setCloseDays] = useState([])
+    const allDays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
 
     const handleInputChange = (e) => {
-      const { name, value } = e.target;
+      const { name, value } = e.target
       setReview((prevState) => ({
         ...prevState,
         [name]: value,
-      }));
-    };
-    console.log(formData);
+      }))
+    }
+    console.log(formData)
     useEffect(() => {
       const fetchData = async () => {
-        setBusinessData(formData);
+        setBusinessData(formData)
 
-        setColorTheme(formData.theme);
-        setLoading(false);
+        setColorTheme(formData.theme)
+        setLoading(false)
         const closed = allDays.filter(
           (day) =>
             !formData.businessTiming.workingDays
               .map((d) => d.toLowerCase())
-              .includes(day)
-        );
-        setCloseDays(closed);
-      };
+              .includes(day),
+        )
+        setCloseDays(closed)
+      }
 
-      fetchData();
-    }, [id]);
+      fetchData()
+    }, [id])
+
+    const handleCreateBusiness = async (e) => {
+      e.preventDefault()
+      const response = await CreateBusinessDetails(formData)
+      if (response?.data) {
+        navigate(`template${response?.data?._id}`)
+      }
+    }
 
     const settings4 = {
       dots: false,
@@ -4324,7 +4342,7 @@ export default function CreateBusiness() {
           },
         },
       ],
-    };
+    }
 
     const setting2 = {
       dots: false,
@@ -4374,7 +4392,7 @@ export default function CreateBusiness() {
           },
         },
       ],
-    };
+    }
 
     const settings3 = {
       dots: false,
@@ -4423,7 +4441,7 @@ export default function CreateBusiness() {
           },
         },
       ],
-    };
+    }
 
     const gallery = {
       dots: true,
@@ -4447,7 +4465,7 @@ export default function CreateBusiness() {
           },
         },
       ],
-    };
+    }
     if (loading) {
       return (
         <div className="h-100vh text-center ">
@@ -4455,12 +4473,12 @@ export default function CreateBusiness() {
             <div className="col-3 ">Loading...</div>
           </div>
         </div>
-      );
+      )
     }
 
     // If there's no business data (e.g., fetch failed), show an error message
     if (!businessData) {
-      return <div>Error loading business data.</div>;
+      return <div>Error loading business data.</div>
     }
 
     return (
@@ -4472,7 +4490,7 @@ export default function CreateBusiness() {
           rel="stylesheet"
         />
         <style>
-          {" "}
+          {' '}
           {`
                         ::-webkit-scrollbar {
                             width: 12px; /* Width of the entire scrollbar */
@@ -4517,14 +4535,14 @@ export default function CreateBusiness() {
         <Navbar
           expand="lg"
           className="bg-white pjs fixed-top"
-          style={{ paddingBlock: "5px" }}
+          style={{ paddingBlock: '5px' }}
         >
           <Container>
             {/* Align Brand to the start (left side) */}
             <Navbar.Brand
               href="/"
               className="fw-bold w-50 nav-logo"
-              style={{ fontSize: "36px" }}
+              style={{ fontSize: '36px' }}
             >
               <img src={businessData.logo} alt="" />
               <span className="ms-2">{businessData.businessName}</span>
@@ -4532,7 +4550,7 @@ export default function CreateBusiness() {
 
             <Navbar.Toggle
               aria-controls="basic-navbar-nav"
-              style={{ color: "black" }}
+              style={{ color: 'black' }}
             />
 
             <Navbar.Collapse id="basic-navbar-nav">
@@ -4540,40 +4558,40 @@ export default function CreateBusiness() {
                 <NavLink
                   href="#menu"
                   className="text-black text-center text-lg-start  text-decoration-none fs-14"
-                  style={{ color: "black" }}
+                  style={{ color: 'black' }}
                 >
                   Menu
                 </NavLink>
                 <NavLink
                   href="#gallery"
                   className="text-black text-center text-lg-start  text-decoration-none fs-14"
-                  style={{ color: "black" }}
+                  style={{ color: 'black' }}
                 >
                   Gallery
                 </NavLink>
                 <NavLink
                   href="#about"
                   className="text-black text-center text-lg-start  text-decoration-none fs-14"
-                  style={{ color: "black" }}
+                  style={{ color: 'black' }}
                 >
                   About
                 </NavLink>
                 <NavLink
                   href="#contact"
                   className="text-black text-center text-lg-start  text-decoration-none fs-14"
-                  style={{ color: "black" }}
+                  style={{ color: 'black' }}
                 >
                   Contact
                 </NavLink>
                 <NavLink
-                  onClick={handleNextStep}
+                  onClick={handleCreateBusiness}
                   style={{
                     backgroundColor: colorTheme,
-                    color: "white",
-                    borderRadius: "10px 0px",
-                    padding: "8px 20px",
-                    fontSize: "13px",
-                    boxShadow: "0px 15px 30px rgba(0, 0, 0, 0.15)",
+                    color: 'white',
+                    borderRadius: '10px 0px',
+                    padding: '8px 20px',
+                    fontSize: '13px',
+                    boxShadow: '0px 15px 30px rgba(0, 0, 0, 0.15)',
                   }}
                   className="fw-bold text-decoration-none text-center text-lg-start"
                 >
@@ -4617,7 +4635,7 @@ export default function CreateBusiness() {
                         <NavLink
                           to="#about"
                           className="btn btn-dark text-white radius-theme box-shadow w-100 p-1"
-                          style={{ backgroundColor: "#212529" }}
+                          style={{ backgroundColor: '#212529' }}
                         >
                           View More
                         </NavLink>
@@ -4685,10 +4703,10 @@ export default function CreateBusiness() {
                     <div className="col">
                       <span className="fs-13">Address</span>
                       <p className="fs-16">
-                        {businessData.address.buildingName},{" "}
+                        {businessData.address.buildingName},{' '}
                         {businessData.address.city},
                         {businessData.address.landMark},
-                        {businessData.address.streetName},{" "}
+                        {businessData.address.streetName},{' '}
                         {businessData.address.state}
                       </p>
                     </div>
@@ -4702,10 +4720,10 @@ export default function CreateBusiness() {
                     </div>
                     <div className="col">
                       <span className="fs-13">Send Email</span>
-                     
-                          <p className="fs-16" >
-                            {businessData.contactDetails.email}
-                          </p>
+
+                      <p className="fs-16">
+                        {businessData.contactDetails.email}
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -4717,12 +4735,12 @@ export default function CreateBusiness() {
                     </div>
                     <div className="col">
                       <span className="fs-13">Contact</span>
-                          <p className="fs-16">
-                            {businessData.contactDetails.primaryNumber}
-                          </p>
-                          <p className="fs-16">
-                            {businessData.contactDetails.secondaryNumber}
-                          </p>
+                      <p className="fs-16">
+                        {businessData.contactDetails.primaryNumber}
+                      </p>
+                      <p className="fs-16">
+                        {businessData.contactDetails.secondaryNumber}
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -4733,7 +4751,7 @@ export default function CreateBusiness() {
 
         <section
           className=" h-auto"
-          style={{ backgroundColor: "#F3F3F4" }}
+          style={{ backgroundColor: '#F3F3F4' }}
           id="about"
         >
           <div className="container p-top">
@@ -4761,7 +4779,7 @@ export default function CreateBusiness() {
           </div>
         </section>
 
-        <section className="h-auto" style={{ backgroundColor: "#F3F3F4" }}>
+        <section className="h-auto" style={{ backgroundColor: '#F3F3F4' }}>
           <div className="container p-top">
             <div className="col-12 mb-5">
               <div className="mt-5 text-center">
@@ -4793,10 +4811,10 @@ export default function CreateBusiness() {
                             src={dish.image}
                             alt={dish.title}
                             style={{
-                              width: "100%",
-                              height: "auto",
-                              maxWidth: "300px",
-                              objectFit: "cover",
+                              width: '100%',
+                              height: 'auto',
+                              maxWidth: '300px',
+                              objectFit: 'cover',
                             }}
                           />
                         </div>
@@ -4820,10 +4838,10 @@ export default function CreateBusiness() {
                           src={dish.image}
                           alt={dish.title}
                           style={{
-                            width: "100%",
-                            height: "auto",
-                            maxWidth: "300px",
-                            objectFit: "cover",
+                            width: '100%',
+                            height: 'auto',
+                            maxWidth: '300px',
+                            objectFit: 'cover',
                           }}
                         />
                       </div>
@@ -4879,7 +4897,7 @@ export default function CreateBusiness() {
 
         <section
           className="h-auto david-font"
-          style={{ backgroundColor: "#F3F3F4" }}
+          style={{ backgroundColor: '#F3F3F4' }}
         >
           <div className="container p-top">
             <div className="col-12 mt-5 text-center ">
@@ -4892,7 +4910,7 @@ export default function CreateBusiness() {
                     <div
                       key={index}
                       className={`col-12 col-lg-4 service-design ${
-                        index === currentSlide ? "active" : ""
+                        index === currentSlide ? 'active' : ''
                       } mt-5 mb-5 text-center`}
                     >
                       <div className="col-12 text-center">
@@ -4903,7 +4921,7 @@ export default function CreateBusiness() {
                       </div>
                       <div
                         className="col-12 text-center"
-                        style={{ height: "100px" }}
+                        style={{ height: '100px' }}
                       >
                         <img
                           src={service.image}
@@ -4919,7 +4937,7 @@ export default function CreateBusiness() {
                   <div
                     key={index}
                     className={`col-12 col-lg-4 service-design ${
-                      index === currentSlide ? "active" : ""
+                      index === currentSlide ? 'active' : ''
                     } mt-5 mb-5 text-center`}
                   >
                     <div className="col-12 text-center">
@@ -4931,7 +4949,7 @@ export default function CreateBusiness() {
 
                     <div
                       className="col-12 text-center"
-                      style={{ height: "100px" }}
+                      style={{ height: '100px' }}
                     >
                       <img
                         src={service.image}
@@ -5003,7 +5021,7 @@ export default function CreateBusiness() {
             </div>
           </div>
         </section>
-        <section className="" style={{ backgroundColor: "#F3F3F4" }}>
+        <section className="" style={{ backgroundColor: '#F3F3F4' }}>
           <div className="container david-font p-top">
             <div className="col-12 text-center">
               <h1>Our Happy Customers</h1>
@@ -5038,7 +5056,7 @@ export default function CreateBusiness() {
                       {[...Array(Math.floor(testimonial.rating))].map(
                         (star, i) => (
                           <i key={i} className="bi bi-star-fill"></i>
-                        )
+                        ),
                       )}
                       {testimonial.rating % 1 !== 0 && (
                         <i className="bi bi-star-half"></i>
@@ -5074,11 +5092,11 @@ export default function CreateBusiness() {
           header="Write a Review"
           visible={visible}
           onHide={() => {
-            if (!visible) return;
-            setVisible(false);
+            if (!visible) return
+            setVisible(false)
           }}
-          style={{ width: "50vw" }}
-          breakpoints={{ "960px": "75vw", "641px": "100vw" }}
+          style={{ width: '50vw' }}
+          breakpoints={{ '960px': '75vw', '641px': '100vw' }}
         >
           <div className="container">
             <div className="p-3 justify-content-center">
@@ -5139,7 +5157,7 @@ export default function CreateBusiness() {
                     <div className="col-lg-8">
                       <input
                         type="text"
-                        style={{ border: "0 !important" }}
+                        style={{ border: '0 !important' }}
                         className="form-control form-control-lg"
                       />
                     </div>
@@ -5160,7 +5178,7 @@ export default function CreateBusiness() {
                     <div className="col-12">
                       <input
                         type="text"
-                        style={{ border: "0 !important" }}
+                        style={{ border: '0 !important' }}
                         className="form-control form-control-sm"
                       />
                     </div>
@@ -5191,7 +5209,7 @@ export default function CreateBusiness() {
                   </div>
                   <div
                     className="col-12 mt-4  text-center text-lg-start"
-                    style={{ color: "#A4B3CB" }}
+                    style={{ color: '#A4B3CB' }}
                   >
                     <p>{businessData.description}</p>
                   </div>
@@ -5203,7 +5221,7 @@ export default function CreateBusiness() {
                       <a
                         href="#"
                         className="fs-14 text-decoration-none"
-                        style={{ color: "#A4B3CB" }}
+                        style={{ color: '#A4B3CB' }}
                       >
                         Menu
                       </a>
@@ -5212,7 +5230,7 @@ export default function CreateBusiness() {
                       <a
                         href="#"
                         className="fs-14 text-decoration-none"
-                        style={{ color: "#A4B3CB" }}
+                        style={{ color: '#A4B3CB' }}
                       >
                         About Us
                       </a>
@@ -5221,7 +5239,7 @@ export default function CreateBusiness() {
                       <a
                         href="#"
                         className="fs-14 text-decoration-none"
-                        style={{ color: "#A4B3CB" }}
+                        style={{ color: '#A4B3CB' }}
                       >
                         Contact Us
                       </a>
@@ -5230,7 +5248,7 @@ export default function CreateBusiness() {
                       <a
                         href="#"
                         className="fs-14 text-decoration-none"
-                        style={{ color: "#A4B3CB" }}
+                        style={{ color: '#A4B3CB' }}
                       >
                         Main Dishes
                       </a>
@@ -5252,17 +5270,17 @@ export default function CreateBusiness() {
                         </div>
                         <div
                           className="mt-3 text-center text-lg-start"
-                          style={{ color: "#A4B3CB" }}
+                          style={{ color: '#A4B3CB' }}
                         >
                           {businessData.businessTiming.workingDays.map(
                             (day, index) => (
                               <p>{day}</p>
-                            )
+                            ),
                           )}
                         </div>
                         <div
                           className="mt-3 text-center text-lg-start"
-                          style={{ color: "#A4B3CB" }}
+                          style={{ color: '#A4B3CB' }}
                         >
                           <span>8:00 am to 9:00 pm</span>
                         </div>
@@ -5271,12 +5289,12 @@ export default function CreateBusiness() {
 
                     <div className="col-lg-6">
                       <div className="col-12 mt-5 text-center text-lg-start">
-                        <div className="mt-3" style={{ color: "#A4B3CB" }}>
+                        <div className="mt-3" style={{ color: '#A4B3CB' }}>
                           {closeDays.map((day, index) => (
                             <p>{day}</p>
                           ))}
                         </div>
-                        <div className="mt-3" style={{ color: "#A4B3CB" }}>
+                        <div className="mt-3" style={{ color: '#A4B3CB' }}>
                           <span>CLOSED</span>
                         </div>
                       </div>
@@ -5323,7 +5341,7 @@ export default function CreateBusiness() {
                   <div className="row">
                     <div
                       className="col-12 col-lg-6  text-center text-lg-start mb-5 mt-5"
-                      style={{ color: "#A4B3CB" }}
+                      style={{ color: '#A4B3CB' }}
                     >
                       <div className="row">
                         <div className="col-12 col-lg-6">Terms of Service</div>
@@ -5332,7 +5350,7 @@ export default function CreateBusiness() {
                     </div>
                     <div
                       className="col-12 col-lg-8 mt-5 text-center text-lg-start"
-                      style={{ color: "#A4B3CB" }}
+                      style={{ color: '#A4B3CB' }}
                     >
                       <span>© 2024 Business Bazaar. All Right Reserved</span>
                     </div>
@@ -5343,12 +5361,11 @@ export default function CreateBusiness() {
           </div>
         </footer>
       </>
-    );
+    )
   }
 
   function Subscription() {
-
-    function planSubmit(id,price,name) {
+    function planSubmit(id, price, name) {
       setFormData((prevFormData) => ({
         ...prevFormData,
         selectedPlan: id,
@@ -5405,7 +5422,7 @@ export default function CreateBusiness() {
                               <div className="col-8 p-0 text-start">
                                 <span className="text-secondary">
                                   per editor/month
-                                </span>{" "}
+                                </span>{' '}
                                 <br />
                                 <span className="text-secondary">
                                   Billed Monthly
@@ -5425,7 +5442,9 @@ export default function CreateBusiness() {
                             <div className="mt-4">
                               <button
                                 className="btn w-100 text-white"
-                                onClick={() => planSubmit(plan._id,plan.amount,plan.plan)}
+                                onClick={() =>
+                                  planSubmit(plan._id, plan.amount, plan.plan)
+                                }
                                 style={{ backgroundColor: '#5b7ee88c' }}
                               >
                                 Choose Plan
@@ -5442,9 +5461,8 @@ export default function CreateBusiness() {
           </div>
         </div>
       </>
-    );
+    )
   }
-
 
   return (
     <>
@@ -5462,7 +5480,9 @@ export default function CreateBusiness() {
       {step === 12 && <MoreImages />}
       {step === 13 && <PreviewTemplates />}
       {step === 14 && <Subscription />}
-      {step === 15 && <Razorpay formData={formData} planDetails={planDetails} />}
+      {step === 15 && (
+        <Razorpay formData={formData} planDetails={planDetails} />
+      )}
     </>
-  );
+  )
 }
