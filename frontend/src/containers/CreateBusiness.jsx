@@ -30,6 +30,7 @@ import InputAdornment from '@mui/material/InputAdornment'
 import Visibility from '@mui/icons-material/Visibility'
 import VisibilityOff from '@mui/icons-material/VisibilityOff'
 import Razorpay from './Razorpay'
+import CreateBusinessLocation from '../components/CreateBusinessLocation'
 
 export const CreateBusiness = () => {
   const [step, setStep] = useState(1)
@@ -912,14 +913,6 @@ export const CreateBusiness = () => {
       validateField(name, value)
     }
 
-    const handleLocationChange = (event) => {
-      const { name, value } = event.target
-      setLocation((prevLocation) => ({
-        ...prevLocation,
-        [name]: value,
-      }))
-    }
-
     return (
       <div className="h-100vh create-business-div">
         <div className="row px-4 h-100">
@@ -1029,16 +1022,7 @@ export const CreateBusiness = () => {
               </div>
 
               {/* Location */}
-              <div className="input-group mt-2 w-100">
-                <TextField
-                  fullWidth
-                  label="Location"
-                  variant="filled"
-                  name="lon"
-                  value={location.lon}
-                  onChange={handleLocationChange}
-                />
-              </div>
+              <CreateBusinessLocation setLocation={setLocation}/>
 
               {/* Contact Numbers */}
               <div id="mobileNumberDiv" className="mt-4">
