@@ -32,7 +32,7 @@ import VisibilityOff from '@mui/icons-material/VisibilityOff'
 import Razorpay from './Razorpay'
 
 export default function CreateBusiness() {
-  const [step, setStep] = useState(5)
+  const [step, setStep] = useState(6)
   const navigate = useNavigate()
 
   const [planDetails, setPlanDetails] = useState({
@@ -1583,7 +1583,7 @@ export default function CreateBusiness() {
                     <span className="title-main">Add</span> <br />
                     <span className="title-highlight">Business Timing</span>
                   </h1>
-                  <span style={{color:"red"}}>{error&&error}</span>
+                  <span style={{ color: 'red' }}>{error && error}</span>
                 </div>
 
                 {/* Working Days Selection */}
@@ -1900,16 +1900,21 @@ export default function CreateBusiness() {
 
   function BusinessDesc() {
     const [description, setDescription] = useState('')
+    const [error, setError] = useState('')
 
     useEffect(() => {
       setDescription(formData?.description)
     }, [])
     const handleDescSubmit = () => {
-      setFormData((prevFormData) => ({
-        ...prevFormData,
-        description: description,
-      }))
-      handleNextStep()
+      if (!description) {
+        setError('Description is required')
+      } else {
+        setFormData((prevFormData) => ({
+          ...prevFormData,
+          description: description,
+        }))
+        handleNextStep()
+      }
     }
     return (
       <>
@@ -1953,6 +1958,7 @@ export default function CreateBusiness() {
                   >
                     {description}
                   </textarea>
+                  <span style={{ color: 'red' }}>{error && error}</span>
                 </div>
               </div>
 
