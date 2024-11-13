@@ -12,7 +12,7 @@ import Gallery from "/src/components/Business/Gallery";
 import ServicesSection from "/src/components/Business/ServicesSection";
 import MenuSection from "/src/components/Business/MenuSection";
 import ContactForm from "/src/components/Business/contactForm";
-import Loader from "../components/Loader/Loader";
+import Loader from "../../src/components/Loader/Loader";
 
 
 const PremiumTemplate = () => {
@@ -171,7 +171,7 @@ const PremiumTemplate = () => {
         <SubscribeSection />
 
         <TemplateFooter businessData={businessData} closeDays={closeDays} />
-        {/* <BackdropLoader open={loading} /> */}
+        {loading && <Loader />}
       </Box>
     </>
   );

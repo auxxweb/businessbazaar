@@ -30,6 +30,7 @@ import InputAdornment from '@mui/material/InputAdornment'
 import Visibility from '@mui/icons-material/Visibility'
 import VisibilityOff from '@mui/icons-material/VisibilityOff'
 import Razorpay from './Razorpay'
+import Loader from "../components/Loader/Loader";
 
 export const CreateBusiness = () => {
   const [step, setStep] = useState(8)
@@ -2347,7 +2348,7 @@ export const CreateBusiness = () => {
       return (
         <div className="h-100vh">
           <div className="d-flex h-100 justify-content-center align-items-center">
-            <span>Loading</span>
+           {}
           </div>
         </div>
       )
