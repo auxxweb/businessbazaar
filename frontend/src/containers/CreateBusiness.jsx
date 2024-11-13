@@ -17,7 +17,7 @@ import { Container, Nav, Navbar, NavLink } from 'react-bootstrap'
 import '/src/assets/css/template.css'
 import 'slick-carousel/slick/slick.css'
 import 'slick-carousel/slick/slick-theme.css'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { Dialog } from 'primereact/dialog'
 import { Rating } from 'primereact/rating'
 import { InputText } from 'primereact/inputtext'
@@ -4527,174 +4527,6 @@ export const CreateBusiness = () => {
     )
   }
 
-  function MoreVideos() {
-    const [videos, setVideos] = useState([{ file: null, fileType: '' }])
-    const [s3PreRequest, setS3PreRequest] = useState([])
-
-    const handleFileChange = (index, event) => {
-      const file = event.target.files[0]
-      if (file) {
-        const newVideos = [...videos]
-        newVideos[index] = { file, fileType: file.type }
-        setVideos(newVideos)
-      }
-    }
-
-    const addVideoInput = () => {
-      setVideos((prevVideos) => [...prevVideos, { file: null, fileType: '' }])
-    }
-
-    const removeVideoInput = (index) => {
-      const updatedVideos = videos.filter((_, i) => i !== index)
-      setVideos(updatedVideos)
-    }
-
-    const handleAddVideoClick = (index) => {
-      document.getElementById(`file-input-${index}`).click()
-    }
-
-    const handleGallerySubmit = async () => {
-      const videoFiles = videos
-        .filter((video) => video.file)
-        .map((video) => video.file)
-
-      if (videoFiles.length === 0) {
-        handleNextStep()
-        return
-      }
-
-      try {
-        const requestBody = {
-          files: videoFiles.map((file) => ({
-            position: 'Videos',
-            file_type: file.type,
-          })),
-        }
-        const url = 'https://businessbazaarserver.auxxweb.in/api/v1/s3url'
-        const response = await axios.post(url, requestBody, {
-          headers: { 'Content-Type': 'application/json' },
-        })
-
-        const s3Urls = response.data.data
-        setS3PreRequest(s3Urls.map((url) => url.url))
-
-        await Promise.all(
-          s3Urls.map(async (data, index) => {
-            const { url } = data
-            const file = videoFiles[index]
-            await axios.put(url, file, {
-              headers: { 'Content-Type': file.type },
-            })
-          }),
-        )
-        const accessLinks = s3Urls.map((s3Data) => s3Data.accessLink)
-
-        setFormData((prevFormData) => ({
-          ...prevFormData,
-          videos: accessLinks,
-        }))
-
-        handleNextStep()
-      } catch (error) {
-        console.error('Error uploading videos:', error)
-      }
-    }
-
-    return (
-      <div className="h-100vh create-business-div">
-        <div className="row h-100 justify-content-center">
-          <div className="d-none d-md-block left-portion p-0 col-md-5 h-100">
-            <img
-              src="/src/assets/images/landing-page.jpg"
-              alt="Landing Page"
-              className="w-100 h-100"
-            />
-          </div>
-
-          <div className="col-12 col-md-7 row align-items-end justify-content-center h-100 p-3 p-md-5 right-portion">
-            <div className="col-12 text-start">
-              <button
-                className="btn btn-dark w-auto float-start"
-                onClick={handlePrevStep}
-              >
-                <i className="bi bi-arrow-left"></i>
-              </button>
-            </div>
-            <div className="row justify-content-center">
-              <div className="col-12 text-center text-md-start mt-2">
-                <h1 className="fw-bold">Add Video (Optional)</h1>
-              </div>
-
-              <div className="col-12">
-                <div className="row mb-3">
-                  {videos.map((video, index) => (
-                    <div className="col-6 col-lg-3 mb-3" key={index}>
-                      <input
-                        type="file"
-                        hidden
-                        id={`file-input-${index}`}
-                        accept="video/*"
-                        onChange={(e) => handleFileChange(index, e)}
-                      />
-                      <div
-                        className="p-2 add-logo-div"
-                        onClick={() => handleAddVideoClick(index)}
-                      >
-                        <div className="text-center">
-                          {video.file ? (
-                            <video
-                              width="100%"
-                              controls
-                              className="video-preview"
-                            >
-                              <source
-                                src={URL.createObjectURL(video.file)}
-                                type={video.file.type}
-                              />
-                              Your browser does not support the video tag.
-                            </video>
-                          ) : (
-                            <img
-                              src="/src/assets/images/add-video.png"
-                              width="50"
-                              alt="Add Video"
-                            />
-                          )}
-                          <div className="col-12">
-                            <span>Add Video</span>
-                          </div>
-                        </div>
-                      </div>
-
-                      {index > 0 && (
-                        <div className="text-center mt-2">
-                          <button
-                            className="btn btn-danger btn-sm"
-                            onClick={() => removeVideoInput(index)}
-                          >
-                            Remove
-                          </button>
-                        </div>
-                      )}
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-
-            <div className="col-12 text-center p-3 p-md-5">
-              <button
-                className="btn btn-primary w-100 text-white p-2"
-                onClick={handleGallerySubmit}
-              >
-                Save & Next
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    )
-  }
 
   function PreviewTemplates() {
     const [currentSlide, setCurrentSlide] = useState(0)
@@ -4753,12 +4585,13 @@ export const CreateBusiness = () => {
     }, [id])
 
     const handleCreateBusiness = async (e) => {
-      e.preventDefault()
-      const response = await CreateBusinessDetails(formData)
-      if (response?.data) {
-        window.location.href = `template/${response?.data?._id}`
-        // navigate(`template${response?.data?._id}`)
-      }
+      // e.preventDefault()
+      // const response = await CreateBusinessDetails(formData)
+      // if (response?.data) {
+      //   window.location.href = `template/${response?.data?._id}`
+      //   // navigate(`template${response?.data?._id}`)
+      // }
+      handleNextStep()
     }
 
     const settings4 = {
@@ -5834,7 +5667,11 @@ export const CreateBusiness = () => {
   }
 
   function Subscription() {
+    const navigate = useNavigate()
     function planSubmit(id, price, name) {
+      var freePlan = import.meta.env.VITE_FREE_PLAN_ID
+      if (id != freePlan) {
+        console.log('first')
       setFormData((prevFormData) => ({
         ...prevFormData,
         selectedPlan: id,
@@ -5844,6 +5681,23 @@ export const CreateBusiness = () => {
         price: price,
       })
       handleNextStep()
+    }else{
+      const submitData = async () => {
+        console.log('second')
+        setFormData((prevFormData) => ({
+          ...prevFormData,
+          selectedPlan: id,
+        }))
+        formData.selectedPlan = id
+        const res = await CreateBusinessDetails(formData)
+        const resId = res.data._id || res.data.data?._id
+        if (res.success){
+          navigate(`/templates/${resId}`)
+        }
+      }
+      submitData()
+    }
+     
     }
 
     return (

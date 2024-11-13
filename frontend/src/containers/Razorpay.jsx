@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { CreateBusinessDetails } from '../Functions/functions'
 import axios from 'axios';
+import { useNavigate } from 'react-router';
 
 
 
@@ -10,6 +11,7 @@ export default function Razorpay(values) {
     const planDetails = values.planDetails
     const [isScriptLoaded, setScriptLoaded] = useState(false)
     const [businessId, setBusinessId] = useState('')
+    const navigate = useNavigate()
     const loadRazorpayScript = () => {
       return new Promise((resolve) => {
         const script = document.createElement('script')
@@ -37,53 +39,68 @@ export default function Razorpay(values) {
       }
 
       const options = {
-        key: 'rzp_test_SGRm1pfUuOFpzu', // Dummy Razorpay key ID for testing
+        key: 'rzp_test_DBApSwEptkCDdS', // Dummy Razorpay key ID for testing
         amount: planDetails.amount *100, // Amount in paise (50000 paise = ₹500)
         currency: 'INR',
         name: 'InConnect',
         description: 'Test Transaction',
         image: '', // Dummy logo URL
         handler: async function (response) {
+          console.log(response)
           var paymentDetails = {
             plan: formData.selectedPlan,
             paymentId: response.razorpay_payment_id,
             date: new Date(),
             paymentStatus: 'success',
           }
-          try {
-            const response = await axios.post(
-              'https://businessbazaarserver.auxxweb.in/api/v1/payment',
-              paymentDetails,
-              {
-                headers: {
-                  'Content-Type': 'application/json',
-                  Authorization: `Bearer ${id}`, // Sending businessId as bearer token
-                },
-              },
-            )
-            if (response.status !== 200) {
-              throw new Error(`HTTP error! Status: ${response.status}`)
-            }
+          // setInterval(async () => {
+          //   try {
+          //     const payment_status = await axios.post(
+          //       `https://businessbazaarserver.auxxweb.in/api/v1/payment/status/${response.razorpay_payment_id}`
+          //     );
+          //     if (payment_status === 'success') {
+          //       try {
+          //                   const response = await axios.post(
+          //                     'https://businessbazaarserver.auxxweb.in/api/v1/payment',
+          //                     paymentDetails,
+          //                     {
+          //                       headers: {
+          //                         'Content-Type': 'application/json',
+          //                         Authorization: `Bearer ${id}`, // Sending businessId as bearer token
+          //                       },
+          //                     },
+          //                   )
+          //                   if (response.status !== 200) {
+          //                     throw new Error(`HTTP error! Status: ${response.status}`)
+          //                   }
 
-            const data = response.data
-            if (data.success) {
-              return data
-            } else {
-              console.error(
-                'Failed to create business details:',
-                data.message || 'Unknown error',
-              )
-              throw new Error(
-                data.message || 'Failed to create business details',
-              )
-            }
-          } catch (error) {
-            console.error(
-              'Error occurred while fetching business site details:',
-              error.message,
-            )
-            throw error
-          }
+          //                   const data = response.data
+          //                   if (data.success) {
+
+          //                     navigate(`/templates/${businessId}`)
+          //                     // return data
+          //                   } else {
+          //                     console.error(
+          //                       'Failed to create business details:',
+          //                       data.message || 'Unknown error',
+          //                     )
+          //                     throw new Error(
+          //                       data.message || 'Failed to create business details',
+          //                     )
+          //                   }
+          //                 } catch (error) {
+          //                   console.error(
+          //                     'Error occurred while fetching business site details:',
+          //                     error.message,
+          //                   )
+          //                   throw error
+          //                 }
+          //     }
+          //   } catch (error) {
+          //     console.error("Error fetching payment status:", error);
+          //   }
+          // }, 1000);
+          
         },
         prefill: {
           name: formData.businessName,
@@ -91,7 +108,7 @@ export default function Razorpay(values) {
           contact: formData.contactDetails.primaryNumber,
         },
         notes: {
-          address: `${formData.address.location}, ${formData.address.state}, ${formData.address.country}`,
+          businessId: businessId,
         },
         theme: {
           color: formData.theme, // Customize theme color

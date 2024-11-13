@@ -14,6 +14,7 @@ export default function Business() {
   const [loading, setLoading] = useState(true)
   const [searchTerm, setSearchTerm] = useState('')
   const [limit, setLimit] = useState(1)
+  const [visibleBusiness, setVisibleBusiness] = useState(10);
   const { id } = useParams()
 
   useEffect(() => {
@@ -29,7 +30,7 @@ export default function Business() {
           })
           setCategoryData(category.data)
 
-          const business = await getCategoryBusiness(currentPage, id, searchTerm, limit)
+          const business = await getCategoryBusiness(currentPage, id, searchTerm, visibleBusiness)
           setTotalBusinessData(business.data.totalCount)
           setBusinessData(business.data.data)
         } catch (error) {
@@ -44,7 +45,7 @@ export default function Business() {
       const fetchData = async ()=>{
         try {
           setLoading(true)
-          const business = await fetchBusiness(currentPage)
+          const business = await fetchBusiness(currentPage,visibleBusiness)
           console.log(business)
           setTotalBusinessData(business.data.totalCount)
           setBusinessData(business.data.data)
@@ -59,18 +60,15 @@ export default function Business() {
       }
       fetchData()
     }
-  }, [currentPage, id, searchTerm])
+  }, [currentPage, id, searchTerm,visibleBusiness])
 
   const totalPages = Math.ceil(totalBusinessData / limit);
 
-  const goToPreviousPage = () => {
-    if (currentPage > 1) setCurrentPage(prevPage => prevPage - 1);
+
+ 
+  const loadMoreBusiness = () => {
+    setVisibleBusiness((prev) => prev + 10);
   };
-  
-  const goToNextPage = () => {
-    if (currentPage < totalPages) setCurrentPage(prevPage => prevPage + 1);
-  };
-  
 
   const handleSearch = (e) => {
     setSearchTerm(e.target.value)
@@ -177,44 +175,17 @@ export default function Business() {
               </Link>
             ))}
           </div>
+          {visibleBusiness < totalBusinessData && (
+            <div className="mt-5 text-center mb-1">
+              <button
+                onClick={loadMoreBusiness}
+                className="btn btn-dark btn-md"
+              >
+                View More <i className="bi bi-arrow-right"></i>
+              </button>
+            </div>
+          )}
 
-          <div className="d-flex justify-content-center align-items-center mt-4">
-          <button
-            onClick={goToPreviousPage}
-            disabled={currentPage === 1}
-            className="btn btn-primary me-2"
-            style={{
-              borderTopLeftRadius: '50px',
-              borderBottomLeftRadius: '50px',
-              border: 'none',
-              color: '#E5F0FD',
-              backgroundColor: currentPage === 1 ? '#A0C4E7' : '#228AE2', // Lighter color when disabled
-              cursor: currentPage === 1 ? 'not-allowed' : 'pointer', // Change cursor for disabled state
-              opacity: currentPage === 1 ? 0.6 : 1,
-            }}
-          >
-            Prev.
-          </button>
-          <span>
-            Page {currentPage} of {totalPages}
-          </span>
-          <button
-            onClick={goToNextPage}
-            disabled={currentPage === totalPages}
-            className="btn btn-primary ms-2"
-            style={{
-              borderTopRightRadius: '50px',
-              borderBottomRightRadius: '50px',
-              border: 'none',
-              color: '#E5F0FD',
-              backgroundColor: currentPage === totalPages ? '#A0C4E7' : '#228AE2', // Lighter color when disabled
-              cursor: currentPage === totalPages ? 'not-allowed' : 'pointer',
-              opacity: currentPage === totalPages ? 0.6 : 1,
-            }}
-          >
-            Next
-          </button>
-        </div>
         </div>
       </section>
     </Layout>
