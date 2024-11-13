@@ -3131,28 +3131,48 @@ export default function CreateBusiness() {
 
                 <div className="col-12">
                   {/* Special Service Title */}
-                  <div className="col-12 text-start">
-                    <label>Title</label>
-                    <input
-                      type="text"
-                      name="title"
+                  <div className="input-group mt-2 w-100">
+                    <TextField
+                    fullWidth
+                    label="Title"
+                    id="title"
+                    variant="filled"
+                    name="title"
+                    autoComplete="title"
+                    onChange={(e) => handleInputChange(e,setServices)}
+                    error={!!errors?.landingPageHeroTitle}
+                    helperText={errors?.landingPageHeroTitle}
                       value={specialService.title}
-                      onChange={handleChange}
-                      placeholder="Title"
-                      className="form-control form-control-lg mb-3"
-                      required
                     />
                   </div>
-                  <div className="col-12 text-start">
-                    <label>Description</label>
-                    <textarea
-                      name="description"
+                  <div className="input-group mb-3 mt-4 w-100">
+                    <TextField
+                    fullWidth
+                    label="Description"
+                    id="description"
+                    variant="filled"
+                    name="description"
+                    autoComplete="description"
+                    multiline // Makes the TextField behave like a textarea
+                    rows={4} // You can adjust the number of rows (height) here
                       value={specialService.description}
-                      className="form-control form-control-lg"
-                      onChange={handleChange}
-                      placeholder="Description"
-                      required
-                    ></textarea>
+                    onChange={(e) => handleInputChange(e, )}
+                    error={!!errors?.landingPageHeroDescription}
+                    helperText={errors?.landingPageHeroDescription}
+                    sx={{
+                      '& .MuiInputBase-root': {
+                        padding: '12px', // Padding inside the textarea
+                      },
+                      '& .MuiFilledInput-root': {
+                        backgroundColor: '#f9f9f9', // Optional: Background color for the filled variant
+                      },
+                      '& .MuiFormLabel-root': {
+                        top: '-6px', // Adjust label positioning if needed
+                      },
+                    }}
+                 
+                     
+                   />
                   </div>
 
                   {/* Special Services List */}
@@ -3165,25 +3185,47 @@ export default function CreateBusiness() {
                   {specialService.data.map((p, index) => (
                     <div key={index} className="mt-2">
                       {index !== 0 && <div className="divider"></div>}
-                      <label>Title</label>
-                      <input
-                        type="text"
+                      <TextField
+                    fullWidth
+                    label="Title"
+                    id="title"
+                    variant="filled"
                         name="title"
-                        className="form-control form-control-lg mb-3"
-                        placeholder="Service Name"
+                        autoComplete="Service Name"
                         value={p.title}
                         onChange={(e) => handleProductChange(index, e)}
-                        required
+                        error={!!errors?.landingPageHeroTitle}
+                        helperText={errors?.landingPageHeroTitle}
                       />
-                      <label>Service Description </label>
-                      <textarea
-                        name="description"
-                        className="form-control form-control-lg mb-3"
-                        placeholder="Service Description"
-                        value={p.description}
+                <div className="input-group mb-3 mt-4 w-100">
+
+                      <TextField
+                    fullWidth
+                    label="Description"
+                    id="description"
+                    variant="filled"
+                    name="description"
+                    autoComplete="description"
+                    multiline // Makes the TextField behave like a textarea
+                    rows={4} // You can adjust the number of rows (height) here
+                    error={!!errors?.landingPageHeroDescription}
+                    helperText={errors?.landingPageHeroDescription}
+                    sx={{
+                      '& .MuiInputBase-root': {
+                        padding: '12px', // Padding inside the textarea
+                      },
+                      '& .MuiFilledInput-root': {
+                        backgroundColor: '#f9f9f9', // Optional: Background color for the filled variant
+                      },
+                      '& .MuiFormLabel-root': {
+                        top: '-6px', // Adjust label positioning if needed
+                      },
+                    }}
                         onChange={(e) => handleProductChange(index, e)}
-                        required
+                        
                       />
+                </div>
+
                       <div className="col-12 col-md-3 mb-3">
                         <input
                           type="file"
@@ -3248,26 +3290,48 @@ export default function CreateBusiness() {
 
                   {/* Services List */}
                   {services.map((service, index) => (
-                    <div key={index} className="row align-items-center mb-3">
-                      <label>Service Title</label>
-                      <input
-                        type="text"
-                        name="title"
-                        className="form-control form-control-lg mb-3"
-                        placeholder="Service Title"
+                    <div key={index} className="input-group mt-2 w-100">
+                      <TextField
+                    fullWidth
+                    label="Title"
+                    id="title"
+                    variant="filled"
+                    name="title"
+                    autoComplete="title"
+                    error={!!errors?.welcomePartTitle}
+                    helperText={errors?.welcomePartTitle}
                         value={service.title}
                         onChange={(e) => handleServiceChange(index, e)}
-                        required
                       />
-                      <label>Service Description </label>
-                      <textarea
-                        name="description"
-                        className="form-control form-control-lg mb-3"
-                        placeholder="Service Description"
+                <div className="input-group mb-3 mt-4 w-100">
+
+                      <TextField
+                    fullWidth
+                    label="Description"
+                    id="description"
+                    variant="filled"
+                    name="description"
+                    autoComplete="description"
+                    multiline // Makes the TextField behave like a textarea
+                    rows={4} // You can adjust the number of rows (height) here
+                    error={!!errors?.welcomePartDescription}
+                    helperText={errors?.welcomePartDescription}
+                    sx={{
+                      '& .MuiInputBase-root': {
+                        padding: '12px', // Padding inside the textarea
+                      },
+                      '& .MuiFilledInput-root': {
+                        backgroundColor: '#f9f9f9', // Optional: Background color for the filled variant
+                      },
+                      '& .MuiFormLabel-root': {
+                        top: '-6px', // Adjust label positioning if needed
+                      },
+                    }}
                         value={service.description}
                         onChange={(e) => handleServiceChange(index, e)}
                         required
                       />
+                      </div>
                       <div className="col-12 col-md-3 mb-3">
                         <input
                           type="file"
@@ -3657,36 +3721,57 @@ export default function CreateBusiness() {
                   </h5>
                 </div>
                 {productSection.map((item, index) => (
-                  <div key={index} className="row align-items-start">
-                    <label className="form-label">Product Title</label>
+                  <div key={index} className="input-group mt-2 w-100">
 
-                    <input
-                      type="text"
-                      name="title"
-                      className="form-control form-control-lg mb-3"
-                      placeholder="Product Title"
+                    <TextField
+                    fullWidth
+                    label="Product Title"
+                    id="title"
+                    variant="filled"
+                    name="title"
+                    autoComplete="title"
+                    error={'Product title required'}
+                    helperText={'Product title required'}
                       value={item.title}
                       onChange={(e) => {
                         const updatedProducts = [...productSection]
                         updatedProducts[index].title = e.target.value
                         setProductSection(updatedProducts)
                       }}
-                      required
                     />
-                    <label className="form-label">Description</label>
+                <div className="input-group mb-3 mt-4 w-100">
 
-                    <textarea
+                    <TextField
+                      fullWidth
+                      label="Description"
+                      id="description"
+                      variant="filled"
                       name="description"
-                      className="form-control form-control-lg mb-3"
-                      placeholder="Description"
+                      autoComplete="description"
+                      multiline // Makes the TextField behave like a textarea
+                      rows={4} // You can adjust the number of rows (height) here
+                      error={'Product description required'}
+                      helperText={'Product description required'}
+                      sx={{
+                        '& .MuiInputBase-root': {
+                          padding: '12px', // Padding inside the textarea
+                        },
+                        '& .MuiFilledInput-root': {
+                          backgroundColor: '#f9f9f9', // Optional: Background color for the filled variant
+                        },
+                        '& .MuiFormLabel-root': {
+                          top: '-6px', // Adjust label positioning if needed
+                        },
+                      }}
                       value={item.description}
                       onChange={(e) => {
                         const updatedProducts = [...productSection]
                         updatedProducts[index].description = e.target.value
                         setProductSection(updatedProducts)
                       }}
-                      required
                     />
+                </div>
+
                     <div className="col-12 col-md-3 mb-3">
                       <input
                         type="file"
@@ -3716,13 +3801,15 @@ export default function CreateBusiness() {
                         </div>
                       </div>
                     </div>
-                    <label className="form-label">Price</label>
+                    <div className="input-group mb-3 mt-4 w-100">
 
-                    <input
+                    <TextField
+                    fullWidth
                       type="number"
+                      id="price"
                       name="price"
-                      className="form-control form-control-lg w-100 mb-3"
-                      placeholder="Price"
+                       variant="filled"
+                      label="Price"
                       value={item.price}
                       onChange={(e) => {
                         const updatedProducts = [...productSection]
@@ -3730,6 +3817,7 @@ export default function CreateBusiness() {
                         setProductSection(updatedProducts)
                       }}
                     />
+                  </div>
                   </div>
                 ))}
                 <a
@@ -3954,35 +4042,42 @@ export default function CreateBusiness() {
 
               {/* Form Fields */}
               <div className="col-12">
-                <div className="col-12 mb-3">
-                  <input
-                    type="text"
+                <div className="input-group mt-2 w-100">
+                  <TextField
+                    fullWidth
+                    label="Title"
+                    id="title"
+                    variant="filled"
                     name="title"
-                    className="form-control form-control-lg"
-                    placeholder="Title"
+                    autoComplete="title"
                     value={seoData.title}
                     onChange={handleSeoInputChange}
                   />
                 </div>
 
-                <div className="col-12 mb-3">
-                  <textarea
+                <div className="input-group mb-3 mt-4 w-100">
+                  <TextField
+                    fullWidth
+                    label="Description"
+                    id="description"
+                    variant="filled"
                     name="description"
-                    className="form-control form-control-lg"
-                    placeholder="Description.."
+                    autoComplete="description"
+                    multiline // Makes the TextField behave like a textarea
+                    rows={4} // You can adjus
                     value={seoData.description}
                     onChange={handleSeoInputChange}
-                  ></textarea>
+                />
                 </div>
 
                 {/* Tags Section */}
-                <div className="col-12 mb-3">
+                <div className="input-group mb-3 mt-4 w-100">
                   {seoData.metaTags.map((tag, index) => (
                     <div className="input-group mb-2" key={index}>
-                      <input
+                      <TextField
+                    fullWidth
                         type="text"
-                        className="form-control form-control-lg"
-                        placeholder="Tag"
+                        label="Tag"
                         value={tag}
                         onChange={(e) => handleTagChange(index, e.target.value)}
                       />
@@ -4009,12 +4104,14 @@ export default function CreateBusiness() {
 
                 {/* Social Media Links */}
                 {socialMediaLinks.map((link, index) => (
-                  <div className="col-12 mb-3 mt-3" key={index}>
-                    <input
+                  <div className="input-group mb-3 mt-4 w-100" key={index}>
+                    <TextField
+                    fullWidth
                       type="text"
+                       id="link"
+                    variant="filled"
                       name={link.tag}
-                      className="form-control form-control-lg"
-                      placeholder={link.tag}
+                      label={link.tag}
                       value={link.link}
                       onChange={(e) =>
                         handleSocialMediaChange(index, e.target.value)
