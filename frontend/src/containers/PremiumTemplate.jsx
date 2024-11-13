@@ -12,6 +12,8 @@ import Gallery from "/src/components/Business/Gallery";
 import ServicesSection from "/src/components/Business/ServicesSection";
 import MenuSection from "/src/components/Business/MenuSection";
 import ContactForm from "/src/components/Business/contactForm";
+import Loader from "../components/Loader/Loader";
+
 
 const PremiumTemplate = () => {
   const { businessData, loading, closeDays } = useBusiness();
@@ -169,7 +171,7 @@ const PremiumTemplate = () => {
         <SubscribeSection />
 
         <TemplateFooter businessData={businessData} closeDays={closeDays} />
-        <BackdropLoader open={loading} />
+        {loading && <Loader />}
       </Box>
     </>
   );

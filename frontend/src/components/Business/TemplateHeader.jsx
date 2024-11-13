@@ -7,7 +7,7 @@ const TemplateHeader = ({businessData}) => {
                 <Container>
                     {/* Align Brand to the start (left side) */}
                     <Navbar.Brand href="/" className='fw-bold w-50 nav-logo' style={{ fontSize: '36px' }}>
-                        <img src={businessData?.logo} alt="" />
+                        <img src={businessData?.logo && businessData?.logo.length > 0 ? businessData?.logo : PlaceholderBanner} alt="" />
                         <span className="ms-2">{businessData?.businessName}</span>
                     </Navbar.Brand>
 

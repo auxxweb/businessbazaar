@@ -3,6 +3,8 @@ import Layout from '../components/Layout'
 import { Link, useParams } from 'react-router-dom'
 import { fetchBusiness, getCategoryBusiness, getCategoryData } from '../Functions/functions'
 import Loader from '../components/Loader/Loader'
+import Placeholder from "../assets/images/placeholder.jpg";
+import PlaceholderBanner from "../assets/images/BannerPlaceholder.png";
 
 export default function Business() {
   const [categoryData, setCategoryData] = useState([])
@@ -145,7 +147,7 @@ export default function Business() {
                 <div className="row p-2">
                   <div className="col-4 p-0">
                     <img
-                      src={business.logo}
+                      src={business.logo ? business.logo : Placeholder}
                       alt=""
                       className="w-100 br-theme"
                     />

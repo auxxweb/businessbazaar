@@ -1,5 +1,7 @@
 /* eslint-disable react/prop-types */
 import { Box, Button, Container, Typography } from "@mui/material";
+import Placeholder from "../../../src/assets/images/placeholder.jpg";
+// import PlaceholderBanner from "../assets/images/BannerPlaceholder.png";
 
 const WelcomeCard = ({ businessData }) => {
   return (
@@ -12,7 +14,7 @@ const WelcomeCard = ({ businessData }) => {
       <div className="row mt-5 align-items-center mb-5">
         <div className="col-12 col-lg-6 mt-2 text-center text-lg-start about-image">
           <img
-            src={businessData?.welcomePart?.coverImage}
+            src={businessData?.welcomePart?.coverImage && businessData?.welcomePart?.coverImage !== "" ? businessData?.welcomePart?.coverImage : Placeholder}
             className="img-fluid about-image"
             alt=""
           />
