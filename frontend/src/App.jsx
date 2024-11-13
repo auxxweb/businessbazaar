@@ -1,5 +1,5 @@
 import Home from './containers/Home'
-import CreateBusiness from './containers/CreateBusiness'
+import { CreateBusiness } from './containers/CreateBusiness';
 import Business from './containers/Business'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import 'primereact/resources/themes/saga-blue/theme.css' // You can change the theme if desired

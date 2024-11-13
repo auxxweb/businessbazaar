@@ -31,8 +31,8 @@ import Visibility from '@mui/icons-material/Visibility'
 import VisibilityOff from '@mui/icons-material/VisibilityOff'
 import Razorpay from './Razorpay'
 
-export default function CreateBusiness() {
-  const [step, setStep] = useState(1)
+export const CreateBusiness = () => {
+  const [step, setStep] = useState(8)
   const navigate = useNavigate()
 
   const [planDetails, setPlanDetails] = useState({
@@ -111,10 +111,10 @@ export default function CreateBusiness() {
     specialServices: {
       title: '',
       description: '',
-      data: [],
+      data: [{ title: '', description: '', image: '' }],
     },
     productSection: [],
-    service: [],
+    service: [{ title: '', description: '', image: '' }],
     testimonial: {
       description: '',
       reviews: [],
@@ -2300,22 +2300,19 @@ export default function CreateBusiness() {
 
     const handleLandingSubmit = async () => {
       try {
-        let landingPreReq=null
-        let welcomePreReq=null
-        if(landingPageHero.coverImage){
+        let landingPreReq = null
+        let welcomePreReq = null
+        if (landingPageHero.coverImage) {
           setLoading(true)
-           landingPreReq = await preRequestFun(
+          landingPreReq = await preRequestFun(
             landingPageHero.coverImage,
             'Landing',
           )
         }
-        
-        if(welcomePart?.coverImage){
+
+        if (welcomePart?.coverImage) {
           setLoading(true)
-           welcomePreReq = await preRequestFun(
-            welcomePart.coverImage,
-            'Landing',
-          )
+          welcomePreReq = await preRequestFun(welcomePart.coverImage, 'Landing')
         }
         if (landingPreReq?.accessLink) {
           landingPageHero.coverImage = landingPreReq.accessLink
@@ -2362,7 +2359,7 @@ export default function CreateBusiness() {
           {/* Left Image Section */}
 
           {/* Right Form Section */}
-          <div  className="col-12 col-md-6 row align-items-end justify-content-center h-100 p-3 p-md-5 right-portion">
+          <div className="col-12 col-md-6 row align-items-end justify-content-center h-100 p-3 p-md-5 right-portion">
             <div className="col-12 text-start">
               <button
                 className="btn btn-dark w-auto float-start"
@@ -3125,7 +3122,7 @@ export default function CreateBusiness() {
                 <div className="col-12 mt-5 text-center text-md-start">
                   <h1 className="fw-bold title-text">
                     <span className="title-main">Add </span>
-                    <span className="title-highlight">Services</span>
+                    <span className="title-highlight">Services Details</span>
                   </h1>
                 </div>
 
@@ -3133,47 +3130,53 @@ export default function CreateBusiness() {
                   {/* Special Service Title */}
                   <div className="input-group mt-2 w-100">
                     <TextField
-                    fullWidth
-                    label="Title"
-                    id="title"
-                    variant="filled"
-                    name="title"
-                    autoComplete="title"
-                    onChange={(e) => handleInputChange(e,setServices)}
-                    error={!!errors?.landingPageHeroTitle}
-                    helperText={errors?.landingPageHeroTitle}
+                      fullWidth
+
+                      label="Title"
+                      id="title-1"
+                      variant="filled"
+                      name="title"
+                      autoComplete="title-1"
+                      onChange={handleChange}
+                      error={!!errors?.landingPageHeroTitle}
+                      helperText={errors?.landingPageHeroTitle}
                       value={specialService.title}
                     />
                   </div>
                   <div className="input-group mb-3 mt-4 w-100">
                     <TextField
-                    fullWidth
-                    label="Description"
-                    id="description"
-                    variant="filled"
-                    name="description"
-                    autoComplete="description"
-                    multiline // Makes the TextField behave like a textarea
-                    rows={4} // You can adjust the number of rows (height) here
+                      fullWidth
+                      label="Description"
+                      id="description-1"
+                      variant="filled"
+                      name="description"
+                      autoComplete="description-1"
+                      multiline // Makes the TextField behave like a textarea
+                      rows={4} // You can adjust the number of rows (height) here
                       value={specialService.description}
-                    onChange={(e) => handleInputChange(e, )}
-                    error={!!errors?.landingPageHeroDescription}
-                    helperText={errors?.landingPageHeroDescription}
-                    sx={{
-                      '& .MuiInputBase-root': {
-                        padding: '12px', // Padding inside the textarea
-                      },
-                      '& .MuiFilledInput-root': {
-                        backgroundColor: '#f9f9f9', // Optional: Background color for the filled variant
-                      },
-                      '& .MuiFormLabel-root': {
-                        top: '-6px', // Adjust label positioning if needed
-                      },
-                    }}
-                 
-                     
-                   />
+                      onChange={handleChange}
+                      error={!!errors?.landingPageHeroDescription}
+                      helperText={errors?.landingPageHeroDescription}
+                      sx={{
+                        '& .MuiInputBase-root': {
+                          padding: '12px', // Padding inside the textarea
+                        },
+                        '& .MuiFilledInput-root': {
+                          backgroundColor: '#f9f9f9', // Optional: Background color for the filled variant
+                        },
+                        '& .MuiFormLabel-root': {
+                          top: '-6px', // Adjust label positioning if needed
+                        },
+                      }}
+                    />
                   </div>
+                  <hr
+                    style={{
+                      border: '3px solid #105193',
+                      borderRadius: '5px',
+                      margin: '35px 0',
+                    }}
+                  />
 
                   {/* Special Services List */}
                   <div className="col-12 text-center">
@@ -3182,14 +3185,14 @@ export default function CreateBusiness() {
                     </h5>
                   </div>
 
-                  {specialService.data.map((p, index) => (
-                    <div key={index} className="mt-2">
+                  {specialService?.data?.map((p, index) => (
+                    <div key={`index-${index}`} className="mt-2">
                       {index !== 0 && <div className="divider"></div>}
                       <TextField
-                    fullWidth
-                    label="Title"
-                    id="title"
-                    variant="filled"
+                        fullWidth
+                        label="Title"
+                        id="title"
+                        variant="filled"
                         name="title"
                         autoComplete="Service Name"
                         value={p.title}
@@ -3197,34 +3200,32 @@ export default function CreateBusiness() {
                         error={!!errors?.landingPageHeroTitle}
                         helperText={errors?.landingPageHeroTitle}
                       />
-                <div className="input-group mb-3 mt-4 w-100">
-
-                      <TextField
-                    fullWidth
-                    label="Description"
-                    id="description"
-                    variant="filled"
-                    name="description"
-                    autoComplete="description"
-                    multiline // Makes the TextField behave like a textarea
-                    rows={4} // You can adjust the number of rows (height) here
-                    error={!!errors?.landingPageHeroDescription}
-                    helperText={errors?.landingPageHeroDescription}
-                    sx={{
-                      '& .MuiInputBase-root': {
-                        padding: '12px', // Padding inside the textarea
-                      },
-                      '& .MuiFilledInput-root': {
-                        backgroundColor: '#f9f9f9', // Optional: Background color for the filled variant
-                      },
-                      '& .MuiFormLabel-root': {
-                        top: '-6px', // Adjust label positioning if needed
-                      },
-                    }}
-                        onChange={(e) => handleProductChange(index, e)}
-                        
-                      />
-                </div>
+                      <div className="input-group mb-3 mt-4 w-100">
+                        <TextField
+                          fullWidth
+                          label="Description"
+                          id="description"
+                          variant="filled"
+                          name="description"
+                          autoComplete="description"
+                          multiline // Makes the TextField behave like a textarea
+                          rows={4} // You can adjust the number of rows (height) here
+                          error={!!errors?.landingPageHeroDescription}
+                          helperText={errors?.landingPageHeroDescription}
+                          sx={{
+                            '& .MuiInputBase-root': {
+                              padding: '12px', // Padding inside the textarea
+                            },
+                            '& .MuiFilledInput-root': {
+                              backgroundColor: '#f9f9f9', // Optional: Background color for the filled variant
+                            },
+                            '& .MuiFormLabel-root': {
+                              top: '-6px', // Adjust label positioning if needed
+                            },
+                          }}
+                          onChange={(e) => handleProductChange(index, e)}
+                        />
+                      </div>
 
                       <div className="col-12 col-md-3 mb-3">
                         <input
@@ -3240,7 +3241,7 @@ export default function CreateBusiness() {
                           className="p-2 mt-2 add-logo-div"
                         >
                           <div className="text-center">
-                            {isLoading.specialService[index] ? (
+                            {isLoading?.specialService[index] ? (
                               <div
                                 className="spinner-border text-primary"
                                 role="status"
@@ -3270,8 +3271,20 @@ export default function CreateBusiness() {
                       )}
                     </div>
                   ))}
+                   <hr
+                    style={{
+                      border: '3px solid #105193',
+                      borderRadius: '5px',
+                      margin: '35px 0',
+                    }}
+                  />
 
                   {/* Add Service Button */}
+                  <div className="col-12 text-center">
+                    <h5 className="fs-18 mb-4 p-1 text-center text-md-start text-dark fw-bold mt-3">
+                      Add Services
+                    </h5>
+                  </div>
                   <a
                     href="#"
                     onClick={() =>
@@ -3292,45 +3305,44 @@ export default function CreateBusiness() {
                   {services.map((service, index) => (
                     <div key={index} className="input-group mt-2 w-100">
                       <TextField
-                    fullWidth
-                    label="Title"
-                    id="title"
-                    variant="filled"
-                    name="title"
-                    autoComplete="title"
-                    error={!!errors?.welcomePartTitle}
-                    helperText={errors?.welcomePartTitle}
+                        fullWidth
+                        label="Title"
+                        id="title"
+                        variant="filled"
+                        name="title"
+                        autoComplete="title"
+                        error={!!errors?.welcomePartTitle}
+                        helperText={errors?.welcomePartTitle}
                         value={service.title}
                         onChange={(e) => handleServiceChange(index, e)}
                       />
-                <div className="input-group mb-3 mt-4 w-100">
-
-                      <TextField
-                    fullWidth
-                    label="Description"
-                    id="description"
-                    variant="filled"
-                    name="description"
-                    autoComplete="description"
-                    multiline // Makes the TextField behave like a textarea
-                    rows={4} // You can adjust the number of rows (height) here
-                    error={!!errors?.welcomePartDescription}
-                    helperText={errors?.welcomePartDescription}
-                    sx={{
-                      '& .MuiInputBase-root': {
-                        padding: '12px', // Padding inside the textarea
-                      },
-                      '& .MuiFilledInput-root': {
-                        backgroundColor: '#f9f9f9', // Optional: Background color for the filled variant
-                      },
-                      '& .MuiFormLabel-root': {
-                        top: '-6px', // Adjust label positioning if needed
-                      },
-                    }}
-                        value={service.description}
-                        onChange={(e) => handleServiceChange(index, e)}
-                        required
-                      />
+                      <div className="input-group mb-3 mt-4 w-100">
+                        <TextField
+                          fullWidth
+                          label="Description"
+                          id="description"
+                          variant="filled"
+                          name="description"
+                          autoComplete="description"
+                          multiline // Makes the TextField behave like a textarea
+                          rows={4} // You can adjust the number of rows (height) here
+                          error={!!errors?.welcomePartDescription}
+                          helperText={errors?.welcomePartDescription}
+                          sx={{
+                            '& .MuiInputBase-root': {
+                              padding: '12px', // Padding inside the textarea
+                            },
+                            '& .MuiFilledInput-root': {
+                              backgroundColor: '#f9f9f9', // Optional: Background color for the filled variant
+                            },
+                            '& .MuiFormLabel-root': {
+                              top: '-6px', // Adjust label positioning if needed
+                            },
+                          }}
+                          value={service.description}
+                          onChange={(e) => handleServiceChange(index, e)}
+                          required
+                        />
                       </div>
                       <div className="col-12 col-md-3 mb-3">
                         <input
@@ -3464,9 +3476,10 @@ export default function CreateBusiness() {
                                     }
                                 `}
               </style>
+              <div>
               <section
                 className="h-auto"
-                style={{ backgroundColor: '#F3F3F4' }}
+                style={{ backgroundColor: '#F3F3F4' ,overflowY:"scroll"}}
               >
                 <div className="container p-top">
                   <div className="col-12 mb-5">
@@ -3616,6 +3629,7 @@ export default function CreateBusiness() {
                   </div>
                 </div>
               </section>
+              </div>
             </div>
           </div>
         </div>
@@ -3722,16 +3736,15 @@ export default function CreateBusiness() {
                 </div>
                 {productSection.map((item, index) => (
                   <div key={index} className="input-group mt-2 w-100">
-
                     <TextField
-                    fullWidth
-                    label="Product Title"
-                    id="title"
-                    variant="filled"
-                    name="title"
-                    autoComplete="title"
-                    error={'Product title required'}
-                    helperText={'Product title required'}
+                      fullWidth
+                      label="Product Title"
+                      id="title"
+                      variant="filled"
+                      name="title"
+                      autoComplete="title"
+                      error={'Product title required'}
+                      helperText={'Product title required'}
                       value={item.title}
                       onChange={(e) => {
                         const updatedProducts = [...productSection]
@@ -3739,38 +3752,37 @@ export default function CreateBusiness() {
                         setProductSection(updatedProducts)
                       }}
                     />
-                <div className="input-group mb-3 mt-4 w-100">
-
-                    <TextField
-                      fullWidth
-                      label="Description"
-                      id="description"
-                      variant="filled"
-                      name="description"
-                      autoComplete="description"
-                      multiline // Makes the TextField behave like a textarea
-                      rows={4} // You can adjust the number of rows (height) here
-                      error={'Product description required'}
-                      helperText={'Product description required'}
-                      sx={{
-                        '& .MuiInputBase-root': {
-                          padding: '12px', // Padding inside the textarea
-                        },
-                        '& .MuiFilledInput-root': {
-                          backgroundColor: '#f9f9f9', // Optional: Background color for the filled variant
-                        },
-                        '& .MuiFormLabel-root': {
-                          top: '-6px', // Adjust label positioning if needed
-                        },
-                      }}
-                      value={item.description}
-                      onChange={(e) => {
-                        const updatedProducts = [...productSection]
-                        updatedProducts[index].description = e.target.value
-                        setProductSection(updatedProducts)
-                      }}
-                    />
-                </div>
+                    <div className="input-group mb-3 mt-4 w-100">
+                      <TextField
+                        fullWidth
+                        label="Description"
+                        id="description"
+                        variant="filled"
+                        name="description"
+                        autoComplete="description"
+                        multiline // Makes the TextField behave like a textarea
+                        rows={4} // You can adjust the number of rows (height) here
+                        error={'Product description required'}
+                        helperText={'Product description required'}
+                        sx={{
+                          '& .MuiInputBase-root': {
+                            padding: '12px', // Padding inside the textarea
+                          },
+                          '& .MuiFilledInput-root': {
+                            backgroundColor: '#f9f9f9', // Optional: Background color for the filled variant
+                          },
+                          '& .MuiFormLabel-root': {
+                            top: '-6px', // Adjust label positioning if needed
+                          },
+                        }}
+                        value={item.description}
+                        onChange={(e) => {
+                          const updatedProducts = [...productSection]
+                          updatedProducts[index].description = e.target.value
+                          setProductSection(updatedProducts)
+                        }}
+                      />
+                    </div>
 
                     <div className="col-12 col-md-3 mb-3">
                       <input
@@ -3802,22 +3814,21 @@ export default function CreateBusiness() {
                       </div>
                     </div>
                     <div className="input-group mb-3 mt-4 w-100">
-
-                    <TextField
-                    fullWidth
-                      type="number"
-                      id="price"
-                      name="price"
-                       variant="filled"
-                      label="Price"
-                      value={item.price}
-                      onChange={(e) => {
-                        const updatedProducts = [...productSection]
-                        updatedProducts[index].price = e.target.value
-                        setProductSection(updatedProducts)
-                      }}
-                    />
-                  </div>
+                      <TextField
+                        fullWidth
+                        type="number"
+                        id="price"
+                        name="price"
+                        variant="filled"
+                        label="Price"
+                        value={item.price}
+                        onChange={(e) => {
+                          const updatedProducts = [...productSection]
+                          updatedProducts[index].price = e.target.value
+                          setProductSection(updatedProducts)
+                        }}
+                      />
+                    </div>
                   </div>
                 ))}
                 <a
@@ -4067,7 +4078,7 @@ export default function CreateBusiness() {
                     rows={4} // You can adjus
                     value={seoData.description}
                     onChange={handleSeoInputChange}
-                />
+                  />
                 </div>
 
                 {/* Tags Section */}
@@ -4075,7 +4086,7 @@ export default function CreateBusiness() {
                   {seoData.metaTags.map((tag, index) => (
                     <div className="input-group mb-2" key={index}>
                       <TextField
-                    fullWidth
+                        fullWidth
                         type="text"
                         label="Tag"
                         value={tag}
@@ -4106,10 +4117,10 @@ export default function CreateBusiness() {
                 {socialMediaLinks.map((link, index) => (
                   <div className="input-group mb-3 mt-4 w-100" key={index}>
                     <TextField
-                    fullWidth
+                      fullWidth
                       type="text"
-                       id="link"
-                    variant="filled"
+                      id="link"
+                      variant="filled"
                       name={link.tag}
                       label={link.tag}
                       value={link.link}
@@ -4661,7 +4672,7 @@ export default function CreateBusiness() {
       e.preventDefault()
       const response = await CreateBusinessDetails(formData)
       if (response?.data) {
-        window.location.href=`template/${response?.data?._id}`
+        window.location.href = `template/${response?.data?._id}`
         // navigate(`template${response?.data?._id}`)
       }
     }
