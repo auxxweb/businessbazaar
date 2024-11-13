@@ -32,7 +32,7 @@ import VisibilityOff from '@mui/icons-material/VisibilityOff'
 import Razorpay from './Razorpay'
 
 export default function CreateBusiness() {
-  const [step, setStep] = useState(6)
+  const [step, setStep] = useState(1)
   const navigate = useNavigate()
 
   const [planDetails, setPlanDetails] = useState({
@@ -2300,20 +2300,28 @@ export default function CreateBusiness() {
 
     const handleLandingSubmit = async () => {
       try {
-        setLoading(true)
-        const landingPreReq = await preRequestFun(
-          landingPageHero.coverImage,
-          'Landing',
-        )
-        const welcomePreReq = await preRequestFun(
-          welcomePart.coverImage,
-          'Landing',
-        )
-        if (landingPreReq.accessLink) {
-          landingPageHero.coverImage = landingPreReq.accessLink
-          setLandingPageHero(landingPreReq.accessLink)
+        let landingPreReq=null
+        let welcomePreReq=null
+        if(landingPageHero.coverImage){
+          setLoading(true)
+           landingPreReq = await preRequestFun(
+            landingPageHero.coverImage,
+            'Landing',
+          )
         }
-        if (welcomePreReq.accessLink) {
+        
+        if(welcomePart?.coverImage){
+          setLoading(true)
+           welcomePreReq = await preRequestFun(
+            welcomePart.coverImage,
+            'Landing',
+          )
+        }
+        if (landingPreReq?.accessLink) {
+          landingPageHero.coverImage = landingPreReq.accessLink
+          setLandingPageHero(landingPreReq?.accessLink)
+        }
+        if (welcomePreReq?.accessLink) {
           welcomePart.coverImage = welcomePreReq.accessLink
           setWelcomePart(welcomePreReq.accessLink)
         }
@@ -2354,7 +2362,7 @@ export default function CreateBusiness() {
           {/* Left Image Section */}
 
           {/* Right Form Section */}
-          <div className="col-12 col-md-6 row align-items-end justify-content-center h-100 p-3 p-md-5 right-portion">
+          <div  className="col-12 col-md-6 row align-items-end justify-content-center h-100 p-3 p-md-5 right-portion">
             <div className="col-12 text-start">
               <button
                 className="btn btn-dark w-auto float-start"
@@ -2373,14 +2381,15 @@ export default function CreateBusiness() {
               </div>
 
               {/* Color Theme Section */}
-              <div className="col-12 p-3 p-md-5">
+              <div className="col-12 p-3 p-md-3">
                 <h5 className="fs-18 mb-4 p-1 text-start text-md-start text-dark fw-bold mt-3">
                   Color Theme
                 </h5>
-                <div className="col-6 col-md-3 d-flex w-100 gap-5">
+                <div className="col-6 col-md-3 d-flex w-100 gap-5 pb-3">
                   <div>
                     <label>Choose Primary Color</label>
-                    <input
+                    <TextField
+                      variant="outlined"
                       type="color"
                       name="color"
                       className="form-control form-control-lg"
@@ -2391,7 +2400,7 @@ export default function CreateBusiness() {
 
                   <div>
                     <label>Choose Secondary Color</label>
-                    <input
+                    <TextField
                       type="color"
                       name="color"
                       className="form-control form-control-lg"
@@ -2402,37 +2411,51 @@ export default function CreateBusiness() {
                 </div>
 
                 {/* Landing Page Hero Details */}
-                <h5 className="fs-18 mb-2 text-dark fw-bold mt-3">
+                <h5 className="fs-18 mb-4 text-dark fw-bold mt-4">
                   Add Landing Page Banner
                 </h5>
-                <label>Title</label>
-                <input
-                  type="text"
-                  name="title"
-                  className="form-control form-control-lg mb-3"
-                  placeholder="Title"
-                  value={landingPageHero.title}
-                  onChange={(e) => handleInputChange(e, setLandingPageHero)}
-                />
-                {errors.landingPageHeroTitle && (
-                  <div className="text-danger">
-                    {errors.landingPageHeroTitle}
-                  </div>
-                )}
 
-                <label>Description</label>
-                <textarea
-                  name="description"
-                  className="form-control form-control-lg mb-3"
-                  placeholder="Description"
-                  value={landingPageHero.description}
-                  onChange={(e) => handleInputChange(e, setLandingPageHero)}
-                />
-                {errors.landingPageHeroDescription && (
-                  <div className="text-danger">
-                    {errors.landingPageHeroDescription}
-                  </div>
-                )}
+                <div className="input-group mt-2 w-100">
+                  <TextField
+                    fullWidth
+                    label="Title"
+                    id="title"
+                    variant="filled"
+                    name="title"
+                    autoComplete="title"
+                    value={landingPageHero.title}
+                    onChange={(e) => handleInputChange(e, setLandingPageHero)}
+                    error={!!errors?.landingPageHeroTitle}
+                    helperText={errors?.landingPageHeroTitle}
+                  />
+                </div>
+                <div className="input-group mb-3 mt-4 w-100">
+                  <TextField
+                    fullWidth
+                    label="Description"
+                    id="description"
+                    variant="filled"
+                    name="description"
+                    autoComplete="description"
+                    multiline // Makes the TextField behave like a textarea
+                    rows={4} // You can adjust the number of rows (height) here
+                    value={landingPageHero.description}
+                    onChange={(e) => handleInputChange(e, setLandingPageHero)}
+                    error={!!errors?.landingPageHeroDescription}
+                    helperText={errors?.landingPageHeroDescription}
+                    sx={{
+                      '& .MuiInputBase-root': {
+                        padding: '12px', // Padding inside the textarea
+                      },
+                      '& .MuiFilledInput-root': {
+                        backgroundColor: '#f9f9f9', // Optional: Background color for the filled variant
+                      },
+                      '& .MuiFormLabel-root': {
+                        top: '-6px', // Adjust label positioning if needed
+                      },
+                    }}
+                  />
+                </div>
 
                 {/* Hero Image Upload */}
                 <input
@@ -2479,32 +2502,47 @@ export default function CreateBusiness() {
                 <h5 className="fs-18 mb-2 text-dark fw-bold mt-3">
                   Add Welcome Part
                 </h5>
-                <label>Title</label>
-                <input
-                  type="text"
-                  name="title"
-                  className="form-control form-control-lg mb-3"
-                  placeholder="Title"
-                  value={welcomePart.title}
-                  onChange={(e) => handleInputChange(e, setWelcomePart)}
-                />
-                {errors.welcomePartTitle && (
-                  <div className="text-danger">{errors.welcomePartTitle}</div>
-                )}
-
-                <label>Description</label>
-                <textarea
-                  name="description"
-                  className="form-control form-control-lg mb-3"
-                  placeholder="Description"
-                  value={welcomePart.description}
-                  onChange={(e) => handleInputChange(e, setWelcomePart)}
-                />
-                {errors.welcomePartDescription && (
-                  <div className="text-danger">
-                    {errors.welcomePartDescription}
-                  </div>
-                )}
+                <div className="input-group mt-2 w-100">
+                  <TextField
+                    fullWidth
+                    label="Title"
+                    id="title"
+                    variant="filled"
+                    name="title"
+                    autoComplete="title"
+                    value={welcomePart.title}
+                    onChange={(e) => handleInputChange(e, setWelcomePart)}
+                    error={!!errors?.welcomePartTitle}
+                    helperText={errors?.welcomePartTitle}
+                  />
+                </div>
+                <div className="input-group mb-3 mt-4 w-100">
+                  <TextField
+                    fullWidth
+                    label="Description"
+                    id="description"
+                    variant="filled"
+                    name="description"
+                    autoComplete="description"
+                    multiline // Makes the TextField behave like a textarea
+                    rows={4} // You can adjust the number of rows (height) here
+                    value={welcomePart.description}
+                    onChange={(e) => handleInputChange(e, setWelcomePart)}
+                    error={!!errors?.welcomePartDescription}
+                    helperText={errors?.welcomePartDescription}
+                    sx={{
+                      '& .MuiInputBase-root': {
+                        padding: '12px', // Padding inside the textarea
+                      },
+                      '& .MuiFilledInput-root': {
+                        backgroundColor: '#f9f9f9', // Optional: Background color for the filled variant
+                      },
+                      '& .MuiFormLabel-root': {
+                        top: '-6px', // Adjust label positioning if needed
+                      },
+                    }}
+                  />
+                </div>
 
                 {/* Welcome Image Upload */}
                 <input
