@@ -1,4 +1,6 @@
 /* eslint-disable react/prop-types */
+import PlaceholderBanner from "../../assets/images/Placeholder.jpg"
+
 const TemplateFooter = ({ businessData, closeDays }) => {
   return (
     <footer className="h-auto">

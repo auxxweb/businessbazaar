@@ -85,7 +85,7 @@ const PremiumTemplate = () => {
   {/* Background Image */}
       <Box
         sx={{
-          backgroundImage: `url(${businessData?.landingPageHero?.coverImage})`,
+          backgroundImage: `url(${businessData?.landingPageHero?.coverImage && businessData?.landingPageHero?.coverImage.length =="" ? businessData?.landingPageHero?.coverImage : "https://products.otis.com/hubfs/raw_assets/public/Otis_Oct2020/images/grayscale-mountain.png"})`,
           backgroundSize: "cover",
           backgroundPosition: "center",
           width: "100%",
@@ -171,7 +171,7 @@ const PremiumTemplate = () => {
         <SubscribeSection />
 
         <TemplateFooter businessData={businessData} closeDays={closeDays} />
-        {loading && <Loader />}
+        {/* <BackdropLoader open={loading} /> */}
       </Box>
     </>
   );

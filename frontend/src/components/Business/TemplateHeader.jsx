@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import { Container, Nav, Navbar, NavLink } from 'react-bootstrap'
-
+import PlaceholderBanner from "../../assets/images/Placeholder.jpg"
 const TemplateHeader = ({businessData}) => {
   return (
     <Navbar expand="lg" className="bg-white pjs fixed-top" style={{ paddingBlock: "5px" }}>

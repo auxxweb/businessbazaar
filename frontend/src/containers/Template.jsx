@@ -601,8 +601,8 @@ export default function Template() {
             <div className="col-12 col-lg-6 text-end d-none d-lg-block">
               <img
                 src={
-                  businessData?.landingPageHero?.coverImage &&
-                  businessData?.landingPageHero?.coverImage?.length > 0
+                  businessData?.landingPageHero?.image &&
+                  businessData?.landingPageHero?.image?.length > 0
                     ? businessData?.landingPageHero?.coverImage
                     : PlaceholderBanner
                 }
@@ -684,10 +684,7 @@ export default function Template() {
             <div className="col-12 col-lg-6 mt-2 text-center text-lg-start about-image">
               <img
                 src={
-                  businessData?.welcomePart?.coverImage &&
-                  businessData?.welcomePart?.coverImage?.length > 0
-                    ? businessData?.welcomePart?.coverImage
-                    : PlaceholderBanner
+                (businessData?.welcomePart?.image ?? Placeholder)
                 }
                 className="img-fluid about-image"
                 alt=""
