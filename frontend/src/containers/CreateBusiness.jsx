@@ -32,7 +32,7 @@ import VisibilityOff from '@mui/icons-material/VisibilityOff'
 import Razorpay from './Razorpay'
 
 export const CreateBusiness = () => {
-  const [step, setStep] = useState(10)
+  const [step, setStep] = useState(1)
 
   const [planDetails, setPlanDetails] = useState({
     price: '',
@@ -123,7 +123,7 @@ export const CreateBusiness = () => {
     seoData: {
       title: '',
       description: '',
-      metaTags: [],
+      metaTags: [''],
     },
     selectedPlan: '',
   })
@@ -4154,29 +4154,37 @@ export const CreateBusiness = () => {
                         fullWidth
                         type="text"
                         label="Tag"
+                        variant='filled'
                         value={tag}
                         onChange={(e) => handleTagChange(index, e.target.value)}
                       />
-                      {index > 0 ? (
-                        <button
-                          className="btn btn-danger"
-                          onClick={() => removeTag(index)}
-                          type="button"
-                        >
-                          Remove
-                        </button>
-                      ) : (
-                        <button
-                          className="btn btn-primary"
-                          type="button"
-                          onClick={addTag}
-                        >
-                          Add More
-                        </button>
+                      {seoData?.metaTags?.length > 1 && (
+                         <div
+                         onClick={() => removeTag(index)}
+                         className="remove-button position-absolute"
+                         style={{
+                           top: '5px',
+                           right: '10px',
+                           cursor: 'pointer',
+                           color: '#ff4d4f',
+                           fontSize: '18px',
+                           fontWeight: 'bold',
+                           zIndex: 9,
+                         }}
+                       >
+                         X
+                       </div>
                       )}
                     </div>
                   ))}
                 </div>
+                <button
+                  className="text-decoration-none btn btn-primary w-100 mb-3"
+                  type="button"
+                  onClick={addTag}
+                >
+                  Add More
+                </button>
 
                 {/* Social Media Links */}
                 {socialMediaLinks.map((link, index) => (
@@ -4354,7 +4362,7 @@ export const CreateBusiness = () => {
             </div>
 
             <div className="row justify-content-start">
-                <div className="col-12 text-center text-md-start mt-4">
+              <div className="col-12 text-center text-md-start mt-4">
                 <h1 className="fw-bold title-text">
                   <span className="title-main">Add </span>
                   <span className="title-highlight">Gallery</span>
@@ -4375,7 +4383,7 @@ export const CreateBusiness = () => {
                       />
                       <div className="p-2 add-logo-div">
                         {/* Remove Button for all except the first image */}
-                        {(images?.length > 1 || image.file)  ? (
+                        {images?.length > 1 || image.file ? (
                           <div className="d-flex justify-content-end">
                             <CloseIcon
                               style={{
@@ -4720,6 +4728,19 @@ export const CreateBusiness = () => {
     ])
     const [closeDays, setCloseDays] = useState([])
     const allDays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+    const convertTo12HourFormat = (time) => {
+      // Split the time into hours and minutes
+      let [hours, minutes] = time.split(':').map(Number)
+
+      // Determine if it's AM or PM
+      let amOrPm = hours >= 12 ? 'PM' : 'AM'
+
+      // Convert hours from 24-hour to 12-hour format
+      hours = hours % 12 || 12
+
+      // Format the time string
+      return `${hours}:${minutes.toString().padStart(2, '0')} ${amOrPm}`
+    }
 
     const handleInputChange = (e) => {
       const { name, value } = e.target
@@ -5261,7 +5282,7 @@ export const CreateBusiness = () => {
               <div className="col-12 mb-5 row justify-content-center david-font">
                 {businessData.specialServices.data.length > 2 ? (
                   <Slider {...settings4}>
-                    {businessData.specialServices.data.map((dish, index) => (
+                    {businessData?.specialServices?.data?.map((dish, index) => (
                       <div
                         key={index}
                         className="dish-div col-12 col-lg-6 text-center p-3"
@@ -5734,7 +5755,7 @@ export const CreateBusiness = () => {
                         >
                           {businessData.businessTiming.workingDays.map(
                             (day, index) => (
-                              <p>{day}</p>
+                              <p key={`key-${index}`}>{day}</p>
                             ),
                           )}
                         </div>
@@ -5742,7 +5763,11 @@ export const CreateBusiness = () => {
                           className="mt-3 text-center text-lg-start"
                           style={{ color: '#A4B3CB' }}
                         >
-                          <span>8:00 am to 9:00 pm</span>
+                          <span>{`${convertTo12HourFormat(
+                            formData?.businessTiming?.openTime?.open,
+                          )} to ${convertTo12HourFormat(
+                            formData?.businessTiming?.openTime?.close,
+                          )}`}</span>
                         </div>
                       </div>
                     </div>
@@ -5868,44 +5893,50 @@ export const CreateBusiness = () => {
                     {/* Free Plan */}
                     {planData.map((plan, index) => (
                       <div className="col-12 col-md-6 mb-4" key={index}>
-                        <div className="card br-20 b-theme2">
+                        <div className="card br-20 b-theme2 shadow-lg border-0 overflow-hidden">
                           <div className="p-4">
-                            <div className="col-12 text-center">
-                              <span className="fw-bold">{plan.plan}</span>
+                            <div className="col-12 text-center mb-3">
+                              <span className="fw-bold fs-20 text-dark">
+                                {plan?.plan}
+                              </span>
                             </div>
-                            <div className="row mt-2 mb-2">
-                              <div className="col-4">
-                                <h1 className="fw-bold fs-30">
-                                  ₹{plan.amount}
-                                </h1>
+                            <div className="d-flex justify-content-between align-items-center mt-2 mb-2">
+                              <div className="price-section">
+                                <h2 className="fw-bold fs-28 text-primary mb-0">
+                                  ₹{plan?.amount}
+                                </h2>
                               </div>
-                              <div className="col-8 p-0 text-start">
-                                <span className="text-secondary">
-                                  per editor/month
-                                </span>{' '}
-                                <br />
-                                <span className="text-secondary">
-                                  Billed Monthly
+                              <div className="validity-section text-end">
+                                <span className="text-dark fw-bold fs-16">
+                                  Validity{' '}
+                                  <span style={{ color: 'blue' }}>
+                                    {plan?.validity} year
+                                  </span>
                                 </span>
                               </div>
                             </div>
                             <div className="col-12 mt-4">
-                              {plan.description.map((data, descIndex) => (
-                                <div className="mt-2" key={descIndex}>
-                                  <span className="subscription-tick bg-light active">
+                              {plan?.description.map((data, descIndex) => (
+                                <div
+                                  className="d-flex align-items-center mt-2"
+                                  key={descIndex}
+                                >
+                                  <span className="subscription-tick bg-light text-success me-2">
                                     <i className="bi bi-check"></i>
                                   </span>
-                                  <span className="fs-16">{data}</span>
+                                  <span className="fs-14 text-dark">
+                                    {data}
+                                  </span>
                                 </div>
                               ))}
                             </div>
                             <div className="mt-4">
                               <button
-                                className="btn w-100 text-white"
+                                className="btn w-100 text-white py-2 fw-bold"
                                 onClick={() =>
                                   planSubmit(plan._id, plan.amount, plan.plan)
                                 }
-                                style={{ backgroundColor: '#5b7ee88c' }}
+                                style={{ backgroundColor: '#5b7ee8' }}
                               >
                                 Choose Plan
                               </button>
@@ -5920,6 +5951,114 @@ export const CreateBusiness = () => {
             </div>
           </div>
         </div>
+        <style>
+          {`.card {
+  border-radius: 20px;
+  background-color: #fff;
+  transition: transform 0.3s, box-shadow 0.3s;
+  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+}
+
+.br-20 {
+  border-radius: 20px;
+}
+
+.b-theme2 {
+  background-color: #f8f9fa;
+}
+
+.fs-20 {
+  font-size: 20px; /* Smaller title font */
+}
+
+.fs-28 {
+  font-size: 28px; /* Reduced font size for amount */
+}
+
+.fs-16 {
+  font-size: 16px; /* Font size for validity */
+}
+
+.fs-14 {
+  font-size: 14px; /* Font size for description text */
+}
+
+.text-primary {
+  color: #5b7ee8;
+}
+
+.text-dark {
+  color: #343a40;
+}
+
+.text-muted {
+  color: #6c757d;
+}
+
+.fw-medium {
+  font-weight: 500;
+}
+
+.fw-bold {
+  font-weight: 700;
+}
+
+.price-section {
+  text-align: left;
+}
+
+.validity-section {
+  text-align: right;
+}
+
+.subscription-tick {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 1px solid #ddd;
+  color: #28a745;
+}
+
+.btn {
+  border-radius: 10px;
+  font-weight: 600;
+  background-color: #5b7ee8;
+  transition: background-color 0.3s;
+}
+
+.btn:hover {
+  background-color: #4a6fca;
+}
+
+.shadow-lg {
+  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+}
+
+.me-2 {
+  margin-right: 0.5rem;
+}
+
+.d-flex {
+  display: flex;
+}
+
+.align-items-center {
+  align-items: center;
+}
+
+.justify-content-between {
+  justify-content: space-between;
+}
+`}
+        </style>
       </>
     )
   }
@@ -5939,7 +6078,7 @@ export const CreateBusiness = () => {
       {step === 10 && <SeoDetails />}
       {step === 11 && <MoreImages />}
       {step === 12 && <Subscription />}
-      {step === 13 && <PreviewTemplates />}
+      {step === 2 && <PreviewTemplates />}
       {step === 14 && (
         <Razorpay formData={formData} planDetails={planDetails} />
       )}

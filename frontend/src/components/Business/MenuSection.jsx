@@ -78,7 +78,7 @@ const MenuSection = ({ businessData }) => {
               <CardMedia
                 sx={{ width: 224, height: 203, marginInline:'auto' }}
                 // image="/business/menu.png"
-                image={item?.image}
+                image={item?.image && item?.image > 0 ? item?.image : "https://img.freepik.com/free-vector/illustration-gallery-icon_53876-27002.jpg"}
               />
               <CardContent>
                 <Typography

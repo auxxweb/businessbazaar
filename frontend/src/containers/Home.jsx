@@ -9,6 +9,7 @@ import "slick-carousel/slick/slick-theme.css";
 import { useNavigate, Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import "./Home.css";
+import Placeholder from "../assets/images/placeholder.jpg";
 
 import {
   createReveiw,
@@ -227,7 +228,7 @@ export default function Home() {
                   <Carousel.Item key={`key-${banner?._id}`} className=" h-100">
                     <img
                       className="d-block w-100"
-                      src={banner?.image || "/src/assets/images/1.jpg"} // Use banner image or fallback
+                      src={banner?.image && banner?.image.length > 0 ? banner?.image : Placeholder } // Use banner image or fallback
                       alt="First slide"
                       style={{
                         objectFit: "cover",
@@ -374,7 +375,7 @@ export default function Home() {
                     key={category._id} // Unique key for each category
                   >
                     <img
-                      src={category.image}
+                      src={category.image && category.image.length > 0 ? category.image : Placeholder}
                       alt={category.name}
                       className="cat-img"
                     />
@@ -424,7 +425,7 @@ export default function Home() {
                   <div className="row p-2">
                     <div className="col-4 p-0">
                       <img
-                        src={business?.logo}
+                        src={business?.logo &&business?.logo?.length > 0 ? business?.logo : Placeholder}
                         alt=""
                         className="w-100 br-theme"
                       />

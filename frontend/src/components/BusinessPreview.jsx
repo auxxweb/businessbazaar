@@ -13,6 +13,8 @@ import { Rating } from "primereact/rating";
 import { InputText } from "primereact/inputtext";
 import { InputTextarea } from "primereact/inputtextarea";
 import { width } from "@fortawesome/free-brands-svg-icons/fa42Group";
+import Placeholder from "../assets/images/placeholder.jpg";
+import PlaceholderBanner from "../assets/images/BannerPlaceholder.png";
 
 function BusinessPreview({ formData }) {
   console.log(formData, "data");
@@ -250,7 +252,7 @@ function BusinessPreview({ formData }) {
             {/* Left Image for Mobile View */}
             <div className="col-12 col-lg-6 text-end d-block d-lg-none">
               <img
-                src={businessData.landingPageHero.coverImage}
+                src={businessData.landingPageHero.coverImage && businessData.landingPageHero.coverImage.length > 0 ? businessData.landingPageHero.coverImage : Placeholder}
                 alt=""
                 className="banner-image"
               />
@@ -322,7 +324,7 @@ function BusinessPreview({ formData }) {
             {/* Right Image for Desktop View */}
             <div className="col-12 col-lg-6 text-end d-none d-lg-block">
               <img
-                src={businessData.landingPageHero.coverImage}
+                src={businessData.landingPageHero.coverImage && businessData.landingPageHero.coverImage.length > 0 ? businessData.landingPageHero.coverImage : Placeholder}
                 alt=""
                 className="banner-image"
               />
@@ -403,7 +405,7 @@ function BusinessPreview({ formData }) {
           <div className="row mt-5 align-items-center mb-5">
             <div className="col-12 col-lg-6 mt-2 text-center text-lg-start about-image">
               <img
-                src={businessData.welcomePart.coverImage}
+                src={businessData.welcomePart.coverImage && businessData.welcomePart.coverImage.length > 0 ? businessData.welcomePart.coverImage : Placeholder}
                 className="img-fluid"
                 alt=""
               />
@@ -453,7 +455,7 @@ function BusinessPreview({ formData }) {
                     >
                       <div className="col-12 position-relative">
                         <img
-                          src={dish.image}
+                          src={dish.image && dish.image.length > 0 ? dish.image : Placeholder}
                           alt={dish.title}
                           style={{
                             width: "100%",
@@ -480,7 +482,7 @@ function BusinessPreview({ formData }) {
                   >
                     <div className="col-12 position-relative">
                       <img
-                        src={dish.image}
+                        src={dish.image && dish.image.length > 0 ? dish.image : Placeholder}
                         alt={dish.title}
                         style={{
                           width: "100%",
@@ -522,7 +524,7 @@ function BusinessPreview({ formData }) {
                   <div className="col-12 col-lg-6 mt-3" key={index}>
                     <div className="row  product-section align-items-center">
                       <div className="col-2">
-                        <img src={item.image} alt="" className="w-100" />
+                        <img src={item.image && item.image.length > 0 ? item.image : Placeholder} alt="" className="w-100" />
                       </div>
                       <div className="col-8">
                         <h1 className="fs-20 fw-bold">{item.title}</h1>
@@ -593,7 +595,7 @@ function BusinessPreview({ formData }) {
             <Slider {...gallery} className="gallery-slider">
               {businessData?.gallery?.map((image, index) => (
                 <div key={index} className="p-2">
-                  <img src={image} alt="" className="w-100 gallery-img" />
+                  <img src={image && image.length > 0 ? image : Placeholder} alt="" className="w-100 gallery-img" />
                 </div>
               ))}
             </Slider>
@@ -824,7 +826,7 @@ function BusinessPreview({ formData }) {
               <div className="col-12 col-lg-3">
                 <div className="col-12 d-block d-lg-flex text-center text-lg-start text mt-5">
                   <div className="nav-logo width-fit">
-                    <img src={businessData.logo} alt="" />
+                    <img src={businessData.logo && businessData.logo.length > 0 ? businessData.logo : Placeholder} alt="" />
                   </div>
                   <span className="ms-2 fs-30 text-white">
                     {businessData.businessName}

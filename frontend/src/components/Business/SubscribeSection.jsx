@@ -18,6 +18,7 @@ const SubscribeSection = () => {
                 <div className="col-lg-8">
                   <input
                     type="email"
+                    placeholder="Enter your email"
                     style={{ border: "0 !important" }}
                     className="form-control form-control-lg"
                   />
