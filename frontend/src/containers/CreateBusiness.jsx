@@ -4154,6 +4154,7 @@ export const CreateBusiness = () => {
                         fullWidth
                         type="text"
                         label="Tag"
+                        variant='filled'
                         value={tag}
                         onChange={(e) => handleTagChange(index, e.target.value)}
                       />
