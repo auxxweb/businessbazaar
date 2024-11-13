@@ -1,6 +1,4 @@
-/* eslint-disable react/prop-types */
 import { useEffect, useState } from 'react'
-import PhoneInput from 'react-phone-input-2'
 import 'react-phone-input-2/lib/style.css'
 import TextField from '@mui/material/TextField'
 import Autocomplete from '@mui/material/Autocomplete'
@@ -12,7 +10,6 @@ import {
 } from '../Functions/functions'
 import axios from 'axios'
 import { toast } from 'react-toastify'
-
 import { Container, Nav, Navbar, NavLink } from 'react-bootstrap'
 import '/src/assets/css/template.css'
 import 'slick-carousel/slick/slick.css'
@@ -32,7 +29,7 @@ import VisibilityOff from '@mui/icons-material/VisibilityOff'
 import Razorpay from './Razorpay'
 
 export const CreateBusiness = () => {
-  const [step, setStep] = useState(10)
+  const [step, setStep] = useState(11)
 
   const [planDetails, setPlanDetails] = useState({
     price: '',
@@ -54,78 +51,157 @@ export const CreateBusiness = () => {
   const [planData, setPlanData] = useState([])
 
   const [formData, setFormData] = useState({
-    businessName: '',
-    logo: '',
-    ownerName: '',
-    email: '',
-    password: '',
-    address: {
-      buildingName: '',
-      streetName: '',
-      landMark: '',
-      city: '',
-      state: '',
-      pinCode: '',
+    "businessName": "Auxxweb solutions",
+    "logo": "https://static.vecteezy.com/system/resources/previews/011/883/296/non_2x/modern-graphic-leaf-abstrack-with-water-drop-colorful-logo-good-for-technology-logo-fruits-logo-fresh-logo-nature-logo-company-logo-dummy-logo-bussiness-logo-vector.jpg",
+    "ownerName": "Adarash Raj",
+    "email": "auxxweb1@gmail.com",
+    "password": "Pass@123#",
+    "location": {
+      "lat": 9.152589,
+      "lon": 76.737434
     },
-    location: {
-      lat: '',
-      lon: '',
+    "address": {
+      "buildingName": "hilite business park",
+      "streetName": "palazhi",
+      "landMark": "hilite mall",
+      "city": "calicut",
+      "state": "kerala",
+      "pinCode": 688541
     },
-    contactDetails: {
-      name: '',
-      primaryNumber: '',
-      secondaryNumber: '',
-      whatsappNumber: '',
-      email: '',
-      website: '',
+    "contactDetails": {
+      "primaryNumber": 9074306855,
+      "secondaryNumber": 9074306844,
+      "whatsAppNumber": 9074306855,
+      "email": "auxxweb@gmail.com",
+      "webSite": "auxxweb.in"
     },
-    socialMediaLinks: [
-      { tag: 'facebook', link: '' },
-      { tag: 'instagram', link: '' },
-      { tag: 'twitter', link: '' },
-    ],
-    category: '',
-    services: [],
-    businessTiming: {
-      workingDays: [],
-      openTime: {
-        open: '',
-        close: '',
+    "socialMediaLinks": [
+      {
+        "tag": "facebook",
+        "link": "https://www.instagram.com"
       },
+      {
+        "tag": "instagram",
+        "link": "https://www.instagram.com"
+      },
+      {
+        "tag": "twitter",
+        "link": "https://www.instagram.com"
+      }
+    ],
+    "category": "66fe5533d2bbc6f25c7ae03c",
+    "services": [
+      "website",
+      "mobileApplication"
+    ],
+    "businessTiming": {
+      "workingDays": [
+        "monday",
+        "friday"
+      ],
+      "openTime": {
+        "open": "09:00 Am",
+        "close": "08:00 Pm"
+      }
     },
-    description: '',
-    theme: '',
-    secondaryTheme: '',
-
-    landingPageHero: {
-      title: '',
-      description: '',
-      coverImage: '',
+    "description": "We offer comprehensive software development and digital marketing services to help your business thrive in the digital age. Our team of experts is committed to delivering innovative solutions that drive growth and success.",
+    "theme": "#549F84",
+    "landingPageHero": {
+      "title": "we are auxxweb",
+      "description": "We offer comprehensive software development and digital marketing services to help your business thrive in the digital age. Our team of experts is committed to delivering innovative solutions that drive growth and success.",
+      "coverImage": "https://www.auxxweb.in/assets/images/temp/dm.png"
     },
-    welcomePart: {
-      title: '',
-      description: '',
-      coverImage: '',
+    "welcomePart": {
+      "title": "welcome to auxxweb",
+      "description": "We offer comprehensive software development and digital marketing services to help your business thrive in the digital age. Our team of experts is committed to delivering innovative solutions that drive growth and success.",
+      "coverImage": "https://www.auxxweb.in/assets/images/temp/download.png"
     },
-    specialServices: {
-      title: '',
-      description: '',
-      data: [{ title: '', description: '', image: '' }],
+    "specialServices": {
+      "title": "Out core services",
+      "description": "We offer comprehensive software development and digital marketing services to help your business thrive in the digital age. Our team of experts is committed to delivering innovative solutions that drive growth and success.",
+      "data": [
+        {
+          "image": "https://www.auxxweb.in/assets/images/clients/client_6.png",
+          "title": "aswassam",
+          "description": "health care clinic in alappuzha, we provide all the health services"
+        },
+        {
+          "image": "https://www.auxxweb.in/assets/images/clients/client_7.png",
+          "title": "k stories",
+          "description": "world best story writing and reading website, enjoy your free tym with k stories"
+        }
+      ]
     },
-    productSection: [],
-    service: [{ title: '', description: '', image: '' }],
-    testimonial: {
-      description: '',
-      reviews: [],
+    "productSection": [
+      {
+        "title": "website",
+        "image": "https://www.auxxweb.in/assets/images/temp/img5.png",
+        "description": " we are providing best websites in minimal price and high quality , auxxweb solutions",
+        "price": 100
+      },
+      {
+        "title": "mobileApp",
+        "image": "https://www.auxxweb.in/assets/images/temp/img5.png",
+        "description": " we are providing best mogileapps in minimal price and high quality , auxxweb solutions",
+        "price": 500
+      },
+      {
+        "title": "ERP softwares",
+        "image": "https://www.auxxweb.in/assets/images/temp/img5.png",
+        "description": " we are providing best ero siftwares in minimal price and high quality , auxxweb solutions",
+        "price": 200
+      }
+    ],
+    "service": [
+      {
+        "title": "website service",
+        "image": "https://www.auxxweb.in/assets/images/temp/img5.png",
+        "description": " we are providing best websites in minimal price and high quality , auxxweb solutions"
+      },
+      {
+        "title": "mobileApp service",
+        "image": "https://www.auxxweb.in/assets/images/temp/img5.png",
+        "description": " we are providing best mogileapps in minimal price and high quality , auxxweb solutions"
+      },
+      {
+        "title": "ERP software service",
+        "image": "https://www.auxxweb.in/assets/images/temp/img5.png",
+        "description": " we are providing best ero siftwares in minimal price and high quality , auxxweb solutions"
+      }
+    ],
+    "testimonial": {
+      "description": "Our Happy Customers",
+      "reviews": [
+        {
+          "name": "adarsh",
+          "image": "https://www.auxxweb.in/assets/images/team/adarsh.jpeg",
+          "review": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non neque elit. Sed ut tellus ac neque fermentum tristique. Donec sed facilisis tellus, a vulputate turpis. Duis eget turpis non tellus tincidunt fermentum.",
+          "rating": 4
+        },
+        {
+          "name": "rahul",
+          "image": "https://www.auxxweb.in/assets/images/team/hari.png",
+          "review": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non neque elit. Sed ut tellus ac neque fermentum tristique. Donec sed facilisis tellus, a vulputate turpis. Duis eget turpis non tellus tincidunt fermentum.",
+          "rating": 3.5
+        }
+      ]
     },
-    gallery: [],
-    videos: [],
-    seoData: {
-      title: '',
-      description: '',
-      metaTags: [],
+    "gallery": [
+      "https://www.auxxweb.in/assets/images/temp/contact-tv.png",
+      "https://www.auxxweb.in/assets/images/temp/download.png",
+      "https://www.auxxweb.in/assets/images/temp/web7.png",
+      "https://www.auxxweb.in/assets/images/temp/dm.png"
+    ],
+    "seoData": {
+      "title": "best software company in kerala",
+      "description": " we are providing best ero siftwares in minimal price and high quality , auxxweb solutions",
+      "metaTags": [
+        "it company",
+        "software",
+        "website"
+      ]
     },
-    selectedPlan: '',
+    "selectedPlan": "",
   })
 
   const preRequestFun = async (file, position) => {
@@ -235,7 +311,7 @@ export const CreateBusiness = () => {
 
           toast.error(
             error?.response?.data?.message ??
-              'An error occurred. Please try again.',
+            'An error occurred. Please try again.',
             {
               position: 'top-right',
               autoClose: 3000,
@@ -1594,9 +1670,8 @@ export const CreateBusiness = () => {
                     {allDays.map((day) => (
                       <div
                         key={day}
-                        className={`day-div ${
-                          days.includes(day) ? 'active' : ''
-                        } p-2 text-center cursor-pointer`}
+                        className={`day-div ${days.includes(day) ? 'active' : ''
+                          } p-2 text-center cursor-pointer`}
                         style={{
                           width: '60px',
                           borderRadius: '8px',
@@ -2213,6 +2288,9 @@ export const CreateBusiness = () => {
       coverImage: '',
       loading: '',
     })
+    const [landingFile, setLandingFile] = useState()
+    const [welcomeFile, setWelcomeFile] = useState()
+
     const [errors, setErrors] = useState({})
     const [loading, setLoading] = useState(false) // Loader state
 
@@ -2225,7 +2303,6 @@ export const CreateBusiness = () => {
       setWelcomePart(formData?.welcomePart)
     }, [])
 
-    // Generic File Change Handler with Loader
     const handleFileChange = (name, e, sectionSetter) => {
       const file = e.target.files[0]
 
@@ -2256,11 +2333,13 @@ export const CreateBusiness = () => {
               ...prevState,
               loading: false,
             }))
+            setLandingFile(file)
           } else if (name === 'welcomePartImage') {
             setWelcomePart((prevState) => ({
               ...prevState,
               loading: false,
             }))
+            setWelcomeFile(file)
           }
 
           setLoading(false) // Hide loader after image is set
@@ -2274,6 +2353,8 @@ export const CreateBusiness = () => {
         reader.readAsDataURL(file)
       }
     }
+
+
 
     const handleInputChange = (e, sectionSetter) => {
       const { name, value } = e.target
@@ -2296,47 +2377,45 @@ export const CreateBusiness = () => {
       setErrors(newErrors)
       return Object.keys(newErrors).length === 0
     }
-
     const handleLandingSubmit = async () => {
+      setLoading(true); // Set loading once at the start
       try {
-        let landingPreReq = null
-        let welcomePreReq = null
-        if (landingPageHero.coverImage) {
-          setLoading(true)
-          landingPreReq = await preRequestFun(
-            landingPageHero.coverImage,
-            'Landing',
-          )
+        let landingPreReq = null;
+        let welcomePreReq = null;
+
+        if (landingFile) {
+          landingPreReq = await preRequestFun(landingFile, 'Landing');
         }
 
-        if (welcomePart?.coverImage) {
-          setLoading(true)
-          welcomePreReq = await preRequestFun(welcomePart.coverImage, 'Landing')
+        if (welcomeFile) {
+          welcomePreReq = await preRequestFun(welcomeFile, 'Welcome');
         }
+
         if (landingPreReq?.accessLink) {
-          landingPageHero.coverImage = landingPreReq.accessLink
-          setLandingPageHero(landingPreReq?.accessLink)
+          setLandingPageHero((prev) => ({ ...prev, coverImage: landingPreReq.accessLink }));
         }
+
         if (welcomePreReq?.accessLink) {
-          welcomePart.coverImage = welcomePreReq.accessLink
-          setWelcomePart(welcomePreReq.accessLink)
+          setWelcomePart((prev) => ({ ...prev, coverImage: welcomePreReq.accessLink }));
         }
+
         if (validateForm()) {
           setFormData((prevFormData) => ({
             ...prevFormData,
-            landingPageHero,
+            landingPageHero: { ...landingPageHero, coverImage: landingPreReq?.accessLink || landingPageHero.coverImage },
             theme,
             secondaryTheme,
-            welcomePart,
-          }))
-          handleNextStep()
+            welcomePart: { ...welcomePart, coverImage: welcomePreReq?.accessLink || welcomePart.coverImage },
+          }));
+          handleNextStep();
         }
       } catch (e) {
-        console.log(e)
+        console.log(e);
       } finally {
-        setLoading(false)
+        setLoading(false); // Set loading to false at the end
       }
-    }
+    };
+
 
     const triggerFileUpload = (inputId) => {
       document.getElementById(inputId).click()
@@ -2620,7 +2699,12 @@ export const CreateBusiness = () => {
                         background-color: ${theme};
                         color: white;
                         border: none;
-                    }.service-design.active{
+                    }.theme:hover{
+                        background-color: ${secondaryTheme};
+                        color: white;
+                        border: none;
+                    }
+                        .service-design.active{
                         background-color: ${theme};
                     }.address-section{
                     background-color:${theme};
@@ -3608,9 +3692,8 @@ export const CreateBusiness = () => {
                           {services.map((service, index) => (
                             <div
                               key={index}
-                              className={`col-12 col-lg-4 service-design ${
-                                index === currentSlide ? 'active' : ''
-                              } mt-5 mb-5 text-center`}
+                              className={`col-12 col-lg-4 service-design ${index === currentSlide ? 'active' : ''
+                                } mt-5 mb-5 text-center`}
                             >
                               <div className="col-12 text-center">
                                 <h3>{service.title}</h3>
@@ -3637,9 +3720,8 @@ export const CreateBusiness = () => {
                         services.map((service, index) => (
                           <div
                             key={index}
-                            className={`col-12 col-lg-4 service-design ${
-                              index === currentSlide ? 'active' : ''
-                            } mt-5 mb-5 text-center`}
+                            className={`col-12 col-lg-4 service-design ${index === currentSlide ? 'active' : ''
+                              } mt-5 mb-5 text-center`}
                           >
                             <div className="col-12 text-center">
                               <h3>{service.title}</h3>
@@ -4354,7 +4436,7 @@ export const CreateBusiness = () => {
             </div>
 
             <div className="row justify-content-start">
-                <div className="col-12 text-center text-md-start mt-4">
+              <div className="col-12 text-center text-md-start mt-4">
                 <h1 className="fw-bold title-text">
                   <span className="title-main">Add </span>
                   <span className="title-highlight">Gallery</span>
@@ -4375,7 +4457,7 @@ export const CreateBusiness = () => {
                       />
                       <div className="p-2 add-logo-div">
                         {/* Remove Button for all except the first image */}
-                        {(images?.length > 1 || image.file)  ? (
+                        {(images?.length > 1 || image.file) ? (
                           <div className="d-flex justify-content-end">
                             <CloseIcon
                               style={{
@@ -4969,7 +5051,12 @@ export const CreateBusiness = () => {
                         background-color: ${formData?.theme};
                         color: white;
                         border: none;
-                    }.service-design.active{
+                    }.theme:hover{
+                        background-color: ${formData?.secondaryTheme};
+                        color: white;
+                        border: none;
+                    }
+                        .service-design.active{
                         background-color: ${formData?.theme};
                     }.address-section{
                     background-color:${formData?.theme};
@@ -5369,9 +5456,8 @@ export const CreateBusiness = () => {
                   {businessData.service.map((service, index) => (
                     <div
                       key={index}
-                      className={`col-12 col-lg-4 service-design ${
-                        index === currentSlide ? 'active' : ''
-                      } mt-5 mb-5 text-center`}
+                      className={`col-12 col-lg-4 service-design ${index === currentSlide ? 'active' : ''
+                        } mt-5 mb-5 text-center`}
                     >
                       <div className="col-12 text-center">
                         <h3>{service.title}</h3>
@@ -5396,9 +5482,8 @@ export const CreateBusiness = () => {
                 businessData.service.map((service, index) => (
                   <div
                     key={index}
-                    className={`col-12 col-lg-4 service-design ${
-                      index === currentSlide ? 'active' : ''
-                    } mt-5 mb-5 text-center`}
+                    className={`col-12 col-lg-4 service-design ${index === currentSlide ? 'active' : ''
+                      } mt-5 mb-5 text-center`}
                   >
                     <div className="col-12 text-center">
                       <h3>{service.title}</h3>
