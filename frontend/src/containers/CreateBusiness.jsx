@@ -17,7 +17,7 @@ import { Container, Nav, Navbar, NavLink } from 'react-bootstrap'
 import '/src/assets/css/template.css'
 import 'slick-carousel/slick/slick.css'
 import 'slick-carousel/slick/slick-theme.css'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import { Dialog } from 'primereact/dialog'
 import { Rating } from 'primereact/rating'
 import { InputText } from 'primereact/inputtext'
@@ -32,8 +32,7 @@ import VisibilityOff from '@mui/icons-material/VisibilityOff'
 import Razorpay from './Razorpay'
 
 export const CreateBusiness = () => {
-  const [step, setStep] = useState(8)
-  const navigate = useNavigate()
+  const [step, setStep] = useState(9)
 
   const [planDetails, setPlanDetails] = useState({
     price: '',
@@ -3725,15 +3724,19 @@ export const CreateBusiness = () => {
     }
 
     const handleProductSubmit = () => {
-      const isValid = productSection.every(
-        (product) =>
-          product.title &&
-          product.description &&
-          (product.price || product.price === ''),
-      )
+      const isValid = productSection.every((product) => {
+        // If either title or description is provided, both must be filled
+        if (product.title || product.description) {
+          return product.title && product.description
+        }
+        // Price is optional
+        return true
+      })
 
       if (!isValid) {
-        setError('Please fill out all fields except for the product price.')
+        setError(
+          'Please fill out both the title and description if either field is provided.',
+        )
         return
       }
 
@@ -3743,6 +3746,12 @@ export const CreateBusiness = () => {
         productSection,
       }))
       handleNextStep()
+    }
+    const removeProduct = (index) => {
+      setProductSection((prev) => {
+        const updatedProducts = prev?.filter((_, i) => i !== index)
+        return updatedProducts
+      })
     }
 
     return (
@@ -3763,6 +3772,9 @@ export const CreateBusiness = () => {
                   <span className="title-main">Add </span>
                   <span className="title-highlight">Product Details</span>
                 </h1>
+                {error && (
+                  <p className="text-danger text-danger mt-3">{error}</p>
+                )}
               </div>
 
               <div className="col-12">
@@ -3771,8 +3783,29 @@ export const CreateBusiness = () => {
                     Add Products
                   </h5>
                 </div>
-                {productSection.map((item, index) => (
-                  <div key={index} className="input-group mt-2 w-100">
+                {productSection?.map((item, index) => (
+                  <div
+                    key={index}
+                    className="mt-2 card p-3 pt-5 position-relative shadow-sm"
+                    style={{ border: '1px solid #ddd', borderRadius: '8px' }}
+                  >
+                    {productSection?.length > 1 && (
+                      <div
+                        onClick={() => removeProduct(index)}
+                        className="remove-button position-absolute"
+                        style={{
+                          top: '10px',
+                          right: '10px',
+                          cursor: 'pointer',
+                          color: '#ff4d4f',
+                          fontSize: '18px',
+                          fontWeight: 'bold',
+                          zIndex: 9,
+                        }}
+                      >
+                        X
+                      </div>
+                    )}
                     <TextField
                       fullWidth
                       label="Product Title"
@@ -3780,8 +3813,6 @@ export const CreateBusiness = () => {
                       variant="filled"
                       name="title"
                       autoComplete="title"
-                      error={'Product title required'}
-                      helperText={'Product title required'}
                       value={item.title}
                       onChange={(e) => {
                         const updatedProducts = [...productSection]
@@ -3799,8 +3830,6 @@ export const CreateBusiness = () => {
                         autoComplete="description"
                         multiline // Makes the TextField behave like a textarea
                         rows={4} // You can adjust the number of rows (height) here
-                        error={'Product description required'}
-                        helperText={'Product description required'}
                         sx={{
                           '& .MuiInputBase-root': {
                             padding: '12px', // Padding inside the textarea
@@ -3882,12 +3911,11 @@ export const CreateBusiness = () => {
                       },
                     ])
                   }
-                  className="text-decoration-none btn btn-primary w-100"
+                  className="text-decoration-none mt-4 btn btn-primary w-100"
                 >
                   + Add More Product
                 </a>
               </div>
-              {error && <p className="text-danger text-danger mt-3">{error}</p>}
             </div>
 
             <div className="col-12 mt-4 text-center">
