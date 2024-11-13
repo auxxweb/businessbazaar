@@ -12,8 +12,10 @@ const baseUrl = "https://server.instant-connect.in";
 
 export const fetchCategories = async (limit) => {
   try {
-    const response = await axios.get(`${baseUrl}/api/v1/category?limit=${limit}`, config);
-
+    const response = await axios.get(
+      `${baseUrl}/api/v1/category?limit=${limit}`,
+      config
+    );
 
     if (response.status !== 200) {
       throw new Error(`HTTP error! Status: ${response.status}`);
@@ -30,13 +32,27 @@ export const fetchCategories = async (limit) => {
   }
 };
 
-export const fetchBusiness = async (page,limit,search) => {
+export const fetchBusiness = async (page, limit, search, location) => {
   try {
-    console.log(search)
-    const response = await axios.get(
-     `${baseUrl}/api/v1/business?page=${page}&limit=${limit}${search != null ? `&searchTerm=${search}` : ''}`,
-      config,
-    )
+    console.log(location, "location");
+    const query = {
+      page: page,
+      limit: limit,
+    };
+
+    if (search) {
+      query.searchTerm = search;
+    }
+
+    if (location.lat && location.lon) {
+      query.lat = location.lat;
+      query.lon = location.lon;
+    }
+
+    const response = await axios.get(`${baseUrl}/api/v1/business`, {
+      params: query,
+      ...config,
+    });
 
     if (response.status !== 200) {
       throw new Error(`HTTP error! Status: ${response.status}`);
@@ -389,7 +405,9 @@ export const getTermsAndConditions = async () => {
 
 export const getBusinessTermsAndConditions = async (businessId) => {
   try {
-    const response = await axios.get(`${baseUrl}/api/v1/terms_and_conditions/business/${businessId}`);
+    const response = await axios.get(
+      `${baseUrl}/api/v1/terms_and_conditions/business/${businessId}`
+    );
     if (response.status !== 200) {
       throw new Error("HTTP status: " + response.status);
     }
