@@ -3131,7 +3131,6 @@ export const CreateBusiness = () => {
                   <div className="input-group mt-2 w-100">
                     <TextField
                       fullWidth
-
                       label="Title"
                       id="title-1"
                       variant="filled"
@@ -3186,8 +3185,32 @@ export const CreateBusiness = () => {
                   </div>
 
                   {specialService?.data?.map((p, index) => (
-                    <div key={`index-${index}`} className="mt-2">
+                    <div
+                      key={`index-${index}`}
+                      className="mt-2 card p-3 pt-5 position-relative shadow-sm"
+                      style={{ border: '1px solid #ddd', borderRadius: '8px' }}
+                    >
+                      {/* Add "X" button to remove item from every card except the last one */}
+                      {index < specialService.data.length - 1 && (
+                        <div
+                          onClick={() => removeSpecialService(index)}
+                          className="remove-button position-absolute"
+                          style={{
+                            top: '10px',
+                            right: '10px',
+                            cursor: 'pointer',
+                            color: '#ff4d4f',
+                            fontSize: '18px',
+                            fontWeight: 'bold',
+                            zIndex: 9,
+                          }}
+                        >
+                          X
+                        </div>
+                      )}
+
                       {index !== 0 && <div className="divider"></div>}
+
                       <TextField
                         fullWidth
                         label="Title"
@@ -3200,6 +3223,7 @@ export const CreateBusiness = () => {
                         error={!!errors?.landingPageHeroTitle}
                         helperText={errors?.landingPageHeroTitle}
                       />
+
                       <div className="input-group mb-3 mt-4 w-100">
                         <TextField
                           fullWidth
@@ -3208,19 +3232,19 @@ export const CreateBusiness = () => {
                           variant="filled"
                           name="description"
                           autoComplete="description"
-                          multiline // Makes the TextField behave like a textarea
-                          rows={4} // You can adjust the number of rows (height) here
+                          multiline
+                          rows={4}
                           error={!!errors?.landingPageHeroDescription}
                           helperText={errors?.landingPageHeroDescription}
                           sx={{
                             '& .MuiInputBase-root': {
-                              padding: '12px', // Padding inside the textarea
+                              padding: '12px',
                             },
                             '& .MuiFilledInput-root': {
-                              backgroundColor: '#f9f9f9', // Optional: Background color for the filled variant
+                              backgroundColor: '#f9f9f9',
                             },
                             '& .MuiFormLabel-root': {
-                              top: '-6px', // Adjust label positioning if needed
+                              top: '-6px',
                             },
                           }}
                           onChange={(e) => handleProductChange(index, e)}
@@ -3258,33 +3282,11 @@ export const CreateBusiness = () => {
                           </div>
                         </div>
                       </div>
-                      {index > 0 && (
-                        <div className="col-12 text-center">
-                          <button
-                            type="button"
-                            onClick={() => removeSpecialService(index)}
-                            className="btn btn-danger mt-2 w-100 mb-2"
-                          >
-                            Remove
-                          </button>
-                        </div>
-                      )}
                     </div>
                   ))}
-                   <hr
-                    style={{
-                      border: '3px solid #105193',
-                      borderRadius: '5px',
-                      margin: '35px 0',
-                    }}
-                  />
 
                   {/* Add Service Button */}
-                  <div className="col-12 text-center">
-                    <h5 className="fs-18 mb-4 p-1 text-center text-md-start text-dark fw-bold mt-3">
-                      Add Services
-                    </h5>
-                  </div>
+
                   <a
                     href="#"
                     onClick={() =>
@@ -3300,10 +3302,48 @@ export const CreateBusiness = () => {
                   >
                     + Add More Special Service
                   </a>
+                  <hr
+                    style={{
+                      border: '3px solid #105193',
+                      borderRadius: '5px',
+                      margin: '35px 0',
+                    }}
+                  />
+                  <div className="col-12 text-center">
+                    <h5 className="fs-18 mb-4 p-1 text-center text-md-start text-dark fw-bold mt-3">
+                      Add Services
+                    </h5>
+                  </div>
 
                   {/* Services List */}
-                  {services.map((service, index) => (
-                    <div key={index} className="input-group mt-2 w-100">
+                  {services?.map((service, index) => (
+                    <div
+                      key={index}
+                      className="input-group mt-2 w-100 position-relative card p-3 pt-5 shadow-sm"
+                      style={{
+                        border: '1px solid #ddd',
+                        borderRadius: '8px',
+                      }}
+                    >
+                      {/* "X" button to remove item, only shown if it's not the first service */}
+                      {services?.length > 1 && (
+                        <div
+                          onClick={() => removeService(index)}
+                          className="remove-button position-absolute"
+                          style={{
+                            top: '10px',
+                            right: '10px',
+                            cursor: 'pointer',
+                            color: '#ff4d4f',
+                            fontSize: '18px',
+                            fontWeight: 'bold',
+                            zIndex: 9,
+                          }}
+                        >
+                          X
+                        </div>
+                      )}
+
                       <TextField
                         fullWidth
                         label="Title"
@@ -3316,6 +3356,7 @@ export const CreateBusiness = () => {
                         value={service.title}
                         onChange={(e) => handleServiceChange(index, e)}
                       />
+
                       <div className="input-group mb-3 mt-4 w-100">
                         <TextField
                           fullWidth
@@ -3324,19 +3365,19 @@ export const CreateBusiness = () => {
                           variant="filled"
                           name="description"
                           autoComplete="description"
-                          multiline // Makes the TextField behave like a textarea
-                          rows={4} // You can adjust the number of rows (height) here
+                          multiline
+                          rows={4}
                           error={!!errors?.welcomePartDescription}
                           helperText={errors?.welcomePartDescription}
                           sx={{
                             '& .MuiInputBase-root': {
-                              padding: '12px', // Padding inside the textarea
+                              padding: '12px',
                             },
                             '& .MuiFilledInput-root': {
-                              backgroundColor: '#f9f9f9', // Optional: Background color for the filled variant
+                              backgroundColor: '#f9f9f9',
                             },
                             '& .MuiFormLabel-root': {
-                              top: '-6px', // Adjust label positioning if needed
+                              top: '-6px',
                             },
                           }}
                           value={service.description}
@@ -3344,6 +3385,7 @@ export const CreateBusiness = () => {
                           required
                         />
                       </div>
+
                       <div className="col-12 col-md-3 mb-3">
                         <input
                           type="file"
@@ -3376,17 +3418,6 @@ export const CreateBusiness = () => {
                           </div>
                         </div>
                       </div>
-                      {index > 0 && ( // Only show the remove button if it's not the first service
-                        <div className="col-12 text-center">
-                          <button
-                            type="button"
-                            onClick={() => removeService(index)}
-                            className="btn btn-danger mt-2 w-100 mb-2"
-                          >
-                            Remove Service
-                          </button>
-                        </div>
-                      )}
                     </div>
                   ))}
 
@@ -3477,32 +3508,61 @@ export const CreateBusiness = () => {
                                 `}
               </style>
               <div>
-              <section
-                className="h-auto"
-                style={{ backgroundColor: '#F3F3F4' ,overflowY:"scroll"}}
-              >
-                <div className="container p-top">
-                  <div className="col-12 mb-5">
-                    <div className="mt-5 text-center">
-                      <div className="col-12">
-                        <h1 className="text-center text-dark fw-bold david-font fw-bold banner-title fs-45">
-                          {specialService.title}
-                        </h1>
-                      </div>
-                      <div className="row justify-content-center">
-                        <div className="col-6 mb-1">
-                          <p className="text-secondary text-center">
-                            {specialService.description}
-                          </p>
+                <section
+                  className="h-auto"
+                  style={{ backgroundColor: '#F3F3F4', overflowY: 'scroll' }}
+                >
+                  <div className="container p-top">
+                    <div className="col-12 mb-5">
+                      <div className="mt-5 text-center">
+                        <div className="col-12">
+                          <h1 className="text-center text-dark fw-bold david-font fw-bold banner-title fs-45">
+                            {specialService.title}
+                          </h1>
+                        </div>
+                        <div className="row justify-content-center">
+                          <div className="col-6 mb-1">
+                            <p className="text-secondary text-center">
+                              {specialService.description}
+                            </p>
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                  <div className="col-12">
-                    <div className="col-12 mb-5 row justify-content-center david-font">
-                      {specialService.data.length > 2 ? (
-                        <Slider {...settings4}>
-                          {specialService.data.map((dish, index) => (
+                    <div className="col-12">
+                      <div className="col-12 mb-5 row justify-content-center david-font">
+                        {specialService.data.length > 2 ? (
+                          <Slider {...settings4}>
+                            {specialService.data.map((dish, index) => (
+                              <div
+                                key={index}
+                                className="dish-div col-12 col-lg-6 text-center p-3"
+                              >
+                                <div className="col-12 position-relative">
+                                  <img
+                                    src={dish.image}
+                                    alt={dish.title}
+                                    style={{
+                                      width: '100%',
+                                      height: 'auto',
+                                      maxWidth: '300px',
+                                      objectFit: 'cover',
+                                    }}
+                                  />
+                                </div>
+                                <div className="col-12">
+                                  <h2 className="fs-20 fw-bold">
+                                    {dish.title}
+                                  </h2>
+                                </div>
+                                <div className="col-12 mt-3 mb-3">
+                                  <p>{dish.description}</p>
+                                </div>
+                              </div>
+                            ))}
+                          </Slider>
+                        ) : (
+                          specialService.data.map((dish, index) => (
                             <div
                               key={index}
                               className="dish-div col-12 col-lg-6 text-center p-3"
@@ -3526,52 +3586,56 @@ export const CreateBusiness = () => {
                                 <p>{dish.description}</p>
                               </div>
                             </div>
+                          ))
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </section>
+
+                <section
+                  className="h-auto david-font"
+                  style={{ backgroundColor: '#F3F3F4' }}
+                >
+                  <div className="container p-top">
+                    <div className="col-12 mt-5 text-center ">
+                      <h1 className="fw-bold text-center">
+                        Services We Provide
+                      </h1>
+                    </div>
+                    <div className="col-12 mb-5 row justify-content-center">
+                      {services.length > 3 ? (
+                        <Slider {...setting2} className="mb-5">
+                          {services.map((service, index) => (
+                            <div
+                              key={index}
+                              className={`col-12 col-lg-4 service-design ${
+                                index === currentSlide ? 'active' : ''
+                              } mt-5 mb-5 text-center`}
+                            >
+                              <div className="col-12 text-center">
+                                <h3>{service.title}</h3>
+                              </div>
+                              <div className="col-12 mt-5">
+                                <p className="text-center">
+                                  {service.description}
+                                </p>
+                              </div>
+                              <div
+                                className="col-12 text-center"
+                                style={{ height: '100px' }}
+                              >
+                                <img
+                                  src={service.image}
+                                  alt={service.title}
+                                  className="h-100"
+                                />
+                              </div>
+                            </div>
                           ))}
                         </Slider>
                       ) : (
-                        specialService.data.map((dish, index) => (
-                          <div
-                            key={index}
-                            className="dish-div col-12 col-lg-6 text-center p-3"
-                          >
-                            <div className="col-12 position-relative">
-                              <img
-                                src={dish.image}
-                                alt={dish.title}
-                                style={{
-                                  width: '100%',
-                                  height: 'auto',
-                                  maxWidth: '300px',
-                                  objectFit: 'cover',
-                                }}
-                              />
-                            </div>
-                            <div className="col-12">
-                              <h2 className="fs-20 fw-bold">{dish.title}</h2>
-                            </div>
-                            <div className="col-12 mt-3 mb-3">
-                              <p>{dish.description}</p>
-                            </div>
-                          </div>
-                        ))
-                      )}
-                    </div>
-                  </div>
-                </div>
-              </section>
-
-              <section
-                className="h-auto david-font"
-                style={{ backgroundColor: '#F3F3F4' }}
-              >
-                <div className="container p-top">
-                  <div className="col-12 mt-5 text-center ">
-                    <h1 className="fw-bold text-center">Services We Provide</h1>
-                  </div>
-                  <div className="col-12 mb-5 row justify-content-center">
-                    {services.length > 3 ? (
-                      <Slider {...setting2} className="mb-5">
-                        {services.map((service, index) => (
+                        services.map((service, index) => (
                           <div
                             key={index}
                             className={`col-12 col-lg-4 service-design ${
@@ -3597,38 +3661,11 @@ export const CreateBusiness = () => {
                               />
                             </div>
                           </div>
-                        ))}
-                      </Slider>
-                    ) : (
-                      services.map((service, index) => (
-                        <div
-                          key={index}
-                          className={`col-12 col-lg-4 service-design ${
-                            index === currentSlide ? 'active' : ''
-                          } mt-5 mb-5 text-center`}
-                        >
-                          <div className="col-12 text-center">
-                            <h3>{service.title}</h3>
-                          </div>
-                          <div className="col-12 mt-5">
-                            <p className="text-center">{service.description}</p>
-                          </div>
-                          <div
-                            className="col-12 text-center"
-                            style={{ height: '100px' }}
-                          >
-                            <img
-                              src={service.image}
-                              alt={service.title}
-                              className="h-100"
-                            />
-                          </div>
-                        </div>
-                      ))
-                    )}
+                        ))
+                      )}
+                    </div>
                   </div>
-                </div>
-              </section>
+                </section>
               </div>
             </div>
           </div>

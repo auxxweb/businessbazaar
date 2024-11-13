@@ -189,6 +189,8 @@
     overflow-y: scroll;
 }.left-portion{
     border:1px dashed #ccc;
+    overflow: hidden;
+    overflow-y: scroll;
 }
 #home .carousel-inner{
     height: 100%;
