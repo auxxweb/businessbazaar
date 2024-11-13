@@ -348,10 +348,10 @@ export const getCategoryData = async ({
   }
 };
 
-export const getCategoryBusiness = async (page, categoryId) => {
+export const getCategoryBusiness = async (page, categoryId,searchTerm,limit) => {
   try {
     const response = await axios.get(
-      `${baseUrl}/api/v1/business/category/${categoryId}?page=${page}&&limit=6`
+      `${baseUrl}/api/v1/business/category/${categoryId}?page=${page}&&searchTerm=${searchTerm}&&limit=${limit}`
     );
 
     if (response.status !== 200) {
