@@ -4564,7 +4564,8 @@ export default function CreateBusiness() {
       e.preventDefault()
       const response = await CreateBusinessDetails(formData)
       if (response?.data) {
-        navigate(`template${response?.data?._id}`)
+        window.location.href=`template/${response?.data?._id}`
+        // navigate(`template${response?.data?._id}`)
       }
     }
 
