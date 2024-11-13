@@ -6065,17 +6065,17 @@ export const CreateBusiness = () => {
 
   return (
     <>
-      {step === 111 && <AuthenticationDetails formData={formData} />}
-      {step === 22 && <BusinessDetails formData={formData} />}
+      {step === 1 && <AuthenticationDetails formData={formData} />}
+      {step === 2 && <BusinessDetails formData={formData} />}
       {step === 3 && <ContactDetails formData={formData} />}
       {step === 4 && <CategoryDetails />}
       {/* {step === 5 && <ServicesOffering />} */}
-      {step === 176 && <BusinessTiming />}
+      {step === 5 && <BusinessTiming />}
       {step === 6 && <BusinessDesc />}
       {step === 7 && <LandingPageDetails />}
       {step === 8 && <CreateServices />}
       {step === 9 && <CreateProductPart />}
-      {step === 1 && <SeoDetails />}
+      {step === 10 && <SeoDetails />}
       {step === 11 && <MoreImages />}
       {step === 12 && <Subscription />}
       {step === 2 && <PreviewTemplates />}
