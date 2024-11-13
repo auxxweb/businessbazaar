@@ -32,7 +32,7 @@ import VisibilityOff from '@mui/icons-material/VisibilityOff'
 import Razorpay from './Razorpay'
 
 export default function CreateBusiness() {
-  const [step, setStep] = useState(1)
+  const [step, setStep] = useState(5)
   const navigate = useNavigate()
 
   const [planDetails, setPlanDetails] = useState({
@@ -417,8 +417,8 @@ export default function CreateBusiness() {
     const [businessName, setBusinessName] = useState('')
     const [isLoading, setIsLoading] = useState(false)
     const [error, setError] = useState({
-      logo:null,
-      name:null
+      logo: null,
+      name: null,
     })
     const [logoFile, setLogoFile] = useState(null)
     const [logoPrev, setLogoPrev] = useState(null)
@@ -428,29 +428,28 @@ export default function CreateBusiness() {
       setBusinessName(formData?.businessName)
     }, [formData])
     const handleLogoChange = (event) => {
-      const file = event.target.files[0];
-    
+      const file = event.target.files[0]
+
       if (file) {
-        setIsLoading(true);
-        setLogoFile(file);
-    
-        const reader = new FileReader();
-    
+        setIsLoading(true)
+        setLogoFile(file)
+
+        const reader = new FileReader()
+
         reader.onload = function (e) {
-          setLogoPrev(e.target.result);
-          setLogo(e.target.result); // Set logo to Base64 string for preview consistency
-          setIsLoading(false);
-        };
-    
+          setLogoPrev(e.target.result)
+          setLogo(e.target.result) // Set logo to Base64 string for preview consistency
+          setIsLoading(false)
+        }
+
         reader.onerror = function () {
-          console.error('Error reading file:', reader.error);
-          setIsLoading(false);
-        };
-    
-        reader.readAsDataURL(file); // Convert file to a Base64 string
+          console.error('Error reading file:', reader.error)
+          setIsLoading(false)
+        }
+
+        reader.readAsDataURL(file) // Convert file to a Base64 string
       }
-    };
-    
+    }
 
     const imageUpload = () => {
       document.getElementById('ImageLogo').click()
@@ -458,52 +457,51 @@ export default function CreateBusiness() {
 
     // Handle form submission with validation
     const handleBusinessSubmit = async () => {
-      let hasError = false;
-    
+      let hasError = false
+
       // Check if Business Name is empty
       if (!businessName) {
         setError({
           ...error,
-          name:'Business Name is required.'
-        });
-        hasError = true;
+          name: 'Business Name is required.',
+        })
+        hasError = true
       }
-    
+
       // Check if Logo is not uploaded
       if (!logoFile) {
         setError({
           ...error,
-          logo:'Business Logo is required.'
-        });
-        hasError = true;
+          logo: 'Business Logo is required.',
+        })
+        hasError = true
       }
-    
-      if (hasError) return;
-    
-      setError('');
+
+      if (hasError) return
+
+      setError('')
       try {
-        setIsLoading(true);
-        let preReq = null;
-    
+        setIsLoading(true)
+        let preReq = null
+
         if (logoFile) {
-          preReq = await preRequestFun(logoFile, 'Landing');
+          preReq = await preRequestFun(logoFile, 'Landing')
         }
-    
+
         setFormData((prevFormData) => ({
           ...prevFormData,
           businessName,
           ...(preReq && {
             logo: preReq.accessLink,
           }),
-        }));
-        handleNextStep();
+        }))
+        handleNextStep()
       } catch (e) {
-        console.error('An error occurred during submission', e);
+        console.error('An error occurred during submission', e)
       } finally {
-        setIsLoading(false);
+        setIsLoading(false)
       }
-    };
-    
+    }
 
     return (
       <div className="business-details-page">
@@ -578,7 +576,9 @@ export default function CreateBusiness() {
                   </div>
                 </div>
 
-                {error?.logo && <div className="text-danger mb-4">{error?.logo}</div>}
+                {error?.logo && (
+                  <div className="text-danger mb-4">{error?.logo}</div>
+                )}
 
                 <button
                   className="btn btn-primary w-100 text-white p-2"
@@ -717,175 +717,176 @@ export default function CreateBusiness() {
           [name]: value,
         },
       }))
-      validateField(name,value)
+      validateField(name, value)
     }
 
     const validateField = (field, value) => {
-      const phoneNumberRegex = /^[+]?[0-9]{10,15}$/;
-      const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-      const pinCodeRegex = /^[0-9]{6}$/;
-    
-      const newErrors = { ...errors }; // Keep current errors
-    
+      const phoneNumberRegex = /^[+]?[0-9]{10,15}$/
+      const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
+      const pinCodeRegex = /^[0-9]{6}$/
+
+      const newErrors = { ...errors } // Keep current errors
+
       // Perform validation based on field type
       switch (field) {
-        case "primaryNumber":
+        case 'primaryNumber':
           if (!value) {
-            newErrors.primaryNumber = "Primary number is required.";
+            newErrors.primaryNumber = 'Primary number is required.'
           } else if (!phoneNumberRegex.test(value)) {
-            newErrors.primaryNumber = "Invalid primary number. Must be between 10-15 digits.";
+            newErrors.primaryNumber =
+              'Invalid primary number. Must be between 10-15 digits.'
           } else {
-            delete newErrors.primaryNumber;
+            delete newErrors.primaryNumber
           }
-          break;
-    
-        case "whatsappNumber":
+          break
+
+        case 'whatsappNumber':
           if (!value) {
-            newErrors.whatsappNumber = "WhatsApp number is required.";
+            newErrors.whatsappNumber = 'WhatsApp number is required.'
           } else if (!phoneNumberRegex.test(value)) {
-            newErrors.whatsappNumber = "Invalid WhatsApp number. Must be between 10-15 digits.";
+            newErrors.whatsappNumber =
+              'Invalid WhatsApp number. Must be between 10-15 digits.'
           } else {
-            delete newErrors.whatsappNumber;
+            delete newErrors.whatsappNumber
           }
-          break;
-    
-        case "email":
+          break
+
+        case 'email':
           if (!value) {
-            newErrors.email = "Email is required.";
+            newErrors.email = 'Email is required.'
           } else if (!emailRegex.test(value)) {
-            newErrors.email = "Invalid email format.";
+            newErrors.email = 'Invalid email format.'
           } else {
-            delete newErrors.email;
+            delete newErrors.email
           }
-          break;
-    
-        case "secondaryNumber":
+          break
+
+        case 'secondaryNumber':
           if (value && !phoneNumberRegex.test(value)) {
-            newErrors.secondaryNumber = "Invalid secondary number. Must be between 10-15 digits.";
+            newErrors.secondaryNumber =
+              'Invalid secondary number. Must be between 10-15 digits.'
           } else {
-            delete newErrors.secondaryNumber;
+            delete newErrors.secondaryNumber
           }
-          break;
-    
-        case "pinCode":
+          break
+
+        case 'pinCode':
           if (!value) {
-            newErrors.pinCode = "PinCode is required.";
+            newErrors.pinCode = 'PinCode is required.'
           } else if (!pinCodeRegex.test(value)) {
-            newErrors.pinCode = "Invalid pin code. It should be 6 digits.";
+            newErrors.pinCode = 'Invalid pin code. It should be 6 digits.'
           } else {
-            delete newErrors.pinCode;
+            delete newErrors.pinCode
           }
-          break;
-    
-        case "buildingName":
+          break
+
+        case 'buildingName':
           if (!value) {
-            newErrors.buildingName = "Building name is required.";
+            newErrors.buildingName = 'Building name is required.'
           } else {
-            delete newErrors.buildingName;
+            delete newErrors.buildingName
           }
-          break;
-    
-        case "state":
+          break
+
+        case 'state':
           if (!value) {
-            newErrors.state = "State is required.";
+            newErrors.state = 'State is required.'
           } else {
-            delete newErrors.state;
+            delete newErrors.state
           }
-          break;
-    
-        case "city":
+          break
+
+        case 'city':
           if (!value) {
-            newErrors.city = "City is required.";
+            newErrors.city = 'City is required.'
           } else {
-            delete newErrors.city;
+            delete newErrors.city
           }
-          break;
-    
-        case "streetName":
+          break
+
+        case 'streetName':
           if (!value) {
-            newErrors.streetName = "Street / Colony name is required.";
+            newErrors.streetName = 'Street / Colony name is required.'
           } else {
-            delete newErrors.streetName;
+            delete newErrors.streetName
           }
-          break;
-    
+          break
+
         default:
-          break;
+          break
       }
-    
+
       // Update errors state
-      setErrors(newErrors);
-      return !newErrors[field]; // Returns true if the specific field has no error
-    };
+      setErrors(newErrors)
+      return !newErrors[field] // Returns true if the specific field has no error
+    }
 
     const validateRequiredFields = () => {
       const requiredFields = [
-        "primaryNumber",
-        "whatsappNumber",
-        "email",
-        "pinCode",
-        "buildingName",
-        "state",
-        "city",
-        "streetName"
-      ];
-    
-      const newErrors = { ...errors }; // Keep current errors
-      let isValid = true;
-    
+        'primaryNumber',
+        'whatsappNumber',
+        'email',
+        'pinCode',
+        'buildingName',
+        'state',
+        'city',
+        'streetName',
+      ]
+
+      const newErrors = { ...errors } // Keep current errors
+      let isValid = true
+
       // Loop through required fields and check if they are filled
       requiredFields.forEach((field) => {
-        let value;
-    
+        let value
+
         switch (field) {
-          case "primaryNumber":
-            value = newFormData?.contactDetails?.primaryNumber;
-            break;
-          case "whatsappNumber":
-            value = newFormData?.contactDetails?.whatsappNumber;
-            break;
-          case "email":
-            value = newFormData?.contactDetails?.email;
-            break;
-          case "pinCode":
-            value = address?.pinCode;
-            break;
-          case "buildingName":
-            value = address?.buildingName;
-            break;
-          case "state":
-            value = address?.state;
-            break;
-          case "city":
-            value = address?.city;
-            break;
-          case "streetName":
-            value = address?.streetName;
-            break;
+          case 'primaryNumber':
+            value = newFormData?.contactDetails?.primaryNumber
+            break
+          case 'whatsappNumber':
+            value = newFormData?.contactDetails?.whatsappNumber
+            break
+          case 'email':
+            value = newFormData?.contactDetails?.email
+            break
+          case 'pinCode':
+            value = address?.pinCode
+            break
+          case 'buildingName':
+            value = address?.buildingName
+            break
+          case 'state':
+            value = address?.state
+            break
+          case 'city':
+            value = address?.city
+            break
+          case 'streetName':
+            value = address?.streetName
+            break
           default:
-            break;
+            break
         }
-    
+
         // Check if value is missing
         if (!value) {
-          newErrors[field] = `${field} is required.`;
-          isValid = false;
+          newErrors[field] = `${field} is required.`
+          isValid = false
         } else {
-          delete newErrors[field]; // Remove any previous errors for that field
+          delete newErrors[field] // Remove any previous errors for that field
         }
-      });
-    
+      })
+
       // Update errors state
-      setErrors(newErrors);
-      return isValid; // Returns true if all required fields are filled
-    };
-    
-    
+      setErrors(newErrors)
+      return isValid // Returns true if all required fields are filled
+    }
 
     const contactSubmitHandler = () => {
-      console.log(newFormData,"new-formData");
-      
-      if ( validateRequiredFields()) {
+      console.log(newFormData, 'new-formData')
+
+      if (validateRequiredFields()) {
         setFormData((prevData) => ({
           ...prevData,
           contactDetails: newFormData.contactDetails,
@@ -909,7 +910,7 @@ export default function CreateBusiness() {
           [name]: value,
         },
       }))
-      validateField(name,value)
+      validateField(name, value)
     }
 
     const handleLocationChange = (event) => {
@@ -1264,11 +1265,21 @@ export default function CreateBusiness() {
   }
 
   function CategoryDetails() {
+    const [error, setError] = useState('')
     const handleCategoryChange = (event, value) => {
       setFormData({
         ...formData,
         category: value ? value._id : '',
       })
+      setError('')
+    }
+
+    const handleNext = () => {
+      if (!formData?.category) {
+        setError('Please select any category.')
+      } else {
+        handleNextStep()
+      }
     }
 
     return (
@@ -1323,6 +1334,9 @@ export default function CreateBusiness() {
                         {...params}
                         label="Categories"
                         variant="filled"
+                        fullWidth
+                        error={!!error} // Display error style if there's an error
+                        helperText={error}
                       />
                     )}
                     onChange={handleCategoryChange}
@@ -1342,7 +1356,7 @@ export default function CreateBusiness() {
             <div className="col-12 text-center mt-5">
               <button
                 className="btn btn-primary w-100 text-white p-2"
-                onClick={handleNextStep}
+                onClick={handleNext}
               >
                 Save & Next
               </button>
@@ -1495,6 +1509,7 @@ export default function CreateBusiness() {
     const [days, setDays] = useState([])
     const [openTime, setOpenTime] = useState('')
     const [closeTime, setCloseTime] = useState('')
+    const [error, setError] = useState('')
 
     const allDays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
 
@@ -1529,17 +1544,21 @@ export default function CreateBusiness() {
     }
 
     const handleSubmit = () => {
-      setFormData((prevFormData) => ({
-        ...prevFormData,
-        businessTiming: {
-          workingDays: days,
-          openTime: {
-            open: openTime,
-            close: closeTime,
+      if (days?.length === 0) {
+        setError('Please select atleast one day')
+      } else {
+        setFormData((prevFormData) => ({
+          ...prevFormData,
+          businessTiming: {
+            workingDays: days,
+            openTime: {
+              open: openTime,
+              close: closeTime,
+            },
           },
-        },
-      }))
-      handleNextStep()
+        }))
+        handleNextStep()
+      }
     }
 
     return (
@@ -1564,6 +1583,7 @@ export default function CreateBusiness() {
                     <span className="title-main">Add</span> <br />
                     <span className="title-highlight">Business Timing</span>
                   </h1>
+                  <span style={{color:"red"}}>{error&&error}</span>
                 </div>
 
                 {/* Working Days Selection */}
@@ -1615,8 +1635,9 @@ export default function CreateBusiness() {
                       <label htmlFor="openingTime" className="form-label">
                         Opening Time
                       </label>
-                      <input
+                      <TextField
                         type="time"
+                        variant="outlined"
                         className="form-control form-control-lg"
                         value={openTime}
                         onChange={handleOpenTimeChange}
@@ -1626,8 +1647,9 @@ export default function CreateBusiness() {
                       <label htmlFor="closingTime" className="form-label">
                         Closing Time
                       </label>
-                      <input
+                      <TextField
                         type="time"
+                        variant="outlined"
                         className="form-control form-control-lg"
                         value={closeTime}
                         onChange={handleCloseTimeChange}
@@ -5676,17 +5698,17 @@ export default function CreateBusiness() {
       {step === 2 && <BusinessDetails formData={formData} />}
       {step === 3 && <ContactDetails formData={formData} />}
       {step === 4 && <CategoryDetails />}
-      {step === 5 && <ServicesOffering />}
-      {step === 6 && <BusinessTiming />}
-      {step === 7 && <BusinessDesc />}
-      {step === 8 && <LandingPageDetails />}
-      {step === 9 && <CreateServices />}
-      {step === 10 && <CreateProductPart />}
-      {step === 11 && <SeoDetails />}
-      {step === 12 && <MoreImages />}
-      {step === 13 && <PreviewTemplates />}
-      {step === 14 && <Subscription />}
-      {step === 15 && (
+      {/* {step === 5 && <ServicesOffering />} */}
+      {step === 5 && <BusinessTiming />}
+      {step === 6 && <BusinessDesc />}
+      {step === 7 && <LandingPageDetails />}
+      {step === 8 && <CreateServices />}
+      {step === 9 && <CreateProductPart />}
+      {step === 10 && <SeoDetails />}
+      {step === 11 && <MoreImages />}
+      {step === 12 && <PreviewTemplates />}
+      {step === 13 && <Subscription />}
+      {step === 14 && (
         <Razorpay formData={formData} planDetails={planDetails} />
       )}
     </>
