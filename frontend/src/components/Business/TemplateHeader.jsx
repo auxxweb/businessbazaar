@@ -1,13 +1,13 @@
 /* eslint-disable react/prop-types */
 import { Container, Nav, Navbar, NavLink } from 'react-bootstrap'
-
+import PlaceholderBanner from "../../assets/images/Placeholder.jpg"
 const TemplateHeader = ({businessData}) => {
   return (
     <Navbar expand="lg" className="bg-white pjs fixed-top" style={{ paddingBlock: "5px" }}>
                 <Container>
                     {/* Align Brand to the start (left side) */}
                     <Navbar.Brand href="/" className='fw-bold w-50 nav-logo' style={{ fontSize: '36px' }}>
-                        <img src={businessData?.logo} alt="" />
+                        <img src={businessData?.logo && businessData?.logo.length > 0 ? businessData?.logo : PlaceholderBanner} alt="" />
                         <span className="ms-2">{businessData?.businessName}</span>
                     </Navbar.Brand>
 

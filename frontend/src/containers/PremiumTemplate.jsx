@@ -12,6 +12,8 @@ import Gallery from "/src/components/Business/Gallery";
 import ServicesSection from "/src/components/Business/ServicesSection";
 import MenuSection from "/src/components/Business/MenuSection";
 import ContactForm from "/src/components/Business/contactForm";
+import Loader from "../../src/components/Loader/Loader";
+
 
 const PremiumTemplate = () => {
   const { businessData, loading, closeDays } = useBusiness();
@@ -83,7 +85,7 @@ const PremiumTemplate = () => {
   {/* Background Image */}
       <Box
         sx={{
-          backgroundImage: `url(${businessData?.landingPageHero?.coverImage})`,
+          backgroundImage: `url(${businessData?.landingPageHero?.coverImage && businessData?.landingPageHero?.coverImage.length =="" ? businessData?.landingPageHero?.coverImage : "https://products.otis.com/hubfs/raw_assets/public/Otis_Oct2020/images/grayscale-mountain.png"})`,
           backgroundSize: "cover",
           backgroundPosition: "center",
           width: "100%",
@@ -169,7 +171,7 @@ const PremiumTemplate = () => {
         <SubscribeSection />
 
         <TemplateFooter businessData={businessData} closeDays={closeDays} />
-        <BackdropLoader open={loading} />
+        {loading && <Loader />}
       </Box>
     </>
   );

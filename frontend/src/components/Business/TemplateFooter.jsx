@@ -1,4 +1,6 @@
 /* eslint-disable react/prop-types */
+import PlaceholderBanner from "../../assets/images/Placeholder.jpg"
+
 const TemplateFooter = ({ businessData, closeDays }) => {
   return (
     <footer className="h-auto">
@@ -8,7 +10,7 @@ const TemplateFooter = ({ businessData, closeDays }) => {
             <div className="col-12 col-lg-3">
               <div className="col-12 d-block d-lg-flex text-center text-lg-start text mt-5">
                 <div className="nav-logo width-fit">
-                  <img src={businessData?.logo} alt="" />
+                  <img src={businessData?.logo && businessData?.logo.length > 0 ? businessData?.logo : PlaceholderBanner} alt="" />
                 </div>
                 <span className="ms-2 fs-30 text-white">
                   {businessData?.businessName}

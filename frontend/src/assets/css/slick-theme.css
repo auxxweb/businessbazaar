@@ -72,7 +72,7 @@
   line-height: 1;
 
   opacity: 0.75;
-  color: white;
+  color: #107D93;
 
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -108,7 +108,7 @@
   content: "→";
 }
 
-[dir="rtl"] .slick-next:before {
+[dir="rtl"]  {
   content: "←";
 }
 

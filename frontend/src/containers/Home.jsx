@@ -9,6 +9,7 @@ import "slick-carousel/slick/slick-theme.css";
 import { useNavigate, Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import "./Home.css";
+import Placeholder from "../assets/images/placeholder.jpg";
 
 import {
   createReveiw,
@@ -23,6 +24,7 @@ import { InputText } from "primereact/inputtext";
 import { Rating } from "primereact/rating";
 import { Dialog } from "primereact/dialog";
 import { formatDate } from "../utils/app.utils";
+import LocationAutocomplete from "../components/LocationAutoComplete";
 
 export default function Home() {
   const navigate = useNavigate();
@@ -47,6 +49,12 @@ export default function Home() {
       },
     ],
   };
+
+  const [location, setLocation] = useState({
+    lat: "",
+    lon: "",
+  });
+
   const [categoryData, setCategoryData] = useState([]);
   const [bannerData, setBannerData] = useState([]);
   const [page, setPage] = useState(1);
@@ -146,7 +154,9 @@ export default function Home() {
         setLoading(true);
         const businessDetails = await fetchBusiness(
           currentPage,
-          visibleBusiness
+          visibleBusiness,
+          "",
+          location
         );
 
         const categoryDetails = await fetchCategories(visibleCategories);
@@ -163,7 +173,7 @@ export default function Home() {
       }
     };
     fetchData();
-  }, [visibleBusiness, visibleCategories]);
+  }, [visibleBusiness, visibleCategories, location]);
 
   useEffect(() => {
     const fetchBanner = async () => {
@@ -195,7 +205,8 @@ export default function Home() {
       const businessDetails = await fetchBusiness(
         currentPage,
         visibleBusiness,
-        searchData
+        searchData,
+        location
       );
       setBusinessData(businessDetails.data.data);
       window.location.href = "/#business";
@@ -217,7 +228,7 @@ export default function Home() {
                   <Carousel.Item key={`key-${banner?._id}`} className=" h-100">
                     <img
                       className="d-block w-100"
-                      src={banner?.image || "/src/assets/images/1.jpg"} // Use banner image or fallback
+                      src={banner?.image && banner?.image.length > 0 ? banner?.image : Placeholder } // Use banner image or fallback
                       alt="First slide"
                       style={{
                         objectFit: "cover",
@@ -277,48 +288,7 @@ export default function Home() {
                 style={{ display: "ruby" }}
               >
                 {/* Location Input with Crosshair Icon */}
-                <div className="col-12 col-md-9 mt-3 h-auto">
-                  <div
-                    className="input-group  banner-input-div w-100"
-                    style={{
-                      border: "1px solid #ced4da",
-                      borderRadius: "8px",
-                      overflow: "hidden",
-                      background: "none",
-                    }}
-                  >
-                    <span
-                      className="input-group-text"
-                      style={{
-                        backgroundColor: "white",
-                        border: "none",
-                        padding: "0 12px",
-                        display: "flex",
-                        alignItems: "center",
-                        color: "white",
-                        background: "none",
-                      }}
-                    >
-                      <i
-                        className="bi bi-crosshair2"
-                        style={{ fontSize: "1.2em" }}
-                      ></i>
-                    </span>
-                    <input
-                      type="text"
-                      className="form-control custom-placeholder"
-                      placeholder="Location"
-                      style={{
-                        border: "none",
-                        boxShadow: "none",
-                        paddingLeft: "0",
-                        fontSize: "1em",
-                        color: "white",
-                        background: "none",
-                      }}
-                    />
-                  </div>
-                </div>
+                <LocationAutocomplete setLocation={setLocation} />
 
                 {/* Search Input with Search Icon */}
                 <div className="col-12 col-md-9 mt-3">
@@ -405,7 +375,7 @@ export default function Home() {
                     key={category._id} // Unique key for each category
                   >
                     <img
-                      src={category.image}
+                      src={category.image && category.image.length > 0 ? category.image : Placeholder}
                       alt={category.name}
                       className="cat-img"
                     />
@@ -455,7 +425,7 @@ export default function Home() {
                   <div className="row p-2">
                     <div className="col-4 p-0">
                       <img
-                        src={business?.logo}
+                        src={business?.logo &&business?.logo?.length > 0 ? business?.logo : Placeholder}
                         alt=""
                         className="w-100 br-theme"
                       />
@@ -474,8 +444,9 @@ export default function Home() {
                           <i className="bi bi-crosshair"></i>
                           <span className="ms-1 fs-15">
                             {business?.address?.buildingName},{" "}
-                            {business?.address?.city}, {business?.address?.landMark}
-                            , {business?.address?.streetName},{" "}
+                            {business?.address?.city},{" "}
+                            {business?.address?.landMark},{" "}
+                            {business?.address?.streetName},{" "}
                             {business?.address?.state}
                           </span>
                         </h3>
