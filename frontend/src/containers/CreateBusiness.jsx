@@ -123,7 +123,7 @@ export const CreateBusiness = () => {
     seoData: {
       title: '',
       description: '',
-      metaTags: [""],
+      metaTags: [''],
     },
     selectedPlan: '',
   })
@@ -4157,26 +4157,33 @@ export const CreateBusiness = () => {
                         value={tag}
                         onChange={(e) => handleTagChange(index, e.target.value)}
                       />
-                      {index > 0 ? (
-                        <button
-                          className="btn btn-danger"
-                          onClick={() => removeTag(index)}
-                          type="button"
-                        >
-                          Remove
-                        </button>
-                      ) : (
-                        <button
-                          className="btn btn-primary"
-                          type="button"
-                          onClick={addTag}
-                        >
-                          Add More
-                        </button>
+                      {seoData?.metaTags?.length > 1 && (
+                         <div
+                         onClick={() => removeTag(index)}
+                         className="remove-button position-absolute"
+                         style={{
+                           top: '5px',
+                           right: '10px',
+                           cursor: 'pointer',
+                           color: '#ff4d4f',
+                           fontSize: '18px',
+                           fontWeight: 'bold',
+                           zIndex: 9,
+                         }}
+                       >
+                         X
+                       </div>
                       )}
                     </div>
                   ))}
                 </div>
+                <button
+                  className="text-decoration-none btn btn-primary w-100 mb-3"
+                  type="button"
+                  onClick={addTag}
+                >
+                  Add More
+                </button>
 
                 {/* Social Media Links */}
                 {socialMediaLinks.map((link, index) => (
@@ -4720,7 +4727,7 @@ export const CreateBusiness = () => {
     ])
     const [closeDays, setCloseDays] = useState([])
     const allDays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
-    const convertTo12HourFormat=(time)=> {
+    const convertTo12HourFormat = (time) => {
       // Split the time into hours and minutes
       let [hours, minutes] = time.split(':').map(Number)
 
@@ -5755,7 +5762,11 @@ export const CreateBusiness = () => {
                           className="mt-3 text-center text-lg-start"
                           style={{ color: '#A4B3CB' }}
                         >
-                          <span>{`${convertTo12HourFormat(formData?.businessTiming?.openTime?.open)} to ${convertTo12HourFormat(formData?.businessTiming?.openTime?.close)}`}</span>
+                          <span>{`${convertTo12HourFormat(
+                            formData?.businessTiming?.openTime?.open,
+                          )} to ${convertTo12HourFormat(
+                            formData?.businessTiming?.openTime?.close,
+                          )}`}</span>
                         </div>
                       </div>
                     </div>
