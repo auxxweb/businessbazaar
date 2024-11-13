@@ -717,30 +717,175 @@ export default function CreateBusiness() {
           [name]: value,
         },
       }))
+      validateField(name,value)
     }
 
-    const validateForm = () => {
-      const newErrors = {}
-      if (!newFormData.contactDetails.primaryNumber)
-        newErrors.primaryNumber = 'Primary number is required.'
-      if (!newFormData.contactDetails.whatsappNumber)
-        newErrors.whatsappNumber = 'WhatsApp number is required.'
-      if (!newFormData.contactDetails.email)
-        newErrors.email = 'Email is required.'
-      if (!address.buildingName)
-        newErrors.buildingName = 'Building name is required.'
-      if (!address.state) newErrors.state = 'State is required'
-      if (!address.city) newErrors.city = 'City is required'
-      if (!address?.streetName)
-        newErrors.streetName = 'Street / Colony name is required'
-      if (!address?.pinCode) newErrors.pinCode = 'Pincode is required'
+    const validateField = (field, value) => {
+      const phoneNumberRegex = /^[+]?[0-9]{10,15}$/;
+      const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+      const pinCodeRegex = /^[0-9]{6}$/;
+    
+      const newErrors = { ...errors }; // Keep current errors
+    
+      // Perform validation based on field type
+      switch (field) {
+        case "primaryNumber":
+          if (!value) {
+            newErrors.primaryNumber = "Primary number is required.";
+          } else if (!phoneNumberRegex.test(value)) {
+            newErrors.primaryNumber = "Invalid primary number. Must be between 10-15 digits.";
+          } else {
+            delete newErrors.primaryNumber;
+          }
+          break;
+    
+        case "whatsappNumber":
+          if (!value) {
+            newErrors.whatsappNumber = "WhatsApp number is required.";
+          } else if (!phoneNumberRegex.test(value)) {
+            newErrors.whatsappNumber = "Invalid WhatsApp number. Must be between 10-15 digits.";
+          } else {
+            delete newErrors.whatsappNumber;
+          }
+          break;
+    
+        case "email":
+          if (!value) {
+            newErrors.email = "Email is required.";
+          } else if (!emailRegex.test(value)) {
+            newErrors.email = "Invalid email format.";
+          } else {
+            delete newErrors.email;
+          }
+          break;
+    
+        case "secondaryNumber":
+          if (value && !phoneNumberRegex.test(value)) {
+            newErrors.secondaryNumber = "Invalid secondary number. Must be between 10-15 digits.";
+          } else {
+            delete newErrors.secondaryNumber;
+          }
+          break;
+    
+        case "pinCode":
+          if (!value) {
+            newErrors.pinCode = "PinCode is required.";
+          } else if (!pinCodeRegex.test(value)) {
+            newErrors.pinCode = "Invalid pin code. It should be 6 digits.";
+          } else {
+            delete newErrors.pinCode;
+          }
+          break;
+    
+        case "buildingName":
+          if (!value) {
+            newErrors.buildingName = "Building name is required.";
+          } else {
+            delete newErrors.buildingName;
+          }
+          break;
+    
+        case "state":
+          if (!value) {
+            newErrors.state = "State is required.";
+          } else {
+            delete newErrors.state;
+          }
+          break;
+    
+        case "city":
+          if (!value) {
+            newErrors.city = "City is required.";
+          } else {
+            delete newErrors.city;
+          }
+          break;
+    
+        case "streetName":
+          if (!value) {
+            newErrors.streetName = "Street / Colony name is required.";
+          } else {
+            delete newErrors.streetName;
+          }
+          break;
+    
+        default:
+          break;
+      }
+    
+      // Update errors state
+      setErrors(newErrors);
+      return !newErrors[field]; // Returns true if the specific field has no error
+    };
 
-      setErrors(newErrors)
-      return Object.keys(newErrors).length === 0
-    }
+    const validateRequiredFields = () => {
+      const requiredFields = [
+        "primaryNumber",
+        "whatsappNumber",
+        "email",
+        "pinCode",
+        "buildingName",
+        "state",
+        "city",
+        "streetName"
+      ];
+    
+      const newErrors = { ...errors }; // Keep current errors
+      let isValid = true;
+    
+      // Loop through required fields and check if they are filled
+      requiredFields.forEach((field) => {
+        let value;
+    
+        switch (field) {
+          case "primaryNumber":
+            value = newFormData?.contactDetails?.primaryNumber;
+            break;
+          case "whatsappNumber":
+            value = newFormData?.contactDetails?.whatsappNumber;
+            break;
+          case "email":
+            value = newFormData?.contactDetails?.email;
+            break;
+          case "pinCode":
+            value = address?.pinCode;
+            break;
+          case "buildingName":
+            value = address?.buildingName;
+            break;
+          case "state":
+            value = address?.state;
+            break;
+          case "city":
+            value = address?.city;
+            break;
+          case "streetName":
+            value = address?.streetName;
+            break;
+          default:
+            break;
+        }
+    
+        // Check if value is missing
+        if (!value) {
+          newErrors[field] = `${field} is required.`;
+          isValid = false;
+        } else {
+          delete newErrors[field]; // Remove any previous errors for that field
+        }
+      });
+    
+      // Update errors state
+      setErrors(newErrors);
+      return isValid; // Returns true if all required fields are filled
+    };
+    
+    
 
     const contactSubmitHandler = () => {
-      if (validateForm()) {
+      console.log(newFormData,"new-formData");
+      
+      if ( validateRequiredFields()) {
         setFormData((prevData) => ({
           ...prevData,
           contactDetails: newFormData.contactDetails,
@@ -757,6 +902,14 @@ export default function CreateBusiness() {
         ...prevAddress,
         [name]: value,
       }))
+      setNewFormData((prevData) => ({
+        ...prevData,
+        contactDetails: {
+          ...prevData.contactDetails,
+          [name]: value,
+        },
+      }))
+      validateField(name,value)
     }
 
     const handleLocationChange = (event) => {
