@@ -32,7 +32,7 @@ import VisibilityOff from '@mui/icons-material/VisibilityOff'
 import Razorpay from './Razorpay'
 
 export const CreateBusiness = () => {
-  const [step, setStep] = useState(9)
+  const [step, setStep] = useState(10)
 
   const [planDetails, setPlanDetails] = useState({
     price: '',
@@ -4353,16 +4353,19 @@ export const CreateBusiness = () => {
               </button>
             </div>
 
-            <div className="row justify-content-center">
-              <div className="col-12 text-center text-md-start">
-                <h1 className="fw-bold">Add Gallery</h1>
+            <div className="row justify-content-start">
+                <div className="col-12 text-center text-md-start mt-4">
+                <h1 className="fw-bold title-text">
+                  <span className="title-main">Add </span>
+                  <span className="title-highlight">Gallery</span>
+                </h1>
               </div>
 
               {/* Image Upload Fields */}
-              <div className="col-12 p-md-5">
+              <div className="col-12 p-md-12 flex justify-content-start">
                 <div className="row mb-3 gap-2">
                   {images.map((image, index) => (
-                    <div className="col-6 col-md-3 mb-3" key={index}>
+                    <div className="col-4 col-md-3 mb-3 mx-2" key={index}>
                       <input
                         type="file"
                         hidden
@@ -4372,9 +4375,20 @@ export const CreateBusiness = () => {
                       />
                       <div className="p-2 add-logo-div">
                         {/* Remove Button for all except the first image */}
-                        {index > 0 ? (
+                        {(images?.length > 1 || image.file)  ? (
                           <div className="d-flex justify-content-end">
-                            <CloseIcon onClick={() => removeImage(index)} />
+                            <CloseIcon
+                              style={{
+                                top: '10px',
+                                right: '10px',
+                                cursor: 'pointer',
+                                color: '#ff4d4f',
+                                fontSize: '18px',
+                                fontWeight: 'bold',
+                                zIndex: 9,
+                              }}
+                              onClick={() => removeImage(index)}
+                            />
                           </div>
                         ) : (
                           <div style={{ height: '1.5rem' }}></div>
@@ -5924,8 +5938,8 @@ export const CreateBusiness = () => {
       {step === 9 && <CreateProductPart />}
       {step === 10 && <SeoDetails />}
       {step === 11 && <MoreImages />}
-      {step === 12 && <PreviewTemplates />}
-      {step === 13 && <Subscription />}
+      {step === 12 && <Subscription />}
+      {step === 13 && <PreviewTemplates />}
       {step === 14 && (
         <Razorpay formData={formData} planDetails={planDetails} />
       )}
