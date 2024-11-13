@@ -1,4 +1,6 @@
+/* eslint-disable react/prop-types */
 import { useEffect, useState } from 'react'
+import PhoneInput from 'react-phone-input-2'
 import 'react-phone-input-2/lib/style.css'
 import TextField from '@mui/material/TextField'
 import Autocomplete from '@mui/material/Autocomplete'
@@ -10,6 +12,7 @@ import {
 } from '../Functions/functions'
 import axios from 'axios'
 import { toast } from 'react-toastify'
+
 import { Container, Nav, Navbar, NavLink } from 'react-bootstrap'
 import '/src/assets/css/template.css'
 import 'slick-carousel/slick/slick.css'
@@ -27,10 +30,9 @@ import InputAdornment from '@mui/material/InputAdornment'
 import Visibility from '@mui/icons-material/Visibility'
 import VisibilityOff from '@mui/icons-material/VisibilityOff'
 import Razorpay from './Razorpay'
-import Loader from "../components/Loader/Loader";
 
 export const CreateBusiness = () => {
-  const [step, setStep] = useState(11)
+  const [step, setStep] = useState(1)
 
   const [planDetails, setPlanDetails] = useState({
     price: '',
@@ -52,157 +54,78 @@ export const CreateBusiness = () => {
   const [planData, setPlanData] = useState([])
 
   const [formData, setFormData] = useState({
-    "businessName": "Auxxweb solutions",
-    "logo": "https://static.vecteezy.com/system/resources/previews/011/883/296/non_2x/modern-graphic-leaf-abstrack-with-water-drop-colorful-logo-good-for-technology-logo-fruits-logo-fresh-logo-nature-logo-company-logo-dummy-logo-bussiness-logo-vector.jpg",
-    "ownerName": "Adarash Raj",
-    "email": "auxxweb1@gmail.com",
-    "password": "Pass@123#",
-    "location": {
-      "lat": 9.152589,
-      "lon": 76.737434
+    businessName: '',
+    logo: '',
+    ownerName: '',
+    email: '',
+    password: '',
+    address: {
+      buildingName: '',
+      streetName: '',
+      landMark: '',
+      city: '',
+      state: '',
+      pinCode: '',
     },
-    "address": {
-      "buildingName": "hilite business park",
-      "streetName": "palazhi",
-      "landMark": "hilite mall",
-      "city": "calicut",
-      "state": "kerala",
-      "pinCode": 688541
+    location: {
+      lat: '',
+      lon: '',
     },
-    "contactDetails": {
-      "primaryNumber": 9074306855,
-      "secondaryNumber": 9074306844,
-      "whatsAppNumber": 9074306855,
-      "email": "auxxweb@gmail.com",
-      "webSite": "auxxweb.in"
+    contactDetails: {
+      name: '',
+      primaryNumber: '',
+      secondaryNumber: '',
+      whatsappNumber: '',
+      email: '',
+      website: '',
     },
-    "socialMediaLinks": [
-      {
-        "tag": "facebook",
-        "link": "https://www.instagram.com"
-      },
-      {
-        "tag": "instagram",
-        "link": "https://www.instagram.com"
-      },
-      {
-        "tag": "twitter",
-        "link": "https://www.instagram.com"
-      }
+    socialMediaLinks: [
+      { tag: 'facebook', link: '' },
+      { tag: 'instagram', link: '' },
+      { tag: 'twitter', link: '' },
     ],
-    "category": "66fe5533d2bbc6f25c7ae03c",
-    "services": [
-      "website",
-      "mobileApplication"
-    ],
-    "businessTiming": {
-      "workingDays": [
-        "monday",
-        "friday"
-      ],
-      "openTime": {
-        "open": "09:00 Am",
-        "close": "08:00 Pm"
-      }
-    },
-    "description": "We offer comprehensive software development and digital marketing services to help your business thrive in the digital age. Our team of experts is committed to delivering innovative solutions that drive growth and success.",
-    "theme": "#549F84",
-    "landingPageHero": {
-      "title": "we are auxxweb",
-      "description": "We offer comprehensive software development and digital marketing services to help your business thrive in the digital age. Our team of experts is committed to delivering innovative solutions that drive growth and success.",
-      "coverImage": "https://www.auxxweb.in/assets/images/temp/dm.png"
-    },
-    "welcomePart": {
-      "title": "welcome to auxxweb",
-      "description": "We offer comprehensive software development and digital marketing services to help your business thrive in the digital age. Our team of experts is committed to delivering innovative solutions that drive growth and success.",
-      "coverImage": "https://www.auxxweb.in/assets/images/temp/download.png"
-    },
-    "specialServices": {
-      "title": "Out core services",
-      "description": "We offer comprehensive software development and digital marketing services to help your business thrive in the digital age. Our team of experts is committed to delivering innovative solutions that drive growth and success.",
-      "data": [
-        {
-          "image": "https://www.auxxweb.in/assets/images/clients/client_6.png",
-          "title": "aswassam",
-          "description": "health care clinic in alappuzha, we provide all the health services"
-        },
-        {
-          "image": "https://www.auxxweb.in/assets/images/clients/client_7.png",
-          "title": "k stories",
-          "description": "world best story writing and reading website, enjoy your free tym with k stories"
-        }
-      ]
-    },
-    "productSection": [
-      {
-        "title": "website",
-        "image": "https://www.auxxweb.in/assets/images/temp/img5.png",
-        "description": " we are providing best websites in minimal price and high quality , auxxweb solutions",
-        "price": 100
+    category: '',
+    services: [],
+    businessTiming: {
+      workingDays: [],
+      openTime: {
+        open: '',
+        close: '',
       },
-      {
-        "title": "mobileApp",
-        "image": "https://www.auxxweb.in/assets/images/temp/img5.png",
-        "description": " we are providing best mogileapps in minimal price and high quality , auxxweb solutions",
-        "price": 500
-      },
-      {
-        "title": "ERP softwares",
-        "image": "https://www.auxxweb.in/assets/images/temp/img5.png",
-        "description": " we are providing best ero siftwares in minimal price and high quality , auxxweb solutions",
-        "price": 200
-      }
-    ],
-    "service": [
-      {
-        "title": "website service",
-        "image": "https://www.auxxweb.in/assets/images/temp/img5.png",
-        "description": " we are providing best websites in minimal price and high quality , auxxweb solutions"
-      },
-      {
-        "title": "mobileApp service",
-        "image": "https://www.auxxweb.in/assets/images/temp/img5.png",
-        "description": " we are providing best mogileapps in minimal price and high quality , auxxweb solutions"
-      },
-      {
-        "title": "ERP software service",
-        "image": "https://www.auxxweb.in/assets/images/temp/img5.png",
-        "description": " we are providing best ero siftwares in minimal price and high quality , auxxweb solutions"
-      }
-    ],
-    "testimonial": {
-      "description": "Our Happy Customers",
-      "reviews": [
-        {
-          "name": "adarsh",
-          "image": "https://www.auxxweb.in/assets/images/team/adarsh.jpeg",
-          "review": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non neque elit. Sed ut tellus ac neque fermentum tristique. Donec sed facilisis tellus, a vulputate turpis. Duis eget turpis non tellus tincidunt fermentum.",
-          "rating": 4
-        },
-        {
-          "name": "rahul",
-          "image": "https://www.auxxweb.in/assets/images/team/hari.png",
-          "review": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non neque elit. Sed ut tellus ac neque fermentum tristique. Donec sed facilisis tellus, a vulputate turpis. Duis eget turpis non tellus tincidunt fermentum.",
-          "rating": 3.5
-        }
-      ]
     },
-    "gallery": [
-      "https://www.auxxweb.in/assets/images/temp/contact-tv.png",
-      "https://www.auxxweb.in/assets/images/temp/download.png",
-      "https://www.auxxweb.in/assets/images/temp/web7.png",
-      "https://www.auxxweb.in/assets/images/temp/dm.png"
-    ],
-    "seoData": {
-      "title": "best software company in kerala",
-      "description": " we are providing best ero siftwares in minimal price and high quality , auxxweb solutions",
-      "metaTags": [
-        "it company",
-        "software",
-        "website"
-      ]
+    description: '',
+    theme: '',
+    secondaryTheme: '',
+
+    landingPageHero: {
+      title: '',
+      description: '',
+      coverImage: '',
     },
-    "selectedPlan": "",
+    welcomePart: {
+      title: '',
+      description: '',
+      coverImage: '',
+    },
+    specialServices: {
+      title: '',
+      description: '',
+      data: [{ title: '', description: '', image: '' }],
+    },
+    productSection: [],
+    service: [{ title: '', description: '', image: '' }],
+    testimonial: {
+      description: '',
+      reviews: [],
+    },
+    gallery: [],
+    videos: [],
+    seoData: {
+      title: '',
+      description: '',
+      metaTags: [""],
+    },
+    selectedPlan: '',
   })
 
   const preRequestFun = async (file, position) => {
@@ -312,7 +235,7 @@ export const CreateBusiness = () => {
 
           toast.error(
             error?.response?.data?.message ??
-            'An error occurred. Please try again.',
+              'An error occurred. Please try again.',
             {
               position: 'top-right',
               autoClose: 3000,
@@ -1671,8 +1594,9 @@ export const CreateBusiness = () => {
                     {allDays.map((day) => (
                       <div
                         key={day}
-                        className={`day-div ${days.includes(day) ? 'active' : ''
-                          } p-2 text-center cursor-pointer`}
+                        className={`day-div ${
+                          days.includes(day) ? 'active' : ''
+                        } p-2 text-center cursor-pointer`}
                         style={{
                           width: '60px',
                           borderRadius: '8px',
@@ -2289,9 +2213,6 @@ export const CreateBusiness = () => {
       coverImage: '',
       loading: '',
     })
-    const [landingFile, setLandingFile] = useState()
-    const [welcomeFile, setWelcomeFile] = useState()
-
     const [errors, setErrors] = useState({})
     const [loading, setLoading] = useState(false) // Loader state
 
@@ -2304,6 +2225,7 @@ export const CreateBusiness = () => {
       setWelcomePart(formData?.welcomePart)
     }, [])
 
+    // Generic File Change Handler with Loader
     const handleFileChange = (name, e, sectionSetter) => {
       const file = e.target.files[0]
 
@@ -2334,13 +2256,11 @@ export const CreateBusiness = () => {
               ...prevState,
               loading: false,
             }))
-            setLandingFile(file)
           } else if (name === 'welcomePartImage') {
             setWelcomePart((prevState) => ({
               ...prevState,
               loading: false,
             }))
-            setWelcomeFile(file)
           }
 
           setLoading(false) // Hide loader after image is set
@@ -2354,8 +2274,6 @@ export const CreateBusiness = () => {
         reader.readAsDataURL(file)
       }
     }
-
-
 
     const handleInputChange = (e, sectionSetter) => {
       const { name, value } = e.target
@@ -2378,45 +2296,47 @@ export const CreateBusiness = () => {
       setErrors(newErrors)
       return Object.keys(newErrors).length === 0
     }
+
     const handleLandingSubmit = async () => {
-      setLoading(true); // Set loading once at the start
       try {
-        let landingPreReq = null;
-        let welcomePreReq = null;
-
-        if (landingFile) {
-          landingPreReq = await preRequestFun(landingFile, 'Landing');
+        let landingPreReq = null
+        let welcomePreReq = null
+        if (landingPageHero.coverImage) {
+          setLoading(true)
+          landingPreReq = await preRequestFun(
+            landingPageHero.coverImage,
+            'Landing',
+          )
         }
 
-        if (welcomeFile) {
-          welcomePreReq = await preRequestFun(welcomeFile, 'Welcome');
+        if (welcomePart?.coverImage) {
+          setLoading(true)
+          welcomePreReq = await preRequestFun(welcomePart.coverImage, 'Landing')
         }
-
         if (landingPreReq?.accessLink) {
-          setLandingPageHero((prev) => ({ ...prev, coverImage: landingPreReq.accessLink }));
+          landingPageHero.coverImage = landingPreReq.accessLink
+          setLandingPageHero(landingPreReq?.accessLink)
         }
-
         if (welcomePreReq?.accessLink) {
-          setWelcomePart((prev) => ({ ...prev, coverImage: welcomePreReq.accessLink }));
+          welcomePart.coverImage = welcomePreReq.accessLink
+          setWelcomePart(welcomePreReq.accessLink)
         }
-
         if (validateForm()) {
           setFormData((prevFormData) => ({
             ...prevFormData,
-            landingPageHero: { ...landingPageHero, coverImage: landingPreReq?.accessLink || landingPageHero.coverImage },
+            landingPageHero,
             theme,
             secondaryTheme,
-            welcomePart: { ...welcomePart, coverImage: welcomePreReq?.accessLink || welcomePart.coverImage },
-          }));
-          handleNextStep();
+            welcomePart,
+          }))
+          handleNextStep()
         }
       } catch (e) {
-        console.log(e);
+        console.log(e)
       } finally {
-        setLoading(false); // Set loading to false at the end
+        setLoading(false)
       }
-    };
-
+    }
 
     const triggerFileUpload = (inputId) => {
       document.getElementById(inputId).click()
@@ -2426,7 +2346,7 @@ export const CreateBusiness = () => {
       return (
         <div className="h-100vh">
           <div className="d-flex h-100 justify-content-center align-items-center">
-           {}
+            <span>Loading</span>
           </div>
         </div>
       )
@@ -2700,12 +2620,7 @@ export const CreateBusiness = () => {
                         background-color: ${theme};
                         color: white;
                         border: none;
-                    }.theme:hover{
-                        background-color: ${secondaryTheme};
-                        color: white;
-                        border: none;
-                    }
-                        .service-design.active{
+                    }.service-design.active{
                         background-color: ${theme};
                     }.address-section{
                     background-color:${theme};
@@ -3693,8 +3608,9 @@ export const CreateBusiness = () => {
                           {services.map((service, index) => (
                             <div
                               key={index}
-                              className={`col-12 col-lg-4 service-design ${index === currentSlide ? 'active' : ''
-                                } mt-5 mb-5 text-center`}
+                              className={`col-12 col-lg-4 service-design ${
+                                index === currentSlide ? 'active' : ''
+                              } mt-5 mb-5 text-center`}
                             >
                               <div className="col-12 text-center">
                                 <h3>{service.title}</h3>
@@ -3721,8 +3637,9 @@ export const CreateBusiness = () => {
                         services.map((service, index) => (
                           <div
                             key={index}
-                            className={`col-12 col-lg-4 service-design ${index === currentSlide ? 'active' : ''
-                              } mt-5 mb-5 text-center`}
+                            className={`col-12 col-lg-4 service-design ${
+                              index === currentSlide ? 'active' : ''
+                            } mt-5 mb-5 text-center`}
                           >
                             <div className="col-12 text-center">
                               <h3>{service.title}</h3>
@@ -4458,7 +4375,7 @@ export const CreateBusiness = () => {
                       />
                       <div className="p-2 add-logo-div">
                         {/* Remove Button for all except the first image */}
-                        {(images?.length > 1 || image.file) ? (
+                        {images?.length > 1 || image.file ? (
                           <div className="d-flex justify-content-end">
                             <CloseIcon
                               style={{
@@ -4803,6 +4720,19 @@ export const CreateBusiness = () => {
     ])
     const [closeDays, setCloseDays] = useState([])
     const allDays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+    const convertTo12HourFormat=(time)=> {
+      // Split the time into hours and minutes
+      let [hours, minutes] = time.split(':').map(Number)
+
+      // Determine if it's AM or PM
+      let amOrPm = hours >= 12 ? 'PM' : 'AM'
+
+      // Convert hours from 24-hour to 12-hour format
+      hours = hours % 12 || 12
+
+      // Format the time string
+      return `${hours}:${minutes.toString().padStart(2, '0')} ${amOrPm}`
+    }
 
     const handleInputChange = (e) => {
       const { name, value } = e.target
@@ -5052,12 +4982,7 @@ export const CreateBusiness = () => {
                         background-color: ${formData?.theme};
                         color: white;
                         border: none;
-                    }.theme:hover{
-                        background-color: ${formData?.secondaryTheme};
-                        color: white;
-                        border: none;
-                    }
-                        .service-design.active{
+                    }.service-design.active{
                         background-color: ${formData?.theme};
                     }.address-section{
                     background-color:${formData?.theme};
@@ -5349,7 +5274,7 @@ export const CreateBusiness = () => {
               <div className="col-12 mb-5 row justify-content-center david-font">
                 {businessData.specialServices.data.length > 2 ? (
                   <Slider {...settings4}>
-                    {businessData.specialServices.data.map((dish, index) => (
+                    {businessData?.specialServices?.data?.map((dish, index) => (
                       <div
                         key={index}
                         className="dish-div col-12 col-lg-6 text-center p-3"
@@ -5457,8 +5382,9 @@ export const CreateBusiness = () => {
                   {businessData.service.map((service, index) => (
                     <div
                       key={index}
-                      className={`col-12 col-lg-4 service-design ${index === currentSlide ? 'active' : ''
-                        } mt-5 mb-5 text-center`}
+                      className={`col-12 col-lg-4 service-design ${
+                        index === currentSlide ? 'active' : ''
+                      } mt-5 mb-5 text-center`}
                     >
                       <div className="col-12 text-center">
                         <h3>{service.title}</h3>
@@ -5483,8 +5409,9 @@ export const CreateBusiness = () => {
                 businessData.service.map((service, index) => (
                   <div
                     key={index}
-                    className={`col-12 col-lg-4 service-design ${index === currentSlide ? 'active' : ''
-                      } mt-5 mb-5 text-center`}
+                    className={`col-12 col-lg-4 service-design ${
+                      index === currentSlide ? 'active' : ''
+                    } mt-5 mb-5 text-center`}
                   >
                     <div className="col-12 text-center">
                       <h3>{service.title}</h3>
@@ -5820,7 +5747,7 @@ export const CreateBusiness = () => {
                         >
                           {businessData.businessTiming.workingDays.map(
                             (day, index) => (
-                              <p>{day}</p>
+                              <p key={`key-${index}`}>{day}</p>
                             ),
                           )}
                         </div>
@@ -5828,7 +5755,7 @@ export const CreateBusiness = () => {
                           className="mt-3 text-center text-lg-start"
                           style={{ color: '#A4B3CB' }}
                         >
-                          <span>8:00 am to 9:00 pm</span>
+                          <span>{`${convertTo12HourFormat(formData?.businessTiming?.openTime?.open)} to ${convertTo12HourFormat(formData?.businessTiming?.openTime?.close)}`}</span>
                         </div>
                       </div>
                     </div>
@@ -5954,44 +5881,50 @@ export const CreateBusiness = () => {
                     {/* Free Plan */}
                     {planData.map((plan, index) => (
                       <div className="col-12 col-md-6 mb-4" key={index}>
-                        <div className="card br-20 b-theme2">
+                        <div className="card br-20 b-theme2 shadow-lg border-0 overflow-hidden">
                           <div className="p-4">
-                            <div className="col-12 text-center">
-                              <span className="fw-bold">{plan.plan}</span>
+                            <div className="col-12 text-center mb-3">
+                              <span className="fw-bold fs-20 text-dark">
+                                {plan?.plan}
+                              </span>
                             </div>
-                            <div className="row mt-2 mb-2">
-                              <div className="col-4">
-                                <h1 className="fw-bold fs-30">
-                                  ₹{plan.amount}
-                                </h1>
+                            <div className="d-flex justify-content-between align-items-center mt-2 mb-2">
+                              <div className="price-section">
+                                <h2 className="fw-bold fs-28 text-primary mb-0">
+                                  ₹{plan?.amount}
+                                </h2>
                               </div>
-                              <div className="col-8 p-0 text-start">
-                                <span className="text-secondary">
-                                  per editor/month
-                                </span>{' '}
-                                <br />
-                                <span className="text-secondary">
-                                  Billed Monthly
+                              <div className="validity-section text-end">
+                                <span className="text-dark fw-bold fs-16">
+                                  Validity{' '}
+                                  <span style={{ color: 'blue' }}>
+                                    {plan?.validity} year
+                                  </span>
                                 </span>
                               </div>
                             </div>
                             <div className="col-12 mt-4">
-                              {plan.description.map((data, descIndex) => (
-                                <div className="mt-2" key={descIndex}>
-                                  <span className="subscription-tick bg-light active">
+                              {plan?.description.map((data, descIndex) => (
+                                <div
+                                  className="d-flex align-items-center mt-2"
+                                  key={descIndex}
+                                >
+                                  <span className="subscription-tick bg-light text-success me-2">
                                     <i className="bi bi-check"></i>
                                   </span>
-                                  <span className="fs-16">{data}</span>
+                                  <span className="fs-14 text-dark">
+                                    {data}
+                                  </span>
                                 </div>
                               ))}
                             </div>
                             <div className="mt-4">
                               <button
-                                className="btn w-100 text-white"
+                                className="btn w-100 text-white py-2 fw-bold"
                                 onClick={() =>
                                   planSubmit(plan._id, plan.amount, plan.plan)
                                 }
-                                style={{ backgroundColor: '#5b7ee88c' }}
+                                style={{ backgroundColor: '#5b7ee8' }}
                               >
                                 Choose Plan
                               </button>
@@ -6006,26 +5939,134 @@ export const CreateBusiness = () => {
             </div>
           </div>
         </div>
+        <style>
+          {`.card {
+  border-radius: 20px;
+  background-color: #fff;
+  transition: transform 0.3s, box-shadow 0.3s;
+  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+}
+
+.br-20 {
+  border-radius: 20px;
+}
+
+.b-theme2 {
+  background-color: #f8f9fa;
+}
+
+.fs-20 {
+  font-size: 20px; /* Smaller title font */
+}
+
+.fs-28 {
+  font-size: 28px; /* Reduced font size for amount */
+}
+
+.fs-16 {
+  font-size: 16px; /* Font size for validity */
+}
+
+.fs-14 {
+  font-size: 14px; /* Font size for description text */
+}
+
+.text-primary {
+  color: #5b7ee8;
+}
+
+.text-dark {
+  color: #343a40;
+}
+
+.text-muted {
+  color: #6c757d;
+}
+
+.fw-medium {
+  font-weight: 500;
+}
+
+.fw-bold {
+  font-weight: 700;
+}
+
+.price-section {
+  text-align: left;
+}
+
+.validity-section {
+  text-align: right;
+}
+
+.subscription-tick {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 1px solid #ddd;
+  color: #28a745;
+}
+
+.btn {
+  border-radius: 10px;
+  font-weight: 600;
+  background-color: #5b7ee8;
+  transition: background-color 0.3s;
+}
+
+.btn:hover {
+  background-color: #4a6fca;
+}
+
+.shadow-lg {
+  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+}
+
+.me-2 {
+  margin-right: 0.5rem;
+}
+
+.d-flex {
+  display: flex;
+}
+
+.align-items-center {
+  align-items: center;
+}
+
+.justify-content-between {
+  justify-content: space-between;
+}
+`}
+        </style>
       </>
     )
   }
 
   return (
     <>
-      {step === 1 && <AuthenticationDetails formData={formData} />}
-      {step === 2 && <BusinessDetails formData={formData} />}
+      {step === 111 && <AuthenticationDetails formData={formData} />}
+      {step === 22 && <BusinessDetails formData={formData} />}
       {step === 3 && <ContactDetails formData={formData} />}
       {step === 4 && <CategoryDetails />}
       {/* {step === 5 && <ServicesOffering />} */}
-      {step === 5 && <BusinessTiming />}
+      {step === 176 && <BusinessTiming />}
       {step === 6 && <BusinessDesc />}
       {step === 7 && <LandingPageDetails />}
       {step === 8 && <CreateServices />}
       {step === 9 && <CreateProductPart />}
-      {step === 10 && <SeoDetails />}
+      {step === 1 && <SeoDetails />}
       {step === 11 && <MoreImages />}
       {step === 12 && <Subscription />}
-      {step === 13 && <PreviewTemplates />}
+      {step === 2 && <PreviewTemplates />}
       {step === 14 && (
         <Razorpay formData={formData} planDetails={planDetails} />
       )}
