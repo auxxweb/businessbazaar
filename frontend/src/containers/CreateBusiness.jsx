@@ -5697,7 +5697,7 @@ export const CreateBusiness = () => {
         const res = await CreateBusinessDetails(formData)
         const resId = res.data._id || res.data.data?._id
         if (res.success){
-          navigate(`/templates/${resId}`)
+          navigate(`/template/${resId}`)
         }
       }
       submitData()
