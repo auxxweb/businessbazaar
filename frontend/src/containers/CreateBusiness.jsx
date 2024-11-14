@@ -34,7 +34,7 @@ import CreateBusinessLocation from '../components/CreateBusinessLocation'
 import Loader from '../components/Loader/Loader'
 
 export const CreateBusiness = () => {
-  const [step, setStep] = useState(14)
+  const [step, setStep] = useState(1)
 
   const [planDetails, setPlanDetails] = useState({
     price: '',
@@ -56,18 +56,18 @@ export const CreateBusiness = () => {
   const [planData, setPlanData] = useState([])
 
   const [formData, setFormData] = useState({
-    businessName: 'aswasam',
-    logo: 'https://wallpapers.com/images/hd/messi-pictures-jzykf84saw6wbkd6.jpg',
-    ownerName: 'adarsh',
-    email: 'gurupriyanjofficial@gmail.com',
-    password: '123456789',
+    businessName: '',
+    logo: '',
+    ownerName: '',
+    email: "",
+    password: "",
     address: {
-      buildingName: 'chalithara',
-      streetName: 'thirunalloor',
-      landMark: 'near thirunalloor',
-      city: 'cherthala',
-      state: 'kerala',
-      pinCode: '688541',
+      buildingName: '',
+      streetName: '',
+      landMark: '',
+      city: '',
+      state: '',
+      pinCode: '',
     },
     location: {
       lat: '',
@@ -75,18 +75,18 @@ export const CreateBusiness = () => {
     },
     contactDetails: {
       name: '',
-      primaryNumber: '9074306855',
-      secondaryNumber: '9074306855',
-      whatsappNumber: '9074306855',
-      email: 'gurupriyanjofficial@gmail.com',
-      website: 'www.auxxweb.in',
+      primaryNumber: '',
+      secondaryNumber: '',
+      whatsappNumber: '',
+      email: '',
+      website: '',
     },
     socialMediaLinks: [
       { tag: 'facebook', link: '' },
       { tag: 'instagram', link: '' },
       { tag: 'twitter', link: '' },
     ],
-    category: '672a1314f26cfec8601a7478',
+    category: '',
     services: [],
     businessTiming: {
       workingDays: ["mon"],
@@ -100,22 +100,22 @@ export const CreateBusiness = () => {
     secondaryTheme: '#e63c1e',
 
     landingPageHero: {
-      title: 'title landing page',
-      description: 'landing page description',
-      coverImage: 'https://cdn.britannica.com/34/212134-050-A7289400/Lionel-Messi-2018.jpg',
+      title: '',
+      description: '',
+      coverImage: '',
     },
     welcomePart: {
-      title: 'welcome to welcome page',
-      description: 'description',
-      coverImage: 'https://cdn.britannica.com/34/212134-050-A7289400/Lionel-Messi-2018.jpg',
+      title: '',
+      description: '',
+      coverImage: '',
     },
     specialServices: {
-      title: 'welcome to special services',
-      description: 'description of special services',
-      data: [{ title: 'special service 1', description: 'description special service 1', image: 'https://cdn.britannica.com/34/212134-050-A7289400/Lionel-Messi-2018.jpg' }],
+      title: '',
+      description: '',
+      data: [{ title: '', description: '', image: '' }],
     },
     productSection: [],
-    service:  [{ title: 'special service 1', description: 'description special service 1', image: 'https://cdn.britannica.com/34/212134-050-A7289400/Lionel-Messi-2018.jpg' }],
+    service:  [{ title: '', description: '', image: '' }],
     testimonial: {
       description: '',
       reviews: [],
@@ -127,7 +127,7 @@ export const CreateBusiness = () => {
       description: '',
       metaTags: [''],
     },
-    selectedPlan: '672a5b6726b1dce75a0402c6',
+    selectedPlan: '',
   })
 
   const preRequestFun = async (file, position) => {
