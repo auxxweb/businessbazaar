@@ -34,7 +34,7 @@ import CreateBusinessLocation from '../components/CreateBusinessLocation'
 import Loader from '../components/Loader/Loader'
 
 export const CreateBusiness = () => {
-  const [step, setStep] = useState(7)
+  const [step, setStep] = useState(1)
 
   const [planDetails, setPlanDetails] = useState({
     price: '',
