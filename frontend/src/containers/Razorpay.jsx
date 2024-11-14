@@ -1,14 +1,14 @@
-import React, { useEffect, useState } from 'react'
+import  { useEffect, useState } from 'react'
 import {
   checkPaymentStatus,
   CreateBusinessDetails,
 } from '../Functions/functions'
-import axios from 'axios'
 import { useNavigate } from 'react-router'
+import { toast } from 'react-toastify';
 
-export default function Razorpay(values) {
-  const formData = values.formData
-  const planDetails = values.planDetails
+export default function Razorpay({formData,planDetails, setStep}) {
+
+  
   const [isScriptLoaded, setScriptLoaded] = useState(false)
   const [businessId, setBusinessId] = useState('')
   const navigate = useNavigate()
@@ -47,21 +47,36 @@ export default function Razorpay(values) {
       image: '', // Dummy logo URL
       handler: async function (response) {
         console.log(response, 'response')
-        var paymentDetails = {
-          plan: formData.selectedPlan,
-          paymentId: response?.razorpay_payment_id,
-        }
         const interval = setInterval(async () => {
           try {
             const paymentData = await checkPaymentStatus(id, token)
             const payment_status = paymentData?.data?.PaymentStatus
-            console.log(payment_status, 'paymentStatus----',paymentData?.data)
-
             if (payment_status === 'success') {
               clearInterval(interval) // Clear the interval if payment is successful
-              navigate(`/templates/${id}`)
+              navigate(`/template/${id}`)
+            }
+            if(payment_status==="failed"){
+              clearInterval(interval)
+              toast.error(
+                "Payment Failed ,try again ",
+                {
+                  position: "top-right",
+                  autoClose: 3000,
+                  hideProgressBar: false,
+                  closeOnClick: true,
+                  pauseOnHover: true,
+                  draggable: true,
+                  theme: "colored",
+                  style: {
+                    backgroundColor: "#e74c3c", // Custom red color for error
+                    color: "#FFFFFF", // White text
+                  },
+                }
+              );
+              setStep((prev) => prev - 1)
             }
           } catch (error) {
+           
             console.error('Error fetching payment status:', error)
           }
         }, 2000)
@@ -72,6 +87,15 @@ export default function Razorpay(values) {
 
           console.log('Stopped checking payment status after 2 minutes')
         }, 2 * 60 * 1000) // 2 minutes in milliseconds
+      },
+      modal: {
+        ondismiss: function () {
+          toast.warning("Payment process was cancelled. Please try again.", {
+            position: "top-right",
+            autoClose: 3000,
+          });
+          setStep((prev) => prev - 1)
+        }
       },
       prefill: {
         name: formData.businessName,

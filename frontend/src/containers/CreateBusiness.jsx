@@ -5916,9 +5916,9 @@ export const CreateBusiness = () => {
       {step === 10 && <SeoDetails />}
       {step === 11 && <MoreImages />}
       {step === 12 && <Subscription />}
-      {step === 2 && <PreviewTemplates />}
+      {step === 13 && <PreviewTemplates />}
       {step === 14 && (
-        <Razorpay formData={formData} planDetails={planDetails} />
+        <Razorpay formData={formData} planDetails={planDetails} setStep={setStep} />
       )}
     </>
   )
