@@ -91,11 +91,11 @@ export const CreateBusiness = () => {
     businessTiming: {
       workingDays: ['mon'],
       openTime: {
-        open: '22:10',
-        close: '24:23',
+        open: '',
+        close: '',
       },
     },
-    description: 'great work',
+    description: '',
     theme: '#1528b7',
     secondaryTheme: '#e63c1e',
 
