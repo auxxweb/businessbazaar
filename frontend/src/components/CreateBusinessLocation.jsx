@@ -1,4 +1,4 @@
-/* eslint-disable no-unused-vars */
+ 
 /* eslint-disable react/prop-types */
 import { TextField } from "@mui/material";
 import { useJsApiLoader, StandaloneSearchBox } from "@react-google-maps/api";
@@ -25,12 +25,12 @@ const CreateBusinessLocation = ({ setLocation }) => {
   };
 
   const handleOnPlacesChanged = () => {
-    const places = inputRef.current.getPlaces();
+    const places = inputRef?.current?.getPlaces();
     const place = places[0];
-    const lat = place.geometry.location.lat();
-    const lng = place.geometry.location.lng();
+    const lat = place?.geometry?.location.lat();
+    const lng = place?.geometry?.location.lng();
 
-    setInputValue(place.formatted_address);
+    setInputValue(place?.formatted_address);
     setLocation({
       lat: lat,
       lon: lng,
