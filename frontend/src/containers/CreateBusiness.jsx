@@ -186,6 +186,7 @@ export const CreateBusiness = () => {
     const [passwordError, setPasswordError] = useState('')
     const [emailError, setEmailError] = useState('')
     const [showPassword, setShowPassword] = useState(false)
+    const navigate = useNavigate()
 
     useEffect(() => {
       setAuthData({
@@ -279,6 +280,9 @@ export const CreateBusiness = () => {
     const togglePasswordVisibility = () => {
       setShowPassword(!showPassword)
     }
+    const handleBack =()=>{
+      navigate("/")
+    }
 
     return (
       <div className="h-100vh create-business-div">
@@ -293,7 +297,7 @@ export const CreateBusiness = () => {
 
           <div className="col-12 col-md-7 d-flex flex-column align-items-center right-portion h-100 p-4">
             <div className="back-button-container">
-              <button className="btn btn-dark" onClick={handlePrevStep}>
+              <button className="btn btn-dark" onClick={handleBack}>
                 <i className="bi bi-arrow-left"></i>
               </button>
             </div>
@@ -5917,7 +5921,7 @@ export const CreateBusiness = () => {
       {step === 10 && <SeoDetails />}
       {step === 11 && <MoreImages />}
       {step === 12 && <Subscription />}
-      {step === 2 && <PreviewTemplates />}
+      {step === 13 && <PreviewTemplates />}
       {step === 14 && (
         <Razorpay formData={formData} planDetails={planDetails} />
       )}

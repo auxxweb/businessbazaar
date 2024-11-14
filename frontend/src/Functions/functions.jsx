@@ -95,8 +95,8 @@ export const fetchSearchCategory = async (search) => {
 
 export const fetchBusinessTemplate = async (id, setLoading) => {
 
+  setLoading(true);
   try {
-    setLoading(true);
     const response = await axios.get(
       `${baseUrl}/api/v1/business/${id}`,
       config
@@ -108,6 +108,7 @@ export const fetchBusinessTemplate = async (id, setLoading) => {
     const data = response.data;
     if (data.success) {
       return data;
+      setLoading(false);
     } else {
       setLoading(false);
 
