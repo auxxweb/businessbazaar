@@ -131,7 +131,8 @@ export const CreateBusiness = () => {
   })
 
   const preRequestFun = async (file, position) => {
-    const url = 'https://businessbazaarserver.auxxweb.in/api/v1/s3url'
+   const baseUrl = import.meta.env.VITE_APP_BE_API_KEY ?? "" ;
+    const url =` ${baseUrl}/api/v1/s3url`
     const requestBody = {
       files: [
         {
@@ -4285,7 +4286,9 @@ export const CreateBusiness = () => {
         }
 
         try {
-          const url = 'https://businessbazaarserver.auxxweb.in/api/v1/s3url'
+          
+     const baseUrl = import.meta.env.VITE_APP_BE_API_KEY ?? "" ;
+    const url =` ${baseUrl}/api/v1/s3url`
 
           // Fetch pre-signed S3 URLs
           const response = await axios.post(url, requestBody, {

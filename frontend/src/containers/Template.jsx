@@ -491,7 +491,8 @@ export default function Template() {
                 Contact
               </NavLink>
               <NavLink
-                to="/create-business"
+                // to="/create-business"
+                href="#services"
                 style={{
                   backgroundColor: colorTheme,
                   color: "white",
@@ -554,7 +555,7 @@ export default function Template() {
                     </div>
                     <div className="col-6 col-lg-3 mb-2">
                       <NavLink
-                        to="#service"
+                        href="#services"
                         className="btn btn-dark text-white radius-theme box-shadow theme w-100 p-1"
                       >
                         Services
@@ -601,8 +602,8 @@ export default function Template() {
             <div className="col-12 col-lg-6 text-end d-none d-lg-block">
               <img
                 src={
-                  businessData?.landingPageHero?.image &&
-                  businessData?.landingPageHero?.image?.length > 0
+                  businessData?.landingPageHero?.coverImage &&
+                  businessData?.landingPageHero?.coverImage?.length > 0
                     ? businessData?.landingPageHero?.coverImage
                     : PlaceholderBanner
                 }
@@ -684,7 +685,7 @@ export default function Template() {
             <div className="col-12 col-lg-6 mt-2 text-center text-lg-start about-image">
               <img
                 src={
-                (businessData?.welcomePart?.image ?? Placeholder)
+                (businessData?.welcomePart?.coverImage ?? Placeholder)
                 }
                 className="img-fluid about-image"
                 alt=""
@@ -706,7 +707,7 @@ export default function Template() {
         </div>
       </section>
 
-      <section className="h-auto" style={{ backgroundColor: "#F3F3F4" }}>
+      <section className="h-auto" id="services" style={{ backgroundColor: "#F3F3F4" }}>
         <div className="container p-top">
           <div className="col-12 mb-5">
             <div className="mt-5 text-center">
@@ -798,7 +799,7 @@ export default function Template() {
             <div className="row justify-content-center">
               <div className="col-12 col-md-6 text-center">
                 <h1 className="text-dark fw-bold david-font banner-title fs-45">
-                  Menu
+                  Our List
                 </h1>
               </div>
             </div>
