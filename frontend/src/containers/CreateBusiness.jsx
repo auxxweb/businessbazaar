@@ -31,6 +31,7 @@ import Visibility from '@mui/icons-material/Visibility'
 import VisibilityOff from '@mui/icons-material/VisibilityOff'
 import Razorpay from './Razorpay'
 import CreateBusinessLocation from '../components/CreateBusinessLocation'
+import Loader from '../components/Loader/Loader'
 
 export const CreateBusiness = () => {
   const [step, setStep] = useState(1)
@@ -2328,11 +2329,11 @@ export const CreateBusiness = () => {
 
     if (loading) {
       return (
-        <div className="h-100vh">
-          <div className="d-flex h-100 justify-content-center align-items-center">
-            <span>Loading</span>
-          </div>
+        <div className="h-100vh text-center ">
+        <div className="row h-100 justify-content-center align-items-center">
+          <div className="col-3 "> {loading && <Loader />}</div>
         </div>
+      </div>
       )
     }
 
@@ -4555,7 +4556,7 @@ export const CreateBusiness = () => {
       hours = hours % 12 || 12
 
       // Format the time string
-      return `${hours}:${minutes.toString().padStart(2, '0')} ${amOrPm}`
+      return `${hours}:${minutes?.toString()?.padStart(2, '0')} ${amOrPm}`
     }
 
     const handleInputChange = (e) => {
@@ -4767,10 +4768,10 @@ export const CreateBusiness = () => {
     if (loading) {
       return (
         <div className="h-100vh text-center ">
-          <div className="row h-100 justify-content-center align-items-center">
-            <div className="col-3 ">Loading...</div>
-          </div>
+        <div className="row h-100 justify-content-center align-items-center">
+          <div className="col-3 "> {loading && <Loader />}</div>
         </div>
+      </div>
       )
     }
 

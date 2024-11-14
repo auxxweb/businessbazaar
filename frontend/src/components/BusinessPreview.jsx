@@ -15,6 +15,7 @@ import { InputTextarea } from "primereact/inputtextarea";
 import { width } from "@fortawesome/free-brands-svg-icons/fa42Group";
 import Placeholder from "../assets/images/placeholder.jpg";
 import PlaceholderBanner from "../assets/images/BannerPlaceholder.png";
+import Loader  from "./Loader/Loader";
 
 function BusinessPreview({ formData }) {
   console.log(formData, "data");
@@ -232,10 +233,10 @@ function BusinessPreview({ formData }) {
   if (loading) {
     return (
       <div className="h-100vh text-center ">
-        <div className="row h-100 justify-content-center align-items-center">
-          <div className="col-3 ">Loading...</div>
-        </div>
+      <div className="row h-100 justify-content-center align-items-center">
+        <div className="col-3 "> {loading && <Loader />}</div>
       </div>
+    </div>
     );
   }
 
