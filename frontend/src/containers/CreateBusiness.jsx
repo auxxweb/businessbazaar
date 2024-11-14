@@ -34,7 +34,7 @@ import CreateBusinessLocation from '../components/CreateBusinessLocation'
 import Loader from '../components/Loader/Loader'
 
 export const CreateBusiness = () => {
-  const [step, setStep] = useState(1)
+  const [step, setStep] = useState(7)
 
   const [planDetails, setPlanDetails] = useState({
     price: '',
@@ -59,8 +59,8 @@ export const CreateBusiness = () => {
     businessName: '',
     logo: '',
     ownerName: '',
-    email: "",
-    password: "",
+    email: '',
+    password: '',
     address: {
       buildingName: '',
       streetName: '',
@@ -89,7 +89,7 @@ export const CreateBusiness = () => {
     category: '',
     services: [],
     businessTiming: {
-      workingDays: ["mon"],
+      workingDays: ['mon'],
       openTime: {
         open: '22:10',
         close: '24:23',
@@ -115,7 +115,7 @@ export const CreateBusiness = () => {
       data: [{ title: '', description: '', image: '' }],
     },
     productSection: [],
-    service:  [{ title: '', description: '', image: '' }],
+    service: [{ title: '', description: '', image: '' }],
     testimonial: {
       description: '',
       reviews: [],
@@ -280,8 +280,8 @@ export const CreateBusiness = () => {
     const togglePasswordVisibility = () => {
       setShowPassword(!showPassword)
     }
-    const handleBack =()=>{
-      navigate("/")
+    const handleBack = () => {
+      navigate('/')
     }
 
     return (
@@ -1027,7 +1027,7 @@ export const CreateBusiness = () => {
               </div>
 
               {/* Location */}
-              <CreateBusinessLocation setLocation={setLocation}/>
+              <CreateBusinessLocation setLocation={setLocation} />
 
               {/* Contact Numbers */}
               <div id="mobileNumberDiv" className="mt-4">
@@ -2202,6 +2202,9 @@ export const CreateBusiness = () => {
       coverImage: '',
       loading: '',
     })
+    const [landingFile, setLandingFile] = useState()
+    const [welcomeFile, setWelcomeFile] = useState()
+
     const [errors, setErrors] = useState({})
     const [loading, setLoading] = useState(false) // Loader state
 
@@ -2214,7 +2217,6 @@ export const CreateBusiness = () => {
       setWelcomePart(formData?.welcomePart)
     }, [])
 
-    // Generic File Change Handler with Loader
     const handleFileChange = (name, e, sectionSetter) => {
       const file = e.target.files[0]
 
@@ -2245,11 +2247,13 @@ export const CreateBusiness = () => {
               ...prevState,
               loading: false,
             }))
+            setLandingFile(file)
           } else if (name === 'welcomePartImage') {
             setWelcomePart((prevState) => ({
               ...prevState,
               loading: false,
             }))
+            setWelcomeFile(file)
           }
 
           setLoading(false) // Hide loader after image is set
@@ -2285,45 +2289,55 @@ export const CreateBusiness = () => {
       setErrors(newErrors)
       return Object.keys(newErrors).length === 0
     }
-
     const handleLandingSubmit = async () => {
+      setLoading(true) // Set loading once at the start
       try {
         let landingPreReq = null
         let welcomePreReq = null
-        if (landingPageHero.coverImage) {
-          setLoading(true)
-          landingPreReq = await preRequestFun(
-            landingPageHero.coverImage,
-            'Landing',
-          )
+
+        if (landingFile) {
+          landingPreReq = await preRequestFun(landingFile, 'Landing')
         }
 
-        if (welcomePart?.coverImage) {
-          setLoading(true)
-          welcomePreReq = await preRequestFun(welcomePart.coverImage, 'Landing')
+        if (welcomeFile) {
+          welcomePreReq = await preRequestFun(welcomeFile, 'Welcome')
         }
+
         if (landingPreReq?.accessLink) {
-          landingPageHero.coverImage = landingPreReq.accessLink
-          setLandingPageHero(landingPreReq?.accessLink)
+          setLandingPageHero((prev) => ({
+            ...prev,
+            coverImage: landingPreReq.accessLink,
+          }))
         }
+
         if (welcomePreReq?.accessLink) {
-          welcomePart.coverImage = welcomePreReq.accessLink
-          setWelcomePart(welcomePreReq.accessLink)
+          setWelcomePart((prev) => ({
+            ...prev,
+            coverImage: welcomePreReq.accessLink,
+          }))
         }
+
         if (validateForm()) {
           setFormData((prevFormData) => ({
             ...prevFormData,
-            landingPageHero,
+            landingPageHero: {
+              ...landingPageHero,
+              coverImage:
+                landingPreReq?.accessLink || landingPageHero.coverImage,
+            },
             theme,
             secondaryTheme,
-            welcomePart,
+            welcomePart: {
+              ...welcomePart,
+              coverImage: welcomePreReq?.accessLink || welcomePart.coverImage,
+            },
           }))
           handleNextStep()
         }
       } catch (e) {
         console.log(e)
       } finally {
-        setLoading(false)
+        setLoading(false) // Set loading to false at the end
       }
     }
 
@@ -2333,11 +2347,11 @@ export const CreateBusiness = () => {
 
     if (loading) {
       return (
-        <div className="h-100vh text-center ">
-        <div className="row h-100 justify-content-center align-items-center">
-          <div className="col-3 "> {loading && <Loader />}</div>
+        <div className="h-100vh">
+          <div className="d-flex h-100 justify-content-center align-items-center">
+            <span>Loading</span>
+          </div>
         </div>
-      </div>
       )
     }
 
@@ -4143,26 +4157,26 @@ export const CreateBusiness = () => {
                         fullWidth
                         type="text"
                         label="Tag"
-                        variant='filled'
+                        variant="filled"
                         value={tag}
                         onChange={(e) => handleTagChange(index, e.target.value)}
                       />
                       {seoData?.metaTags?.length > 1 && (
-                         <div
-                         onClick={() => removeTag(index)}
-                         className="remove-button position-absolute"
-                         style={{
-                           top: '5px',
-                           right: '10px',
-                           cursor: 'pointer',
-                           color: '#ff4d4f',
-                           fontSize: '18px',
-                           fontWeight: 'bold',
-                           zIndex: 9,
-                         }}
-                       >
-                         X
-                       </div>
+                        <div
+                          onClick={() => removeTag(index)}
+                          className="remove-button position-absolute"
+                          style={{
+                            top: '5px',
+                            right: '10px',
+                            cursor: 'pointer',
+                            color: '#ff4d4f',
+                            fontSize: '18px',
+                            fontWeight: 'bold',
+                            zIndex: 9,
+                          }}
+                        >
+                          X
+                        </div>
                       )}
                     </div>
                   ))}
@@ -4532,7 +4546,6 @@ export const CreateBusiness = () => {
     )
   }
 
-
   function PreviewTemplates() {
     const [currentSlide, setCurrentSlide] = useState(0)
     const [businessData, setBusinessData] = useState(null)
@@ -4772,10 +4785,10 @@ export const CreateBusiness = () => {
     if (loading) {
       return (
         <div className="h-100vh text-center ">
-        <div className="row h-100 justify-content-center align-items-center">
-          <div className="col-3 "> {loading && <Loader />}</div>
+          <div className="row h-100 justify-content-center align-items-center">
+            <div className="col-3 "> {loading && <Loader />}</div>
+          </div>
         </div>
-      </div>
       )
     }
 
@@ -5677,32 +5690,31 @@ export const CreateBusiness = () => {
       var freePlan = import.meta.env.VITE_FREE_PLAN_ID
       if (id != freePlan) {
         console.log('first')
-      setFormData((prevFormData) => ({
-        ...prevFormData,
-        selectedPlan: id,
-      }))
-      setPlanDetails({
-        name: name,
-        price: price,
-      })
-      handleNextStep()
-    }else{
-      const submitData = async () => {
-        console.log('second')
         setFormData((prevFormData) => ({
           ...prevFormData,
           selectedPlan: id,
         }))
-        formData.selectedPlan = id
-        const res = await CreateBusinessDetails(formData)
-        const resId = res.data._id || res.data.data?._id
-        if (res.success){
-          navigate(`/template/${resId}`)
+        setPlanDetails({
+          name: name,
+          price: price,
+        })
+        handleNextStep()
+      } else {
+        const submitData = async () => {
+          console.log('second')
+          setFormData((prevFormData) => ({
+            ...prevFormData,
+            selectedPlan: id,
+          }))
+          formData.selectedPlan = id
+          const res = await CreateBusinessDetails(formData)
+          const resId = res.data._id || res.data.data?._id
+          if (res.success) {
+            navigate(`/template/${resId}`)
+          }
         }
+        submitData()
       }
-      submitData()
-    }
-     
     }
 
     return (
@@ -5923,7 +5935,11 @@ export const CreateBusiness = () => {
       {step === 12 && <Subscription />}
       {step === 13 && <PreviewTemplates />}
       {step === 14 && (
-        <Razorpay formData={formData} planDetails={planDetails} setStep={setStep} />
+        <Razorpay
+          formData={formData}
+          planDetails={planDetails}
+          setStep={setStep}
+        />
       )}
     </>
   )
