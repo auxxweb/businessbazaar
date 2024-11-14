@@ -1,7 +1,6 @@
 /* eslint-disable no-unused-vars */
 import axios from "axios";
 import { toast } from "react-toastify";
-
 const config = {
   headers: {
     "Content-Type": "application/json",
@@ -94,8 +93,10 @@ export const fetchSearchCategory = async (search) => {
   }
 };
 
-export const fetchBusinessTemplate = async (id) => {
+export const fetchBusinessTemplate = async (id, setLoading) => {
+
   try {
+    setLoading(true);
     const response = await axios.get(
       `${baseUrl}/api/v1/business/${id}`,
       config
@@ -108,10 +109,28 @@ export const fetchBusinessTemplate = async (id) => {
     if (data.success) {
       return data;
     } else {
+      setLoading(false);
+
       console.error("Failed to fetch Search Value");
     }
   } catch (error) {
+    setLoading(false);
+    toast.error("Failed to load website!", {
+      position: "top-right",
+      autoClose: 3000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      theme: "colored",
+      style: {
+        backgroundColor: "#aa0808", // Custom red color for error
+        color: "#FFFFFF", // White text
+      },
+    });
     console.error("Failed to fetch Business Site Details");
+  }finally{
+   setLoading(false);
   }
 };
 

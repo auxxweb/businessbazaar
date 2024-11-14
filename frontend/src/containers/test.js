@@ -16,6 +16,7 @@ import { Dialog } from 'primereact/dialog';
 import { Rating } from 'primereact/rating';
 import { InputText } from "primereact/inputtext";
 import { InputTextarea } from "primereact/inputtextarea";
+import Loader from '../components/Loader/Loader';
 
 
 
@@ -2462,11 +2463,11 @@ export default function CreateBusiness() {
 
 
         if (loading) {
-            return <div className='h-100vh text-center '>
-                <div className='row h-100 justify-content-center align-items-center'>
-
-                    <div className='col-3 '>Loading...</div>
-                </div>
+            return <div className="h-100vh text-center ">
+        <div className="row h-100 justify-content-center align-items-center">
+          <div className="col-3 "> {loading && <Loader />}</div>
+        </div>
+     
             </div>;
         }
 
