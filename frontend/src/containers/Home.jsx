@@ -422,80 +422,110 @@ export default function Home() {
 
             {!loading &&
               businessData.map((business) => (
-<Link
-  to={
-    business.selectedPlan?.isPremium
-      ? `/template/premium/${business?._id}`
-      : `/template/${business?._id}`
-  }
-  key={business._id}
-  className="text-decoration-none text-dark col-12 col-md-5 b-theme location-card mt-3 business-card"
->
-  <div className="row p-2" style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap' }}>
-    <div className="col-4 p-0">
-      <img
-        src={business?.logo && business?.logo?.length > 0 ? business?.logo : Placeholder}
-        alt=""
-        className="w-100 br-theme"
-        style={{ objectFit: 'cover' }} // Ensure image is responsive
-      />
-    </div>
-    <div className="col-8" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', height: '100%' }}>
-      <div className="col-12 mb-2 mt-2">
-        <h2 style={{
-          fontSize: '28px',
-          whiteSpace: 'nowrap',
-          overflow: 'hidden',
-          textOverflow: 'ellipsis'
-        }}>
-          {business?.businessName}
-        </h2>
-      </div>
-      <div className="col-12">
-        <span>{business?.category?.name}</span>
-      </div>
-      <div className="col-12 mt-3" style={{
-        display: '-webkit-box',
-        WebkitLineClamp: 3,  // Limit to 3 lines
-        WebkitBoxOrient: 'vertical',
-        overflow: 'hidden',
-        textOverflow: 'ellipsis'
-      }}>
-        <h3 className="fs-16">
-          <i className="bi bi-crosshair"></i>
-          <span className="ms-1 fs-15">
-            {business?.address?.buildingName}, {" "}
-            {business?.address?.city}, {" "}
-            {business?.address?.landMark}, {" "}
-            {business?.address?.streetName}, {" "}
-            {business?.address?.state}
-          </span>
-        </h3>
-      </div>
+                <Link
+                  to={
+                    business.selectedPlan?.isPremium
+                      ? `/template/premium/${business?._id}`
+                      : `/template/${business?._id}`
+                  }
+                  key={business._id}
+                  className="text-decoration-none text-dark col-12 col-md-5 b-theme location-card mt-3 business-card"
+                >
+                  <div
+                    className="row p-2"
+                    style={{
+                      display: 'flex',
+                      flexDirection: 'row',
+                      flexWrap: 'wrap',
+                    }}
+                  >
+                    <div className="col-4 p-0">
+                      <img
+                        src={
+                          business?.logo && business?.logo?.length > 0
+                            ? business?.logo
+                            : Placeholder
+                        }
+                        alt=""
+                        className="w-100 br-theme"
+                        style={{ objectFit: 'cover' }} // Ensure image is responsive
+                      />
+                    </div>
+                    <div
+                      className="col-8"
+                      style={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        justifyContent: 'space-between',
+                        height: '100%',
+                      }}
+                    >
+                      <div className="col-12 mb-2 mt-2">
+                        <h2
+                          style={{
+                            fontSize: '28px',
+                            whiteSpace: 'nowrap',
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis',
+                          }}
+                        >
+                          {business?.businessName}
+                        </h2>
+                      </div>
+                      <div className="col-12">
+                        <span>{business?.category?.name}</span>
+                      </div>
+                      <div
+                        className="col-12 mt-3"
+                        style={{
+                          display: '-webkit-box',
+                          WebkitLineClamp: 3, // Limit to 3 lines
+                          WebkitBoxOrient: 'vertical',
+                          overflow: 'hidden',
+                          textOverflow: 'ellipsis',
+                        }}
+                      >
+                        <h3 className="fs-16">
+                          <i className="bi bi-crosshair"></i>
+                          <span className="ms-1 fs-15">
+                            {business?.address?.buildingName},{' '}
+                            {business?.address?.city},{' '}
+                            {business?.address?.landMark},{' '}
+                            {business?.address?.streetName},{' '}
+                            {business?.address?.state}
+                          </span>
+                        </h3>
+                      </div>
 
-      {/* Rating Section (on the right side) */}
-      <div className="col-12 mt-3 d-flex justify-content-end align-items-center">
-        <div className="d-flex align-items-center" style={{
-          backgroundColor: 'white', // White background
-          borderRadius: '10px',
-          padding: '5px 10px',
-          boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)' // Subtle shadow for clean look
-        }}>
-          {/* Always show a yellow star */}
-          <FaStar color="gold" size={20} />
-          <span className="ms-2" style={{
-            fontWeight: 'bold',
-            fontSize: '16px',
-            color: '#d48a27' // Dark gold color for the rating count
-          }}>
-            {business?.rating > 0 ? business?.rating : 0} {/* Show 0 if no rating */}
-          </span>
-        </div>
-      </div>
-    </div>
-  </div>
-</Link>
-
+                      {/* Rating Section (on the right side) */}
+                      <div className="col-12 mt-3 d-flex justify-content-end align-items-center">
+                        <div
+                          className="d-flex align-items-center"
+                          style={{
+                            backgroundColor: 'white', // White background
+                            borderRadius: '10px',
+                            padding: '5px 10px',
+                            boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', // Subtle shadow for clean look
+                          }}
+                        >
+                          {/* Always show a yellow star */}
+                          <FaStar color="gold" size={20} />
+                          <span
+                            className="ms-2"
+                            style={{
+                              fontWeight: 'bold',
+                              fontSize: '16px',
+                              color: '#d48a27', // Dark gold color for the rating count
+                            }}
+                          >
+                            {business?.rating > 0 ? business?.rating : 0}{' '}
+                            {/* Show 0 if no rating */}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </Link>
               ))}
           </div>
           {visibleBusiness < totalBusinessData && (
