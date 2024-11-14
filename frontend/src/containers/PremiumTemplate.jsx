@@ -171,6 +171,8 @@ const PremiumTemplate = () => {
         <SubscribeSection />
 
         <TemplateFooter businessData={businessData} closeDays={closeDays} />
+        <a href="#" class="btn btn-lg btn-bottom btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
+
         {loading && <Loader />}
       </Box>
     </>

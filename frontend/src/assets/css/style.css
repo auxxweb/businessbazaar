@@ -468,6 +468,28 @@ textarea:enabled{
         font-size: 3rem; /* Default title font size */
     }
 }
+.btn-lg-square {
+    width: 48px;
+    height: 48px;
+}
+
+.btn-square,
+.btn-sm-square,
+.btn-lg-square {
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: normal;
+    border-radius: 2px;
+}
+.back-to-top {
+    position: fixed;
+    display: none;
+    right: 45px;
+    bottom: 45px;
+    z-index: 99;
+}
 .custom-button{
     border-radius: 0 8px 8px 0 !important;
 }.p-top{
@@ -507,9 +529,15 @@ textarea:enabled{
     background-color: #105193;
     border-color: #105193;
   }
+
   .btn-primary:hover {
     background-color: #107d93;
     border-color: #107d93;
+  }
+  .btn-bottom {
+    color: #105193;
+    background-color: #107d93;
+    border-color: #107d93
   }
   @media (max-width: 768px) {
     .right-portion {
