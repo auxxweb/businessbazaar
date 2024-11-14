@@ -133,7 +133,7 @@ export default function Template() {
     const { name, value } = e.target;
     setReview((prevState) => ({
       ...prevState,
-      [name]: value,
+      [name]: value,getAllBusinessReviews
     }));
   };
 
@@ -1398,6 +1398,7 @@ export default function Template() {
           </div>
         </div>
       </footer>
+      <a href="#" class="btn btn-lg btn-bottom btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
     </>
   );
 }
