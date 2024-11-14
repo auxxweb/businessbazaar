@@ -33,7 +33,7 @@ import Razorpay from './Razorpay'
 import CreateBusinessLocation from '../components/CreateBusinessLocation'
 
 export const CreateBusiness = () => {
-  const [step, setStep] = useState(1)
+  const [step, setStep] = useState(14)
 
   const [planDetails, setPlanDetails] = useState({
     price: '',
@@ -55,18 +55,18 @@ export const CreateBusiness = () => {
   const [planData, setPlanData] = useState([])
 
   const [formData, setFormData] = useState({
-    businessName: '',
-    logo: '',
-    ownerName: '',
-    email: '',
-    password: '',
+    businessName: 'aswasam',
+    logo: 'https://wallpapers.com/images/hd/messi-pictures-jzykf84saw6wbkd6.jpg',
+    ownerName: 'adarsh',
+    email: 'gurupriyanjofficial@gmail.com',
+    password: '123456789',
     address: {
-      buildingName: '',
-      streetName: '',
-      landMark: '',
-      city: '',
-      state: '',
-      pinCode: '',
+      buildingName: 'chalithara',
+      streetName: 'thirunalloor',
+      landMark: 'near thirunalloor',
+      city: 'cherthala',
+      state: 'kerala',
+      pinCode: '688541',
     },
     location: {
       lat: '',
@@ -74,47 +74,47 @@ export const CreateBusiness = () => {
     },
     contactDetails: {
       name: '',
-      primaryNumber: '',
-      secondaryNumber: '',
-      whatsappNumber: '',
-      email: '',
-      website: '',
+      primaryNumber: '9074306855',
+      secondaryNumber: '9074306855',
+      whatsappNumber: '9074306855',
+      email: 'gurupriyanjofficial@gmail.com',
+      website: 'www.auxxweb.in',
     },
     socialMediaLinks: [
       { tag: 'facebook', link: '' },
       { tag: 'instagram', link: '' },
       { tag: 'twitter', link: '' },
     ],
-    category: '',
+    category: '672a1314f26cfec8601a7478',
     services: [],
     businessTiming: {
-      workingDays: [],
+      workingDays: ["mon"],
       openTime: {
-        open: '',
-        close: '',
+        open: '22:10',
+        close: '24:23',
       },
     },
-    description: '',
-    theme: '',
-    secondaryTheme: '',
+    description: 'great work',
+    theme: '#1528b7',
+    secondaryTheme: '#e63c1e',
 
     landingPageHero: {
-      title: '',
-      description: '',
-      coverImage: '',
+      title: 'title landing page',
+      description: 'landing page description',
+      coverImage: 'https://cdn.britannica.com/34/212134-050-A7289400/Lionel-Messi-2018.jpg',
     },
     welcomePart: {
-      title: '',
-      description: '',
-      coverImage: '',
+      title: 'welcome to welcome page',
+      description: 'description',
+      coverImage: 'https://cdn.britannica.com/34/212134-050-A7289400/Lionel-Messi-2018.jpg',
     },
     specialServices: {
-      title: '',
-      description: '',
-      data: [{ title: '', description: '', image: '' }],
+      title: 'welcome to special services',
+      description: 'description of special services',
+      data: [{ title: 'special service 1', description: 'description special service 1', image: 'https://cdn.britannica.com/34/212134-050-A7289400/Lionel-Messi-2018.jpg' }],
     },
     productSection: [],
-    service: [{ title: '', description: '', image: '' }],
+    service:  [{ title: 'special service 1', description: 'description special service 1', image: 'https://cdn.britannica.com/34/212134-050-A7289400/Lionel-Messi-2018.jpg' }],
     testimonial: {
       description: '',
       reviews: [],
@@ -126,7 +126,7 @@ export const CreateBusiness = () => {
       description: '',
       metaTags: [''],
     },
-    selectedPlan: '',
+    selectedPlan: '672a5b6726b1dce75a0402c6',
   })
 
   const preRequestFun = async (file, position) => {
@@ -165,8 +165,8 @@ export const CreateBusiness = () => {
       try {
         const categoryDetails = await fetchCategories()
         const plans = await FetchPlans()
-        setPlanData(plans.data.data)
-        setCategoryData(categoryDetails.data.data)
+        setPlanData(plans?.data?.data)
+        setCategoryData(categoryDetails?.data?.data)
       } catch (error) {
         console.error('Error fetching categories:', error)
       } finally {
@@ -4555,7 +4555,7 @@ export const CreateBusiness = () => {
       hours = hours % 12 || 12
 
       // Format the time string
-      return `${hours}:${minutes.toString().padStart(2, '0')} ${amOrPm}`
+      return `${hours}:${minutes?.toString()?.padStart(2, '0')} ${amOrPm}`
     }
 
     const handleInputChange = (e) => {
