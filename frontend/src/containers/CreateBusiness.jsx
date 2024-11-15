@@ -313,7 +313,7 @@ export const CreateBusiness = () => {
             <div className="input-group mt-2 w-100">
               <TextField
                 fullWidth
-                label="Email"
+                label="Email*"
                 variant="filled"
                 name="email"
                 value={authData.email}
@@ -326,7 +326,7 @@ export const CreateBusiness = () => {
             <div className="input-group mt-3 w-100">
               <TextField
                 fullWidth
-                label="Password"
+                label="Password*"
                 type={showPassword ? 'text' : 'password'}
                 variant="filled"
                 name="password"
@@ -530,7 +530,7 @@ export const CreateBusiness = () => {
                 <div className="input-group mb-4 mt-2 w-100">
                   <TextField
                     fullWidth
-                    label="Business Name"
+                    label="Business Name*"
                     id="businessName"
                     variant="filled"
                     name="businessName"
@@ -543,9 +543,11 @@ export const CreateBusiness = () => {
                 </div>
 
                 <div className="mb-4">
-                  <label htmlFor="ImageLogo" className="form-label">
-                    Upload Business Logo
-                  </label>
+                <label htmlFor="ImageLogo" className="form-label">
+  Upload Business Logo* 
+  <span style={{ color: "grey" }}> (Ratio 1 : 1)</span>
+</label>
+
                   <input
                     type="file"
                     id="ImageLogo"
@@ -570,7 +572,7 @@ export const CreateBusiness = () => {
                         className="img-thumbnail"
                       />
                     ) : (
-                      <div>
+                        <div>
                         <img
                           src="/src/assets/images/add_image.png"
                           width="50"
@@ -578,6 +580,7 @@ export const CreateBusiness = () => {
                         />
                         <div>Add Logo</div>
                       </div>
+                      
                     )}
                   </div>
                 </div>
@@ -942,7 +945,7 @@ export const CreateBusiness = () => {
               <div className="input-group mt-2 w-100">
                 <TextField
                   fullWidth
-                  label="Building name"
+                  label="Building name*"
                   id="buildingName"
                   variant="filled"
                   name="buildingName"
@@ -958,7 +961,7 @@ export const CreateBusiness = () => {
               <div className="input-group mt-2 w-100">
                 <TextField
                   fullWidth
-                  label="City"
+                  label="City*"
                   variant="filled"
                   name="city"
                   value={address.city}
@@ -972,7 +975,7 @@ export const CreateBusiness = () => {
               <div className="input-group mt-2 w-100">
                 <TextField
                   fullWidth
-                  label="Street / Colony name"
+                  label="Street / Colony name*"
                   variant="filled"
                   name="streetName"
                   value={address.streetName}
@@ -1000,7 +1003,7 @@ export const CreateBusiness = () => {
                   <div className="input-group mt-2 w-100">
                     <TextField
                       fullWidth
-                      label="State"
+                      label="State*"
                       variant="filled"
                       name="state"
                       value={address.state}
@@ -1014,7 +1017,7 @@ export const CreateBusiness = () => {
                   <div className="input-group mt-2 w-100">
                     <TextField
                       fullWidth
-                      label="Pincode"
+                      label="Pincode*"
                       variant="filled"
                       type="number"
                       name="pinCode"
@@ -1037,7 +1040,7 @@ export const CreateBusiness = () => {
                     <div className="input-group mt-2 w-100">
                       <TextField
                         fullWidth
-                        label="Primary number"
+                        label="Primary number*"
                         variant="filled"
                         name="primaryNumber"
                         value={newFormData.contactDetails.primaryNumber}
@@ -1071,7 +1074,7 @@ export const CreateBusiness = () => {
                     <div className="input-group mt-2 w-100">
                       <TextField
                         fullWidth
-                        label="WhatsApp number"
+                        label="WhatsApp number*"
                         variant="filled"
                         name="whatsappNumber"
                         value={newFormData.contactDetails.whatsappNumber}
@@ -1092,7 +1095,7 @@ export const CreateBusiness = () => {
                     <div className="input-group mt-2 w-100">
                       <TextField
                         fullWidth
-                        label="Email address"
+                        label="Email address*"
                         variant="filled"
                         name="email"
                         value={newFormData.contactDetails.email}
@@ -1321,7 +1324,7 @@ export const CreateBusiness = () => {
                     renderInput={(params) => (
                       <TextField
                         {...params}
-                        label="Categories"
+                        label="Categories*"
                         variant="filled"
                         fullWidth
                         error={!!error} // Display error style if there's an error
@@ -1933,7 +1936,7 @@ export const CreateBusiness = () => {
 
                 {/* Text Editor Section */}
                 <div className="col-12  p-3 p-md-5">
-                  <label>Business Description</label>
+                  <label>Business Description*</label>
                   <textarea
                     name="description_main"
                     className="w-100 form-control form-control-lg"
@@ -2418,7 +2421,7 @@ export const CreateBusiness = () => {
                 <div className="input-group mt-2 w-100">
                   <TextField
                     fullWidth
-                    label="Title"
+                    label="Title*"
                     id="title"
                     variant="filled"
                     name="title"
@@ -2432,7 +2435,7 @@ export const CreateBusiness = () => {
                 <div className="input-group mb-3 mt-4 w-100">
                   <TextField
                     fullWidth
-                    label="Description"
+                    label="Description*"
                     id="description"
                     variant="filled"
                     name="description"
@@ -2473,8 +2476,10 @@ export const CreateBusiness = () => {
                 <div
                   onClick={() => triggerFileUpload('LandingHeroImageInput')}
                   className="p-2 mt-2 mb-3 add-logo-div"
-                >
+                ><span style={{color:'grey'}}>(Ratio 16 : 9)</span>
                   <div className="text-center">
+                  
+
                     {landingPageHero.loading ? (
                       <div
                         className="spinner-border text-primary"
@@ -2505,7 +2510,7 @@ export const CreateBusiness = () => {
                 <div className="input-group mt-2 w-100">
                   <TextField
                     fullWidth
-                    label="Title"
+                    label="Title*"
                     id="title"
                     variant="filled"
                     name="title"
@@ -2519,7 +2524,7 @@ export const CreateBusiness = () => {
                 <div className="input-group mb-3 mt-4 w-100">
                   <TextField
                     fullWidth
-                    label="Description"
+                    label="Description*"
                     id="description"
                     variant="filled"
                     name="description"
@@ -2556,7 +2561,7 @@ export const CreateBusiness = () => {
                 <div
                   onClick={() => triggerFileUpload('WelcomeImageInput')}
                   className="p-2 mt-2 mb-3 add-logo-div"
-                >
+                ><span style={{color:'grey'}}>(Ratio 5 : 7)</span>
                   <div className="text-center">
                     {welcomePart.loading ? (
                       <div
@@ -2573,6 +2578,7 @@ export const CreateBusiness = () => {
                         alt="Add Welcome Image"
                       />
                     )}
+                    
                   </div>
                 </div>
                 {errors.welcomePartCoverImage && (
@@ -3266,7 +3272,7 @@ export const CreateBusiness = () => {
                         <div
                           onClick={() => uploadImage('specialService', index)}
                           className="p-2 mt-2 add-logo-div"
-                        >
+                        ><span style={{color:'grey'}}>(Ratio 4 : 3) </span>
                           <div className="text-center">
                             {isLoading?.specialService[index] ? (
                               <div
@@ -3401,7 +3407,7 @@ export const CreateBusiness = () => {
                         <div
                           onClick={() => uploadImage('service', index)}
                           className="p-2 mt-2 add-logo-div"
-                        >
+                        ><span style={{color:'grey'}}>(Ratio 16 : 8) </span>
                           <div className="text-center">
                             {isLoading.service[index] ? (
                               <div
@@ -3864,7 +3870,7 @@ export const CreateBusiness = () => {
                       <div
                         onClick={() => uploadImage(index)}
                         className="p-2 mt-2 add-logo-div"
-                      >
+                      ><span style={{color:'grey'}}>(Ratio 1 : 1)</span>
                         <div className="text-center">
                           {item.loadingImage ? (
                             <div
@@ -4410,7 +4416,7 @@ export const CreateBusiness = () => {
                         <div
                           className="text-center"
                           onClick={() => handleAddImageClick(index)}
-                        >
+                        ><span style={{color:'grey'}}>(Ratio 4 : 5)</span>
                           {image.file ? (
                             <img
                               src={URL.createObjectURL(image.file)}
@@ -5723,7 +5729,7 @@ export const CreateBusiness = () => {
     return (
       <>
         <div className="h-100vh create-business-div">
-          <div className="row h-100 justify-content-center">
+          <div className="row h-100 justify-content-center"><span style={{color:'grey'}}>(Ratio  16 : 9)</span>
             {/* Left Image Section - Hidden on small screens */}
             <div className="d-none d-md-block left-portion p-0 col-md-5 h-100">
               <img
