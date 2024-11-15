@@ -59,7 +59,7 @@ export default function Home() {
   const [categoryData, setCategoryData] = useState([])
   const [bannerData, setBannerData] = useState([])
   const [page, setPage] = useState(1)
-  const [limit, setLimit] = useState(10)
+  const [limit, setLimit] = useState(6)
   const [businessData, setBusinessData] = useState([])
   const [searchData, setSearchData] = useState('')
   const [totalBusinessData, setTotalBusinessData] = useState(0)
@@ -679,14 +679,14 @@ export default function Home() {
                 </div>
               ))}
             </Slider>
-            <div className="text-center mt-5 mb-5">
+            {review?.length> limit&&<div className="text-center mt-5 mb-5">
               <a
                 onClick={() => navigate('/reviews')}
                 className="btn btn-dark btn-md text-decoration-none text-theme2"
               >
                 View more <i className="bi bi-arrow-right"></i>
               </a>
-            </div>
+            </div>}
           </div>
         </div>
       </section>

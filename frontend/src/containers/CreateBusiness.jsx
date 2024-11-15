@@ -37,7 +37,7 @@ export const CreateBusiness = () => {
   const [step, setStep] = useState(1)
 
   const [planDetails, setPlanDetails] = useState({
-    price: '',
+    price: '', 
     name: '',
   })
 
@@ -900,7 +900,7 @@ export const CreateBusiness = () => {
           ...prevData,
           contactDetails: newFormData.contactDetails,
           address: address,
-          location: location,
+          location: location, 
         }))
         handleNextStep()
       }
