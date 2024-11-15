@@ -326,7 +326,7 @@ export default function Home() {
                     <input
                       type="text"
                       className="form-control custom-placeholder"
-                      placeholder="Search for Restaurants"
+                      placeholder="Search businesses by name..."
                       value={searchData}
                       onInput={(e) => setSearchData(e.target.value)}
                       style={{
@@ -847,7 +847,7 @@ export default function Home() {
           </div>
         </div>
       </footer>
-          <a href="#" class="btn btn-lg btn-bottom btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
+          <a href="#" className="btn btn-lg btn-bottom btn-lg-square back-to-top"><i className="bi bi-arrow-up"></i></a>
     </Layout>
   )
 }
