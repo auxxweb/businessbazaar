@@ -374,22 +374,23 @@ export default function Home() {
               {!loading &&
                 categoryData.map((category) => (
                   <Link
-                    className="cat-div text-decoration-none"
-                    data-aos="zoom-in"
-                    to={`/business/${category._id}`} // Dynamically generate the URL with the category ID
-                    key={category._id} // Unique key for each category
-                  >
-                    <img
-                      src={
-                        category.image && category.image.length > 0
-                          ? category.image
-                          : Placeholder
-                      }
-                      alt={category.name}
-                      className="cat-img"
-                    />
-                    {category.name}
-                  </Link>
+                  className="cat-div text-decoration-none"
+                  data-aos="zoom-in"
+                  to={`/business/${category._id}`} // Dynamically generate the URL with the category ID
+                  key={category._id} // Unique key for each category
+                >
+                  <img
+                    src={
+                      category.image && category.image.length > 0
+                        ? category.image
+                        : Placeholder
+                    }
+                    alt={category.name}
+                    className="cat-img"
+                  />
+                  <div className="cat-text">{category.name}</div> {/* Wrap category.name in a div */}
+                </Link>
+                
                 ))}
             </div>
             {visibleCategories <= categoryData.length && ( // Check if more categories are available
