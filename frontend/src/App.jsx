@@ -17,7 +17,7 @@ import TermsAndConditions from "./components/Business/TermsAndConditions";
 import BusinessTermsAndConditions from "./components/Business/BusinessTermsAndConditions";
 
 // Lazy loading components
-const Home = lazy(() => import("./containers/Home"));
+const Home = lazy(() => import("./views/Home"));
 
 // const CreateBusiness = lazy(() => import("./containers/CreateBusiness"));
 // const Business = lazy(() => import("./containers/Business"));
