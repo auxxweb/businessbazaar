@@ -33,7 +33,7 @@ import Razorpay from './Razorpay'
 import CreateBusinessLocation from '../components/CreateBusinessLocation'
 import Loader from '../components/Loader/Loader'
 
-export const CreateBusiness = () => {
+const CreateBusiness = () => {
   const [step, setStep] = useState(1)
 
   const [planDetails, setPlanDetails] = useState({
@@ -5953,3 +5953,5 @@ export const CreateBusiness = () => {
     </>
   )
 }
+
+export default CreateBusiness;
