@@ -1,10 +1,14 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
+import Cropper from "react-easy-crop";
 import { TextField } from "@mui/material";
 import { updateBusinessDetails } from "../store/businessSlice";
-import { Container, Nav, Navbar, NavLink } from "react-bootstrap";
+import { Button, Container, Nav, Navbar, NavLink } from "react-bootstrap";
 import { preRequestFun } from "../service/s3url";
+import getCroppedImg from "../../../utils/cropper.utils";
+
+const initialCropState = { x: 0, y: 0 };
 
 const LandingPageDetails = () => {
   const navigate = useNavigate();
@@ -32,15 +36,63 @@ const LandingPageDetails = () => {
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false); // Loader state
 
+  const [crop, setCrop] = useState(initialCropState);
+  const [zoom, setZoom] = useState(1);
+  const [croppedArea, setCroppedArea] = useState(null);
+  const [showCropper, setShowCropper] = useState(false);
+  const [imageFieldName, setImageFieldName] = useState("landingPageHeroImage");
+
+  const onCropComplete = (croppedAreaPercentage, croppedAreaPixels) => {
+    setCroppedArea(croppedAreaPixels);
+  };
+
+  const handleCropSave = async () => {
+    try {
+      const filePrev =
+        imageFieldName === "landingPageHeroImage"
+          ? landingPageHero?.coverImage
+          : welcomePart?.coverImage;
+
+      const file =
+        imageFieldName === "landingPageHeroImage" ? landingFile : welcomeFile;
+
+      const { fileUrl, blob } = await getCroppedImg(filePrev, croppedArea);
+      setShowCropper(false);
+
+      const croppedFile = new File([blob], file?.name || "cropped-logo.png", {
+        type: blob.type,
+      });
+
+      if (imageFieldName === "landingPageHeroImage") {
+        setLandingFile(croppedFile);
+        setLandingPageHero((prevData) => ({
+          ...prevData,
+          coverImage: fileUrl,
+        }));
+      } else {
+        setWelcomeFile(croppedFile);
+        setWelcomePart((prevData) => ({
+          ...prevData,
+          coverImage: fileUrl,
+        }));
+      }
+      setCrop(initialCropState);
+    } catch (e) {
+      console.error("Error cropping image:", e);
+    }
+  };
+
   const handleFileChange = (name, e, sectionSetter) => {
     const file = e.target.files[0];
 
     if (name === "landingPageHeroImage") {
+      setImageFieldName("landingPageHeroImage");
       setLandingPageHero((prevState) => ({
         ...prevState,
         loading: true,
       }));
     } else if (name === "welcomePartImage") {
+      setImageFieldName("welcomePartImage");
       setWelcomePart((prevState) => ({
         ...prevState,
         loading: true,
@@ -63,12 +115,14 @@ const LandingPageDetails = () => {
             loading: false,
           }));
           setLandingFile(file);
+          setShowCropper(true);
         } else if (name === "welcomePartImage") {
           setWelcomePart((prevState) => ({
             ...prevState,
             loading: false,
           }));
           setWelcomeFile(file);
+          setShowCropper(true);
         }
 
         setLoading(false); // Hide loader after image is set
@@ -182,6 +236,63 @@ const LandingPageDetails = () => {
 
   return (
     <div className="h-100vh create-business-div">
+      {/* Cropper Modal */}
+      {showCropper && (
+        <div
+          className="modal fade show d-block"
+          tabIndex="-1"
+          role="dialog"
+          style={{ backgroundColor: "rgba(0, 0, 0, 0.5)" }}
+        >
+          <div className="modal-dialog modal-lg" role="document">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h5 className="modal-title">Crop Your Image</h5>
+                <button
+                  type="button"
+                  className="btn-close"
+                  aria-label="Close"
+                  onClick={() => setShowCropper(false)}
+                ></button>
+              </div>
+              <div className="modal-body">
+                <div
+                  className="cropper-container position-relative"
+                  style={{ height: "400px" }}
+                >
+                  <Cropper
+                    image={
+                      imageFieldName === "landingPageHeroImage"
+                        ? landingPageHero?.coverImage
+                        : welcomePart?.coverImage
+                    }
+                    crop={crop}
+                    zoom={zoom}
+                    aspect={
+                      imageFieldName === "landingPageHeroImage" ? 16 / 9 : 5 / 7
+                    }
+                    onCropChange={setCrop}
+                    onZoomChange={setZoom}
+                    onCropComplete={onCropComplete}
+                  />
+                </div>
+              </div>
+              <div className="modal-footer">
+                <Button variant="primary" onClick={handleCropSave}>
+                  Save Crop
+                </Button>
+                <Button
+                  variant="outlined"
+                  onClick={() => setShowCropper(false)}
+                >
+                  Cancel
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       <div className="row h-100 justify-content-center">
         {/* Left Image Section */}
 
