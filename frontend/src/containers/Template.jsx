@@ -26,6 +26,7 @@ import NewsArticles from "./NewsArticles";
 
 export default function Template() {
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [showNews,setShowNews] = useState(false)
   const [businessData, setBusinessData] = useState(null);
   const { id } = useParams();
   const [loading, setLoading] = useState(true);
@@ -91,6 +92,16 @@ export default function Template() {
       return false;
     }
   };
+
+  useEffect(()=>{
+    
+  if(window?.location?.hash == '#news'){
+    setShowNews(true)
+  }else{
+    setShowNews(false)
+  }
+
+  },[window?.location?.hash])
   const handleNewsLetterSubmit = async (e) => {
     e.preventDefault();
     console.log("newsLetterEmail", newsLetterEmail);
@@ -492,7 +503,8 @@ export default function Template() {
                 Contact
               </NavLink>
               <NavLink
-                href="/template/673602dec124792981be4071/news"
+                href="#news"
+                onClick={((e)=>setShowNews(true))}
                 className="text-black text-center text-lg-start  text-decoration-none fs-14"
                 style={{ color: "black" }}
               >
@@ -517,9 +529,9 @@ export default function Template() {
           </Navbar.Collapse>
         </Container>
       </Navbar>
-      {true ? <NewsArticles /> : <>
+      {showNews ? <NewsArticles newsData={businessData?.landingPageHero} colorTheme={colorTheme} /> : <>
 
-        <section className="h-auto">
+        <section className="h-auto" >
           <div className="container p-top">
             <div className="row align-items-center banner-section">
               {/* Left Image for Mobile View */}

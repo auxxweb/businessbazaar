@@ -481,3 +481,35 @@ export const getBusinessTermsAndConditions = async (businessId) => {
     console.log("Error fetching business terms & conditions", error.message);
   }
 };
+
+export const fetchNewsArticles = async (id,page=1, limit=10, search="") => {
+  try {
+    const query = {
+      page: page,
+      limit: limit,
+    };
+
+    if (search) {
+      query.searchTerm = search;
+    }
+
+    const response = await axios.get(`${baseUrl}/api/v1/business-news/${id}`, {
+      params: query,
+      ...config,
+    });
+
+    if (response.status !== 200) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+
+    const data = response.data;
+
+    if (data.success) {
+      return data;
+    } else {
+      console.error("Failed to fetch Business");
+    }
+  } catch (error) {
+    console.error("Error fetching Business:", error.message);
+  }
+};
