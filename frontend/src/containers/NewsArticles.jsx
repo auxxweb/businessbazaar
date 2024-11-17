@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import PlaceholderBanner from "../assets/images/BannerPlaceholder.png";
 import { fetchNewsArticles } from '../Functions/functions';
 import { useParams } from 'react-router';
+import { formatDate } from '../utils/app.utils';
 
 function NewsArticles({ colorTheme }) {
 
@@ -12,9 +13,13 @@ function NewsArticles({ colorTheme }) {
     useEffect(() => {
          fetchNewsArticles(id).then((response)=>{
             if(response.success){
-                setNewsData(response.data.data)
-                const [data] = response?.data?.data.filter((item)=>item.isBanner)
-                setBannerData(data)
+                setNewsData(response.data.data.filter((item)=> !item?.isBanner))
+                const [data] = response?.data?.data.filter((item)=>item?.isBanner)
+                if (!data) {
+                    setBannerData(response?.data?.data[0])
+                }else{
+                    setBannerData(data)
+                }
             }
             })
     }, [id])
@@ -28,25 +33,25 @@ function NewsArticles({ colorTheme }) {
                     </div>
                     <div className="row align-items-center banner-section shadow-lg py-3 " style={{ borderRadius: "15px" }}>
                         <div className="col-12 col-lg-6 text-end  overflow-hidden">
-                        <LinkPreview url={newsData[2]?.link} />
+                        <LinkPreview url={bannerData?.link} />
                         </div>
                         {/* Text Content */}
                         <div className="col-12 col-lg-6">
                             <div className="row align-items-center">
                                 <div className="col-12">
                                     <h1 className="text-start text-dark fw-bold david-font fw-bold  text-center text-sm-start">
-                                        {newsData[2]?.title}
+                                        {bannerData?.title}
                                     </h1>
                                 </div>
                                 <div className="col-12">
                                     <p className="text-secondary text-center text-lg-start david-font">
-                                        {newsData[0]?.description}
+                                        {bannerData?.description}
                                     </p>
                                 </div>
                                 <div className="mt-3 col-12">
                                     <div className="row">
                                         <div className="col-6 d-flex align-items-center">
-                                            <p style={{ fontStyle: "italic", fontSize: " 12px" }} className='p-0 m-0 '>Date Published:{Date.now()}</p>
+                                            <p style={{ fontStyle: "italic", fontSize: " 12px" }} className='p-0 m-0 '>Date Published:{formatDate(bannerData?.createdAt)}</p>
                                         </div>
                                         <div className="col-6 ">
                                             <a
@@ -88,7 +93,7 @@ function NewsArticles({ colorTheme }) {
                                             <div className="mb-3 col-12">
                                                 <div className="row">
                                                     <div className="col-6 d-flex align-items-center">
-                                                        <p className='m-0 p-0' style={{ fontStyle: "italic", fontSize: " 10px" }}>Date Published:{Date.now()}</p>
+                                                        <p className='m-0 p-0' style={{ fontStyle: "italic", fontSize: " 10px" }}>Date Published:{formatDate(item?.createdAt)}</p>
                                                     </div>
                                                     <div className="col-6">
                                                         <a
