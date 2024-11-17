@@ -1,5 +1,5 @@
 import Home from './containers/Home'
-import {CreateBusiness } from './containers/CreateBusiness';
+import { CreateBusiness } from './containers/CreateBusiness';
 import Business from './containers/Business'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import 'primereact/resources/themes/saga-blue/theme.css' // You can change the theme if desired
@@ -7,7 +7,7 @@ import 'primereact/resources/primereact.min.css' // Core CSS for PrimeReact comp
 
 
 
-import 'primeicons/primeicons.css';         
+import 'primeicons/primeicons.css';
 import '/src/assets/css/style.css';
 import Testimonials from './containers/Testimonials';
 import 'primeicons/primeicons.css'
@@ -66,6 +66,7 @@ function App() {
         <Route path="/business/" element={<Business />} />
         <Route path="/business/:id" element={<Business />} />
         <Route path="/template/:id" element={<Template />} />
+        <Route path="/template/:id/news" element={<Template />} />
         <Route path="/template/premium/:id" element={<PremiumTemplate />} />
         <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
         <Route path='/terms-and-conditions/:id' element={<BusinessTermsAndConditions />} />
