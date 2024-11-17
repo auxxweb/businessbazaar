@@ -161,7 +161,7 @@ const LandingPageDetails = () => {
     document.getElementById(inputId).click();
   };
 
-  const handlePrevStep = () => navigate;
+  const handlePrevStep = () => navigate("/create-business/description");
 
   useEffect(() => {
     setTheme(businessState?.theme || "#6AA646");
