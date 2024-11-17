@@ -57,10 +57,7 @@ const MoreImages = () => {
   const [croppedArea, setCroppedArea] = useState(null);
   const [showCropper, setShowCropper] = useState(false);
   const [selectedImgIndex, setSelectedImgIndex] = useState(null);
-
-  const selectedImgPreview = selectedImgIndex
-    ? URL.createObjectURL(images?.[selectedImgIndex]?.file)
-    : null;
+  const [imagePreview, setImagePreview] = useState(null);
 
   const onCropComplete = (croppedAreaPercentage, croppedAreaPixels) => {
     setCroppedArea(croppedAreaPixels);
@@ -70,7 +67,7 @@ const MoreImages = () => {
     try {
       if (selectedImgIndex) {
         const file = images?.[selectedImgIndex]?.file;
-        const { blob } = await getCroppedImg(selectedImgPreview, croppedArea);
+        const { blob } = await getCroppedImg(imagePreview, croppedArea);
 
         const croppedFile = new File([blob], file?.name || "cropped-logo.png", {
           type: blob.type,
@@ -94,15 +91,16 @@ const MoreImages = () => {
   const handleFileChange = (index, event) => {
     const file = event.target.files[0];
     if (file) {
-      const updatedImages = [...images];
-      updatedImages[index] = {
-        file,
-        fileType: file.type,
-        fileName: file.name,
-      };
+      const reader = new FileReader();
+
       setSelectedImgIndex(index);
-      setImages(updatedImages);
-      setShowCropper(true);
+
+      reader.onload = async (e) => {
+        setImagePreview(e.target.result);
+        setShowCropper(true);
+      };
+
+      reader.readAsDataURL(file);
     }
   };
 
@@ -221,7 +219,7 @@ const MoreImages = () => {
                   style={{ height: "400px" }}
                 >
                   <Cropper
-                    image={selectedImgPreview}
+                    image={imagePreview}
                     crop={crop}
                     zoom={zoom}
                     aspect={4 / 5}
