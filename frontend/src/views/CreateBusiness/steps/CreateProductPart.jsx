@@ -1,9 +1,12 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
+import Cropper from "react-easy-crop";
 import { TextField } from "@mui/material";
 import { updateBusinessDetails } from "../store/businessSlice";
 import { preRequestFun } from "../service/s3url";
+import { Button } from "react-bootstrap";
+import getCroppedImg from "../../../utils/cropper.utils";
 
 const initialState = [
   {
@@ -22,6 +25,50 @@ const CreateProductPart = () => {
 
   const [productSection, setProductSection] = useState(initialState);
   const [error, setError] = useState("");
+  const [imgFile, setImgFile] = useState(null);
+  const [imgPrev, setImgPrev] = useState(null);
+  const [crop, setCrop] = useState({ x: 0, y: 0 });
+  const [zoom, setZoom] = useState(1);
+  const [croppedArea, setCroppedArea] = useState(null);
+  const [showCropper, setShowCropper] = useState(false);
+  const [selectedProdIndex, setSelectedProdIndex] = useState(null);
+
+  const onCropComplete = (croppedAreaPercentage, croppedAreaPixels) => {
+    setCroppedArea(croppedAreaPixels);
+  };
+
+  const handleCropSave = async () => {
+    try {
+      const { fileUrl, blob } = await getCroppedImg(imgPrev, croppedArea);
+
+      const croppedFile = new File(
+        [blob],
+        imgFile?.name || "cropped-logo.png",
+        {
+          type: blob.type,
+        }
+      );
+
+      const preReq = await preRequestFun(croppedFile, imgFile?.name);
+      let accessLink = "";
+      if (preReq && preReq.accessLink) {
+        accessLink = preReq.accessLink;
+        const updatedProducts = [...productSection];
+        updatedProducts[selectedProdIndex].image = accessLink; // Update image URL
+        updatedProducts[selectedProdIndex].loadingImage = false; // Stop loader after processing the image
+        setProductSection(updatedProducts);
+      } else {
+        console.error("Access link not found in response.");
+      }
+
+      setImgPrev(fileUrl);
+      setImgFile(croppedFile);
+    } catch (e) {
+      console.error("Error cropping image:", e);
+    } finally {
+      setShowCropper(false);
+    }
+  };
 
   useEffect(() => {
     setProductSection(
@@ -34,22 +81,17 @@ const CreateProductPart = () => {
   const handleFileChange = (index, e) => {
     const file = e.target.files[0];
     if (file) {
+      setImgFile(file);
+      setSelectedProdIndex(index);
+
       const updatedProducts = [...productSection];
       updatedProducts[index].loadingImage = true; // Start loader when the file is selected
       setProductSection(updatedProducts);
 
       const reader = new FileReader();
-      reader.onload = async () => {
-        const preReq = await preRequestFun(file, name);
-        let accessLink = "";
-        if (preReq && preReq.accessLink) {
-          accessLink = preReq.accessLink;
-          updatedProducts[index].image = accessLink; // Update image URL
-        } else {
-          console.error("Access link not found in response.");
-        }
-        updatedProducts[index].loadingImage = false; // Stop loader after processing the image
-        setProductSection([...updatedProducts]); // Trigger re-render with updated products
+      reader.onload = async (e) => {
+        setImgPrev(e.target.result);
+        setShowCropper(true);
       };
 
       reader.readAsDataURL(file);
@@ -97,6 +139,57 @@ const CreateProductPart = () => {
 
   return (
     <div className="h-100vh create-business-div">
+      {/* Cropper Modal */}
+      {showCropper && (
+        <div
+          className="modal fade show d-block"
+          tabIndex="-1"
+          role="dialog"
+          style={{ backgroundColor: "rgba(0, 0, 0, 0.5)" }}
+        >
+          <div className="modal-dialog modal-lg" role="document">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h5 className="modal-title">Crop Your Image</h5>
+                <button
+                  type="button"
+                  className="btn-close"
+                  aria-label="Close"
+                  onClick={() => setShowCropper(false)}
+                ></button>
+              </div>
+              <div className="modal-body">
+                <div
+                  className="cropper-container position-relative"
+                  style={{ height: "400px" }}
+                >
+                  <Cropper
+                    image={imgPrev}
+                    crop={crop}
+                    zoom={zoom}
+                    aspect={1}
+                    onCropChange={setCrop}
+                    onZoomChange={setZoom}
+                    onCropComplete={onCropComplete}
+                  />
+                </div>
+              </div>
+              <div className="modal-footer">
+                <Button variant="primary" onClick={handleCropSave}>
+                  Save Crop
+                </Button>
+                <Button
+                  variant="outlined"
+                  onClick={() => setShowCropper(false)}
+                >
+                  Cancel
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       <div className="row h-100 justify-content-center">
         <div className="col-12 col-md-6 row align-items-end justify-content-center h-100 p-3 p-md-5 right-portion">
           <div className="col-12 text-start">
