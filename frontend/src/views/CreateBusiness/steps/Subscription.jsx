@@ -36,7 +36,7 @@ const Subscription = () => {
         const res = await CreateBusinessDetails(requestBody);
         const resId = res?.data?._id || res?.data?.data?._id;
         if (res.success) {
-          navigate(`/template/${resId}`);
+          navigate(`/business/${resId}`);
           dispatch(resetBusinessState());
         }
       };

@@ -99,9 +99,9 @@ const router = createBrowserRouter([
   },
   { path: "/reviews", element: <Testimonials /> },
   { path: "/business", element: <Business /> },
-  { path: "/business/:id", element: <Business /> },
-  { path: "/template/:id", element: <Template /> },
-  { path: "/template/premium/:id", element: <PremiumTemplate /> },
+  { path: "/category/:id", element: <Business /> },
+  { path: "/business/:id", element: <Template /> },
+  { path: "/business/premium/:id", element: <PremiumTemplate /> },
   { path: "/terms-and-conditions", element: <TermsAndConditions /> },
   {
     path: "/terms-and-conditions/:id",

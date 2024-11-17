@@ -32,8 +32,8 @@ const BusinessesSection = ({
               <Link
                 to={
                   business.selectedPlan?.isPremium
-                    ? `/template/premium/${business?._id}`
-                    : `/template/${business?._id}`
+                    ? `/business/premium/${business?._id}`
+                    : `/business/${business?._id}`
                 }
                 key={business._id}
                 className="text-decoration-none text-dark col-12 col-md-5 b-theme location-card mt-3 business-card"

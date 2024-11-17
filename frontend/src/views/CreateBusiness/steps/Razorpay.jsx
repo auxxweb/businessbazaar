@@ -62,7 +62,7 @@ export default function Razorpay() {
             if (payment_status === "success") {
               setLoader(false);
               clearInterval(interval); // Clear the interval if payment is successful
-              navigate(`/template/${id}`);
+              navigate(`/business/${id}`);
             }
             if (payment_status === "failed") {
               setLoader(false);
