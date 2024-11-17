@@ -50,6 +50,12 @@
   max-height: 3rem; /* Maximum height for two lines */
 }
 
+@media (max-width: 600px) {
+  .cat-div {
+    min-width: 100%; /* Ensure cards take full width on small screens */
+  }
+}
+
 @media (min-width: 576px) {
   .cat-div {
     flex: 1 1 auto; /* 3 cards per row on small screens with dynamic width based on content */
@@ -67,6 +73,7 @@
     flex: 1 1 auto; /* 5 cards per row on large screens with dynamic width based on content */
   }
 }
+
 .banner-input-div {
   backdrop-filter: blur(15px);
 }
