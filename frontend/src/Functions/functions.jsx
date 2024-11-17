@@ -7,8 +7,8 @@ const config = {
   },
 };
 
-const baseUrl = import.meta.env.VITE_APP_BE_API_KEY ?? "" ;
-// const baseUrl = "https://server.instant-connect.in";
+// const baseUrl = import.meta.env.VITE_APP_BE_API_KEY ?? "" ;
+const baseUrl = "https://server.instant-connect.in";
 
 export const fetchCategories = async (limit) => {
   try {
@@ -108,7 +108,6 @@ export const fetchBusinessTemplate = async (id, setLoading) => {
     const data = response.data;
     if (data.success) {
       return data;
-      setLoading(false);
     } else {
       setLoading(false);
 
@@ -130,12 +129,12 @@ export const fetchBusinessTemplate = async (id, setLoading) => {
       },
     });
     console.error("Failed to fetch Business Site Details");
-  }finally{
-   setLoading(false);
+  } finally {
+    setLoading(false);
   }
 };
 
-export const getAllReviews = async ({ page = 1, limit = 10,searchTerm="" }) => {
+export const getAllReviews = async ({ page = 1, limit = 10, searchTerm = "" }) => {
   try {
     const response = await axios.get(`${baseUrl}/api/v1/review?page=${page}&limit=${limit}&searchTerm=${searchTerm}`, config);
 
@@ -188,7 +187,7 @@ export const CreateBusinessDetails = async (formData) => {
   } catch (error) {
     toast.error(
       error?.response?.data?.message ??
-        "Failed to create business Please try again.",
+      "Failed to create business Please try again.",
       {
         position: "top-right",
         autoClose: 3000,
@@ -356,7 +355,7 @@ export const FetchPlans = async () => {
     console.error("Error fetching categories:", error.message);
   }
 };
-export const checkPaymentStatus = async (paymentId,token) => {
+export const checkPaymentStatus = async (paymentId, token) => {
   try {
     const response = await axios.get(`${baseUrl}/api/v1/payment/status/${paymentId}`, {
       headers: {
@@ -424,7 +423,7 @@ export const getCategoryData = async ({
   }
 };
 
-export const getCategoryBusiness = async (page, categoryId,searchTerm,limit) => {
+export const getCategoryBusiness = async (page, categoryId, searchTerm, limit) => {
   try {
     const response = await axios.get(
       `${baseUrl}/api/v1/business/category/${categoryId}?page=${page}&&searchTerm=${searchTerm}&&limit=${limit}`
@@ -480,5 +479,37 @@ export const getBusinessTermsAndConditions = async (businessId) => {
     }
   } catch (error) {
     console.log("Error fetching business terms & conditions", error.message);
+  }
+};
+
+export const fetchNewsArticles = async (id,page=1, limit=10, search="") => {
+  try {
+    const query = {
+      page: page,
+      limit: limit,
+    };
+
+    if (search) {
+      query.searchTerm = search;
+    }
+
+    const response = await axios.get(`${baseUrl}/api/v1/business-news/${id}`, {
+      params: query,
+      ...config,
+    });
+
+    if (response.status !== 200) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+
+    const data = response.data;
+
+    if (data.success) {
+      return data;
+    } else {
+      console.error("Failed to fetch Business");
+    }
+  } catch (error) {
+    console.error("Error fetching Business:", error.message);
   }
 };
