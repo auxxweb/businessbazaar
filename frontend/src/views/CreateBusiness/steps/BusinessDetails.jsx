@@ -2,9 +2,12 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
+import Cropper from "react-easy-crop";
 import { TextField } from "@mui/material";
+import { Button } from "react-bootstrap";
 import { updateBusinessDetails } from "../store/businessSlice";
 import { preRequestFun } from "../service/s3url";
+import getCroppedImg from "../../../utils/cropper.utils";
 
 const BusinessDetails = () => {
   const navigate = useNavigate();
@@ -16,35 +19,53 @@ const BusinessDetails = () => {
     businessState?.businessName || ""
   );
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState({
-    logo: null,
-    name: null,
-  });
+  const [error, setError] = useState({ logo: null, name: null });
   const [logoFile, setLogoFile] = useState(null);
   const [logoPrev, setLogoPrev] = useState(null);
+  const [crop, setCrop] = useState({ x: 0, y: 0 });
+  const [zoom, setZoom] = useState(1);
+  const [croppedArea, setCroppedArea] = useState(null);
+  const [showCropper, setShowCropper] = useState(false);
 
   const handleLogoChange = (event) => {
     const file = event.target.files[0];
-
     if (file) {
-      setIsLoading(true);
       setLogoFile(file);
       setError((prev) => ({ ...prev, logo: null }));
-
       const reader = new FileReader();
-
       reader.onload = function (e) {
         setLogoPrev(e.target.result);
-        setLogo(e.target.result); // Set logo to Base64 string for preview consistency
-        setIsLoading(false);
+        setShowCropper(true);
       };
-
       reader.onerror = function () {
         console.error("Error reading file:", reader.error);
-        setIsLoading(false);
       };
+      reader.readAsDataURL(file);
+    }
+  };
 
-      reader.readAsDataURL(file); // Convert file to a Base64 string
+  const onCropComplete = (croppedAreaPercentage, croppedAreaPixels) => {
+    setCroppedArea(croppedAreaPixels);
+  };
+
+  const handleCropSave = async () => {
+    try {
+      const { fileUrl, blob } = await getCroppedImg(logoPrev, croppedArea);
+      setLogoPrev(fileUrl);
+      setLogo(fileUrl);
+      setShowCropper(false);
+
+      const croppedFile = new File(
+        [blob],
+        logoFile?.name || "cropped-logo.png",
+        {
+          type: blob.type,
+        }
+      );
+
+      setLogoFile(croppedFile);
+    } catch (e) {
+      console.error("Error cropping image:", e);
     }
   };
 
@@ -55,42 +76,27 @@ const BusinessDetails = () => {
   // Handle form submission with validation
   const handleBusinessSubmit = async () => {
     let hasError = false;
-
-    // Check if Business Name is empty
     if (!businessName) {
-      setError({
-        ...error,
-        name: "Business Name is required.",
-      });
+      setError({ ...error, name: "Business Name is required." });
       hasError = true;
     }
-
-    // Check if Logo is not uploaded
     if (!logoFile && !logo) {
-      setError({
-        ...error,
-        logo: "Business Logo is required.",
-      });
+      setError({ ...error, logo: "Business Logo is required." });
       hasError = true;
     }
-
     if (hasError) return;
 
     setError({});
     try {
       setIsLoading(true);
       let preReq = null;
-
       if (logoFile) {
         preReq = await preRequestFun(logoFile, "Landing");
       }
-
       dispatch(
         updateBusinessDetails({
           businessName,
-          ...(preReq && {
-            logo: preReq.accessLink,
-          }),
+          ...(preReq && { logo: preReq.accessLink }),
         })
       );
       navigate("/create-business/contact");
@@ -109,6 +115,57 @@ const BusinessDetails = () => {
   }, [businessState]);
   return (
     <div className="business-details-page">
+      {/* Cropper Modal */}
+      {showCropper && (
+        <div
+          className="modal fade show d-block"
+          tabIndex="-1"
+          role="dialog"
+          style={{ backgroundColor: "rgba(0, 0, 0, 0.5)" }}
+        >
+          <div className="modal-dialog modal-lg" role="document">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h5 className="modal-title">Crop Your Image</h5>
+                <button
+                  type="button"
+                  className="btn-close"
+                  aria-label="Close"
+                  onClick={() => setShowCropper(false)}
+                ></button>
+              </div>
+              <div className="modal-body">
+                <div
+                  className="cropper-container position-relative"
+                  style={{ height: "400px" }}
+                >
+                  <Cropper
+                    image={logoPrev}
+                    crop={crop}
+                    zoom={zoom}
+                    aspect={1}
+                    onCropChange={setCrop}
+                    onZoomChange={setZoom}
+                    onCropComplete={onCropComplete}
+                  />
+                </div>
+              </div>
+              <div className="modal-footer">
+                <Button variant="primary" onClick={handleCropSave}>
+                  Save Crop
+                </Button>
+                <Button
+                  variant="outlined"
+                  onClick={() => setShowCropper(false)}
+                >
+                  Cancel
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       <div className="container-fluid">
         <div className="row justify-content-center align-items-center">
           {/* Left Section - Form */}
