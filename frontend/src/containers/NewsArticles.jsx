@@ -215,7 +215,7 @@ function LinkPreview({ url }) {
 
     if (previewData?.youtube) {
         return (<div className='overflow-hidden  rounded' style={{ cursor: 'pointer' }}>
-            <iframe src={url} frameborder="0" className='w-100 h-100'></iframe>
+            <iframe src={url} frameBorder="0" className='w-100 h-100'></iframe>
         </div>)
     }
 
