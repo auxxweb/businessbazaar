@@ -12,6 +12,8 @@ const ReviewSection = ({
   review,
 }) => {
   const navigate = useNavigate();
+  const sliderSettings = { ...settings };
+  if (reviews?.length < 2) sliderSettings.infinite = false;
   return (
     <section className="mt-3 bg-light">
       <div className="container" id="review">
@@ -37,7 +39,7 @@ const ReviewSection = ({
         </div>
 
         <div className="col-12">
-          <Slider {...settings}>
+          <Slider {...sliderSettings}>
             {reviews?.map((testimonial, index) => (
               <div key={index} className="testi-slide">
                 <div

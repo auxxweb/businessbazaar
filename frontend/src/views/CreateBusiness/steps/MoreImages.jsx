@@ -1,10 +1,13 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
+import Cropper from "react-easy-crop";
 import CloseIcon from "@mui/icons-material/Close";
 import Slider from "react-slick";
 import axios from "axios";
 import { updateBusinessDetails } from "../store/businessSlice";
+import { Button } from "react-bootstrap";
+import getCroppedImg from "../../../utils/cropper.utils";
 
 const gallery = {
   dots: true,
@@ -30,27 +33,74 @@ const gallery = {
   ],
 };
 
+const GALLERY_IMAGES_LIMIT = 10;
+
+const initialImgState = {
+  file: null,
+  fileType: "",
+  fileName: "",
+  accessLink: "",
+};
+
+const initialCropState = { x: 0, y: 0 };
+
 const MoreImages = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const businessState = useSelector((state) => state.business);
 
   const [loading, setLoading] = useState(false);
-  const [images, setImages] = useState([
-    { file: null, fileType: "", fileName: "" },
-  ]);
-  // const [formData, setFormData] = useState({});
+  const [images, setImages] = useState([initialImgState]);
+
+  const [crop, setCrop] = useState(initialCropState);
+  const [zoom, setZoom] = useState(1);
+  const [croppedArea, setCroppedArea] = useState(null);
+  const [showCropper, setShowCropper] = useState(false);
+  const [selectedImgIndex, setSelectedImgIndex] = useState(null);
+  const [imagePreview, setImagePreview] = useState(null);
+
+  const onCropComplete = (croppedAreaPercentage, croppedAreaPixels) => {
+    setCroppedArea(croppedAreaPixels);
+  };
+
+  const handleCropSave = async () => {
+    try {
+      if (selectedImgIndex) {
+        const file = images?.[selectedImgIndex]?.file;
+        const { blob } = await getCroppedImg(imagePreview, croppedArea);
+
+        const croppedFile = new File([blob], file?.name || "cropped-logo.png", {
+          type: blob.type,
+        });
+
+        setImages((prev) => {
+          const updatedImages = [...prev];
+          updatedImages[selectedImgIndex].file = croppedFile;
+          return updatedImages;
+        });
+
+        setCrop(initialCropState);
+      }
+    } catch (e) {
+      console.error("Error cropping image:", e);
+    } finally {
+      setShowCropper(false);
+    }
+  };
 
   const handleFileChange = (index, event) => {
     const file = event.target.files[0];
     if (file) {
-      const updatedImages = [...images];
-      updatedImages[index] = {
-        file,
-        fileType: file.type,
-        fileName: file.name,
+      const reader = new FileReader();
+
+      setSelectedImgIndex(index);
+
+      reader.onload = async (e) => {
+        setImagePreview(e.target.result);
+        setShowCropper(true);
       };
-      setImages(updatedImages);
+
+      reader.readAsDataURL(file);
     }
   };
 
@@ -71,11 +121,14 @@ const MoreImages = () => {
   };
 
   const handleGallerySubmit = async () => {
-    if (images.length > 0 && images[0].file != null) {
-      const imageFiles = images.map((image) => image?.file);
+    const imagesToUpload = images?.filter(({ accessLink }) => !accessLink);
+    const imageFiles = imagesToUpload?.map(({ file }) => file);
+
+    if (imageFiles?.length > 0) {
       setLoading(true);
+
       const requestBody = {
-        files: imageFiles.map((file) => ({
+        files: imageFiles?.map((file) => ({
           position: "gallery",
           file_type: file.type,
         })),
@@ -83,9 +136,9 @@ const MoreImages = () => {
 
       try {
         const baseUrl = import.meta.env.VITE_APP_BE_API_KEY ?? "";
-        const url = ` ${baseUrl}/api/v1/s3url`;
+        const url = `${baseUrl}/api/v1/s3url`;
 
-        // Fetch pre-signed S3 URLs
+        // Fetch pre-signed S3 URLs for new files
         const response = await axios.post(url, requestBody, {
           headers: {
             "Content-Type": "application/json",
@@ -106,10 +159,15 @@ const MoreImages = () => {
           })
         );
 
-        // Collect access links and store them in formData
-        const accessLinks = s3Urls.map((s3Data) => s3Data.accessLink);
+        // Collect new access links
+        const newAccessLinks = s3Urls.map((s3Data) => s3Data.accessLink);
 
-        dispatch(updateBusinessDetails({ gallery: accessLinks }));
+        // Merge original images with new access links, maintaining the original order
+        const finalAccessLinks = images.map((image) =>
+          image.accessLink ? image.accessLink : newAccessLinks.shift()
+        );
+
+        dispatch(updateBusinessDetails({ gallery: finalAccessLinks }));
 
         navigate("/create-business/subscription");
       } catch (error) {
@@ -118,14 +176,75 @@ const MoreImages = () => {
         setLoading(false);
       }
     } else {
-      navigate("/create-business/subscription"); // Proceed to the next step if there are no files to upload
+      navigate("/create-business/subscription"); // Proceed if no new files to upload
     }
   };
 
   const handlePrevStep = () => navigate("/create-business/seo");
 
+  useEffect(() => {
+    if (businessState?.gallery?.length)
+      setImages(
+        businessState?.gallery?.map((accessLink) => ({
+          ...initialImgState,
+          accessLink,
+        }))
+      );
+  }, [businessState]);
+
   return (
     <div className="h-100vh create-business-div">
+      {/* Cropper Modal */}
+      {showCropper && (
+        <div
+          className="modal fade show d-block"
+          tabIndex="-1"
+          role="dialog"
+          style={{ backgroundColor: "rgba(0, 0, 0, 0.5)" }}
+        >
+          <div className="modal-dialog modal-lg" role="document">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h5 className="modal-title">Crop Your Image</h5>
+                <button
+                  type="button"
+                  className="btn-close"
+                  aria-label="Close"
+                  onClick={() => setShowCropper(false)}
+                ></button>
+              </div>
+              <div className="modal-body">
+                <div
+                  className="cropper-container position-relative"
+                  style={{ height: "400px" }}
+                >
+                  <Cropper
+                    image={imagePreview}
+                    crop={crop}
+                    zoom={zoom}
+                    aspect={4 / 5}
+                    onCropChange={setCrop}
+                    onZoomChange={setZoom}
+                    onCropComplete={onCropComplete}
+                  />
+                </div>
+              </div>
+              <div className="modal-footer">
+                <Button variant="primary" onClick={handleCropSave}>
+                  Save Crop
+                </Button>
+                <Button
+                  variant="outlined"
+                  onClick={() => setShowCropper(false)}
+                >
+                  Cancel
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       <div className="row h-100 justify-content-center">
         {/* Right Form Section */}
         <div className="col-12 col-md-6 row align-items-end justify-content-center h-100 p-3 p-md-5 right-portion">
@@ -183,9 +302,13 @@ const MoreImages = () => {
                         onClick={() => handleAddImageClick(index)}
                       >
                         <span style={{ color: "grey" }}>(Ratio 4 : 5)</span>
-                        {image.file ? (
+                        {image?.file || image?.accessLink ? (
                           <img
-                            src={URL.createObjectURL(image.file)}
+                            src={
+                              image?.file
+                                ? URL.createObjectURL(image?.file)
+                                : image?.accessLink
+                            }
                             alt={`Uploaded Preview ${index}`}
                             className="img-preview"
                             width="100"
@@ -205,14 +328,17 @@ const MoreImages = () => {
                   </div>
                 ))}
               </div>
-              <div className="col-12 mb-3 text-center">
-                <button
-                  className="btn w-100 btn btn-primary"
-                  onClick={addImageInput}
-                >
-                  + Add another image
-                </button>
-              </div>
+
+              {images?.length < GALLERY_IMAGES_LIMIT && (
+                <div className="col-12 mb-3 text-center">
+                  <button
+                    className="btn w-100 btn btn-primary"
+                    onClick={addImageInput}
+                  >
+                    + Add another image
+                  </button>
+                </div>
+              )}
             </div>
           </div>
 
@@ -296,10 +422,14 @@ const MoreImages = () => {
                 {images.length > 0 ? (
                   <Slider {...gallery} className="gallery-slider">
                     {images.map((image, index) =>
-                      image.file ? (
+                      image?.file || image?.accessLink ? (
                         <div key={index} className="p-2">
                           <img
-                            src={URL.createObjectURL(image.file)}
+                            src={
+                              image?.file
+                                ? URL.createObjectURL(image.file)
+                                : image?.accessLink
+                            }
                             alt=""
                             className="w-100 gallery-img"
                           />

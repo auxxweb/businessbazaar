@@ -33,7 +33,7 @@ const CategorySection = ({
                 <Link
                   className="cat-div text-decoration-none"
                   data-aos="zoom-in"
-                  to={`/business/${category._id}`} // Dynamically generate the URL with the category ID
+                  to={`/category/${category._id}`} // Dynamically generate the URL with the category ID
                   key={category._id} // Unique key for each category
                 >
                   <img

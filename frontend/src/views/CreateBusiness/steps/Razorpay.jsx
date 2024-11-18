@@ -6,9 +6,12 @@ import {
 import { useNavigate } from "react-router";
 import { toast } from "react-toastify";
 import Loader from "../../../components/Loader/Loader";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { resetBusinessState } from "../store/businessSlice";
+import { resetPlanState } from "../store/subscriptionPlanSlice";
 
 export default function Razorpay() {
+  const dispatch = useDispatch();
   const businessState = useSelector((state) => state.business);
   const planDetails = useSelector((state) => state.subscriptionPlanDetails);
 
@@ -62,7 +65,9 @@ export default function Razorpay() {
             if (payment_status === "success") {
               setLoader(false);
               clearInterval(interval); // Clear the interval if payment is successful
-              navigate(`/template/${id}`);
+              navigate(`/business/${id}`);
+              dispatch(resetBusinessState());
+              dispatch(resetPlanState());
             }
             if (payment_status === "failed") {
               setLoader(false);

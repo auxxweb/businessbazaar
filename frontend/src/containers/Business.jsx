@@ -138,7 +138,7 @@ export default function Business() {
           <div className="row justify-content-around gap-2">
             {businessData.map((business) => (
               <Link
-                to={business.selectedPlan?.isPremium? `/template/premium/${business?._id}` :`/template/${business?._id}`}
+                to={business.selectedPlan?.isPremium? `/business/premium/${business?._id}` :`/business/${business?._id}`}
                 key={business._id}
                 className="text-decoration-none text-dark col-12 col-md-5 b-theme location-card mt-3"
               >

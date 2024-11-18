@@ -1,10 +1,13 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
-import { updateBusinessDetails } from "../store/businessSlice";
+import Cropper from "react-easy-crop";
 import Slider from "react-slick";
 import { TextField } from "@mui/material";
+import { updateBusinessDetails } from "../store/businessSlice";
 import { preRequestFun } from "../service/s3url";
+import { Button } from "react-bootstrap";
+import getCroppedImg from "../../../utils/cropper.utils";
 
 const CreateServices = () => {
   const navigate = useNavigate();
@@ -24,6 +27,98 @@ const CreateServices = () => {
     service: {},
   });
   const [errors] = useState([]);
+  const [crop1, setCrop1] = useState({ x: 0, y: 0 });
+  const [crop2, setCrop2] = useState({ x: 0, y: 0 });
+  const [zoom1, setZoom1] = useState(1);
+  const [zoom2, setZoom2] = useState(1);
+  const [croppedArea1, setCroppedArea1] = useState(null);
+  const [croppedArea2, setCroppedArea2] = useState(null);
+  const [showCropper1, setShowCropper1] = useState(false);
+  const [showCropper2, setShowCropper2] = useState(false);
+  const [spServiceFile, setSpServiceFile] = useState(null);
+  const [spServiceImgPrev, setSpServiceImgPrev] = useState(null);
+  const [selectedSpServiceIndex, setSelectedSpServiceIndex] = useState(null);
+  const [serviceFile, setServiceFile] = useState(null);
+  const [serviceImgPrev, setServiceImgPrev] = useState(null);
+  const [selectedServiceIndex, setSelectedServiceIndex] = useState(null);
+
+  const onCropComplete1 = (croppedAreaPercentage, croppedAreaPixels) => {
+    setCroppedArea1(croppedAreaPixels);
+  };
+
+  const onCropComplete2 = (croppedAreaPercentage, croppedAreaPixels) => {
+    setCroppedArea2(croppedAreaPixels);
+  };
+
+  const handleCropSave1 = async () => {
+    try {
+      const { fileUrl, blob } = await getCroppedImg(
+        spServiceImgPrev,
+        croppedArea1
+      );
+
+      const croppedFile = new File(
+        [blob],
+        spServiceFile?.name || "cropped-logo.png",
+        {
+          type: blob.type,
+        }
+      );
+
+      const preReq = await preRequestFun(croppedFile, "service");
+      if (preReq?.accessLink) {
+        setSpecialService((prevData) => {
+          const updatedData = [...prevData.data];
+          updatedData[selectedSpServiceIndex].image = preReq.accessLink;
+          return { ...prevData, data: updatedData };
+        });
+      } else {
+        console.error("Access link not found in response.");
+      }
+
+      setSpServiceImgPrev(fileUrl);
+      setSpServiceFile(croppedFile);
+    } catch (e) {
+      console.error("Error cropping image:", e);
+    } finally {
+      setShowCropper1(false);
+    }
+  };
+
+  const handleCropSave2 = async () => {
+    try {
+      const { fileUrl, blob } = await getCroppedImg(
+        serviceImgPrev,
+        croppedArea2
+      );
+
+      const croppedFile = new File(
+        [blob],
+        serviceFile?.name || "cropped-logo.png",
+        {
+          type: blob.type,
+        }
+      );
+
+      const preReq = await preRequestFun(croppedFile, "service");
+      if (preReq?.accessLink) {
+        setServices((prevServices) => {
+          const updatedServices = [...prevServices];
+          updatedServices[selectedServiceIndex].image = preReq.accessLink;
+          return updatedServices;
+        });
+      } else {
+        console.error("Access link not found in response.");
+      }
+
+      setServiceImgPrev(fileUrl);
+      setServiceFile(croppedFile);
+    } catch (e) {
+      console.error("Error cropping image:", e);
+    } finally {
+      setShowCropper2(false);
+    }
+  };
 
   // Handle change for individual special service fields
   const handleProductChange = (index, e) => {
@@ -54,25 +149,27 @@ const CreateServices = () => {
         [type]: { ...prevLoading[type], [index]: true },
       }));
 
-      const preReq = await preRequestFun(file, "service");
-      if (preReq && preReq.accessLink) {
-        const imageUrl = preReq.accessLink;
-        if (type === "specialService") {
-          setSpecialService((prevData) => {
-            const updatedData = [...prevData.data];
-            updatedData[index].image = imageUrl;
-            return { ...prevData, data: updatedData };
-          });
-        } else {
-          setServices((prevServices) => {
-            const updatedServices = [...prevServices];
-            updatedServices[index].image = imageUrl;
-            return updatedServices;
-          });
-        }
-      } else {
-        console.error("Access link not found in response.");
+      const reader = new FileReader();
+
+      if (type === "specialService") {
+        setSpServiceFile(file);
+        setSelectedSpServiceIndex(index);
+      } else if (type === "service") {
+        setServiceFile(file);
+        setSelectedServiceIndex(index);
       }
+
+      reader.onload = async (e) => {
+        if (type === "specialService") {
+          setSpServiceImgPrev(e.target.result);
+          setShowCropper1(true);
+        } else if (type === "service") {
+          setServiceImgPrev(e.target.result);
+          setShowCropper2(true);
+        }
+      };
+
+      reader.readAsDataURL(file);
 
       // Remove loading state
       setIsLoading((prevLoading) => ({
@@ -235,6 +332,106 @@ const CreateServices = () => {
   return (
     <>
       <div className="h-100vh create-business-div">
+        {showCropper1 && (
+          <div
+            className="modal fade show d-block"
+            tabIndex="-1"
+            role="dialog"
+            style={{ backgroundColor: "rgba(0, 0, 0, 0.5)" }}
+          >
+            <div className="modal-dialog modal-lg" role="document">
+              <div className="modal-content">
+                <div className="modal-header">
+                  <h5 className="modal-title">Crop Your Image</h5>
+                  <button
+                    type="button"
+                    className="btn-close"
+                    aria-label="Close"
+                    onClick={() => setShowCropper1(false)}
+                  ></button>
+                </div>
+                <div className="modal-body">
+                  <div
+                    className="cropper-container position-relative"
+                    style={{ height: "400px" }}
+                  >
+                    <Cropper
+                      image={spServiceImgPrev}
+                      crop={crop1}
+                      zoom={zoom1}
+                      aspect={4 / 3}
+                      onCropChange={setCrop1}
+                      onZoomChange={setZoom1}
+                      onCropComplete={onCropComplete1}
+                    />
+                  </div>
+                </div>
+                <div className="modal-footer">
+                  <Button variant="primary" onClick={handleCropSave1}>
+                    Save Crop
+                  </Button>
+                  <Button
+                    variant="outlined"
+                    onClick={() => setShowCropper1(false)}
+                  >
+                    Cancel
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {showCropper2 && (
+          <div
+            className="modal fade show d-block"
+            tabIndex="-1"
+            role="dialog"
+            style={{ backgroundColor: "rgba(0, 0, 0, 0.5)" }}
+          >
+            <div className="modal-dialog modal-lg" role="document">
+              <div className="modal-content">
+                <div className="modal-header">
+                  <h5 className="modal-title">Crop Your Image</h5>
+                  <button
+                    type="button"
+                    className="btn-close"
+                    aria-label="Close"
+                    onClick={() => setShowCropper2(false)}
+                  ></button>
+                </div>
+                <div className="modal-body">
+                  <div
+                    className="cropper-container position-relative"
+                    style={{ height: "400px" }}
+                  >
+                    <Cropper
+                      image={serviceImgPrev}
+                      crop={crop2}
+                      zoom={zoom2}
+                      aspect={16 / 8}
+                      onCropChange={setCrop2}
+                      onZoomChange={setZoom2}
+                      onCropComplete={onCropComplete2}
+                    />
+                  </div>
+                </div>
+                <div className="modal-footer">
+                  <Button variant="primary" onClick={handleCropSave2}>
+                    Save Crop
+                  </Button>
+                  <Button
+                    variant="outlined"
+                    onClick={() => setShowCropper2(false)}
+                  >
+                    Cancel
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
         <div className="row h-100 justify-content-center">
           {/* Left Image Section */}
 
