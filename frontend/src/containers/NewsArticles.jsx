@@ -1,159 +1,52 @@
 import React, { useEffect, useState } from 'react'
-import { useParams } from 'react-router';
-import InfiniteScroll from "react-infinite-scroll-component";
-
-import PlaceholderBanner from "../assets/images/BannerPlaceholder.png";
-import { fetchNewsArticles } from '../Functions/functions';
-import { formatDate } from '../utils/app.utils';
+import { useParams } from 'react-router'
+import InfiniteScroll from 'react-infinite-scroll-component'
+import PlaceholderBanner from '../assets/images/BannerPlaceholder.png'
+import { fetchNewsArticles } from '../Functions/functions'
+import { formatDate } from '../utils/app.utils'
 
 function NewsArticles({ colorTheme }) {
+  const { id } = useParams()
+  const [newsData, setNewsData] = useState([])
+  const [bannerData, setBannerData] = useState([])
+  const [hasMore, setHasMore] = useState(true)
+  const [index, setIndex] = useState(2)
 
-    const { id } = useParams();
-
-    const [newsData, setNewsData] = useState([]);
-    const [bannerData, setBannerData] = useState([])
-    const [hasMore, setHasMore] = useState(true);
-    const [index, setIndex] = useState(2);
-
-    useEffect(() => {
-        fetchNewsArticles(id).then((response) => {
-            if (response.success) {
-                const updatedBannerArray = [];
-                const updatedNewsArray = [];
-                response.data.data.map((item) => {
-                    if (item?.isBanner && updatedBannerArray.length !== 0) {
-                        updatedBannerArray.push(item)
-                    } else {
-                        updatedNewsArray.push(item)
-                    }
-                })
-                if (updatedBannerArray.length === 0) {
-                    setBannerData(response.data.data[0])
-                    updatedNewsArray.shift()
-                    setNewsData(updatedNewsArray);
-                } else {
-                    setNewsData(updatedNewsArray.filter((result) => result._id !== updatedBannerArray[0]._id))
-                }
-            }
+  useEffect(() => {
+    fetchNewsArticles(id).then((response) => {
+      if (response.success) {
+        const updatedBannerArray = []
+        const updatedNewsArray = []
+        response.data.data.forEach((item) => {
+          if (item?.isBanner && updatedBannerArray.length === 0) {
+            updatedBannerArray.push(item)
+          } else {
+            updatedNewsArray.push(item)
+          }
         })
-    }, [id])
+        setBannerData(updatedBannerArray[0] || response.data.data[0])
+        if (updatedBannerArray.length === 0) updatedNewsArray.shift()
+        setNewsData(
+          updatedNewsArray.filter(
+            (result) => result._id !== updatedBannerArray[0]?._id,
+          ),
+        )
+      }
+    })
+  }, [id])
 
-    const fetchMoreData = () => {
-        fetchNewsArticles(id, index)
-            .then((res) => {
-                setNewsData((prevItems) => [...prevItems, ...res.data.data]);
+  const fetchMoreData = () => {
+    fetchNewsArticles(id, index)
+      .then((res) => {
+        setNewsData((prevItems) => [...prevItems, ...res.data.data])
+        setHasMore(res.data.data.length > 0)
+      })
+      .catch((err) => console.error(err))
+    setIndex((prevIndex) => prevIndex + 1)
+  }
 
-                res.data.data.length > 0 ? setHasMore(true) : setHasMore(false);
-            })
-            .catch((err) => console.log(err));
 
-        setIndex((prevIndex) => prevIndex + 1);
-    };
-
-    return (
-        <>
-            <section className="h-auto">
-                <div className="container mt-2 p-top">
-                    <div className="col-12 mt-5 text-center text-lg-start">
-                        <h1 className="fw-bold text-center">News & Articles</h1>
-                    </div>
-                    <div className="row align-items-center banner-section shadow-lg py-3 " style={{ borderRadius: "15px" }}>
-                        <div className="col-12 col-lg-6 text-end  overflow-hidden">
-                            <LinkPreview url={bannerData?.link} />
-                        </div>
-                        {/* Text Content */}
-                        <div className="col-12 col-lg-6">
-                            <div className="row align-items-center">
-                                <div className="col-12">
-                                    <h1 className="text-start text-dark fw-bold david-font fw-bold  text-center text-sm-start">
-                                        {bannerData?.title}
-                                    </h1>
-                                </div>
-                                <div className="col-12 ">
-                                    <p className="text-secondary text-center text-lg-start david-font">
-                                        {bannerData?.description}
-                                    </p>
-                                </div>
-                                <div className="mt-3 col-12">
-                                    <div className="row">
-                                        <div className="col-6 d-flex align-items-center">
-                                            <p style={{ fontStyle: "italic", fontSize: " 12px" }} className='p-0 m-0 '>Date Published:{formatDate(bannerData?.createdAt)}</p>
-                                        </div>
-                                        <div className="col-6 ">
-                                            <a
-                                                style={{ backgroundColor: colorTheme }}
-                                                target='_blank'
-                                                href={bannerData?.link}
-                                                className="btn btn-dark text-white radius-theme box-shadow theme w-100 p-1">
-                                                visit
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-            <section className="h-auto mb-4">
-                <InfiniteScroll
-                    dataLength={newsData.length}
-                    next={fetchMoreData}
-                    hasMore={hasMore}
-                    loader={<div className='m-auto text-center w-100 '><p>loading...</p></div>}
-                >
-                    <div className="container ">
-                        <div className="row">
-                            {newsData?.map((item, index) => (
-                                <div key={index} className="col-12 col-lg-4 mx-1 mx-auto">
-                                    <div className="row align-items-center banner-section shadow-lg rounded mx-1 ">
-                                        <div className="col-12  pt-3">
-                                            <LinkPreview url={item?.link} />
-                                        </div>
-                                        <div className="col-12 ">
-                                            <div className="row align-items-center">
-                                                <div className="col-12">
-                                                    <p className="text-start text-dark fw-bold david-font fw-bold  text-center text-sm-start">
-                                                        {item?.title}
-                                                    </p>
-                                                </div>
-                                                <div className="col-12 ">
-                                                    <p className="text-secondary text-start text-xs-start david-font">
-                                                        {item?.description?.substring(0, 300)}...
-                                                    </p>
-                                                </div>
-                                                <div className="mb-3 col-12">
-                                                    <div className="row">
-                                                        <div className="col-6 d-flex align-items-center">
-                                                            <p className='m-0 p-0' style={{ fontStyle: "italic", fontSize: " 10px" }}>Date Published:{formatDate(item?.createdAt)}</p>
-                                                        </div>
-                                                        <div className="col-6">
-                                                            <a
-                                                                target='_blank'
-                                                                href={item?.link}
-                                                                style={{ backgroundColor: colorTheme }}
-                                                                className="btn btn-dark text-white radius-theme box-shadow theme w-100 p-1">
-                                                                visit
-                                                            </a>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                </InfiniteScroll>
-            </section>
-        </>
-    )
-}
-
-export default NewsArticles
-
-function LinkPreview({ url }) {
+  function LinkPreview({ url }) {
     const [previewData, setPreviewData] = useState(null);
     const [loading, setLoading] = useState(true);
 
@@ -208,14 +101,14 @@ function LinkPreview({ url }) {
     if (!previewData) {
         return (
             <div className='overflow-hidden  rounded' style={{ cursor: 'pointer' }}>
-                <img src={PlaceholderBanner} alt="Link Preview" className='w-100 h-100' />
+                <img src={PlaceholderBanner} alt="Link Preview"  style={styles.image} />
             </div>
         )
     }
 
     if (previewData?.youtube) {
         return (<div className='overflow-hidden  rounded' style={{ cursor: 'pointer' }}>
-            <iframe src={url} frameBorder="0" className='w-100 h-100'></iframe>
+            <iframe src={url} frameBorder="0"  style={styles.image}></iframe>
         </div>)
     }
 
@@ -235,4 +128,185 @@ function LinkPreview({ url }) {
             {previewData.image && <img src={previewData?.image} alt="Link Preview" className='w-100 h-100' />}
         </div>
     );
+}
+
+  return (
+    <>
+      {/* Banner Section */}
+      <section className="banner-section" style={styles.bannerSection}>
+        <div className="container">
+          <div className="row">
+            <div className="col-12 col-lg-6">
+              <div style={styles.bannerImage}>
+                {/* <img
+                  src={bannerData?.image || PlaceholderBanner}
+                  alt="Banner"
+                  style={styles.image}
+                /> */}
+                 <LinkPreview url={bannerData?.link} />
+              </div>
+            </div>
+            <div className="col-12 col-lg-6 d-flex flex-column justify-content-center">
+              <h1 style={styles.bannerTitle}>{bannerData?.title}</h1>
+              <p style={styles.bannerDescription}>{bannerData?.description}</p>
+              <div className="d-flex justify-content-between align-items-center">
+                <span style={styles.date}>
+                  Published: {formatDate(bannerData?.createdAt)}
+                </span>
+                <a
+                  href={bannerData?.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={styles.visitButton}
+                  className="btn btn-dark text-white radius-theme box-shadow theme">
+                
+                  Visit Article
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* News Articles Section */}
+      <section className="news-articles-section" style={styles.newsSection}>
+        <InfiniteScroll
+          dataLength={newsData.length}
+          next={fetchMoreData}
+          hasMore={hasMore}
+          loader={<div style={styles.loader}>Loading...</div>}
+        >
+          <div className="container">
+            <div className="row">
+              {newsData.map((item, index) => (
+                <div
+                  className="col-12 col-md-6 col-lg-4"
+                  key={index}
+                  style={styles.cardContainer}
+                >
+                  <div style={styles.card}>
+                    <div style={styles.cardImage}>
+                      {/* <img
+                        src={item?.image || PlaceholderBanner}
+                        alt="Article"
+                        style={styles.image}
+                      /> */}
+                      <LinkPreview url={item?.link} />
+                    </div>
+                    <div style={styles.cardContent}>
+                      <h2 style={styles.cardTitle}>{item?.title}</h2>
+                      <p style={styles.cardDescription}>
+                        {item?.description?.substring(0, 150)}...
+                      </p>
+                      <div className="d-flex justify-content-between align-items-center">
+                        <span style={styles.date}>
+                          Published: {formatDate(item?.createdAt)}
+                        </span>
+                        <a
+                          href={item?.link}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          style={styles.visitButton}
+                          className="btn btn-dark text-white radius-theme box-shadow theme">
+                        
+                          Read More
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </InfiniteScroll>
+      </section>
+    </>
+  )
+}
+
+export default NewsArticles
+
+const styles = {
+  bannerSection: {
+    backgroundColor: '#f7f7f7',
+    padding: '40px 20px',
+    borderRadius: '15px',
+    marginBottom: '30px',
+  },
+  bannerImage: {
+    overflow: 'hidden',
+    borderRadius: '10px',
+  },
+  image: {
+    width: '100%',
+    height: 'auto',
+    objectFit: 'cover',
+    minHeight:"225px"
+  },
+  bannerTitle: {
+    fontSize: '32px',
+    fontWeight: 'bold',
+    fontFamily: 'Georgia, serif',
+    color: '#333',
+    marginBottom: '15px',
+  },
+  bannerDescription: {
+    fontSize: '16px',
+    fontFamily: 'Arial, sans-serif',
+    color: '#666',
+    marginBottom: '15px',
+  },
+  visitButton: {
+    padding: '10px 20px',
+    backgroundColor: '#007bff',
+    color: '#fff',
+    textDecoration: 'none',
+    // borderRadius: '5px',
+    fontSize: '14px',
+    fontWeight: 'bold',
+  },
+  date: {
+    fontStyle: 'italic',
+    fontSize: '12px',
+    color: '#888',
+  },
+  newsSection: {
+    backgroundColor: '#fff',
+    padding: '20px 0',
+    justifyContent: 'center',
+  },
+  cardContainer: {
+    marginBottom: '20px',
+  },
+  card: {
+    border: '1px solid #ddd',
+    borderRadius: '10px',
+    overflow: 'hidden',
+    boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+  },
+  cardImage: {
+    overflow: 'hidden',
+  },
+  cardContent: {
+    padding: '15px',
+  },
+  cardTitle: {
+    fontSize: '18px',
+    fontWeight: 'bold',
+    color: '#333',
+    marginBottom: '10px',
+    fontFamily: 'Georgia, serif',
+  },
+  cardDescription: {
+    fontSize: '14px',
+    color: '#555',
+    marginBottom: '10px',
+    fontFamily: 'Arial, sans-serif',
+  },
+  loader: {
+    textAlign: 'center',
+    padding: '20px',
+    fontSize: '16px',
+    color: '#555',
+  },
 }
