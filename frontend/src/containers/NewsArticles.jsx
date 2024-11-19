@@ -4,6 +4,8 @@ import InfiniteScroll from 'react-infinite-scroll-component'
 import PlaceholderBanner from '../assets/images/BannerPlaceholder.png'
 import { fetchNewsArticles } from '../Functions/functions'
 import { formatDate } from '../utils/app.utils'
+import CardLoader from '../components/cardLoader/CardLoader'
+import Loader from '../components/Loader/Loader'
 
 function NewsArticles({ colorTheme }) {
   const { id } = useParams()
@@ -11,10 +13,15 @@ function NewsArticles({ colorTheme }) {
   const [bannerData, setBannerData] = useState([])
   const [hasMore, setHasMore] = useState(true)
   const [index, setIndex] = useState(2)
+  const [totalNews, setTotalNews] = useState(6)
 
   useEffect(() => {
     fetchNewsArticles(id).then((response) => {
       if (response.success) {
+        setTotalNews(response?.data?.totalCount)
+        if (response?.data?.totalCount === 0) {
+          setHasMore(false)
+        }
         const updatedBannerArray = []
         const updatedNewsArray = []
         response.data.data.forEach((item) => {
@@ -39,101 +46,122 @@ function NewsArticles({ colorTheme }) {
     fetchNewsArticles(id, index)
       .then((res) => {
         setNewsData((prevItems) => [...prevItems, ...res.data.data])
+        console.log(res?.data?.data, 'sldfns;lfnslfn')
+
         setHasMore(res.data.data.length > 0)
       })
       .catch((err) => console.error(err))
     setIndex((prevIndex) => prevIndex + 1)
   }
 
-
   function LinkPreview({ url }) {
-    const [previewData, setPreviewData] = useState(null);
-    const [loading, setLoading] = useState(true);
+    const [previewData, setPreviewData] = useState(null)
+    const [loading, setLoading] = useState(true)
 
     useEffect(() => {
-        const isYouTubeVideo = isYouTubeURL(url);
-        if (isYouTubeVideo) {
+      const isYouTubeVideo = isYouTubeURL(url)
+      if (isYouTubeVideo) {
+        setPreviewData({
+          youtube: true,
+        })
+        setLoading(false)
+      }
+      const fetchData = async () => {
+        try {
+          const response = await fetch(url)
+          const data = await response.text()
+
+          if (!isYouTubeVideo) {
+            const parser = new DOMParser()
+            const doc = parser.parseFromString(data, 'text/html')
+            const title = doc.querySelector('title')?.textContent || ''
+            const description =
+              doc
+                .querySelector('meta[name="description"]')
+                ?.getAttribute('content') || ''
+            const image =
+              doc
+                .querySelector('meta[property="og:image"]')
+                ?.getAttribute('content') || ''
+
             setPreviewData({
-                youtube: true
-            });
-            setLoading(false);
+              title,
+              description,
+              image,
+              youtube: false,
+            })
+            setLoading(false)
+          }
+        } catch (error) {
+          console.error(error)
+          setLoading(false)
         }
-        const fetchData = async () => {
-            try {
-
-                const response = await fetch(url);
-                const data = await response.text();
-
-                if (!isYouTubeVideo) {
-                    const parser = new DOMParser();
-                    const doc = parser.parseFromString(data, 'text/html');
-                    const title = doc.querySelector('title')?.textContent || '';
-                    const description = doc.querySelector('meta[name="description"]')?.getAttribute('content') || '';
-                    const image = doc.querySelector('meta[property="og:image"]')?.getAttribute('content') || '';
-
-                    setPreviewData({
-                        title,
-                        description,
-                        image,
-                        youtube: false,
-                    });
-                    setLoading(false);
-                }
-            } catch (error) {
-                console.error(error);
-                setLoading(false);
-            }
-        };
-        if (!isYouTubeVideo) {
-
-            fetchData();
-        }
-    }, [url]);
+      }
+      if (!isYouTubeVideo) {
+        fetchData()
+      }
+    }, [url])
 
     const isYouTubeURL = (url) => {
-        return url?.includes('youtube.com') || url?.includes('youtu.be');
-    };
+      return url?.includes('youtube.com') || url?.includes('youtu.be')
+    }
 
     if (loading) {
-        return <p>Loading...</p>;
+      return <CardLoader />
     }
 
     if (!previewData) {
-        return (
-            <div className='overflow-hidden  rounded' style={{ cursor: 'pointer' }}>
-                <img src={PlaceholderBanner} alt="Link Preview"  style={styles.image} />
-            </div>
-        )
+      return (
+        <div className="overflow-hidden  rounded" style={{ cursor: 'pointer' }}>
+          <img
+            src={PlaceholderBanner}
+            alt="Link Preview"
+            style={styles.image}
+          />
+        </div>
+      )
     }
 
     if (previewData?.youtube) {
-        return (<div className='overflow-hidden  rounded' style={{ cursor: 'pointer' }}>
-            <iframe src={url} frameBorder="0"  style={styles.image}></iframe>
-        </div>)
+      return (
+        <div className="overflow-hidden  rounded" style={{ cursor: 'pointer' }}>
+          <iframe src={url} frameBorder="0" style={styles.image}></iframe>
+        </div>
+      )
     }
 
     const handleClick = () => {
-        window.open(url, '_blank');
-    };
+      window.open(url, '_blank')
+    }
 
     if (previewData.videoId) {
-        return (
-            <div onClick={handleClick} style={{ cursor: 'pointer' }}>
-                <img src={previewData.videoThumbnail} alt="Video Thumbnail" />
-            </div>
-        );
+      return (
+        <div onClick={handleClick} style={{ cursor: 'pointer' }}>
+          <img src={previewData.videoThumbnail} alt="Video Thumbnail" />
+        </div>
+      )
     }
     return (
-        <div className='overflow-hidden  rounded' onClick={handleClick} style={{ cursor: 'pointer' }}>
-            {previewData.image && <img src={previewData?.image} alt="Link Preview" className='w-100 h-100' />}
-        </div>
-    );
-}
+      <div
+        className="overflow-hidden  rounded"
+        onClick={handleClick}
+        style={{ cursor: 'pointer' }}
+      >
+        {previewData.image && (
+          <img
+            src={previewData?.image}
+            alt="Link Preview"
+            className="w-100 h-100"
+          />
+        )}
+      </div>
+    )
+  }
 
   return (
-    <>
+    <div style={{minHeight:"100vh"}}>
       {/* Banner Section */}
-      <section className="banner-section" style={styles.bannerSection}>
+    { totalNews && <section className="banner-section" style={styles.bannerSection}>
         <div className="container">
           <div className="row">
             <div className="col-12 col-lg-6">
@@ -143,7 +171,7 @@ function NewsArticles({ colorTheme }) {
                   alt="Banner"
                   style={styles.image}
                 /> */}
-                 <LinkPreview url={bannerData?.link} />
+                <LinkPreview url={bannerData?.link} />
               </div>
             </div>
             <div className="col-12 col-lg-6 d-flex flex-column justify-content-center">
@@ -157,24 +185,28 @@ function NewsArticles({ colorTheme }) {
                   href={bannerData?.link}
                   target="_blank"
                   rel="noopener noreferrer"
-                  style={styles.visitButton}
-                  className="btn btn-dark text-white radius-theme box-shadow theme">
-                
-                  Visit Article
+                  style={{ ...styles.visitButton, backgroundColor: colorTheme }}
+                  className="btn btn-dark text-white radius-theme box-shadow theme"
+                >
+                  Read More
                 </a>
               </div>
             </div>
           </div>
         </div>
-      </section>
+      </section>}
 
       {/* News Articles Section */}
       <section className="news-articles-section" style={styles.newsSection}>
         <InfiniteScroll
-          dataLength={newsData.length}
+          dataLength={totalNews}
           next={fetchMoreData}
           hasMore={hasMore}
-          loader={<div style={styles.loader}>Loading...</div>}
+          loader={
+            <div style={styles.loader}>
+              <Loader />
+            </div>
+          }
         >
           <div className="container">
             <div className="row">
@@ -206,9 +238,13 @@ function NewsArticles({ colorTheme }) {
                           href={item?.link}
                           target="_blank"
                           rel="noopener noreferrer"
-                          style={styles.visitButton}
-                          className="btn btn-dark text-white radius-theme box-shadow theme">
-                        
+                          style={{
+                            ...styles.visitButton,
+                            backgroundColor: colorTheme,
+                          }}
+                          // style={styles.visitButton}
+                          className="btn btn-dark text-white radius-theme box-shadow theme"
+                        >
                           Read More
                         </a>
                       </div>
@@ -220,7 +256,7 @@ function NewsArticles({ colorTheme }) {
           </div>
         </InfiniteScroll>
       </section>
-    </>
+    </div>
   )
 }
 
@@ -241,7 +277,7 @@ const styles = {
     width: '100%',
     height: 'auto',
     objectFit: 'cover',
-    minHeight:"225px"
+    minHeight: '225px',
   },
   bannerTitle: {
     fontSize: '32px',
