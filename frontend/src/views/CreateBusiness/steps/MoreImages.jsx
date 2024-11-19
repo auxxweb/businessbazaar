@@ -1,13 +1,13 @@
-import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router";
-import Cropper from "react-easy-crop";
-import CloseIcon from "@mui/icons-material/Close";
-import Slider from "react-slick";
-import axios from "axios";
-import { updateBusinessDetails } from "../store/businessSlice";
-import { Button } from "react-bootstrap";
-import getCroppedImg from "../../../utils/cropper.utils";
+import { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { useNavigate } from 'react-router'
+import Cropper from 'react-easy-crop'
+import CloseIcon from '@mui/icons-material/Close'
+import Slider from 'react-slick'
+import axios from 'axios'
+import { updateBusinessDetails } from '../store/businessSlice'
+import { Button } from 'react-bootstrap'
+import getCroppedImg from '../../../utils/cropper.utils'
 
 const gallery = {
   dots: true,
@@ -31,156 +31,160 @@ const gallery = {
       },
     },
   ],
-};
+}
 
-const GALLERY_IMAGES_LIMIT = 10;
+const GALLERY_IMAGES_LIMIT = 10
 
 const initialImgState = {
   file: null,
-  fileType: "",
-  fileName: "",
-  accessLink: "",
-};
+  fileType: '',
+  fileName: '',
+  accessLink: '',
+}
 
-const initialCropState = { x: 0, y: 0 };
+const initialCropState = { x: 0, y: 0 }
 
 const MoreImages = () => {
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const businessState = useSelector((state) => state.business);
+  const navigate = useNavigate()
+  const dispatch = useDispatch()
+  const businessState = useSelector((state) => state.business)
 
-  const [loading, setLoading] = useState(false);
-  const [images, setImages] = useState([initialImgState]);
+  const [loading, setLoading] = useState(false)
+  const [images, setImages] = useState([initialImgState])
 
-  const [crop, setCrop] = useState(initialCropState);
-  const [zoom, setZoom] = useState(1);
-  const [croppedArea, setCroppedArea] = useState(null);
-  const [showCropper, setShowCropper] = useState(false);
-  const [selectedImgIndex, setSelectedImgIndex] = useState(null);
-  const [imagePreview, setImagePreview] = useState(null);
+  const [crop, setCrop] = useState(initialCropState)
+  const [zoom, setZoom] = useState(1)
+  const [croppedArea, setCroppedArea] = useState(null)
+  const [showCropper, setShowCropper] = useState(false)
+  const [selectedImgIndex, setSelectedImgIndex] = useState(null)
+  const [imagePreview, setImagePreview] = useState(null)
 
   const onCropComplete = (croppedAreaPercentage, croppedAreaPixels) => {
-    setCroppedArea(croppedAreaPixels);
-  };
+    setCroppedArea(croppedAreaPixels)
+  }
 
   const handleCropSave = async () => {
     try {
-      if (selectedImgIndex) {
-        const file = images?.[selectedImgIndex]?.file;
-        const { blob } = await getCroppedImg(imagePreview, croppedArea);
+      if (selectedImgIndex >= 0) {
+        const file = images?.[selectedImgIndex]?.file
+        const { blob } = await getCroppedImg(imagePreview, croppedArea)
 
-        const croppedFile = new File([blob], file?.name || "cropped-logo.png", {
+        const croppedFile = new File([blob], file?.name || 'cropped-logo.png', {
           type: blob.type,
-        });
+        })
 
         setImages((prev) => {
-          const updatedImages = [...prev];
-          updatedImages[selectedImgIndex].file = croppedFile;
-          return updatedImages;
-        });
+          const updatedImages = [...prev]
+          updatedImages[selectedImgIndex].file = croppedFile
+          return updatedImages
+        })
 
-        setCrop(initialCropState);
+        setCrop(initialCropState)
       }
     } catch (e) {
-      console.error("Error cropping image:", e);
+      console.error('Error cropping image:', e)
     } finally {
-      setShowCropper(false);
+      setShowCropper(false)
     }
-  };
+  }
 
   const handleFileChange = (index, event) => {
-    const file = event.target.files[0];
+    const file = event.target.files[0]
     if (file) {
-      const reader = new FileReader();
+      const reader = new FileReader()
 
-      setSelectedImgIndex(index);
+      setSelectedImgIndex(index)
 
       reader.onload = async (e) => {
-        setImagePreview(e.target.result);
-        setShowCropper(true);
-      };
+        setImagePreview(e.target.result)
+        setShowCropper(true)
+      }
 
-      reader.readAsDataURL(file);
+      reader.readAsDataURL(file)
     }
-  };
+  }
 
   const addImageInput = () => {
     setImages((prevImages) => [
       ...prevImages,
-      { file: null, fileType: "", fileName: "" },
-    ]);
-  };
+      { file: null, fileType: '', fileName: '' },
+    ])
+  }
 
   const handleAddImageClick = (index) => {
-    document.getElementById(`file-input-${index}`).click();
-  };
+    document.getElementById(`file-input-${index}`).click()
+  }
 
   const removeImage = (index) => {
-    const updatedImages = images.filter((_, i) => i !== index);
-    setImages(updatedImages);
-  };
+    if (images?.length > 1) {
+      const updatedImages = images.filter((_, i) => i !== index)
+      setImages(updatedImages)
+    } else {
+      setImages([{ file: null, fileType: '', fileName: '' }])
+    }
+  }
 
   const handleGallerySubmit = async () => {
-    const imagesToUpload = images?.filter(({ accessLink }) => !accessLink);
-    const imageFiles = imagesToUpload?.map(({ file }) => file);
+    const imagesToUpload = images?.filter(({ accessLink }) => !accessLink)
+    const imageFiles = imagesToUpload?.map(({ file }) => file)
 
     if (imageFiles?.length > 0) {
-      setLoading(true);
+      setLoading(true)
 
       const requestBody = {
         files: imageFiles?.map((file) => ({
-          position: "gallery",
+          position: 'gallery',
           file_type: file.type,
         })),
-      };
+      }
 
       try {
-        const baseUrl = import.meta.env.VITE_APP_BE_API_KEY ?? "";
-        const url = `${baseUrl}/api/v1/s3url`;
+        const baseUrl = import.meta.env.VITE_APP_BE_API_KEY ?? ''
+        const url = `${baseUrl}/api/v1/s3url`
 
         // Fetch pre-signed S3 URLs for new files
         const response = await axios.post(url, requestBody, {
           headers: {
-            "Content-Type": "application/json",
+            'Content-Type': 'application/json',
           },
-        });
+        })
 
-        const s3Urls = response.data.data;
+        const s3Urls = response.data.data
 
         // Upload each file to its respective S3 URL
         await Promise.all(
           s3Urls.map(async (data, index) => {
-            const { url } = data;
-            const file = imageFiles[index];
+            const { url } = data
+            const file = imageFiles[index]
 
             await axios.put(url, file, {
-              headers: { "Content-Type": file.type },
-            });
-          })
-        );
+              headers: { 'Content-Type': file.type },
+            })
+          }),
+        )
 
         // Collect new access links
-        const newAccessLinks = s3Urls.map((s3Data) => s3Data.accessLink);
+        const newAccessLinks = s3Urls.map((s3Data) => s3Data.accessLink)
 
         // Merge original images with new access links, maintaining the original order
         const finalAccessLinks = images.map((image) =>
-          image.accessLink ? image.accessLink : newAccessLinks.shift()
-        );
+          image.accessLink ? image.accessLink : newAccessLinks.shift(),
+        )
 
-        dispatch(updateBusinessDetails({ gallery: finalAccessLinks }));
+        dispatch(updateBusinessDetails({ gallery: finalAccessLinks }))
 
-        navigate("/create-business/subscription");
+        navigate('/create-business/subscription')
       } catch (error) {
-        console.error("Error fetching S3 URLs or uploading files:", error);
+        console.error('Error fetching S3 URLs or uploading files:', error)
       } finally {
-        setLoading(false);
+        setLoading(false)
       }
     } else {
-      navigate("/create-business/subscription"); // Proceed if no new files to upload
+      navigate('/create-business/subscription') // Proceed if no new files to upload
     }
-  };
+  }
 
-  const handlePrevStep = () => navigate("/create-business/seo");
+  const handlePrevStep = () => navigate('/create-business/seo')
 
   useEffect(() => {
     if (businessState?.gallery?.length)
@@ -188,9 +192,9 @@ const MoreImages = () => {
         businessState?.gallery?.map((accessLink) => ({
           ...initialImgState,
           accessLink,
-        }))
-      );
-  }, [businessState]);
+        })),
+      )
+  }, [businessState])
 
   return (
     <div className="h-100vh create-business-div">
@@ -200,7 +204,7 @@ const MoreImages = () => {
           className="modal fade show d-block"
           tabIndex="-1"
           role="dialog"
-          style={{ backgroundColor: "rgba(0, 0, 0, 0.5)" }}
+          style={{ backgroundColor: 'rgba(0, 0, 0, 0.5)' }}
         >
           <div className="modal-dialog modal-lg" role="document">
             <div className="modal-content">
@@ -216,7 +220,7 @@ const MoreImages = () => {
               <div className="modal-body">
                 <div
                   className="cropper-container position-relative"
-                  style={{ height: "400px" }}
+                  style={{ height: '400px' }}
                 >
                   <Cropper
                     image={imagePreview}
@@ -283,25 +287,25 @@ const MoreImages = () => {
                         <div className="d-flex justify-content-end">
                           <CloseIcon
                             style={{
-                              top: "10px",
-                              right: "10px",
-                              cursor: "pointer",
-                              color: "#ff4d4f",
-                              fontSize: "18px",
-                              fontWeight: "bold",
+                              top: '10px',
+                              right: '10px',
+                              cursor: 'pointer',
+                              color: '#ff4d4f',
+                              fontSize: '18px',
+                              fontWeight: 'bold',
                               zIndex: 9,
                             }}
                             onClick={() => removeImage(index)}
                           />
                         </div>
                       ) : (
-                        <div style={{ height: "1.5rem" }}></div>
+                        <div style={{ height: '1.5rem' }}></div>
                       )}
                       <div
                         className="text-center"
                         onClick={() => handleAddImageClick(index)}
                       >
-                        <span style={{ color: "grey" }}>(Ratio 4 : 5)</span>
+                        <span style={{ color: 'grey' }}>(Ratio 4 : 5)</span>
                         {image?.file || image?.accessLink ? (
                           <img
                             src={
@@ -313,14 +317,14 @@ const MoreImages = () => {
                             className="img-preview"
                             width="100"
                             height="80"
-                            style={{ objectFit: "cover" }}
+                            style={{ objectFit: 'cover' }}
                           />
                         ) : (
                           <img
                             src="/src/assets/images/add_image.png"
                             width="50"
                             alt="Add Image"
-                            style={{ height: "70px", objectFit: "contain" }}
+                            style={{ height: '70px', objectFit: 'contain' }}
                           />
                         )}
                       </div>
@@ -368,7 +372,7 @@ const MoreImages = () => {
             rel="stylesheet"
           />
           <style>
-            {" "}
+            {' '}
             {`
                                 ::-webkit-scrollbar {
                                     width: 12px; /* Width of the entire scrollbar */
@@ -412,7 +416,7 @@ const MoreImages = () => {
           </style>
           <section
             className="h-auto david-font"
-            style={{ backgroundColor: "#F3F3F4" }}
+            style={{ backgroundColor: '#F3F3F4' }}
           >
             <div className="container p-top">
               <div className="col-12 mb-5" id="gallery">
@@ -434,7 +438,7 @@ const MoreImages = () => {
                             className="w-100 gallery-img"
                           />
                         </div>
-                      ) : null
+                      ) : null,
                     )}
                   </Slider>
                 ) : null}
@@ -444,7 +448,7 @@ const MoreImages = () => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default MoreImages;
+export default MoreImages

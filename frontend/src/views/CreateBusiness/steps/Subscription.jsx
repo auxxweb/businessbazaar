@@ -21,8 +21,8 @@ const Subscription = () => {
   const [planData, setPlanData] = useState([]);
 
   function planSubmit(id, price, name) {
-    var freePlan = import.meta.env.VITE_FREE_PLAN_ID;
-    if (id != freePlan) {
+    var freePlan = import.meta.env.VITE_APP_FREE_PLAN_ID ?? "";
+    if (String(id) != String(freePlan)) {
       console.log("first");
       dispatch(updateBusinessDetails({ selectedPlan: id }));
       dispatch(updatePlanDetails({ name, price }));

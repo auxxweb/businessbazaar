@@ -12,6 +12,7 @@ const useBusinessTerms = (id) => {
       console.log(data, "data terms")
       setBusinessTerms(data?.data?.data);
     } catch (err) {
+      setTermsLoading(false);
       console.log(err, "error");
     } finally {
       setTermsLoading(false);

@@ -11,6 +11,7 @@ const useTerms = () => {
       const data = await getTermsAndConditions();
         setTerms(data?.data?.data);
     } catch (err) {
+      setTermsLoading(false);
       console.log(err, "error");
     } finally {
       setTermsLoading(false);

@@ -7,8 +7,8 @@ const config = {
   },
 };
 
-// const baseUrl = import.meta.env.VITE_APP_BE_API_KEY ?? "" ;
-const baseUrl = "https://server.instant-connect.in";
+const baseUrl = import.meta.env.VITE_APP_BE_API_KEY ?? "" ;
+// const baseUrl = "https://server.instant-connect.in";
 
 export const fetchCategories = async (limit) => {
   try {
