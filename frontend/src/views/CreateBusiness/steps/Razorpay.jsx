@@ -54,7 +54,7 @@ export default function Razorpay() {
       name: "InConnect",
       description:
         "InConnect is a comprehensive platform designed to simplify and enhance professional networking, providing seamless tools for business growth, collaboration, and community building",
-      image: "https://instant-connect.in/src/assets/images/logo.jpeg", // Dummy logo URL
+      image: "https://instant-connect.in/src/assets/images/enConnectLogo.jpg", // Dummy logo URL
       handler: async function (response) {
         console.log(response, "response");
         setLoader(true);
