@@ -15,7 +15,7 @@ import { InputTextarea } from "primereact/inputtextarea";
 import { width } from "@fortawesome/free-brands-svg-icons/fa42Group";
 import Placeholder from "../assets/images/placeholder.jpg";
 import PlaceholderBanner from "../assets/images/BannerPlaceholder.png";
-import Loader  from "./Loader/Loader";
+import Loader from "./Loader/Loader";
 
 function BusinessPreview({ formData }) {
   console.log(formData, "data");
@@ -233,10 +233,10 @@ function BusinessPreview({ formData }) {
   if (loading) {
     return (
       <div className="h-100vh text-center ">
-      <div className="row h-100 justify-content-center align-items-center">
-        <div className="col-3 "> {loading && <Loader />}</div>
+        <div className="row h-100 justify-content-center align-items-center">
+          <div className="col-3 "> {loading && <Loader />}</div>
+        </div>
       </div>
-    </div>
     );
   }
 
@@ -343,19 +343,31 @@ function BusinessPreview({ formData }) {
             <div className="row">
               <div className="col-12 col-lg-4 mb-3 mb-lg-0">
                 <div className="row align-items-center justify-content-start">
-                  <div className="col-auto address-logo">
-                    <i className="bi bi-geo-alt-fill"></i>
-                  </div>
-                  <div className="col">
-                    <span className="fs-13">Address</span>
-                    <p className="fs-16">
-                      {businessData.address.buildingName},{" "}
-                      {businessData.address.city},
-                      {businessData.address.landMark},
-                      {businessData.address.streetName},{" "}
-                      {businessData.address.state}
-                    </p>
-                  </div>
+                  <a
+                    href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+                      `${businessData.address.buildingName}, ${businessData.address.city}, ${businessData.address.landMark}, ${businessData.address.streetName}, ${businessData.address.state}`
+                    )}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{ textDecoration: 'none', color: 'inherit' }}
+                  >
+                    <div className="row">
+                      <div className="col-auto address-logo">
+                        <i className="bi bi-geo-alt-fill"></i>
+                      </div>
+                      <div className="col">
+                        <span className="fs-13">Address</span>
+                        <p className="fs-16">
+                          {businessData.address.buildingName},{" "}
+                          {businessData.address.city},
+                          {businessData.address.landMark},
+                          {businessData.address.streetName},{" "}
+                          {businessData.address.state}
+                        </p>
+                      </div>
+                    </div>
+                  </a>
+
                 </div>
               </div>
 
@@ -557,9 +569,8 @@ function BusinessPreview({ formData }) {
                 {businessData.service.map((service, index) => (
                   <div
                     key={index}
-                    className={`col-12 col-lg-4 service-design ${
-                      index === currentSlide ? "active" : ""
-                    } mt-5 mb-5 text-center`}
+                    className={`col-12 col-lg-4 service-design ${index === currentSlide ? "active" : ""
+                      } mt-5 mb-5 text-center`}
                   >
                     <div className="col-12 text-center">
                       <h3>{service.title}</h3>
@@ -574,9 +585,8 @@ function BusinessPreview({ formData }) {
               businessData.service.map((service, index) => (
                 <div
                   key={index}
-                  className={`col-12 col-lg-4 service-design ${
-                    index === currentSlide ? "active" : ""
-                  } mt-5 mb-5 text-center`}
+                  className={`col-12 col-lg-4 service-design ${index === currentSlide ? "active" : ""
+                    } mt-5 mb-5 text-center`}
                 >
                   <div className="col-12 text-center">
                     <h3>{service.title}</h3>
@@ -884,8 +894,8 @@ function BusinessPreview({ formData }) {
 
               <div className="col-12 col-lg-4">
                 <div className="row">
-                  <div className="col-lg-6">
-                    <div className="col-12">
+                  <div className="col-12 col-lg-36">
+                    <div className="col-12 col-lg-3">
                       <div className="col-12 mt-3 mb-3 text-center text-lg-start">
                         <a
                           href="#"

@@ -12,19 +12,31 @@ const ContactSection = ({ businessData }) => {
           <div className="row justify-content-between">
             <div className="col-12 col-lg-4 mb-3 mb-lg-0">
               <div className="row align-items-center justify-content-start">
-                <div className="col-auto address-logo">
-                  <i className="bi bi-geo-alt-fill"></i>
-                </div>
-                <div className="col">
-                  <span className="fs-13">Address</span>
-                  <p className="fs-16">
-                    {businessData?.address?.buildingName},{" "}
-                    {businessData?.address?.city},
-                    {businessData?.address?.landMark},
-                    {businessData?.address?.streetName},{" "}
-                    {businessData?.address?.state}
-                  </p>
-                </div>
+                <a
+                  href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+                    `${businessData.address.buildingName}, ${businessData.address.city}, ${businessData.address.landMark}, ${businessData.address.streetName}, ${businessData.address.state}`
+                  )}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{ textDecoration: 'none', color: 'inherit' }}
+                >
+                  <div className="row">
+                    <div className="col-auto address-logo">
+                      <i className="bi bi-geo-alt-fill"></i>
+                    </div>
+                    <div className="col">
+                      <span className="fs-13">Address</span>
+                      <p className="fs-16">
+                        {businessData.address.buildingName},{" "}
+                        {businessData.address.city},
+                        {businessData.address.landMark},
+                        {businessData.address.streetName},{" "}
+                        {businessData.address.state}
+                      </p>
+                    </div>
+                  </div>
+                </a>
+
               </div>
             </div>
 

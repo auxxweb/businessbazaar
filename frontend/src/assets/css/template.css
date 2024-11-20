@@ -253,7 +253,8 @@ footer {
 .search-bar-div {
   position: absolute;
   width: 100%;
-  top: 43%; /* Default for larger screens */
+  height: 91%;
+  top: 68%;   /* Default for larger screens */
   display: flex;
   justify-content: center;
   left: 0%;

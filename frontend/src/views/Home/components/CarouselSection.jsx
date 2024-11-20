@@ -12,12 +12,12 @@ const CarouselSection = ({ bannerData, onSearch, setLocation }) => {
   }, [searchData, onSearch]);
 
   return (
-    <div id="#home" className="h-100vh">
+    <div id="#home" className="h-100vh ">
       <div className="h-100 bg-red">
         <div className="border-1 surface-border border-round text-center h-100">
           <Carousel className="banner-slick h-100">
             {bannerData && bannerData.length > 0 ? (
-              bannerData?.map((banner) => (
+              bannerData.map((banner) => (
                 <Carousel.Item key={`key-${banner?._id}`} className=" h-100">
                   <img
                     className="d-block w-100"
@@ -25,7 +25,7 @@ const CarouselSection = ({ bannerData, onSearch, setLocation }) => {
                       banner?.image && banner?.image.length > 0
                         ? banner?.image
                         : Placeholder
-                    } // Use banner image or fallback
+                    }
                     alt="First slide"
                     style={{
                       objectFit: "cover",
@@ -52,12 +52,13 @@ const CarouselSection = ({ bannerData, onSearch, setLocation }) => {
           </Carousel>
         </div>
       </div>
-      <div className="search-bar-div position-absolute">
+      <div className="search-bar-div ">
         <div className="container">
-          <div className="row banner-main-div">
+        <div className="row banner-main-div flex flex-row items-start justify-between">
+        {/* Left Section */}
             <div
               className="col-12 col-md-6 banner-head-text"
-              style={{ textAlign: "left" }}
+              style={{ textAlign: "left"  }}
             >
               <h1
                 className="head-line fw-bold text-start"
@@ -66,27 +67,20 @@ const CarouselSection = ({ bannerData, onSearch, setLocation }) => {
                 In<span className="text-theme2">Connect</span> <br />
                 Your Digital Platform for Growing Your Business
               </h1>
-              <p
-                className="text-white"
-                data-aos="zoom-in"
-                style={{ textAlign: "left" }}
-              >
-                InConnect is your one-stop platform to create, showcase, and
-                share your business online. Get a personalized NFC card to
-                connect with clients instantly, boost referrals, and expand your
-                reach. Build a professional online presence effortlessly with
-                subscription-based tools. Connect and grow with InConnect!
+              <p className="text-white d-none d-md-block" data-aos="zoom-in">
+                InConnect is your one-stop platform to create, showcase, and share your business online. Get a personalized NFC card to connect with clients instantly, boost referrals, and expand your reach. Build a professional online presence effortlessly with subscription-based tools. Connect and grow with InConnect!
               </p>
             </div>
 
+            {/* Right Section */}
             <div
-              className=" row search-div text-end col-12 col-md-6"
-              style={{ display: "ruby" }}
+              className="col-12 col-md-6 search-div text-end"
+              style={{ display: "flex", flexDirection: "column",  }}
             >
-              {/* Location Input with Crosshair Icon */}
+              {/* Location Input */}
               <LocationAutocomplete setLocation={setLocation} />
 
-              {/* Search Input with Search Icon */}
+              {/* Search Input */}
               <div className="col-12 col-md-9 mt-3">
                 <div
                   className="input-group banner-input-div"
@@ -143,6 +137,7 @@ const CarouselSection = ({ bannerData, onSearch, setLocation }) => {
         </div>
       </div>
     </div>
+
   );
 };
 

@@ -20,9 +20,14 @@ import Template from "./containers/Template";
 import PremiumTemplate from "./containers/PremiumTemplate";
 import TermsAndConditions from "./components/Business/TermsAndConditions";
 import BusinessTermsAndConditions from "./components/Business/BusinessTermsAndConditions";
+import Loader from "./components/Loader/Loader";
 
 // Lazy loading components
-const Home = lazy(() => import("./views/Home"));
+const Home = lazy(() =>
+  new Promise((resolve) => {
+    setTimeout(() => resolve(import("./views/Home")), 500); 
+  })
+);
 // const Business = lazy(() => import("./containers/Business"));
 // const Testimonials = lazy(() => import("./containers/Testimonials"));
 // const Template = lazy(() => import("./containers/Template"));
@@ -124,7 +129,7 @@ function App() {
         pauseOnHover
         theme="colored"
       />
-      <Suspense fallback={<div>Loading...</div>}>
+      <Suspense fallback={<Loader/>}>
         <RouterProvider router={router} />
       </Suspense>
     </>

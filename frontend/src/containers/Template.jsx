@@ -26,7 +26,7 @@ import NewsArticles from "./NewsArticles";
 
 export default function Template() {
   const [currentSlide, setCurrentSlide] = useState(0);
-  const [showNews,setShowNews] = useState(false)
+  const [showNews, setShowNews] = useState(false)
   const [businessData, setBusinessData] = useState(null);
   const { id } = useParams();
   const [loading, setLoading] = useState(true);
@@ -93,15 +93,15 @@ export default function Template() {
     }
   };
 
-  useEffect(()=>{
-    
-  if(window?.location?.hash == '#news'){
-    setShowNews(true)
-  }else{
-    setShowNews(false)
-  }
+  useEffect(() => {
 
-  },[window?.location?.hash])
+    if (window?.location?.hash == '#news') {
+      setShowNews(true)
+    } else {
+      setShowNews(false)
+    }
+
+  }, [window?.location?.hash])
   const handleNewsLetterSubmit = async (e) => {
     e.preventDefault();
     console.log("newsLetterEmail", newsLetterEmail);
@@ -504,7 +504,7 @@ export default function Template() {
               </NavLink>
               <NavLink
                 href="#news"
-                onClick={((e)=>setShowNews(true))}
+                onClick={((e) => setShowNews(true))}
                 className="text-black text-center text-lg-start  text-decoration-none fs-14"
                 style={{ color: "black" }}
               >
@@ -646,19 +646,31 @@ export default function Template() {
               <div className="row justify-content-between">
                 <div className="col-12 col-lg-4 mb-3 mb-lg-0">
                   <div className="row align-items-center justify-content-start">
-                    <div className="col-auto address-logo">
-                      <i className="bi bi-geo-alt-fill"></i>
-                    </div>
-                    <div className="col">
-                      <span className="fs-13">Address</span>
-                      <p className="fs-16">
-                        {businessData?.address?.buildingName},{" "}
-                        {businessData?.address?.city},
-                        {businessData?.address?.landMark},
-                        {businessData?.address?.streetName},{" "}
-                        {businessData?.address?.state}
-                      </p>
-                    </div>
+                    <a
+                      href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+                        `${businessData.address.buildingName}, ${businessData.address.city}, ${businessData.address.landMark}, ${businessData.address.streetName}, ${businessData.address.state}`
+                      )}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{ textDecoration: 'none', color: 'inherit' }}
+                    >
+                      <div className="row">
+                        <div className="col-auto address-logo">
+                          <i className="bi bi-geo-alt-fill"></i>
+                        </div>
+                        <div className="col">
+                          <span className="fs-13">Address</span>
+                          <p className="fs-16">
+                            {businessData.address.buildingName},{" "}
+                            {businessData.address.city},
+                            {businessData.address.landMark},
+                            {businessData.address.streetName},{" "}
+                            {businessData.address.state}
+                          </p>
+                        </div>
+                      </div>
+                    </a>
+
                   </div>
                 </div>
 
@@ -667,12 +679,15 @@ export default function Template() {
                     <div className="col-auto address-logo">
                       <i className="bi bi-envelope-fill"></i>
                     </div>
-                    <div className="col">
-                      <span className="fs-13">Send Email</span>
-                      <p className="fs-16">
-                        {businessData?.contactDetails?.email}
-                      </p>
-                    </div>
+                    <a href={`mailto:${businessData?.contactDetails?.email}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+                      <div className="col">
+                        <span className="fs-13">Send Email</span>
+                        <p className="fs-16">
+                          {businessData?.contactDetails?.email}
+                        </p>
+                      </div>
+                    </a>
+
                   </div>
                 </div>
 
@@ -684,10 +699,14 @@ export default function Template() {
                     <div className="col">
                       <span className="fs-13">Contact</span>
                       <p className="fs-16 mb-0">
-                        {businessData?.contactDetails?.primaryNumber}
+                        <a href={`tel:${businessData?.contactDetails?.primaryNumber}`}>
+                          {businessData?.contactDetails?.primaryNumber}
+                        </a>
                       </p>
                       <p className="fs-16 mt-0">
-                        {businessData?.contactDetails?.secondaryNumber}
+                        <a href={`tel:${businessData?.contactDetails?.secondaryNumber}`}>
+                          {businessData?.contactDetails?.secondaryNumber}
+                        </a>
                       </p>
                     </div>
                   </div>
@@ -1319,7 +1338,7 @@ export default function Template() {
                 </div>
               </div>
 
-              <div className="col-4">
+              <div className="col-12 col-lg-2">
                 <div className="row mt-5">
                   <div className="col-lg-6">
                     <div className="col-12">

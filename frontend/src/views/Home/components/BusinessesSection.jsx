@@ -14,7 +14,7 @@ const BusinessesSection = ({
   return (
     <section className="home-spot h-auto mb-5">
       <div className="container padding" id="business">
-        <div className="text-center mb-5">
+        <div className="text-center mb-5 ">
           <h1 className="fw-bold" data-aos="fade-right">
             Discover the Top Businesses
           </h1>
