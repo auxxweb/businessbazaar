@@ -19,6 +19,10 @@ export default function Testimonials() {
         description: "",
       },
     ]);
+
+    useEffect(() => {
+      window.scrollTo(0, 0);
+    }, []);
     const [reviews, setReviews] = useState([])
     const [isReviewed, setIsReviewed] = useState(false)
       const handleInputChange = (e) => {

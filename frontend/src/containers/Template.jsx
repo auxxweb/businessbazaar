@@ -95,6 +95,10 @@ export default function Template() {
   };
 
   useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [id]);
+
+  useEffect(() => {
 
     if (window?.location?.hash == '#news') {
       setShowNews(true)
@@ -1573,7 +1577,7 @@ export default function Template() {
           </div>
         </div>
       </footer>
-      <a href="#" class="btn btn-lg btn-bottom btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
+      <a href="#" className="btn btn-lg btn-bottom btn-lg-square back-to-top"><i className="bi bi-arrow-up"></i></a>
     </>
   );
 }
