@@ -1,4 +1,4 @@
-import { Suspense, lazy } from "react";
+import { Suspense, lazy, useEffect } from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -111,6 +111,11 @@ const router = createBrowserRouter([
 ]);
 
 function App() {
+
+
+  useEffect(()=>{
+    window.scrollTo(0, 0);
+  },[])
   return (
     <>
       <ToastContainer
