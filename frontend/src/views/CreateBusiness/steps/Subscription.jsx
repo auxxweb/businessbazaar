@@ -23,7 +23,7 @@ const Subscription = () => {
   function planSubmit(id, price, name) {
     var freePlan = import.meta.env.VITE_APP_FREE_PLAN_ID ?? "";
     if (String(id) != String(freePlan)) {
-      console.log("first");
+      console.log("first",freePlan,"free plan",id);
       dispatch(updateBusinessDetails({ selectedPlan: id }));
       dispatch(updatePlanDetails({ name, price }));
       navigate("/create-business/template");
