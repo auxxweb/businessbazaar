@@ -11,6 +11,7 @@ import "/src/assets/css/style.css";
 import "/src/assets/css/template.css";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import Loader from "./components/Loader/Loader";
 
 // Import the necessary components
 // import CreateBusiness from "./containers/CreateBusiness";
@@ -124,7 +125,9 @@ function App() {
         pauseOnHover
         theme="colored"
       />
-      <Suspense fallback={<div>Loading...</div>}>
+      <Suspense fallback={<div>
+       Loading...
+      </div>}>
         <RouterProvider router={router} />
       </Suspense>
     </>
