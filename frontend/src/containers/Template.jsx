@@ -489,7 +489,7 @@ export default function Template() {
       </Container>
     </Navbar>
     <section className="h-auto">
-        <div className="container p-top">
+        <div className="container p-top" style={{ height: "100vh", display: "flex", justifyContent: "center", alignItems: "center"}}>
         <div
       style={{
         display: "flex",
