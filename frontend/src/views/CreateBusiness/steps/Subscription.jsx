@@ -21,7 +21,7 @@ const Subscription = () => {
   const [planData, setPlanData] = useState([]);
 
   function planSubmit(id, price, name) {
-    var freePlan = import.meta.env.VITE_APP_FREE_PLAN_ID ?? "";
+    var freePlan = import.meta.env.VITE_APP_FREE_PLAN_ID ?? "6735fef4c124792981be3ffb";
     if (String(id) != String(freePlan)) {
       console.log("first",freePlan,"free plan",id);
       dispatch(updateBusinessDetails({ selectedPlan: id }));
@@ -84,7 +84,7 @@ const Subscription = () => {
             />
           </div>
           {/* Right Form Section */}
-          <div className="col-12 col-md-7 row align-items-end justify-content-center h-100 p-3 p-md-5 right-portion">
+          <div className="col-12 col-md-7 row justify-content-center h-100 p-3 p-md-5 right-portion">
             <div className="col-12 text-start">
               <button
                 className="btn btn-dark w-auto float-start"
