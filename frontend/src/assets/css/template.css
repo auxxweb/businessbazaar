@@ -238,6 +238,9 @@ footer {
 }
 .navbar {
 }
+.btn-outline-secondary {
+font-size: x-small;
+}
 .home-navbar.navbar a {
   color: white !important;
 }

@@ -24,9 +24,7 @@ import Loader from "./components/Loader/Loader";
 
 // Lazy loading components
 const Home = lazy(() =>
-  new Promise((resolve) => {
-    setTimeout(() => resolve(import("./views/Home")), 500); 
-  })
+  import("./views/Home")
 );
 // const Business = lazy(() => import("./containers/Business"));
 // const Testimonials = lazy(() => import("./containers/Testimonials"));
