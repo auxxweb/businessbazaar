@@ -1,6 +1,7 @@
 /* eslint-disable react/prop-types */
 import { Container, Nav, Navbar, NavLink } from 'react-bootstrap'
 import PlaceholderBanner from "../../assets/images/Placeholder.jpg"
+import Placeholder from "../../assets/images/placeholder.jpg";
 const TemplateHeader = ({businessData}) => {
   return (
     <Navbar

@@ -74,7 +74,7 @@ const Subscription = () => {
     <>
       <div className="h-100vh create-business-div">
         <div className="row h-100 justify-content-center">
-          <span style={{ color: "grey" }}>(Ratio 16 : 9)</span>
+          <span style={{ color: "grey" }}></span>
           {/* Left Image Section - Hidden on small screens */}
           <div className="d-none d-md-block left-portion p-0 col-md-5 h-100">
             <img
