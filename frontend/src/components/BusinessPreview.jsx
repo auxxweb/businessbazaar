@@ -884,8 +884,8 @@ function BusinessPreview({ formData }) {
 
               <div className="col-12 col-lg-4">
                 <div className="row">
-                  <div className="col-lg-6">
-                    <div className="col-12">
+                  <div className="col-12 col-lg-3">
+                    <div className="col-12 col-lg-3">
                       <div className="col-12 mt-3 mb-3 text-center text-lg-start">
                         <a
                           href="#"

@@ -1,15 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import Layout from '../components/Layout'
 import { Link, useParams } from 'react-router-dom'
-import { useDebouncedCallback } from 'use-debounce'
-import {
-  fetchBusiness,
-  getCategoryBusiness,
-  getCategoryData,
-} from '../Functions/functions'
+import { fetchBusiness, getCategoryBusiness, getCategoryData } from '../Functions/functions'
 import Loader from '../components/Loader/Loader'
-import Placeholder from '../assets/images/placeholder.jpg'
-import PlaceholderBanner from '../assets/images/BannerPlaceholder.png'
+import Placeholder from "../assets/images/placeholder.jpg";
+import PlaceholderBanner from "../assets/images/BannerPlaceholder.png";
 
 export default function Business() {
   const [categoryData, setCategoryData] = useState([])
@@ -19,7 +14,7 @@ export default function Business() {
   const [loading, setLoading] = useState(true)
   const [searchTerm, setSearchTerm] = useState('')
   const [limit, setLimit] = useState(1)
-  const [visibleBusiness, setVisibleBusiness] = useState(10)
+  const [visibleBusiness, setVisibleBusiness] = useState(10);
   const { id } = useParams()
 
   useEffect(() => {
@@ -35,12 +30,7 @@ export default function Business() {
           })
           setCategoryData(category.data)
 
-          const business = await getCategoryBusiness(
-            currentPage,
-            id,
-            searchTerm,
-            visibleBusiness,
-          )
+          const business = await getCategoryBusiness(currentPage, id, searchTerm, visibleBusiness)
           setTotalBusinessData(business.data.totalCount)
           setBusinessData(business.data.data)
         } catch (error) {
@@ -51,59 +41,50 @@ export default function Business() {
       }
 
       fetchData()
-    } else {
-      const fetchData = async () => {
+    }else{
+      const fetchData = async ()=>{
         try {
           setLoading(true)
-          const business = await fetchBusiness(currentPage, visibleBusiness)
+          const business = await fetchBusiness(currentPage,visibleBusiness)
           console.log(business)
           setTotalBusinessData(business.data.totalCount)
           setBusinessData(business.data.data)
-        } catch (e) {
+        }catch(e){
+
+
           console.error('Error fetching data:', error)
-        } finally {
+        }
+        finally{
           setLoading(false)
         }
       }
       fetchData()
     }
-  }, [currentPage, id, searchTerm, visibleBusiness])
+  }, [currentPage, id, searchTerm,visibleBusiness])
 
-  const totalPages = Math.ceil(totalBusinessData / limit)
+  const totalPages = Math.ceil(totalBusinessData / limit);
 
+
+ 
   const loadMoreBusiness = () => {
-    setVisibleBusiness((prev) => prev + 10)
+    setVisibleBusiness((prev) => prev + 10);
+  };
+
+  const handleSearch = (e) => {
+    setSearchTerm(e.target.value)
+    setCurrentPage(1) // Reset to first page on new search
   }
 
-  const handleSearch = useDebouncedCallback(
-    // function
-    (value) => {
-      setSearchTerm(value ?? '')
-      setCurrentPage(1)
-    },
-    500,
-  )
-  // const handleSearch = (e) => {
-  //   setSearchTerm(e.target.value)
-  //   setCurrentPage(1) // Reset to first page on new search
-  // }
-
+  if (loading) {
+    return <Loader />
+  }
 
   return (
     <Layout title="Business" navClass="home">
       <section className="business-view-banner">
-        <img
-          src={
-            id ? categoryData.coverImage : '/src/assets/images/businesses.jpg'
-          }
-          className="w-100 h-100"
-          style={{ filter: 'brightness(0.4)' }}
-          alt=""
-        />
+        <img src={id?categoryData.coverImage:"/src/assets/images/businesses.jpg"} className="w-100 h-100" style={{filter:"brightness(0.4)"}} alt="" />
         <div className="text-center image-title">
-          <h2 className="text-white">
-            {id ? categoryData.name : 'All Businesses'}
-          </h2>
+          <h2 className='text-white'>{id?categoryData.name:"All Businesses"}</h2>
         </div>
       </section>
 
@@ -126,13 +107,14 @@ export default function Business() {
                   </span>
                   <input
                     type="text"
-                    className="form-control"
-                    style={{ color: 'grey' }}
+                    className="form-control custom-placeholder"
                     placeholder="Search for Businesses"
-                    // value={searchTerm}
-                    onChange={(e) => {
-                      e.preventDefault()
-                      handleSearch(e.target.value ?? '')
+                    value={searchTerm}
+                    onChange={handleSearch}
+                    style={{
+                      borderTopRightRadius: '50px',
+                      borderBottomRightRadius: '50px',
+                      borderLeft: 'none',
                     }}
                   />
                 </div>
@@ -154,14 +136,9 @@ export default function Business() {
           </div>
 
           <div className="row justify-content-around gap-2">
-            {loading&&<Loader />}
             {businessData.map((business) => (
               <Link
-                to={
-                  business.selectedPlan?.isPremium
-                    ? `/business/premium/${business?._id}`
-                    : `/business/${business?._id}`
-                }
+                to={business.selectedPlan?.isPremium? `/business/premium/${business?._id}` :`/business/${business?._id}`}
                 key={business._id}
                 className="text-decoration-none text-dark col-12 col-md-5 b-theme location-card mt-3"
               >
@@ -208,11 +185,11 @@ export default function Business() {
               </button>
             </div>
           )}
+
         </div>
       </section>
-      <a href="#" className="btn btn-lg btn-bottom btn-lg-square back-to-top">
-        <i className="bi bi-arrow-up"></i>
-      </a>
+      <a href="#" class="btn btn-lg btn-bottom btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
+
     </Layout>
   )
 }

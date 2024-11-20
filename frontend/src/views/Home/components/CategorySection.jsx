@@ -21,7 +21,7 @@ const CategorySection = ({
           </h1>
           <p className="mt-3 text-center  ">
             Uncover a variety of services and experiences designed to cater to
-            your every need. E xplore the finest options available and find
+            your every need. Explore the finest options available and find
             exactly what you&apos;re looking for!
           </p>
         </div>

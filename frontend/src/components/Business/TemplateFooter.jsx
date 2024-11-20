@@ -5,7 +5,7 @@ const TemplateFooter = ({ businessData, closeDays }) => {
   return (
     <footer className="h-auto">
       <div className="container pjs  p-top">
-        <div className="mt-1">
+        <div className="mt-5">
           <div className="row">
             <div className="col-12 col-lg-3">
               <div className="col-12 d-block d-lg-flex text-center text-lg-start text mt-5">

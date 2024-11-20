@@ -1,4 +1,4 @@
-import { Suspense, lazy, useEffect } from "react";
+import { Suspense, lazy } from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -11,7 +11,6 @@ import "/src/assets/css/style.css";
 import "/src/assets/css/template.css";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import Loader from "./components/Loader/Loader";
 
 // Import the necessary components
 // import CreateBusiness from "./containers/CreateBusiness";
@@ -21,9 +20,14 @@ import Template from "./containers/Template";
 import PremiumTemplate from "./containers/PremiumTemplate";
 import TermsAndConditions from "./components/Business/TermsAndConditions";
 import BusinessTermsAndConditions from "./components/Business/BusinessTermsAndConditions";
+import Loader from "./components/Loader/Loader";
 
 // Lazy loading components
-const Home = lazy(() => import("./views/Home"));
+const Home = lazy(() =>
+  new Promise((resolve) => {
+    setTimeout(() => resolve(import("./views/Home")), 500); 
+  })
+);
 // const Business = lazy(() => import("./containers/Business"));
 // const Testimonials = lazy(() => import("./containers/Testimonials"));
 // const Template = lazy(() => import("./containers/Template"));
@@ -111,11 +115,6 @@ const router = createBrowserRouter([
 ]);
 
 function App() {
-
-
-  useEffect(()=>{
-    window.scrollTo(0, 0);
-  },[])
   return (
     <>
       <ToastContainer
@@ -130,9 +129,7 @@ function App() {
         pauseOnHover
         theme="colored"
       />
-      <Suspense fallback={<div>
-       Loading...
-      </div>}>
+      <Suspense fallback={<Loader/>}>
         <RouterProvider router={router} />
       </Suspense>
     </>

@@ -40,11 +40,6 @@ const FooterSection = () => {
                     Useful Links
                   </h3>
                   <div className="col-12 mb-3 text-center text-md-start">
-                    <a href="https://admin.enconnect.in/" className="fs-20 text-white">
-                      Go to Admin Panel
-                    </a>
-                  </div>
-                  <div className="col-12 mb-3 text-center text-md-start">
                     <a href="" className="fs-20 text-white">
                       About Me
                     </a>
