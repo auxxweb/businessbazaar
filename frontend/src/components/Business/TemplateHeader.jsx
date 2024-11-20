@@ -13,7 +13,7 @@ const TemplateHeader = ({businessData}) => {
     <button
       className="btn btn-outline-secondary d-none d-lg-inline-block me-2"
       onClick={() => window.location.href = "/"} // Modify the onClick action as needed
-    >Home
+     ><i className="bi bi-arrow-left"></i> Home
     </button>
 
     {/* Align Brand to the start (left side) */}
@@ -45,7 +45,7 @@ const TemplateHeader = ({businessData}) => {
           className="text-black text-center text-lg-start text-decoration-none fs-14"
           style={{ color: "black" }}
         >
-           <i className="bi bi-arrow-left"></i>
+           
           Home
         </NavLink>
         <NavLink

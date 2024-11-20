@@ -191,6 +191,11 @@ footer {
     font-size: 1.25rem;
   }
 }
+.btn-outline-secondary {
+  border-color: #105193 !important;
+  font-size: small;
+  /* color: #6c757d !important; */
+}
 .gallery-img {
   height: 300px;
   object-fit: cover;
