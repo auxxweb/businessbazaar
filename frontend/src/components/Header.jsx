@@ -38,6 +38,14 @@ export default function Header() {
             >
               Review
             </a>
+            <a
+              href="https://admin.enconnect.in/"
+              target="_blank"
+              className="text-black text-decoration-none mx-3 my-auto"
+              style={{ fontSize: '16px' }}
+            >
+              Admin Panel
+            </a>
             <NavLink
               to="/create-business"
               className="fw-bold text-decoration-none mx-3 my-auto"

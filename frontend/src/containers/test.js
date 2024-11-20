@@ -2473,7 +2473,23 @@ export default function CreateBusiness() {
 
         // If there's no business data (e.g., fetch failed), show an error message
         if (!businessData) {
-            return <div>Error loading business data.</div>;
+            return <div className="bg-white p-6 rounded-xl shadow-lg border border-blue-200">
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                height: "200px",
+                color: "#1D4ED8", // Tailwind [#107D93]
+                fontSize: "20px", // Slightly larger font size for premium feel
+                textAlign: "center",
+                fontWeight: "500", // Medium font weight
+                fontFamily: "'Inter', sans-serif" // Premium standard font
+              }}
+            >
+              Error loading business data.
+            </div>
+          </div>;
         }
 
 
