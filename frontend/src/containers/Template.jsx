@@ -52,6 +52,22 @@ export default function Template() {
     "saturday",
     "sunday",
   ];
+
+  const [isTruncated, setIsTruncated] = useState(true);
+
+  // Function to truncate text after a specified character limit
+  const truncateText = (text, limit = 100) => {
+    if (text?.length > limit && isTruncated) {
+      return text.slice(0, limit) + '';
+    }
+    return text;
+  };
+
+  // Toggle the truncation state when clicked
+  const toggleTruncation = () => {
+    setIsTruncated(!isTruncated);
+  };
+
   const [newsLetterEmail, setNewsLetterEmail] = useState("");
 
   const handleFormSubmit = async (e, formData) => {
@@ -396,124 +412,124 @@ export default function Template() {
   // If there's no business data (e.g., fetch failed), show an error message
   if (!businessData) {
     return <>
-    <Navbar
-      expand="lg"
-      className="bg-white pjs fixed-top"
-      style={{ paddingBlock: "5px" }}
-    >
-      <Container>
-        {/* Back button for large screens (before the logo) */}
-        <button
-          className="btn btn-outline-secondary d-none d-lg-inline-block me-2"
-          onClick={() => window.location.href = "/"} // Modify the onClick action as needed
-        >
-          <i className="bi bi-arrow-left"></i> Home
-        </button>
+      <Navbar
+        expand="lg"
+        className="bg-white pjs fixed-top"
+        style={{ paddingBlock: "5px" }}
+      >
+        <Container>
+          {/* Back button for large screens (before the logo) */}
+          <button
+            className="btn btn-outline-secondary d-none d-lg-inline-block me-2"
+            onClick={() => window.location.href = "/"} // Modify the onClick action as needed
+          >
+            <i className="bi bi-arrow-left"></i> Homeeee
+          </button>
 
-        {/* Align Brand to the start (left side) */}
-        <Navbar.Brand
-          href="#"
-          className="fw-bold w-50 nav-logo"
-          style={{ fontSize: "36px" }}
-        >
-          <img
-            src={businessData?.logo && businessData?.logo.length > 0
-              ? businessData?.logo
-              : Placeholder}
-            alt={businessData?.businessName || "Logo Placeholder"} />
-          <span className="ms-2">{businessData?.businessName}</span>
-        </Navbar.Brand>
+          {/* Align Brand to the start (left side) */}
+          <Navbar.Brand
+            href="#"
+            className="fw-bold w-50 nav-logo"
+            style={{ fontSize: "36px" }}
+          >
+            <img
+              src={businessData?.logo && businessData?.logo.length > 0
+                ? businessData?.logo
+                : Placeholder}
+              alt={businessData?.businessName || "Logo Placeholder"} />
+            <span className="ms-2">{businessData?.businessName}</span>
+          </Navbar.Brand>
 
-        <Navbar.Toggle
-          aria-controls="basic-navbar-nav"
-          style={{ color: "black" }} />
+          <Navbar.Toggle
+            aria-controls="basic-navbar-nav"
+            style={{ color: "black" }} />
 
-        <Navbar.Collapse id="basic-navbar-nav">
-          <Nav className="ms-auto w-100 justify-content-evenly jcc">
-            <NavLink
-              href="#"
-              className="text-black text-center text-lg-start text-decoration-none fs-14"
-              style={{ color: "black" }}
-            >
-              Home
-            </NavLink>
-            <NavLink
-              href="#about"
-              className="text-black text-center text-lg-start text-decoration-none fs-14"
-              style={{ color: "black" }}
-            >
-              About
-            </NavLink>
-            <NavLink
-              href="#gallery"
-              className="text-black text-center text-lg-start text-decoration-none fs-14"
-              style={{ color: "black" }}
-            >
-              Gallery
-            </NavLink>
-            <NavLink
-              href="#contact"
-              className="text-black text-center text-lg-start text-decoration-none fs-14"
-              style={{ color: "black" }}
-            >
-              Contact
-            </NavLink>
-            <NavLink
-              href="#news"
-              onClick={(e) => setShowNews(true)}
-              className="text-black text-center text-lg-start text-decoration-none fs-14"
-              style={{ color: "black" }}
-            >
-              News
-            </NavLink>
-            <NavLink
-              href="#services"
-              style={{
-                backgroundColor: "#105193",
-                color: "white",
-                borderRadius: "10px 0px",
-                padding: "8px 20px",
-                fontSize: "13px",
-                boxShadow: "0px 15px 30px rgba(0, 0, 0, 0.15)",
-              }}
-              className="fw-bold text-decoration-none text-center text-lg-start"
-            >
-              Services
-            </NavLink>
+          <Navbar.Collapse id="basic-navbar-nav">
+            <Nav className="ms-auto w-100 justify-content-evenly jcc">
+              <NavLink
+                href="#"
+                className="text-black text-center text-lg-start text-decoration-none fs-14"
+                style={{ color: "black" }}
+              >
+                Home
+              </NavLink>
+              <NavLink
+                href="#about"
+                className="text-black text-center text-lg-start text-decoration-none fs-14"
+                style={{ color: "black" }}
+              >
+                About
+              </NavLink>
+              <NavLink
+                href="#gallery"
+                className="text-black text-center text-lg-start text-decoration-none fs-14"
+                style={{ color: "black" }}
+              >
+                Gallery
+              </NavLink>
+              <NavLink
+                href="#contact"
+                className="text-black text-center text-lg-start text-decoration-none fs-14"
+                style={{ color: "black" }}
+              >
+                Contact
+              </NavLink>
+              <NavLink
+                href="#news"
+                onClick={(e) => setShowNews(true)}
+                className="text-black text-center text-lg-start text-decoration-none fs-14"
+                style={{ color: "black" }}
+              >
+                News
+              </NavLink>
+              <NavLink
+                href="#services"
+                style={{
+                  backgroundColor: "#105193",
+                  color: "white",
+                  borderRadius: "10px 0px",
+                  padding: "8px 20px",
+                  fontSize: "13px",
+                  boxShadow: "0px 15px 30px rgba(0, 0, 0, 0.15)",
+                }}
+                className="fw-bold text-decoration-none text-center text-lg-start"
+              >
+                Services
+              </NavLink>
 
-            {/* Back button for smaller screens (inside menu items) */}
-            <button
-              className="btn btn-outline-secondary d-lg-none mt-2"
-              onClick={() => window.location.href = "/"} // Modify the onClick action as needed
-            >
-              Back to Home
-            </button>
-          </Nav>
-        </Navbar.Collapse>
-      </Container>
-    </Navbar>
-    <section className="h-auto">
-        <div className="container p-top" style={{ height: "100vh", display: "flex", justifyContent: "center", alignItems: "center"}}>
-        <div
-      style={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        height: "200px",
-        color: "#1D4ED8", // Tailwind [#107D93]
-        fontSize: "20px", // Slightly larger font size for premium feel
-        textAlign: "center",
-        fontWeight: "500", // Medium font weight
-        fontFamily: "'Inter', sans-serif" // Premium standard font
-      }}
-    >
-      Error loading business data.
-    </div>
-            </div>
+              {/* Back button for smaller screens (inside menu items) */}
+              <button
+                className="btn btn-outline-secondary d-lg-none mt-2"
+                onClick={() => window.location.href = "/"} // Modify the onClick action as needed
+              >
+                Back to Home
+              </button>
+            </Nav>
+          </Navbar.Collapse>
+        </Container>
+      </Navbar>
+      <section className="h-auto">
+        <div className="container p-top" style={{ height: "100vh", display: "flex", justifyContent: "center", alignItems: "center" }}>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              height: "200px",
+              color: "#1D4ED8", // Tailwind [#107D93]
+              fontSize: "20px", // Slightly larger font size for premium feel
+              textAlign: "center",
+              fontWeight: "500", // Medium font weight
+              fontFamily: "'Inter', sans-serif" // Premium standard font
+            }}
+          >
+            Error loading business data.
+          </div>
+        </div>
 
-        
-        </section>
-        </>;
+
+      </section>
+    </>;
   }
 
   return (
@@ -568,113 +584,151 @@ export default function Template() {
                     `}
       </style>
       <Navbar
-  expand="lg"
-  className="bg-white pjs fixed-top"
-  style={{ paddingBlock: "5px" }}
->
-  <Container>
-    {/* Back button for large screens (before the logo) */}
-    <button
-      className="btn btn-outline-secondary d-none d-lg-inline-block me-2"
-      onClick={() => window.location.href = "/"} // Modify the onClick action as needed
-    >
-     <i className="bi bi-arrow-left"></i> Home
-    </button>
-
-    {/* Align Brand to the start (left side) */}
-    <Navbar.Brand
-      href="#"
-      className="fw-bold w-50 nav-logo"
-      style={{ fontSize: "36px" }}
-    >
-      <img
-        src={
-          businessData?.logo && businessData?.logo.length > 0
-            ? businessData?.logo
-            : Placeholder
-        }
-        alt={businessData?.businessName || "Logo Placeholder"}
-      />
-      <span className="ms-2">{businessData?.businessName}</span>
-    </Navbar.Brand>
-
-    <Navbar.Toggle
-      aria-controls="basic-navbar-nav"
-      style={{ color: "black" }}
-    />
-
-    <Navbar.Collapse id="basic-navbar-nav">
-      <Nav className="ms-auto w-100 justify-content-evenly jcc">
-        <NavLink
-          href="#"
-          className="text-black text-center text-lg-start text-decoration-none fs-14"
-          style={{ color: "black" }}
-        >
-          Home
-        </NavLink>
-        <NavLink
-          href="#about"
-          className="text-black text-center text-lg-start text-decoration-none fs-14"
-          style={{ color: "black" }}
-        >
-          About
-        </NavLink>
-        <NavLink
-          href="#gallery"
-          className="text-black text-center text-lg-start text-decoration-none fs-14"
-          style={{ color: "black" }}
-        >
-          Gallery
-        </NavLink>
-        <NavLink
-          href="#contact"
-          className="text-black text-center text-lg-start text-decoration-none fs-14"
-          style={{ color: "black" }}
-        >
-          Contact
-        </NavLink>
-        <NavLink
-          href="#news"
-          onClick={(e) => setShowNews(true)}
-          className="text-black text-center text-lg-start text-decoration-none fs-14"
-          style={{ color: "black" }}
-        >
-          News
-        </NavLink>
-        <NavLink
-          href="#services"
-          style={{
-            backgroundColor: colorTheme,
-            color: "white",
-            borderRadius: "10px 0px",
-            padding: "8px 20px",
-            fontSize: "13px",
-            boxShadow: "0px 15px 30px rgba(0, 0, 0, 0.15)",
-          }}
-          className="fw-bold text-decoration-none text-center text-lg-start"
-        >
-          Services
-        </NavLink>
-
-        {/* Back button for smaller screens (inside menu items) */}
+        expand="lg"
+        className="bg-white pjs fixed-top"
+        style={{ paddingBlock: "5px" }}
+      >
         <button
-          className="btn btn-outline-secondary d-lg-none mt-2"
-          onClick={() => window.location.href = "/"} // Modify the onClick action as needed
+          className="btn d-none d-lg-inline-block me-2 mr-4"
+          style={{
+            marginLeft: '18px',
+
+            backgroundColor: "transparent", // Default transparent background
+            color: colorTheme, // Text color based on colorTheme
+            border: `1.5px solid ${colorTheme}`, // Border color based on colorTheme
+            padding: "4px 10px", // Reduced padding for smaller button size
+            fontSize: "12px", // Smaller font size
+            borderRadius: "6px", // Optional: Make edges slightly rounded
+          }}
+          onClick={() => (window.location.href = "/")}
+          onMouseEnter={(e) => {
+            e.target.style.backgroundColor = colorTheme; // Full background color on hover
+            e.target.style.color = "#fff"; // Text turns white on hover
+          }}
+          onMouseLeave={(e) => {
+            e.target.style.backgroundColor = "transparent"; // Transparent background when not hovering
+            e.target.style.color = colorTheme; // Text returns to colorTheme
+          }}
         >
-          Back to Home
+          <i className="bi bi-arrow-left"></i> Home
         </button>
-      </Nav>
-    </Navbar.Collapse>
-  </Container>
-</Navbar>
+
+        <Container>
+          {/* Back button for large screens (before the logo) */}
+
+
+
+          {/* Align Brand to the start (left side) */}
+          <Navbar.Brand
+            href="#"
+            className="fw-bold w-50 nav-logo"
+            style={{ fontSize: "36px" }}
+          >
+            <img
+              src={
+                businessData?.logo && businessData?.logo.length > 0
+                  ? businessData?.logo
+                  : Placeholder
+              }
+              alt={businessData?.businessName || "Logo Placeholder"}
+            />
+            <span className="ms-2">{businessData?.businessName}</span>
+          </Navbar.Brand>
+
+          <Navbar.Toggle
+            aria-controls="basic-navbar-nav"
+            style={{ color: "black" }}
+          />
+
+          <Navbar.Collapse id="basic-navbar-nav">
+            <Nav className="ms-auto w-100 justify-content-evenly jcc">
+              <NavLink
+                href="#"
+                className="text-black text-center text-lg-start text-decoration-none fs-14"
+                style={{ color: "black" }}
+              >
+                Home
+              </NavLink>
+              <NavLink
+                href="#about"
+                className="text-black text-center text-lg-start text-decoration-none fs-14"
+                style={{ color: "black" }}
+              >
+                About
+              </NavLink>
+              <NavLink
+                href="#gallery"
+                className="text-black text-center text-lg-start text-decoration-none fs-14"
+                style={{ color: "black" }}
+              >
+                Gallery
+              </NavLink>
+              <NavLink
+                href="#contact"
+                className="text-black text-center text-lg-start text-decoration-none fs-14"
+                style={{ color: "black" }}
+              >
+                Contact
+              </NavLink>
+              <NavLink
+                href="#news"
+                onClick={(e) => setShowNews(true)}
+                className="text-black text-center text-lg-start text-decoration-none fs-14"
+                style={{ color: "black" }}
+              >
+                News
+              </NavLink>
+              <NavLink
+                href="#services"
+                style={{
+                  backgroundColor: colorTheme,
+                  color: "white",
+                  borderRadius: "10px 0px",
+                  padding: "8px 20px",
+                  fontSize: "13px",
+                  boxShadow: "0px 15px 30px rgba(0, 0, 0, 0.15)",
+                }}
+                className="fw-bold text-decoration-none text-center text-lg-start"
+              >
+                Services
+              </NavLink>
+
+              {/* Back button for smaller screens (inside menu items) */}
+              <button
+                className="btn btn-outline-secondary d-lg-none mt-2"
+                style={{
+                  backgroundColor: "transparent", // Default transparent background
+                  color: colorTheme, // Text color based on colorTheme
+                  border: `2px solid ${colorTheme}`, // Border color based on colorTheme
+                  padding: "6px 16px", // Adjust padding if needed
+                  fontSize: "13px", // Adjust font size for smaller screens
+                  borderRadius: "0px 10px",// Optional: Rounded edges for better UI
+                }}
+                onClick={() => (window.location.href = "/")}
+                onMouseEnter={(e) => {
+                  e.target.style.backgroundColor = colorTheme; // Full background color on hover
+                  e.target.style.color = "#fff"; // Text turns white on hover
+                }}
+                onMouseLeave={(e) => {
+                  e.target.style.backgroundColor = "transparent"; // Transparent background when not hovering
+                  e.target.style.color = colorTheme; // Text returns to colorTheme
+                }}
+              >
+                Back to Home
+              </button>
+
+            </Nav>
+          </Navbar.Collapse>
+        </Container>
+      </Navbar>
 
       {showNews ? <NewsArticles newsData={businessData?.landingPageHero} colorTheme={colorTheme} /> : <>
 
-        <section className="h-auto" >
-          <div className="container p-top">
+        <section className="h-auto">
+          <div className="container  pt-0 ">
             <div className="row align-items-center banner-section">
               {/* Left Image for Mobile View */}
-              <div className="col-12 col-lg-6 text-end d-block d-lg-none">
+              <div className="col-12 col-lg-6 text-center text-lg-end d-block d-lg-none">
                 <img
                   src={
                     businessData?.landingPageHero?.coverImage &&
@@ -685,25 +739,33 @@ export default function Template() {
                   alt=""
                   className="banner-image"
                 />
-                <div className="banner-image-2 d-none">
-                  <img src="/src/assets/images/baner-image2.png" alt="" />
-                </div>
               </div>
+
 
               {/* Text Content */}
               <div className="col-12 col-lg-6">
                 <div className="row align-items-center">
                   <div className="col-12">
-                    <h1 className="text-start text-dark fw-bold david-font fw-bold banner-title text-center text-lg-start">
+                    <h1 className="text-dark fw-bold david-font banner-title text-center text-lg-start sm:text-sm sm:leading-5 sm:whitespace-nowrap lg:text-4xl">
                       {businessData?.landingPageHero?.title}
                     </h1>
                   </div>
+
                   <div className="col-12">
                     <p className="text-secondary text-center text-lg-start david-font">
-                      {businessData?.landingPageHero?.description}
+                      {truncateText(businessData?.landingPageHero?.description, 100)}
+                      {businessData?.landingPageHero?.description?.length > 100 && isTruncated && (
+                        <span
+                          onClick={toggleTruncation}
+                          className="text-primary cursor-pointer ml-1 text-black"
+                        >
+                          ...
+                        </span>
+                      )}
                     </p>
                   </div>
-                  <div className="mt-3 col-12">
+                  {/* Hide Buttons on Mobile */}
+                  <div className="mt-3 col-12 d-none d-lg-block">
                     <div className="row">
                       <div className="col-6 col-lg-3 mb-2">
                         <NavLink
@@ -724,7 +786,9 @@ export default function Template() {
                       </div>
                     </div>
                   </div>
-                  <div className="mt-5 col-12 social-media gap-3">
+
+                  {/* Social Media Links */}
+                  <div className="mt-2 col-12 social-media gap-3">
                     <a
                       href={
                         businessData?.socialMediaLinks?.length &&
@@ -733,7 +797,7 @@ export default function Template() {
                       target="_blank"
                       className="contact-banner text-dark"
                     >
-                      <i className="bi bi-facebook"></i>
+                      <i className="bi bi-facebook text-3xl sm:text-xl"></i>
                     </a>
                     <a
                       href={
@@ -743,7 +807,7 @@ export default function Template() {
                       target="_blank"
                       className="contact-banner text-dark"
                     >
-                      <i className="bi bi-instagram"></i>
+                      <i className="bi bi-instagram text-3xl sm:text-xl"></i>
                     </a>
                     <a
                       href={
@@ -753,9 +817,11 @@ export default function Template() {
                       target="_blank"
                       className="contact-banner text-dark"
                     >
-                      <i className="bi bi-twitter"></i>
+                      <i className="bi bi-twitter text-3xl sm:text-xl"></i>
                     </a>
                   </div>
+
+
                 </div>
               </div>
 
@@ -771,19 +837,18 @@ export default function Template() {
                   alt=""
                   className="banner-image"
                 />
-                <div className="banner-image-2 d-none">
-                  <img src="/src/assets/images/baner-image2.png" alt="" />
-                </div>
               </div>
             </div>
           </div>
         </section>
 
-        <div className="mt-5 mb-5">
-          <div className="container p-top">
+
+        <div className="mt-2 mb-3 sm:mt-0 sm:mb-0">
+          <div className="container px-4 sm:px-0">
             <div className="col-12 address-section">
               <div className="row justify-content-between">
-                <div className="col-12 col-lg-4 mb-3 mb-lg-0">
+                {/* Address Section */}
+                <div className="col-12 col-sm-4 mb-3 mb-sm-0">
                   <div className="row align-items-center justify-content-start">
                     <a
                       href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
@@ -791,58 +856,54 @@ export default function Template() {
                       )}`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      style={{ textDecoration: 'none', color: 'inherit' }}
+                      className="text-decoration-none text-dark"
                     >
                       <div className="row">
                         <div className="col-auto address-logo">
-                          <i className="bi bi-geo-alt-fill"></i>
+                          <i className="bi bi-geo-alt-fill text-2xl sm:text-lg" />
                         </div>
                         <div className="col">
-                          <span className="fs-13">Address</span>
-                          <p className="fs-16">
-                            {businessData.address.buildingName},{" "}
-                            {businessData.address.city},
-                            {businessData.address.landMark},
-                            {businessData.address.streetName},{" "}
-                            {businessData.address.state}
-                          </p>
+                          <span className="fs-12 sm:fs-10">Address</span>
+                          <p className="fs-14 sm:fs-12">{`${businessData.address.buildingName}, ${businessData.address.city}, ${businessData.address.landMark}, ${businessData.address.streetName}, ${businessData.address.state}`}</p>
                         </div>
                       </div>
                     </a>
-
                   </div>
                 </div>
 
-                <div className="col-12 col-lg-4 mb-3 mb-lg-0">
+                {/* Email Section */}
+                <div className="col-12 col-sm-4 mb-3 mb-sm-0">
                   <div className="row align-items-center justify-content-start">
                     <div className="col-auto address-logo">
-                      <i className="bi bi-envelope-fill"></i>
+                      <i className="bi bi-envelope-fill text-2xl sm:text-lg" />
                     </div>
-                    <a href={`mailto:${businessData?.contactDetails?.email}`} style={{ textDecoration: 'none', color: 'inherit' }}>
-                      <div className="col">
-                        <span className="fs-13">Send Email</span>
-                        <p className="fs-16">
-                          {businessData?.contactDetails?.email}
-                        </p>
-                      </div>
-                    </a>
 
+                    <div className="col">
+                      <a
+                        href={`mailto:${businessData?.contactDetails?.email}`}
+                        className="text-decoration-none text-dark"
+                      >
+                        <span className="fs-12 sm:fs-10">Send Email</span>
+                        <p className="fs-14 sm:fs-12">{businessData?.contactDetails?.email}</p>
+                      </a>
+                    </div>
                   </div>
                 </div>
 
-                <div className="col-12 col-lg-4 mb-3 mb-lg-0">
+                {/* Contact Section */}
+                <div className="col-12 col-sm-4 mb-3 mb-sm-0">
                   <div className="row align-items-center justify-content-start">
                     <div className="col-auto address-logo">
-                      <i className="bi bi-telephone"></i>
+                      <i className="bi bi-telephone text-2xl sm:text-lg" />
                     </div>
                     <div className="col">
-                      <span className="fs-13">Contact</span>
-                      <p className="fs-16 mb-0">
+                      <span className="fs-12 sm:fs-10">Contact</span>
+                      <p className="fs-14 sm:fs-12 mb-0">
                         <a href={`tel:${businessData?.contactDetails?.primaryNumber}`}>
                           {businessData?.contactDetails?.primaryNumber}
                         </a>
                       </p>
-                      <p className="fs-16 mt-0">
+                      <p className="fs-14 sm:fs-12 mt-0">
                         <a href={`tel:${businessData?.contactDetails?.secondaryNumber}`}>
                           {businessData?.contactDetails?.secondaryNumber}
                         </a>
@@ -854,6 +915,8 @@ export default function Template() {
             </div>
           </div>
         </div>
+
+
 
         <section
           className=" h-auto"

@@ -124,13 +124,13 @@ footer {
 
   .banner-title {
     color: '#101A24';
-    font-size: 40px;
-    font-weight: '700';
-    /* line-height: 70px; */
+    font-size: 30px;
+    font-weight: '900';
+    line-height: 35px;
   }
 
   .banner-image {
-    width: 50%;
+    width: 100%;
   }
 
   .banner-image-2 img {
@@ -217,9 +217,12 @@ footer {
 
 @media (max-width: 576px) {
   .address-section {
-    padding: 20px;
+    padding-top: 20px; 
+    padding-bottom: 0px;
+    line-height: 14px;
   }
 
+ 
   .fs-13 {
     font-size: 0.8rem;
   }
@@ -229,7 +232,7 @@ footer {
   }
 
   .address-logo i {
-    font-size: 1.25rem;
+    font-size: 1rem;
   }
 }
 
