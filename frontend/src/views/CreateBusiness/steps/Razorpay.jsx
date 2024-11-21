@@ -51,9 +51,9 @@ export default function Razorpay() {
       key: "rzp_test_w5XnOXa3pTEdZE", // Dummy Razorpay key ID for testing
       amount: planDetails?.amount * 100, // Amount in paise (50000 paise = ₹500)
       currency: "INR",
-      name: "InConnect",
+      name: "EnConnect",
       description:
-        "InConnect is a comprehensive platform designed to simplify and enhance professional networking, providing seamless tools for business growth, collaboration, and community building",
+        "EnConnect is a comprehensive platform designed to simplify and enhance professional networking, providing seamless tools for business growth, collaboration, and community building",
       image: "https://instant-connect.in/src/assets/images/enConnectLogo.jpg", // Dummy logo URL
       handler: async function (response) {
         console.log(response, "response");
