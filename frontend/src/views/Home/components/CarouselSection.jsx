@@ -15,7 +15,7 @@ const CarouselSection = ({ bannerData, onSearch, setLocation }) => {
     <div id="#home" className="h-100vh ">
       <div className="h-100 bg-red">
       <div className="border-1 surface-border border-round text-center h-100">
-      <Carousel controls={false} indicators={false} className="banner-slick h-100">
+      <Carousel controls={false}  className="banner-slick h-100">
         {bannerData && bannerData.length > 0 ? (
           bannerData.map((banner) => (
             <Carousel.Item key={`key-${banner?._id}`} className="h-100">
