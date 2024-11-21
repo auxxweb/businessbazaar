@@ -32,7 +32,33 @@ const FooterSection = () => {
               <span className="fs-20 text-white text-center text-md-start">
                 where requirements are found
               </span>
+
+              <div className="col-12 text-center text-lg-start">
+                {/* Title */}
+                <div className="mt-3 mb-2">
+                  <a
+                    href="#"
+                    className="fs-14 text-decoration-none text-orange"
+                  >
+                    FOLLOW US
+                  </a>
+                </div>
+
+                {/* Social Media Icons */}
+                <div className="row justify-content-center justify-content-lg-start gap-3">
+                  <a href="#" className="contact-banner text-orange">
+                    <i className="bi bi-facebook text-orange"></i>
+                  </a>
+                  <a href="#" className="contact-banner text-orange">
+                    <i className="bi bi-instagram text-orange"></i>
+                  </a>
+                  <a href="#" className="contact-banner text-orange">
+                    <i className="bi bi-twitter text-orange"></i>
+                  </a>
+                </div>
+              </div>
             </div>
+
             <div className="col-12 col-md-6">
               <div className="row ">
                 <div className="col-12 col-md-6 text-start usefull-links">

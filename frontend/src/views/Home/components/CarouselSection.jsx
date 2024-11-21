@@ -64,7 +64,7 @@ const CarouselSection = ({ bannerData, onSearch, setLocation }) => {
                 className="head-line fw-bold text-start"
                 data-aos="fade-right"
               >
-                In<span className="text-theme2">Connect</span> <br />
+                En<span className="text-theme2">Connect</span> <br />
                 Your Digital Platform for Growing Your Business
               </h1>
               <p className="text-white d-none d-md-block" data-aos="zoom-in">
