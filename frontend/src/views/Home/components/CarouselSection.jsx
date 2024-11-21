@@ -14,56 +14,50 @@ const CarouselSection = ({ bannerData, onSearch, setLocation }) => {
   return (
     <div id="#home" className="h-100vh ">
       <div className="h-100 bg-red">
-        <div className="border-1 surface-border border-round text-center h-100">
-          <Carousel className="banner-slick h-100">
-            {bannerData && bannerData.length > 0 ? (
-              bannerData.map((banner) => (
-                <Carousel.Item key={`key-${banner?._id}`} className=" h-100">
-                  <img
-                    className="d-block w-100"
-                    src={
-                      banner?.image && banner?.image.length > 0
-                        ? banner?.image
-                        : Placeholder
-                    }
-                    alt="First slide"
-                    style={{
-                      objectFit: "cover",
-                      height: "100%",
-                      filter: "brightness(0.3)",
-                    }}
-                  />
-                </Carousel.Item>
-              ))
-            ) : (
-              <Carousel.Item className=" h-100">
-                <img
-                  className="d-block w-100"
-                  src="/src/assets/images/1.jpg"
-                  alt="First slide"
-                  style={{
-                    objectFit: "cover",
-                    height: "100%",
-                    filter: "brightness(0.3)",
-                  }}
-                />
-              </Carousel.Item>
-            )}
-          </Carousel>
-        </div>
+      <div className="border-1 surface-border border-round text-center h-100">
+      <Carousel controls={false} indicators={false} className="banner-slick h-100">
+        {bannerData && bannerData.length > 0 ? (
+          bannerData.map((banner) => (
+            <Carousel.Item key={`key-${banner?._id}`} className="h-100">
+              <img
+                className="d-block w-100"
+                src={
+                  banner?.image && banner?.image.length > 0
+                    ? banner?.image
+                    : Placeholder
+                }
+                alt="Banner slide"
+                style={{
+                  objectFit: "cover",
+                  height: "100%",
+                  filter: "brightness(0.3)",
+                }}
+              />
+            </Carousel.Item>
+          ))
+        ) : (
+          <Carousel.Item className="h-100">
+            <img
+              className="d-block w-100"
+              src="/src/assets/images/1.jpg"
+              alt="First slide"
+              style={{
+                objectFit: "cover",
+                height: "100%",
+                filter: "brightness(0.3)",
+              }}
+            />
+          </Carousel.Item>
+        )}
+      </Carousel>
+    </div>
       </div>
-      <div className="search-bar-div ">
-        <div className="container">
-        <div className="row banner-main-div flex flex-row items-start justify-between">
-        {/* Left Section */}
-            <div
-              className="col-12 col-md-6 banner-head-text"
-              style={{ textAlign: "left"  }}
-            >
-              <h1
-                className="head-line fw-bold text-start"
-                data-aos="fade-right"
-              >
+      <div className="search-bar-div sm:flex sm:justify-center sm:items-center ">
+        <div className="container ">
+          <div className="row banner-main-div flex flex-row items-center justify-between">
+            {/* Left Section */}
+            <div className="col-12 col-md-6 banner-head-text" style={{ textAlign: "left" }}>
+              <h1 className="text-5xl sm:text-4xl md:text-7xl text-white fw-bold font-bold text-start" data-aos="fade-right">
                 En<span className="text-theme2">Connect</span> <br />
                 Your Digital Platform for Growing Your Business
               </h1>
@@ -74,8 +68,8 @@ const CarouselSection = ({ bannerData, onSearch, setLocation }) => {
 
             {/* Right Section */}
             <div
-              className="col-12 col-md-6 search-div text-end"
-              style={{ display: "flex", flexDirection: "column",  }}
+              className="col-12 col-md-6 search-div text-end flex flex-column items-center justify-center"
+              style={{ display: "flex", flexDirection: "column", alignItems: "center" }}
             >
               {/* Location Input */}
               <LocationAutocomplete setLocation={setLocation} />
@@ -103,10 +97,7 @@ const CarouselSection = ({ bannerData, onSearch, setLocation }) => {
                       background: "none",
                     }}
                   >
-                    <i
-                      className="bi bi-search fw-bold"
-                      style={{ fontSize: "1.2em" }}
-                    ></i>
+                    <i className="bi bi-search fw-bold" style={{ fontSize: "1.2em" }}></i>
                   </span>
                   <input
                     type="text"
@@ -123,11 +114,7 @@ const CarouselSection = ({ bannerData, onSearch, setLocation }) => {
                       background: "none",
                     }}
                   />
-                  <button
-                    className="btn btn-md bg-theme"
-                    style={{ border: "none" }}
-                    onClick={handleSearchSubmit}
-                  >
+                  <button className="btn btn-md bg-theme" style={{ border: "none" }} onClick={handleSearchSubmit}>
                     Search
                   </button>
                 </div>
@@ -136,6 +123,7 @@ const CarouselSection = ({ bannerData, onSearch, setLocation }) => {
           </div>
         </div>
       </div>
+
     </div>
 
   );
