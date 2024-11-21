@@ -38,24 +38,34 @@ const FooterSection = () => {
                 <div className="mt-3 mb-2">
                   <a
                     href="#"
-                    className="fs-14 text-decoration-none text-orange"
+                    className="fs-14 text-decoration-none text-orange " style={{color:'#fff'}}
                   >
                     FOLLOW US
                   </a>
                 </div>
 
                 {/* Social Media Icons */}
-                <div className="row justify-content-center justify-content-lg-start gap-3">
-                  <a href="#" className="contact-banner text-orange">
-                    <i className="bi bi-facebook text-orange"></i>
+                <div className="d-flex justify-content-center justify-content-lg-start gap-3">
+                  <a
+                    href="#" className="contact-banner text-orange d-flex align-items-center justify-content-center"
+                    style={{ fontSize: "1.5rem", width: "50px", height: "50px", backgroundColor: "transparent",color:'#107D93', border: "none" }}
+                  >
+                    <i className="bi bi-facebook"></i>
                   </a>
-                  <a href="#" className="contact-banner text-orange">
-                    <i className="bi bi-instagram text-orange"></i>
+                  <a
+                    href="#" className="contact-banner text-orange d-flex align-items-center justify-content-center"
+                    style={{ fontSize: "1.5rem", width: "50px", height: "50px", backgroundColor: "transparent", color:'#107D93', border: "none" }}
+                  >
+                    <i className="bi bi-instagram"></i>
                   </a>
-                  <a href="#" className="contact-banner text-orange">
-                    <i className="bi bi-twitter text-orange"></i>
+                  <a
+                    href="#" className="contact-banner text-orange d-flex align-items-center justify-content-center"
+                    style={{ fontSize: "1.5rem", width: "50px", height: "50px", backgroundColor: "transparent", color:'#107D93', border: "none" }}
+                  >
+                    <i className="bi bi-twitter"></i>
                   </a>
                 </div>
+
               </div>
             </div>
 
@@ -119,7 +129,7 @@ const FooterSection = () => {
         <div className="footer-bottom p-4">
           <div className="row w-full justify-content-between">
             <div className="col-sm-4 text-left">
-              <a href={`/terms-and-conditions`}>Terms and Conditions</a>
+              <a href={`/terms-and-conditions`} >Terms and Conditions</a>
             </div>
             <div className="col-sm-4 text-right">
               <div style={{ color: "#A4B3CB" }} className="text-right">

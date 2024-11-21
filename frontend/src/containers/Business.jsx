@@ -1,94 +1,104 @@
-import React, { useEffect, useState } from 'react'
-import Layout from '../components/Layout'
-import { Link, useParams } from 'react-router-dom'
-import { fetchBusiness, getCategoryBusiness, getCategoryData } from '../Functions/functions'
-import Loader from '../components/Loader/Loader'
+import React, { useEffect, useState } from 'react';
+import Layout from '../components/Layout';
+import { Link, useParams } from 'react-router-dom';
+import { fetchBusiness, getCategoryBusiness, getCategoryData } from '../Functions/functions';
+import Loader from '../components/Loader/Loader';
 import Placeholder from "../assets/images/placeholder.jpg";
 import PlaceholderBanner from "../assets/images/BannerPlaceholder.png";
+import debounce from 'lodash.debounce';
 
 export default function Business() {
-  const [categoryData, setCategoryData] = useState([])
-  const [businessData, setBusinessData] = useState([])
-  const [totalBusinessData, setTotalBusinessData] = useState(0)
-  const [currentPage, setCurrentPage] = useState(1)
-  const [loading, setLoading] = useState(true)
-  const [searchTerm, setSearchTerm] = useState('')
-  const [limit, setLimit] = useState(1)
+  const [categoryData, setCategoryData] = useState([]);
+  const [businessData, setBusinessData] = useState([]);
+  const [totalBusinessData, setTotalBusinessData] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [loading, setLoading] = useState(true);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [limit, setLimit] = useState(10); // Adjusting the limit as needed
   const [visibleBusiness, setVisibleBusiness] = useState(10);
-  const { id } = useParams()
-  
+  const { id } = useParams();
+
+  // Scroll to the top when category changes
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [id]);
 
+  // Fetch data whenever currentPage, id, searchTerm, or visibleBusiness changes
   useEffect(() => {
-    if (id) {
-      const fetchData = async () => {
-        setLoading(true)
-        try {
+    const fetchData = async () => {
+      // setLoading(true);
+      try {
+        if (id) {
+          // Fetch data for a specific category
+          console.log('Fetching category data...');
           const category = await getCategoryData({
             categoryId: id,
             searchTerm,
             page: currentPage,
             limit,
-          })
-          setCategoryData(category.data)
+          });
+          console.log('Category Data:', category);
+          setCategoryData(category.data);
 
-          const business = await getCategoryBusiness(currentPage, id, searchTerm, visibleBusiness)
-          setTotalBusinessData(business.data.totalCount)
-          setBusinessData(business.data.data)
-        } catch (error) {
-          console.error('Error fetching data:', error)
-        } finally {
-          setLoading(false)
+          const business = await getCategoryBusiness(currentPage, id, searchTerm, visibleBusiness);
+          console.log('Business Data:', business);
+          setTotalBusinessData(business.data.totalCount);
+          setBusinessData(business.data.data);
+        } else {
+          // Fetch all businesses if no category id is provided
+          console.log('Fetching all business data...');
+          const business = await fetchBusiness(currentPage, visibleBusiness);
+          console.log('Business Data:', business);
+          setTotalBusinessData(business.data.totalCount);
+          setBusinessData(business.data.data);
         }
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      } finally {
+        console.log('Data fetch complete');
+        setLoading(false); // Make sure this is being reached
       }
+    };
 
-      fetchData()
-    }else{
-      const fetchData = async ()=>{
-        try {
-          setLoading(true)
-          const business = await fetchBusiness(currentPage,visibleBusiness)
-          console.log(business)
-          setTotalBusinessData(business.data.totalCount)
-          setBusinessData(business.data.data)
-        }catch(e){
-
-
-          console.error('Error fetching data:', error)
-        }
-        finally{
-          setLoading(false)
-        }
-      }
-      fetchData()
-    }
-  }, [currentPage, id, searchTerm,visibleBusiness])
+    fetchData();
+  }, [currentPage, id, searchTerm, visibleBusiness]);
 
   const totalPages = Math.ceil(totalBusinessData / limit);
 
-
- 
+  // Load more businesses when the button is clicked
   const loadMoreBusiness = () => {
     setVisibleBusiness((prev) => prev + 10);
   };
 
-  const handleSearch = (e) => {
-    setSearchTerm(e.target.value)
-    setCurrentPage(1) // Reset to first page on new search
-  }
+  // Debounced search function
+  const debouncedSearch = debounce((value) => {
+    setSearchTerm(value);
+    setCurrentPage(1); // Reset to first page on new search
+  }, 500); // 500 ms delay
 
-  if (loading) {
-    return <Loader />
-  }
+  // Handle immediate input update
+  const handleSearch = (e) => {
+    const value = e.target.value;
+    setSearchTerm(value); // Immediate update for the input field
+    debouncedSearch(value); // Trigger debounced search for API call
+  };
+
+  // If loading, show the Loader component
+  // if (loading) {
+  //   return <Loader />;
+  // }
 
   return (
     <Layout title="Business" navClass="home">
       <section className="business-view-banner">
-        <img src={id?categoryData.coverImage:"/src/assets/images/businesses.jpg"} className="w-100 h-100" style={{filter:"brightness(0.4)"}} alt="" />
+        <img
+          src={id ? categoryData.coverImage : "/src/assets/images/businesses.jpg"}
+          className="w-100 h-100"
+          style={{ filter: "brightness(0.4)" }}
+          alt=""
+        />
         <div className="text-center image-title">
-          <h2 className='text-white'>{id?categoryData.name:"All Businesses"}</h2>
+          <h2 className="text-white">{id ? categoryData.name : "All Businesses"}</h2>
         </div>
       </section>
 
@@ -109,12 +119,13 @@ export default function Business() {
                   >
                     <i className="bi bi-search fw-bold"></i>
                   </span>
+
                   <input
                     type="text"
                     className="form-control custom-placeholder"
                     placeholder="Search for Businesses"
                     value={searchTerm}
-                    onChange={handleSearch}
+                    onChange={handleSearch} // Immediate update with debounce for API call
                     style={{
                       borderTopRightRadius: '50px',
                       borderBottomRightRadius: '50px',
@@ -140,45 +151,54 @@ export default function Business() {
           </div>
 
           <div className="row justify-content-around gap-2">
-            {businessData.map((business) => (
-              <Link
-                to={business.selectedPlan?.isPremium? `/business/premium/${business?._id}` :`/business/${business?._id}`}
-                key={business._id}
-                className="text-decoration-none text-dark col-12 col-md-5 b-theme location-card mt-3"
-              >
-                <div className="row p-2">
-                  <div className="col-4 p-0">
-                    <img
-                      src={business.logo ? business.logo : Placeholder}
-                      alt=""
-                      className="w-100 br-theme"
-                    />
+            {businessData.length > 0 ? (
+              businessData.map((business) => (
+                <Link
+                  to={
+                    business.selectedPlan?.isPremium
+                      ? `/business/premium/${business?._id}`
+                      : `/business/${business?._id}`
+                  }
+                  key={business._id}
+                  className="text-decoration-none text-dark col-12 col-md-5 b-theme location-card mt-3"
+                >
+                  <div className="row p-2">
+                    <div className="col-4 p-0">
+                      <img
+                        src={business.logo ? business.logo : Placeholder}
+                        alt=""
+                        className="w-100 br-theme"
+                      />
+                    </div>
+                    <div className="col-8">
+                      <div className="col-12 mb-2 mt-2">
+                        <h2 style={{ fontSize: "28px" }}>{business.businessName}</h2>
+                      </div>
+                      <div className="col-12">
+                        <span>{business.category.name}</span>
+                      </div>
+                      <div className="col-12 mt-3">
+                        <h3 className="fs-16">
+                          <i className="bi bi-crosshair"></i>
+                          <span className="ms-1 fs-15">
+                            {business.address.buildingName}, {business.address.city},{" "}
+                            {business.address.landMark}, {business.address.streetName},{" "}
+                            {business.address.state}
+                          </span>
+                        </h3>
+                      </div>
+                    </div>
                   </div>
-                  <div className="col-8">
-                    <div className="col-12 mb-2 mt-2">
-                      <h2 style={{ fontSize: '28px' }}>
-                        {business.businessName}
-                      </h2>
-                    </div>
-                    <div className="col-12">
-                      <span>{business.category.name}</span>
-                    </div>
-                    <div className="col-12 mt-3">
-                      <h3 className="fs-16">
-                        <i className="bi bi-crosshair"></i>
-                        <span className="ms-1 fs-15">
-                          {business.address.buildingName},{' '}
-                          {business.address.city}, {business.address.landMark},{' '}
-                          {business.address.streetName},{' '}
-                          {business.address.state}
-                        </span>
-                      </h3>
-                    </div>
-                  </div>
-                </div>
-              </Link>
-            ))}
+                </Link>
+              ))
+            ) : (
+              <div className="text-center mt-5">
+                <h3>No businesses found</h3>
+                <p>Please check back later or refine your search.</p>
+              </div>
+            )}
           </div>
+
           {visibleBusiness < totalBusinessData && (
             <div className="mt-5 text-center mb-1">
               <button
@@ -189,11 +209,12 @@ export default function Business() {
               </button>
             </div>
           )}
-
         </div>
       </section>
-      <a href="#" className="btn btn-lg btn-bottom btn-lg-square back-to-top"><i className="bi bi-arrow-up"></i></a>
 
+      <a href="#" className="btn btn-lg btn-bottom btn-lg-square back-to-top">
+        <i className="bi bi-arrow-up"></i>
+      </a>
     </Layout>
-  )
+  );
 }
