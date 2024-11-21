@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Container, Nav, Navbar, NavLink } from "react-bootstrap";
+import { Carousel, Container, Nav, Navbar, NavLink } from "react-bootstrap";
 import "/src/assets/css/template.css";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
@@ -25,7 +25,24 @@ import Loader from "../components/Loader/Loader";
 import NewsArticles from "./NewsArticles";
 import { height } from "@fortawesome/free-brands-svg-icons/fa42Group";
 
+let items = document?.querySelectorAll('.carousel .carousel-item')
+
+items.forEach((el) => {
+  const minPerSlide = 4
+  let next = el.nextElementSibling
+  for (var i = 1; i < minPerSlide; i++) {
+    if (!next) {
+      // wrap carousel by using first child
+      next = items[0]
+    }
+    let cloneChild = next.cloneNode(true)
+    el.appendChild(cloneChild.children[0])
+    next = next.nextElementSibling
+  }
+})
+
 export default function Template() {
+
   const [currentSlide, setCurrentSlide] = useState(0);
   const [showNews, setShowNews] = useState(false)
   const [businessData, setBusinessData] = useState(null);
@@ -396,124 +413,124 @@ export default function Template() {
   // If there's no business data (e.g., fetch failed), show an error message
   if (!businessData) {
     return <>
-    <Navbar
-      expand="lg"
-      className="bg-white pjs fixed-top"
-      style={{ paddingBlock: "5px" }}
-    >
-      <Container>
-        {/* Back button for large screens (before the logo) */}
-        <button
-          className="btn btn-outline-secondary d-none d-lg-inline-block me-2"
-          onClick={() => window.location.href = "/"} // Modify the onClick action as needed
-        >
-          <i className="bi bi-arrow-left"></i> Home
-        </button>
+      <Navbar
+        expand="lg"
+        className="bg-white pjs fixed-top"
+        style={{ paddingBlock: "5px" }}
+      >
+        <Container>
+          {/* Back button for large screens (before the logo) */}
+          <button
+            className="btn btn-outline-secondary d-none d-lg-inline-block me-2"
+            onClick={() => window.location.href = "/"} // Modify the onClick action as needed
+          >
+            <i className="bi bi-arrow-left"></i> Home
+          </button>
 
-        {/* Align Brand to the start (left side) */}
-        <Navbar.Brand
-          href="#"
-          className="fw-bold w-50 nav-logo"
-          style={{ fontSize: "36px" }}
-        >
-          <img
-            src={businessData?.logo && businessData?.logo.length > 0
-              ? businessData?.logo
-              : Placeholder}
-            alt={businessData?.businessName || "Logo Placeholder"} />
-          <span className="ms-2">{businessData?.businessName}</span>
-        </Navbar.Brand>
+          {/* Align Brand to the start (left side) */}
+          <Navbar.Brand
+            href="#"
+            className="fw-bold w-50 nav-logo"
+            style={{ fontSize: "36px" }}
+          >
+            <img
+              src={businessData?.logo && businessData?.logo.length > 0
+                ? businessData?.logo
+                : Placeholder}
+              alt={businessData?.businessName || "Logo Placeholder"} />
+            <span className="ms-2">{businessData?.businessName}</span>
+          </Navbar.Brand>
 
-        <Navbar.Toggle
-          aria-controls="basic-navbar-nav"
-          style={{ color: "black" }} />
+          <Navbar.Toggle
+            aria-controls="basic-navbar-nav"
+            style={{ color: "black" }} />
 
-        <Navbar.Collapse id="basic-navbar-nav">
-          <Nav className="ms-auto w-100 justify-content-evenly jcc">
-            <NavLink
-              href="#"
-              className="text-black text-center text-lg-start text-decoration-none fs-14"
-              style={{ color: "black" }}
-            >
-              Home
-            </NavLink>
-            <NavLink
-              href="#about"
-              className="text-black text-center text-lg-start text-decoration-none fs-14"
-              style={{ color: "black" }}
-            >
-              About
-            </NavLink>
-            <NavLink
-              href="#gallery"
-              className="text-black text-center text-lg-start text-decoration-none fs-14"
-              style={{ color: "black" }}
-            >
-              Gallery
-            </NavLink>
-            <NavLink
-              href="#contact"
-              className="text-black text-center text-lg-start text-decoration-none fs-14"
-              style={{ color: "black" }}
-            >
-              Contact
-            </NavLink>
-            <NavLink
-              href="#news"
-              onClick={(e) => setShowNews(true)}
-              className="text-black text-center text-lg-start text-decoration-none fs-14"
-              style={{ color: "black" }}
-            >
-              News
-            </NavLink>
-            <NavLink
-              href="#services"
-              style={{
-                backgroundColor: "#105193",
-                color: "white",
-                borderRadius: "10px 0px",
-                padding: "8px 20px",
-                fontSize: "13px",
-                boxShadow: "0px 15px 30px rgba(0, 0, 0, 0.15)",
-              }}
-              className="fw-bold text-decoration-none text-center text-lg-start"
-            >
-              Services
-            </NavLink>
+          <Navbar.Collapse id="basic-navbar-nav">
+            <Nav className="ms-auto w-100 justify-content-evenly jcc">
+              <NavLink
+                href="#"
+                className="text-black text-center text-lg-start text-decoration-none fs-14"
+                style={{ color: "black" }}
+              >
+                Home
+              </NavLink>
+              <NavLink
+                href="#about"
+                className="text-black text-center text-lg-start text-decoration-none fs-14"
+                style={{ color: "black" }}
+              >
+                About
+              </NavLink>
+              <NavLink
+                href="#gallery"
+                className="text-black text-center text-lg-start text-decoration-none fs-14"
+                style={{ color: "black" }}
+              >
+                Gallery
+              </NavLink>
+              <NavLink
+                href="#contact"
+                className="text-black text-center text-lg-start text-decoration-none fs-14"
+                style={{ color: "black" }}
+              >
+                Contact
+              </NavLink>
+              <NavLink
+                href="#news"
+                onClick={(e) => setShowNews(true)}
+                className="text-black text-center text-lg-start text-decoration-none fs-14"
+                style={{ color: "black" }}
+              >
+                News
+              </NavLink>
+              <NavLink
+                href="#services"
+                style={{
+                  backgroundColor: "#105193",
+                  color: "white",
+                  borderRadius: "10px 0px",
+                  padding: "8px 20px",
+                  fontSize: "13px",
+                  boxShadow: "0px 15px 30px rgba(0, 0, 0, 0.15)",
+                }}
+                className="fw-bold text-decoration-none text-center text-lg-start"
+              >
+                Services
+              </NavLink>
 
-            {/* Back button for smaller screens (inside menu items) */}
-            <button
-              className="btn btn-outline-secondary d-lg-none mt-2"
-              onClick={() => window.location.href = "/"} // Modify the onClick action as needed
-            >
-              Back to Home
-            </button>
-          </Nav>
-        </Navbar.Collapse>
-      </Container>
-    </Navbar>
-    <section className="h-auto">
-        <div className="container p-top" style={{ height: "100vh", display: "flex", justifyContent: "center", alignItems: "center"}}>
-        <div
-      style={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        height: "200px",
-        color: "#1D4ED8", // Tailwind [#107D93]
-        fontSize: "20px", // Slightly larger font size for premium feel
-        textAlign: "center",
-        fontWeight: "500", // Medium font weight
-        fontFamily: "'Inter', sans-serif" // Premium standard font
-      }}
-    >
-      Error loading business data.
-    </div>
-            </div>
+              {/* Back button for smaller screens (inside menu items) */}
+              <button
+                className="btn btn-outline-secondary d-lg-none mt-2"
+                onClick={() => window.location.href = "/"} // Modify the onClick action as needed
+              >
+                Back to Home
+              </button>
+            </Nav>
+          </Navbar.Collapse>
+        </Container>
+      </Navbar>
+      <section className="h-auto">
+        <div className="container p-top" style={{ height: "100vh", display: "flex", justifyContent: "center", alignItems: "center" }}>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              height: "200px",
+              color: "#1D4ED8", // Tailwind [#107D93]
+              fontSize: "20px", // Slightly larger font size for premium feel
+              textAlign: "center",
+              fontWeight: "500", // Medium font weight
+              fontFamily: "'Inter', sans-serif" // Premium standard font
+            }}
+          >
+            Error loading business data.
+          </div>
+        </div>
 
-        
-        </section>
-        </>;
+
+      </section>
+    </>;
   }
 
   return (
@@ -568,105 +585,105 @@ export default function Template() {
                     `}
       </style>
       <Navbar
-  expand="lg"
-  className="bg-white pjs fixed-top"
-  style={{ paddingBlock: "5px" }}
->
-  <Container>
-    {/* Back button for large screens (before the logo) */}
-    <button
-      className="btn btn-outline-secondary d-none d-lg-inline-block me-2"
-      onClick={() => window.location.href = "/"} // Modify the onClick action as needed
-    >
-     <i className="bi bi-arrow-left"></i> Home
-    </button>
+        expand="lg"
+        className="bg-white pjs fixed-top"
+        style={{ paddingBlock: "5px" }}
+      >
+        <Container>
+          {/* Back button for large screens (before the logo) */}
+          <button
+            className="btn btn-outline-secondary d-none d-lg-inline-block me-2"
+            onClick={() => window.location.href = "/"} // Modify the onClick action as needed
+          >
+            <i className="bi bi-arrow-left"></i> Home
+          </button>
 
-    {/* Align Brand to the start (left side) */}
-    <Navbar.Brand
-      href="#"
-      className="fw-bold w-50 nav-logo"
-      style={{ fontSize: "36px" }}
-    >
-      <img
-        src={
-          businessData?.logo && businessData?.logo.length > 0
-            ? businessData?.logo
-            : Placeholder
-        }
-        alt={businessData?.businessName || "Logo Placeholder"}
-      />
-      <span className="ms-2">{businessData?.businessName}</span>
-    </Navbar.Brand>
+          {/* Align Brand to the start (left side) */}
+          <Navbar.Brand
+            href="#"
+            className="fw-bold w-50 nav-logo"
+            style={{ fontSize: "36px" }}
+          >
+            <img
+              src={
+                businessData?.logo && businessData?.logo.length > 0
+                  ? businessData?.logo
+                  : Placeholder
+              }
+              alt={businessData?.businessName || "Logo Placeholder"}
+            />
+            <span className="ms-2">{businessData?.businessName}</span>
+          </Navbar.Brand>
 
-    <Navbar.Toggle
-      aria-controls="basic-navbar-nav"
-      style={{ color: "black" }}
-    />
+          <Navbar.Toggle
+            aria-controls="basic-navbar-nav"
+            style={{ color: "black" }}
+          />
 
-    <Navbar.Collapse id="basic-navbar-nav">
-      <Nav className="ms-auto w-100 justify-content-evenly jcc">
-        <NavLink
-          href="#"
-          className="text-black text-center text-lg-start text-decoration-none fs-14"
-          style={{ color: "black" }}
-        >
-          Home
-        </NavLink>
-        <NavLink
-          href="#about"
-          className="text-black text-center text-lg-start text-decoration-none fs-14"
-          style={{ color: "black" }}
-        >
-          About
-        </NavLink>
-        <NavLink
-          href="#gallery"
-          className="text-black text-center text-lg-start text-decoration-none fs-14"
-          style={{ color: "black" }}
-        >
-          Gallery
-        </NavLink>
-        <NavLink
-          href="#contact"
-          className="text-black text-center text-lg-start text-decoration-none fs-14"
-          style={{ color: "black" }}
-        >
-          Contact
-        </NavLink>
-        <NavLink
-          href="#news"
-          onClick={(e) => setShowNews(true)}
-          className="text-black text-center text-lg-start text-decoration-none fs-14"
-          style={{ color: "black" }}
-        >
-          News
-        </NavLink>
-        <NavLink
-          href="#services"
-          style={{
-            backgroundColor: colorTheme,
-            color: "white",
-            borderRadius: "10px 0px",
-            padding: "8px 20px",
-            fontSize: "13px",
-            boxShadow: "0px 15px 30px rgba(0, 0, 0, 0.15)",
-          }}
-          className="fw-bold text-decoration-none text-center text-lg-start"
-        >
-          Services
-        </NavLink>
+          <Navbar.Collapse id="basic-navbar-nav">
+            <Nav className="ms-auto w-100 justify-content-evenly jcc">
+              <NavLink
+                href="#"
+                className="text-black text-center text-lg-start text-decoration-none fs-14"
+                style={{ color: "black" }}
+              >
+                Home
+              </NavLink>
+              <NavLink
+                href="#about"
+                className="text-black text-center text-lg-start text-decoration-none fs-14"
+                style={{ color: "black" }}
+              >
+                About
+              </NavLink>
+              <NavLink
+                href="#gallery"
+                className="text-black text-center text-lg-start text-decoration-none fs-14"
+                style={{ color: "black" }}
+              >
+                Gallery
+              </NavLink>
+              <NavLink
+                href="#contact"
+                className="text-black text-center text-lg-start text-decoration-none fs-14"
+                style={{ color: "black" }}
+              >
+                Contact
+              </NavLink>
+              <NavLink
+                href="#news"
+                onClick={(e) => setShowNews(true)}
+                className="text-black text-center text-lg-start text-decoration-none fs-14"
+                style={{ color: "black" }}
+              >
+                News
+              </NavLink>
+              <NavLink
+                href="#services"
+                style={{
+                  backgroundColor: colorTheme,
+                  color: "white",
+                  borderRadius: "10px 0px",
+                  padding: "8px 20px",
+                  fontSize: "13px",
+                  boxShadow: "0px 15px 30px rgba(0, 0, 0, 0.15)",
+                }}
+                className="fw-bold text-decoration-none text-center text-lg-start"
+              >
+                Services
+              </NavLink>
 
-        {/* Back button for smaller screens (inside menu items) */}
-        <button
-          className="btn btn-outline-secondary d-lg-none mt-2"
-          onClick={() => window.location.href = "/"} // Modify the onClick action as needed
-        >
-          Back to Home
-        </button>
-      </Nav>
-    </Navbar.Collapse>
-  </Container>
-</Navbar>
+              {/* Back button for smaller screens (inside menu items) */}
+              <button
+                className="btn btn-outline-secondary d-lg-none mt-2"
+                onClick={() => window.location.href = "/"} // Modify the onClick action as needed
+              >
+                Back to Home
+              </button>
+            </Nav>
+          </Navbar.Collapse>
+        </Container>
+      </Navbar>
 
       {showNews ? <NewsArticles newsData={businessData?.landingPageHero} colorTheme={colorTheme} /> : <>
 
@@ -781,9 +798,9 @@ export default function Template() {
 
         <div className="mt-5 mb-5">
           <div className="container p-top">
-            <div className="col-12 address-section">
-              <div className="row justify-content-between">
-                <div className="col-12 col-lg-4 mb-3 mb-lg-0">
+            <div className="col-12 address-section ">
+              <div className="row justify-content-between ">
+                <div className="col-12 col-lg-4  mb-lg-0 ">
                   <div className="row align-items-center justify-content-start">
                     <a
                       href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
@@ -793,8 +810,8 @@ export default function Template() {
                       rel="noopener noreferrer"
                       style={{ textDecoration: 'none', color: 'inherit' }}
                     >
-                      <div className="row">
-                        <div className="col-auto address-logo">
+                      <div className="row  d-flex justify-content-center align-items-center">
+                        <div className="col-auto address-logo  ">
                           <i className="bi bi-geo-alt-fill"></i>
                         </div>
                         <div className="col">
@@ -813,38 +830,38 @@ export default function Template() {
                   </div>
                 </div>
 
-                <div className="col-12 col-lg-4 mb-3 mb-lg-0">
-                  <div className="row align-items-center justify-content-start">
-                    <div className="col-auto address-logo">
+                <div className="col-12 col-lg-4   d-flex align-items-center  p-0   ">
+                  <div className=" d-flex   justify-content-start w-100 align-items-center  ">
+                    <div className="address-logo me-2  ">
                       <i className="bi bi-envelope-fill"></i>
                     </div>
-                    <a href={`mailto:${businessData?.contactDetails?.email}`} style={{ textDecoration: 'none', color: 'inherit' }}>
-                      <div className="col">
-                        <span className="fs-13">Send Email</span>
-                        <p className="fs-16">
-                          {businessData?.contactDetails?.email}
-                        </p>
-                      </div>
+                    <a className=" " href={`mailto:${businessData?.contactDetails?.email}`} style={{ textDecoration: 'none', color: 'inherit', width: "fit-content" }}>
+                      <span className="fs-13">Send Email</span>
+                      <p className="fs-16">
+                        {businessData?.contactDetails?.email}
+                      </p>
                     </a>
 
                   </div>
                 </div>
 
-                <div className="col-12 col-lg-4 mb-3 mb-lg-0">
-                  <div className="row align-items-center justify-content-start">
+                <div className="col-12 col-lg-4 mb-3 mb-lg-0  d-flex justify-content-start align-items-center ">
+                  <div className="row align-items-center  justify-content-start">
                     <div className="col-auto address-logo">
                       <i className="bi bi-telephone"></i>
                     </div>
-                    <div className="col">
+                    <div className="col ">
                       <span className="fs-13">Contact</span>
                       <p className="fs-16 mb-0">
-                        <a href={`tel:${businessData?.contactDetails?.primaryNumber}`}>
+                        <a className="text-white" style={{ textDecoration: "none" }} href={`tel:${businessData?.contactDetails?.primaryNumber}`}>
                           {businessData?.contactDetails?.primaryNumber}
                         </a>
                       </p>
                       <p className="fs-16 mt-0">
-                        <a href={`tel:${businessData?.contactDetails?.secondaryNumber}`}>
+
+                        <a className="text-white" style={{ textDecoration: "none" }} href={`tel:${businessData?.contactDetails?.secondaryNumber}`}>
                           {businessData?.contactDetails?.secondaryNumber}
+
                         </a>
                       </p>
                     </div>
@@ -1031,7 +1048,39 @@ export default function Template() {
               <h1 className="fw-bold text-center">Services We Provide</h1>
             </div>
             <div className="col-12 mb-5">
-              <Slider {...setting2} className="mb-5">
+              <Carousel controls={false} touch={true} >
+                {businessData?.service?.map((service, index) => (
+                  <Carousel.Item key={service?._id} className="" interval={1000} >
+                    <div
+
+                      className={`col-12 col-lg-4 service-design mx-auto  ${index === currentSlide ? "active" : "bg-white"
+                        }  mt-5 mb-5 text-center`}
+                    >
+                      <div className="col-12 text-center">
+                        <h3>{service.title}</h3>
+                      </div>
+                      <div className="col-12 mt-5">
+                        <p className="text-center">{service.description}</p>
+                      </div>
+                      <div
+                        className="col-12 text-center"
+                        style={{ height: "100px" }}
+                      >
+                        <img
+                          src={
+                            service.image && service.image.length > 0
+                              ? service.image
+                              : Placeholder
+                          }
+                          alt={service.title}
+                          className="h-100"
+                        />
+                      </div>
+                    </div>
+                  </Carousel.Item>
+                ))}
+              </Carousel>
+              {/* <Slider {...setting2}   className="mb-5"> 
                 {businessData?.service?.map((service, index) => (
                   <div
                     key={index}
@@ -1060,24 +1109,29 @@ export default function Template() {
                     </div>
                   </div>
                 ))}
-              </Slider>
+               </Slider> */}
             </div>
 
             <div className="col-12 mb-5" id="gallery">
               <div className="col-12 mb-5 mt-5">
                 <h1 className="fw-bold text-center">Gallery</h1>
               </div>
-              <Slider {...gallery} className="gallery-slider">
-                {businessData?.gallery?.map((image, index) => (
-                  <div key={index} className="p-2">
+              <Carousel controls={false} touch={true} >
+                     {businessData?.gallery?.map((image, index) => (
+                  <Carousel.Item key={index} className="" interval={1000} >
+                  <div key={index} className="p-2 col-12 col-lg-4 mx-auto">
                     <img
                       src={image && image.length > 0 ? image : Placeholder}
                       alt=""
                       className="w-100 gallery-img"
                     />
                   </div>
+                  </Carousel.Item>
                 ))}
-              </Slider>
+              </Carousel>
+              {/* <Slider {...gallery} className="gallery-slider">
+               
+              </Slider> */}
             </div>
           </div>
         </section>
@@ -1255,9 +1309,9 @@ export default function Template() {
                 ))}
               </Slider>
               <div className="text-center mt-3 mb-5">
-                {/* <a href="/reviews" className="text-decoration-none text-theme2">
+                <a href="/reviews" className="text-decoration-none text-theme2">
       View more <i className="bi bi-arrow-right"></i>
-    </a> */}
+    </a>
               </div>
             </div>
             <div className="col-12">
@@ -1279,12 +1333,13 @@ export default function Template() {
             if (!visible) return;
             setVisible(false);
           }}
-          style={{ width: "50vw" }}
+
+          style={{ minWidth: "50vw", borderRadius: '12px', overflow: "hidden" }}
           breakpoints={{ "960px": "75vw", "641px": "100vw" }}
         >
-          <div className="container">
+          <div className="container ">
             <form onSubmit={handleReviewSubmit}>
-              <div className="p-3 justify-content-center">
+              <div className=" mb-3 justify-content-center">
                 <Rating
                   value={review.rating}
                   onChange={(e) => setReview({ ...review, rating: e.value })}
@@ -1292,7 +1347,7 @@ export default function Template() {
                 />
               </div>
 
-              <div className="col-12">
+              <div className="">
                 <InputText
                   keyfilter="text"
                   placeholder="Full Name"
@@ -1305,8 +1360,8 @@ export default function Template() {
               </div>
 
               {/* Description Input Field */}
-              <div className="col-12 mt-3">
-                <div className="card flex justify-content-center">
+              <div className=" mt-3">
+                <div className="w-100 d-flex justify-content-center">
                   <InputTextarea
                     value={review.review} // Bind the description from state
                     onChange={handleInputChange} // Update description in state
@@ -1314,16 +1369,15 @@ export default function Template() {
                     cols={30}
                     name="review" // Important: use `name` for targeting in handleInputChange
                     placeholder="Write your review here..."
+                    className="w-100"
                   />
                 </div>
               </div>
 
-              <div className="col-12 mt-3">
-                <div className="row">
-                  <button type="submit" className="btn-theme2 btn theme radius">
-                    Submit Review
-                  </button>
-                </div>
+              <div className="col-12 mt-3 text-center">
+                <button type="submit" className="btn-theme2 btn  theme radius">
+                  Submit Review
+                </button>
               </div>
             </form>
           </div>

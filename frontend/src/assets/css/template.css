@@ -53,7 +53,7 @@
 .service-design {
   border-radius: 90px 30px 90px 30px;
   padding: 20px;
-  width: 90% !important;
+  /* width: 90% !important; */
 }
 .service-design.active {
   color: white;
@@ -157,13 +157,17 @@ footer {
   color: white !important;
 }
 
+.address-logo{
+  border-radius: 50%;
+  width: 2.5rem;
+  height: 2.5rem;
+  background: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 .address-logo i {
   padding: 10px;
-  background-color: white;
-
-  border-radius: 50%;
-  height: auto;
-  font-size: 1.5rem;
 }
 
 .fs-13 {
