@@ -24,6 +24,9 @@ import Placeholder from "../assets/images/Placeholder.jpg";
 import Loader from "../components/Loader/Loader";
 import NewsArticles from "./NewsArticles";
 import { height } from "@fortawesome/free-brands-svg-icons/fa42Group";
+import ShareButton from "../components/ShareButton";
+
+
 
 export default function Template() {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -39,6 +42,9 @@ export default function Template() {
     name: "",
     review: "",
   });
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [id]);
 
   const [reviews, setReviews] = useState([]);
 
@@ -423,7 +429,7 @@ export default function Template() {
             className="btn btn-outline-secondary d-none d-lg-inline-block me-2"
             onClick={() => window.location.href = "/"} // Modify the onClick action as needed
           >
-            <i className="bi bi-arrow-left"></i> Homeeee
+            <i className="bi bi-arrow-left"></i> Home
           </button>
 
           {/* Align Brand to the start (left side) */}
@@ -691,7 +697,9 @@ export default function Template() {
                 className="fw-bold text-decoration-none text-center text-lg-start"
               >
                 Services
+
               </NavLink>
+
 
               {/* Back button for smaller screens (inside menu items) */}
               <button
@@ -721,11 +729,10 @@ export default function Template() {
           </Navbar.Collapse>
         </Container>
       </Navbar>
-
       {showNews ? <NewsArticles newsData={businessData?.landingPageHero} colorTheme={colorTheme} /> : <>
 
         <section className="h-auto">
-          <div className="container  pt-0 ">
+          <div className="container">
             <div className="row align-items-center banner-section">
               {/* Left Image for Mobile View */}
               <div className="col-12 col-lg-6 text-center text-lg-end d-block d-lg-none">
@@ -776,7 +783,7 @@ export default function Template() {
                           View More
                         </NavLink>
                       </div>
-                      <div className="col-6 col-lg-3 mb-2">
+                      <div className="col-6 col-lg-3 mb-1">
                         <NavLink
                           href="#services"
                           className="btn btn-dark text-white radius-theme box-shadow theme w-100 p-1"
@@ -788,7 +795,7 @@ export default function Template() {
                   </div>
 
                   {/* Social Media Links */}
-                  <div className="mt-2 col-12 social-media gap-3">
+                  <div className=" col-12 social-media gap-2">
                     <a
                       href={
                         businessData?.socialMediaLinks?.length &&
@@ -843,6 +850,7 @@ export default function Template() {
         </section>
 
 
+
         <div className="mt-2 mb-3 sm:mt-0 sm:mb-0">
           <div className="container px-4 sm:px-0">
             <div className="col-12 address-section">
@@ -877,7 +885,6 @@ export default function Template() {
                     <div className="col-auto address-logo">
                       <i className="bi bi-envelope-fill text-2xl sm:text-lg" />
                     </div>
-
                     <div className="col">
                       <a
                         href={`mailto:${businessData?.contactDetails?.email}`}
@@ -886,6 +893,7 @@ export default function Template() {
                         <span className="fs-12 sm:fs-10">Send Email</span>
                         <p className="fs-14 sm:fs-12">{businessData?.contactDetails?.email}</p>
                       </a>
+                      <ShareButton number={businessData?.contactDetails?.primaryNumber} />
                     </div>
                   </div>
                 </div>
@@ -908,9 +916,13 @@ export default function Template() {
                           {businessData?.contactDetails?.secondaryNumber}
                         </a>
                       </p>
+
                     </div>
+
                   </div>
                 </div>
+
+
               </div>
             </div>
           </div>
@@ -1640,7 +1652,9 @@ export default function Template() {
           </div>
         </div>
       </footer>
-      <a href="#" className="btn btn-lg btn-bottom btn-lg-square back-to-top"><i className="bi bi-arrow-up"></i></a>
+      <a href="#" className="btn btn-lg btn-bottom btn-lg-square bg-transparent rounded-circle back-to-top1" >
+        <i className="bi bi-arrow-up"></i>
+      </a>
     </>
   );
 }
