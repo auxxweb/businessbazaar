@@ -2,16 +2,19 @@ import React, { useEffect, useState } from 'react'
 import Layout from '../components/Layout'
 import { InputTextarea } from "primereact/inputtextarea";
 import { InputText } from "primereact/inputtext";
-import { Rating } from "primereact/rating";
 import { Dialog } from "primereact/dialog";
 import { toast } from 'react-toastify'
 import { getAllReviews } from '../Functions/functions';
 import { formatDate } from '../utils/app.utils'
+import Rating from '@mui/material/Rating';
+
 
 export default function Testimonials() {
     const [visible,setVisible] = useState(false);
     const [page, setPage] = useState(1)
     const [limit, setLimit] = useState(10)
+    const [reviewLoading, setReviewLoading] = useState(false);
+    const [businessData, setBusinessData] = useState(null);
     const [review, setReview] = useState([
       {
         rating: "",
@@ -60,10 +63,52 @@ export default function Testimonials() {
         }
         fetchReviews()
       }, [isReviewed])
+
+      const handleReviewSubmit = (e) => {
+        e.preventDefault();
+        console.log(review, "review");
+        setReviewLoading(true)
+    
+        createBusinessReview({
+          ...review,
+          businessId: id,
+        }).then((response) => {
+          setReviewLoading(false)
+          setReview({
+            rating: "",
+            name: "",
+            review: "",
+          })
+          if (response?.data) {
+            toast.success("Thank you for your review!", {
+              position: "top-right",
+              autoClose: 3000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              theme: "colored",
+              style: {
+                backgroundColor: "#38a20e", // Custom red color for error
+                color: "#FFFFFF", // White text
+              },
+            });
+            setreviewFetch(!reviewFetch);
+            setVisible(false);
+          }
+        }).catch((err) => {
+          setReview({
+            rating: "",
+            name: "",
+            review: "",
+          })
+          setReviewLoading(false)
+          console.log(err.message);
+        })
+      };
       
   return (
     <Layout title="Reviews" navClass='home'>
-    
     <section className="d-block bg-light">
         <div className="col-12 h-50-vh"><img src="/src/assets/images/testi-banner.jpg" alt="" className='w-100 h-100' style={{objectFit:'cover',filter:"brightness(0.5)"}}/></div>
         <div className="container d-block" id="review">
@@ -131,55 +176,67 @@ export default function Testimonials() {
         </div>
       </section>
       <Dialog
-        header="Write a Review"
-        visible={visible}
-        onHide={() => {
-          if (!visible) return;
-          setVisible(false);
-        }}
-        style={{ width: "50vw" }}
-        breakpoints={{ "960px": "75vw", "641px": "100vw" }}
-      >
-        <div className="container">
-          <div className="p-3 justify-content-center">
-            <Rating
-              value={review.rating}
-              onChange={(e) => setReview({ ...review, rating: e.value })}
-              cancel={false}
-            />
-          </div>
-          <div className="col-12">
-            <InputText
-              keyfilter="text"
-              placeholder="Full Name"
-              className="w-100"
-              value={review.name}
-              name="name"
-              onChange={handleInputChange}
-            />
-          </div>
+          header="Write a Review"
+          visible={visible}
+          onHide={() => {
+            if (!visible) return;
+            setVisible(false);
+          }}
 
-          <div className="col-12 mt-3">
-            <div className="card flex justify-content-center">
-              <InputTextarea
-                value={review.description}
-                onChange={handleInputChange}
-                rows={5}
-                cols={30}
-                name="description"
-                placeholder="Write your review here..."
-              />
-            </div>
+          style={{ minWidth: "50vw", borderRadius: '12px', overflow: "hidden" }}
+          breakpoints={{ "960px": "75vw", "641px": "100vw" }}
+        >
+          <div className="container ">
+            <form onSubmit={handleReviewSubmit}>
+              <div className=" mb-3 d-flex justify-content-center">
+                <Rating
+                  name="simple-controlled"
+                  value={review.rating}
+                  color="warning"
+                  onChange={(event, newValue) => {
+                    setReview({ ...review, rating: newValue })
+                  }}
+                />
+              </div>
+
+              <div className="">
+                <InputText
+                  keyfilter="text"
+                  placeholder="Full Name"
+                  className="w-100"
+                  value={review.name}
+                  name="name"
+                  required
+                  onChange={handleInputChange}
+                />
+              </div>
+
+              {/* Description Input Field */}
+              <div className=" mt-3">
+                <div className="w-100 d-flex justify-content-center">
+                  <InputTextarea
+                    value={review.review} // Bind the description from state
+                    onChange={handleInputChange} // Update description in state
+                    rows={5}
+                    cols={30}
+                    name="review" // Important: use `name` for targeting in handleInputChange
+                    placeholder="Write your review here..."
+                    className="w-100"
+                  />
+                </div>
+              </div>
+
+              <div className="col-12 mt-3 text-center">
+                {reviewLoading ?
+                  <div class="spinner-border" style={{ color: businessData?.theme }} role="status">
+                    <span class="visually-hidden">Loading...</span>
+                  </div> : <button type="submit" className="btn-theme2 btn  theme radius  ">
+                    Submit Review
+                  </button>}
+              </div>
+            </form>
           </div>
-          <div className="col-12 mt-3">
-            <div className="row">
-              <button className="btn-dark btn theme radius">
-                Submit Review
-              </button>
-            </div>
-          </div>
-        </div>
-      </Dialog>
+        </Dialog>
       <footer className=" h-auto footer-section">
         <div className="container">
           <div className="p-4 mt-0 mt-md-5">

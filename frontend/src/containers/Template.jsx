@@ -13,7 +13,7 @@ import {
   submitNewsLetter,
 } from "../Functions/functions";
 import { Dialog } from "primereact/dialog";
-import { Rating } from "primereact/rating";
+import Rating from '@mui/material/Rating';
 import { InputText } from "primereact/inputtext";
 import { InputTextarea } from "primereact/inputtextarea";
 import ContactForm from "/src/components/Business/contactForm";
@@ -23,7 +23,7 @@ import PlaceholderBanner from "../assets/images/BannerPlaceholder.png";
 import Placeholder from "../assets/images/Placeholder.jpg";
 import Loader from "../components/Loader/Loader";
 import NewsArticles from "./NewsArticles";
-import { height } from "@fortawesome/free-brands-svg-icons/fa42Group";
+import BusinessReviews from "./BusinessReviews";
 
 let items = document?.querySelectorAll('.carousel .carousel-item')
 
@@ -48,9 +48,11 @@ export default function Template() {
   const [businessData, setBusinessData] = useState(null);
   const { id } = useParams();
   const [loading, setLoading] = useState(true);
+  const [reviewLoading, setReviewLoading] = useState(false);
   const [colorTheme, setColorTheme] = useState("");
   const [visible, setVisible] = useState(false);
   const [reviewFetch, setreviewFetch] = useState(false);
+  const [showAllReviews,setShowAllReviews] = useState(false)
   const [review, setReview] = useState({
     rating: "",
     name: "",
@@ -116,14 +118,19 @@ export default function Template() {
   }, [id]);
 
   useEffect(() => {
-
     if (window?.location?.hash == '#news') {
       setShowNews(true)
     } else {
       setShowNews(false)
     }
+    if (window?.location?.hash == '#reviews') {
+      setShowAllReviews(true)
+    } else {
+      setShowAllReviews(false)
+    }
 
   }, [window?.location?.hash])
+
   const handleNewsLetterSubmit = async (e) => {
     e.preventDefault();
     console.log("newsLetterEmail", newsLetterEmail);
@@ -180,32 +187,48 @@ export default function Template() {
     fetchReview();
   }, [id, reviewFetch]);
 
-  const handleReviewSubmit = async (e) => {
+  const handleReviewSubmit = (e) => {
     e.preventDefault();
     console.log(review, "review");
+    setReviewLoading(true)
 
-    const response = await createBusinessReview({
+    createBusinessReview({
       ...review,
       businessId: id,
-    });
+    }).then((response) => {
+      setReviewLoading(false)
+      setReview({
+        rating: "",
+        name: "",
+        review: "",
+      })
+      if (response?.data) {
+        toast.success("Thank you for your review!", {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          theme: "colored",
+          style: {
+            backgroundColor: "#38a20e", // Custom red color for error
+            color: "#FFFFFF", // White text
+          },
+        });
+        setreviewFetch(!reviewFetch);
+        setVisible(false);
+      }
+    }).catch((err) => {
+      setReview({
+        rating: "",
+        name: "",
+        review: "",
+      })
+      setReviewLoading(false)
+      console.log(err.message);
+    })
 
-    if (response?.data) {
-      toast.success("Thank you for your review!", {
-        position: "top-right",
-        autoClose: 3000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        theme: "colored",
-        style: {
-          backgroundColor: "#38a20e", // Custom red color for error
-          color: "#FFFFFF", // White text
-        },
-      });
-      setreviewFetch(!reviewFetch);
-      setVisible(false);
-    }
   };
 
   useEffect(() => {
@@ -685,9 +708,12 @@ export default function Template() {
         </Container>
       </Navbar>
 
-      {showNews ? <NewsArticles newsData={businessData?.landingPageHero} colorTheme={colorTheme} /> : <>
+      {showAllReviews && <BusinessReviews theme={businessData?.theme} secondaryTheme={businessData?.secondaryTheme} bgBanner={businessData?.logo}/>}
+      {showNews && <NewsArticles businessId={id} newsData={businessData?.landingPageHero} colorTheme={colorTheme} />}
 
-        <section className="h-auto" >
+      { !showAllReviews && !showNews && 
+      <>
+        <section className="h-auto " >
           <div className="container p-top">
             <div className="row align-items-center banner-section">
               {/* Left Image for Mobile View */}
@@ -1117,15 +1143,15 @@ export default function Template() {
                 <h1 className="fw-bold text-center">Gallery</h1>
               </div>
               <Carousel controls={false} touch={true} >
-                     {businessData?.gallery?.map((image, index) => (
+                {businessData?.gallery?.map((image, index) => (
                   <Carousel.Item key={index} className="" interval={1000} >
-                  <div key={index} className="p-2 col-12 col-lg-4 mx-auto">
-                    <img
-                      src={image && image.length > 0 ? image : Placeholder}
-                      alt=""
-                      className="w-100 gallery-img"
-                    />
-                  </div>
+                    <div key={index} className="p-2 col-12 col-lg-4 mx-auto">
+                      <img
+                        src={image && image.length > 0 ? image : Placeholder}
+                        alt=""
+                        className="w-100 gallery-img"
+                      />
+                    </div>
                   </Carousel.Item>
                 ))}
               </Carousel>
@@ -1309,9 +1335,9 @@ export default function Template() {
                 ))}
               </Slider>
               <div className="text-center mt-3 mb-5">
-                <a href="/reviews" className="text-decoration-none text-theme2">
-      View more <i className="bi bi-arrow-right"></i>
-    </a>
+                <a href="#reviews" className="text-decoration-none text-theme2">
+                  View more <i className="bi bi-arrow-right"></i>
+                </a>
               </div>
             </div>
             <div className="col-12">
@@ -1339,11 +1365,14 @@ export default function Template() {
         >
           <div className="container ">
             <form onSubmit={handleReviewSubmit}>
-              <div className=" mb-3 justify-content-center">
+              <div className=" mb-3 d-flex justify-content-center">
                 <Rating
+                  name="simple-controlled"
                   value={review.rating}
-                  onChange={(e) => setReview({ ...review, rating: e.value })}
-                  cancel={false}
+                  color="warning"
+                  onChange={(event, newValue) => {
+                    setReview({ ...review, rating: newValue })
+                  }}
                 />
               </div>
 
@@ -1375,9 +1404,12 @@ export default function Template() {
               </div>
 
               <div className="col-12 mt-3 text-center">
-                <button type="submit" className="btn-theme2 btn  theme radius">
-                  Submit Review
-                </button>
+                {reviewLoading ?
+                  <div class="spinner-border" style={{ color: businessData?.theme }} role="status">
+                    <span class="visually-hidden">Loading...</span>
+                  </div> : <button type="submit" className="btn-theme2 btn  theme radius  ">
+                    Submit Review
+                  </button>}
               </div>
             </form>
           </div>
