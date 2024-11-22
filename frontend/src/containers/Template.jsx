@@ -69,6 +69,22 @@ export default function Template() {
     "saturday",
     "sunday",
   ];
+
+  const [isTruncated, setIsTruncated] = useState(true);
+
+  // Function to truncate text after a specified character limit
+  const truncateText = (text, limit = 100) => {
+    if (text?.length > limit && isTruncated) {
+      return text.slice(0, limit) + '';
+    }
+    return text;
+  };
+
+  // Toggle the truncation state when clicked
+  const toggleTruncation = () => {
+    setIsTruncated(!isTruncated);
+  };
+
   const [newsLetterEmail, setNewsLetterEmail] = useState("");
 
   const handleFormSubmit = async (e, formData) => {
@@ -424,7 +440,7 @@ export default function Template() {
             className="btn btn-outline-secondary d-none d-lg-inline-block me-2"
             onClick={() => window.location.href = "/"} // Modify the onClick action as needed
           >
-            <i className="bi bi-arrow-left"></i> Home
+            <i className="bi bi-arrow-left"></i> Homeeee
           </button>
 
           {/* Align Brand to the start (left side) */}
@@ -589,14 +605,35 @@ export default function Template() {
         className="bg-white pjs fixed-top"
         style={{ paddingBlock: "5px" }}
       >
+        <button
+          className="btn d-none d-lg-inline-block me-2 mr-4"
+          style={{
+            marginLeft: '18px',
+
+            backgroundColor: "transparent", // Default transparent background
+            color: colorTheme, // Text color based on colorTheme
+            border: `1.5px solid ${colorTheme}`, // Border color based on colorTheme
+            padding: "4px 10px", // Reduced padding for smaller button size
+            fontSize: "12px", // Smaller font size
+            borderRadius: "6px", // Optional: Make edges slightly rounded
+          }}
+          onClick={() => (window.location.href = "/")}
+          onMouseEnter={(e) => {
+            e.target.style.backgroundColor = colorTheme; // Full background color on hover
+            e.target.style.color = "#fff"; // Text turns white on hover
+          }}
+          onMouseLeave={(e) => {
+            e.target.style.backgroundColor = "transparent"; // Transparent background when not hovering
+            e.target.style.color = colorTheme; // Text returns to colorTheme
+          }}
+        >
+          <i className="bi bi-arrow-left"></i> Home
+        </button>
+
         <Container>
           {/* Back button for large screens (before the logo) */}
-          <button
-            className="btn btn-outline-secondary d-none d-lg-inline-block me-2"
-            onClick={() => window.location.href = "/"} // Modify the onClick action as needed
-          >
-            <i className="bi bi-arrow-left"></i> Home
-          </button>
+
+
 
           {/* Align Brand to the start (left side) */}
           <Navbar.Brand
@@ -676,10 +713,27 @@ export default function Template() {
               {/* Back button for smaller screens (inside menu items) */}
               <button
                 className="btn btn-outline-secondary d-lg-none mt-2"
-                onClick={() => window.location.href = "/"} // Modify the onClick action as needed
+                style={{
+                  backgroundColor: "transparent", // Default transparent background
+                  color: colorTheme, // Text color based on colorTheme
+                  border: `2px solid ${colorTheme}`, // Border color based on colorTheme
+                  padding: "6px 16px", // Adjust padding if needed
+                  fontSize: "13px", // Adjust font size for smaller screens
+                  borderRadius: "0px 10px",// Optional: Rounded edges for better UI
+                }}
+                onClick={() => (window.location.href = "/")}
+                onMouseEnter={(e) => {
+                  e.target.style.backgroundColor = colorTheme; // Full background color on hover
+                  e.target.style.color = "#fff"; // Text turns white on hover
+                }}
+                onMouseLeave={(e) => {
+                  e.target.style.backgroundColor = "transparent"; // Transparent background when not hovering
+                  e.target.style.color = colorTheme; // Text returns to colorTheme
+                }}
               >
                 Back to Home
               </button>
+
             </Nav>
           </Navbar.Collapse>
         </Container>
@@ -687,11 +741,11 @@ export default function Template() {
 
       {showNews ? <NewsArticles newsData={businessData?.landingPageHero} colorTheme={colorTheme} /> : <>
 
-        <section className="h-auto" >
-          <div className="container p-top">
+        <section className="h-auto">
+          <div className="container  pt-0 ">
             <div className="row align-items-center banner-section">
               {/* Left Image for Mobile View */}
-              <div className="col-12 col-lg-6 text-end d-block d-lg-none">
+              <div className="col-12 col-lg-6 text-center text-lg-end d-block d-lg-none">
                 <img
                   src={
                     businessData?.landingPageHero?.coverImage &&
@@ -702,25 +756,33 @@ export default function Template() {
                   alt=""
                   className="banner-image"
                 />
-                <div className="banner-image-2 d-none">
-                  <img src="/src/assets/images/baner-image2.png" alt="" />
-                </div>
               </div>
+
 
               {/* Text Content */}
               <div className="col-12 col-lg-6">
                 <div className="row align-items-center">
                   <div className="col-12">
-                    <h1 className="text-start text-dark fw-bold david-font fw-bold banner-title text-center text-lg-start">
+                    <h1 className="text-dark fw-bold david-font banner-title text-center text-lg-start sm:text-sm sm:leading-5 sm:whitespace-nowrap lg:text-4xl">
                       {businessData?.landingPageHero?.title}
                     </h1>
                   </div>
+
                   <div className="col-12">
                     <p className="text-secondary text-center text-lg-start david-font">
-                      {businessData?.landingPageHero?.description}
+                      {truncateText(businessData?.landingPageHero?.description, 100)}
+                      {businessData?.landingPageHero?.description?.length > 100 && isTruncated && (
+                        <span
+                          onClick={toggleTruncation}
+                          className="text-primary cursor-pointer ml-1 text-black"
+                        >
+                          ...
+                        </span>
+                      )}
                     </p>
                   </div>
-                  <div className="mt-3 col-12">
+                  {/* Hide Buttons on Mobile */}
+                  <div className="mt-3 col-12 d-none d-lg-block">
                     <div className="row">
                       <div className="col-6 col-lg-3 mb-2">
                         <NavLink
@@ -741,7 +803,9 @@ export default function Template() {
                       </div>
                     </div>
                   </div>
-                  <div className="mt-5 col-12 social-media gap-3">
+
+                  {/* Social Media Links */}
+                  <div className="mt-2 col-12 social-media gap-3">
                     <a
                       href={
                         businessData?.socialMediaLinks?.length &&
@@ -750,7 +814,7 @@ export default function Template() {
                       target="_blank"
                       className="contact-banner text-dark"
                     >
-                      <i className="bi bi-facebook"></i>
+                      <i className="bi bi-facebook text-3xl sm:text-xl"></i>
                     </a>
                     <a
                       href={
@@ -760,7 +824,7 @@ export default function Template() {
                       target="_blank"
                       className="contact-banner text-dark"
                     >
-                      <i className="bi bi-instagram"></i>
+                      <i className="bi bi-instagram text-3xl sm:text-xl"></i>
                     </a>
                     <a
                       href={
@@ -770,9 +834,11 @@ export default function Template() {
                       target="_blank"
                       className="contact-banner text-dark"
                     >
-                      <i className="bi bi-twitter"></i>
+                      <i className="bi bi-twitter text-3xl sm:text-xl"></i>
                     </a>
                   </div>
+
+
                 </div>
               </div>
 
@@ -788,19 +854,18 @@ export default function Template() {
                   alt=""
                   className="banner-image"
                 />
-                <div className="banner-image-2 d-none">
-                  <img src="/src/assets/images/baner-image2.png" alt="" />
-                </div>
               </div>
             </div>
           </div>
         </section>
 
-        <div className="mt-5 mb-5">
-          <div className="container p-top">
-            <div className="col-12 address-section ">
-              <div className="row justify-content-between ">
-                <div className="col-12 col-lg-4  mb-lg-0 ">
+
+        <div className="mt-2 mb-3 sm:mt-0 sm:mb-0">
+          <div className="container px-4 sm:px-0">
+            <div className="col-12 address-section">
+              <div className="row justify-content-between">
+                {/* Address Section */}
+                <div className="col-12 col-sm-4 mb-3 mb-sm-0">
                   <div className="row align-items-center justify-content-start">
                     <a
                       href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
@@ -808,58 +873,55 @@ export default function Template() {
                       )}`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      style={{ textDecoration: 'none', color: 'inherit' }}
+                      className="text-decoration-none text-dark"
                     >
-                      <div className="row  d-flex justify-content-center align-items-center">
-                        <div className="col-auto address-logo  ">
-                          <i className="bi bi-geo-alt-fill"></i>
+                      <div className="row">
+                        <div className="col-auto address-logo">
+                          <i className="bi bi-geo-alt-fill text-2xl sm:text-lg" />
                         </div>
                         <div className="col">
-                          <span className="fs-13">Address</span>
-                          <p className="fs-16">
-                            {businessData.address.buildingName},{" "}
-                            {businessData.address.city},
-                            {businessData.address.landMark},
-                            {businessData.address.streetName},{" "}
-                            {businessData.address.state}
-                          </p>
+                          <span className="fs-12 sm:fs-10">Address</span>
+                          <p className="fs-14 sm:fs-12">{`${businessData.address.buildingName}, ${businessData.address.city}, ${businessData.address.landMark}, ${businessData.address.streetName}, ${businessData.address.state}`}</p>
                         </div>
                       </div>
                     </a>
-
                   </div>
                 </div>
 
-                <div className="col-12 col-lg-4   d-flex align-items-center  p-0   ">
-                  <div className=" d-flex   justify-content-start w-100 align-items-center  ">
-                    <div className="address-logo me-2  ">
-                      <i className="bi bi-envelope-fill"></i>
-                    </div>
-                    <a className=" " href={`mailto:${businessData?.contactDetails?.email}`} style={{ textDecoration: 'none', color: 'inherit', width: "fit-content" }}>
-                      <span className="fs-13">Send Email</span>
-                      <p className="fs-16">
-                        {businessData?.contactDetails?.email}
-                      </p>
-                    </a>
-
-                  </div>
-                </div>
-
-                <div className="col-12 col-lg-4 mb-3 mb-lg-0  d-flex justify-content-start align-items-center ">
-                  <div className="row align-items-center  justify-content-start">
+                {/* Email Section */}
+                <div className="col-12 col-sm-4 mb-3 mb-sm-0">
+                  <div className="row align-items-center justify-content-start">
                     <div className="col-auto address-logo">
-                      <i className="bi bi-telephone"></i>
+                      <i className="bi bi-envelope-fill text-2xl sm:text-lg" />
                     </div>
-                    <div className="col ">
-                      <span className="fs-13">Contact</span>
-                      <p className="fs-16 mb-0">
-                        <a className="text-white" style={{ textDecoration: "none" }} href={`tel:${businessData?.contactDetails?.primaryNumber}`}>
+
+                    <div className="col">
+                      <a
+                        href={`mailto:${businessData?.contactDetails?.email}`}
+                        className="text-decoration-none text-dark"
+                      >
+                        <span className="fs-12 sm:fs-10">Send Email</span>
+                        <p className="fs-14 sm:fs-12">{businessData?.contactDetails?.email}</p>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Contact Section */}
+                <div className="col-12 col-sm-4 mb-3 mb-sm-0">
+                  <div className="row align-items-center justify-content-start">
+                    <div className="col-auto address-logo">
+                      <i className="bi bi-telephone text-2xl sm:text-lg" />
+                    </div>
+                    <div className="col">
+                      <span className="fs-12 sm:fs-10">Contact</span>
+                      <p className="fs-14 sm:fs-12 mb-0">
+                        <a href={`tel:${businessData?.contactDetails?.primaryNumber}`}>
                           {businessData?.contactDetails?.primaryNumber}
                         </a>
                       </p>
-                      <p className="fs-16 mt-0">
-
-                        <a className="text-white" style={{ textDecoration: "none" }} href={`tel:${businessData?.contactDetails?.secondaryNumber}`}>
+                      <p className="fs-14 sm:fs-12 mt-0">
+                        <a href={`tel:${businessData?.contactDetails?.secondaryNumber}`}>
                           {businessData?.contactDetails?.secondaryNumber}
 
                         </a>
@@ -871,6 +933,8 @@ export default function Template() {
             </div>
           </div>
         </div>
+
+
 
         <section
           className=" h-auto"
