@@ -6,11 +6,14 @@ import { InputTextarea } from "primereact/inputtextarea";
 import { createBusinessReview, getAllBusinessReviews } from "../Functions/functions";
 import { useParams } from "react-router";
 import { formatDate } from "../utils/app.utils";
-import Loader from "../components/Loader/Loader";
+import { toast } from "react-toastify";
 
 const BusinessReviews = ({ theme, secondaryTheme, bgBanner }) => {
     const { id } = useParams()
     const [visible, setVisible] = useState(false)
+    const [openReviewModal, setOpenReviewModal] = useState(false)
+    const [reviewFetch, setReviewFetch] = useState(false)
+    const [viewReview, setViewReview] = useState(null)
     const [review, setReview] = useState({
         rating: "",
         name: "",
@@ -25,7 +28,7 @@ const BusinessReviews = ({ theme, secondaryTheme, bgBanner }) => {
             setAllReviews(response?.data?.data);
         };
         fetchReview();
-    }, [id]);
+    }, [id, reviewFetch]);
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -33,7 +36,6 @@ const BusinessReviews = ({ theme, secondaryTheme, bgBanner }) => {
             ...review,
             businessId: id,
         }).then((response) => {
-            setReviewLoading(false)
             setReview({
                 rating: "",
                 name: "",
@@ -53,7 +55,12 @@ const BusinessReviews = ({ theme, secondaryTheme, bgBanner }) => {
                         color: "#FFFFFF", // White text
                     },
                 });
-                setreviewFetch(!reviewFetch);
+                setReviewFetch(!reviewFetch);
+                setReview({
+                    rating: "",
+                    name: "",
+                    review: "",
+                })
                 setVisible(false);
             }
         }).catch((err) => {
@@ -62,7 +69,6 @@ const BusinessReviews = ({ theme, secondaryTheme, bgBanner }) => {
                 name: "",
                 review: "",
             })
-            setReviewLoading(false)
             console.log(err.message);
         })
     }
@@ -74,6 +80,11 @@ const BusinessReviews = ({ theme, secondaryTheme, bgBanner }) => {
             [name]: value
         }));
     };
+
+    const handleReviewModal = (data) => {
+        setViewReview(data)
+        setOpenReviewModal(true)
+    }
 
     return (
         <>
@@ -89,17 +100,20 @@ const BusinessReviews = ({ theme, secondaryTheme, bgBanner }) => {
                     setReview={setReview}
                     review={review}
                 />}
+                {openReviewModal && <ViewReview theme={theme} data={viewReview} setVisible={setOpenReviewModal} visible={openReviewModal} />}
                 <div className="container">
                     <div className="row">
                         <div className="col-12 d-flex justify-content-center py-4 align-items-center mx-auto ">
-                            <button style={{ backgroundColor: theme }} className="btn theme text-white radius-theme" onClick={(() => setVisible(true))}>write Review</button>
+                            <button style={{ backgroundColor: theme }} className="btn  text-white radius-theme" onClick={(() => setVisible(true))}>write Review</button>
                         </div>
                         {allReviews && allReviews?.map((item) => (
                             <div data-aos="zoom-out" key={item?._id} className="  testi-slide col-12 col-md-6 col-lg-4  mx-auto  p-3  " >
                                 <div
-                                    className={`p-3  rounded shadow position-relative bg-white  `}
+                                style={{minHeight:"15.5rem"}}
+                                    className={`p-3  rounded shadow position-relative bg-white h-full  d-flex justify-content-between flex-column `}
                                 >
-                                    <div className="row ">
+                                    <div className="">
+                                    <div className="row  ">
                                         <div className="col-2 ">
                                             <img
                                                 width={50}
@@ -110,26 +124,29 @@ const BusinessReviews = ({ theme, secondaryTheme, bgBanner }) => {
                                             />
                                         </div>
                                         <div className="col-10">
-                                            <h3 className="fs-20 p-0 m-0 ms-4">
+                                            <h3 className="fs-20 p-0 m-0 ms-4 text-capitalize">
                                                 {item?.name}
                                             </h3>
                                             <div className="text-warning text-center mt-0 m-0">
-                                                {[...Array(Math.floor(item?.rating))].map(
-                                                    (star, i) => (
-                                                        <i key={i} className="bi bi-star-fill"></i>
-                                                    ),
-                                                )}
-                                                {item?.rating % 1 !== 0 && (
-                                                    <i className="bi bi-star-half"></i>
-                                                )}
+                                                <Rating
+                                                    name="simple-controlled"
+                                                    value={item?.rating}
+
+                                                />
                                             </div>
                                         </div>
                                     </div>
-                                    <div className="w-100 mt-4">
-                                        <p className='w-100' style={{ whiteSpace: 'pre' }}>{item?.review} </p>
+                                    <div className="w-100 mt-4 ">
+                                        <p className='p-0 m-0' >
+                                            {item?.review?.split(' ').length < 20 ? item?.review : item?.review?.split(' ')?.slice(0, 20).join(' ') + '...'}
+
+                                        </p>
                                     </div>
-                                    <div className="col-12 mt-4">
-                                        <p>{formatDate(item?.createdAt ?? '')}</p>
+                                    </div>
+
+                                    <div className="d-flex  justify-content-between align-items-center">
+                                        <p style={{ fontSize: "12px" }} className="text-secondary p-0 m-0 fst-italic">Created At : {formatDate(item?.createdAt ?? '')}</p>
+                                        {item?.review?.split(' ').length > 20 && <span style={{background:theme}} onClick={(() => handleReviewModal(item))} className=" btn  text-white radius-theme  ">Read More</span>}
                                     </div>
                                 </div>
                             </div>
@@ -142,6 +159,53 @@ const BusinessReviews = ({ theme, secondaryTheme, bgBanner }) => {
 }
 
 export default BusinessReviews;
+
+const ViewReview = ({ data, theme, visible, setVisible }) => {
+    return (
+        <Dialog
+            header="Write a Review"
+            visible={visible}
+            onHide={() => {
+                if (!visible) return;
+                setVisible(false);
+            }}
+
+            style={{ maxWidth: "70vw", borderRadius: '12px', overflow: "hidden" }}
+            breakpoints={{ "960px": "75vw", "641px": "100vw" }}
+        >
+            <div className="container ">
+                <div className=" ">
+                    <div className="d-flex justify-content-start align-items-center mb-3">
+                        <img
+                            width={50}
+                            height={50}
+                            src="/src/assets/images/user.png"
+                            alt={data?.name}
+                            className="me-2"
+                        />
+                        <div>
+                            <h6 className="m-0 p-0 text-capitalize">{data?.name}</h6>
+
+                            <Rating
+                                size="small"
+                                value={data?.rating}
+                            />
+                        </div>
+                    </div>
+                    <p>
+                        {data?.review}
+                    </p>
+                </div>
+                <div className="col-12 mt-3 d-flex justify-content-between align-items-center">
+                    <p style={{ fontSize: '12px' }} className="m-0 p-0 fst-italic">{formatDate(data?.createdAt)} </p>
+                    <button onClick={(() => setVisible(false))} style={{ background: theme }} type="submit" className="btn text-white radius-theme  ">
+                        close
+                    </button>
+                </div>
+            </div>
+        </Dialog>
+    )
+}
 
 
 export const ReviewModal = ({
@@ -206,7 +270,6 @@ export const ReviewModal = ({
                             />
                         </div>
                     </div>
-
                     <div className="col-12 mt-3 text-center">
                         {reviewLoading ?
                             <div class="spinner-border" style={{ color: theme }} role="status">
