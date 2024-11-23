@@ -48,7 +48,7 @@ const BusinessTiming = () => {
         updateBusinessDetails({
           businessTiming: {
             workingDays: days,
-            openTime: {
+            time: {
               open: openTime,
               close: closeTime,
             },

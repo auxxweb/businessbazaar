@@ -1253,7 +1253,11 @@ const PreviewTemplates = () => {
                     className="col-12 col-lg-8 mt-5 text-center text-lg-start"
                     style={{ color: "#A4B3CB" }}
                   >
-                    <span>© 2024 Business Bazaar. All Right Reserved</span>
+                   <span>
+                          Copyright &copy;
+                          {new Date().getFullYear()} En Connect. All Rights
+                          Reserved
+                        </span>
                   </div>
                 </div>
               </div>
