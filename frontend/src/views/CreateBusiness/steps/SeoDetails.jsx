@@ -15,7 +15,7 @@ const SeoDetails = () => {
     { tag: "facebook", link: "" },
     { tag: "twitter", link: "" },
     { tag: "youtube", link: "" },
-    { tag: "linkedIn", link: "" },
+    { tag: "linkedin", link: "" },
   ]);
   const [loading, setLoading] = useState(false)
 
