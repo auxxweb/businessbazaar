@@ -62,6 +62,9 @@ const LandingPageDetails = lazy(() =>
 const CreateServices = lazy(() =>
   import("./views/CreateBusiness/steps/CreateServices")
 );
+const CreateCoreServices = lazy(() =>
+  import("./views/CreateBusiness/steps/CreateCoreServices")
+);
 const CreateProductPart = lazy(() =>
   import("./views/CreateBusiness/steps/CreateProductPart")
 );
@@ -91,6 +94,7 @@ const router = createBrowserRouter([
       { path: "timing", element: <BusinessTiming /> },
       { path: "description", element: <BusinessDesc /> },
       { path: "landing", element: <LandingPageDetails /> },
+      { path: "core-services", element: <CreateCoreServices /> },
       { path: "services", element: <CreateServices /> },
       { path: "product", element: <CreateProductPart /> },
       { path: "seo", element: <SeoDetails /> },
