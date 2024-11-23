@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
 import { TextField } from "@mui/material";
 import { updateBusinessDetails } from "../store/businessSlice";
+import Loader from "../../../components/Loader/Loader";
 
 const SeoDetails = () => {
   const navigate = useNavigate();
@@ -16,6 +17,7 @@ const SeoDetails = () => {
     { tag: "youtube", link: "" },
     { tag: "linkedIn", link: "" },
   ]);
+  const [loading,setLoading] = useState(false)
 
   const [seoData, setSeoData] = useState({
     title: "",
@@ -67,8 +69,11 @@ const SeoDetails = () => {
 
   // Handle form submit and update formData with socialMediaLinks and seoData
   const handleSeoSubmit = () => {
-    dispatch(updateBusinessDetails({ socialMediaLinks, seoData }));
-    navigate("/create-business/gallery");
+    setLoading(true)
+      dispatch(updateBusinessDetails({ socialMediaLinks, seoData }));
+      navigate("/create-business/gallery");
+    
+    setLoading(false)
   };
 
   const handlePrevStep = () => navigate("/create-business/product");
@@ -80,6 +85,16 @@ const SeoDetails = () => {
     );
     setSeoData(JSON.parse(JSON.stringify(businessState?.seoData)));
   }, [businessState]);
+
+  if (loading) {
+    return (
+      <div className="h-100vh">
+        <div className="d-flex h-100 justify-content-center align-items-center">
+        <Loader />
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="h-100vh create-business-div">

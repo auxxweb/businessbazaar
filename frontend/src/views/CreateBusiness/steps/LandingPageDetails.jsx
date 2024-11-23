@@ -360,9 +360,10 @@ const LandingPageDetails = () => {
                   name="title"
                   autoComplete="title"
                   value={landingPageHero.title}
+                  inputProps={{maxLength:35}}
                   onChange={(e) => handleInputChange(e, setLandingPageHero)}
-                  error={!!errors?.landingPageHeroTitle}
-                  helperText={errors?.landingPageHeroTitle}
+                  error={errors?.landingPageHeroTitle || landingPageHero?.title?.split("")?.length >= 35 ? true : false}
+                  helperText={errors?.landingPageHeroTitle || landingPageHero?.title?.split("")?.length >= 35 ? "exceeded the limit" : ""}
                 />
               </div>
               <div className="input-group mb-3 mt-4 w-100">
@@ -376,9 +377,10 @@ const LandingPageDetails = () => {
                   multiline // Makes the TextField behave like a textarea
                   rows={4} // You can adjust the number of rows (height) here
                   value={landingPageHero.description}
+                  inputProps={{maxLength:200}}
                   onChange={(e) => handleInputChange(e, setLandingPageHero)}
-                  error={!!errors?.landingPageHeroDescription}
-                  helperText={errors?.landingPageHeroDescription}
+                  error={errors?.landingPageHeroDescription || landingPageHero?.description?.split("")?.length >= 200 ? true : false}
+                  helperText={errors?.landingPageHeroDescription || landingPageHero?.description?.split("")?.length >= 200 ? "exceeded the limit" : ""}
                   sx={{
                     "& .MuiInputBase-root": {
                       padding: "12px", // Padding inside the textarea
@@ -447,10 +449,11 @@ const LandingPageDetails = () => {
                   variant="filled"
                   name="title"
                   autoComplete="title"
+                  inputProps={{maxLength:35}}
                   value={welcomePart.title}
                   onChange={(e) => handleInputChange(e, setWelcomePart)}
-                  error={!!errors?.welcomePartTitle}
-                  helperText={errors?.welcomePartTitle}
+                  error={errors?.welcomePartTitle || welcomePart?.title?.split("")?.length >= 35 ? true : false}
+                  helperText={errors?.welcomePartTitle || welcomePart?.title?.split("")?.length >= 35 ? "exceeded the limit" : ""}
                 />
               </div>
               <div className="input-group mb-3 mt-4 w-100">
@@ -464,9 +467,10 @@ const LandingPageDetails = () => {
                   multiline // Makes the TextField behave like a textarea
                   rows={4} // You can adjust the number of rows (height) here
                   value={welcomePart.description}
+                  inputProps={{maxLength:200}}
                   onChange={(e) => handleInputChange(e, setWelcomePart)}
-                  error={!!errors?.welcomePartDescription}
-                  helperText={errors?.welcomePartDescription}
+                  error={errors?.welcomePartDescription || welcomePart?.description?.split("")?.length >= 200 ? true : false}
+                  helperText={errors?.welcomePartDescription || welcomePart?.description?.split("")?.length >= 200 ? "exceeded the limit" : ""}
                   sx={{
                     "& .MuiInputBase-root": {
                       padding: "12px", // Padding inside the textarea

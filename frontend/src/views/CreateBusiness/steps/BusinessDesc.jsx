@@ -63,8 +63,8 @@ const BusinessDesc = () => {
                   value={description}
                   inputProps={{maxLength:200}}
                   onChange={(e) => setDescription(e.target.value)}
-                  error={!!error?.name}
-                  helperText={error?.name}
+                  error={error?.name || description?.split("")?.length >= 200 ? true : false}
+                  helperText={error?.name || description?.split("")?.length >= 200 ? "exceeded the limit" : ""}
                   rows={5}
                 />
                 {/* <textarea
