@@ -293,7 +293,7 @@ export default function Template() {
 
   const settings = {
     dots: false,
-    infinite: true,
+    infinite: !reviews?.length,
     autoplay: true,
     arrows: false,
     // centerMode: true,
@@ -306,7 +306,7 @@ export default function Template() {
       {
         breakpoint: 1024,
         settings: {
-          slidesToShow: 3,
+          slidesToShow:reviews?.length? 2 : 3,
           slidesToScroll: 1,
           infinite: true,
         },
@@ -314,7 +314,7 @@ export default function Template() {
       {
         breakpoint: 768,
         settings: {
-          slidesToShow: 1,
+          slidesToShow:1,
           slidesToScroll: 1,
         },
       },
