@@ -76,18 +76,18 @@ const FooterSection = () => {
                     Useful Links
                   </h3>
                   <div className="col-12 mb-3 text-center text-md-start">
-                    <a href="" className="fs-20 text-white">
-                      About Me
+                    <a href="#about" className="fs-20 text-white">
+                      About Us
                     </a>
                   </div>
                   <div className="col-12 mb-3 text-center text-md-start">
-                    <a href="" className="fs-20 text-white">
+                    <a href="#" className="fs-20 text-white">
                       Services
                     </a>
                   </div>
                   <div className="col-12 mb-3 text-center text-md-start">
-                    <a href="" className="fs-20 text-white">
-                      Portfolio
+                    <a href="#review" className="fs-20 text-white">
+                      Review
                     </a>
                   </div>
                 </div>
