@@ -1231,7 +1231,7 @@ export default function Template() {
                       ))}
                     </Slider>
                   ) : (
-                    businessData.specialServices.data.map((dish, index) => (
+                    businessData?.service?.data?.map((dish, index) => (
                       <div
                         key={index}
                         className="dish-div col-12 col-lg-6 text-center p-3"
