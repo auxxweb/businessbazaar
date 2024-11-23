@@ -5,11 +5,14 @@ import { TextField } from "@mui/material";
 import CreateBusinessLocation from "../../../components/CreateBusinessLocation";
 import { updateBusinessDetails } from "../store/businessSlice";
 
+const libraries = ['places'];
+
 const ContactDetails = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const businessState = useSelector((state) => state.business);
-  const [showLocation,setShowLocation] = useState(false)
+  const [showLocation, setShowLocation] = useState(false)
+  const [placeDetails, setPlaceDetails] = useState("")
 
   const [newFormData, setNewFormData] = useState({
     contactDetails: {
@@ -21,6 +24,8 @@ const ContactDetails = () => {
       website: "",
     },
   });
+
+
 
   const [address, setAddress] = useState({
     buildingName: "",
@@ -376,10 +381,25 @@ const ContactDetails = () => {
             </div>
 
             {/* Location */}
-          { showLocation &&  <CreateBusinessLocation visible={showLocation} setVisible={setShowLocation} setLocation={setLocation} />}
-          <div className="d-flex justify-content-end  mt-2">
-            <button onClick={(()=>setShowLocation(!showLocation))}  className="btn btn-primary">Add Location</button>
-          </div>
+            {showLocation && <CreateBusinessLocation setPlaceDetails={setPlaceDetails} libraries={libraries} visible={showLocation} setVisible={setShowLocation} setLocation={setLocation} />}
+            <div className="d-flex justify-content-between  mt-2">
+              <p style={{ fontSize: "12px" }} className="text-secondary m-0 p-0">{placeDetails}</p>
+              <span onClick={(() => setShowLocation(!showLocation))} className="w-fit border btn btn-primary d-flex align-items-center">
+                <button  className="border-0 bg-transparent ">
+                  <svg fill="#fff" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                    width="17px" height="17px" viewBox="0 0 395.71 395.71"
+                    xml:space="preserve">
+                    <g>
+                      <path d="M197.849,0C122.131,0,60.531,61.609,60.531,137.329c0,72.887,124.591,243.177,129.896,250.388l4.951,6.738
+		c0.579,0.792,1.501,1.255,2.471,1.255c0.985,0,1.901-0.463,2.486-1.255l4.948-6.738c5.308-7.211,129.896-177.501,129.896-250.388
+		C335.179,61.609,273.569,0,197.849,0z M197.849,88.138c27.13,0,49.191,22.062,49.191,49.191c0,27.115-22.062,49.191-49.191,49.191
+		c-27.114,0-49.191-22.076-49.191-49.191C148.658,110.2,170.734,88.138,197.849,88.138z"/>
+                    </g>
+                  </svg>
+                </button>
+                <button style={{width:"7rem",fontSize:"14px"}} className="border-0 bg-transparent text-white text-wrap ">Add Location</button>
+              </span>
+            </div>
             {/* Contact Numbers */}
             <div id="mobileNumberDiv" className="mt-4">
               <div className="row mt-3">
@@ -463,7 +483,7 @@ const ContactDetails = () => {
                   label="Website link"
                   variant="filled"
                   name="website"
-                  inputProps={{maxLength:200}}
+                  inputProps={{ maxLength: 200 }}
                   value={newFormData.contactDetails.website}
                   onChange={handleContactChange}
                   error={!!errors.website}

@@ -17,7 +17,7 @@ const SeoDetails = () => {
     { tag: "youtube", link: "" },
     { tag: "linkedIn", link: "" },
   ]);
-  const [loading,setLoading] = useState(false)
+  const [loading, setLoading] = useState(false)
 
   const [seoData, setSeoData] = useState({
     title: "",
@@ -70,16 +70,16 @@ const SeoDetails = () => {
   // Handle form submit and update formData with socialMediaLinks and seoData
   const handleSeoSubmit = () => {
     setLoading(true)
-      dispatch(updateBusinessDetails({ socialMediaLinks, seoData }));
-      navigate("/create-business/gallery");
-    
+    dispatch(updateBusinessDetails({ socialMediaLinks, seoData }));
+    navigate("/create-business/gallery");
+
     setLoading(false)
   };
 
   const handlePrevStep = () => navigate("/create-business/product");
 
   useEffect(() => {
-    
+
     setSocialMediaLinks(
       JSON.parse(JSON.stringify(businessState?.socialMediaLinks))
     );
@@ -90,7 +90,7 @@ const SeoDetails = () => {
     return (
       <div className="h-100vh">
         <div className="d-flex h-100 justify-content-center align-items-center">
-        <Loader />
+          <Loader />
         </div>
       </div>
     );
@@ -128,7 +128,7 @@ const SeoDetails = () => {
                   name="title"
                   autoComplete="title"
                   value={seoData.title}
-                  inputProps={{maxLength:35}}
+                  inputProps={{ maxLength: 35 }}
                   onChange={handleSeoInputChange}
                 />
               </div>
@@ -143,7 +143,7 @@ const SeoDetails = () => {
                   autoComplete="description"
                   multiline // Makes the TextField behave like a textarea
                   rows={4} // You can adjus
-                  inputProps={{maxLength:200}}
+                  inputProps={{ maxLength: 200 }}
                   value={seoData.description}
                   onChange={handleSeoInputChange}
                 />
@@ -158,7 +158,7 @@ const SeoDetails = () => {
                       type="text "
                       label="Tag"
                       variant="filled"
-                      inputProps={{maxLength:35}}
+                      inputProps={{ maxLength: 35 }}
                       value={tag}
                       onChange={(e) => handleTagChange(index, e.target.value)}
                     />
