@@ -40,6 +40,10 @@ items.forEach((el) => {
     next = next.nextElementSibling
   }
 })
+import { height } from "@fortawesome/free-brands-svg-icons/fa42Group";
+import ShareButton from "../components/ShareButton";
+
+
 
 export default function Template() {
 
@@ -58,8 +62,12 @@ export default function Template() {
     name: "",
     review: "",
   });
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [id]);
 
   const [reviews, setReviews] = useState([]);
+  const [reviewCount, setReviewCount] = useState(0);
 
   const [closeDays, setCloseDays] = useState([]);
   const allDays = [
@@ -199,6 +207,7 @@ export default function Template() {
       const response = await getAllBusinessReviews({ businessId: id });
       console.log(response, "data-validation");
       setReviews(response?.data?.data);
+      setReviewCount(response?.data?.totalCount)
     };
     fetchReview();
   }, [id, reviewFetch]);
@@ -1427,11 +1436,11 @@ export default function Template() {
                     </div>
                   ))}
                 </Slider>
-                <div className="text-center mt-3 mb-5">
+                {reviewCount>4&&<div className="text-center mt-3 mb-5">
                   <a href="#reviews" className="text-decoration-none text-theme2">
                     View more <i className="bi bi-arrow-right"></i>
                   </a>
-                </div>
+                </div>}
               </div>
               <div className="col-12">
                 <div className="col-12 text-center mb-3">
@@ -1756,7 +1765,9 @@ export default function Template() {
           </div>
         </div>
       </footer>
-      <a href="#" className="btn btn-lg btn-bottom btn-lg-square back-to-top"><i className="bi bi-arrow-up"></i></a>
+      <a href="#" className="btn btn-lg btn-bottom btn-lg-square bg-transparent rounded-circle back-to-top1" >
+        <i className="bi bi-arrow-up"></i>
+      </a>
     </>
   );
 }

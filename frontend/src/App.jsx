@@ -21,6 +21,7 @@ import PremiumTemplate from "./containers/PremiumTemplate";
 import TermsAndConditions from "./components/Business/TermsAndConditions";
 import BusinessTermsAndConditions from "./components/Business/BusinessTermsAndConditions";
 import Loader from "./components/Loader/Loader";
+import ShareButton from "./components/ShareButton";
 
 // Lazy loading components
 const Home = lazy(() =>
@@ -107,7 +108,7 @@ const router = createBrowserRouter([
   { path: "/reviews", element: <Testimonials /> },
   { path: "/business", element: <Business /> },
   { path: "/category/:id", element: <Business /> },
-  { path: "/business/:id", element: <Template /> },
+  { path: "/business/:id", element: (<div className="relative"><Template /></div>),},
   { path: "/business/premium/:id", element: <PremiumTemplate /> },
   { path: "/terms-and-conditions", element: <TermsAndConditions /> },
   {
@@ -118,7 +119,7 @@ const router = createBrowserRouter([
 
 function App() {
 
-  
+
   return (
     <>
       <ToastContainer
@@ -133,7 +134,7 @@ function App() {
         pauseOnHover
         theme="colored"
       />
-      <Suspense fallback={<Loader/>}>
+      <Suspense fallback={<Loader />}>
         <RouterProvider router={router} />
       </Suspense>
     </>

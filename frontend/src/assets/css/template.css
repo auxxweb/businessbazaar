@@ -114,10 +114,17 @@ footer {
 }
 
 .banner-section {
-  margin-top: 100px;
+  margin-top: 140px;
+  margin-bottom: 25px;
 }
 
 @media screen and (max-width: 768px) {
+  .banner-section{
+    margin-top: 100px;
+    margin-bottom: 0px;
+
+  }
+
   .navbar-brand span {
     font-size: 16px !important;
   }
@@ -193,8 +200,7 @@ footer {
 
 .address-section {
   border-radius: 16px !important;
-
-  padding: 20px;
+  padding: 18px;
   color: white !important;
 }
 
@@ -221,9 +227,9 @@ footer {
 
 @media (max-width: 576px) {
   .address-section {
-    padding-top: 20px; 
+    padding-top: 18px; 
     padding-bottom: 0px;
-    line-height: 14px;
+    line-height: 12.5px;
   }
 
  
@@ -232,7 +238,7 @@ footer {
   }
 
   .fs-16 {
-    font-size: 0.9rem;
+    font-size: 0.8rem;
   }
 
   .address-logo i {
@@ -417,3 +423,6 @@ footer {
 .business-card {
   box-shadow: rgba(0, 0, 0, 0.15) 0px 5px 15px 0px;
 }
+
+
+

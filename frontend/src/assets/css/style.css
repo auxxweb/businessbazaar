@@ -418,7 +418,7 @@ textarea:enabled{
     }
 
     .contact-banner {
-        font-size: 1.5rem; /* Adjust icon size for mobile */
+        font-size: 1rem; /* Adjust icon size for mobile */
     }
 }
 
@@ -485,10 +485,20 @@ textarea:enabled{
 }
 .back-to-top {
     position: fixed;
-    display: none;
+    /* display: none; */
     right: 45px;
-    bottom: 45px;
+    bottom: 50px;
     z-index: 99;
+}
+
+.back-to-top1{
+
+    position: fixed;
+    /* display: none; */
+    right: 14px;
+    bottom: 140px;
+    z-index: 99;
+    
 }
 .custom-button{
     border-radius: 0 8px 8px 0 !important;

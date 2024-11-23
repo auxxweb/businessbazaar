@@ -60,6 +60,7 @@ const BusinessDesc = () => {
                   variant="filled"
                   name="description_main"
                   autoComplete="businessName"
+                  multiline
                   value={description}
                   inputProps={{maxLength:200}}
                   onChange={(e) => setDescription(e.target.value)}
