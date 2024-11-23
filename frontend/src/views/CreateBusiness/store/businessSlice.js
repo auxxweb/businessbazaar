@@ -30,6 +30,8 @@ const initialState = {
     { tag: "facebook", link: "" },
     { tag: "instagram", link: "" },
     { tag: "twitter", link: "" },
+    { tag: "youtube", link: "" },
+    { tag: "linkedIn", link: "" },
   ],
   category: "",
   services: [],
@@ -58,8 +60,16 @@ const initialState = {
     description: "",
     data: [{ title: "", description: "", image: "" }],
   },
-  productSection: [],
-  service: [{ title: "", description: "", image: "" }],
+  productSection: {
+    title: "",
+    description: "",
+    data: [{ title: "", description: "", image: "",price:"" }],
+  },
+  service: {
+    title: "",
+    description: "",
+    data: [{ title: "", description: "", image: "" }],
+  },
   testimonial: {
     description: "",
     reviews: [],

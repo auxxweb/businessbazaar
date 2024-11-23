@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
 import { updateBusinessDetails } from "../store/businessSlice";
+import { TextField } from "@mui/material";
 
 const BusinessDesc = () => {
   const navigate = useNavigate();
@@ -51,8 +52,22 @@ const BusinessDesc = () => {
 
               {/* Text Editor Section */}
               <div className="col-12  p-3 p-md-5">
-                <label>Business Description*</label>
-                <textarea
+                {/* <label>Business Description*</label> */}
+                <TextField
+                  fullWidth
+                  label="Business description* (200 letters)"
+                  id="businessName"
+                  variant="filled"
+                  name="description_main"
+                  autoComplete="businessName"
+                  value={description}
+                  inputProps={{maxLength:200}}
+                  onChange={(e) => setDescription(e.target.value)}
+                  error={error?.name || description?.split("")?.length >= 200 ? true : false}
+                  helperText={error?.name || description?.split("")?.length >= 200 ? "exceeded the limit" : ""}
+                  rows={5}
+                />
+                {/* <textarea
                   name="description_main"
                   className="w-100 form-control form-control-lg"
                   rows={5}
@@ -64,7 +79,7 @@ const BusinessDesc = () => {
                   placeholder="Business description"
                 >
                   {description}
-                </textarea>
+                </textarea> */}
                 <span style={{ color: "red" }}>{error && error}</span>
               </div>
             </div>

@@ -9,7 +9,7 @@ import { preRequestFun } from "../service/s3url";
 import { Button } from "react-bootstrap";
 import getCroppedImg from "../../../utils/cropper.utils";
 
-const CreateProductPart = () => {
+const CreateCoreServices = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const businessState = useSelector((state) => state.business);
@@ -17,7 +17,7 @@ const CreateProductPart = () => {
   const [specialService, setSpecialService] = useState({
     title: "",
     description: "",
-    data: [{ title: "", description: "", image: "", price: "" }],
+    data: [{ title: "", description: "", image: "" }],
   });
   const [isLoading, setIsLoading] = useState({
     specialService: {},
@@ -128,17 +128,14 @@ const CreateProductPart = () => {
   const handleServiceSubmit = () => {
     dispatch(
       updateBusinessDetails({
-        productSection: specialService,
+        specialServices: specialService,
       })
     );
-    navigate("/create-business/seo");
+    navigate("/create-business/services");
   };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    if (name === 'description') {
-
-    }
     setSpecialService((prevData) => ({
       ...prevData,
       [name]: value,
@@ -200,14 +197,13 @@ const CreateProductPart = () => {
     ],
   };
 
-  const handlePrevStep = () => navigate("/create-business/services");
+  const handlePrevStep = () => navigate("/create-business/landing");
 
   useEffect(() => {
     setSpecialService(
-      JSON.parse(JSON.stringify(businessState?.productSection))
+      JSON.parse(JSON.stringify(businessState?.specialServices))
     );
   }, [businessState]);
-
 
   return (
     <>
@@ -280,7 +276,7 @@ const CreateProductPart = () => {
             <div className="row justify-content-center">
               <div className="col-12 mt-5 text-center text-md-start">
                 <h1 className="fw-bold title-text title-main">
-                  Add  <span className="title-highlight">Product Details</span>
+                  Add <span className="title-highlight">Core Services Details</span>
                 </h1>
               </div>
 
@@ -295,7 +291,7 @@ const CreateProductPart = () => {
                     name="title"
                     autoComplete="title-1"
                     onChange={handleChange}
-                    inputProps={{ maxLength: 35 }}
+                    inputProps={{maxLength:35}}
                     error={specialService?.title?.split("")?.length >= 35 ? true : false}
                     helperText={specialService?.title?.split("")?.length >= 35 ? "exceeded the limit" : ""}
                     value={specialService.title}
@@ -313,7 +309,7 @@ const CreateProductPart = () => {
                     rows={4} // You can adjust the number of rows (height) here
                     value={specialService.description}
                     onChange={handleChange}
-                    inputProps={{ maxLength: 200 }}
+                    inputProps={{maxLength:200}}
                     error={specialService?.description?.split("")?.length >= 200 ? true : false}
                     helperText={specialService?.description?.split("")?.length >= 200 ? "exceeded the limit" : ""}
                     sx={{
@@ -329,7 +325,6 @@ const CreateProductPart = () => {
                     }}
                   />
                 </div>
-
                 <hr
                   style={{
                     border: "3px solid #105193",
@@ -341,7 +336,7 @@ const CreateProductPart = () => {
                 {/* Special Services List */}
                 <div className="col-12 text-center">
                   <h5 className="fs-18 mb-4 p-1 text-center text-md-start text-dark fw-bold mt-3">
-                    Add Product Cards
+                    Add Core Services Cards
                   </h5>
                 </div>
 
@@ -352,7 +347,7 @@ const CreateProductPart = () => {
                     style={{ border: "1px solid #ddd", borderRadius: "8px" }}
                   >
                     {/* Add "X" button to remove item from every card except the last one */}
-                    {index < specialService?.data?.length - 1 && (
+                    {index < specialService.data.length - 1 && (
                       <div
                         onClick={() => removeSpecialService(index)}
                         className="remove-button position-absolute"
@@ -380,7 +375,7 @@ const CreateProductPart = () => {
                       name="title"
                       autoComplete="Service Name"
                       value={p.title}
-                      inputProps={{ maxLength: 35 }}
+                      inputProps={{maxLength:35}}
                       onChange={(e) => handleProductChange(index, e)}
                       error={p?.title?.split("")?.length >= 35 ? true : false}
                       helperText={p?.title?.split("")?.length >= 35 ? "exceeded the limit" : ""}
@@ -396,34 +391,9 @@ const CreateProductPart = () => {
                         autoComplete="description"
                         multiline
                         rows={4}
-                        inputProps={{ maxLength: 200 }}
+                        inputProps={{maxLength:200}}
                         error={p?.description?.split("")?.length >= 200 ? true : false}
                         helperText={p?.description?.split("")?.length >= 200 ? "exceeded the limit" : ""}
-                        sx={{
-                          "& .MuiInputBase-root": {
-                            padding: "12px",
-                          },
-                          "& .MuiFilledInput-root": {
-                            backgroundColor: "#f9f9f9",
-                          },
-                          "& .MuiFormLabel-root": {
-                            top: "-6px",
-                          },
-                        }}
-                        onChange={(e) => handleProductChange(index, e)}
-                      />
-                    </div>
-
-                    <div className="input-group mb-3 mt-4 w-100">
-                      <TextField
-                        fullWidth
-                        type="number"
-                        id="price"
-                        name="price"
-                        variant="filled"
-                        label="Price"
-                        error={!!errors?.landingPageHeroDescription}
-                        helperText={errors?.landingPageHeroDescription}
                         sx={{
                           "& .MuiInputBase-root": {
                             padding: "12px",
@@ -482,14 +452,14 @@ const CreateProductPart = () => {
                     setSpecialService((prevData) => ({
                       ...prevData,
                       data: [
-                        ...prevData?.data,
-                        { title: "", description: "", image: "", price: "" },
+                        ...prevData.data,
+                        { title: "", description: "", image: "" },
                       ],
                     }))
                   }
                   className="text-decoration-none btn btn-primary w-100 mb-3"
                 >
-                  + Add More Products
+                  + Add More Special Service
                 </a>
 
               </div>
@@ -589,7 +559,7 @@ const CreateProductPart = () => {
                   </div>
                   <div className="col-12">
                     <div className="col-12 mb-5 row justify-content-center david-font">
-                      {specialService?.data?.length > 2 ? (
+                      {specialService.data.length > 2 ? (
                         <Slider {...settings4}>
                           {specialService.data.map((dish, index) => (
                             <div
@@ -614,14 +584,11 @@ const CreateProductPart = () => {
                               <div className="col-12 mt-3 mb-3">
                                 <p>{dish.description}</p>
                               </div>
-                              <div className="col-12 mt-3 mb-3">
-                                <p>{dish.price}</p>
-                              </div>
                             </div>
                           ))}
                         </Slider>
                       ) : (
-                        specialService?.data?.map((dish, index) => (
+                        specialService.data.map((dish, index) => (
                           <div
                             key={index}
                             className="dish-div col-12 col-lg-6 text-center p-3"
@@ -644,9 +611,6 @@ const CreateProductPart = () => {
                             <div className="col-12 mt-3 mb-3">
                               <p>{dish.description}</p>
                             </div>
-                            <div className="col-12 mt-3 mb-3">
-                              <p>{dish?.price}</p>
-                            </div>
                           </div>
                         ))
                       )}
@@ -662,5 +626,4 @@ const CreateProductPart = () => {
   );
 };
 
-
-export default CreateProductPart;
+export default CreateCoreServices;

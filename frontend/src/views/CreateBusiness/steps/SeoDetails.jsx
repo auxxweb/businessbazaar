@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
 import { TextField } from "@mui/material";
 import { updateBusinessDetails } from "../store/businessSlice";
+import Loader from "../../../components/Loader/Loader";
 
 const SeoDetails = () => {
   const navigate = useNavigate();
@@ -13,7 +14,10 @@ const SeoDetails = () => {
     { tag: "instagram", link: "" },
     { tag: "facebook", link: "" },
     { tag: "twitter", link: "" },
+    { tag: "youtube", link: "" },
+    { tag: "linkedIn", link: "" },
   ]);
+  const [loading, setLoading] = useState(false)
 
   const [seoData, setSeoData] = useState({
     title: "",
@@ -65,18 +69,32 @@ const SeoDetails = () => {
 
   // Handle form submit and update formData with socialMediaLinks and seoData
   const handleSeoSubmit = () => {
+    setLoading(true)
     dispatch(updateBusinessDetails({ socialMediaLinks, seoData }));
     navigate("/create-business/gallery");
+
+    setLoading(false)
   };
 
   const handlePrevStep = () => navigate("/create-business/product");
 
   useEffect(() => {
+
     setSocialMediaLinks(
       JSON.parse(JSON.stringify(businessState?.socialMediaLinks))
     );
     setSeoData(JSON.parse(JSON.stringify(businessState?.seoData)));
   }, [businessState]);
+
+  if (loading) {
+    return (
+      <div className="h-100vh">
+        <div className="d-flex h-100 justify-content-center align-items-center">
+          <Loader />
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="h-100vh create-business-div">
@@ -91,7 +109,7 @@ const SeoDetails = () => {
               <i className="bi bi-arrow-left"></i>
             </button>
           </div>
-          <div className="row justify-content-center">
+          <div className=" ">
             <div className="col-12 text-center text-md-start mt-4">
               <h1 className="fw-bold title-text">
                 <span className="title-main">Add </span>
@@ -104,12 +122,13 @@ const SeoDetails = () => {
               <div className="input-group mt-2 w-100">
                 <TextField
                   fullWidth
-                  label="Title"
+                  label="Title (35 letters)"
                   id="title"
                   variant="filled"
                   name="title"
                   autoComplete="title"
                   value={seoData.title}
+                  inputProps={{ maxLength: 35 }}
                   onChange={handleSeoInputChange}
                 />
               </div>
@@ -117,13 +136,14 @@ const SeoDetails = () => {
               <div className="input-group mb-3 mt-4 w-100">
                 <TextField
                   fullWidth
-                  label="Description"
+                  label="Description (200 letters) "
                   id="description"
                   variant="filled"
                   name="description"
                   autoComplete="description"
                   multiline // Makes the TextField behave like a textarea
                   rows={4} // You can adjus
+                  inputProps={{ maxLength: 200 }}
                   value={seoData.description}
                   onChange={handleSeoInputChange}
                 />
@@ -135,9 +155,10 @@ const SeoDetails = () => {
                   <div className="input-group mb-2" key={index}>
                     <TextField
                       fullWidth
-                      type="text"
+                      type="text "
                       label="Tag"
                       variant="filled"
+                      inputProps={{ maxLength: 35 }}
                       value={tag}
                       onChange={(e) => handleTagChange(index, e.target.value)}
                     />
@@ -168,24 +189,25 @@ const SeoDetails = () => {
               >
                 Add More
               </button>
-
-              {/* Social Media Links */}
-              {socialMediaLinks.map((link, index) => (
-                <div className="input-group mb-3 mt-4 w-100" key={index}>
-                  <TextField
-                    fullWidth
-                    type="text"
-                    id="link"
-                    variant="filled"
-                    name={link.tag}
-                    label={link.tag}
-                    value={link.link}
-                    onChange={(e) =>
-                      handleSocialMediaChange(index, e.target.value)
-                    }
-                  />
-                </div>
-              ))}
+              <div className=" h-100">
+                {/* Social Media Links */}
+                {socialMediaLinks.map((link, index) => (
+                  <div className="input-grou mb-3 mt-4 w-100 " key={index}>
+                    <TextField
+                      fullWidth
+                      type="text"
+                      id="link"
+                      variant="filled"
+                      name={link.tag}
+                      label={link.tag}
+                      value={link.link}
+                      onChange={(e) =>
+                        handleSocialMediaChange(index, e.target.value)
+                      }
+                    />
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
 

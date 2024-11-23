@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Container, Nav, Navbar, NavLink } from "react-bootstrap";
+import { Carousel, Container, Nav, Navbar, NavLink } from "react-bootstrap";
 import "/src/assets/css/template.css";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
@@ -13,7 +13,7 @@ import {
   submitNewsLetter,
 } from "../Functions/functions";
 import { Dialog } from "primereact/dialog";
-import { Rating } from "primereact/rating";
+import Rating from '@mui/material/Rating';
 import { InputText } from "primereact/inputtext";
 import { InputTextarea } from "primereact/inputtextarea";
 import ContactForm from "/src/components/Business/contactForm";
@@ -23,17 +23,36 @@ import PlaceholderBanner from "../assets/images/BannerPlaceholder.png";
 import Placeholder from "../assets/images/Placeholder.jpg";
 import Loader from "../components/Loader/Loader";
 import NewsArticles from "./NewsArticles";
-import { height } from "@fortawesome/free-brands-svg-icons/fa42Group";
+import BusinessReviews from "./BusinessReviews";
+
+let items = document?.querySelectorAll('.carousel .carousel-item')
+
+items.forEach((el) => {
+  const minPerSlide = 4
+  let next = el.nextElementSibling
+  for (var i = 1; i < minPerSlide; i++) {
+    if (!next) {
+      // wrap carousel by using first child
+      next = items[0]
+    }
+    let cloneChild = next.cloneNode(true)
+    el.appendChild(cloneChild.children[0])
+    next = next.nextElementSibling
+  }
+})
 
 export default function Template() {
+
   const [currentSlide, setCurrentSlide] = useState(0);
   const [showNews, setShowNews] = useState(false)
   const [businessData, setBusinessData] = useState(null);
   const { id } = useParams();
   const [loading, setLoading] = useState(true);
+  const [reviewLoading, setReviewLoading] = useState(false);
   const [colorTheme, setColorTheme] = useState("");
   const [visible, setVisible] = useState(false);
   const [reviewFetch, setreviewFetch] = useState(false);
+  const [showAllReviews, setShowAllReviews] = useState(false)
   const [review, setReview] = useState({
     rating: "",
     name: "",
@@ -115,14 +134,19 @@ export default function Template() {
   }, [id]);
 
   useEffect(() => {
-
     if (window?.location?.hash == '#news') {
       setShowNews(true)
     } else {
       setShowNews(false)
     }
+    if (window?.location?.hash == '#reviews') {
+      setShowAllReviews(true)
+    } else {
+      setShowAllReviews(false)
+    }
 
   }, [window?.location?.hash])
+
   const handleNewsLetterSubmit = async (e) => {
     e.preventDefault();
     console.log("newsLetterEmail", newsLetterEmail);
@@ -179,32 +203,48 @@ export default function Template() {
     fetchReview();
   }, [id, reviewFetch]);
 
-  const handleReviewSubmit = async (e) => {
+  const handleReviewSubmit = (e) => {
     e.preventDefault();
     console.log(review, "review");
+    setReviewLoading(true)
 
-    const response = await createBusinessReview({
+    createBusinessReview({
       ...review,
       businessId: id,
-    });
+    }).then((response) => {
+      setReviewLoading(false)
+      setReview({
+        rating: "",
+        name: "",
+        review: "",
+      })
+      if (response?.data) {
+        toast.success("Thank you for your review!", {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          theme: "colored",
+          style: {
+            backgroundColor: "#38a20e", // Custom red color for error
+            color: "#FFFFFF", // White text
+          },
+        });
+        setreviewFetch(!reviewFetch);
+        setVisible(false);
+      }
+    }).catch((err) => {
+      setReview({
+        rating: "",
+        name: "",
+        review: "",
+      })
+      setReviewLoading(false)
+      console.log(err.message);
+    })
 
-    if (response?.data) {
-      toast.success("Thank you for your review!", {
-        position: "top-right",
-        autoClose: 3000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        theme: "colored",
-        style: {
-          backgroundColor: "#38a20e", // Custom red color for error
-          color: "#FFFFFF", // White text
-        },
-      });
-      setreviewFetch(!reviewFetch);
-      setVisible(false);
-    }
   };
 
   useEffect(() => {
@@ -423,7 +463,7 @@ export default function Template() {
             className="btn btn-outline-secondary d-none d-lg-inline-block me-2"
             onClick={() => window.location.href = "/"} // Modify the onClick action as needed
           >
-            <i className="bi bi-arrow-left"></i> Homeeee
+            <i className="bi bi-arrow-left"></i> Home
           </button>
 
           {/* Align Brand to the start (left side) */}
@@ -595,7 +635,7 @@ export default function Template() {
 
             backgroundColor: "transparent", // Default transparent background
             color: colorTheme, // Text color based on colorTheme
-            border: `1.5px solid ${colorTheme}`, // Border color based on colorTheme
+            border:` 1.5px solid ${colorTheme}`, // Border color based on colorTheme
             padding: "4px 10px", // Reduced padding for smaller button size
             fontSize: "12px", // Smaller font size
             borderRadius: "6px", // Optional: Make edges slightly rounded
@@ -691,7 +731,9 @@ export default function Template() {
                 className="fw-bold text-decoration-none text-center text-lg-start"
               >
                 Services
+
               </NavLink>
+
 
               {/* Back button for smaller screens (inside menu items) */}
               <button
@@ -720,12 +762,22 @@ export default function Template() {
             </Nav>
           </Navbar.Collapse>
         </Container>
-      </Navbar>
+      </Navbar>
 
-      {showNews ? <NewsArticles newsData={businessData?.landingPageHero} colorTheme={colorTheme} /> : <>
+      {showAllReviews && <BusinessReviews
+        theme={businessData?.theme}
+        secondaryTheme={businessData?.secondaryTheme}
+        bgBanner={businessData?.logo} />}
 
-        <section className="h-auto">
-          <div className="container  pt-0 ">
+      {showNews && <NewsArticles
+        businessId={id}
+        newsData={businessData?.landingPageHero}
+        colorTheme={colorTheme} />}
+
+      {!showAllReviews && !showNews &&
+        <>
+     <section className="h-auto">
+          <div className="container">
             <div className="row align-items-center banner-section">
               {/* Left Image for Mobile View */}
               <div className="col-12 col-lg-6 text-center text-lg-end d-block d-lg-none">
@@ -776,7 +828,7 @@ export default function Template() {
                           View More
                         </NavLink>
                       </div>
-                      <div className="col-6 col-lg-3 mb-2">
+                      <div className="col-6 col-lg-3 mb-1">
                         <NavLink
                           href="#services"
                           className="btn btn-dark text-white radius-theme box-shadow theme w-100 p-1"
@@ -788,7 +840,7 @@ export default function Template() {
                   </div>
 
                   {/* Social Media Links */}
-                  <div className="mt-2 col-12 social-media gap-3">
+                  <div className=" col-12 social-media gap-2">
                     <a
                       href={
                         businessData?.socialMediaLinks?.length &&
@@ -842,7 +894,6 @@ export default function Template() {
           </div>
         </section>
 
-
         <div className="mt-2 mb-3 sm:mt-0 sm:mb-0">
           <div className="container px-4 sm:px-0">
             <div className="col-12 address-section">
@@ -877,7 +928,6 @@ export default function Template() {
                     <div className="col-auto address-logo">
                       <i className="bi bi-envelope-fill text-2xl sm:text-lg" />
                     </div>
-
                     <div className="col">
                       <a
                         href={`mailto:${businessData?.contactDetails?.email}`}
@@ -886,6 +936,7 @@ export default function Template() {
                         <span className="fs-12 sm:fs-10">Send Email</span>
                         <p className="fs-14 sm:fs-12">{businessData?.contactDetails?.email}</p>
                       </a>
+                      <ShareButton number={businessData?.contactDetails?.primaryNumber} />
                     </div>
                   </div>
                 </div>
@@ -908,76 +959,108 @@ export default function Template() {
                           {businessData?.contactDetails?.secondaryNumber}
                         </a>
                       </p>
+
                     </div>
+
                   </div>
                 </div>
+
+
               </div>
             </div>
           </div>
         </div>
 
-
-
-        <section
-          className=" h-auto"
-          style={{ backgroundColor: "#F3F3F4" }}
-          id="about"
-        >
-          <div className="container p-top">
-            <div className="row mt-5 align-items-center mb-5">
-              <div className="col-12 col-lg-6 mt-2 text-center text-lg-start about-image">
-                <img
-                  src={
-                    (businessData?.welcomePart?.coverImage ?? Placeholder)
-                  }
-                  className="img-fluid about-image"
-                  alt=""
-                />
-              </div>
-              <div className="col-12 col-lg-6">
-                <div className="col-12 mb-3">
-                  <h1 className="text-center text-lg-start text-dark fw-bold david-font fw-bold banner-title">
-                    {businessData?.welcomePart?.title}
-                  </h1>
+          <section
+            className=" h-auto"
+            style={{ backgroundColor: "#F3F3F4" }}
+            id="about"
+          >
+            <div className="container p-top">
+              <div className="row mt-5 align-items-center mb-5">
+                <div className="col-12 col-lg-6 mt-2 text-center text-lg-start about-image">
+                  <img
+                    src={
+                      (businessData?.welcomePart?.coverImage ?? Placeholder)
+                    }
+                    className="img-fluid about-image"
+                    alt=""
+                  />
                 </div>
-                <div className="col-12 mt-4">
-                  <p className="text-secondary text-center text-lg-start david-font mt-4">
-                    {businessData?.welcomePart?.description}
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section className="h-auto" id="services" style={{ backgroundColor: "#F3F3F4" }}>
-          <div className="container p-top">
-            <div className="col-12 mb-5">
-              <div className="mt-5 text-center">
-                <div className="col-12">
-                  <h1 className="text-center text-dark fw-bold david-font fw-bold banner-title fs-45">
-                    {businessData?.specialServices?.title}
-                  </h1>
-                </div>
-                <div className="row justify-content-center">
-                  <div className="col-12 col-lg-6 ">
-                    <p className="text-secondary text-center mb-2">
-                      {businessData?.specialServices?.description}
+                <div className="col-12 col-lg-6">
+                  <div className="col-12 mb-3">
+                    <h1 className="text-center text-lg-start text-dark fw-bold david-font fw-bold banner-title">
+                      {businessData?.welcomePart?.title}
+                    </h1>
+                  </div>
+                  <div className="col-12 mt-4">
+                    <p className="text-secondary text-center text-lg-start david-font mt-4">
+                      {businessData?.welcomePart?.description}
                     </p>
                   </div>
                 </div>
               </div>
             </div>
-            <div className="col-12">
-              <div className="col-12 mb-5 david-font row justify-content-center gap-3">
-                {businessData.specialServices.data.length > 2 ? (
-                  <Slider {...settings}>
-                    {businessData?.specialServices?.data.map((dish, index) => (
+          </section>
+
+          <section className="h-auto" id="services" style={{ backgroundColor: "#F3F3F4" }}>
+            <div className="container p-top">
+              <div className="col-12 mb-5">
+                <div className="mt-5 text-center">
+                  <div className="col-12">
+                    <h1 className="text-center text-dark fw-bold david-font fw-bold banner-title fs-45">
+                      {businessData?.specialServices?.title}
+                    </h1>
+                  </div>
+                  <div className="row justify-content-center">
+                    <div className="col-12 col-lg-6 ">
+                      <p className="text-secondary text-center mb-2">
+                        {businessData?.specialServices?.description}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="col-12">
+                <div className="col-12 mb-5 david-font row justify-content-center gap-3">
+                  {businessData.specialServices.data.length > 2 ? (
+                    <Slider {...settings}>
+                      {businessData?.specialServices?.data.map((dish, index) => (
+                        <div
+                          key={index}
+                          className="dish-div col-12 text-center p-3"
+                        >
+                          <div className="col-12 position-relative text-center">
+                            <img
+                              src={
+                                dish.image && dish.image.length > 0
+                                  ? dish.image
+                                  : Placeholder
+                              }
+                              alt={dish.title}
+                              style={{
+                                width: "300px",
+                                height: "300px",
+                                objectFit: "cover",
+                              }}
+                            />
+                          </div>
+                          <div className="col-12">
+                            <h2 className="fs-20 fw-bold">{dish.title}</h2>
+                          </div>
+                          <div className="col-12 mt-3 mb-3">
+                            <p>{dish.description}</p>
+                          </div>
+                        </div>
+                      ))}
+                    </Slider>
+                  ) : (
+                    businessData.specialServices.data.map((dish, index) => (
                       <div
                         key={index}
-                        className="dish-div col-12 text-center p-3"
+                        className="dish-div col-12 col-lg-6 text-center p-3"
                       >
-                        <div className="col-12 position-relative text-center">
+                        <div className="col-12 position-relative">
                           <img
                             src={
                               dish.image && dish.image.length > 0
@@ -986,8 +1069,9 @@ export default function Template() {
                             }
                             alt={dish.title}
                             style={{
-                              width: "300px",
-                              height: "300px",
+                              width: "100%",
+                              height: "auto",
+                              maxWidth: "300px",
                               objectFit: "cover",
                             }}
                           />
@@ -999,102 +1083,123 @@ export default function Template() {
                           <p>{dish.description}</p>
                         </div>
                       </div>
-                    ))}
-                  </Slider>
-                ) : (
-                  businessData.specialServices.data.map((dish, index) => (
-                    <div
-                      key={index}
-                      className="dish-div col-12 col-lg-6 text-center p-3"
-                    >
-                      <div className="col-12 position-relative">
-                        <img
-                          src={
-                            dish.image && dish.image.length > 0
-                              ? dish.image
-                              : Placeholder
-                          }
-                          alt={dish.title}
-                          style={{
-                            width: "100%",
-                            height: "auto",
-                            maxWidth: "300px",
-                            objectFit: "cover",
-                          }}
-                        />
-                      </div>
-                      <div className="col-12">
-                        <h2 className="fs-20 fw-bold">{dish.title}</h2>
-                      </div>
-                      <div className="col-12 mt-3 mb-3">
-                        <p>{dish.description}</p>
-                      </div>
-                    </div>
-                  ))
-                )}
-              </div>
-            </div>
-          </div>
-        </section>
-        <section className="bg-white h-auto david-font" id="menu">
-          <div className="container  p-top">
-            <div className="col-12 mb-5">
-              <div className="row justify-content-center">
-                <div className="col-12 col-md-6 text-center">
-                  <h1 className="text-dark fw-bold david-font banner-title fs-45">
-                    Our List
-                  </h1>
+                    ))
+                  )}
                 </div>
               </div>
             </div>
+          </section>
+          <section className="bg-white h-auto david-font" id="menu">
+            <div className="container  p-top">
+              <div className="col-12 mb-5">
+                <div className="row justify-content-center">
+                  <div className="col-12 col-md-6 text-center">
+                    <h1 className="text-dark fw-bold david-font banner-title fs-45">
+                     {businessData?.productSection?.title}
+                    </h1>
+                  </div>
+                  <div className="row justify-content-center">
+                    <div className="col-12 col-lg-6 ">
+                      <p className="text-secondary text-center mb-2">
+                        {businessData?.productSection?.description}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
 
-            <div className="mt-5 david-font">
-              <div className="mb-5">
-                <div className="row mb-3">
-                  {businessData?.productSection?.map((item, index) => (
-                    <div
-                      className="col-12 col-lg-6 mt-3 "
-                      style={{ padding: "0 30px" }}
-                      key={index}
-                    >
-                      <div className="row  product-section align-items-center">
-                        <div className="col-2">
+              <div className="mt-5 david-font">
+                <div className="mb-5">
+                  <div className="row mb-3">
+                    {businessData?.productSection?.data?.map((item, index) => (
+                      <div
+                        className="col-12 col-lg-6 mt-3 mx-auto "
+                        style={{ padding: "0 30px" }}
+                        key={index}
+                      >
+                        <div className="row  product-section align-items-center">
+                          <div className="col-2">
+                            <img
+                              src={
+                                item.image && item.image.length > 0
+                                  ? item.image
+                                  : Placeholder
+                              }
+                              alt=""
+                              className="w-100"
+                            />
+                          </div>
+                          <div className="col-8">
+                            <h1 className="fs-20 fw-bold">{item.title}</h1>
+                            <p className="mt-2">{item.description}</p>
+                          </div>
+                          <div className="col-2 p-0">
+                            <span className="fw-bold">{item.price}</span>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section
+            className="h-auto david-font"
+            style={{ backgroundColor: "#F3F3F4" }}
+          >
+            <div className="container p-top">
+            <div className="col-12 mb-5">
+                <div className="row justify-content-center">
+                  <div className="col-12 col-md-6 text-center">
+                    <h1 className="text-dark fw-bold david-font banner-title fs-45">
+                     {businessData?.service?.title}
+                    </h1>
+                  </div>
+                  <div className="row justify-content-center">
+                    <div className="col-12 col-lg-6 ">
+                      <p className="text-secondary text-center mb-2">
+                        {businessData?.service?.description}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="col-12 mb-5 d-none">
+                <Carousel controls={false} touch={true} >
+                  {businessData?.service?.data?.map((item, index) => (
+                    <Carousel.Item key={item?._id} className="" interval={1000} >
+                      <div
+
+                        className={`col-12 col-lg-4 service-design mx-auto  ${index === currentSlide ? "active" : "bg-white"
+                          }  mt-5 mb-5 text-center`}
+                      >
+                        <div className="col-12 text-center">
+                          <h3>{item.title}</h3>
+                        </div>
+                        <div className="col-12 mt-5">
+                          <p className="text-center">{item.description}</p>
+                        </div>
+                        <div
+                          className="col-12 text-center"
+                          style={{ height: "100px" }}
+                        >
                           <img
                             src={
-                              item.image && item.image.length > 0
+                              item.image 
                                 ? item.image
                                 : Placeholder
                             }
-                            alt=""
-                            className="w-100"
+                            alt={item.title}
+                            className="h-100"
                           />
                         </div>
-                        <div className="col-8">
-                          <h1 className="fs-20 fw-bold">{item.title}</h1>
-                          <p className="mt-2">{item.description}</p>
-                        </div>
-                        <div className="col-2 p-0">
-                          <span className="fw-bold">{item.price}</span>
-                        </div>
                       </div>
-                    </div>
+                    </Carousel.Item>
                   ))}
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section
-          className="h-auto david-font"
-          style={{ backgroundColor: "#F3F3F4" }}
-        >
-          <div className="container p-top">
-            <div className="col-12 mt-5 text-center text-lg-start">
-              <h1 className="fw-bold text-center">Services We Provide</h1>
-            </div>
-            <div className="col-12 mb-5">
-              <Slider {...setting2} className="mb-5">
+                </Carousel>
+                {/* <Slider {...setting2}   className="mb-5"> 
                 {businessData?.service?.map((service, index) => (
                   <div
                     key={index}
@@ -1123,345 +1228,356 @@ export default function Template() {
                     </div>
                   </div>
                 ))}
-              </Slider>
-            </div>
-
-            <div className="col-12 mb-5" id="gallery">
-              <div className="col-12 mb-5 mt-5">
-                <h1 className="fw-bold text-center">Gallery</h1>
+               </Slider> */}
               </div>
-              <Slider {...gallery} className="gallery-slider">
-                {businessData?.gallery?.map((image, index) => (
-                  <div key={index} className="p-2">
+
+              <div className="col-12 mb-5" id="gallery">
+                <div className="col-12 mb-5 mt-5">
+                  <h1 className="fw-bold text-center">Gallery</h1>
+                </div>
+                <Carousel controls={false} touch={true} >
+                  {businessData?.gallery?.map((image, index) => (
+                    <Carousel.Item key={index} className="" interval={1000} >
+                      <div key={index} className="p-2 col-12 col-lg-4 mx-auto">
+                        <img
+                          src={image && image.length > 0 ? image : Placeholder}
+                          alt=""
+                          className="w-100 gallery-img"
+                        />
+                      </div>
+                    </Carousel.Item>
+                  ))}
+                </Carousel>
+                {/* <Slider {...gallery} className="gallery-slider">
+               
+              </Slider> */}
+              </div>
+            </div>
+          </section>
+          <section className="bg-white d-none">
+            <div className="container p-top">
+              <div className="row align-items-center">
+                <div className="col-12 col-lg-6 row align-items-center">
+                  <div>
+                    <div className="col-12 text-center text-lg-start">
+                      <h1 className="fw-bold fs-45">Our Expert Chef</h1>
+                    </div>
+                    <div className="col-12 text-center text-lg-start">
+                      <p className="fs-25">
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
+                        non neque elit. Sed ut tellus ac neque fermentum tristique.
+                        Donec sed facilisis tellus, a vulputate turpis. Duis eget
+                        turpis non tellus tincidunt fermentum.
+                      </p>
+                    </div>
+                  </div>
+                  <div className="mt-3 col-12 mb-5">
+                    <div className="row">
+                      <div className="menu-button">
+                        <button className="btn btn-dark text-white radius-theme box-shadow w-100">
+                          Menu
+                        </button>
+                      </div>
+                      <div className="book-a-table">
+                        <button className="btn btn-dark text-white radius-theme box-shadow theme w-100">
+                          Book a table
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="col-12 col-lg-6">
+                  <div className="col-12 text-center">
                     <img
-                      src={image && image.length > 0 ? image : Placeholder}
+                      src="/src/assets/images/chef.png"
                       alt=""
-                      className="w-100 gallery-img"
+                      className="chef-div img-fluid w-100"
                     />
                   </div>
-                ))}
-              </Slider>
-            </div>
-          </div>
-        </section>
-        <section className="bg-white d-none">
-          <div className="container p-top">
-            <div className="row align-items-center">
-              <div className="col-12 col-lg-6 row align-items-center">
-                <div>
-                  <div className="col-12 text-center text-lg-start">
-                    <h1 className="fw-bold fs-45">Our Expert Chef</h1>
-                  </div>
-                  <div className="col-12 text-center text-lg-start">
-                    <p className="fs-25">
-                      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
-                      non neque elit. Sed ut tellus ac neque fermentum tristique.
-                      Donec sed facilisis tellus, a vulputate turpis. Duis eget
-                      turpis non tellus tincidunt fermentum.
-                    </p>
-                  </div>
-                </div>
-                <div className="mt-3 col-12 mb-5">
-                  <div className="row">
-                    <div className="menu-button">
-                      <button className="btn btn-dark text-white radius-theme box-shadow w-100">
-                        Menu
-                      </button>
-                    </div>
-                    <div className="book-a-table">
-                      <button className="btn btn-dark text-white radius-theme box-shadow theme w-100">
-                        Book a table
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div className="col-12 col-lg-6">
-                <div className="col-12 text-center">
-                  <img
-                    src="/src/assets/images/chef.png"
-                    alt=""
-                    className="chef-div img-fluid w-100"
-                  />
                 </div>
               </div>
             </div>
-          </div>
-        </section>
-        <section className="" style={{ backgroundColor: "#F3F3F4" }}>
-          <div className="container david-font p-top">
-            <div className="col-12 text-center">
-              <h1>Our Happy Customers</h1>
-            </div>
-            <div className="col-12">
-              <p className="text-center">
-                At Our Restaurant, we strive to provide the best dining experience
-                possible. Our loyal customers have been satisfied with our
-                culinary skills, service, and overall ambiance. Our positive
-                feedback has helped us continuously improve our dining experience.
-                If you're a loyal customer, we'd love to hear from you!
-              </p>
-            </div>
-
-            <div className="col-12">
-              <Slider {...settings}>
-                {reviews?.map((testimonial, index) => (
-                  <div key={index} className="testi-slide">
-                    <div
-                      className={`testi-div p-4 ${index === currentSlide ? "testi-theme" : ""
-                        }`}
-                      style={{
-                        backgroundColor:
-                          index === currentSlide ? "#f0f8ff" : "#fff", // Light blue background for the active card
-                        borderRadius: "12px", // Rounded corners
-                        boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)", // Lighter shadow for premium feel
-                        padding: "16px", // Reduced padding for smaller card height
-                        transition:
-                          "transform 0.3s ease-in-out, background-color 0.3s ease", // Smooth hover effect and background color transition
-                        maxWidth: "100%", // Ensure card size is responsive
-                        margin: "10px", // Add margin between cards
-                        cursor: "pointer", // Indicating that it's interactive
-                        transform: "scale(1)", // Default scale
-                        minHeight: "250px", // Set the minHeight to 250px for further reduction
-                        display: "flex",
-                        flexDirection: "column", // Flexbox to manage content alignment
-                        justifyContent: "space-between", // Space out elements evenly
-                      }}
-                      onMouseEnter={(e) =>
-                        (e.currentTarget.style.transform = "scale(1.05)")
-                      } // Hover effect
-                      onMouseLeave={(e) =>
-                        (e.currentTarget.style.transform = "scale(1)")
-                      } // Revert hover effect
-                    >
-                      <div className="row">
-                        <div className="col-2">
-                          <img
-                            src="/src/assets/images/user.png"
-                            alt={testimonial?.name}
-                            style={{
-                              objectFit: "cover",
-                              width: "40px", // Adjusted image size
-                              height: "40px", // Adjusted image size
-                              borderRadius: "50%",
-                              border: "2px solid #ddd", // Premium border around the image
-                            }}
-                          />
-                        </div>
-                        <div className="col-10">
-                          <h3
-                            className="fs-20 p-0 m-0 ms-4"
-                            style={{
-                              fontSize: "16px", // Slightly smaller font size for name
-                              fontWeight: "600",
-                              color: "#333",
-                              marginBottom: "4px", // Reduced margin
-                            }}
-                          >
-                            {testimonial?.name}
-                          </h3>
-                          <div className="text-warning text-center mt-0 m-0">
-                            {[...Array(5)].map((star, i) => {
-                              const isFilled =
-                                i < Math.floor(testimonial?.rating);
-                              return (
-                                <i
-                                  key={i}
-                                  className={`bi ${isFilled ? "bi-star-fill" : "bi-star"
-                                    }`}
-                                  style={{
-                                    fontSize: "14px", // Reduced star size
-                                    color: isFilled ? "#FFD700" : "#ddd",
-                                    transition: "color 0.3s ease", // Smooth color transition for stars
-                                  }}
-                                ></i>
-                              );
-                            })}
-                          </div>
-                        </div>
-                      </div>
-                      <div className="col-12 mt-3">
-                        <p
-                          style={{
-                            maxHeight: "60px", // Shortened max height for the review text
-                            overflow: "hidden",
-                            textOverflow: "ellipsis",
-                            display: "-webkit-box",
-                            WebkitLineClamp: 2, // Truncate after 2 lines
-                            WebkitBoxOrient: "vertical",
-                            fontSize: "14px", // Smaller font size for review text
-                            color: "#555", // Slightly lighter text color
-                            lineHeight: "1.4",
-                            fontFamily: '"Roboto", sans-serif', // Modern font for better readability
-                            fontWeight: "400",
-                          }}
-                        >
-                          {testimonial?.review}
-                        </p>
-                      </div>
-                      <div className="col-12 mt-2">
-                        <p
-                          style={{
-                            fontSize: "12px",
-                            color: "#999",
-                            fontStyle: "italic",
-                            textAlign: "right", // Align date to the right for a clean look
-                            marginTop: "4px",
-                          }}
-                        >
-                          {formatDate(testimonial?.createdAt ?? "")}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </Slider>
-              <div className="text-center mt-3 mb-5">
-                {/* <a href="/reviews" className="text-decoration-none text-theme2">
-      View more <i className="bi bi-arrow-right"></i>
-    </a> */}
+          </section>
+          <section className="" style={{ backgroundColor: "#F3F3F4" }}>
+            <div className="container david-font p-top">
+              <div className="col-12 text-center">
+                <h1>Our Happy Customers</h1>
               </div>
-            </div>
-            <div className="col-12">
-              <div className="col-12 text-center mb-3">
-                <button
-                  className="btn btn-dark text-white radius-theme box-shadow theme mt-5"
-                  onClick={() => setVisible(true)}
-                >
-                  Write Review
-                </button>
-              </div>
-            </div>
-          </div>
-        </section>
-        <Dialog
-          header="Write a Review"
-          visible={visible}
-          onHide={() => {
-            if (!visible) return;
-            setVisible(false);
-          }}
-          style={{ width: "50vw" }}
-          breakpoints={{ "960px": "75vw", "641px": "100vw" }}
-        >
-          <div className="container">
-            <form onSubmit={handleReviewSubmit}>
-              <div className="p-3 justify-content-center">
-                <Rating
-                  value={review.rating}
-                  onChange={(e) => setReview({ ...review, rating: e.value })}
-                  cancel={false}
-                />
+              <div className="col-12">
+                <p className="text-center">
+                  At Our Restaurant, we strive to provide the best dining experience
+                  possible. Our loyal customers have been satisfied with our
+                  culinary skills, service, and overall ambiance. Our positive
+                  feedback has helped us continuously improve our dining experience.
+                  If you're a loyal customer, we'd love to hear from you!
+                </p>
               </div>
 
               <div className="col-12">
-                <InputText
-                  keyfilter="text"
-                  placeholder="Full Name"
-                  className="w-100"
-                  value={review.name}
-                  name="name"
-                  required
-                  onChange={handleInputChange}
-                />
-              </div>
-
-              {/* Description Input Field */}
-              <div className="col-12 mt-3">
-                <div className="card flex justify-content-center">
-                  <InputTextarea
-                    value={review.review} // Bind the description from state
-                    onChange={handleInputChange} // Update description in state
-                    rows={5}
-                    cols={30}
-                    name="review" // Important: use `name` for targeting in handleInputChange
-                    placeholder="Write your review here..."
-                  />
+                <Slider {...settings}>
+                  {reviews?.map((testimonial, index) => (
+                    <div key={index} className="testi-slide">
+                      <div
+                        className={`testi-div p-4 ${index === currentSlide ? "testi-theme" : ""
+                          }`}
+                        style={{
+                          backgroundColor:
+                            index === currentSlide ? "#f0f8ff" : "#fff", // Light blue background for the active card
+                          borderRadius: "12px", // Rounded corners
+                          boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)", // Lighter shadow for premium feel
+                          padding: "16px", // Reduced padding for smaller card height
+                          transition:
+                            "transform 0.3s ease-in-out, background-color 0.3s ease", // Smooth hover effect and background color transition
+                          maxWidth: "100%", // Ensure card size is responsive
+                          margin: "10px", // Add margin between cards
+                          cursor: "pointer", // Indicating that it's interactive
+                          transform: "scale(1)", // Default scale
+                          minHeight: "250px", // Set the minHeight to 250px for further reduction
+                          display: "flex",
+                          flexDirection: "column", // Flexbox to manage content alignment
+                          justifyContent: "space-between", // Space out elements evenly
+                        }}
+                        onMouseEnter={(e) =>
+                          (e.currentTarget.style.transform = "scale(1.05)")
+                        } // Hover effect
+                        onMouseLeave={(e) =>
+                          (e.currentTarget.style.transform = "scale(1)")
+                        } // Revert hover effect
+                      >
+                        <div className="row">
+                          <div className="col-2">
+                            <img
+                              src="/src/assets/images/user.png"
+                              alt={testimonial?.name}
+                              style={{
+                                objectFit: "cover",
+                                width: "40px", // Adjusted image size
+                                height: "40px", // Adjusted image size
+                                borderRadius: "50%",
+                                border: "2px solid #ddd", // Premium border around the image
+                              }}
+                            />
+                          </div>
+                          <div className="col-10">
+                            <h3
+                              className="fs-20 p-0 m-0 ms-4"
+                              style={{
+                                fontSize: "16px", // Slightly smaller font size for name
+                                fontWeight: "600",
+                                color: "#333",
+                                marginBottom: "4px", // Reduced margin
+                              }}
+                            >
+                              {testimonial?.name}
+                            </h3>
+                            <div className="text-warning text-center mt-0 m-0">
+                              {[...Array(5)].map((star, i) => {
+                                const isFilled =
+                                  i < Math.floor(testimonial?.rating);
+                                return (
+                                  <i
+                                    key={i}
+                                    className={`bi ${isFilled ? "bi-star-fill" : "bi-star"
+                                      }`}
+                                    style={{
+                                      fontSize: "14px", // Reduced star size
+                                      color: isFilled ? "#FFD700" : "#ddd",
+                                      transition: "color 0.3s ease", // Smooth color transition for stars
+                                    }}
+                                  ></i>
+                                );
+                              })}
+                            </div>
+                          </div>
+                        </div>
+                        <div className="col-12 mt-3">
+                          <p
+                            style={{
+                              maxHeight: "60px", // Shortened max height for the review text
+                              overflow: "hidden",
+                              textOverflow: "ellipsis",
+                              display: "-webkit-box",
+                              WebkitLineClamp: 2, // Truncate after 2 lines
+                              WebkitBoxOrient: "vertical",
+                              fontSize: "14px", // Smaller font size for review text
+                              color: "#555", // Slightly lighter text color
+                              lineHeight: "1.4",
+                              fontFamily: '"Roboto", sans-serif', // Modern font for better readability
+                              fontWeight: "400",
+                            }}
+                          >
+                            {testimonial?.review}
+                          </p>
+                        </div>
+                        <div className="col-12 mt-2">
+                          <p
+                            style={{
+                              fontSize: "12px",
+                              color: "#999",
+                              fontStyle: "italic",
+                              textAlign: "right", // Align date to the right for a clean look
+                              marginTop: "4px",
+                            }}
+                          >
+                            {formatDate(testimonial?.createdAt ?? "")}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </Slider>
+                <div className="text-center mt-3 mb-5">
+                  <a href="#reviews" className="text-decoration-none text-theme2">
+                    View more <i className="bi bi-arrow-right"></i>
+                  </a>
                 </div>
               </div>
-
-              <div className="col-12 mt-3">
-                <div className="row">
-                  <button type="submit" className="btn-theme2 btn theme radius">
-                    Submit Review
+              <div className="col-12">
+                <div className="col-12 text-center mb-3">
+                  <button
+                    className="btn btn-dark text-white radius-theme box-shadow theme mt-5"
+                    onClick={() => setVisible(true)}
+                  >
+                    Write Review
                   </button>
                 </div>
               </div>
-            </form>
-          </div>
-        </Dialog>
+            </div>
+          </section>
+          <Dialog
+            header="Write a Review"
+            visible={visible}
+            onHide={() => {
+              if (!visible) return;
+              setVisible(false);
+            }}
 
-        <ContactForm handleFormSubmit={handleFormSubmit} />
+            style={{ minWidth: "50vw", borderRadius: '12px', overflow: "hidden" }}
+            breakpoints={{ "960px": "75vw", "641px": "100vw" }}
+          >
+            <div className="container ">
+              <form onSubmit={handleReviewSubmit}>
+                <div className=" mb-3 d-flex justify-content-center">
+                  <Rating
+                    name="simple-controlled"
+                    value={review.rating}
+                    color="warning"
+                    onChange={(event, newValue) => {
+                      setReview({ ...review, rating: newValue })
+                    }}
+                  />
+                </div>
 
-        <section className="h-auto david-font" id="contact">
-          <div className="container p-top">
-            <div className="col-12 newsletter position-relative">
-              <img
-                src="/src/assets/images/newsletter.png"
-                alt=""
-                className="w-100"
-              />
-              <div className="text-center newsletter-content position-absolute">
-                <div className="d-none d-lg-block">
-                  <h2 className="fs-45 mb-3 fw-bold text-white">
-                    Create Your Own Business <br />
-                    Subscribing To Our Newsletter
-                  </h2>
-                  <div className="row bg-white align-items-center input-div p-2">
-                    <div className="col-lg-8">
-                      <input
-                        type="email"
-                        placeholder="Enter Your Email"
-                        style={{ border: "0 !important" }}
-                        required
-                        value={newsLetterEmail}
-                        onChange={(e) =>
-                          setNewsLetterEmail(e.target?.value?.trim())
-                        }
-                        className="form-control form-control-lg"
-                      />
-                    </div>
-                    <div className="col-lg-4">
-                      <button
-                        onClick={handleNewsLetterSubmit}
-                        className="btn theme btn-lg w-100"
-                      >
-                        Subscribe
-                      </button>
-                    </div>
+                <div className="">
+                  <InputText
+                    keyfilter="text"
+                    placeholder="Full Name"
+                    className="w-100"
+                    value={review.name}
+                    name="name"
+                    required
+                    onChange={handleInputChange}
+                  />
+                </div>
+
+                {/* Description Input Field */}
+                <div className=" mt-3">
+                  <div className="w-100 d-flex justify-content-center">
+                    <InputTextarea
+                      value={review.review} // Bind the description from state
+                      onChange={handleInputChange} // Update description in state
+                      rows={5}
+                      cols={30}
+                      name="review" // Important: use `name` for targeting in handleInputChange
+                      placeholder="Write your review here..."
+                      className="w-100"
+                    />
                   </div>
                 </div>
 
-                <div className="d-block d-lg-none">
-                  <h2 className="fs-16 fw-bold text-white">
-                    Create Your Own Business <br />
-                    Subscribing To Our Newsletter
-                  </h2>
-                  <div className="row">
-                    <div className="col-12">
-                      <input
-                        type="email"
-                        name="email"
-                        style={{ border: "0 !important" }}
-                        className="form-control form-control-sm"
-                      />
+                <div className="col-12 mt-3 text-center">
+                  {reviewLoading ?
+                    <div className="spinner-border" style={{ color: businessData?.theme }} role="status">
+                      <span className="visually-hidden">Loading...</span>
+                    </div> : <button type="submit" className="btn-theme2 btn  theme radius  ">
+                      Submit Review
+                    </button>}
+                </div>
+              </form>
+            </div>
+          </Dialog>
+
+          <ContactForm handleFormSubmit={handleFormSubmit} />
+
+          <section className="h-auto david-font" id="contact">
+            <div className="container p-top">
+              <div className="col-12 newsletter position-relative">
+                <img
+                  src="/src/assets/images/newsletter.png"
+                  alt=""
+                  className="w-100"
+                />
+                <div className="text-center newsletter-content position-absolute">
+                  <div className="d-none d-lg-block">
+                    <h2 className="fs-45 mb-3 fw-bold text-white">
+                      Create Your Own Business <br />
+                      Subscribing To Our Newsletter
+                    </h2>
+                    <div className="row bg-white align-items-center input-div p-2">
+                      <div className="col-lg-8">
+                        <input
+                          type="email"
+                          placeholder="Enter Your Email"
+                          style={{ border: "0 !important" }}
+                          required
+                          value={newsLetterEmail}
+                          onChange={(e) =>
+                            setNewsLetterEmail(e.target?.value?.trim())
+                          }
+                          className="form-control form-control-lg"
+                        />
+                      </div>
+                      <div className="col-lg-4">
+                        <button
+                          onClick={handleNewsLetterSubmit}
+                          className="btn theme btn-lg w-100"
+                        >
+                          Subscribe
+                        </button>
+                      </div>
                     </div>
-                    <div className="col-12">
-                      <button
-                        type="button"
-                        className="btn theme btn-sm mt-1 w-100"
-                      >
-                        Subscribe
-                      </button>
+                  </div>
+
+                  <div className="d-block d-lg-none">
+                    <h2 className="fs-16 fw-bold text-white">
+                      Create Your Own Business <br />
+                      Subscribing To Our Newsletter
+                    </h2>
+                    <div className="row">
+                      <div className="col-12">
+                        <input
+                          type="email"
+                          name="email"
+                          style={{ border: "0 !important" }}
+                          className="form-control form-control-sm"
+                        />
+                      </div>
+                      <div className="col-12">
+                        <button
+                          type="button"
+                          className="btn theme btn-sm mt-1 w-100"
+                        >
+                          Subscribe
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-        </section>
-      </>}
+          </section>
+        </>}
 
       <footer className="h-auto">
         <div className="container pjs  p-top">
