@@ -1721,12 +1721,12 @@ export default function Template() {
                       className="fs-14 text-decoration-none"
                       style={{ color: '#A4B3CB' }}
                     >
-                      Menu
+                      Home
                     </a>
                   </div>
                   <div className="col-12 mt-3 mb-3  text-center text-lg-start">
                     <a
-                      href="#"
+                      href="#about"
                       className="fs-14 text-decoration-none"
                       style={{ color: '#A4B3CB' }}
                     >
@@ -1735,7 +1735,7 @@ export default function Template() {
                   </div>
                   <div className="col-12 mt-3 mb-3  text-center text-lg-start">
                     <a
-                      href="#"
+                      href="#contact"
                       className="fs-14 text-decoration-none"
                       style={{ color: '#A4B3CB' }}
                     >
@@ -1744,11 +1744,11 @@ export default function Template() {
                   </div>
                   <div className="col-12 mt-3 mb-3  text-center text-lg-start">
                     <a
-                      href="#"
+                      href="#gallery"
                       className="fs-14 text-decoration-none"
                       style={{ color: '#A4B3CB' }}
                     >
-                      Main Dishes
+                      Gallery
                     </a>
                   </div>
                 </div>
