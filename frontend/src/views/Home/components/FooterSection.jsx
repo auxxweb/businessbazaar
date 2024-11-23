@@ -135,7 +135,7 @@ const FooterSection = () => {
               <div style={{ color: "#A4B3CB" }} className="text-right">
                 <span>
                   Copyright &copy;
-                  {new Date().getFullYear()} In Connect. All Rights Reserved
+                  {new Date().getFullYear()} En Connect. All Rights Reserved
                 </span>
               </div>
             </div>
