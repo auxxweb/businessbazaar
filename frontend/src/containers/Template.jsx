@@ -1029,8 +1029,15 @@ export default function Template() {
                 <div className="row justify-content-center">
                   <div className="col-12 col-md-6 text-center">
                     <h1 className="text-dark fw-bold david-font banner-title fs-45">
-                      Our List
+                     {businessData?.productSection?.title}
                     </h1>
+                  </div>
+                  <div className="row justify-content-center">
+                    <div className="col-12 col-lg-6 ">
+                      <p className="text-secondary text-center mb-2">
+                        {businessData?.productSection?.description}
+                      </p>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -1038,9 +1045,9 @@ export default function Template() {
               <div className="mt-5 david-font">
                 <div className="mb-5">
                   <div className="row mb-3">
-                    {businessData?.productSection?.map((item, index) => (
+                    {businessData?.productSection?.data?.map((item, index) => (
                       <div
-                        className="col-12 col-lg-6 mt-3 "
+                        className="col-12 col-lg-6 mt-3 mx-auto "
                         style={{ padding: "0 30px" }}
                         key={index}
                       >
@@ -1077,23 +1084,36 @@ export default function Template() {
             style={{ backgroundColor: "#F3F3F4" }}
           >
             <div className="container p-top">
-              <div className="col-12 mt-5 text-center text-lg-start">
-                <h1 className="fw-bold text-center">Services We Provide</h1>
+            <div className="col-12 mb-5">
+                <div className="row justify-content-center">
+                  <div className="col-12 col-md-6 text-center">
+                    <h1 className="text-dark fw-bold david-font banner-title fs-45">
+                     {businessData?.service?.title}
+                    </h1>
+                  </div>
+                  <div className="row justify-content-center">
+                    <div className="col-12 col-lg-6 ">
+                      <p className="text-secondary text-center mb-2">
+                        {businessData?.service?.description}
+                      </p>
+                    </div>
+                  </div>
+                </div>
               </div>
-              <div className="col-12 mb-5">
+              <div className="col-12 mb-5 d-none">
                 <Carousel controls={false} touch={true} >
-                  {businessData?.service?.map((service, index) => (
-                    <Carousel.Item key={service?._id} className="" interval={1000} >
+                  {businessData?.service?.data?.map((item, index) => (
+                    <Carousel.Item key={item?._id} className="" interval={1000} >
                       <div
 
                         className={`col-12 col-lg-4 service-design mx-auto  ${index === currentSlide ? "active" : "bg-white"
                           }  mt-5 mb-5 text-center`}
                       >
                         <div className="col-12 text-center">
-                          <h3>{service.title}</h3>
+                          <h3>{item.title}</h3>
                         </div>
                         <div className="col-12 mt-5">
-                          <p className="text-center">{service.description}</p>
+                          <p className="text-center">{item.description}</p>
                         </div>
                         <div
                           className="col-12 text-center"
@@ -1101,11 +1121,11 @@ export default function Template() {
                         >
                           <img
                             src={
-                              service.image && service.image.length > 0
-                                ? service.image
+                              item.image 
+                                ? item.image
                                 : Placeholder
                             }
-                            alt={service.title}
+                            alt={item.title}
                             className="h-100"
                           />
                         </div>

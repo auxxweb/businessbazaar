@@ -202,7 +202,7 @@ const LandingPageDetails = () => {
             },
           })
         );
-        navigate("/create-business/services");
+        navigate("/create-business/core-services");
       }
     } catch (e) {
       console.log(e);

@@ -60,8 +60,16 @@ const initialState = {
     description: "",
     data: [{ title: "", description: "", image: "" }],
   },
-  productSection: [],
-  service: [{ title: "", description: "", image: "" }],
+  productSection: {
+    title: "",
+    description: "",
+    data: [{ title: "", description: "", image: "",price:"" }],
+  },
+  service: {
+    title: "",
+    description: "",
+    data: [{ title: "", description: "", image: "" }],
+  },
   testimonial: {
     description: "",
     reviews: [],

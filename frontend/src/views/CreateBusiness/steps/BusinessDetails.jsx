@@ -191,6 +191,7 @@ const BusinessDetails = () => {
                   name="businessName"
                   autoComplete="businessName"
                   value={businessName}
+                  inputProps={{maxLength:35}}
                   onChange={(e) => setBusinessName(e.target.value)}
                   error={!!error?.name}
                   helperText={error?.name}

@@ -463,6 +463,7 @@ const ContactDetails = () => {
                   label="Website link"
                   variant="filled"
                   name="website"
+                  inputProps={{maxLength:200}}
                   value={newFormData.contactDetails.website}
                   onChange={handleContactChange}
                   error={!!errors.website}

@@ -107,12 +107,13 @@ const SeoDetails = () => {
               <div className="input-group mt-2 w-100">
                 <TextField
                   fullWidth
-                  label="Title"
+                  label="Title (35 letters)"
                   id="title"
                   variant="filled"
                   name="title"
                   autoComplete="title"
                   value={seoData.title}
+                  inputProps={{maxLength:35}}
                   onChange={handleSeoInputChange}
                 />
               </div>
@@ -120,13 +121,14 @@ const SeoDetails = () => {
               <div className="input-group mb-3 mt-4 w-100">
                 <TextField
                   fullWidth
-                  label="Description"
+                  label="Description (200 letters) "
                   id="description"
                   variant="filled"
                   name="description"
                   autoComplete="description"
                   multiline // Makes the TextField behave like a textarea
                   rows={4} // You can adjus
+                  inputProps={{maxLength:200}}
                   value={seoData.description}
                   onChange={handleSeoInputChange}
                 />
@@ -138,9 +140,10 @@ const SeoDetails = () => {
                   <div className="input-group mb-2" key={index}>
                     <TextField
                       fullWidth
-                      type="text"
+                      type="text "
                       label="Tag"
                       variant="filled"
+                      inputProps={{maxLength:35}}
                       value={tag}
                       onChange={(e) => handleTagChange(index, e.target.value)}
                     />
