@@ -1,12 +1,24 @@
- 
+
 /* eslint-disable react/prop-types */
 import { TextField } from "@mui/material";
-import { useJsApiLoader, StandaloneSearchBox } from "@react-google-maps/api";
+import { Dialog } from "primereact/dialog";
+import React from "react";
+import { useJsApiLoader, StandaloneSearchBox, GoogleMap} from "@react-google-maps/api";
 import { useRef, useState } from "react";
+import './businessLocation.css'
 
-const CreateBusinessLocation = ({ setLocation }) => {
+const containerStyle = {
+  width: '100%',
+  height: '400px',
+}
+
+const CreateBusinessLocation = ({ setLocation, visible, setVisible }) => {
   const inputRef = useRef();
   const [inputValue, setInputValue] = useState("");
+  const [center, setCenter] = useState({
+    lat: 11.2487,
+    lng: 75.8335,
+  });
 
   const { isLoaded } = useJsApiLoader({
     id: "google-map-script",
@@ -21,7 +33,12 @@ const CreateBusinessLocation = ({ setLocation }) => {
         lat: "",
         lon: "",
       });
+      setCenter({
+        lat: 11.2487,
+        lng: 75.8335,
+      })
     }
+
   };
 
   const handleOnPlacesChanged = () => {
@@ -35,26 +52,82 @@ const CreateBusinessLocation = ({ setLocation }) => {
       lat: lat,
       lon: lng,
     });
+    setCenter({
+      lat: lat,
+      lng: lng,
+    })
+
   };
 
+  const [map, setMap] = React.useState(null)
+
+  const onLoad = React.useCallback((mapInstance) => {
+    const bounds = new window.google.maps.LatLngBounds(center);
+    mapInstance.fitBounds(bounds);
+    setMap(mapInstance); // Save the map instance in state if needed
+  }, [map]);
+
+  const onUnmount = React.useCallback((map) => {
+    setMap(null)
+  }, [])
+
+  const handleOnclock = React.useCallback((data)=>{
+    setInputValue("")
+    setLocation({
+      lat: data?.latLng?.lat(),
+      lon: data?.latLng?.lng(),
+    });
+    setCenter({
+      lat: data?.latLng?.lat(),
+      lng: data?.latLng?.lng(),
+    })
+    
+  },[])
+
   return (
-    <div className="input-group mt-2 w-100">
-      {isLoaded && (
-        <StandaloneSearchBox
-          onLoad={(ref) => (inputRef.current = ref)}
-          onPlacesChanged={handleOnPlacesChanged}
+    <Dialog
+      header="Select the location"
+      visible={visible}
+      onHide={() => {
+        if (!visible) return;
+        setVisible(false);
+      }}
+
+      style={{ minWidth: "50vw", borderRadius: '12px', overflow: "hidden", zIndex: 1 }}
+      breakpoints={{ "960px": "75vw", "641px": "100vw" }}
+    >
+        {isLoaded && (
+      <div className=" mt-2 w-100">
+          <StandaloneSearchBox
+            onLoad={(ref) => (inputRef.current = ref)}
+            onPlacesChanged={handleOnPlacesChanged}
+
+          >
+            <TextField
+              fullWidth
+              label="Location"
+              variant="filled"
+              name="lon"
+              value={inputValue}
+              onChange={onInputChange}
+            />
+          </StandaloneSearchBox>
+         
+           <GoogleMap
+          mapContainerStyle={containerStyle}
+          center={center}
+          zoom={10}
+          onLoad={onLoad}
+          onUnmount={onUnmount}
+          onClick={handleOnclock}
         >
-          <TextField
-            fullWidth
-            label="Location"
-            variant="filled"
-            name="lon"
-            value={inputValue}
-            onChange={onInputChange}
-          />
-        </StandaloneSearchBox>
-      )}
-    </div>
+        </GoogleMap>
+       
+        
+      </div>
+        )}
+        
+    </Dialog>
   );
 };
 

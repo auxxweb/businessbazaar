@@ -9,6 +9,7 @@ const ContactDetails = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const businessState = useSelector((state) => state.business);
+  const [showLocation,setShowLocation] = useState(false)
 
   const [newFormData, setNewFormData] = useState({
     contactDetails: {
@@ -375,8 +376,10 @@ const ContactDetails = () => {
             </div>
 
             {/* Location */}
-            <CreateBusinessLocation setLocation={setLocation} />
-
+          { showLocation &&  <CreateBusinessLocation visible={showLocation} setVisible={setShowLocation} setLocation={setLocation} />}
+          <div className="d-flex justify-content-end  mt-2">
+            <button onClick={(()=>setShowLocation(!showLocation))}  className="btn btn-primary">Add Location</button>
+          </div>
             {/* Contact Numbers */}
             <div id="mobileNumberDiv" className="mt-4">
               <div className="row mt-3">

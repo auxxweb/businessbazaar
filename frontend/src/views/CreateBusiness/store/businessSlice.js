@@ -30,6 +30,8 @@ const initialState = {
     { tag: "facebook", link: "" },
     { tag: "instagram", link: "" },
     { tag: "twitter", link: "" },
+    { tag: "youtube", link: "" },
+    { tag: "linkedIn", link: "" },
   ],
   category: "",
   services: [],
