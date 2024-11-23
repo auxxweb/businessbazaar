@@ -193,8 +193,8 @@ const BusinessDetails = () => {
                   value={businessName}
                   inputProps={{maxLength:35}}
                   onChange={(e) => setBusinessName(e.target.value)}
-                  error={!!error?.name}
-                  helperText={error?.name}
+                  error={error?.name || businessName?.split("")?.length >= 35 ? true : false}
+                  helperText={error?.name || businessName?.split("")?.length >= 35 ? "exceeded the limit" : ""}
                 />
               </div>
 

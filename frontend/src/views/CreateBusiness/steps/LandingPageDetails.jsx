@@ -7,6 +7,7 @@ import { updateBusinessDetails } from "../store/businessSlice";
 import { Button, Container, Nav, Navbar, NavLink } from "react-bootstrap";
 import { preRequestFun } from "../service/s3url";
 import getCroppedImg from "../../../utils/cropper.utils";
+import Loader from "../../../components/Loader/Loader";
 
 const initialCropState = { x: 0, y: 0 };
 
@@ -228,7 +229,7 @@ const LandingPageDetails = () => {
     return (
       <div className="h-100vh">
         <div className="d-flex h-100 justify-content-center align-items-center">
-          <span>Loading</span>
+        <Loader />
         </div>
       </div>
     );

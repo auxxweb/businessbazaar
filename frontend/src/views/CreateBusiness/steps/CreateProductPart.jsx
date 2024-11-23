@@ -17,7 +17,7 @@ const CreateProductPart = () => {
   const [specialService, setSpecialService] = useState({
     title: "",
     description: "",
-    data: [{ title: "", description: "", image: "",price:"" }],
+    data: [{ title: "", description: "", image: "", price: "" }],
   });
   const [isLoading, setIsLoading] = useState({
     specialService: {},
@@ -136,8 +136,8 @@ const CreateProductPart = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    if(name === 'description'){
-      
+    if (name === 'description') {
+
     }
     setSpecialService((prevData) => ({
       ...prevData,
@@ -207,7 +207,7 @@ const CreateProductPart = () => {
       JSON.parse(JSON.stringify(businessState?.productSection))
     );
   }, [businessState]);
-  
+
 
   return (
     <>
@@ -295,13 +295,13 @@ const CreateProductPart = () => {
                     name="title"
                     autoComplete="title-1"
                     onChange={handleChange}
-                    inputProps={{maxLength:35}}
-                    error={!!errors?.landingPageHeroTitle}
-                    helperText={errors?.landingPageHeroTitle}
+                    inputProps={{ maxLength: 35 }}
+                    error={specialService?.title?.split("")?.length >= 35 ? true : false}
+                    helperText={specialService?.title?.split("")?.length >= 35 ? "exceeded the limit" : ""}
                     value={specialService.title}
                   />
                 </div>
-                                <div className="input-group mb-3 mt-4 w-100">
+                <div className="input-group mb-3 mt-4 w-100">
                   <TextField
                     fullWidth
                     label="Description (200 letters)"
@@ -313,9 +313,9 @@ const CreateProductPart = () => {
                     rows={4} // You can adjust the number of rows (height) here
                     value={specialService.description}
                     onChange={handleChange}
-                    inputProps={{maxLength:200}}
-                    error={!!errors?.landingPageHeroDescription}
-                    helperText={errors?.landingPageHeroDescription}
+                    inputProps={{ maxLength: 200 }}
+                    error={specialService?.description?.split("")?.length >= 200 ? true : false}
+                    helperText={specialService?.description?.split("")?.length >= 200 ? "exceeded the limit" : ""}
                     sx={{
                       "& .MuiInputBase-root": {
                         padding: "12px", // Padding inside the textarea
@@ -329,6 +329,7 @@ const CreateProductPart = () => {
                     }}
                   />
                 </div>
+
                 <hr
                   style={{
                     border: "3px solid #105193",
@@ -379,10 +380,10 @@ const CreateProductPart = () => {
                       name="title"
                       autoComplete="Service Name"
                       value={p.title}
-                      inputProps={{maxLength:35}}
+                      inputProps={{ maxLength: 35 }}
                       onChange={(e) => handleProductChange(index, e)}
-                      error={!!errors?.landingPageHeroTitle}
-                      helperText={errors?.landingPageHeroTitle}
+                      error={p?.title?.split("")?.length >= 35 ? true : false}
+                      helperText={p?.title?.split("")?.length >= 35 ? "exceeded the limit" : ""}
                     />
 
                     <div className="input-group mb-3 mt-4 w-100">
@@ -395,9 +396,9 @@ const CreateProductPart = () => {
                         autoComplete="description"
                         multiline
                         rows={4}
-                        inputProps={{maxLength:200}}
-                        error={!!errors?.landingPageHeroDescription}
-                        helperText={errors?.landingPageHeroDescription}
+                        inputProps={{ maxLength: 200 }}
+                        error={p?.description?.split("")?.length >= 200 ? true : false}
+                        helperText={p?.description?.split("")?.length >= 200 ? "exceeded the limit" : ""}
                         sx={{
                           "& .MuiInputBase-root": {
                             padding: "12px",
@@ -482,7 +483,7 @@ const CreateProductPart = () => {
                       ...prevData,
                       data: [
                         ...prevData?.data,
-                        { title: "", description: "", image: "",price:"" },
+                        { title: "", description: "", image: "", price: "" },
                       ],
                     }))
                   }

@@ -295,8 +295,8 @@ const CreateServices = () => {
                     autoComplete="title-1"
                     onChange={handleChange}
                     inputProps={{maxLength:35}}
-                    error={!!errors?.landingPageHeroTitle}
-                    helperText={errors?.landingPageHeroTitle}
+                    error={specialService?.title?.split("")?.length >= 35 ? true : false}
+                    helperText={specialService?.title?.split("")?.length >= 35 ? "exceeded the limit" : ""}
                     value={specialService.title}
                   />
                 </div>
@@ -313,8 +313,8 @@ const CreateServices = () => {
                     value={specialService.description}
                     inputProps={{maxLength:200}}
                     onChange={handleChange}
-                    error={!!errors?.landingPageHeroDescription}
-                    helperText={errors?.landingPageHeroDescription}
+                    error={specialService?.description?.split("")?.length >= 200 ? true : false}
+                    helperText={specialService?.description?.split("")?.length >= 200 ? "exceeded the limit" : ""}
                     sx={{
                       "& .MuiInputBase-root": {
                         padding: "12px", // Padding inside the textarea
@@ -380,8 +380,8 @@ const CreateServices = () => {
                       value={p.title}
                       inputProps={{maxLength:35}}
                       onChange={(e) => handleProductChange(index, e)}
-                      error={!!errors?.landingPageHeroTitle}
-                      helperText={errors?.landingPageHeroTitle}
+                      error={p?.title?.split("")?.length >= 35 ? true : false}
+                      helperText={p?.title?.split("")?.length >= 35 ? "exceeded the limit" : ""}
                     />
 
                     <div className="input-group mb-3 mt-4 w-100">
@@ -395,8 +395,8 @@ const CreateServices = () => {
                         multiline
                         rows={4}
                         inputProps={{maxLength:200}}
-                        error={!!errors?.landingPageHeroDescription}
-                        helperText={errors?.landingPageHeroDescription}
+                        error={p?.description?.split("")?.length >= 200 ? true : false}
+                      helperText={p?.description?.split("")?.length >= 200 ? "exceeded the limit" : ""}
                         sx={{
                           "& .MuiInputBase-root": {
                             padding: "12px",
