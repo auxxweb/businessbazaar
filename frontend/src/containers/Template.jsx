@@ -40,6 +40,10 @@ items.forEach((el) => {
     next = next.nextElementSibling
   }
 })
+import { height } from "@fortawesome/free-brands-svg-icons/fa42Group";
+import ShareButton from "../components/ShareButton";
+
+
 
 export default function Template() {
 
@@ -58,8 +62,12 @@ export default function Template() {
     name: "",
     review: "",
   });
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [id]);
 
   const [reviews, setReviews] = useState([]);
+  const [reviewCount, setReviewCount] = useState(0);
 
   const [closeDays, setCloseDays] = useState([]);
   const allDays = [
@@ -199,6 +207,7 @@ export default function Template() {
       const response = await getAllBusinessReviews({ businessId: id });
       console.log(response, "data-validation");
       setReviews(response?.data?.data);
+      setReviewCount(response?.data?.totalCount)
     };
     fetchReview();
   }, [id, reviewFetch]);
@@ -463,7 +472,7 @@ export default function Template() {
             className="btn btn-outline-secondary d-none d-lg-inline-block me-2"
             onClick={() => window.location.href = "/"} // Modify the onClick action as needed
           >
-            <i className="bi bi-arrow-left"></i> Homeeee
+            <i className="bi bi-arrow-left"></i> Home
           </button>
 
           {/* Align Brand to the start (left side) */}
@@ -635,7 +644,7 @@ export default function Template() {
 
             backgroundColor: "transparent", // Default transparent background
             color: colorTheme, // Text color based on colorTheme
-            border: `1.5px solid ${colorTheme}`, // Border color based on colorTheme
+            border:` 1.5px solid ${colorTheme}`, // Border color based on colorTheme
             padding: "4px 10px", // Reduced padding for smaller button size
             fontSize: "12px", // Smaller font size
             borderRadius: "6px", // Optional: Make edges slightly rounded
@@ -731,7 +740,9 @@ export default function Template() {
                 className="fw-bold text-decoration-none text-center text-lg-start"
               >
                 Services
+
               </NavLink>
+
 
               {/* Back button for smaller screens (inside menu items) */}
               <button
@@ -760,7 +771,7 @@ export default function Template() {
             </Nav>
           </Navbar.Collapse>
         </Container>
-      </Navbar>
+      </Navbar>
 
       {showAllReviews && <BusinessReviews
         theme={businessData?.theme}
@@ -774,190 +785,200 @@ export default function Template() {
 
       {!showAllReviews && !showNews &&
         <>
-          <section className="h-auto " >
-            <div className="container p-top">
-              <div className="row align-items-center banner-section">
-                {/* Left Image for Mobile View */}
-                <div className="col-12 col-lg-6 text-end d-block d-lg-none">
-                  <img
-                    src={
-                      businessData?.landingPageHero?.coverImage &&
-                        businessData?.landingPageHero?.coverImage?.length > 0
-                        ? businessData?.landingPageHero?.coverImage
-                        : PlaceholderBanner
-                    }
-                    alt=""
-                    className="banner-image"
-                  />
-                  <div className="banner-image-2 d-none">
-                    <img src="/src/assets/images/baner-image2.png" alt="" />
-                  </div>
-                </div>
+     <section className="h-auto">
+          <div className="container">
+            <div className="row align-items-center banner-section">
+              {/* Left Image for Mobile View */}
+              <div className="col-12 col-lg-6 text-center text-lg-end d-block d-lg-none">
+                <img
+                  src={
+                    businessData?.landingPageHero?.coverImage &&
+                      businessData?.landingPageHero?.coverImage?.length > 0
+                      ? businessData?.landingPageHero?.coverImage
+                      : PlaceholderBanner
+                  }
+                  alt=""
+                  className="banner-image"
+                />
+              </div>
 
-                {/* Text Content */}
-                <div className="col-12 col-lg-6">
-                  <div className="row align-items-center">
-                    <div className="col-12">
-                      <h1 className="text-start text-dark fw-bold david-font fw-bold banner-title text-center text-lg-start">
-                        {businessData?.landingPageHero?.title}
-                      </h1>
-                    </div>
-                    <div className="col-12">
-                      <p className="text-secondary text-center text-lg-start david-font">
-                        {businessData?.landingPageHero?.description}
-                      </p>
-                    </div>
-                    <div className="mt-3 col-12">
-                      <div className="row">
-                        <div className="col-6 col-lg-3 mb-2">
-                          <NavLink
-                            to="#about"
-                            className="btn btn-dark text-white radius-theme box-shadow w-100 p-1"
-                            style={{ backgroundColor: "#212529" }}
-                          >
-                            View More
-                          </NavLink>
-                        </div>
-                        <div className="col-6 col-lg-3 mb-2">
-                          <NavLink
-                            href="#services"
-                            className="btn btn-dark text-white radius-theme box-shadow theme w-100 p-1"
-                          >
-                            Services
-                          </NavLink>
-                        </div>
+
+              {/* Text Content */}
+              <div className="col-12 col-lg-6">
+                <div className="row align-items-center">
+                  <div className="col-12">
+                    <h1 className="text-dark fw-bold david-font banner-title text-center text-lg-start sm:text-sm sm:leading-5 sm:whitespace-nowrap lg:text-4xl">
+                      {businessData?.landingPageHero?.title}
+                    </h1>
+                  </div>
+
+                  <div className="col-12">
+                    <p className="text-secondary text-center text-lg-start david-font">
+                      {truncateText(businessData?.landingPageHero?.description, 100)}
+                      {businessData?.landingPageHero?.description?.length > 100 && isTruncated && (
+                        <span
+                          onClick={toggleTruncation}
+                          className="text-primary cursor-pointer ml-1 text-black"
+                        >
+                          ...
+                        </span>
+                      )}
+                    </p>
+                  </div>
+                  {/* Hide Buttons on Mobile */}
+                  <div className="mt-3 col-12 d-none d-lg-block">
+                    <div className="row">
+                      <div className="col-6 col-lg-3 mb-2">
+                        <NavLink
+                          to="#about"
+                          className="btn btn-dark text-white radius-theme box-shadow w-100 p-1"
+                          style={{ backgroundColor: "#212529" }}
+                        >
+                          View More
+                        </NavLink>
+                      </div>
+                      <div className="col-6 col-lg-3 mb-1">
+                        <NavLink
+                          href="#services"
+                          className="btn btn-dark text-white radius-theme box-shadow theme w-100 p-1"
+                        >
+                          Services
+                        </NavLink>
                       </div>
                     </div>
-                    <div className="mt-5 col-12 social-media gap-3">
-                      <a
-                        href={
-                          businessData?.socialMediaLinks?.length &&
-                          businessData?.socialMediaLinks[0]?.link
-                        }
-                        target="_blank"
-                        className="contact-banner text-dark"
-                      >
-                        <i className="bi bi-facebook"></i>
-                      </a>
-                      <a
-                        href={
-                          businessData?.socialMediaLinks?.length &&
-                          businessData?.socialMediaLinks[1]?.link
-                        }
-                        target="_blank"
-                        className="contact-banner text-dark"
-                      >
-                        <i className="bi bi-instagram"></i>
-                      </a>
-                      <a
-                        href={
-                          businessData?.socialMediaLinks?.length &&
-                          businessData?.socialMediaLinks[2]?.link
-                        }
-                        target="_blank"
-                        className="contact-banner text-dark"
-                      >
-                        <i className="bi bi-twitter"></i>
-                      </a>
-                    </div>
                   </div>
-                </div>
 
-                {/* Right Image for Desktop View */}
-                <div className="col-12 col-lg-6 text-end d-none d-lg-block">
-                  <img
-                    src={
-                      businessData?.landingPageHero?.coverImage &&
-                        businessData?.landingPageHero?.coverImage?.length > 0
-                        ? businessData?.landingPageHero?.coverImage
-                        : PlaceholderBanner
-                    }
-                    alt=""
-                    className="banner-image"
-                  />
-                  <div className="banner-image-2 d-none">
-                    <img src="/src/assets/images/baner-image2.png" alt="" />
+                  {/* Social Media Links */}
+                  <div className=" col-12 social-media gap-2">
+                    <a
+                      href={
+                        businessData?.socialMediaLinks?.length &&
+                        businessData?.socialMediaLinks[0]?.link
+                      }
+                      target="_blank"
+                      className="contact-banner text-dark"
+                    >
+                      <i className="bi bi-facebook text-3xl sm:text-xl"></i>
+                    </a>
+                    <a
+                      href={
+                        businessData?.socialMediaLinks?.length &&
+                        businessData?.socialMediaLinks[1]?.link
+                      }
+                      target="_blank"
+                      className="contact-banner text-dark"
+                    >
+                      <i className="bi bi-instagram text-3xl sm:text-xl"></i>
+                    </a>
+                    <a
+                      href={
+                        businessData?.socialMediaLinks?.length &&
+                        businessData?.socialMediaLinks[2]?.link
+                      }
+                      target="_blank"
+                      className="contact-banner text-dark"
+                    >
+                      <i className="bi bi-twitter text-3xl sm:text-xl"></i>
+                    </a>
                   </div>
+
+
                 </div>
               </div>
-            </div>
-          </section>
 
-          <div className="mt-5 mb-5">
-            <div className="container p-top">
-              <div className="col-12 address-section ">
-                <div className="row justify-content-between ">
-                  <div className="col-12 col-lg-4  mb-lg-0 ">
-                    <div className="row align-items-center justify-content-start">
-                      <a
-                        href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
-                          `${businessData.address.buildingName}, ${businessData.address.city}, ${businessData.address.landMark}, ${businessData.address.streetName}, ${businessData.address.state}`
-                        )}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        style={{ textDecoration: 'none', color: 'inherit' }}
-                      >
-                        <div className="row  d-flex justify-content-center align-items-center">
-                          <div className="col-auto address-logo  ">
-                            <i className="bi bi-geo-alt-fill"></i>
-                          </div>
-                          <div className="col">
-                            <span className="fs-13">Address</span>
-                            <p className="fs-16">
-                              {businessData.address.buildingName},{" "}
-                              {businessData.address.city},
-                              {businessData.address.landMark},
-                              {businessData.address.streetName},{" "}
-                              {businessData.address.state}
-                            </p>
-                          </div>
-                        </div>
-                      </a>
-
-                    </div>
-                  </div>
-
-                  <div className="col-12 col-lg-4   d-flex align-items-center  p-0   ">
-                    <div className=" d-flex   justify-content-start w-100 align-items-center  ">
-                      <div className="address-logo me-2  ">
-                        <i className="bi bi-envelope-fill"></i>
-                      </div>
-                      <a className=" " href={`mailto:${businessData?.contactDetails?.email}`} style={{ textDecoration: 'none', color: 'inherit', width: "fit-content" }}>
-                        <span className="fs-13">Send Email</span>
-                        <p className="fs-16">
-                          {businessData?.contactDetails?.email}
-                        </p>
-                      </a>
-
-                    </div>
-                  </div>
-
-                  <div className="col-12 col-lg-4 mb-3 mb-lg-0  d-flex justify-content-start align-items-center ">
-                    <div className="row align-items-center  justify-content-start">
-                      <div className="col-auto address-logo">
-                        <i className="bi bi-telephone"></i>
-                      </div>
-                      <div className="col ">
-                        <span className="fs-13">Contact</span>
-                        <p className="fs-16 mb-0">
-                          <a className="text-white" style={{ textDecoration: "none" }} href={`tel:${businessData?.contactDetails?.primaryNumber}`}>
-                            {businessData?.contactDetails?.primaryNumber}
-                          </a>
-                        </p>
-                        <p className="fs-16 mt-0">
-
-                          <a className="text-white" style={{ textDecoration: "none" }} href={`tel:${businessData?.contactDetails?.secondaryNumber}`}>
-                            {businessData?.contactDetails?.secondaryNumber}
-
-                          </a>
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+              {/* Right Image for Desktop View */}
+              <div className="col-12 col-lg-6 text-end d-none d-lg-block">
+                <img
+                  src={
+                    businessData?.landingPageHero?.coverImage &&
+                      businessData?.landingPageHero?.coverImage?.length > 0
+                      ? businessData?.landingPageHero?.coverImage
+                      : PlaceholderBanner
+                  }
+                  alt=""
+                  className="banner-image"
+                />
               </div>
             </div>
           </div>
+        </section>
+
+        <div className="mt-2 mb-3 sm:mt-0 sm:mb-0">
+          <div className="container px-4 sm:px-0">
+            <div className="col-12 address-section">
+              <div className="row justify-content-between">
+                {/* Address Section */}
+                <div className="col-12 col-sm-4 mb-3 mb-sm-0">
+                  <div className="row align-items-center justify-content-start">
+                    <a
+                      href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+                        `${businessData.address.buildingName}, ${businessData.address.city}, ${businessData.address.landMark}, ${businessData.address.streetName}, ${businessData.address.state}`
+                      )}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-decoration-none text-dark"
+                    >
+                      <div className="row">
+                        <div className="col-auto address-logo">
+                          <i className="bi bi-geo-alt-fill text-2xl sm:text-lg" />
+                        </div>
+                        <div className="col">
+                          <span className="fs-12 sm:fs-10">Address</span>
+                          <p className="fs-14 sm:fs-12">{`${businessData.address.buildingName}, ${businessData.address.city}, ${businessData.address.landMark}, ${businessData.address.streetName}, ${businessData.address.state}`}</p>
+                        </div>
+                      </div>
+                    </a>
+                  </div>
+                </div>
+
+                {/* Email Section */}
+                <div className="col-12 col-sm-4 mb-3 mb-sm-0">
+                  <div className="row align-items-center justify-content-start">
+                    <div className="col-auto address-logo">
+                      <i className="bi bi-envelope-fill text-2xl sm:text-lg" />
+                    </div>
+                    <div className="col">
+                      <a
+                        href={`mailto:${businessData?.contactDetails?.email}`}
+                        className="text-decoration-none text-dark"
+                      >
+                        <span className="fs-12 sm:fs-10">Send Email</span>
+                        <p className="fs-14 sm:fs-12">{businessData?.contactDetails?.email}</p>
+                      </a>
+                      <ShareButton number={businessData?.contactDetails?.primaryNumber} />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Contact Section */}
+                <div className="col-12 col-sm-4 mb-3 mb-sm-0">
+                  <div className="row align-items-center justify-content-start">
+                    <div className="col-auto address-logo">
+                      <i className="bi bi-telephone text-2xl sm:text-lg" />
+                    </div>
+                    <div className="col">
+                      <span className="fs-12 sm:fs-10">Contact</span>
+                      <p className="fs-14 sm:fs-12 mb-0">
+                        <a href={`tel:${businessData?.contactDetails?.primaryNumber}`}>
+                          {businessData?.contactDetails?.primaryNumber}
+                        </a>
+                      </p>
+                      <p className="fs-14 sm:fs-12 mt-0">
+                        <a href={`tel:${businessData?.contactDetails?.secondaryNumber}`}>
+                          {businessData?.contactDetails?.secondaryNumber}
+                        </a>
+                      </p>
+
+                    </div>
+
+                  </div>
+                </div>
+
+
+              </div>
+            </div>
+          </div>
+        </div>
 
           <section
             className=" h-auto"
@@ -1415,11 +1436,11 @@ export default function Template() {
                     </div>
                   ))}
                 </Slider>
-                <div className="text-center mt-3 mb-5">
+                {reviewCount>4&&<div className="text-center mt-3 mb-5">
                   <a href="#reviews" className="text-decoration-none text-theme2">
                     View more <i className="bi bi-arrow-right"></i>
                   </a>
-                </div>
+                </div>}
               </div>
               <div className="col-12">
                 <div className="col-12 text-center mb-3">
@@ -1486,8 +1507,8 @@ export default function Template() {
 
                 <div className="col-12 mt-3 text-center">
                   {reviewLoading ?
-                    <div class="spinner-border" style={{ color: businessData?.theme }} role="status">
-                      <span class="visually-hidden">Loading...</span>
+                    <div className="spinner-border" style={{ color: businessData?.theme }} role="status">
+                      <span className="visually-hidden">Loading...</span>
                     </div> : <button type="submit" className="btn-theme2 btn  theme radius  ">
                       Submit Review
                     </button>}
@@ -1744,7 +1765,9 @@ export default function Template() {
           </div>
         </div>
       </footer>
-      <a href="#" className="btn btn-lg btn-bottom btn-lg-square back-to-top"><i className="bi bi-arrow-up"></i></a>
+      <a href="#" className="btn btn-lg btn-bottom btn-lg-square bg-transparent rounded-circle back-to-top1" >
+        <i className="bi bi-arrow-up"></i>
+      </a>
     </>
   );
 }

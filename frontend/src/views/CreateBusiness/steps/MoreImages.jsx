@@ -127,8 +127,13 @@ const MoreImages = () => {
   const handleGallerySubmit = async () => {
     const imagesToUpload = images?.filter(({ accessLink }) => !accessLink)
     const imageFiles = imagesToUpload?.map(({ file }) => file)
+    const imageFilesLength = imagesToUpload
+    ?.map(({ file }) => file)
+    .filter((file) => file != null);
+    console.log(imageFilesLength,"imageFiles");
+    
 
-    if (imageFiles?.length > 0) {
+    if (imageFilesLength?.length > 0) {
       setLoading(true)
 
       const requestBody = {
