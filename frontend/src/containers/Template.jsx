@@ -79,19 +79,23 @@ export default function Template() {
 
   const [isTruncated, setIsTruncated] = useState(true)
 
-  const convertTo12HourFormat = (time="") => {
+  const convertTo12HourFormat = (time = '') => {
     // Split the time into hours and minutes
-    let [hours, minutes] = time.split(":").map(Number);
+    let [hours, minutes] = time.split(':').map(Number)
 
     // Determine if it's AM or PM
-    let amOrPm = hours >= 12 ? "PM" : "AM";
+    let amOrPm = hours >= 12 ? 'PM' : 'AM'
 
     // Convert hours from 24-hour to 12-hour format
-    hours = hours % 12 || 12;
+    hours = hours % 12 || 12
 
     // Format the time string
-    return `${hours}:${minutes?.toString()?.padStart(2, "0")?minutes?.toString()?.padStart(2, "0"):`00`} ${amOrPm}`;
-  };
+    return `${hours}:${
+      minutes?.toString()?.padStart(2, '0')
+        ? minutes?.toString()?.padStart(2, '0')
+        : `00`
+    } ${amOrPm}`
+  }
 
   // Function to truncate text after a specified character limit
   const truncateText = (text, limit = 100) => {
@@ -289,7 +293,7 @@ export default function Template() {
 
   const settings = {
     dots: false,
-    infinite: true,
+    infinite: !reviews?.length,
     autoplay: true,
     arrows: false,
     // centerMode: true,
@@ -302,7 +306,7 @@ export default function Template() {
       {
         breakpoint: 1024,
         settings: {
-          slidesToShow: 3,
+          slidesToShow: reviews?.length ? 2 : 3,
           slidesToScroll: 1,
           infinite: true,
         },
@@ -339,21 +343,22 @@ export default function Template() {
   }
   const setting2 = {
     dots: false,
-    arrows: false,
-    infinite: true,
+    infinite: businessData?.service?.length > 3, // Infinite scroll only for more than 3 items
     autoplay: true,
-    // centerMode: true,
+    arrows: false,
     speed: 500,
-    slidesToShow: 2,
+    slidesToShow:
+      businessData?.service?.length <= 3 ? businessData?.service?.length : 2, // Dynamic slidesToShow
     slidesToScroll: 1,
-    afterChange: (current) => setCurrentSlide(current),
+  
     responsive: [
       {
         breakpoint: 1024,
         settings: {
-          slidesToShow: 3,
+          slidesToShow:
+            businessData?.service?.length <= 3 ? businessData?.service?.length : 3,
           slidesToScroll: 1,
-          infinite: true,
+          infinite: businessData?.service?.length > 3,
         },
       },
       {
@@ -385,7 +390,8 @@ export default function Template() {
         },
       },
     ],
-  }
+  };
+  
 
   const settings3 = {
     dots: false,
@@ -879,36 +885,19 @@ export default function Template() {
 
                     {/* Social Media Links */}
                     <div className=" col-12 social-media gap-2">
-                      <a
-                        href={
-                          businessData?.socialMediaLinks?.length &&
-                          businessData?.socialMediaLinks[0]?.link
-                        }
-                        target="_blank"
-                        className="contact-banner text-dark"
-                      >
-                        <i className="bi bi-facebook text-3xl sm:text-xl"></i>
-                      </a>
-                      <a
-                        href={
-                          businessData?.socialMediaLinks?.length &&
-                          businessData?.socialMediaLinks[1]?.link
-                        }
-                        target="_blank"
-                        className="contact-banner text-dark"
-                      >
-                        <i className="bi bi-instagram text-3xl sm:text-xl"></i>
-                      </a>
-                      <a
-                        href={
-                          businessData?.socialMediaLinks?.length &&
-                          businessData?.socialMediaLinks[2]?.link
-                        }
-                        target="_blank"
-                        className="contact-banner text-dark"
-                      >
-                        <i className="bi bi-twitter text-3xl sm:text-xl"></i>
-                      </a>
+                      {businessData?.socialMediaLinks?.map((social) => (
+                        <>
+                          <a
+                            href={social?.link}
+                            target="_blank"
+                            className="contact-banner text-dark"
+                          >
+                            <i
+                              className={`bi bi-${social?.tag} text-3xl sm:text-xl`}
+                            ></i>
+                          </a>
+                        </>
+                      ))}
                     </div>
                   </div>
                 </div>
@@ -1213,7 +1202,7 @@ export default function Template() {
               <div className="col-12">
                 <div className="col-12 mb-5 david-font row justify-content-center gap-3">
                   {businessData?.service?.data?.length > 2 ? (
-                    <Slider {...settings}>
+                    <Slider {...setting2}>
                       {businessData?.service?.data?.map((dish, index) => (
                         <div
                           key={index}
@@ -1235,16 +1224,30 @@ export default function Template() {
                             />
                           </div>
                           <div className="col-12">
-                            <h2 className="fs-20 fw-bold">{dish.title}</h2>
+                            <h2
+                              className="fs-20 fw-bold text-wrap"
+                              style={{
+                                wordBreak: 'break-word',
+                                overflowWrap: 'break-word',
+                              }}
+                            >
+                              {dish.title}
+                            </h2>
                           </div>
-                          <div className="col-12 mt-3 mb-3">
+                          <div
+                            className="col-12 mt-3 mb-3 text-wrap"
+                            style={{
+                              wordBreak: 'break-word',
+                              overflowWrap: 'break-word',
+                            }}
+                          >
                             <p>{dish.description}</p>
                           </div>
                         </div>
                       ))}
                     </Slider>
                   ) : (
-                    businessData.specialServices.data.map((dish, index) => (
+                    businessData?.service?.data?.map((dish, index) => (
                       <div
                         key={index}
                         className="dish-div col-12 col-lg-6 text-center p-3"
@@ -1266,9 +1269,23 @@ export default function Template() {
                           />
                         </div>
                         <div className="col-12">
-                          <h2 className="fs-20 fw-bold">{dish.title}</h2>
+                          <h2
+                            className="fs-20 fw-bold text-wrap"
+                            style={{
+                              wordBreak: 'break-word',
+                              overflowWrap: 'break-word',
+                            }}
+                          >
+                            {dish.title}
+                          </h2>
                         </div>
-                        <div className="col-12 mt-3 mb-3">
+                        <div
+                          className="col-12 mt-3 mb-3 text-wrap"
+                          style={{
+                            wordBreak: 'break-word',
+                            overflowWrap: 'break-word',
+                          }}
+                        >
                           <p>{dish.description}</p>
                         </div>
                       </div>
@@ -1778,12 +1795,12 @@ export default function Template() {
                       </div>
                       <div
                         className="mt-3 text-center text-lg-start"
-                        style={{ color: "#A4B3CB" }}
+                        style={{ color: '#A4B3CB' }}
                       >
                         <span>{`${convertTo12HourFormat(
-                          businessData?.businessTiming?.time?.open
+                          businessData?.businessTiming?.time?.open,
                         )} to ${convertTo12HourFormat(
-                          businessData?.businessTiming?.time?.close
+                          businessData?.businessTiming?.time?.close,
                         )}`}</span>
                       </div>
                     </div>
@@ -1802,33 +1819,19 @@ export default function Template() {
                   </div>
 
                   <div className="mt-5 col-12 row gap-3 jcc-md text-center text-lg-start">
-                    <a
-                      href={
-                        businessData?.socialMediaLinks?.length &&
-                        businessData?.socialMediaLinks[0]?.link
-                      }
-                      className="contact-banner text-orange text-center text-lg-start"
-                    >
-                      <i className="bi bi-facebook text-orange"></i>
-                    </a>
-                    <a
-                      href={
-                        businessData?.socialMediaLinks?.length &&
-                        businessData?.socialMediaLinks[1]?.link
-                      }
-                      className="contact-banner text-center text-lg-start"
-                    >
-                      <i className="bi bi-instagram text-orange"></i>
-                    </a>
-                    <a
-                      href={
-                        businessData?.socialMediaLinks?.length &&
-                        businessData?.socialMediaLinks[2]?.link
-                      }
-                      className="contact-banner text-center text-lg-start"
-                    >
-                      <i className="bi bi-twitter text-orange"></i>
-                    </a>
+                    {businessData?.socialMediaLinks?.map((social) => (
+                      <>
+                        <a
+                          href={social?.link}
+                          target="_blank"
+                          className="contact-banner text-dark"
+                        >
+                          <i
+                            className={`bi bi-${social?.tag} text-3xl sm:text-xl`}
+                          ></i>
+                        </a>
+                      </>
+                    ))}
                     {/* <hr style={{width:"fit-content",opacity: 0.15,}}></hr> */}
                   </div>
                 </div>
