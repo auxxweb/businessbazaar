@@ -31,7 +31,7 @@ const initialState = {
     { tag: "instagram", link: "" },
     { tag: "twitter", link: "" },
     { tag: "youtube", link: "" },
-    { tag: "linkedIn", link: "" },
+    { tag: "linkedin", link: "" },
   ],
   category: "",
   services: [],
