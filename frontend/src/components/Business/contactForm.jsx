@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 // import 'src/ContactForm.css'; // Import the CSS file
 import 'react-phone-input-2/lib/style.css'
 import { useParams } from 'react-router'
-function ContactForm({ handleFormSubmit }) {
+function ContactForm({ handleFormSubmit, businessData }) {
   const { id } = useParams()
   const [formData, setFormData] = useState({
     name: '',
@@ -92,8 +92,9 @@ function ContactForm({ handleFormSubmit }) {
             type="submit"
             className="submit-button"
             style={{
-              backgroundColor: 'black',
+              backgroundColor: businessData?.theme,
               borderRadius: '10px',
+            
               //   borderBottomLeftRadius: "50px",
               border: '1px solid #ced4da',
             }}

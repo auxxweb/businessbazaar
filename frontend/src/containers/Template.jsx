@@ -1622,7 +1622,7 @@ export default function Template() {
             </div>
           </Dialog>
 
-          <ContactForm handleFormSubmit={handleFormSubmit} />
+          <ContactForm handleFormSubmit={handleFormSubmit} businessData={businessData} />
 
           <section className="h-auto david-font" id="contact">
             <div className="container p-top">
