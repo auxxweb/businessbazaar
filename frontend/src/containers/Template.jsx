@@ -306,7 +306,7 @@ export default function Template() {
       {
         breakpoint: 1024,
         settings: {
-          slidesToShow:reviews?.length? 2 : 3,
+          slidesToShow: reviews?.length ? 2 : 3,
           slidesToScroll: 1,
           infinite: true,
         },
@@ -314,7 +314,7 @@ export default function Template() {
       {
         breakpoint: 768,
         settings: {
-          slidesToShow:1,
+          slidesToShow: 1,
           slidesToScroll: 1,
         },
       },
@@ -343,21 +343,22 @@ export default function Template() {
   }
   const setting2 = {
     dots: false,
-    arrows: false,
-    infinite: true,
+    infinite: businessData?.service?.length > 3, // Infinite scroll only for more than 3 items
     autoplay: true,
-    // centerMode: true,
+    arrows: false,
     speed: 500,
-    slidesToShow: 2,
+    slidesToShow:
+      businessData?.service?.length <= 3 ? businessData?.service?.length : 2, // Dynamic slidesToShow
     slidesToScroll: 1,
-    afterChange: (current) => setCurrentSlide(current),
+  
     responsive: [
       {
         breakpoint: 1024,
         settings: {
-          slidesToShow: 3,
+          slidesToShow:
+            businessData?.service?.length <= 3 ? businessData?.service?.length : 3,
           slidesToScroll: 1,
-          infinite: true,
+          infinite: businessData?.service?.length > 3,
         },
       },
       {
@@ -389,7 +390,8 @@ export default function Template() {
         },
       },
     ],
-  }
+  };
+  
 
   const settings3 = {
     dots: false,
@@ -1200,7 +1202,7 @@ export default function Template() {
               <div className="col-12">
                 <div className="col-12 mb-5 david-font row justify-content-center gap-3">
                   {businessData?.service?.data?.length > 2 ? (
-                    <Slider {...settings}>
+                    <Slider {...setting2}>
                       {businessData?.service?.data?.map((dish, index) => (
                         <div
                           key={index}
@@ -1222,9 +1224,23 @@ export default function Template() {
                             />
                           </div>
                           <div className="col-12">
-                            <h2 className="fs-20 fw-bold">{dish.title}</h2>
+                            <h2
+                              className="fs-20 fw-bold text-wrap"
+                              style={{
+                                wordBreak: 'break-word',
+                                overflowWrap: 'break-word',
+                              }}
+                            >
+                              {dish.title}
+                            </h2>
                           </div>
-                          <div className="col-12 mt-3 mb-3">
+                          <div
+                            className="col-12 mt-3 mb-3 text-wrap"
+                            style={{
+                              wordBreak: 'break-word',
+                              overflowWrap: 'break-word',
+                            }}
+                          >
                             <p>{dish.description}</p>
                           </div>
                         </div>
@@ -1253,9 +1269,23 @@ export default function Template() {
                           />
                         </div>
                         <div className="col-12">
-                          <h2 className="fs-20 fw-bold">{dish.title}</h2>
+                          <h2
+                            className="fs-20 fw-bold text-wrap"
+                            style={{
+                              wordBreak: 'break-word',
+                              overflowWrap: 'break-word',
+                            }}
+                          >
+                            {dish.title}
+                          </h2>
                         </div>
-                        <div className="col-12 mt-3 mb-3">
+                        <div
+                          className="col-12 mt-3 mb-3 text-wrap"
+                          style={{
+                            wordBreak: 'break-word',
+                            overflowWrap: 'break-word',
+                          }}
+                        >
                           <p>{dish.description}</p>
                         </div>
                       </div>
