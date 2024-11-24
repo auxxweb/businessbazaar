@@ -80,7 +80,7 @@ export default function Header() {
               style={{ fontSize: "16px" }}
               onClick={() => setExpanded(false)} // Close on link click
             >
-              Admin Panel
+              Go to Dashboard
             </a>
             <NavLink
               to="/create-business"
