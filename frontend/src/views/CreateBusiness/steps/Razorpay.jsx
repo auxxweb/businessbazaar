@@ -145,7 +145,7 @@ export default function Razorpay() {
     const submitData = async () => {
       console.log(businessState, "formData");
 
-      try {
+      try { 
         const res = await CreateBusinessDetails(businessState);
 
         const id = res?.data?._id || res?.data.data?._id;

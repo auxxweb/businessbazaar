@@ -28,10 +28,10 @@ const BusinessesSection = ({
           {loading && <Loader />}
 
           {!loading &&
-            businessData.map((business) => (
+            businessData?.map((business) => (
               <Link
                 to={
-                  business.selectedPlan?.isPremium
+                  business?.selectedPlan?.isPremium
                     ? `/business/premium/${business?._id}`
                     : `/business/${business?._id}`
                 }
