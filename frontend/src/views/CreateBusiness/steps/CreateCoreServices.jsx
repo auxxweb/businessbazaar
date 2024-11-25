@@ -6,7 +6,7 @@ import Slider from "react-slick";
 import { TextField } from "@mui/material";
 import { updateBusinessDetails } from "../store/businessSlice";
 import { preRequestFun } from "../service/s3url";
-import { Button } from "react-bootstrap";
+import { Button, Spinner } from "react-bootstrap";
 import getCroppedImg from "../../../utils/cropper.utils";
 
 const CreateCoreServices = () => {
@@ -22,6 +22,8 @@ const CreateCoreServices = () => {
   const [isLoading, setIsLoading] = useState({
     specialService: {},
   });
+  const [loading,setLoading] = useState(false)
+  const [cropperLoading,setCropperLoading] = useState(false)
   const [errors] = useState([]);
   const [crop1, setCrop1] = useState({ x: 0, y: 0 });
   const [zoom1, setZoom1] = useState(1);
@@ -38,6 +40,7 @@ const CreateCoreServices = () => {
 
   const handleCropSave1 = async () => {
     try {
+      setCropperLoading(true)
       const { fileUrl, blob } = await getCroppedImg(
         spServiceImgPrev,
         croppedArea1
@@ -64,9 +67,12 @@ const CreateCoreServices = () => {
 
       setSpServiceImgPrev(fileUrl);
       setSpServiceFile(croppedFile);
+      setCropperLoading(false)
     } catch (e) {
+      setCropperLoading(false)
       console.error("Error cropping image:", e);
     } finally {
+      setCropperLoading(false)
       setShowCropper1(false);
     }
   };
@@ -126,12 +132,14 @@ const CreateCoreServices = () => {
 
   // Submit function to store data
   const handleServiceSubmit = () => {
+    setLoading(true)
     dispatch(
       updateBusinessDetails({
         specialServices: specialService,
       })
     );
     navigate("/create-business/services");
+    setLoading(false)
   };
 
   const handleChange = (e) => {
@@ -243,13 +251,12 @@ const CreateCoreServices = () => {
                   </div>
                 </div>
                 <div className="modal-footer">
-                  <Button variant="primary" onClick={handleCropSave1}>
+                  {cropperLoading ? <Spinner variant="primary" /> : <Button variant="primary" onClick={handleCropSave1}>
                     Save Crop
-                  </Button>
+                  </Button>}
                   <Button
                     variant="outlined"
-                    onClick={() => setShowCropper1(false)}
-                  >
+                    onClick={() => setShowCropper1(false)}>
                     Cancel
                   </Button>
                 </div>
@@ -257,7 +264,6 @@ const CreateCoreServices = () => {
             </div>
           </div>
         )}
-
 
         <div className="row h-100 justify-content-center">
           {/* Left Image Section */}
@@ -285,13 +291,13 @@ const CreateCoreServices = () => {
                 <div className="input-group mt-2 w-100">
                   <TextField
                     fullWidth
-                    label="Title (35 letters)"
+                    label="Title (8 words)"
                     id="title-1"
                     variant="filled"
                     name="title"
                     autoComplete="title-1"
                     onChange={handleChange}
-                    inputProps={{maxLength:35}}
+                    inputProps={{ maxLength: 35 }}
                     error={specialService?.title?.split("")?.length >= 35 ? true : false}
                     helperText={specialService?.title?.split("")?.length >= 35 ? "exceeded the limit" : ""}
                     value={specialService.title}
@@ -300,7 +306,7 @@ const CreateCoreServices = () => {
                 <div className="input-group mb-3 mt-4 w-100">
                   <TextField
                     fullWidth
-                    label="Description (200 letters)"
+                    label="Description (50 words)"
                     id="description-1"
                     variant="filled"
                     name="description"
@@ -309,9 +315,9 @@ const CreateCoreServices = () => {
                     rows={4} // You can adjust the number of rows (height) here
                     value={specialService.description}
                     onChange={handleChange}
-                    inputProps={{maxLength:200}}
-                    error={specialService?.description?.split("")?.length >= 200 ? true : false}
-                    helperText={specialService?.description?.split("")?.length >= 200 ? "exceeded the limit" : ""}
+                    inputProps={{ maxLength: 250 }}
+                    error={specialService?.description?.split("")?.length >= 250 ? true : false}
+                    helperText={specialService?.description?.split("")?.length >= 250 ? "exceeded the limit" : ""}
                     sx={{
                       "& .MuiInputBase-root": {
                         padding: "12px", // Padding inside the textarea
@@ -369,13 +375,13 @@ const CreateCoreServices = () => {
 
                     <TextField
                       fullWidth
-                      label="Title (35 letters)"
+                      label="Title (8 words)"
                       id="title"
                       variant="filled"
                       name="title"
                       autoComplete="Service Name"
                       value={p.title}
-                      inputProps={{maxLength:35}}
+                      inputProps={{ maxLength: 35 }}
                       onChange={(e) => handleProductChange(index, e)}
                       error={p?.title?.split("")?.length >= 35 ? true : false}
                       helperText={p?.title?.split("")?.length >= 35 ? "exceeded the limit" : ""}
@@ -384,16 +390,16 @@ const CreateCoreServices = () => {
                     <div className="input-group mb-3 mt-4 w-100">
                       <TextField
                         fullWidth
-                        label="Description (200 letters)"
+                        label="Description (50 words)"
                         id="description"
                         variant="filled"
                         name="description"
                         autoComplete="description"
                         multiline
                         rows={4}
-                        inputProps={{maxLength:200}}
-                        error={p?.description?.split("")?.length >= 200 ? true : false}
-                        helperText={p?.description?.split("")?.length >= 200 ? "exceeded the limit" : ""}
+                        inputProps={{ maxLength: 250 }}
+                        error={p?.description?.split("")?.length >= 250 ? true : false}
+                        helperText={p?.description?.split("")?.length >= 250 ? "exceeded the limit" : ""}
                         sx={{
                           "& .MuiInputBase-root": {
                             padding: "12px",
@@ -443,9 +449,6 @@ const CreateCoreServices = () => {
                     </div>
                   </div>
                 ))}
-
-                {/* Add Service Button */}
-
                 <a
                   href="#"
                   onClick={() =>
@@ -472,12 +475,12 @@ const CreateCoreServices = () => {
 
             {/* Save & Next Button */}
             <div className="col-12 mt-4 text-center">
-              <button
+             { loading ? <Spinner variant="primary"/> :<button
                 className="btn btn-primary btn-md w-100"
                 onClick={handleServiceSubmit}
               >
                 Save & Next
-              </button>
+              </button>}
             </div>
           </div>
 

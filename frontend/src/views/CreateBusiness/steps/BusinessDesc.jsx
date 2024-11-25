@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
 import { updateBusinessDetails } from "../store/businessSlice";
 import { TextField } from "@mui/material";
+import { Spinner } from "react-bootstrap";
 
 const BusinessDesc = () => {
   const navigate = useNavigate();
@@ -11,14 +12,17 @@ const BusinessDesc = () => {
 
   const [description, setDescription] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false)
 
   const handleDescSubmit = () => {
+    setLoading(true)
     if (!description) {
       setError("Description is required");
     } else {
       dispatch(updateBusinessDetails({ description }));
       navigate("/create-business/landing");
     }
+    setLoading(false)
   };
 
   const handlePrevStep = () => navigate("/create-business/timing");
@@ -55,17 +59,17 @@ const BusinessDesc = () => {
                 {/* <label>Business Description*</label> */}
                 <TextField
                   fullWidth
-                  label="Business description* (200 letters)"
+                  label="Business description* (50 words)"
                   id="businessName"
                   variant="filled"
                   name="description_main"
                   autoComplete="businessName"
                   multiline
                   value={description}
-                  inputProps={{maxLength:200}}
+                  inputProps={{ maxLength: 250 }}
                   onChange={(e) => setDescription(e.target.value)}
-                  error={error?.name || description?.split("")?.length >= 200 ? true : false}
-                  helperText={error?.name || description?.split("")?.length >= 200 ? "exceeded the limit" : ""}
+                  error={error?.name || description?.split("")?.length >= 250 ? true : false}
+                  helperText={error?.name || description?.split("")?.length >= 250 ? "exceeded the limit" : ""}
                   rows={5}
                 />
                 {/* <textarea
@@ -87,12 +91,12 @@ const BusinessDesc = () => {
 
             {/* Save & Next Button */}
             <div className="col-12 text-center p-3 ">
-              <button
+              {loading ? <Spinner variant="primary" /> : <button
                 className="btn btn-primary w-100 text-white p-2"
                 onClick={handleDescSubmit}
               >
                 Save & Next
-              </button>
+              </button>}
             </div>
           </div>
 

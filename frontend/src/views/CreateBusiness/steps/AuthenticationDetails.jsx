@@ -8,6 +8,7 @@ import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { toast } from "react-toastify";
 import { checkBusinessExists } from "../../../Functions/functions";
 import { updateBusinessDetails } from "../store/businessSlice";
+import { Spinner } from "react-bootstrap";
 
 function AuthenticationDetails() {
   const navigate = useNavigate();
@@ -21,6 +22,7 @@ function AuthenticationDetails() {
   const [passwordError, setPasswordError] = useState("");
   const [emailError, setEmailError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const { email, password } = authData;
 
@@ -46,6 +48,7 @@ function AuthenticationDetails() {
   }
 
   const handleAuthSubmit = async () => {
+    setLoading(true)
     const isEmailValid = validateEmail(email);
     const isPasswordValid = validatePassword(password);
 
@@ -58,7 +61,9 @@ function AuthenticationDetails() {
           dispatch(updateBusinessDetails({ email, password }));
           navigate("/create-business/details");
         }
+        setLoading(false)
       } catch (error) {
+        setLoading(false)
         console.log(error, "error-----------");
 
         toast.error(
@@ -79,6 +84,7 @@ function AuthenticationDetails() {
           }
         );
       }
+      setLoading(false)
     }
   };
 
@@ -178,12 +184,12 @@ function AuthenticationDetails() {
           </div>
 
           <div className="col-12 text-center mt-4">
-            <button
+          { loading ? <Spinner variant="primary"/> : <button
               className="btn btn-primary w-100 text-white p-2"
               onClick={handleAuthSubmit}
             >
               Save & Next
-            </button>
+            </button>}
           </div>
         </div>
       </div>

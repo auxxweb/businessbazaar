@@ -11,6 +11,7 @@ import {
 } from "../../../Functions/functions";
 import Loader from "../../../components/Loader/Loader";
 import { updatePlanDetails } from "../store/subscriptionPlanSlice";
+import { Spinner } from "react-bootstrap";
 
 const Subscription = () => {
   const navigate = useNavigate();
@@ -18,12 +19,14 @@ const Subscription = () => {
   const businessState = useSelector((state) => state.business);
 
   const [loading, setLoading] = useState(true);
+  const [submitLoading, setSubmitLoading] = useState(false)
   const [planData, setPlanData] = useState([]);
 
   function planSubmit(id, price, name) {
+    setSubmitLoading(true)
     var freePlan = import.meta.env.VITE_APP_FREE_PLAN_ID ?? "6735fef4c124792981be3ffb";
     if (String(id) != String(freePlan)) {
-      console.log("first",freePlan,"free plan",id);
+      console.log("first", freePlan, "free plan", id);
       dispatch(updateBusinessDetails({ selectedPlan: id }));
       dispatch(updatePlanDetails({ name, price }));
       navigate("/create-business/template");
@@ -42,6 +45,7 @@ const Subscription = () => {
       };
       submitData();
     }
+    setSubmitLoading(false)
   }
 
   const handlePrevStep = () => navigate("/create-business/gallery");
@@ -137,8 +141,8 @@ const Subscription = () => {
                               </div>
                             ))}
                           </div>
-                          <div className="mt-4">
-                            <button
+                          <div className="mt-4 text-center">
+                            {submitLoading ? <Spinner variant="primary" /> : <button
                               className="btn w-100 text-white py-2 fw-bold"
                               onClick={() =>
                                 planSubmit(plan._id, plan.amount, plan.plan)
@@ -146,7 +150,7 @@ const Subscription = () => {
                               style={{ backgroundColor: "#5b7ee8" }}
                             >
                               Choose Plan
-                            </button>
+                            </button>}
                           </div>
                         </div>
                       </div>
