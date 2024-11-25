@@ -54,6 +54,8 @@ export default function Template() {
   const [visible, setVisible] = useState(false)
   const [reviewFetch, setreviewFetch] = useState(false)
   const [showAllReviews, setShowAllReviews] = useState(false)
+  const [textColor, setTextColor] = useState('');
+
   const [review, setReview] = useState({
     rating: '',
     name: '',
@@ -79,6 +81,8 @@ export default function Template() {
 
   const [isTruncated, setIsTruncated] = useState(true)
 
+
+
   const convertTo12HourFormat = (time = '') => {
     // Split the time into hours and minutes
     let [hours, minutes] = time.split(':').map(Number)
@@ -90,11 +94,10 @@ export default function Template() {
     hours = hours % 12 || 12
 
     // Format the time string
-    return `${hours}:${
-      minutes?.toString()?.padStart(2, '0')
-        ? minutes?.toString()?.padStart(2, '0')
-        : `00`
-    } ${amOrPm}`
+    return `${hours}:${minutes?.toString()?.padStart(2, '0')
+      ? minutes?.toString()?.padStart(2, '0')
+      : `00`
+      } ${amOrPm}`
   }
 
   // Function to truncate text after a specified character limit
@@ -286,10 +289,34 @@ export default function Template() {
             .includes(day),
       )
       setCloseDays(closed)
+      if (businessDetails?.data?.theme) {
+        const themeColor = businessDetails.data.theme;
+        setColorTheme(themeColor);
+
+        // Calculate contrasting text color
+        const contrastColor = getContrastingColor(themeColor);
+        setTextColor(contrastColor);
+      }
     }
 
     fetchData()
   }, [id])
+
+  const getContrastingColor = (hexColor) => {
+    // Remove '#' if present
+    const color = hexColor.replace('#', '');
+
+    // Convert to RGB
+    const r = parseInt(color.substring(0, 2), 16);
+    const g = parseInt(color.substring(2, 4), 16);
+    const b = parseInt(color.substring(4, 6), 16);
+
+    // Calculate brightness
+    const brightness = (0.299 * r + 0.587 * g + 0.114 * b);
+
+    // Return black or white based on brightness
+    return brightness > 186 ? '#000000' : '#FFFFFF'; // Adjust threshold if needed
+  };
 
   const settings = {
     dots: false,
@@ -350,7 +377,7 @@ export default function Template() {
     slidesToShow:
       businessData?.service?.length <= 3 ? businessData?.service?.length : 2, // Dynamic slidesToShow
     slidesToScroll: 1,
-  
+
     responsive: [
       {
         breakpoint: 1024,
@@ -391,7 +418,7 @@ export default function Template() {
       },
     ],
   };
-  
+
 
   const settings3 = {
     dots: false,
@@ -795,7 +822,7 @@ export default function Template() {
             </Nav>
           </Navbar.Collapse>
         </Container>
-              
+
       </Navbar>
 
       {showAllReviews && (
@@ -824,7 +851,7 @@ export default function Template() {
                   <img
                     src={
                       businessData?.landingPageHero?.coverImage &&
-                      businessData?.landingPageHero?.coverImage?.length > 0
+                        businessData?.landingPageHero?.coverImage?.length > 0
                         ? businessData?.landingPageHero?.coverImage
                         : PlaceholderBanner
                     }
@@ -907,7 +934,7 @@ export default function Template() {
                   <img
                     src={
                       businessData?.landingPageHero?.coverImage &&
-                      businessData?.landingPageHero?.coverImage?.length > 0
+                        businessData?.landingPageHero?.coverImage?.length > 0
                         ? businessData?.landingPageHero?.coverImage
                         : PlaceholderBanner
                     }
@@ -939,8 +966,11 @@ export default function Template() {
                             <i className="bi bi-geo-alt-fill text-2xl sm:text-lg" />
                           </div>
                           <div className="col">
-                            <span className="fs-12 sm:fs-10">Address</span>
-                            <p className="fs-14 sm:fs-12">{`${businessData.address.buildingName}, ${businessData.address.city}, ${businessData.address.landMark}, ${businessData.address.streetName}, ${businessData.address.state}`}</p>
+                            <span className="fs-12 sm:fs-10" style={{ color: textColor }}>Address</span>
+                            <p
+                              style={{ color: textColor, textDecoration: 'none' }}
+
+                              className="fs-14 sm:fs-12">{`${businessData.address.buildingName}, ${businessData.address.city}, ${businessData.address.landMark}, ${businessData.address.streetName}, ${businessData.address.state}`}</p>
                           </div>
                         </div>
                       </a>
@@ -958,8 +988,10 @@ export default function Template() {
                           href={`mailto:${businessData?.contactDetails?.email}`}
                           className="text-decoration-none text-dark"
                         >
-                          <span className="fs-12 sm:fs-10">Send Email</span>
-                          <p className="fs-14 sm:fs-12">
+                          <span className="fs-12 sm:fs-10 " style={{ color: textColor }}>Send Email</span>
+                          <p className="fs-14 sm:fs-12"
+                            style={{ color: textColor, textDecoration: 'none' }}
+                          >
                             {businessData?.contactDetails?.email}
                           </p>
                         </a>
@@ -977,9 +1009,12 @@ export default function Template() {
                         <i className="bi bi-telephone text-2xl sm:text-lg" />
                       </div>
                       <div className="col">
-                        <span className="fs-12 sm:fs-10">Contact</span>
+                        <span className="fs-12 sm:fs-10" style={{ color: textColor }}>
+                          Contact
+                        </span>
                         <p className="fs-14 sm:fs-12 mb-0">
                           <a
+                            style={{ color: textColor, textDecoration: 'none' }}
                             href={`tel:${businessData?.contactDetails?.primaryNumber}`}
                           >
                             {businessData?.contactDetails?.primaryNumber}
@@ -987,6 +1022,7 @@ export default function Template() {
                         </p>
                         <p className="fs-14 sm:fs-12 mt-0">
                           <a
+                            style={{ color: textColor, textDecoration: 'none' }}
                             href={`tel:${businessData?.contactDetails?.secondaryNumber}`}
                           >
                             {businessData?.contactDetails?.secondaryNumber}
@@ -1167,6 +1203,8 @@ export default function Template() {
                             <p className="mt-2">{item.description}</p>
                           </div>
                           <div className="col-2 p-0">
+
+                            <span className="fw-bold">{item.price ? 'Price : ₹' : ' '}</span>
                             <span className="fw-bold">{item.price}</span>
                           </div>
                         </div>
@@ -1294,7 +1332,7 @@ export default function Template() {
                 </div>
               </div>
 
-              <div className="col-12 mb-5" id="gallery">
+              <div className="col-12  mb-5" id="gallery">
                 <div className="col-12 mb-5 mt-5">
                   <h1 className="fw-bold text-center">Gallery</h1>
                 </div>
@@ -1413,9 +1451,8 @@ export default function Template() {
                   {reviews?.map((testimonial, index) => (
                     <div key={index} className="testi-slide">
                       <div
-                        className={`testi-div p-4 ${
-                          index === currentSlide ? 'testi-theme' : ''
-                        }`}
+                        className={`testi-div p-4 ${index === currentSlide ? 'testi-theme' : ''
+                          }`}
                         style={{
                           backgroundColor:
                             index === currentSlide ? '#f0f8ff' : '#fff', // Light blue background for the active card
@@ -1473,9 +1510,8 @@ export default function Template() {
                                 return (
                                   <i
                                     key={i}
-                                    className={`bi ${
-                                      isFilled ? 'bi-star-fill' : 'bi-star'
-                                    }`}
+                                    className={`bi ${isFilled ? 'bi-star-fill' : 'bi-star'
+                                      }`}
                                     style={{
                                       fontSize: '14px', // Reduced star size
                                       color: isFilled ? '#FFD700' : '#ddd',
