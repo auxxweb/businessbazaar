@@ -114,7 +114,7 @@ export default function Testimonials() {
         <div className="container d-block" id="review">
           <div className="mt-3 mb-3">
             <h1 className="text-center p-3 pt-5 fw-bold " data-aos="zoom-out">
-              What Our Customers Are Saying
+             Review
             </h1>
             <p className="mt-3 text-center" data-aos="zoom-in">
               Hear from those who have experienced our services firsthand. Read
@@ -228,8 +228,8 @@ export default function Testimonials() {
 
               <div className="col-12 mt-3 text-center">
                 {reviewLoading ?
-                  <div class="spinner-border" style={{ color: businessData?.theme }} role="status">
-                    <span class="visually-hidden">Loading...</span>
+                  <div className="spinner-border" style={{ color: businessData?.theme }} role="status">
+                    <span className="visually-hidden">Loading...</span>
                   </div> : <button type="submit" className="btn-theme2 btn  theme radius  ">
                     Submit Review
                   </button>}

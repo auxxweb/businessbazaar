@@ -19,7 +19,7 @@ const ReviewSection = ({
       <div className="container" id="review">
         <div className="mt-3 mb-3">
           <h1 className="text-center p-3 pt-5 fw-bold " data-aos="zoom-out">
-            What Our Customers Are Saying
+            Reviews
           </h1>
           <p className="mt-3 text-center" data-aos="zoom-in">
             Hear from those who have experienced our services firsthand. Read
