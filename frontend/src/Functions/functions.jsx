@@ -134,7 +134,7 @@ export const fetchBusinessTemplate = async (id, setLoading) => {
   }
 };
 
-export const getAllReviews = async ({ page = 1, limit = 10, searchTerm = "" }) => {
+export const getAllReviews = async ( page = 1, limit = 10, searchTerm = "" ) => {
   try {
     const response = await axios.get(`${baseUrl}/api/v1/review?page=${page}&limit=${limit}&searchTerm=${searchTerm}`, config);
 

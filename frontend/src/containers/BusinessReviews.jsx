@@ -7,6 +7,7 @@ import { createBusinessReview, getAllBusinessReviews } from "../Functions/functi
 import { useParams } from "react-router";
 import { formatDate } from "../utils/app.utils";
 import { toast } from "react-toastify";
+import { Spinner } from "react-bootstrap";
 
 const BusinessReviews = ({ theme, secondaryTheme, bgBanner }) => {
     const { id } = useParams()
@@ -100,7 +101,11 @@ const BusinessReviews = ({ theme, secondaryTheme, bgBanner }) => {
                     setReview={setReview}
                     review={review}
                 />}
-                {openReviewModal && <ViewReview theme={theme} data={viewReview} setVisible={setOpenReviewModal} visible={openReviewModal} />}
+                {openReviewModal && <ViewReview
+                    theme={theme}
+                    data={viewReview}
+                    setVisible={setOpenReviewModal}
+                    visible={openReviewModal} />}
                 <div className="container">
                     <div className="row">
                         <div className="col-12 d-flex justify-content-center py-4 align-items-center mx-auto ">
@@ -109,44 +114,44 @@ const BusinessReviews = ({ theme, secondaryTheme, bgBanner }) => {
                         {allReviews && allReviews?.map((item) => (
                             <div data-aos="zoom-out" key={item?._id} className="  testi-slide col-12 col-md-6 col-lg-4  mx-auto  p-3  " >
                                 <div
-                                style={{minHeight:"15.5rem"}}
+                                    style={{ minHeight: "15.5rem" }}
                                     className={`p-3  rounded shadow position-relative bg-white h-full  d-flex justify-content-between flex-column `}
                                 >
                                     <div className="">
-                                    <div className="row  ">
-                                        <div className="col-2 ">
-                                            <img
-                                                width={50}
-                                                height={50}
-                                                src="/src/assets/images/user.png"
-                                                alt={item?.name}
-                                                style={{ objectFit: 'cover' }}
-                                            />
-                                        </div>
-                                        <div className="col-10">
-                                            <h3 className="fs-20 p-0 m-0 ms-4 text-capitalize">
-                                                {item?.name}
-                                            </h3>
-                                            <div className="text-warning text-center mt-0 m-0">
-                                                <Rating
-                                                    name="simple-controlled"
-                                                    value={item?.rating}
-
+                                        <div className="row  ">
+                                            <div className="col-2 ">
+                                                <img
+                                                    width={50}
+                                                    height={50}
+                                                    src="/src/assets/images/user.png"
+                                                    alt={item?.name}
+                                                    style={{ objectFit: 'cover' }}
                                                 />
                                             </div>
-                                        </div>
-                                    </div>
-                                    <div className="w-100 mt-4 ">
-                                        <p className='p-0 m-0' >
-                                            {item?.review?.split(' ').length < 20 ? item?.review : item?.review?.split(' ')?.slice(0, 20).join(' ') + '...'}
+                                            <div className="col-10">
+                                                <h3 className="fs-20 p-0 m-0 ms-4 text-capitalize">
+                                                    {item?.name}
+                                                </h3>
+                                                <div className="text-warning text-center mt-0 m-0">
+                                                    <Rating
+                                                        name="simple-controlled"
+                                                        value={item?.rating}
 
-                                        </p>
-                                    </div>
+                                                    />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="w-100 mt-4 ">
+                                            <p className='p-0 m-0' >
+                                                {item?.review?.split(' ').length < 20 ? item?.review : item?.review?.split(' ')?.slice(0, 20).join(' ') + '...'}
+
+                                            </p>
+                                        </div>
                                     </div>
 
                                     <div className="d-flex  justify-content-between align-items-center">
                                         <p style={{ fontSize: "12px" }} className="text-secondary p-0 m-0 fst-italic">Created At : {formatDate(item?.createdAt ?? '')}</p>
-                                        {item?.review?.split(' ').length > 20 && <span style={{background:theme}} onClick={(() => handleReviewModal(item))} className=" btn  text-white radius-theme  ">Read More</span>}
+                                        {item?.review?.split(' ').length > 20 && <span style={{ background: theme }} onClick={(() => handleReviewModal(item))} className=" btn  text-white radius-theme  ">Read More</span>}
                                     </div>
                                 </div>
                             </div>
@@ -160,7 +165,7 @@ const BusinessReviews = ({ theme, secondaryTheme, bgBanner }) => {
 
 export default BusinessReviews;
 
-const ViewReview = ({ data, theme, visible, setVisible }) => {
+export const ViewReview = ({ data, theme, visible, setVisible }) => {
     return (
         <Dialog
             header="Write a Review"
@@ -215,7 +220,6 @@ export const ReviewModal = ({
     handleReviewSubmit,
     setReview,
     theme,
-    secondaryTheme,
     reviewLoading,
     review
 }) => {
@@ -232,7 +236,7 @@ export const ReviewModal = ({
             breakpoints={{ "960px": "75vw", "641px": "100vw" }}
         >
             <div className="container ">
-                <form onSubmit={handleReviewSubmit}>
+                <form onSubmit={ handleReviewSubmit}>
                     <div className=" mb-3 d-flex justify-content-center">
                         <Rating
                             name="simple-controlled"
@@ -272,9 +276,7 @@ export const ReviewModal = ({
                     </div>
                     <div className="col-12 mt-3 text-center">
                         {reviewLoading ?
-                            <div class="spinner-border" style={{ color: theme }} role="status">
-                                <span class="visually-hidden">Loading...</span>
-                            </div> : <button type="submit" className="btn-theme2 btn  theme radius  ">
+                            <Spinner variant="primary" /> : <button type="submit" className="btn-theme2 btn  theme-radius  ">
                                 Submit Review
                             </button>}
                     </div>

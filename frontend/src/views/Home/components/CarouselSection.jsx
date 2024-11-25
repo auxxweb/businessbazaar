@@ -4,6 +4,8 @@ import { Carousel } from "react-bootstrap";
 import LocationAutocomplete from "../../../components/LocationAutoComplete";
 import Placeholder from "../../../assets/images/placeholder.jpg";
 
+const libraries = ["places"];
+
 const CarouselSection = ({ bannerData, onSearch, setLocation }) => {
   const [searchData, setSearchData] = useState("");
 
@@ -72,7 +74,7 @@ const CarouselSection = ({ bannerData, onSearch, setLocation }) => {
               style={{ display: "flex", flexDirection: "column", alignItems: "center" }}
             >
               {/* Location Input */}
-              <LocationAutocomplete setLocation={setLocation} />
+              <LocationAutocomplete setLocation={setLocation} libraries={libraries} />
 
               {/* Search Input */}
               <div className="col-12 col-md-9 mt-3">

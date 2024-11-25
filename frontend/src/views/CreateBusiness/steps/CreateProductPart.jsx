@@ -506,7 +506,6 @@ const CreateProductPart = () => {
                 </p>
               )}
             </div>
-
             {/* Save & Next Button */}
             <div className="col-12 mt-4 text-center">
              {loading ? <Spinner variant="primary"/> : <button
