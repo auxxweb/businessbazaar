@@ -15,10 +15,6 @@ import {
   fetchCategories,
   getAllReviews,
 } from "../../Functions/functions";
-import { InputTextarea } from "primereact/inputtextarea";
-import { InputText } from "primereact/inputtext";
-import { Rating } from "primereact/rating";
-import { Dialog } from "primereact/dialog";
 import { BUSINESS_PAGE, REVIEW_LIMIT, REVIEW_PAGE } from "./constants";
 import {
   BusinessSection,
@@ -27,6 +23,7 @@ import {
   FooterSection,
   ReviewSection,
 } from "./components";
+import { ReviewModal } from "../../containers/BusinessReviews";
 
 export default function Home() {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -63,6 +60,7 @@ export default function Home() {
   const [loading, setLoading] = useState(true);
   const [visible, setVisible] = useState(false);
   const [isReviewed, setIsReviewed] = useState(false);
+  const [reviewLoading, setReviewLoading] = useState(false);
   const [reviews, setReviews] = useState([]);
   const [visibleCategories, setVisibleCategories] = useState(20);
   const [visibleBusiness, setVisibleBusiness] = useState(10);
@@ -86,7 +84,7 @@ export default function Home() {
       } catch (error) {
         toast.error(
           error?.response?.data?.message ??
-            "An error occurred. Please try again.",
+          "An error occurred. Please try again.",
           {
             position: "top-right",
             autoClose: 3000,
@@ -106,8 +104,10 @@ export default function Home() {
     fetchReviews();
   }, [isReviewed]);
 
-  const handleReviewSubmit = async () => {
+  const handleReviewSubmit = async (e) => {
+    e.preventDefault()
     try {
+      setReviewLoading(true)
       if (!review?.name?.trim()?.length) {
         toast.warning("Please enter your name!", {
           position: "top-right",
@@ -128,9 +128,10 @@ export default function Home() {
         setIsReviewed(!isReviewed);
       }
     } catch (error) {
+      setReviewLoading(true)
       toast.error(
         error?.response?.data?.message ??
-          "An error occurred. Please try again.",
+        "An error occurred. Please try again.",
         {
           position: "top-right",
           autoClose: 3000,
@@ -146,6 +147,7 @@ export default function Home() {
         }
       );
     }
+    setReviewLoading(false)
   };
 
   useEffect(() => {
@@ -251,60 +253,14 @@ export default function Home() {
         settings={settings}
       />
 
-      <Dialog
-        header="Write a Review"
+      <ReviewModal
         visible={visible}
-        onHide={() => {
-          if (!visible) return;
-          setVisible(false);
-        }}
-        style={{ width: "50vw" }}
-        breakpoints={{ "960px": "75vw", "641px": "100vw" }}
-      >
-        <div className="container">
-          <div className="p-3 justify-content-center">
-            <Rating
-              value={review.rating}
-              onChange={(e) => setReview({ ...review, rating: e.value })}
-              cancel={false}
-            />
-          </div>
-          <div className="col-12">
-            <InputText
-              keyfilter="text"
-              placeholder="Full Name"
-              className="w-100"
-              value={review.name}
-              name="name"
-              required
-              onChange={handleInputChange}
-            />
-          </div>
-
-          <div className="col-12 mt-3">
-            <div className="card flex justify-content-center">
-              <InputTextarea
-                value={review.description}
-                onChange={handleInputChange}
-                rows={5}
-                cols={30}
-                name="review"
-                placeholder="Write your review here..."
-              />
-            </div>
-          </div>
-          <div className="col-12 mt-3">
-            <div className="row">
-              <button
-                onClick={handleReviewSubmit}
-                className="btn-dark btn theme radius"
-              >
-                Submit Review
-              </button>
-            </div>
-          </div>
-        </div>
-      </Dialog>
+        setVisible={setVisible}
+        review={review}
+        setReview={setReview}
+        handleInputChange={handleInputChange}
+        handleReviewSubmit={handleReviewSubmit} 
+        reviewLoading={reviewLoading} />
 
       <FooterSection />
 

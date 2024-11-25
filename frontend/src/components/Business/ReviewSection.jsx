@@ -76,7 +76,7 @@ const ReviewSection = ({ businessData }) => {
                 textTransform: "uppercase",
               }}
             >
-              Our Happy Customer
+              Reviews
             </Typography>
             <Box
               sx={{

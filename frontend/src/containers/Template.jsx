@@ -1433,7 +1433,7 @@ export default function Template() {
           <section className="" style={{ backgroundColor: '#F3F3F4' }}>
             <div className="container david-font p-top">
               <div className="col-12 text-center">
-                <h1>Our Happy Customers</h1>
+                <h1>Reviews</h1>
               </div>
               <div className="col-12">
                 <p className="text-center">

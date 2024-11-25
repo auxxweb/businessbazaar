@@ -152,7 +152,7 @@ const ReviewSection = ({
               </div>
             ))}
           </Slider>
-          {review?.length > REVIEW_LIMIT && (
+          {review?.length < REVIEW_LIMIT && (
             <div className="text-center mt-5 mb-5">
               <a
                 onClick={() => navigate("/reviews")}

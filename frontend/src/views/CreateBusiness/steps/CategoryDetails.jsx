@@ -4,6 +4,7 @@ import { useNavigate } from "react-router";
 import { Autocomplete, CircularProgress, TextField } from "@mui/material";
 import { updateBusinessDetails } from "../store/businessSlice";
 import { fetchCategories } from "../../../Functions/functions";
+import { Spinner } from "react-bootstrap";
 
 const CategoryDetails = () => {
   const navigate = useNavigate();
@@ -20,11 +21,13 @@ const CategoryDetails = () => {
   };
 
   const handleNext = () => {
+    setLoading(true)
     if (!businessState?.category) {
       setError("Please select any category.");
     } else {
       navigate("/create-business/timing");
     }
+    setLoading(false)
   };
 
   const handlePrevStep = () => navigate("/create-business/contact");
@@ -116,12 +119,12 @@ const CategoryDetails = () => {
           <div className="col-12 mt-5"></div>
 
           <div className="col-12 text-center mt-5">
-            <button
+            {loading ? <Spinner variant="primary" /> : <button
               className="btn btn-primary w-100 text-white p-2"
               onClick={handleNext}
             >
               Save & Next
-            </button>
+            </button>}
           </div>
         </div>
 

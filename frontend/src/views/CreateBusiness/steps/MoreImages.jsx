@@ -6,7 +6,7 @@ import CloseIcon from '@mui/icons-material/Close'
 import Slider from 'react-slick'
 import axios from 'axios'
 import { updateBusinessDetails } from '../store/businessSlice'
-import { Button } from 'react-bootstrap'
+import { Button, Spinner } from 'react-bootstrap'
 import getCroppedImg from '../../../utils/cropper.utils'
 
 const gallery = {
@@ -50,6 +50,7 @@ const MoreImages = () => {
   const businessState = useSelector((state) => state.business)
 
   const [loading, setLoading] = useState(false)
+  const [imageLoading, setImageLoading] = useState(false)
   const [images, setImages] = useState([initialImgState])
 
   const [crop, setCrop] = useState(initialCropState)
@@ -65,6 +66,7 @@ const MoreImages = () => {
 
   const handleCropSave = async () => {
     try {
+      setImageLoading(true)
       if (selectedImgIndex >= 0) {
         const file = images?.[selectedImgIndex]?.file
         const { blob } = await getCroppedImg(imagePreview, croppedArea)
@@ -239,9 +241,9 @@ const MoreImages = () => {
                 </div>
               </div>
               <div className="modal-footer">
-                <Button variant="primary" onClick={handleCropSave}>
+                {imageLoading ?<Spinner variant="primary"/> :<Button variant="primary" onClick={handleCropSave}>
                   Save Crop
-                </Button>
+                </Button>}
                 <Button
                   variant="outlined"
                   onClick={() => setShowCropper(false)}
@@ -353,11 +355,7 @@ const MoreImages = () => {
 
           {/* Save & Next Button */}
           <div className="col-12 text-center p-3 p-md-5">
-            {loading ? (
-              <div className="spinner-border" role="status">
-                <span className="sr-only"></span>
-              </div>
-            ) : (
+            {loading ? <Spinner variant='primary'/> : (
               <button
                 className="btn btn-primary w-100 text-white p-2"
                 onClick={handleGallerySubmit}

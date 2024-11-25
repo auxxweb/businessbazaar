@@ -12,7 +12,6 @@ const containerStyle = {
   height: '400px',
 }
 
-
 const CreateBusinessLocation = ({ placeDetails, setPlaceDetails, setLocation, visible, setVisible, libraries }) => {
   const inputRef = useRef();
   const [inputValue, setInputValue] = useState(placeDetails ? placeDetails : "");

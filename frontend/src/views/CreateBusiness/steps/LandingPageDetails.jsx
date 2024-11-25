@@ -4,7 +4,7 @@ import { useNavigate } from "react-router";
 import Cropper from "react-easy-crop";
 import { TextField } from "@mui/material";
 import { updateBusinessDetails } from "../store/businessSlice";
-import { Button, Container, Nav, Navbar, NavLink } from "react-bootstrap";
+import { Button, Container, Nav, Navbar, NavLink, Spinner } from "react-bootstrap";
 import { preRequestFun } from "../service/s3url";
 import getCroppedImg from "../../../utils/cropper.utils";
 import Loader from "../../../components/Loader/Loader";
@@ -36,6 +36,7 @@ const LandingPageDetails = () => {
 
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false); // Loader state
+  const [cropperLoading, setCropperLoading] = useState(false); // Loader state
 
   const [crop, setCrop] = useState(initialCropState);
   const [zoom, setZoom] = useState(1);
@@ -49,6 +50,7 @@ const LandingPageDetails = () => {
 
   const handleCropSave = async () => {
     try {
+      setCropperLoading(true)
       const filePrev =
         imageFieldName === "landingPageHeroImage"
           ? landingPageHero?.coverImage
@@ -78,7 +80,9 @@ const LandingPageDetails = () => {
         }));
       }
       setCrop(initialCropState);
+      setCropperLoading(false)
     } catch (e) {
+      setCropperLoading(false)
       console.error("Error cropping image:", e);
     }
   };
@@ -203,9 +207,11 @@ const LandingPageDetails = () => {
             },
           })
         );
+        setLoading(false); 
         navigate("/create-business/core-services");
       }
     } catch (e) {
+      setLoading(false); 
       console.log(e);
     } finally {
       setLoading(false); // Set loading to false at the end
@@ -279,9 +285,9 @@ const LandingPageDetails = () => {
                 </div>
               </div>
               <div className="modal-footer">
-                <Button variant="primary" onClick={handleCropSave}>
+              {cropperLoading ? <Spinner variant="primary"/> : <Button variant="primary" onClick={handleCropSave}>
                   Save Crop
-                </Button>
+                </Button>}
                 <Button
                   variant="outlined"
                   onClick={() => setShowCropper(false)}
@@ -354,7 +360,7 @@ const LandingPageDetails = () => {
               <div className="input-group mt-2 w-100">
                 <TextField
                   fullWidth
-                  label="Title*"
+                  label="Title* (8 words)"
                   id="title"
                   variant="filled"
                   name="title"
@@ -369,7 +375,7 @@ const LandingPageDetails = () => {
               <div className="input-group mb-3 mt-4 w-100">
                 <TextField
                   fullWidth
-                  label="Description*"
+                  label="Description* (50 words)"
                   id="description"
                   variant="filled"
                   name="description"
@@ -377,10 +383,10 @@ const LandingPageDetails = () => {
                   multiline // Makes the TextField behave like a textarea
                   rows={4} // You can adjust the number of rows (height) here
                   value={landingPageHero.description}
-                  inputProps={{maxLength:200}}
+                  inputProps={{maxLength:250}}
                   onChange={(e) => handleInputChange(e, setLandingPageHero)}
-                  error={errors?.landingPageHeroDescription || landingPageHero?.description?.split("")?.length >= 200 ? true : false}
-                  helperText={errors?.landingPageHeroDescription || landingPageHero?.description?.split("")?.length >= 200 ? "exceeded the limit" : ""}
+                  error={errors?.landingPageHeroDescription || landingPageHero?.description?.split("")?.length >= 250 ? true : false}
+                  helperText={errors?.landingPageHeroDescription || landingPageHero?.description?.split("")?.length >= 250 ? "exceeded the limit" : ""}
                   sx={{
                     "& .MuiInputBase-root": {
                       padding: "12px", // Padding inside the textarea
@@ -444,7 +450,7 @@ const LandingPageDetails = () => {
               <div className="input-group mt-2 w-100">
                 <TextField
                   fullWidth
-                  label="Title*"
+                  label="Title* (8 words)"
                   id="title"
                   variant="filled"
                   name="title"
@@ -459,7 +465,7 @@ const LandingPageDetails = () => {
               <div className="input-group mb-3 mt-4 w-100">
                 <TextField
                   fullWidth
-                  label="Description*"
+                  label="Description* (50 words)"
                   id="description"
                   variant="filled"
                   name="description"
@@ -467,10 +473,10 @@ const LandingPageDetails = () => {
                   multiline // Makes the TextField behave like a textarea
                   rows={4} // You can adjust the number of rows (height) here
                   value={welcomePart.description}
-                  inputProps={{maxLength:200}}
+                  inputProps={{maxLength:250}}
                   onChange={(e) => handleInputChange(e, setWelcomePart)}
-                  error={errors?.welcomePartDescription || welcomePart?.description?.split("")?.length >= 200 ? true : false}
-                  helperText={errors?.welcomePartDescription || welcomePart?.description?.split("")?.length >= 200 ? "exceeded the limit" : ""}
+                  error={errors?.welcomePartDescription || welcomePart?.description?.split("")?.length >= 250 ? true : false}
+                  helperText={errors?.welcomePartDescription || welcomePart?.description?.split("")?.length >= 250 ? "exceeded the limit" : ""}
                   sx={{
                     "& .MuiInputBase-root": {
                       padding: "12px", // Padding inside the textarea
@@ -524,12 +530,12 @@ const LandingPageDetails = () => {
               )}
 
               <div className="col-12 mt-4 text-center">
-                <button
+              { loading ? <Spinner variant="primary"/> : <button
                   className="btn btn-primary w-100"
                   onClick={handleLandingSubmit}
                 >
                   Save & Next
-                </button>
+                </button>}
               </div>
             </div>
           </div>
