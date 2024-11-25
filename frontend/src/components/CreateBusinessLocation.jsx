@@ -13,9 +13,9 @@ const containerStyle = {
 }
 
 
-const CreateBusinessLocation = ({placeDetails, setPlaceDetails, setLocation, visible, setVisible, libraries }) => {
+const CreateBusinessLocation = ({ placeDetails, setPlaceDetails, setLocation, visible, setVisible, libraries }) => {
   const inputRef = useRef();
-  const [inputValue, setInputValue] = useState(placeDetails ? placeDetails :"");
+  const [inputValue, setInputValue] = useState(placeDetails ? placeDetails : "");
   const [coordinates, setCoordinates] = useState(null);
   const [center, setCenter] = useState({
     lat: 11.2487,
@@ -159,7 +159,7 @@ const CreateBusinessLocation = ({placeDetails, setPlaceDetails, setLocation, vis
                     position={coordinates}
                     animation={window.google.maps.Animation.DROP}
                     icon={{
-                      path: <LocationIcon/>,
+                      path: <LocationIcon />,
                       scale: 7,
                       fillColor: "#FF0000",
                       fillOpacity: 1,
