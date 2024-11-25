@@ -6,7 +6,7 @@ import Slider from "react-slick";
 import { TextField } from "@mui/material";
 import { updateBusinessDetails } from "../store/businessSlice";
 import { preRequestFun } from "../service/s3url";
-import { Button } from "react-bootstrap";
+import { Button, Spinner } from "react-bootstrap";
 import getCroppedImg from "../../../utils/cropper.utils";
 
 const CreateProductPart = () => {
@@ -22,6 +22,8 @@ const CreateProductPart = () => {
   const [isLoading, setIsLoading] = useState({
     specialService: {},
   });
+  const [cropLoading,setCropLoading] = useState(false)
+  const [loading,setLoading] = useState(false)
   const [errors] = useState([]);
   const [crop1, setCrop1] = useState({ x: 0, y: 0 });
   const [zoom1, setZoom1] = useState(1);
@@ -38,6 +40,7 @@ const CreateProductPart = () => {
 
   const handleCropSave1 = async () => {
     try {
+      setCropLoading(true)
       const { fileUrl, blob } = await getCroppedImg(
         spServiceImgPrev,
         croppedArea1
@@ -65,8 +68,10 @@ const CreateProductPart = () => {
       setSpServiceImgPrev(fileUrl);
       setSpServiceFile(croppedFile);
     } catch (e) {
+      setCropLoading(false)
       console.error("Error cropping image:", e);
     } finally {
+      setCropLoading(false)
       setShowCropper1(false);
     }
   };
@@ -126,12 +131,14 @@ const CreateProductPart = () => {
 
   // Submit function to store data
   const handleServiceSubmit = () => {
+    setLoading(true)
     dispatch(
       updateBusinessDetails({
         productSection: specialService,
       })
     );
     navigate("/create-business/seo");
+    setLoading(false)
   };
 
   const handleChange = (e) => {
@@ -247,9 +254,9 @@ const CreateProductPart = () => {
                   </div>
                 </div>
                 <div className="modal-footer">
-                  <Button variant="primary" onClick={handleCropSave1}>
+                 {cropLoading ? <Spinner variant="primary"/> : <Button variant="primary" onClick={handleCropSave1}>
                     Save Crop
-                  </Button>
+                  </Button>}
                   <Button
                     variant="outlined"
                     onClick={() => setShowCropper1(false)}
@@ -289,7 +296,7 @@ const CreateProductPart = () => {
                 <div className="input-group mt-2 w-100">
                   <TextField
                     fullWidth
-                    label="Title (35 letters)"
+                    label="Title (8 words)"
                     id="title-1"
                     variant="filled"
                     name="title"
@@ -304,7 +311,7 @@ const CreateProductPart = () => {
                 <div className="input-group mb-3 mt-4 w-100">
                   <TextField
                     fullWidth
-                    label="Description (200 letters)"
+                    label="Description (50 words)"
                     id="description-1"
                     variant="filled"
                     name="description"
@@ -313,9 +320,9 @@ const CreateProductPart = () => {
                     rows={4} // You can adjust the number of rows (height) here
                     value={specialService.description}
                     onChange={handleChange}
-                    inputProps={{ maxLength: 200 }}
-                    error={specialService?.description?.split("")?.length >= 200 ? true : false}
-                    helperText={specialService?.description?.split("")?.length >= 200 ? "exceeded the limit" : ""}
+                    inputProps={{ maxLength: 250 }}
+                    error={specialService?.description?.split("")?.length >= 250 ? true : false}
+                    helperText={specialService?.description?.split("")?.length >= 250 ? "exceeded the limit" : ""}
                     sx={{
                       "& .MuiInputBase-root": {
                         padding: "12px", // Padding inside the textarea
@@ -374,7 +381,7 @@ const CreateProductPart = () => {
 
                     <TextField
                       fullWidth
-                      label="Title (35 letters)"
+                      label="Title (8 words)"
                       id="title"
                       variant="filled"
                       name="title"
@@ -389,7 +396,7 @@ const CreateProductPart = () => {
                     <div className="input-group mb-3 mt-4 w-100">
                       <TextField
                         fullWidth
-                        label="Description (200 letters)"
+                        label="Description (50 words)"
                         id="description"
                         variant="filled"
                         name="description"
@@ -397,8 +404,8 @@ const CreateProductPart = () => {
                         multiline
                         rows={4}
                         inputProps={{ maxLength: 200 }}
-                        error={p?.description?.split("")?.length >= 200 ? true : false}
-                        helperText={p?.description?.split("")?.length >= 200 ? "exceeded the limit" : ""}
+                        error={p?.description?.split("")?.length >= 250 ? true : false}
+                        helperText={p?.description?.split("")?.length >= 250 ? "exceeded the limit" : ""}
                         sx={{
                           "& .MuiInputBase-root": {
                             padding: "12px",
@@ -499,15 +506,14 @@ const CreateProductPart = () => {
                 </p>
               )}
             </div>
-
             {/* Save & Next Button */}
             <div className="col-12 mt-4 text-center">
-              <button
+             {loading ? <Spinner variant="primary"/> : <button
                 className="btn btn-primary btn-md w-100"
                 onClick={handleServiceSubmit}
               >
                 Save & Next
-              </button>
+              </button>}
             </div>
           </div>
 

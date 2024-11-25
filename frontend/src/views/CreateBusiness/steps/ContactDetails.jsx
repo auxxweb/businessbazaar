@@ -4,6 +4,7 @@ import { useNavigate } from "react-router";
 import { TextField } from "@mui/material";
 import CreateBusinessLocation from "../../../components/CreateBusinessLocation";
 import { updateBusinessDetails } from "../store/businessSlice";
+import { Spinner } from "react-bootstrap";
 
 const libraries = ['places'];
 
@@ -12,7 +13,8 @@ const ContactDetails = () => {
   const dispatch = useDispatch();
   const businessState = useSelector((state) => state.business);
   const [showLocation, setShowLocation] = useState(false)
-  const [placeDetails, setPlaceDetails] = useState("")
+  const [placeDetails, setPlaceDetails] = useState("") 
+  const [loading,setLoading] = useState(false)
 
   const [newFormData, setNewFormData] = useState({
     contactDetails: {
@@ -220,7 +222,7 @@ const ContactDetails = () => {
 
   const contactSubmitHandler = () => {
     console.log(newFormData, "new-formData");
-
+setLoading(true)
     if (validateRequiredFields()) {
       dispatch(
         updateBusinessDetails({
@@ -231,6 +233,7 @@ const ContactDetails = () => {
       );
 
       navigate("/create-business/category");
+      setLoading(false)
     }
   };
 
@@ -493,13 +496,13 @@ const ContactDetails = () => {
             </div>
           </div>
 
-          <div className="col-12 mt-3 text-end">
-            <button
+          <div className="col-12 mt-3 text-center">
+           {loading ? <Spinner variant="primary"/> : <button
               className="btn btn-primary btn-lg w-100"
               onClick={contactSubmitHandler}
             >
               Save & Continue
-            </button>
+            </button>}
           </div>
         </div>
 

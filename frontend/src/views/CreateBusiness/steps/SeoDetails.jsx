@@ -4,6 +4,7 @@ import { useNavigate } from "react-router";
 import { TextField } from "@mui/material";
 import { updateBusinessDetails } from "../store/businessSlice";
 import Loader from "../../../components/Loader/Loader";
+import { Spinner } from "react-bootstrap";
 
 const SeoDetails = () => {
   const navigate = useNavigate();
@@ -72,7 +73,6 @@ const SeoDetails = () => {
     setLoading(true)
     dispatch(updateBusinessDetails({ socialMediaLinks, seoData }));
     navigate("/create-business/gallery");
-
     setLoading(false)
   };
 
@@ -213,12 +213,12 @@ const SeoDetails = () => {
 
           {/* Save & Next Button */}
           <div className="col-12 text-center p-3 p-md-5">
-            <button
+          { loading? <Spinner variant="primary"/> : <button
               className="btn btn-primary w-100 text-white p-2"
               onClick={handleSeoSubmit}
             >
               Save & Next
-            </button>
+            </button>}
           </div>
         </div>
 

@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
 import { updateBusinessDetails } from "../store/businessSlice";
 import { TextField } from "@mui/material";
+import { Spinner } from "react-bootstrap";
 
 const allDays = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
@@ -12,6 +13,7 @@ const BusinessTiming = () => {
   const businessState = useSelector((state) => state.business);
 
   const [days, setDays] = useState([]);
+  const [loading, setLoading] = useState(false)
   const [openTime, setOpenTime] = useState("");
   const [closeTime, setCloseTime] = useState("");
   const [error, setError] = useState("");
@@ -41,6 +43,7 @@ const BusinessTiming = () => {
   };
 
   const handleSubmit = () => {
+    setLoading(true)
     if (days?.length === 0) {
       setError("Please select atleast one day");
     } else {
@@ -58,6 +61,7 @@ const BusinessTiming = () => {
 
       navigate("/create-business/description");
     }
+    setLoading(false)
   };
 
   const handlePrevStep = () => navigate("/create-business/category");
@@ -102,9 +106,8 @@ const BusinessTiming = () => {
                   {allDays.map((day) => (
                     <div
                       key={day}
-                      className={`day-div ${
-                        days.includes(day) ? "active" : ""
-                      } p-2 text-center cursor-pointer`}
+                      className={`day-div ${days.includes(day) ? "active" : ""
+                        } p-2 text-center cursor-pointer`}
                       style={{
                         width: "60px",
                         borderRadius: "8px",
@@ -166,12 +169,12 @@ const BusinessTiming = () => {
 
             {/* Save & Next Button */}
             <div className="col-12 text-center p-3 p-md-5">
-              <button
+              {loading ? <Spinner variant="primary" /> : <button
                 className="btn btn-primary w-100 text-white p-2"
                 onClick={handleSubmit}
               >
                 Save & Next
-              </button>
+              </button>}
             </div>
           </div>
 
