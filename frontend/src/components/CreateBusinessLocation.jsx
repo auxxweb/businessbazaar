@@ -1,9 +1,8 @@
-
 /* eslint-disable react/prop-types */
 import { TextField } from "@mui/material";
 import { Dialog } from "primereact/dialog";
 import React, { useEffect } from "react";
-import { useJsApiLoader, StandaloneSearchBox, GoogleMap} from "@react-google-maps/api";
+import { useJsApiLoader, StandaloneSearchBox, Marker, GoogleMap} from "@react-google-maps/api";
 import { useRef, useState } from "react";
 import './businessLocation.css'
 
@@ -12,10 +11,10 @@ const containerStyle = {
   height: '400px',
 }
 
-
 const CreateBusinessLocation = ({ setPlaceDetails,setLocation, visible, setVisible,libraries }) => {
   const inputRef = useRef();
   const [inputValue, setInputValue] = useState("");
+  const [coordinates, setCoordinates] = useState(null);
   const [center, setCenter] = useState({
     lat: 11.2487,
     lng: 75.8335,
@@ -73,12 +72,12 @@ const CreateBusinessLocation = ({ setPlaceDetails,setLocation, visible, setVisib
     setMap(null)
   }, [])
 
-  const handleOnclick = (data)=>{
+  const handleOnClick = (data)=>{
 
     if(data?.placeId){
       fetchDetailsByPlaceId(data.placeId)
     }else{
-      // setInputValue("") 
+      setPlaceDetails(`latitude:${data?.latLng?.lat()}, longitude:${data?.latLng?.lng()}`)
     }
     setLocation({
       lat: data?.latLng?.lat(),
@@ -88,6 +87,12 @@ const CreateBusinessLocation = ({ setPlaceDetails,setLocation, visible, setVisib
       lat: data?.latLng?.lat(),
       lng: data?.latLng?.lng(),
     })
+
+    setCoordinates({
+      lat: data?.latLng?.lat(),
+      lng: data?.latLng?.lng(),
+    });
+    setInputValue(`latitude:${data?.latLng?.lat()}, longitude:${data?.latLng?.lng()}`);
     
   }
 
@@ -126,6 +131,19 @@ setVisible(false)
       style={{ minWidth: "50vw", borderRadius: '12px', overflow: "hidden", zIndex: 1 }}
       breakpoints={{ "960px": "75vw", "641px": "100vw" }}
     >
+      {/* <div className="mb-4">
+        <h2 className="text-xl font-bold mb-2">Map Click Coordinates</h2>
+        {coordinates && (
+          <div className="bg-gray-100 p-4 rounded-md">
+            <p className="text-gray-700">
+              Latitude: {coordinates.lat.toFixed(6)}
+            </p>
+            <p className="text-gray-700">
+              Longitude: {coordinates.lng.toFixed(6)}
+            </p>
+          </div>
+        )}
+      </div> */}
         {isLoaded && (
       <div className=" mt-2 w-100">
           <StandaloneSearchBox
@@ -146,8 +164,22 @@ setVisible(false)
           zoom={10}
           onLoad={onLoad}
           onUnmount={onUnmount}
-          onClick={handleOnclick}
+          onClick={handleOnClick}
         >
+           {coordinates && (
+            <Marker
+              position={coordinates}
+              animation={window.google.maps.Animation.DROP}
+              icon={{
+                path:<LocationIcon/>,                
+                scale: 7,
+                fillColor: "#FF0000",
+                fillOpacity: 1,
+                strokeWeight: 2,
+                strokeColor: "#FFFFFF"
+              }}
+            />
+          )}
         </GoogleMap>
               </div>
           </StandaloneSearchBox>
@@ -163,3 +195,10 @@ setVisible(false)
 };
 
 export default CreateBusinessLocation;
+
+
+const LocationIcon = ()=>{
+  return (
+    <svg fill="#ff0000" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="100px" height="100px" viewBox="0 0 395.71 395.71" xml:space="preserve" stroke="#ff0000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <g> <path d="M197.849,0C122.131,0,60.531,61.609,60.531,137.329c0,72.887,124.591,243.177,129.896,250.388l4.951,6.738 c0.579,0.792,1.501,1.255,2.471,1.255c0.985,0,1.901-0.463,2.486-1.255l4.948-6.738c5.308-7.211,129.896-177.501,129.896-250.388 C335.179,61.609,273.569,0,197.849,0z M197.849,88.138c27.13,0,49.191,22.062,49.191,49.191c0,27.115-22.062,49.191-49.191,49.191 c-27.114,0-49.191-22.076-49.191-49.191C148.658,110.2,170.734,88.138,197.849,88.138z"></path> </g> </g></svg>
+  )
+}
