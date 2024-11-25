@@ -247,10 +247,11 @@ footer {
 }
 
 .gallery-img {
-  height: 300px;
-  object-fit: cover;
-  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+  width: 100%; /* Ensures the image takes the full width of the column */
+  height: auto; /* Maintains aspect ratio */
+  object-fit: cover; /* Adjust image to fit the container without distortion */
 }
+
 
 .width-fit {
   width: fit-content;

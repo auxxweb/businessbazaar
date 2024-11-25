@@ -122,7 +122,7 @@ export default function Business() {
 
                   <input
                     type="text"
-                    className="form-control custom-placeholder"
+                    className="form-control"
                     placeholder="Search for Businesses"
                     value={searchTerm}
                     onChange={handleSearch} // Immediate update with debounce for API call
@@ -172,7 +172,7 @@ export default function Business() {
                     </div>
                     <div className="col-8">
                       <div className="col-12 mb-2 mt-2">
-                        <h2 style={{ fontSize: "28px" }}>{business.businessName}</h2>
+                        <h2 className='responsive-input '>{business.businessName}</h2>
                       </div>
                       <div className="col-12">
                         <span>{business.category.name}</span>
