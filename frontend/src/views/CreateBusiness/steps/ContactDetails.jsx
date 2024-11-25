@@ -381,7 +381,7 @@ const ContactDetails = () => {
             </div>
 
             {/* Location */}
-            {showLocation && <CreateBusinessLocation setPlaceDetails={setPlaceDetails} libraries={libraries} visible={showLocation} setVisible={setShowLocation} setLocation={setLocation} />}
+            {showLocation && <CreateBusinessLocation placeDetails={placeDetails}  setPlaceDetails={setPlaceDetails} libraries={libraries} visible={showLocation} setVisible={setShowLocation} setLocation={setLocation} />}
             <div className="d-flex justify-content-between  mt-2">
               <p style={{ fontSize: "12px" }} className="text-secondary m-0 p-0">{placeDetails}</p>
               <span onClick={(() => setShowLocation(!showLocation))} className="w-fit border btn btn-primary d-flex align-items-center">
