@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import {
   checkPaymentStatus,
   CreateBusinessDetails,
+  createPayment,
 } from "../../../Functions/functions";
 import { useNavigate } from "react-router";
 import { toast } from "react-toastify";
@@ -13,8 +14,9 @@ import { resetPlanState } from "../store/subscriptionPlanSlice";
 export default function Razorpay() {
   const dispatch = useDispatch();
   const businessState = useSelector((state) => state.business);
-  const planDetails = useSelector((state) => state.subscriptionPlanDetails);
-
+  const planDetails = useSelector((state) => state.subscriptionPlan);
+  
+  const [id,setId]=useState('')
   const [isScriptLoaded, setScriptLoaded] = useState(false);
   const [loader, setLoader] = useState(false);
   const navigate = useNavigate();
@@ -48,7 +50,7 @@ export default function Razorpay() {
     }
 
     const options = {
-      key: "rzp_test_w5XnOXa3pTEdZE", // Dummy Razorpay key ID for testing
+      key: "rzp_test_DBApSwEptkCDdS", // Dummy Razorpay key ID for testing
       amount: planDetails?.amount * 100, // Amount in paise (50000 paise = ₹500)
       currency: "INR",
       name: "EnConnect",
@@ -60,8 +62,10 @@ export default function Razorpay() {
         setLoader(true);
         const interval = setInterval(async () => {
           try {
-            const paymentData = await checkPaymentStatus(id, token);
+            const paymentData = await checkPaymentStatus( token);
+            console.log(paymentData,'payment dataaaaaaaa')
             const payment_status = paymentData?.data?.PaymentStatus;
+            const id= paymentData?.business
             if (payment_status === "success") {
               setLoader(false);
               clearInterval(interval); // Clear the interval if payment is successful
@@ -144,17 +148,35 @@ export default function Razorpay() {
   useEffect(() => {
     const submitData = async () => {
       console.log(businessState, "formData");
+      const paymentToken=localStorage.getItem("paymentToken");
 
-      try { 
-        const res = await CreateBusinessDetails(businessState);
+      if (paymentToken) {
+         const paymentRes = await createPayment(planDetails,paymentToken);
+         if(paymentRes.success) {
 
-        const id = res?.data?._id || res?.data.data?._id;
-        const token = res.data?.token || res.data?.data?.token;
-        console.log("business", id);
-        handlePayment(id, token);
-      } catch (error) {
-        console.log(error, "razorpay-error");
+           handlePayment(id,paymentToken);
+         }
+        return;
+      }else{
+
+        try { 
+          const res = await CreateBusinessDetails(businessState);
+          console.log(res,'resssssssssssssssssssssss')
+          const id = res?.data?._id || res?.data.data?._id;
+          setId(id);
+          const token = res.data?.token || res.data?.data?.token;
+          localStorage.setItem('paymentToken',res?.data?.token)
+          console.log("business", id);
+          const paymentRes = await createPayment(planDetails,token);
+          if(paymentRes.success) {
+            handlePayment(id, token);
+          }
+  
+        } catch (error) {
+          console.log(error, "razorpay-error");
+        }
       }
+
     };
 
     submitData();

@@ -3,6 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   price: "",
   name: "",
+  plan:""
 };
 
 const subscriptionPlanSlice = createSlice({

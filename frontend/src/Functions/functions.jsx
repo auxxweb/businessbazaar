@@ -355,9 +355,41 @@ export const FetchPlans = async () => {
     console.error("Error fetching categories:", error.message);
   }
 };
-export const checkPaymentStatus = async (paymentId, token) => {
+
+
+export const createPayment = async (paymentData, token) => {
   try {
-    const response = await axios.get(`${baseUrl}/api/v1/payment/status/${paymentId}`, {
+    const response = await axios.post(
+      `${baseUrl}/api/v1/payment`, // API endpoint
+      paymentData, // Payload
+      {
+        headers: {
+          Authorization: `Bearer ${token}`, // Authorization header
+        },
+      }
+    );
+ console.log(response.data,'llllllllllllllllllll');
+    const data = response.data;
+    
+    if (data.success) {
+      return data; // Successfully created business details
+    } else {
+      console.error("Failed to add payment:", data.message || "Unknown error");
+      throw new Error(data.message || "Failed to add payment");
+    }
+    } catch (error) {
+    console.error("Error creating payment:", error);
+    throw error; // Re-throw the error to handle it in the calling function
+  }
+};
+
+
+
+
+export const checkPaymentStatus = async ( token) => {
+  try {
+    
+    const response = await axios.get(`${baseUrl}/api/v1/payment/status`, {
       headers: {
         Authorization: `Bearer ${token}`, // Add the Bearer token here
       },
@@ -371,10 +403,10 @@ export const checkPaymentStatus = async (paymentId, token) => {
     if (data.success) {
       return data;
     } else {
-      console.error("Failed to fetch categories");
+      console.error("Failed to fetch payment staus");
     }
   } catch (error) {
-    console.error("Error fetching categories:", error.message);
+    console.error("Error fetching payment status:", error.message);
   }
 };
 export const fetchBanners = async () => {
