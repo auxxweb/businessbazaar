@@ -620,17 +620,40 @@ export default function Template() {
             <div
               style={{
                 display: 'flex',
+                flexDirection: 'column',
                 justifyContent: 'center',
                 alignItems: 'center',
-                height: '200px',
-                color: '#1D4ED8', // Tailwind [#107D93]
-                fontSize: '20px', // Slightly larger font size for premium feel
+                height: '250px',
+                width: '300px',
+                margin: '0 auto',
+                backgroundColor: '#F3F4F6', // Light gray for card background
+                borderRadius: '12px', // Rounded corners
+                boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)', // Subtle shadow for depth
+                color: '#1D4ED8', // Tailwind [#1D4ED8]
+                fontSize: '18px', // Clean font size
                 textAlign: 'center',
-                fontWeight: '500', // Medium font weight
-                fontFamily: "'Inter', sans-serif", // Premium standard font
+                fontWeight: '500', // Medium weight
+                fontFamily: "'Inter', sans-serif",
+                padding: '20px', // Padding for internal spacing
               }}
             >
-              Error loading business data.
+              <img
+                src="https://st.depositphotos.com/1006899/2650/i/450/depositphotos_26505551-stock-photo-error-metaphor.jpg"
+                alt="Profile Not Found Icon"
+                style={{
+                  width: '60px',
+                  height: '60px',
+                  borderRadius: '50%',
+                  border: '2px solid #1D4ED8', // Highlight with theme color
+                  marginBottom: '15px',
+                  borderRadius: '50%',
+                  border: '2px solid #1D4ED8', // Highlight with theme color
+                }}
+              />
+              <p style={{ margin: 0 }}>We couldn't find the profile you're looking for.</p>
+              <span style={{ fontSize: '14px', color: '#6B7280', marginTop: '8px' }}>
+                Please check the details or try again later.
+              </span>
             </div>
           </div>
         </section>
