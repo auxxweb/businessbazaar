@@ -95,7 +95,6 @@ export const fetchSearchCategory = async (search) => {
 
 export const fetchBusinessTemplate = async (id, setLoading) => {
 
-  setLoading(true);
   try {
     const response = await axios.get(
       `${baseUrl}/api/v1/business/${id}`,
@@ -109,16 +108,13 @@ export const fetchBusinessTemplate = async (id, setLoading) => {
     if (data.success) {
       return data;
     } else {
-      setLoading(false);
 
       console.error("Failed to fetch Search Value");
     }
   } catch (error) {
-    setLoading(false);
     
     console.error("Failed to fetch Business Site Details");
   } finally {
-    setLoading(false);
   }
 };
 
