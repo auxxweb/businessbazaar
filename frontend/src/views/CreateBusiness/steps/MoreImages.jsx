@@ -188,6 +188,11 @@ const MoreImages = () => {
         setLoading(false)
       }
     } else {
+      if(images.length !==0){
+        const imageData = [];
+        images.map((item)=>imageData.push(item?.accessLink))
+        dispatch(updateBusinessDetails({ gallery: imageData }))
+      }
       navigate('/create-business/subscription') // Proceed if no new files to upload
     }
   }
@@ -195,8 +200,6 @@ const MoreImages = () => {
   const handlePrevStep = () => navigate('/create-business/seo')
 
   useEffect(() => {
-console.log(businessState?.gallery);
-    
     if (businessState?.gallery?.length >0) {
       setImages(
         businessState?.gallery?.map((accessLink) => ({
