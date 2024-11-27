@@ -66,7 +66,7 @@ const ServicesSection = ({ businessData }) => {
         </Box>
 
         <Slider {...settings}>
-          {businessData?.service?.map((service, index) => (
+          {businessData?.service?.data?.map((service, index) => (
             <Tooltip
               key={index}
               arrow

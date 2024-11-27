@@ -14,7 +14,7 @@ const ContactSection = ({ businessData }) => {
               <div className="row align-items-center justify-content-start">
                 <a
                   href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
-                    `${businessData.address.buildingName}, ${businessData.address.city}, ${businessData.address.landMark}, ${businessData.address.streetName}, ${businessData.address.state}`
+                    `${businessData.address?.buildingName}, ${businessData.address?.city}, ${businessData.address?.landMark}, ${businessData.address?.streetName}, ${businessData.address?.state}`
                   )}`}
                   target="_blank"
                   rel="noopener noreferrer"
@@ -27,11 +27,11 @@ const ContactSection = ({ businessData }) => {
                     <div className="col">
                       <span className="fs-13">Address</span>
                       <p className="fs-16">
-                        {businessData.address.buildingName},{" "}
-                        {businessData.address.city},
-                        {businessData.address.landMark},
-                        {businessData.address.streetName},{" "}
-                        {businessData.address.state}
+                        {businessData.address?.buildingName},{" "}
+                        {businessData.address?.city},
+                        {businessData.address?.landMark},
+                        {businessData.address?.streetName},{" "}
+                        {businessData.address?.state}
                       </p>
                     </div>
                   </div>

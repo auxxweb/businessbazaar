@@ -66,7 +66,7 @@ const MenuSection = ({ businessData }) => {
         </Box>
 
         <Slider {...settings}>
-          {businessData?.productSection?.map((item, index) => (
+          {businessData?.productSection?.data?.map((item, index) => (
             <Card
               sx={{
                 // maxWidth: 224,

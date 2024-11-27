@@ -93,9 +93,7 @@ export const fetchSearchCategory = async (search) => {
   }
 };
 
-export const fetchBusinessTemplate = async (id, setLoading) => {
-
-  setLoading(true);
+export const fetchBusinessTemplate = async (id) => {
   try {
     const response = await axios.get(
       `${baseUrl}/api/v1/business/${id}`,
@@ -109,12 +107,10 @@ export const fetchBusinessTemplate = async (id, setLoading) => {
     if (data.success) {
       return data;
     } else {
-      setLoading(false);
 
       console.error("Failed to fetch Search Value");
     }
   } catch (error) {
-    setLoading(false);
     toast.error("Failed to load website!", {
       position: "top-right",
       autoClose: 3000,
@@ -130,7 +126,6 @@ export const fetchBusinessTemplate = async (id, setLoading) => {
     });
     console.error("Failed to fetch Business Site Details");
   } finally {
-    setLoading(false);
   }
 };
 

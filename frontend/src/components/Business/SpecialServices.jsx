@@ -85,9 +85,9 @@ const settings = {
           {businessData?.specialServices?.data.length>3?(
           <Slider {...settings}>
             {businessData?.specialServices?.data.map((item, index) => (
-              <Box padding={'5px'} display={'block'}>
+              <Box  key={item?._id} padding={'5px'} display={'block'}> 
                 <Box
-                key={index}
+               
                 backgroundColor={"#ffffff"}
                 padding={"1rem"}
                 sx={{
@@ -121,7 +121,7 @@ const settings = {
             ))}
           </Slider>
           ) : ( businessData?.specialServices?.data.map((item, index) => (
-            <Box display={'flex'}>
+            <Box  key={item?._id} display={'flex'}>
                 <Box padding={'5px'} display={'block'} width={{xs:"100%",md:"100%",lg:"40%"}}>
                 <Box
                 key={index}
