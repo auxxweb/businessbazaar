@@ -71,7 +71,7 @@ const PremiumTemplate = () => {
       </style>
 
       <Box sx={{ overflowX: "hidden" }}>
-        <TemplateHeader businessData={businessData} />
+        <TemplateHeader businessData={businessData} colorTheme={businessData?.theme} />
         <Box
           sx={{
             position: "relative",
@@ -124,7 +124,7 @@ const PremiumTemplate = () => {
             <Typography fontSize={"16px"} lineHeight={"24px"}>
               {businessData?.landingPageHero?.description}
             </Typography>
-            <Box marginTop={"30px"}>
+            <Box marginTop={"10px"} marginBottom={"30px"}>
               <Button
                 sx={{
                   textTransform: "capitalize",
@@ -151,51 +151,67 @@ const PremiumTemplate = () => {
                 Book a table{" "}
               </Button>
             </Box>
+            <div className=" col-12 social-media gap-2 d-flex justify-content-center my-3">
+                      {businessData?.socialMediaLinks?.map((social) => (
+                        <>
+                          <a
+                            href={social?.link}
+                            target="_blank"
+                            style={{width:"2.5rem",height:"2.5rem"}}
+                            className="contact-baner  rounded-circle border border-white text-white bg-dark d-flex justify-content-center align-items-center"
+                          >
+                            <i
+                              className={`bi bi-${social?.tag} text-3xl sm:text-xl `}
+                            ></i>
+                          </a>
+                        </>
+                      ))}
+                    </div>
           </Box>
           <Box
             sx={{ position: "absolute", bottom: { xs: "-30%", md: "-21%" } }}
           >
+           
             <ContactSection
-
               businessData={businessData} />
           </Box>
         </Box>
-        <ShareButton
-          number={businessData?.contactDetails?.primaryNumber}
-        />
+        <ShareButton number={businessData?.contactDetails?.primaryNumber} />
                   <div className="mt-2 mb-3 sm:mt-0 sm:mb-0">
             <div className="container px-4 sm:px-0">
+            
               <div className="col-12 address-section">
-                <div className="row justify-content-between">
+                <div className="row d-flex justify-content-between align-items-center  p-2">
+                  
                   {/* Address Section */}
-                  <div className="col-12 col-sm-4 mb-3 mb-sm-0">
-                    <div className="row align-items-center justify-content-start">
+                  <div className="col-12 col-sm-4  my-1">
+                    <div className=" d-flex align-items-center  justify-content-start">
                       <a
                         href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
                           `${businessData?.address?.buildingName}, ${businessData?.address?.city}, ${businessData?.address?.landMark}, ${businessData.address?.streetName}, ${businessData.address?.state}`,
                         )}`}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-decoration-none text-dark"
+                      
+                        className="text-decoration-none   p-0 m-0"
                       >
                         <div className="row">
-                          <div className="col-auto address-logo">
+                          <div className="col-auto address-logo my-auto ">
                             <i className="bi bi-geo-alt-fill text-2xl sm:text-lg" />
                           </div>
-                          <div className="col">
-                            <span className="fs-12 sm:fs-10" style={{ color: businessData?.secondaryTheme }}>Address</span>
+                          <div className="col text-white">
+                            <span className="fs-12 sm:fs-10">Address</span>
                             <p
-                              style={{ color: businessData?.theme, textDecoration: 'none' }}
+                              style={{  textDecoration: 'none' }}
 
-                              className="fs-14 sm:fs-12">{`${businessData.address?.buildingName}, ${businessData.address?.city}, ${businessData.address?.landMark}, ${businessData.address?.streetName}, ${businessData.address?.state}`}</p>
+                              className="fs-14 sm:fs-12 ">{`${businessData.address?.buildingName}, ${businessData.address?.city}, ${businessData.address?.landMark}, ${businessData.address?.streetName}, ${businessData.address?.state}`}</p>
                           </div>
                         </div>
                       </a>
                     </div>
                   </div>
-
                   {/* Email Section */}
-                  <div className="col-12 col-sm-4 mb-3 mb-sm-0">
+                  <div className="col-12 col-sm-4 my-1  mb-sm-0">
                     <div className="row align-items-center justify-content-start">
                       <div className="col-auto address-logo">
                         <i className="bi bi-envelope-fill text-2xl sm:text-lg" />
@@ -203,11 +219,11 @@ const PremiumTemplate = () => {
                       <div className="col">
                         <a
                           href={`mailto:${businessData?.contactDetails?.email}`}
-                          className="text-decoration-none text-dark"
+                          className="text-decoration-none text-white"
                         >
-                          <span className="fs-12 sm:fs-10 " style={{ color: businessData?.textColor }}>Send Email</span>
+                          <span className="fs-12 sm:fs-10 ">Send Email</span>
                           <p className="fs-14 sm:fs-12"
-                            style={{ color: businessData?.textColor, textDecoration: 'none' }}
+                            style={{  textDecoration: 'none' }}
                           >
                             {businessData?.contactDetails?.email}
                           </p>
@@ -220,18 +236,18 @@ const PremiumTemplate = () => {
                   </div>
 
                   {/* Contact Section */}
-                  <div className="col-12 col-sm-4 mb-3 mb-sm-0">
+                  <div className="col-12 col-sm-4 my-1 mb-sm-0">
                     <div className="row align-items-center justify-content-start">
                       <div className="col-auto address-logo">
                         <i className="bi bi-telephone text-2xl sm:text-lg" />
                       </div>
                       <div className="col">
-                        <span className="fs-12 sm:fs-10" style={{ color: businessData.textColor }}>
+                        <span className="fs-12 sm:fs-10" >
                           Contact
                         </span>
                         <p className="fs-14 sm:fs-12 mb-0">
                           <a
-                            style={{ color: businessData?.textColor, textDecoration: 'none' }}
+                            style={{ textDecoration: 'none' }}
                             href={`tel:${businessData?.contactDetails?.primaryNumber}`}
                           >
                             {businessData?.contactDetails?.primaryNumber}
@@ -239,7 +255,7 @@ const PremiumTemplate = () => {
                         </p>
                         <p className="fs-14 sm:fs-12 mt-0">
                           <a
-                            style={{ color: businessData?.textColor, textDecoration: 'none' }}
+                            style={{  textDecoration: 'none' }}
                             href={`tel:${businessData?.contactDetails?.secondaryNumber}`}
                           >
                             {businessData?.contactDetails?.secondaryNumber}
