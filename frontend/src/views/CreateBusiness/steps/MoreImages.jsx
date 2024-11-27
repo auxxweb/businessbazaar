@@ -10,7 +10,6 @@ import { Button, Spinner } from 'react-bootstrap'
 import getCroppedImg from '../../../utils/cropper.utils'
 
 const gallery = {
-  dots: true,
   infinite: true,
   speed: 500,
   slidesToShow: 3,
@@ -83,7 +82,9 @@ const MoreImages = () => {
 
         setCrop(initialCropState)
       }
+      setImageLoading(false)
     } catch (e) {
+      setImageLoading(false)
       console.error('Error cropping image:', e)
     } finally {
       setShowCropper(false)
@@ -130,10 +131,9 @@ const MoreImages = () => {
     const imagesToUpload = images?.filter(({ accessLink }) => !accessLink)
     const imageFiles = imagesToUpload?.map(({ file }) => file)
     const imageFilesLength = imagesToUpload
-    ?.map(({ file }) => file)
-    .filter((file) => file != null);
-    console.log(imageFilesLength,"imageFiles");
-    
+      ?.map(({ file }) => file)
+      .filter((file) => file != null);
+    console.log(imageFilesLength, "imageFiles");
 
     if (imageFilesLength?.length > 0) {
       setLoading(true)
@@ -147,6 +147,7 @@ const MoreImages = () => {
 
       try {
         const baseUrl = import.meta.env.VITE_APP_BE_API_KEY ?? ''
+
         const url = `${baseUrl}/api/v1/s3url`
 
         // Fetch pre-signed S3 URLs for new files
@@ -194,13 +195,17 @@ const MoreImages = () => {
   const handlePrevStep = () => navigate('/create-business/seo')
 
   useEffect(() => {
-    if (businessState?.gallery?.length)
+console.log(businessState?.gallery);
+    
+    if (businessState?.gallery?.length >0) {
       setImages(
         businessState?.gallery?.map((accessLink) => ({
-          ...initialImgState,
           accessLink,
         })),
       )
+    }else{
+      setImages([initialImgState])
+    }
   }, [businessState])
 
   return (
@@ -241,7 +246,7 @@ const MoreImages = () => {
                 </div>
               </div>
               <div className="modal-footer">
-                {imageLoading ?<Spinner variant="primary"/> :<Button variant="primary" onClick={handleCropSave}>
+                {imageLoading ? <Spinner variant="primary" /> : <Button variant="primary" onClick={handleCropSave}>
                   Save Crop
                 </Button>}
                 <Button
@@ -355,7 +360,7 @@ const MoreImages = () => {
 
           {/* Save & Next Button */}
           <div className="col-12 text-center p-3 p-md-5">
-            {loading ? <Spinner variant='primary'/> : (
+            {loading ? <Spinner variant='primary' /> : (
               <button
                 className="btn btn-primary w-100 text-white p-2"
                 onClick={handleGallerySubmit}
@@ -426,7 +431,7 @@ const MoreImages = () => {
                 <div className="col-12 mb-5 mt-5">
                   <h1 className="fw-bold text-center">Gallery</h1>
                 </div>
-                {images.length > 0 ? (
+                {images.length !== 1 ? (
                   <Slider {...gallery} className="gallery-slider">
                     {images.map((image, index) =>
                       image?.file || image?.accessLink ? (
@@ -444,7 +449,10 @@ const MoreImages = () => {
                       ) : null,
                     )}
                   </Slider>
-                ) : null}
+                ) : <div className={`d-flex justify-content-center align-items-center`} >
+                  {!images[0]?.file && !images[0]?.accessLink ? <img src="/src/assets/images/add_image.png" alt="" /> :
+                    <img className='w-50' src={images[0].file ? URL.createObjectURL(images[0]?.file) : images[0].accessLink} alt="" />}
+                </div>}
               </div>
             </div>
           </section>

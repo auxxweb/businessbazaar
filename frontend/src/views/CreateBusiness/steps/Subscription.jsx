@@ -104,7 +104,7 @@ const Subscription = () => {
               <div className="col-12">
                 <div className="row justify-content-center">
                   {/* Free Plan */}
-                  {planData.map((plan, index) => (
+                  {planData?.map((plan, index) => (
                     <div className="col-12 col-md-6 mb-4" key={index}>
                       <div className="card br-20 b-theme2 shadow-lg border-0 overflow-hidden">
                         <div className="p-4">
