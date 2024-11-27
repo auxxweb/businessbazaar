@@ -369,7 +369,7 @@ export default function CreateBusiness() {
                     </div>
                     <div className="left-portion p-3 col-12 col-lg-6 h-100 row align-items-center">
                         <link rel="preconnect" href="https://fonts.googleapis.com" />
-                        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+                        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin />
                         <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap" rel="stylesheet" />
                         <style> {`
                         ::-webkit-scrollbar {
@@ -760,7 +760,7 @@ export default function CreateBusiness() {
                     </div>
                     <div className="left-portion p-3 col-12 col-lg-7 row align-items-center">
                         <link rel="preconnect" href="https://fonts.googleapis.com" />
-                        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+                        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin />
                         <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap" rel="stylesheet" />
                         <style> {`
                     .theme
@@ -2599,7 +2599,7 @@ export default function CreateBusiness() {
         return (
             <>
                 <link rel="preconnect" href="https://fonts.googleapis.com" />
-                <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+                <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin />
                 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap" rel="stylesheet" />
                 <style> {`
                         ::-webkit-scrollbar {
@@ -2973,7 +2973,7 @@ export default function CreateBusiness() {
                 <section className='' style={{ backgroundColor: "#F3F3F4" }}>
                     <div className="container david-font p-top">
                         <div className="col-12 text-center">
-                            <h1>Our Happy Customers</h1>
+                            <h1>Reviews</h1>
                         </div>
                         <div className="col-12">
                             <p className='text-center'>

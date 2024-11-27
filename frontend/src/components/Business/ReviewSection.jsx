@@ -94,7 +94,7 @@ const ReviewSection = ({ businessData }) => {
                 textTransform: "uppercase",
               }}
             >
-             Customer Reviews
+               Customer Reviews
             </Typography>
             <Box
               sx={{

@@ -115,19 +115,7 @@ export const fetchBusinessTemplate = async (id, setLoading) => {
     }
   } catch (error) {
     setLoading(false);
-    toast.error("Failed to load website!", {
-      position: "top-right",
-      autoClose: 3000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      theme: "colored",
-      style: {
-        backgroundColor: "#aa0808", // Custom red color for error
-        color: "#FFFFFF", // White text
-      },
-    });
+    
     console.error("Failed to fetch Business Site Details");
   } finally {
     setLoading(false);

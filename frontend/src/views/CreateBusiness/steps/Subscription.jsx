@@ -24,11 +24,11 @@ const Subscription = () => {
 
   function planSubmit(id, price, name) {
     setSubmitLoading(true)
-    var freePlan = import.meta.env.VITE_APP_FREE_PLAN_ID ?? "6735fef4c124792981be3ffb";
+    var freePlan = import.meta.env.VITE_APP_FREE_PLAN_ID ?? " ";
     if (String(id) != String(freePlan)) {
       console.log("first", freePlan, "free plan", id);
       dispatch(updateBusinessDetails({ selectedPlan: id }));
-      dispatch(updatePlanDetails({ name, price }));
+      dispatch(updatePlanDetails({ name, price ,plan:id}));
       navigate("/create-business/template");
     } else {
       const submitData = async () => {
@@ -104,7 +104,7 @@ const Subscription = () => {
               <div className="col-12">
                 <div className="row justify-content-center">
                   {/* Free Plan */}
-                  {planData.map((plan, index) => (
+                  {planData?.map((plan, index) => (
                     <div className="col-12 col-md-6 mb-4" key={index}>
                       <div className="card br-20 b-theme2 shadow-lg border-0 overflow-hidden">
                         <div className="p-4">
