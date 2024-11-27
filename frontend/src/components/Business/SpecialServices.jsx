@@ -3,9 +3,12 @@ import { Avatar, Box, Container, Stack, Typography } from "@mui/material";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import CardMedia from "@mui/material/CardMedia";
 
 
-const CoreServices = ({ businessData }) => {
+const CoreServices = ({ service,theme }) => {
 
 const settings = {
   dots: true,
@@ -61,11 +64,11 @@ const settings = {
                   textTransform: "uppercase",
                 }}
               >
-                {businessData?.specialServices?.title}
+                {service?.title} 
               </Typography>
               <Box
                 sx={{
-                  border: `2px solid ${businessData?.theme}`,
+                  border: `2px solid ${theme}`,
                   width: "4rem",
                 }}
               ></Box>
@@ -76,90 +79,61 @@ const settings = {
                   color: "#3C4247",
                 }}
               >
-                {businessData?.specialServices?.description}
+                {service?.description}
               </Typography>
             </Box>
           </Box>
                   
-        <Box sx={{ width: "100%" }}>
-          {businessData?.specialServices?.data.length>3?(
-          <Slider {...settings}>
-            {businessData?.specialServices?.data.map((item, index) => (
-              <Box  key={item?._id} padding={'5px'} display={'block'}> 
-                <Box
-               
-                backgroundColor={"#ffffff"}
-                padding={"1rem"}
-                sx={{
-                  borderTopLeftRadius: "40px",
-                  borderBottomRightRadius: "40px",
-                  // display: "flex",
-                  // alignItems: "center",
-                }}
-              >
-                <Box width={'100%'}>
-                <Avatar
-                  alt={item?.title}
-                  src={item?.image}
-                  sx={{
-                    width: 107,
-                    height: 90,
-                    marginInline:'auto',
-                    marginBlock:"10px",
-                    "&:hover": {
-                      backgroundColor: businessData?.theme,
-                    },
-                  }}
-                />
-                </Box>
-                <Box>
-                  <Typography fontWeight={"bold"} textAlign={"center"}>{item?.title}</Typography>
-                  <Typography textAlign={"center"}>{item?.description}</Typography>
-                </Box>
-              </Box>
-              </Box>
-            ))}
-          </Slider>
-          ) : ( businessData?.specialServices?.data.map((item, index) => (
-            <Box  key={item?._id} display={'flex'}>
-                <Box padding={'5px'} display={'block'} width={{xs:"100%",md:"100%",lg:"40%"}}>
-                <Box
-                key={index}
-                backgroundColor={"#ffffff"}
-                padding={"1rem"}
-                sx={{
-                  borderTopLeftRadius: "40px",
-                  borderBottomRightRadius: "40px",
-                  // display: "flex",
-                  // alignItems: "center",
-                }}
-              >
-                <Box width={'100%'}>
-                <Avatar
-                  alt={item?.title}
-                  src={item?.image}
-                  sx={{
-                    width: 107,
-                    height: 90,
-                    marginInline:'auto',
-                    marginBlock:"10px",
-                    "&:hover": {
-                      backgroundColor: businessData?.theme,
-                    },
-                  }}
-                />
-                </Box>
-                <Box>
-                  <Typography fontWeight={"bold"} textAlign={"center"}>{item?.title}</Typography>
-                  <Typography textAlign={"center"}>{item?.description}</Typography>
-                </Box>
-              </Box>
-              </Box>
-            </Box>
-            ))
-          )
-        }
-        </Box>
+          <Slider className=" " {...settings}>
+          {service?.data?.map((item, index) => (
+            <div className=" p-4 ">
+            <Card
+              sx={{
+                // maxWidth: 224,
+                marginTop: index % 2 !== 0 ? "8rem" : 0,
+                marginBottom: index % 2 === 0 ? "8rem" : 0,
+              }}
+              key={index}
+              className=" border shadow "
+            >
+              <CardMedia
+                sx={{ width: 224, height: 203, marginInline:'auto' }}
+                // image="/business/menu.png"
+                image={item?.image ? item?.image : "https://img.freepik.com/free-vector/illustration-gallery-icon_53876-27002.jpg"}
+              />
+              <CardContent>
+                <Typography
+                  mt={".5rem"}
+                  gutterBottom
+                  variant="h5"
+                  component="div"
+                  fontSize={"1rem"}
+                  lineHeight={"1rem"}
+                >
+                  {item?.title}
+                </Typography>
+                <Typography
+                  mt={".5rem"}
+                  gutterBottom
+                  variant="h5"
+                  component="div"
+                  lineHeight={"1rem"}
+                  fontSize={"1.5rem"}
+                  fontWeight={"600"}
+                >
+                  ₹ {item?.price}
+                </Typography>
+                <Typography
+                  variant="body2"
+                  sx={{ color: "#636669", mt: ".5rem" }}
+                >
+                  {item?.description}
+                </Typography>
+              </CardContent>
+            </Card>
+            </div>
+          ))}
+        </Slider>
         </Box>
       </Container>
     </Box>

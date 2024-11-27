@@ -11,11 +11,11 @@ import "slick-carousel/slick/slick-theme.css";
 
 const settings = {
   dots: true,
-  infinite: false,
-  autoplay: false,
+  infinite: true,
+  autoplay: true,
   arrows: false,
   speed: 800,
-  slidesToShow: 4,
+  slidesToShow: 3,
   slidesToScroll: 1,
 
   responsive: [
@@ -41,32 +41,51 @@ const settings = {
   ],
 };
 
-const MenuSection = ({ businessData }) => {
+const MenuSection = ({ productSection,theme,product }) => {
   return (
     <Box display={"flex"} justifyContent={"center"} >
       <Box maxWidth={"lg"} margin={"2rem"} padding={"2rem"} width={"100vw"}>
-        <Box maxWidth={"280px"}>
-          <Typography
-            sx={{
-              fontSize: "38px",
-              fontWeight: 700,
-              lineHeight: "54px",
-              letterSpacing: 0,
-              textTransform: "uppercase",
-            }}
+        <Box
+            display={"flex"}
+            justifyContent={"flex-start"}
+            flexDirection={{ xs: "column", md: "row" }}
+            alignItems={"flex-start"}
+            gap={{ xs: "1rem", lg: "5rem" }}
+            marginBottom={"5rem"}
           >
-            Menu
-          </Typography>
-          <Box
-            sx={{
-              border: `2px solid ${businessData?.theme}`,
-              width: "4rem",
-            }}
-          ></Box>
-        </Box>
+            <Box>
+              <Typography
+                sx={{
+                  fontSize: "38px",
+                  fontWeight: 700,
+                  lineHeight: "54px",
+                  letterSpacing: 0,
+                  textTransform: "uppercase",
+                }}
+              >
+                {productSection?.title} 
+              </Typography>
+              <Box
+                sx={{
+                  border: `2px solid ${theme}`,
+                  width: "4rem",
+                }}
+              ></Box>
+            </Box>
+            <Box >
+              <Typography
+                sx={{
+                  color: "#3C4247",
+                }}
+              >
+                {productSection?.description}
+              </Typography>
+            </Box>
+          </Box>
 
-        <Slider {...settings}>
-          {businessData?.productSection?.data?.map((item, index) => (
+        <Slider className=" " {...settings}>
+          {productSection?.data?.map((item, index) => (
+            <div className=" p-4 ">
             <Card
               sx={{
                 // maxWidth: 224,
@@ -74,11 +93,12 @@ const MenuSection = ({ businessData }) => {
                 marginBottom: index % 2 === 0 ? "8rem" : 0,
               }}
               key={index}
+              className=" border shadow "
             >
               <CardMedia
                 sx={{ width: 224, height: 203, marginInline:'auto' }}
                 // image="/business/menu.png"
-                image={item?.image && item?.image > 0 ? item?.image : "https://img.freepik.com/free-vector/illustration-gallery-icon_53876-27002.jpg"}
+                image={item?.image ? item?.image : "https://img.freepik.com/free-vector/illustration-gallery-icon_53876-27002.jpg"}
               />
               <CardContent>
                 <Typography
@@ -100,7 +120,7 @@ const MenuSection = ({ businessData }) => {
                   fontSize={"1.5rem"}
                   fontWeight={"600"}
                 >
-                  ₹ {item?.price}
+                  {product && "₹"} {item?.price}
                 </Typography>
                 <Typography
                   variant="body2"
@@ -110,6 +130,7 @@ const MenuSection = ({ businessData }) => {
                 </Typography>
               </CardContent>
             </Card>
+            </div>
           ))}
         </Slider>
       </Box>
