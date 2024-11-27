@@ -21,6 +21,9 @@ const BusinessReviews = ({ theme, secondaryTheme, bgBanner }) => {
         review: "",
     });
     const [allReviews, setAllReviews] = useState(null)
+    useEffect(() => {
+        window.scrollTo(0, 0)
+      }, [id])
 
     useEffect(() => {
         const fetchReview = async () => {

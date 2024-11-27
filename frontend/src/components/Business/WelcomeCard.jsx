@@ -10,11 +10,11 @@ const WelcomeCard = ({ businessData }) => {
     style={{ backgroundColor: 'white' }}
     id="about"
   >
-    <div className="container p-top">
-      <div className="row mt-5 align-items-center mb-5">
-        <div className="col-12 col-lg-6 mt-2 text-center text-lg-start about-image">
+    <div className="container ">
+      <div className="row  align-items-center mb-5">
+        <div className="col-12 col-lg-6  text-center text-lg-start about-image">
           <img
-            src={businessData?.welcomePart?.coverImage && businessData?.welcomePart?.coverImage >0? businessData?.welcomePart?.coverImage : Placeholder}
+            src={businessData?.welcomePart?.coverImage ? businessData?.welcomePart?.coverImage : Placeholder}
             className="img-fluid about-image"
             alt=""
           />

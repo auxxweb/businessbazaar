@@ -14,6 +14,10 @@ function NewsArticles({ colorTheme }) {
   const [totalNews, setTotalNews] = useState(6)
 
   useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [id])
+
+  useEffect(() => {
     fetchNewsArticles(id).then((response) => {
       if (response.success) {
         setTotalNews(response?.data?.totalCount)
@@ -52,7 +56,7 @@ function NewsArticles({ colorTheme }) {
   return (
     <div style={{ minHeight: "100vh" }}>
       {/* Banner Section */}
-      {totalNews && <section className="banner-section" style={styles.bannerSection}>
+      {newsData.length !== 0 && <section className="banner-section" style={styles.bannerSection}>
         <div className="container">
           <div className="row">
             <div className="col-12 col-lg-6">
@@ -86,12 +90,11 @@ function NewsArticles({ colorTheme }) {
           </div>
         </div>
       </section>}
-
       {/* News Articles Section */}
       <section className="news-articles-section" style={styles.newsSection}>
         <div className="container">
           <div className="row">
-            { newsData?.length ===0 ? <EmptyComponent/> :newsData?.map((item, index) => (
+            {newsData?.length === 0 ? <EmptyComponent /> : newsData?.map((item, index) => (
               <div
                 className="col-12 col-md-6 col-lg-4"
                 key={index}
@@ -249,10 +252,10 @@ function LinkPreview({ url }) {
   )
 }
 
-const EmptyComponent = ()=>{
+const EmptyComponent = () => {
   return (
-    <div className='w-full h-full d-flex justify-content-center align-itmes-center'>
-      <img className='w-75' src="https://cdn.dribbble.com/users/2382015/screenshots/6065978/media/8b4662f8023e4e2295f865106b5d3aa7.gif" alt="" />
+    <div className='w-full  d-flex justify-content-center align-itmes-center'>
+      <img className='w-75' width={'50vh'} src="https://cdn.dribbble.com/users/2382015/screenshots/6065978/media/8b4662f8023e4e2295f865106b5d3aa7.gif" alt="" />
     </div>
   )
 }

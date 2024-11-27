@@ -40,7 +40,6 @@ items.forEach((el) => {
     next = next.nextElementSibling
   }
 })
-import { height } from '@fortawesome/free-brands-svg-icons/fa42Group'
 import ShareButton from '../components/ShareButton'
 
 export default function Template() {
@@ -978,7 +977,7 @@ export default function Template() {
                     <div className="row align-items-center justify-content-start">
                       <a
                         href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
-                          `${businessData.address.buildingName}, ${businessData.address.city}, ${businessData.address.landMark}, ${businessData.address.streetName}, ${businessData.address.state}`,
+                          `${businessData?.address?.buildingName},${businessData.address?.streetName}, ${businessData?.address?.landMark}, ${businessData?.address?.city},   ${businessData.address?.state}`,
                         )}`}
                         target="_blank"
                         rel="noopener noreferrer"
@@ -993,7 +992,7 @@ export default function Template() {
                             <p
                               style={{ color: textColor, textDecoration: 'none' }}
 
-                              className="fs-14 sm:fs-12">{`${businessData.address.buildingName}, ${businessData.address.city}, ${businessData.address.landMark}, ${businessData.address.streetName}, ${businessData.address.state}`}</p>
+                              className="fs-14 sm:fs-12">{`${businessData?.address?.buildingName},${businessData.address?.streetName}, ${businessData?.address?.landMark}, ${businessData?.address?.city},   ${businessData.address?.state}`}</p>
                           </div>
                         </div>
                       </a>
@@ -1731,14 +1730,20 @@ export default function Template() {
                       <div className="col-12">
                         <input
                           type="email"
-                          name="email"
+                          placeholder="Enter Your Email"
                           style={{ border: '0 !important' }}
+                          required
+                          value={newsLetterEmail}
+                          onChange={(e) =>
+                            setNewsLetterEmail(e.target?.value?.trim())
+                          }
                           className="form-control form-control-sm"
                         />
                       </div>
                       <div className="col-12">
                         <button
                           type="button"
+                          onClick={handleNewsLetterSubmit}
                           className="btn theme btn-sm mt-1 w-100"
                         >
                           Subscribe

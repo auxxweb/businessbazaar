@@ -267,9 +267,9 @@ setLoading(true)
 
   const showCaseAddress = [
     address?.buildingName,
-    address?.city,
-    address?.landMark,
     address?.streetName,
+    address?.landMark,
+    address?.city,
     address?.state,
     address?.pinCode,
   ]
@@ -572,7 +572,7 @@ setLoading(true)
                         </div>
                         <div className="col">
                           <span className="fs-13">Address</span>
-                          <p className="fs-16">{showCaseAddress}</p>
+                          <p className="fs-16 text-break">{showCaseAddress}</p>
                           {/* <p className="fs-16">
                             {address.buildingName},{address.city},
                             {address.landMark},{address.streetName},{" "}

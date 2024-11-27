@@ -2,7 +2,7 @@
 import { Container, Nav, Navbar, NavLink } from 'react-bootstrap'
 import PlaceholderBanner from "../../assets/images/Placeholder.jpg"
 import Placeholder from "../../assets/images/placeholder.jpg";
-const TemplateHeader = ({businessData}) => {
+const TemplateHeader = ({businessData,colorTheme}) => {
   return (
     <Navbar
     expand="lg"
