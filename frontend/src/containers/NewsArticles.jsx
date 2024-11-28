@@ -18,27 +18,29 @@ function NewsArticles({ colorTheme }) {
   }, [id])
 
   useEffect(() => {
-    fetchNewsArticles(id).then((response) => {
-      if (response.success) {
-        setTotalNews(response?.data?.totalCount)
-        const updatedBannerArray = []
-        const updatedNewsArray = []
-        response.data.data.forEach((item) => {
-          if (item?.isBanner && updatedBannerArray.length === 0) {
-            updatedBannerArray.push(item)
-          } else {
-            updatedNewsArray.push(item)
-          }
-        })
-        setBannerData(updatedBannerArray[0] || response.data.data[0])
-        if (updatedBannerArray.length === 0) updatedNewsArray.shift()
-        setNewsData(
-          updatedNewsArray.filter(
-            (result) => result._id !== updatedBannerArray[0]?._id,
-          ),
-        )
-      }
-    })
+    if(id){
+      fetchNewsArticles(id).then((response) => {
+        if (response.success) {
+          setTotalNews(response?.data?.totalCount)
+          const updatedBannerArray = []
+          const updatedNewsArray = []
+          response.data.data.forEach((item) => {
+            if (item?.isBanner && updatedBannerArray.length === 0) {
+              updatedBannerArray.push(item)
+            } else {
+              updatedNewsArray.push(item)
+            }
+          })
+          setBannerData(updatedBannerArray[0] || response.data.data[0])
+          if (updatedBannerArray.length === 0) updatedNewsArray.shift()
+          setNewsData(
+            updatedNewsArray.filter(
+              (result) => result._id !== updatedBannerArray[0]?._id,
+            ),
+          )
+        }
+      })
+    }
   }, [id])
 
   const loadMoreNews = () => {

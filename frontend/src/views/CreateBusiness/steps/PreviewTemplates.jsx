@@ -728,8 +728,6 @@ useEffect(()=>{
 
       {showNews && (
         <NewsArticles
-          businessId={id}
-          newsData={businessData?.landingPageHero}
           colorTheme={colorTheme}
         />
       )}
