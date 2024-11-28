@@ -12,34 +12,46 @@ function NewsArticles({ colorTheme }) {
   const [bannerData, setBannerData] = useState([])
   const [index, setIndex] = useState(2)
   const [totalNews, setTotalNews] = useState(6)
+  const [loading, setLoading] = useState(false)
 
   useEffect(() => {
     window.scrollTo(0, 0)
   }, [id])
 
   useEffect(() => {
-    if(id){
+    if (id) {
+      setLoading(true)
       fetchNewsArticles(id).then((response) => {
         if (response.success) {
           setTotalNews(response?.data?.totalCount)
           const updatedBannerArray = []
           const updatedNewsArray = []
-          response.data.data.forEach((item) => {
-            if (item?.isBanner && updatedBannerArray.length === 0) {
-              updatedBannerArray.push(item)
-            } else {
-              updatedNewsArray.push(item)
-            }
-          })
-          setBannerData(updatedBannerArray[0] || response.data.data[0])
-          if (updatedBannerArray.length === 0) updatedNewsArray.shift()
-          setNewsData(
-            updatedNewsArray.filter(
-              (result) => result._id !== updatedBannerArray[0]?._id,
-            ),
-          )
+          if (response?.data?.data.length === 1) {
+            setBannerData(response.data.data[0])
+          } else {
+            response.data.data.forEach((item) => {
+              if (item?.isBanner && updatedBannerArray.length === 0) {
+                updatedBannerArray.push(item)
+              } else {
+                updatedNewsArray.push(item)
+              }
+            })
+            setBannerData(updatedBannerArray[0] || response.data.data[0])
+            if (updatedBannerArray.length === 0) updatedNewsArray.shift()
+            setNewsData(
+              updatedNewsArray.filter(
+                (result) => result._id !== updatedBannerArray[0]?._id,
+              ),
+            )
+          }
         }
+        setLoading(false)
+      }).catch((err) => {
+        console.log(err);
+        setLoading(false)
+
       })
+      setLoading(false)
     }
   }, [id])
 
@@ -47,31 +59,34 @@ function NewsArticles({ colorTheme }) {
     fetchNewsArticles(id, index)
       .then((res) => {
         setNewsData((prevItems) => [...prevItems, ...res.data.data])
-        console.log(res?.data?.data, 'sldfns;lfnslfn')
       })
       .catch((err) => console.error(err))
     setIndex((prevIndex) => prevIndex + 1)
   }
 
+  if (loading) {
+    return <Loader />
+  }
+
 
 
   return (
-    <div style={{ minHeight: "100vh" }}>
+    <div id='news' style={{ minHeight: "100vh" }}>
       {/* Banner Section */}
-      {newsData.length !== 0 && <section className="banner-section" style={styles.bannerSection}>
+      {bannerData.length !== 0 && <section className="banner-section" style={styles.bannerSection}>
         <div className="container">
           <div className="row">
             <div className="col-12 col-lg-6">
               <div style={styles.bannerImage}>
-                {/* <img
-                  src={bannerData?.image || PlaceholderBanner}
+                {bannerData?.image ? <img
+                  src={bannerData?.image}
                   alt="Banner"
                   style={styles.image}
-                /> */}
-                <LinkPreview url={bannerData?.link} image={bannerData?.image} />
+                />
+                  : <LinkPreview url={bannerData?.link} />}
               </div>
             </div>
-            <div className={` ${newsData.length === 0 && "d-none"} col-12 col-lg-6 d-flex flex-column justify-content-center`}>
+            <div className={` ${bannerData.length === 0 && "d-none"} col-12 col-lg-6 d-flex flex-column justify-content-center`}>
               <h1 style={styles.bannerTitle}>{bannerData?.title}</h1>
               <p style={styles.bannerDescription}>{bannerData?.description}</p>
               <div className="d-flex justify-content-between align-items-center">
@@ -96,7 +111,7 @@ function NewsArticles({ colorTheme }) {
       <section className="news-articles-section" style={styles.newsSection}>
         <div className="container">
           <div className="row">
-            {newsData?.length === 0 ? <EmptyComponent /> : newsData?.map((item, index) => (
+            {newsData?.length === 0 && bannerData.length === 0 && loading ? <EmptyComponent /> : newsData?.map((item, index) => (
               <div
                 className="col-12 col-md-6 col-lg-4"
                 key={index}
@@ -256,7 +271,7 @@ function LinkPreview({ url }) {
 
 const EmptyComponent = () => {
   return (
-    <div className='w-full  d-flex justify-content-center align-itmes-center'>
+    <div className='w-full  d-flex justify-content-center align-items-center'>
       <img className='w-75' width={'50vh'} src="https://cdn.dribbble.com/users/2382015/screenshots/6065978/media/8b4662f8023e4e2295f865106b5d3aa7.gif" alt="" />
     </div>
   )

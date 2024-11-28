@@ -97,6 +97,7 @@ const PremiumTemplate = () => {
       <Box sx={{ overflowX: "hidden" }}>
         <TemplateHeader businessData={businessData} colorTheme={businessData?.theme} />
         <ShareButton number={businessData?.contactDetails?.primaryNumber} />
+        <div id="news">
         {showNews && (
           <NewsArticles
             businessId={id}
@@ -104,6 +105,7 @@ const PremiumTemplate = () => {
             colorTheme={businessData?.theme}
           />
         )}
+        </div>
 
 {showAllReviews && (
         <BusinessReviews
@@ -123,6 +125,7 @@ const PremiumTemplate = () => {
               overflow: "hidden",
             }}
             className="align-items-start align-items-md-center mt-4 pt-4"
+            id='home'
           >
             {/* Background Image */}
             <Box
@@ -416,7 +419,9 @@ const PremiumTemplate = () => {
           <MenuSection productSection={businessData?.productSection} theme={businessData?.theme} product />
           <MenuSection productSection={businessData?.service} theme={businessData?.theme} />
           {/* <ServicesSection businessData={businessData} /> */}
+          <div id="gallery">
           <Gallery businessData={businessData} />
+          </div>
           <ReviewSection businessData={businessData} />
           <ContactForm businessData={businessData} />
           <SubscribeSection />

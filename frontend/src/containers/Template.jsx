@@ -54,6 +54,7 @@ export default function Template() {
   const [reviewFetch, setreviewFetch] = useState(false)
   const [showAllReviews, setShowAllReviews] = useState(false)
   const [textColor, setTextColor] = useState('');
+  const [toggle,setToggle]=useState(false)
 
   const [review, setReview] = useState({
     rating: '',
@@ -545,7 +546,7 @@ export default function Template() {
             <Navbar.Collapse id="basic-navbar-nav">
               <Nav className="ms-auto w-100 justify-content-evenly jcc">
                 <NavLink
-                  href="#"
+                  href="#home"
                   className="text-black text-center text-lg-start text-decoration-none fs-14"
                   style={{ color: 'black' }}
                 >
@@ -711,7 +712,8 @@ export default function Template() {
                         }
                     `}
       </style>
-      <Navbar
+      <Navbar 
+        collapseOnSelect={true}
         expand="lg"
         className="bg-white pjs fixed-top"
         style={{ paddingBlock: '5px' }}
@@ -763,12 +765,13 @@ export default function Template() {
           <Navbar.Toggle
             aria-controls="basic-navbar-nav"
             style={{ color: 'black' }}
+            
           />
 
-          <Navbar.Collapse id="basic-navbar-nav">
+          <Navbar.Collapse  id="basic-navbar-nav">
             <Nav className="ms-auto w-100 justify-content-evenly jcc">
               <NavLink
-                href="#"
+                href="#home"
                 className="text-black text-center text-lg-start text-decoration-none fs-14"
                 style={{ color: 'black' }}
               >
@@ -797,7 +800,6 @@ export default function Template() {
               </NavLink>
               <NavLink
                 href="#news"
-                onClick={(e) => setShowNews(true)}
                 className="text-black text-center text-lg-start text-decoration-none fs-14"
                 style={{ color: 'black' }}
               >
@@ -865,7 +867,7 @@ export default function Template() {
 
       {!showAllReviews && !showNews && (
         <>
-          <section className="h-auto">
+          <section className="h-auto" id='home'>
             <div className="container">
               <div className="row align-items-center banner-section">
                 {/* Left Image for Mobile View */}
@@ -1059,7 +1061,7 @@ export default function Template() {
           </div>
 
           <section
-            className=" h-auto"
+            className="h-auto"
             style={{ backgroundColor: '#F3F3F4' }}
             id="about"
           >
