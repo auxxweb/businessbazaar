@@ -10,6 +10,7 @@ import getCroppedImg from "../../../utils/cropper.utils";
 import Loader from "../../../components/Loader/Loader";
 
 const initialCropState = { x: 0, y: 0 };
+const wordSet = ['is','a','in','as','of','an','to','on','at']; 
 
 const LandingPageDetails = () => {
   const navigate = useNavigate();
@@ -142,9 +143,27 @@ const LandingPageDetails = () => {
     }
   };
 
-  const handleInputChange = (e, sectionSetter) => {
+  const handleInputChange = (e, sectionSetter,errorTitle) => {
     const { name, value } = e.target;
+    const data = e.target.value
     sectionSetter((prevData) => ({ ...prevData, [name]: value }));
+
+    const excludeWords = new Set(['is', 'a', 'in', 'as', 'of', 'an', 'to', 'on', 'at','us','am',]);
+
+    const words = data
+        .toLowerCase() // Convert to lowercase
+        .match(/\b\w+\b/g); // Extract words using regex
+    const filteredWords = words ? words.filter(word => !excludeWords.has(word)) : [];
+    if (filteredWords.length < 80) {
+      setErrors(((prevErrors) => ({ ...prevErrors, [errorTitle]: null })));
+    } else {
+      setErrors(((prevErrors) => ({ ...prevErrors, [errorTitle]: "exceed the word count....." })));
+    }
+  };
+
+  const getWordCount = (inputText) => {
+    return inputText.trim().split(/\s+/)
+      .filter(word => word.length > 2).length;
   };
 
   const validateForm = () => {
@@ -207,11 +226,11 @@ const LandingPageDetails = () => {
             },
           })
         );
-        setLoading(false); 
+        setLoading(false);
         navigate("/create-business/core-services");
       }
     } catch (e) {
-      setLoading(false); 
+      setLoading(false);
       console.log(e);
     } finally {
       setLoading(false); // Set loading to false at the end
@@ -235,7 +254,7 @@ const LandingPageDetails = () => {
     return (
       <div className="h-100vh">
         <div className="d-flex h-100 justify-content-center align-items-center">
-        <Loader />
+          <Loader />
         </div>
       </div>
     );
@@ -285,7 +304,7 @@ const LandingPageDetails = () => {
                 </div>
               </div>
               <div className="modal-footer">
-              {cropperLoading ? <Spinner variant="primary"/> : <Button variant="primary" onClick={handleCropSave}>
+                {cropperLoading ? <Spinner variant="primary" /> : <Button variant="primary" onClick={handleCropSave}>
                   Save Crop
                 </Button>}
                 <Button
@@ -366,8 +385,8 @@ const LandingPageDetails = () => {
                   name="title"
                   autoComplete="title"
                   value={landingPageHero.title}
-                  inputProps={{maxLength:35}}
-                  onChange={(e) => handleInputChange(e, setLandingPageHero)}
+                  inputProps={{ maxLength: 35 }}
+                  onChange={(e) => handleInputChange(e, setLandingPageHero,'landingPageHeroTitle')}
                   error={errors?.landingPageHeroTitle || landingPageHero?.title?.split("")?.length >= 35 ? true : false}
                   helperText={errors?.landingPageHeroTitle || landingPageHero?.title?.split("")?.length >= 35 ? "exceeded the limit" : ""}
                 />
@@ -375,7 +394,7 @@ const LandingPageDetails = () => {
               <div className="input-group mb-3 mt-4 w-100">
                 <TextField
                   fullWidth
-                  label="Description* (50 words)"
+                  label="Description* (80 words)"
                   id="description"
                   variant="filled"
                   name="description"
@@ -383,10 +402,9 @@ const LandingPageDetails = () => {
                   multiline // Makes the TextField behave like a textarea
                   rows={4} // You can adjust the number of rows (height) here
                   value={landingPageHero.description}
-                  inputProps={{maxLength:250}}
-                  onChange={(e) => handleInputChange(e, setLandingPageHero)}
-                  error={errors?.landingPageHeroDescription || landingPageHero?.description?.split("")?.length >= 250 ? true : false}
-                  helperText={errors?.landingPageHeroDescription || landingPageHero?.description?.split("")?.length >= 250 ? "exceeded the limit" : ""}
+                  onChange={(e) => handleInputChange(e, setLandingPageHero,'landingPageHeroDescription')}
+                  error={errors?.landingPageHeroDescription}
+                  helperText={errors?.landingPageHeroDescription}
                   sx={{
                     "& .MuiInputBase-root": {
                       padding: "12px", // Padding inside the textarea
@@ -455,7 +473,7 @@ const LandingPageDetails = () => {
                   variant="filled"
                   name="title"
                   autoComplete="title"
-                  inputProps={{maxLength:35}}
+                  inputProps={{ maxLength: 35 }}
                   value={welcomePart.title}
                   onChange={(e) => handleInputChange(e, setWelcomePart)}
                   error={errors?.welcomePartTitle || welcomePart?.title?.split("")?.length >= 35 ? true : false}
@@ -465,7 +483,7 @@ const LandingPageDetails = () => {
               <div className="input-group mb-3 mt-4 w-100">
                 <TextField
                   fullWidth
-                  label="Description* (50 words)"
+                  label="Description* (80 words)"
                   id="description"
                   variant="filled"
                   name="description"
@@ -473,10 +491,9 @@ const LandingPageDetails = () => {
                   multiline // Makes the TextField behave like a textarea
                   rows={4} // You can adjust the number of rows (height) here
                   value={welcomePart.description}
-                  inputProps={{maxLength:250}}
-                  onChange={(e) => handleInputChange(e, setWelcomePart)}
-                  error={errors?.welcomePartDescription || welcomePart?.description?.split("")?.length >= 250 ? true : false}
-                  helperText={errors?.welcomePartDescription || welcomePart?.description?.split("")?.length >= 250 ? "exceeded the limit" : ""}
+                  onChange={(e) => handleInputChange(e, setWelcomePart,"welcomePartDescription")}
+                  error={errors?.welcomePartDescription }
+                  helperText={errors?.welcomePartDescription }
                   sx={{
                     "& .MuiInputBase-root": {
                       padding: "12px", // Padding inside the textarea
@@ -530,7 +547,7 @@ const LandingPageDetails = () => {
               )}
 
               <div className="col-12 mt-4 text-center">
-              { loading ? <Spinner variant="primary"/> : <button
+                {loading ? <Spinner variant="primary" /> : <button
                   className="btn btn-primary w-100"
                   onClick={handleLandingSubmit}
                 >
