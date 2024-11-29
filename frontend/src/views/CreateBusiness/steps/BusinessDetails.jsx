@@ -2,26 +2,81 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
+import Cropper from "react-easy-crop";
 import { TextField } from "@mui/material";
+import { Button } from "react-bootstrap";
 import { updateBusinessDetails } from "../store/businessSlice";
 import { preRequestFun } from "../service/s3url";
-import { ReactCropperComponent } from "../../../components/ReactCropper";
-import { Spinner } from "../../../components/Loader/Spinner";
+import getCroppedImg from "../../../utils/cropper.utils";
 
 const BusinessDetails = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const businessState = useSelector((state) => state.business);
 
-  const [previewImage, setPreviewImage] = useState(businessState?.logo || "");
-  const [resultImage, setResultImage] = useState(null)
-  const [showCropper, setShowCropper] = useState(false);
-
+  const [logo, setLogo] = useState(businessState?.logo || "");
+  const [cropLogo,setCropLogo] = useState(null)
   const [businessName, setBusinessName] = useState(
     businessState?.businessName || ""
   );
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState({ logo: null, name: null });
+  const [logoFile, setLogoFile] = useState(null);
+  const [logoPrev, setLogoPrev] = useState(null);
+  const [crop, setCrop] = useState({ x: 0, y: 0 });
+  const [zoom, setZoom] = useState(1);
+  const [croppedArea, setCroppedArea] = useState(null);
+  const [showCropper, setShowCropper] = useState(false);
+
+  const handleLogoChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      
+      // setLogoFile(file);
+      setError((prev) => ({ ...prev, logo: null }));
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        
+        setLogoPrev(e.target.result);
+        setShowCropper(true);
+      };
+      reader.onerror = function () {
+        console.error("Error reading file:", reader.error);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const onCropComplete = (croppedAreaPercentage, croppedAreaPixels) => {
+    setCroppedArea(croppedAreaPixels);
+  };
+ 
+  const handleCropSave = async () => {
+    try {
+      
+      const { fileUrl, blob } = await getCroppedImg(logoPrev, croppedArea);
+      // setLogoPrev(fileUrl);
+      setCropLogo(fileUrl)
+      setLogo(fileUrl);
+      setShowCropper(false);
+
+      const croppedFile = new File(
+        [blob],
+        logoFile?.name || "cropped-logo.png",
+        {
+          type: blob.type,
+        }
+      );
+
+      setLogoFile(croppedFile);
+    } catch (e) {
+      console.error("Error cropping image:", e);
+    }
+  };
+
+  const imageUpload = () => {
+    document.getElementById("ImageLogo").click();
+  };
 
   // Handle form submission with validation
   const handleBusinessSubmit = async () => {
@@ -30,7 +85,7 @@ const BusinessDetails = () => {
       setError({ ...error, name: "Business Name is required." });
       hasError = true;
     }
-    if (!resultImage) {
+    if (!logoFile && !logo) {
       setError({ ...error, logo: "Business Logo is required." });
       hasError = true;
     }
@@ -40,8 +95,8 @@ const BusinessDetails = () => {
     try {
       setIsLoading(true);
       let preReq = null;
-      if (resultImage) {
-        preReq = await preRequestFun(resultImage, "Landing");
+      if (logoFile) {
+        preReq = await preRequestFun(logoFile, "Landing");
       }
       dispatch(
         updateBusinessDetails({
@@ -60,11 +115,61 @@ const BusinessDetails = () => {
   const handlePrevStep = () => navigate("/create-business");
 
   useEffect(() => {
-    setPreviewImage(businessState?.logo);
+    setLogo(businessState?.logo);
     setBusinessName(businessState?.businessName);
   }, [businessState]);
   return (
     <div className="business-details-page">
+      {/* Cropper Modal */}
+      {showCropper && (
+        <div
+          className="modal fade show d-block"
+          tabIndex="-1"
+          role="dialog"
+          style={{ backgroundColor: "rgba(0, 0, 0, 0.5)" }}
+        >
+          <div className="modal-dialog modal-lg" role="document">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h5 className="modal-title">Crop Your Image</h5>
+                <button
+                  type="button"
+                  className="btn-close"
+                  aria-label="Close"
+                  onClick={() => setShowCropper(false)}
+                ></button>
+              </div>
+              <div className="modal-body">
+                <div
+                  className="cropper-container position-relative"
+                  style={{ height: "400px" }}
+                >
+                  <Cropper
+                    image={logoPrev}
+                    crop={crop}
+                    zoom={zoom}
+                    aspect={1}
+                    onCropChange={setCrop}
+                    onZoomChange={setZoom}
+                    onCropComplete={onCropComplete}
+                  />
+                </div>
+              </div>
+              <div className="modal-footer">
+                <Button variant="primary" onClick={handleCropSave}>
+                  Save Crop
+                </Button>
+                <Button
+                  variant="outlined"
+                  onClick={() => setShowCropper(false)}
+                >
+                  Cancel
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       <div className="container-fluid">
         <div className="row justify-content-center align-items-center">
@@ -85,39 +190,71 @@ const BusinessDetails = () => {
               <div className="input-group mb-4 mt-2 w-100">
                 <TextField
                   fullWidth
-                  label="Business Name* (8 words)"
+                  label="Business Name*"
                   id="businessName"
                   variant="filled"
                   name="businessName"
                   autoComplete="businessName"
                   value={businessName}
-                  inputProps={{ maxLength: 35 }}
+                  inputProps={{maxLength:35}}
                   onChange={(e) => setBusinessName(e.target.value)}
                   error={error?.name || businessName?.split("")?.length >= 35 ? true : false}
                   helperText={error?.name || businessName?.split("")?.length >= 35 ? "exceeded the limit" : ""}
                 />
               </div>
-              <ReactCropperComponent
-                showCropper={showCropper}
-                setShowCropper={setShowCropper}
-                setResultImage={setResultImage}
-                resultImage={resultImage}
-                previewImage={previewImage}
-                setPreviewImage={setPreviewImage}
-                label={" Upload Business Logo*"}
-                aspectRatio={1/1}
-                ratio={" 1 : 1"} />
+
+              <div className="mb-4">
+                <label htmlFor="ImageLogo" className="form-label">
+                  Upload Business Logo*
+                  <span style={{ color: "grey" }}> (Ratio 1 : 1)</span>
+                </label>
+
+                <input
+                  type="file"
+                  id="ImageLogo"
+                  style={{ display: "none" }}
+                  onChange={handleLogoChange}
+                />
+                <div
+                  onClick={imageUpload}
+                  className="logo-upload p-4 text-center"
+                  style={{ cursor: "pointer" }}
+                >
+                  {isLoading ? (
+                    <div
+                      className="spinner-border text-primary"
+                      role="status"
+                    ></div>
+                  ) : logo || cropLogo ? (
+                    <img
+                      src={cropLogo ?? logo}
+                      alt="Business Logo"
+                      width="100"
+                      className="img-thumbnail"
+                    />
+                  ) : (
+                    <div>
+                      <img
+                        src="/src/assets/images/add_image.png"
+                        width="50"
+                        alt="Add Logo"
+                      />
+                      <div>Add Logo</div>
+                    </div>
+                  )}
+                </div>
+              </div>
 
               {error?.logo && (
                 <div className="text-danger mb-4">{error?.logo}</div>
               )}
 
-              {isLoading ? <Spinner /> : <button
+              <button
                 className="btn btn-primary w-100 text-white p-2"
                 onClick={handleBusinessSubmit}
               >
                 Save & Next
-              </button>}
+              </button>
             </div>
           </div>
 
@@ -128,8 +265,8 @@ const BusinessDetails = () => {
                 <h3 className="fw-bold">Business Name Preview</h3>
               </div>
               <div className="preview-content text-center">
-                {previewImage ? (
-                  <img src={previewImage} alt="Business Logo" width="120" />
+                {logo ? (
+                  <img src={logo} alt="Business Logo" width="120" />
                 ) : (
                   <div className="logo-placeholder">No Logo Uploaded</div>
                 )}
