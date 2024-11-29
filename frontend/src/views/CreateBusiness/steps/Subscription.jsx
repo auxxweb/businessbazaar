@@ -24,7 +24,7 @@ const Subscription = () => {
 
   function planSubmit(id, price, name) {
     setSubmitLoading(true)
-    var freePlan = import.meta.env.VITE_APP_FREE_PLAN_ID ?? " ";
+    var freePlan = import.meta.env.VITE_APP_FREE_PLAN_ID ?? "6735fef4c124792981be3ffb";
     if (String(id) != String(freePlan)) {
       console.log("first", freePlan, "free plan", id);
       dispatch(updateBusinessDetails({ selectedPlan: id }));
