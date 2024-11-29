@@ -4,13 +4,12 @@ import { useNavigate } from "react-router";
 import Cropper from "react-easy-crop";
 import { TextField } from "@mui/material";
 import { updateBusinessDetails } from "../store/businessSlice";
-import { Button, Container, Nav, Navbar, NavLink, Spinner } from "react-bootstrap";
+import { Button, Container, Nav, Navbar, NavLink } from "react-bootstrap";
 import { preRequestFun } from "../service/s3url";
 import getCroppedImg from "../../../utils/cropper.utils";
 import Loader from "../../../components/Loader/Loader";
 
 const initialCropState = { x: 0, y: 0 };
-const wordSet = ['is','a','in','as','of','an','to','on','at']; 
 
 const LandingPageDetails = () => {
   const navigate = useNavigate();
@@ -23,22 +22,22 @@ const LandingPageDetails = () => {
   const [landingPageHero, setLandingPageHero] = useState({
     title: "",
     description: "",
-    coverImage: "",
+    
     loading: "",
   });
   const [welcomePart, setWelcomePart] = useState({
     title: "",
     description: "",
-    coverImage: "",
+    
     loading: "",
   });
-  const [landingFile, setLandingFile] = useState();
-  const [welcomeFile, setWelcomeFile] = useState();
 
+const [currentImage, setCurrentImage] = useState({image:null ,bannerFile:null,welcomeFile:null,preview:null,banner:null,welcome:null});
+
+  const [cropLandImage,setCropLandImage]= useState(null)
+  const [welcomeFile, setWelcomeFile] = useState();
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false); // Loader state
-  const [cropperLoading, setCropperLoading] = useState(false); // Loader state
-
   const [crop, setCrop] = useState(initialCropState);
   const [zoom, setZoom] = useState(1);
   const [croppedArea, setCroppedArea] = useState(null);
@@ -51,16 +50,17 @@ const LandingPageDetails = () => {
 
   const handleCropSave = async () => {
     try {
-      setCropperLoading(true)
+      
       const filePrev =
         imageFieldName === "landingPageHeroImage"
           ? landingPageHero?.coverImage
           : welcomePart?.coverImage;
 
       const file =
-        imageFieldName === "landingPageHeroImage" ? landingFile : welcomeFile;
+        imageFieldName === "landingPageHeroImage" ? cropLandImage : welcomeFile;
 
-      const { fileUrl, blob } = await getCroppedImg(filePrev, croppedArea);
+      const { fileUrl, blob } = await getCroppedImg(currentImage.preview, croppedArea);
+     
       setShowCropper(false);
 
       const croppedFile = new File([blob], file?.name || "cropped-logo.png", {
@@ -68,28 +68,34 @@ const LandingPageDetails = () => {
       });
 
       if (imageFieldName === "landingPageHeroImage") {
-        setLandingFile(croppedFile);
-        setLandingPageHero((prevData) => ({
-          ...prevData,
-          coverImage: fileUrl,
-        }));
+        setCurrentImage((prev)=>({...prev,banner:fileUrl,bannerFile:blob}));
+        // setCropLandImage(croppedFile);
+        // setLandingFile(croppedFile);
+        // setLandingPageHero((prevData) => ({
+        //   ...prevData,
+        //   coverImage: fileUrl,
+        // }));
       } else {
-        setWelcomeFile(croppedFile);
-        setWelcomePart((prevData) => ({
-          ...prevData,
-          coverImage: fileUrl,
-        }));
+        setCurrentImage((prev)=>({...prev,welcome:fileUrl,welcomeFile:blob}));
+        // setWelcomeFile(croppedFile);
+        // setWelcomePart((prevData) => ({
+        //   ...prevData,
+        //   coverImage: fileUrl,
+        // }));
       }
       setCrop(initialCropState);
-      setCropperLoading(false)
     } catch (e) {
-      setCropperLoading(false)
       console.error("Error cropping image:", e);
     }
   };
 
   const handleFileChange = (name, e, sectionSetter) => {
     const file = e.target.files[0];
+
+    setCurrentImage((prev)=>({
+      ...prev,
+      preview: URL.createObjectURL(file)
+    }))
 
     if (name === "landingPageHeroImage") {
       setImageFieldName("landingPageHeroImage");
@@ -120,7 +126,8 @@ const LandingPageDetails = () => {
             ...prevState,
             loading: false,
           }));
-          setLandingFile(file);
+          // setCropLandImage(file)
+          // setLandingFile(file);
           setShowCropper(true);
         } else if (name === "welcomePartImage") {
           setWelcomePart((prevState) => ({
@@ -143,27 +150,9 @@ const LandingPageDetails = () => {
     }
   };
 
-  const handleInputChange = (e, sectionSetter,errorTitle) => {
+  const handleInputChange = (e, sectionSetter) => {
     const { name, value } = e.target;
-    const data = e.target.value
     sectionSetter((prevData) => ({ ...prevData, [name]: value }));
-
-    const excludeWords = new Set(['is', 'a', 'in', 'as', 'of', 'an', 'to', 'on', 'at','us','am',]);
-
-    const words = data
-        .toLowerCase() // Convert to lowercase
-        .match(/\b\w+\b/g); // Extract words using regex
-    const filteredWords = words ? words.filter(word => !excludeWords.has(word)) : [];
-    if (filteredWords.length < 80) {
-      setErrors(((prevErrors) => ({ ...prevErrors, [errorTitle]: null })));
-    } else {
-      setErrors(((prevErrors) => ({ ...prevErrors, [errorTitle]: "exceed the word count....." })));
-    }
-  };
-
-  const getWordCount = (inputText) => {
-    return inputText.trim().split(/\s+/)
-      .filter(word => word.length > 2).length;
   };
 
   const validateForm = () => {
@@ -172,42 +161,46 @@ const LandingPageDetails = () => {
       newErrors.landingPageHeroTitle = "Title is required";
     if (!landingPageHero.description)
       newErrors.landingPageHeroDescription = "Description is required";
-    if (!landingPageHero.coverImage)
+    if (!currentImage.banner)
       newErrors.landingPageHeroCoverImage = "Cover image is required";
     if (!welcomePart.title) newErrors.welcomePartTitle = "Title is required";
     if (!welcomePart.description)
       newErrors.welcomePartDescription = "Description is required";
-    if (!welcomePart.coverImage)
+    if (!currentImage.welcome)
       newErrors.welcomePartCoverImage = "Cover image is required";
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
+
+
+
   const handleLandingSubmit = async () => {
     setLoading(true); // Set loading once at the start
     try {
-      let landingPreReq = null;
+      let landingPreReq = null
       let welcomePreReq = null;
-
-      if (landingFile) {
-        landingPreReq = await preRequestFun(landingFile, "Landing");
+      console.log(landingPreReq,welcomePreReq,'daattaattata')
+      if (currentImage.bannerFile) {
+        landingPreReq = await preRequestFun(currentImage.bannerFile , "Landing");
       }
+       
 
-      if (welcomeFile) {
-        welcomePreReq = await preRequestFun(welcomeFile, "Welcome");
+      if (currentImage.welcomeFile) {
+        welcomePreReq = await preRequestFun(currentImage.welcomeFile, "Welcome");
       }
 
       if (landingPreReq?.accessLink) {
-        setLandingPageHero((prev) => ({
-          ...prev,
-          coverImage: landingPreReq.accessLink,
-        }));
+        // setLandingPageHero((prev) => ({
+        //   ...prev,
+        //   coverImage: landingPreReq.accessLink,
+        // }));
       }
 
       if (welcomePreReq?.accessLink) {
-        setWelcomePart((prev) => ({
-          ...prev,
-          coverImage: welcomePreReq.accessLink,
-        }));
+        // setWelcomePart((prev) => ({
+        //   ...prev,
+        //   coverImage: welcomePreReq.accessLink,
+        // }));
       }
 
       if (validateForm()) {
@@ -215,22 +208,27 @@ const LandingPageDetails = () => {
           updateBusinessDetails({
             landingPageHero: {
               ...landingPageHero,
-              coverImage:
-                landingPreReq?.accessLink || landingPageHero.coverImage,
+              ...(currentImage.bannerFile&&{
+
+                coverImage:
+                  landingPreReq?.accessLink  ,
+              })
             },
             theme,
             secondaryTheme,
             welcomePart: {
               ...welcomePart,
-              coverImage: welcomePreReq?.accessLink || welcomePart.coverImage,
+              ...(currentImage.welcomeFile&&{
+
+                coverImage: welcomePreReq?.accessLink ,
+              })
             },
           })
         );
-        setLoading(false);
+        // setCurrentImage({image:null ,bannerFile:null,welcomeFile:null,preview:null,banner:null,welcome:null})
         navigate("/create-business/core-services");
       }
     } catch (e) {
-      setLoading(false);
       console.log(e);
     } finally {
       setLoading(false); // Set loading to false at the end
@@ -248,13 +246,15 @@ const LandingPageDetails = () => {
     setSecondaryTheme(businessState?.secondaryTheme || "#A8FF75");
     setLandingPageHero(businessState?.landingPageHero);
     setWelcomePart(businessState?.welcomePart);
+    console.log(businessState)
+    setCurrentImage(((prev)=>({...prev,banner:businessState.landingPageHero.coverImage,welcome:businessState.welcomePart.coverImage})));
   }, [businessState]);
 
   if (loading) {
     return (
       <div className="h-100vh">
         <div className="d-flex h-100 justify-content-center align-items-center">
-          <Loader />
+        <Loader />
         </div>
       </div>
     );
@@ -287,11 +287,7 @@ const LandingPageDetails = () => {
                   style={{ height: "400px" }}
                 >
                   <Cropper
-                    image={
-                      imageFieldName === "landingPageHeroImage"
-                        ? landingPageHero?.coverImage
-                        : welcomePart?.coverImage
-                    }
+                    image={currentImage?.preview}
                     crop={crop}
                     zoom={zoom}
                     aspect={
@@ -304,9 +300,9 @@ const LandingPageDetails = () => {
                 </div>
               </div>
               <div className="modal-footer">
-                {cropperLoading ? <Spinner variant="primary" /> : <Button variant="primary" onClick={handleCropSave}>
+                <Button variant="primary" onClick={handleCropSave}>
                   Save Crop
-                </Button>}
+                </Button>
                 <Button
                   variant="outlined"
                   onClick={() => setShowCropper(false)}
@@ -379,14 +375,14 @@ const LandingPageDetails = () => {
               <div className="input-group mt-2 w-100">
                 <TextField
                   fullWidth
-                  label="Title* (8 words)"
+                  label="Title*"
                   id="title"
                   variant="filled"
                   name="title"
                   autoComplete="title"
                   value={landingPageHero.title}
-                  inputProps={{ maxLength: 35 }}
-                  onChange={(e) => handleInputChange(e, setLandingPageHero,'landingPageHeroTitle')}
+                  inputProps={{maxLength:35}}
+                  onChange={(e) => handleInputChange(e, setLandingPageHero)}
                   error={errors?.landingPageHeroTitle || landingPageHero?.title?.split("")?.length >= 35 ? true : false}
                   helperText={errors?.landingPageHeroTitle || landingPageHero?.title?.split("")?.length >= 35 ? "exceeded the limit" : ""}
                 />
@@ -394,7 +390,7 @@ const LandingPageDetails = () => {
               <div className="input-group mb-3 mt-4 w-100">
                 <TextField
                   fullWidth
-                  label="Description* (80 words)"
+                  label="Description*"
                   id="description"
                   variant="filled"
                   name="description"
@@ -402,9 +398,10 @@ const LandingPageDetails = () => {
                   multiline // Makes the TextField behave like a textarea
                   rows={4} // You can adjust the number of rows (height) here
                   value={landingPageHero.description}
-                  onChange={(e) => handleInputChange(e, setLandingPageHero,'landingPageHeroDescription')}
-                  error={errors?.landingPageHeroDescription}
-                  helperText={errors?.landingPageHeroDescription}
+                  inputProps={{maxLength:200}}
+                  onChange={(e) => handleInputChange(e, setLandingPageHero)}
+                  error={errors?.landingPageHeroDescription || landingPageHero?.description?.split("")?.length >= 200 ? true : false}
+                  helperText={errors?.landingPageHeroDescription || landingPageHero?.description?.split("")?.length >= 200 ? "exceeded the limit" : ""}
                   sx={{
                     "& .MuiInputBase-root": {
                       padding: "12px", // Padding inside the textarea
@@ -446,7 +443,7 @@ const LandingPageDetails = () => {
                   ) : (
                     <img
                       src={
-                        landingPageHero.coverImage ||
+                        currentImage?.banner || 
                         "/src/assets/images/add_image.png"
                       }
                       width="50"
@@ -468,12 +465,12 @@ const LandingPageDetails = () => {
               <div className="input-group mt-2 w-100">
                 <TextField
                   fullWidth
-                  label="Title* (8 words)"
+                  label="Title*"
                   id="title"
                   variant="filled"
                   name="title"
                   autoComplete="title"
-                  inputProps={{ maxLength: 35 }}
+                  inputProps={{maxLength:35}}
                   value={welcomePart.title}
                   onChange={(e) => handleInputChange(e, setWelcomePart)}
                   error={errors?.welcomePartTitle || welcomePart?.title?.split("")?.length >= 35 ? true : false}
@@ -483,7 +480,7 @@ const LandingPageDetails = () => {
               <div className="input-group mb-3 mt-4 w-100">
                 <TextField
                   fullWidth
-                  label="Description* (80 words)"
+                  label="Description*"
                   id="description"
                   variant="filled"
                   name="description"
@@ -491,9 +488,10 @@ const LandingPageDetails = () => {
                   multiline // Makes the TextField behave like a textarea
                   rows={4} // You can adjust the number of rows (height) here
                   value={welcomePart.description}
-                  onChange={(e) => handleInputChange(e, setWelcomePart,"welcomePartDescription")}
-                  error={errors?.welcomePartDescription }
-                  helperText={errors?.welcomePartDescription }
+                  inputProps={{maxLength:200}}
+                  onChange={(e) => handleInputChange(e, setWelcomePart)}
+                  error={errors?.welcomePartDescription || welcomePart?.description?.split("")?.length >= 200 ? true : false}
+                  helperText={errors?.welcomePartDescription || welcomePart?.description?.split("")?.length >= 200 ? "exceeded the limit" : ""}
                   sx={{
                     "& .MuiInputBase-root": {
                       padding: "12px", // Padding inside the textarea
@@ -531,7 +529,7 @@ const LandingPageDetails = () => {
                   ) : (
                     <img
                       src={
-                        welcomePart.coverImage ||
+                        currentImage?.welcome ||
                         "/src/assets/images/add_image.png"
                       }
                       width="50"
@@ -547,12 +545,12 @@ const LandingPageDetails = () => {
               )}
 
               <div className="col-12 mt-4 text-center">
-                {loading ? <Spinner variant="primary" /> : <button
+                <button
                   className="btn btn-primary w-100"
                   onClick={handleLandingSubmit}
                 >
                   Save & Next
-                </button>}
+                </button>
               </div>
             </div>
           </div>
@@ -671,7 +669,7 @@ const LandingPageDetails = () => {
                 {/* Left Image for Mobile View */}
                 <div className="col-12 col-lg-6 text-end d-block d-lg-none">
                   <img
-                    src={landingPageHero.coverImage}
+                    src={currentImage?.banner}
                     alt=""
                     className="banner-image"
                   />
@@ -743,7 +741,7 @@ const LandingPageDetails = () => {
                 {/* Right Image for Desktop View */}
                 <div className="col-12 col-lg-6 text-end d-none d-lg-block">
                   <img
-                    src={landingPageHero.coverImage}
+                    src={currentImage?.banner}
                     alt=""
                     className="banner-image"
                   />
@@ -822,7 +820,7 @@ const LandingPageDetails = () => {
               <div className="row mt-5 align-items-center mb-5">
                 <div className="col-12 col-lg-6 mt-2 text-center text-lg-start about-image">
                   <img
-                    src={welcomePart.coverImage}
+                    src={currentImage.welcome}
                     className="img-fluid"
                     alt=""
                   />
