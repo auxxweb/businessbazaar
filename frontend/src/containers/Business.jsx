@@ -144,9 +144,10 @@ export default function Business() {
           <div className="text-center mb-5">
             <h1 className="fw-bold">Discover the Top Businesses</h1>
             <p className="mt-3 text-center">
-              Explore the most popular destinations in your area, highly rated
-              by locals and visitors alike. Find out what makes these places
-              stand out and start your next adventure right here!
+            Explore the top-rated businesses in your area, 
+            highly recommended by locals and visitors alike.
+             Discover what makes these establishments stand out
+             and start your next great experience here!!
             </p>
           </div>
 

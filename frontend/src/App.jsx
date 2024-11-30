@@ -22,6 +22,7 @@ import TermsAndConditions from "./components/Business/TermsAndConditions";
 import BusinessTermsAndConditions from "./components/Business/BusinessTermsAndConditions";
 import Loader from "./components/Loader/Loader";
 import ShareButton from "./components/ShareButton";
+import NotFound from "./components/NotFound";
 
 // Lazy loading components
 const Home = lazy(() =>
@@ -115,6 +116,7 @@ const router = createBrowserRouter([
     path: "/terms-and-conditions/:id",
     element: <BusinessTermsAndConditions />,
   },
+  { path: "*", element: <NotFound/> },
 ]);
 
 function App() {

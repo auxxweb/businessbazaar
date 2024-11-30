@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
 import { QRCodeCanvas } from "qrcode.react";
-import { FaShareAlt, FaLink, FaQrcode, FaShareSquare, FaWhatsapp } from "react-icons/fa";
+import { FaShareAlt, FaLink, FaQrcode, FaShareSquare, FaWhatsapp ,FaAddressCard} from "react-icons/fa";
 import QRCode from "qrcode";
-const ShareButton = ({number}) => {
+const ShareButton = ({ number }) => {
     const [showOptions, setShowOptions] = useState(false);
     const [showQRCode, setShowQRCode] = useState(false);
     const [toastMessage, setToastMessage] = useState(""); // Toast message state
@@ -23,40 +23,40 @@ const ShareButton = ({number}) => {
         });
     };
 
-    
+
     const handleShareSocial = async () => {
         const url = window.location.href; // Current page URL
         const text = `Explore this page using the link below or scan the QR code:\n${url}`;
-    
+
         try {
             // Create a temporary canvas element for the QR code
             const tempCanvas = document.createElement("canvas");
             const qrCodeSize = 200;
-    
+
             // Generate the QR Code
             await QRCode.toCanvas(tempCanvas, url, {
                 width: qrCodeSize,
                 margin: 1,
             });
-    
+
             // Convert the QR code canvas to a Blob
             tempCanvas.toBlob(async (blob) => {
                 if (!blob) {
                     alert("Failed to generate QR code image. Please try again.");
                     return;
                 }
-    
+
                 // Create a file from the QR code blob
                 const qrFile = new File([blob], "qrcode.png", { type: "image/png" });
-    
+  
                 // Check if the browser supports sharing files and URLs
                 if (navigator.share && navigator.canShare({ files: [qrFile] })) {
                     try {
                         // Share both text and files (QR code)
                         await navigator.share({
                             title: "Check out this awesome page!",
-                            text, 
-                            url, 
+                            text,
+                            url,
                             files: [qrFile],
                         });
                         console.log("Shared successfully!");
@@ -73,7 +73,27 @@ const ShareButton = ({number}) => {
             alert("Something went wrong. Please try again.");
         }
     };
-    
+
+    const handleSaveContact = () => {
+        const vCardData = `BEGIN:VCARD
+      VERSION:3.0
+      FN:John Doe
+      TEL:+1234567890
+      EMAIL:johndoe@example.com
+      END:VCARD`;
+      
+        // Create a Blob from the vCard data
+        const blob = new Blob([vCardData], { type: 'text/vcard' });
+        const url = URL.createObjectURL(blob);
+      
+        // Create a temporary anchor element to trigger the download  
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'contact.vcf'; // Filename for the vCard
+        a.click();
+        URL.revokeObjectURL(url); // Clean up the URL object
+      };
+
 
     useEffect(() => {
         const handleClickOutside = (event) => {
@@ -140,6 +160,18 @@ const ShareButton = ({number}) => {
             >
                 <FaWhatsapp size={26} />
             </button>
+
+            <button
+                className="btn btn-success rounded-circle p-2 border-0 text-white position-fixed"
+                style={{
+                    right: '16px',
+                    bottom: '144px', // Adjust positioning
+                    zIndex: 1050,
+                }}
+                onClick={handleSaveContact}
+            >
+                <FaAddressCard size={26} />
+            </button>   
 
 
             {/* Dropdown Options */}

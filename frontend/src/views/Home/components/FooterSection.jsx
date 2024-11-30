@@ -17,7 +17,7 @@ const FooterSection = () => {
                 className="btn btn-theme mt-3"
                 onClick={() => navigate("/create-business")}
               >
-                Create Now
+                Create Profile
               </button>
             </div>
           </div>

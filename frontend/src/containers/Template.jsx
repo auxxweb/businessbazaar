@@ -324,7 +324,7 @@ export default function Template() {
     autoplay: true,
     arrows: false,
     // centerMode: true,
-    speed: 500,
+    speed: 300,
     slidesToShow: 2, // Number of dishes to show
     // mobileFirst: true,
     slidesToScroll: 1,
@@ -370,12 +370,12 @@ export default function Template() {
   }
   const setting2 = {
     dots: false,
-    infinite: businessData?.service?.length > 3, // Infinite scroll only for more than 3 items
+    infinite: !businessData?.service?.length, // Infinite scroll only for more than 3 items
     autoplay: true,
     arrows: false,
-    speed: 500,
-    slidesToShow:
-      businessData?.service?.length <= 3 ? businessData?.service?.length : 2, // Dynamic slidesToShow
+    speed: 300,
+    slidesToShow:2,
+      // businessData?.service?.length <= 3 ? businessData?.service?.length : 2, // Dynamic slidesToShow
     slidesToScroll: 1,
 
     responsive: [
@@ -383,9 +383,9 @@ export default function Template() {
         breakpoint: 1024,
         settings: {
           slidesToShow:
-            businessData?.service?.length <= 3 ? businessData?.service?.length : 3,
+            businessData?.service?.length ?2 : 3,
           slidesToScroll: 1,
-          infinite: businessData?.service?.length > 3,
+          infinite: true,
         },
       },
       {
@@ -1021,6 +1021,7 @@ export default function Template() {
                         </a>
                         <ShareButton
                           number={businessData?.contactDetails?.primaryNumber}
+                          logo={businessData?.logo}
                         />
                       </div>
                     </div>
@@ -1109,13 +1110,13 @@ export default function Template() {
                         {businessData?.specialServices?.description}
                       </p>
                     </div>
-                  </div>
+                  </div>  
                 </div>
               </div>
               <div className="col-12">
                 <div className="col-12 mb-5 david-font row justify-content-center gap-3">
                   {businessData.specialServices.data.length > 2 ? (
-                    <Slider {...settings}>
+                    <Slider {...setting2}>
                       {businessData?.specialServices?.data.map(
                         (dish, index) => (
                           <div
@@ -1266,7 +1267,7 @@ export default function Template() {
                   {businessData?.service?.data?.length > 2 ? (
                     <Slider {...setting2}>
                       {businessData?.service?.data?.map((dish, index) => (
-                        <div
+                        <div 
                           key={index}
                           className="dish-div col-12 text-center p-3"
                         >
@@ -1688,13 +1689,13 @@ export default function Template() {
             <div className="container p-top">
               <div className="col-12 newsletter position-relative">
                 <img
-                  src="/src/assets/images/newsletter.png"
+                  src="/src/assets/images/newsImage1.jpg" 
                   alt=""
-                  className="w-100"
+                  className="w-100 rounded"
                 />
                 <div className="text-center newsletter-content position-absolute">
                   <div className="d-none d-lg-block">
-                    <h2 className="fs-45 mb-3 fw-bold text-white">
+                    <h2 className="fs-45 mb-3 fw-bold text-black">
                       Create Your Own Business <br />
                       Subscribing To Our Newsletter
                     </h2>
@@ -1932,7 +1933,7 @@ export default function Template() {
         className="btn btn-lg btn-bottom btn-lg-square bg-transparent rounded-circle back-to-top1"
       >
         <i className="bi bi-arrow-up"></i>
-      </a>
+      </a>    
     </>
   )
 }
