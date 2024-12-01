@@ -69,11 +69,13 @@ function NewsArticles({ colorTheme }) {
   }
 
 
+  console.log(newsData, "newsData",bannerData)
+
 
   return (
     <div id='news' style={{ minHeight: "100vh" }}>
       {/* Banner Section */}
-      {bannerData?.length !== 0 && <section className="banner-section" style={styles.bannerSection}>
+      {bannerData&&bannerData?.length !== 0 && <section className="banner-section" style={styles.bannerSection}>
         <div className="container">
           <div className="row">
             <div className="col-12 col-lg-6">
@@ -111,7 +113,7 @@ function NewsArticles({ colorTheme }) {
       <section className="news-articles-section" style={styles.newsSection}>
         <div className="container">
           <div className="row">
-            {newsData?.length === 0 && bannerData?.length === 0 && loading ? <EmptyComponent /> : newsData?.map((item, index) => (
+            {(newsData?.length === 0 && bannerData?.length === 0 && !loading) || (newsData?.length === 0 && !bannerData && !loading) ? <EmptyComponent /> : newsData?.map((item, index) => (
               <div
                 className="col-12 col-md-6 col-lg-4"
                 key={index}
