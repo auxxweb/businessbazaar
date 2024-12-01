@@ -221,6 +221,7 @@ export default function Home() {
     },
     [location, visibleBusiness]
   );
+  console.log(businessData,'asasasasasasa')
 
   return (
     <Layout title="Home" navClass="home">

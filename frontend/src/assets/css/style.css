@@ -504,9 +504,9 @@ textarea:enabled{
 .back-to-top1{
 
     position: fixed;
-    /* display: none; */
+    /* display: none; */       
     right: 14px;
-    bottom: 140px;
+    bottom: 200px; 
     z-index: 99;
     
 }

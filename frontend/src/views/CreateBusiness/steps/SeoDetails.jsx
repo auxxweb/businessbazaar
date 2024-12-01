@@ -10,6 +10,8 @@ const SeoDetails = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const businessState = useSelector((state) => state.business);
+  const [errorMessage, setErrorMessage] = useState("");
+ const [descriptionErrorMessage, setDescriptionErrorMessage] = useState('')
 
   const [socialMediaLinks, setSocialMediaLinks] = useState([
     { tag: "instagram", link: "" },
@@ -52,14 +54,61 @@ const SeoDetails = () => {
     }));
   };
 
+
+
   // Handle changes in SEO data fields
   const handleSeoInputChange = (e) => {
     const { name, value } = e.target;
-    setSeoData((prevSeo) => ({
-      ...prevSeo,
+
+    // Split the input by spaces to count words
+    const words = value.trim().split(/\s+/);
+
+    // Prevent typing if the word limit is exceeded
+    if (words.length > 8) {
+      setErrorMessage("Title cannot exceed 8 words."); // Set error message
+      return; // Stop further input
+    }
+
+    // Clear error if within the limit
+    setErrorMessage("");
+
+    // Update state as usual
+    setSeoData((prev) => ({
+      ...prev,
       [name]: value,
     }));
   };
+
+
+  const handleDescriptionInputChange = (e) => {
+    const { name, value } = e.target;
+
+    // Words to exclude from the count
+    const excludedWords = ["is", "am", "I", "are", "the", "a", "an", "of", "to", "in"];
+
+    // Split the input into words and filter out excluded words
+    const words = value
+      .trim()
+      .split(/\s+/)
+      .filter((word) => !excludedWords.includes(word.toLowerCase())); // Case insensitive check
+
+    // Prevent typing if the word limit is exceeded
+    if (words.length > 50) {
+      setDescriptionErrorMessage("Description cannot exceed 50 words."); // Set error message
+      return; // Stop further input
+    }
+
+    // Clear error if within the limit
+    setDescriptionErrorMessage("");
+
+    // Update state as usual
+    setSeoData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  
 
   // Handle social media input changes
   const handleSocialMediaChange = (index, value) => {
@@ -122,31 +171,38 @@ const SeoDetails = () => {
               <div className="input-group mt-2 w-100">
                 <TextField
                   fullWidth
-                  label="Title (35 letters)"
+                  label="Title (Max 8 Words)"
                   id="title"
                   variant="filled"
                   name="title"
                   autoComplete="title"
                   value={seoData.title}
-                  inputProps={{ maxLength: 35 }}
                   onChange={handleSeoInputChange}
+                  helperText={errorMessage || "Enter a title with up to 8 words."}
+                  error={!!errorMessage}
                 />
+
+                {errorMessage && <span>{errorMessage}</span>}
               </div>
 
               <div className="input-group mb-3 mt-4 w-100">
                 <TextField
                   fullWidth
-                  label="Description (200 letters) "
+                  label="Description (50 Words)"
                   id="description"
                   variant="filled"
                   name="description"
                   autoComplete="description"
-                  multiline // Makes the TextField behave like a textarea
-                  rows={4} // You can adjus
-                  inputProps={{ maxLength: 200 }}
+                  multiline
+                  rows={4} // Adjust rows as needed
                   value={seoData.description}
-                  onChange={handleSeoInputChange}
+                  onChange={handleDescriptionInputChange} // Use the new function
+                  helperText={descriptionErrorMessage || "Enter a title with up to 8 words."}
+                  error={!!descriptionErrorMessage}
+
                 />
+                
+                {descriptionErrorMessage && <span>{descriptionErrorMessage}</span>}
               </div>
 
               {/* Tags Section */}
@@ -213,7 +269,7 @@ const SeoDetails = () => {
 
           {/* Save & Next Button */}
           <div className="col-12 text-center p-3 p-md-5">
-          { loading? <Spinner variant="primary"/> : <button
+            {loading ? <Spinner variant="primary" /> : <button
               className="btn btn-primary w-100 text-white p-2"
               onClick={handleSeoSubmit}
             >
