@@ -1462,12 +1462,7 @@ export default function Template() {
               </div>
               <div className="col-12">
                 <p className="text-center">
-                  At Our Restaurant, we strive to provide the best dining
-                  experience possible. Our loyal customers have been satisfied
-                  with our culinary skills, service, and overall ambiance. Our
-                  positive feedback has helped us continuously improve our
-                  dining experience. If you're a loyal customer, we'd love to
-                  hear from you!
+                Take a look at genuine reviews and heartfelt testimonials that highlight experiences, impressions, and the impact of our work. Whether it’s about personal achievements or professional services, these reviews reflect the trust and value we bring to every interaction
                 </p>
               </div>
 
