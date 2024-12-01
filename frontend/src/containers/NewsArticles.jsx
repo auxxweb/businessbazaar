@@ -26,18 +26,18 @@ function NewsArticles({ colorTheme }) {
           setTotalNews(response?.data?.totalCount)
           const updatedBannerArray = []
           const updatedNewsArray = []
-          if (response?.data?.data.length === 1) {
+          if (response?.data?.data?.length === 1) {
             setBannerData(response.data.data[0])
           } else {
             response.data.data.forEach((item) => {
-              if (item?.isBanner && updatedBannerArray.length === 0) {
+              if (item?.isBanner && updatedBannerArray?.length === 0) {
                 updatedBannerArray.push(item)
               } else {
                 updatedNewsArray.push(item)
               }
             })
             setBannerData(updatedBannerArray[0] || response.data.data[0])
-            if (updatedBannerArray.length === 0) updatedNewsArray.shift()
+            if (updatedBannerArray?.length === 0) updatedNewsArray.shift()
             setNewsData(
               updatedNewsArray.filter(
                 (result) => result._id !== updatedBannerArray[0]?._id,
@@ -73,7 +73,7 @@ function NewsArticles({ colorTheme }) {
   return (
     <div id='news' style={{ minHeight: "100vh" }}>
       {/* Banner Section */}
-      {bannerData.length !== 0 && <section className="banner-section" style={styles.bannerSection}>
+      {bannerData?.length !== 0 && <section className="banner-section" style={styles.bannerSection}>
         <div className="container">
           <div className="row">
             <div className="col-12 col-lg-6">
@@ -86,7 +86,7 @@ function NewsArticles({ colorTheme }) {
                   : <LinkPreview url={bannerData?.link} />}
               </div>
             </div>
-            <div className={` ${bannerData.length === 0 && "d-none"} col-12 col-lg-6 d-flex flex-column justify-content-center`}>
+            <div className={` ${bannerData?.length === 0 && "d-none"} col-12 col-lg-6 d-flex flex-column justify-content-center`}>
               <h1 style={styles.bannerTitle}>{bannerData?.title}</h1>
               <p style={styles.bannerDescription}>{bannerData?.description}</p>
               <div className="d-flex justify-content-between align-items-center">
@@ -111,7 +111,7 @@ function NewsArticles({ colorTheme }) {
       <section className="news-articles-section" style={styles.newsSection}>
         <div className="container">
           <div className="row">
-            {newsData?.length === 0 && bannerData.length === 0 && loading ? <EmptyComponent /> : newsData?.map((item, index) => (
+            {newsData?.length === 0 && bannerData?.length === 0 && loading ? <EmptyComponent /> : newsData?.map((item, index) => (
               <div
                 className="col-12 col-md-6 col-lg-4"
                 key={index}
@@ -153,7 +153,7 @@ function NewsArticles({ colorTheme }) {
                 </div>
               </div>
             ))}
-            <div className={`${newsData.length === 0 && "d-none"} d-flex justify-content-center align-items-center w-full `}>
+            <div className={`${newsData?.length === 0 && "d-none"} d-flex justify-content-center align-items-center w-full `}>
               <button className='btn btn-dark text-white radius-theme box-shadow theme' onClick={loadMoreNews}>
                 load more
               </button>
