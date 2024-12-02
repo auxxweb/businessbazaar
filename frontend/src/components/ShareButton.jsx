@@ -75,25 +75,14 @@ const ShareButton = ({ number }) => {
     };
 
     const handleSaveContact = () => {
-        const vCardData = `BEGIN:VCARD
-      VERSION:3.0
-      FN:John Doe
-      TEL:+1234567890
-      EMAIL:johndoe@example.com
-      END:VCARD`;
+        const phoneNumber = "+1234567890";  // Replace with the phone number you want to save
+        const contactUrl = `tel:${phoneNumber}`;
       
-        // Create a Blob from the vCard data
-        const blob = new Blob([vCardData], { type: 'text/vcard' });
-        const url = URL.createObjectURL(blob);
-      
-        // Create a temporary anchor element to trigger the download  
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = 'contact.vcf'; // Filename for the vCard
-        a.click();
-        URL.revokeObjectURL(url); // Clean up the URL object
+        // Open dialer (works on mobile devices)
+        window.location.href = contactUrl;
+        
       };
-
+      
 
     useEffect(() => {
         const handleClickOutside = (event) => {
