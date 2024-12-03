@@ -94,7 +94,7 @@ export default function Header() {
               }}
               onClick={() => setExpanded(false)} // Close on link click
             >
-              My Business
+              My Profile
             </NavLink>
           </Nav>
         </Navbar.Collapse>
