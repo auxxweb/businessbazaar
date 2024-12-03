@@ -75,15 +75,71 @@ const ShareButton = ({ number }) => {
     };
 
     const handleSaveContact = () => {
-        const phoneNumber = "+1234567890";  // Replace with the phone number you want to save
-        const contactUrl = `tel:${phoneNumber}`;
-      
-        // Open dialer (works on mobile devices)
-        window.location.href = contactUrl;
-        
-      };
-      
 
+        const contact = {
+            firstName: "Derik",
+            lastName: "Stenerson",
+            fullName: "Derik Stenerson",
+            organization: "Microsoft Corporation",
+            title: "Software Engineer",
+            birthday: "1963-09-21", // Correct date format YYYY-MM-DD
+            address: {
+                street: "One Microsoft Way",
+                city: "Redmond",
+                state: "WA",
+                zip: "98052-6399",
+                country: "USA"
+            },
+            workPhone: "+1-425-936-5522",
+            workFax: "+1-425-936-7329",
+            mobilePhone: "+1-425-936-0000",
+            email: "deriks@Microsoft.com"
+        };
+        // Properly formatted vCard with correct date format and encoding
+        const vcard = `BEGIN:VCARD\r\n\
+    VERSION:3.0\r\n\
+    N:${contact.lastName};${contact.firstName};;;\r\n\
+    FN:${contact.fullName}\r\n\
+    ORG:${contact.organization}\r\n\
+    TITLE:${contact.title}\r\n\
+    BDAY:${contact.birthday}\r\n\
+    ADR;TYPE=WORK:;;${contact.address.street};${contact.address.city};${contact.address.state};${contact.address.zip};${contact.address.country}\r\n\
+    TEL;TYPE=WORK,MSG:${contact.workPhone}\r\n\
+    TEL;TYPE=WORK,FAX:${contact.workFax}\r\n\
+    TEL;TYPE=CELL:${contact.mobilePhone}\r\n\
+    EMAIL;TYPE=INTERNET:${contact.email}\r\n\
+    END:VCARD`;
+    
+        // Convert to a Blob with the proper MIME type
+        const blob = new Blob([vcard], { type: 'text/vcard;charset=utf-8' });
+        const url = window.URL.createObjectURL(blob);
+    
+        if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
+            // For mobile devices, attempt to open the vCard file directly
+            window.location.href = url;
+        } else {
+            // For desktop browsers, trigger download
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `${contact.fullName}.vcf`; // Save with the full name as the file name
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+    
+        // Clean up the URL after a delay
+        setTimeout(() => {
+            window.URL.revokeObjectURL(url);
+        }, 1000);
+    };
+    
+    // Example Contact Object
+
+    
+    // Trigger vCard generation
+    // generateVCard(contact);
+    
+    
     useEffect(() => {
         const handleClickOutside = (event) => {
             if (
@@ -148,7 +204,7 @@ const ShareButton = ({ number }) => {
                 onClick={handleClick}
             >
                 <FaWhatsapp size={26} />
-            </button>
+            </button>  
 
             <button
                 className="btn btn-success rounded-circle p-2 border-0 text-white position-fixed"
@@ -157,14 +213,14 @@ const ShareButton = ({ number }) => {
                     bottom: '144px', // Adjust positioning
                     zIndex: 1050,
                 }}
-                onClick={handleSaveContact}
+                onClick={handleSaveContact}   
             >
                 <FaAddressCard size={26} />
             </button>   
 
 
             {/* Dropdown Options */}
-            {showOptions && (
+            {showOptions && (  
                 <div
                     className="position-fixed bg-white shadow-lg rounded p-4 w-20"
                     style={{

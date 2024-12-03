@@ -64,7 +64,7 @@ export default function Home() {
   const [isReviewed, setIsReviewed] = useState(false);
   const [reviewLoading, setReviewLoading] = useState(false);
   const [reviews, setReviews] = useState([]);
-  const [visibleCategories, setVisibleCategories] = useState(20);
+  const [visibleCategories, setVisibleCategories] = useState(18);
   const [visibleBusiness, setVisibleBusiness] = useState(10);
   const [review, setReview] = useState([
     {
@@ -75,7 +75,6 @@ export default function Home() {
   ]);
 
 
-  const dispatch= useDispatch()
   useEffect(() => {
     const fetchReviews = async () => {
       try {
@@ -212,16 +211,25 @@ export default function Home() {
   }, []);
 
   const loadMoreCategories = async () => {
-    // setCategoryLoading(true)
-    setVisibleCategories((prev) => prev + 20);
+    setCategoryLoading(true)
     const categoryDetails = await fetchCategories(visibleCategories);
-    setCategoryData(categoryDetails.data.data)
+    setVisibleCategories((prev) => prev + 20);
+    setCategoryData(((prev)=> ([...prev,categoryDetails.data.data])))
+    setCategoryLoading(false)
+
   };
 
-  const loadMoreBusiness = () => {
-    setVisibleBusiness((prev) => prev + 10);
+  const loadMoreBusiness = async() => {  
+    setLoading(true)
+    const businessDetails = await fetchBusiness( BUSINESS_PAGE,
+      visibleBusiness,
+      "",
+      location);
+      setVisibleBusiness((prev) => prev + 10);
+    setCategoryData(((prev)=> ([...prev,businessDetails.data.data])))
+    setLoading(false)
   };
-
+   
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setReview((prevState) => ({
