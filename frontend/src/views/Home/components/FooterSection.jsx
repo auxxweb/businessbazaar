@@ -129,21 +129,36 @@ const FooterSection = () => {
         <div className="footer-bottom p-4">
           <div className="row w-full justify-content-between">
             <div className="col-sm-4 text-left">
-              <a href={`/terms-and-conditions`} >Terms and Conditions</a>
+              <a href={`/terms-and-conditions`}>Terms and Conditions</a>
             </div>
-            {/* <div className="col-sm-4 text-center">
-              <p  style={{ color: "#A4B3CB" }}>Technical partner : Auxxweb Solutions</p>
-            </div> */}
-            <div className="col-sm-4 text-right">
-              <div style={{ color: "#A4B3CB" }} className="text-right">
+            <div className="col-sm-4 text-center">
+              <img src="" alt="" />
+              <p style={{ color: '#A4B3CB' }}>
+                {' '}
                 <span>
                   Copyright &copy;
                   {new Date().getFullYear()} En Connect. All Rights Reserved
+                </span>{' '}
+              </p>
+            </div>
+            <div className="col-sm-4 text-right">
+              <div style={{ color: '#A4B3CB' }} className="text-right">
+                <img src="/images/2 (1).png" alt="" />
+                <span>
+                  Technical Partner :{' '}
+                  <a
+                    style={{ textDecoration: 'none' }}
+                    href="https://www.auxxweb.in"
+                  >
+                    {' '}
+                    Auxxweb IT Solutions
+                  </a>
                 </span>
               </div>
             </div>
           </div>
         </div>
+
       </div>
     </footer>
   );
