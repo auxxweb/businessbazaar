@@ -54,7 +54,7 @@ export default function Template() {
   const [reviewFetch, setreviewFetch] = useState(false)
   const [showAllReviews, setShowAllReviews] = useState(false)
   const [textColor, setTextColor] = useState('');
-  const [toggle,setToggle]=useState(false)
+  const [toggle, setToggle] = useState(false)
 
   const [review, setReview] = useState({
     rating: '',
@@ -302,6 +302,8 @@ export default function Template() {
     fetchData()
   }, [id])
 
+  console.log(businessData,'lll;l;l;l;l;;ll;;;l')
+
   const getContrastingColor = (hexColor) => {
     // Remove '#' if present
     const color = hexColor.replace('#', '');
@@ -374,8 +376,8 @@ export default function Template() {
     autoplay: true,
     arrows: false,
     speed: 300,
-    slidesToShow:2,
-      // businessData?.service?.length <= 3 ? businessData?.service?.length : 2, // Dynamic slidesToShow
+    slidesToShow: 2,
+    // businessData?.service?.length <= 3 ? businessData?.service?.length : 2, // Dynamic slidesToShow
     slidesToScroll: 1,
 
     responsive: [
@@ -383,7 +385,7 @@ export default function Template() {
         breakpoint: 1024,
         settings: {
           slidesToShow:
-            businessData?.service?.length ?2 : 3,
+            businessData?.service?.length ? 2 : 3,
           slidesToScroll: 1,
           infinite: true,
         },
@@ -712,7 +714,7 @@ export default function Template() {
                         }
                     `}
       </style>
-      <Navbar 
+      <Navbar
         collapseOnSelect={true}
         expand="lg"
         className="bg-white pjs fixed-top"
@@ -765,10 +767,10 @@ export default function Template() {
           <Navbar.Toggle
             aria-controls="basic-navbar-nav"
             style={{ color: 'black' }}
-            
+
           />
 
-          <Navbar.Collapse  id="basic-navbar-nav">
+          <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="ms-auto w-100 justify-content-evenly jcc">
               <NavLink
                 href="#home"
@@ -1110,7 +1112,7 @@ export default function Template() {
                         {businessData?.specialServices?.description}
                       </p>
                     </div>
-                  </div>  
+                  </div>
                 </div>
               </div>
               <div className="col-12">
@@ -1204,38 +1206,42 @@ export default function Template() {
 
               <div className="mt-5 david-font">
                 <div className="mb-5">
-                  <div className="row mb-3">
-                    {businessData?.productSection?.data?.map((item, index) => (
-                      <div
-                        className="col-12 col-lg-6 mt-3 mx-auto "
-                        style={{ padding: '0 30px' }}
-                        key={index}
-                      >
-                        <div className="row  product-section align-items-center">
-                          <div className="col-2">
-                            <img
-                              src={
-                                item.image && item.image.length > 0
-                                  ? item.image
-                                  : Placeholder
-                              }
-                              alt=""
-                              className="w-100"
-                            />
+                  
+                    {businessData?.productSection?.data?.length > 0 && (
+                      <div className="row mb-3">
+                        {businessData.productSection.data.map((item, index) => (
+                          <div
+                            className="col-12 col-lg-6 mt-3 mx-auto"
+                            style={{ padding: '0 30px' }}
+                            key={index}
+                          >
+                            <div className="row product-section align-items-center">
+                              <div className="col-2">
+                                <img
+                                  src={
+                                    item?.image && item?.image.length > 0
+                                      ? item.image
+                                      : ''  
+                                  }
+                                  alt=""
+                                  className="w-100"
+                                />
+                              </div>
+                              <div className="col-8">
+                                <h1 className="fs-20 fw-bold">{item.title}</h1>
+                                <p className="mt-2">{item.description}</p>
+                              </div>
+                              <div className="col-2 p-0">
+                                <span className="fw-bold">{item.price ? 'Price : ₹' : ''}</span>
+                                <span className="fw-bold">{item.price}</span>
+                              </div>
+                            </div>
                           </div>
-                          <div className="col-8">
-                            <h1 className="fs-20 fw-bold">{item.title}</h1>
-                            <p className="mt-2">{item.description}</p>
-                          </div>
-                          <div className="col-2 p-0">
-
-                            <span className="fw-bold">{item.price ? 'Price : ₹' : ' '}</span>
-                            <span className="fw-bold">{item.price}</span>
-                          </div>
-                        </div>
+                        ))}
                       </div>
-                    ))}
-                  </div>
+                    )}
+
+               
                 </div>
               </div>
             </div>
@@ -1267,7 +1273,7 @@ export default function Template() {
                   {businessData?.service?.data?.length > 2 ? (
                     <Slider {...setting2}>
                       {businessData?.service?.data?.map((dish, index) => (
-                        <div 
+                        <div
                           key={index}
                           className="dish-div col-12 text-center p-3"
                         >
@@ -1462,7 +1468,7 @@ export default function Template() {
               </div>
               <div className="col-12">
                 <p className="text-center">
-                Take a look at genuine reviews and heartfelt testimonials that highlight experiences, impressions, and the impact of our work. Whether it’s about personal achievements or professional services, these reviews reflect the trust and value we bring to every interaction
+                  Take a look at genuine reviews and heartfelt testimonials that highlight experiences, impressions, and the impact of our work. Whether it’s about personal achievements or professional services, these reviews reflect the trust and value we bring to every interaction
                 </p>
               </div>
 
@@ -1684,7 +1690,7 @@ export default function Template() {
             <div className="container p-top">
               <div className="col-12 newsletter position-relative">
                 <img
-                  src="/src/assets/images/newsImage1.jpg" 
+                  src="/src/assets/images/newsImage1.jpg"
                   alt=""
                   className="w-100 rounded"
                 />
@@ -1928,7 +1934,7 @@ export default function Template() {
         className="btn btn-lg btn-bottom btn-lg-square bg-transparent rounded-circle back-to-top1"
       >
         <i className="bi bi-arrow-up"></i>
-      </a>    
+      </a>
     </>
   )
 }

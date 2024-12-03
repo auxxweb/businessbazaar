@@ -3,6 +3,7 @@ import { FaStar } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import Loader from "../../../components/Loader/Loader";
 import Placeholder from "../../../assets/images/placeholder.jpg";
+import { Spinner } from "react-bootstrap";
 
 const BusinessesSection = ({
   loading,
@@ -25,9 +26,9 @@ const BusinessesSection = ({
           </p>
         </div>
         <div className="row justify-content-around gap-2">
-          {loading && <Loader />}
 
-          {!loading &&
+
+          {
             businessData?.map((business) => (
               <Link
                 to={
@@ -132,15 +133,35 @@ const BusinessesSection = ({
                     </div>
                   </div>
                 </div>
-              </Link>
+              </Link>  
             ))}
         </div>
         {visibleBusiness < totalBusinessData && (
-          <div className="mt-5 text-center mb-1">
-            <button onClick={loadMoreBusiness} className="btn btn-dark btn-md">
-              View More <i className="bi bi-arrow-right"></i>
-            </button>
+          <div className="mb-3 mt-5 text-center">
+            {loading ? (
+              <Spinner
+                style={{
+
+                  borderWidth: "0.2em",
+                  width: "1.5rem",
+                  height: "1.5rem",
+                  display: "inline-block",
+                }}  
+                variant="primary"
+              />
+            ) : (
+              <button
+                onClick={loadMoreBusiness}
+                className="btn btn-dark btn-md"
+              >
+                View More <i className="bi bi-arrow-right"></i>
+              </button>
+            )}
           </div>
+
+
+
+
         )}
       </div>
     </section>

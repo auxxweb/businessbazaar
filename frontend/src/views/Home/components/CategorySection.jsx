@@ -1,8 +1,8 @@
 import PropTypes from "prop-types";
 import Placeholder from "../../../assets/images/placeholder.jpg";
 import { Link } from "react-router-dom";
-import Loader from "../../../components/Loader/Loader";
 import { useState } from "react"; // Import useState for managing button loading state
+import { Spinner } from "react-bootstrap";
 
 const CategorySection = ({
   loading,
@@ -11,13 +11,11 @@ const CategorySection = ({
   loadMoreCategories,
 }) => {
   const [buttonLoading, setButtonLoading] = useState(false); // Track button loading state
- 
+
   const handleLoadMore = async () => {
-    setButtonLoading(true); // Show loader when button is clicked
     await loadMoreCategories(); // Call the loadMoreCategories function
-    setButtonLoading(false); // Hide loader after categories are loaded
   };
-   
+
   return (
     <section id="category" className=" bg-light h-auto" data-aos="fade-up">
       <div className="container" style={{ width: "90%" }}>
@@ -33,8 +31,7 @@ const CategorySection = ({
         </div>
         <div className="mb-5 mt-2" id="category">
           <div className="home-category-div">
-            {loading && <Loader />}
-            {!loading &&
+            {
               categoryData.map((category) => (
                 <Link
                   className="cat-div text-decoration-none"
@@ -59,17 +56,26 @@ const CategorySection = ({
 
           {visibleCategories <= categoryData.length && ( // Check if more categories are available
             <div className="mb-3 mt-5 text-center">
-              <button
-                onClick={handleLoadMore} // Trigger the load more with loading state
-                className="btn btn-dark btn-md"
-                disabled={buttonLoading} // Disable the button when loading
-              >
-                {buttonLoading ? (
-                  <Loader /> // Show loader inside button while loading
-                ) : (
-                  <>View More <i className="bi bi-arrow-right"></i></> // Regular button text when not loading
-                )}
-              </button>
+              {loading ? (
+                  <Spinner
+                    style={{
+                  
+                      borderWidth: "0.2em",
+                      width: "1.5rem",
+                      height: "1.5rem",
+                      display: "inline-block",
+                    }}
+                    variant="primary"
+                  />     
+              ) : (
+                <button
+                  onClick={handleLoadMore}
+                  className="btn btn-dark btn-md"
+                  disabled={buttonLoading}
+                >
+                  View More <i className="bi bi-arrow-right"></i>
+                </button>
+              )}
             </div>
           )}
         </div>
