@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
-import { TextField } from "@mui/material";
+import { MenuItem, TextField } from "@mui/material";
 import CreateBusinessLocation from "../../../components/CreateBusinessLocation";
 import { updateBusinessDetails } from "../store/businessSlice";
 import { Spinner } from "react-bootstrap";
@@ -13,8 +13,8 @@ const ContactDetails = () => {
   const dispatch = useDispatch();
   const businessState = useSelector((state) => state.business);
   const [showLocation, setShowLocation] = useState(false)
-  const [placeDetails, setPlaceDetails] = useState("") 
-  const [loading,setLoading] = useState(false)
+  const [placeDetails, setPlaceDetails] = useState("")
+  const [loading, setLoading] = useState(false)
 
   const [newFormData, setNewFormData] = useState({
     contactDetails: {
@@ -22,8 +22,13 @@ const ContactDetails = () => {
       primaryNumber: "",
       secondaryNumber: "",
       whatsappNumber: "",
+      primaryCountryCode: "",
+      secondaryCountryCode: "",
+      whatsappCountryCode: "",
       email: "",
       website: "",
+
+
     },
   });
 
@@ -56,6 +61,99 @@ const ContactDetails = () => {
     }));
     validateField(name, value);
   };
+
+  const countryCodes = [
+
+    { code: "+91", country: "India", cca2: "IN" },
+    { code: "+974", country: "Qatar", cca2: "QA" },
+    { code: "+968", country: "Oman", cca2: "OM" },
+    { code: "+973", country: "Bahrain", cca2: "BH" },
+  ]
+
+  // const countryCodes = [
+  //   { code: "+1", country: "US/CA", cca2: "US" },
+  //   { code: "+44", country: "UK", cca2: "GB" },
+  //   { code: "+91", country: "India", cca2: "IN" },
+  //   { code: "+61", country: "Aust.", cca2: "AU" },
+  //   { code: "+81", country: "Japan", cca2: "JP" },
+  //   { code: "+49", country: "Ger.", cca2: "DE" },
+  //   { code: "+86", country: "China", cca2: "CN" },
+  //   { code: "+33", country: "France", cca2: "FR" },
+  //   { code: "+39", country: "Italy", cca2: "IT" },
+  //   { code: "+7", country: "Russia", cca2: "RU" },
+  //   { code: "+55", country: "Brazil", cca2: "BR" },
+  //   { code: "+27", country: "S.Af.", cca2: "ZA" },
+  //   { code: "+34", country: "Spain", cca2: "ES" },
+  //   { code: "+64", country: "NZ", cca2: "NZ" },
+  //   { code: "+82", country: "Korea", cca2: "KR" },
+  //   { code: "+971", country: "UAE", cca2: "AE" },
+  //   { code: "+353", country: "Irel.", cca2: "IE" },
+  //   { code: "+47", country: "Norw.", cca2: "NO" },
+  //   { code: "+46", country: "Swed.", cca2: "SE" },
+  //   { code: "+48", country: "Pol.", cca2: "PL" },
+  //   { code: "+41", country: "Switz.", cca2: "CH" },
+  //   { code: "+31", country: "Neth.", cca2: "NL" },
+  //   { code: "+30", country: "Gree.", cca2: "GR" },
+  //   { code: "+351", country: "Port.", cca2: "PT" },
+  //   { code: "+52", country: "Mex.", cca2: "MX" },
+  //   { code: "+90", country: "Turkey", cca2: "TR" },
+  //   { code: "+94", country: "S.Lan", cca2: "LK" },
+  //   { code: "+92", country: "Pak.", cca2: "PK" },
+  //   { code: "+880", country: "B.Desh", cca2: "BD" },
+  //   { code: "+62", country: "Indo.", cca2: "ID" },
+  //   { code: "+66", country: "Thai.", cca2: "TH" },
+  //   { code: "+63", country: "Phil.", cca2: "PH" },
+  //   { code: "+60", country: "Mal.", cca2: "MY" },
+  //   { code: "+65", country: "Sing.", cca2: "SG" },
+  //   { code: "+45", country: "Den.", cca2: "DK" },
+  //   { code: "+20", country: "Egypt", cca2: "EG" },
+  //   { code: "+54", country: "Arg.", cca2: "AR" },
+  //   { code: "+58", country: "Venez.", cca2: "VE" },
+  //   { code: "+598", country: "Uru.", cca2: "UY" },
+  //   { code: "+56", country: "Chile", cca2: "CL" },
+  //   { code: "+51", country: "Peru", cca2: "PE" },
+  //   { code: "+505", country: "Nica.", cca2: "NI" },
+  //   { code: "+506", country: "C.R.", cca2: "CR" },
+  //   { code: "+372", country: "Est.", cca2: "EE" },
+  //   { code: "+370", country: "Lith.", cca2: "LT" },
+  //   { code: "+371", country: "Latv.", cca2: "LV" },
+  //   { code: "+994", country: "Azer.", cca2: "AZ" },
+  //   { code: "+374", country: "Armen.", cca2: "AM" },
+  //   { code: "+995", country: "Georg.", cca2: "GE" },
+  //   { code: "+998", country: "Uzbek", cca2: "UZ" },
+  //   { code: "+977", country: "Nepal", cca2: "NP" },
+  //   { code: "+976", country: "Mong.", cca2: "MN" },
+  //   { code: "+853", country: "Macau", cca2: "MO" },
+  //   { code: "+852", country: "H.K.", cca2: "HK" },
+  //   { code: "+855", country: "Camb.", cca2: "KH" },
+  //   { code: "+856", country: "Laos", cca2: "LA" },
+  //   { code: "+212", country: "Moro.", cca2: "MA" },
+  //   { code: "+213", country: "Alg.", cca2: "DZ" },
+  //   { code: "+216", country: "Tuni.", cca2: "TN" },
+  //   { code: "+218", country: "Libya", cca2: "LY" },
+  //   { code: "+254", country: "Kenya", cca2: "KE" },
+  //   { code: "+255", country: "Tanz.", cca2: "TZ" },
+  //   { code: "+256", country: "Ugand", cca2: "UG" },
+  //   { code: "+234", country: "Nig.", cca2: "NG" },
+  //   { code: "+233", country: "Ghana", cca2: "GH" },
+  //   { code: "+225", country: "Ivory", cca2: "CI" },
+  //   { code: "+221", country: "Sen.", cca2: "SN" },
+  //   { code: "+250", country: "Rw.", cca2: "RW" },
+  //   { code: "+231", country: "Liber", cca2: "LR" },
+  //   { code: "+967", country: "Yemen", cca2: "YE" },
+  //   { code: "+963", country: "Syria", cca2: "SY" },
+  //   { code: "+964", country: "Iraq", cca2: "IQ" },
+  //   { code: "+962", country: "Jorda", cca2: "JO" },
+  //   { code: "+961", country: "Leb.", cca2: "LB" },
+  //   { code: "+972", country: "Isr.", cca2: "IL" },
+  //   { code: "+357", country: "Cyp.", cca2: "CY" },
+  //   { code: "+84", country: "Viet.", cca2: "VN" },
+  //   { code: "+673", country: "Brunei", cca2: "BN" },
+  //   { code: "+975", country: "Bhut.", cca2: "BT" }
+  // ];
+
+
+
 
   const validateField = (field, value) => {
     const phoneNumberRegex = /^[+]?[0-9]{10,15}$/;
@@ -184,6 +282,12 @@ const ContactDetails = () => {
         case "whatsappNumber":
           value = newFormData?.contactDetails?.whatsappNumber;
           break;
+        case "primaryCountryCode":
+          value = newFormData?.contactDetails?.primaryCountryCode;
+          break;
+        case "whatsappCountryCode":
+          value = newFormData?.contactDetails?.whatsappCountryCode;
+          break;
         case "email":
           value = newFormData?.contactDetails?.email;
           break;
@@ -222,7 +326,8 @@ const ContactDetails = () => {
 
   const contactSubmitHandler = () => {
     console.log(newFormData, "new-formData");
-setLoading(true)
+
+    setLoading(true)
     if (validateRequiredFields()) {
       dispatch(
         updateBusinessDetails({
@@ -384,11 +489,11 @@ setLoading(true)
             </div>
 
             {/* Location */}
-            {showLocation && <CreateBusinessLocation placeDetails={placeDetails}  setPlaceDetails={setPlaceDetails} libraries={libraries} visible={showLocation} setVisible={setShowLocation} setLocation={setLocation} />}
+            {showLocation && <CreateBusinessLocation placeDetails={placeDetails} setPlaceDetails={setPlaceDetails} libraries={libraries} visible={showLocation} setVisible={setShowLocation} setLocation={setLocation} />}
             <div className="d-flex justify-content-between  mt-2">
               <p style={{ fontSize: "12px" }} className="text-secondary m-0 p-0">{placeDetails}</p>
               <span onClick={(() => setShowLocation(!showLocation))} className="w-fit border btn btn-primary d-flex align-items-center">
-                <button  className="border-0 bg-transparent ">
+                <button className="border-0 bg-transparent ">
                   <svg fill="#fff" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
                     width="17px" height="17px" viewBox="0 0 395.71 395.71"
                     xml:space="preserve">
@@ -400,7 +505,7 @@ setLoading(true)
                     </g>
                   </svg>
                 </button>
-                <button style={{width:"7rem",fontSize:"14px"}} className="border-0 bg-transparent text-white text-wrap ">Add Location</button>
+                <button style={{ width: "7rem", fontSize: "14px" }} className="border-0 bg-transparent text-white text-wrap ">Add Location</button>
               </span>
             </div>
             {/* Contact Numbers */}
@@ -408,6 +513,29 @@ setLoading(true)
               <div className="row mt-3">
                 <div className="col-12 mt-2 mt-sm-0">
                   <div className="input-group mt-2 w-100">
+                    <TextField
+                      select
+                      label="Country Code"
+                      variant="filled"
+                      name="primaryCountryCode"
+                      value={newFormData.contactDetails.primaryCountryCode}
+                      onChange={handleContactChange}
+                      error={!!errors.primaryCountryCode}
+                      helperText={errors.primaryCountryCode}
+                      style={{ width: '25%' }}
+                    >
+                      {countryCodes.map(({ code, country, cca2 }) => (
+                        <MenuItem key={code} value={code}>
+                          <img
+                            src={`https://flagcdn.com/w20/${cca2.toLowerCase()}.png`}
+                            alt={`${country} flag`}
+                            className="mr-2 w-5 h-4"
+                          />
+
+                          {`(${code})`}
+                        </MenuItem>
+                      ))}
+                    </TextField>
                     <TextField
                       fullWidth
                       label="Primary number*"
@@ -417,6 +545,7 @@ setLoading(true)
                       onChange={handleContactChange}
                       error={!!errors.primaryNumber}
                       helperText={errors.primaryNumber}
+                      style={{ width: '75%' }}
                     />
                   </div>
                 </div>
@@ -425,6 +554,29 @@ setLoading(true)
               <div className="row mt-3">
                 <div className="col-12 mt-2 mt-sm-0">
                   <div className="input-group mt-2 w-100">
+                    <TextField
+                      select
+                      label="Country Code"
+                      variant="filled"
+                      name="secondaryCountryCode"
+                      value={newFormData.contactDetails.secondaryCountryCode} // Default to India
+                      onChange={handleContactChange}
+                      error={!!errors.secondaryCountryCode}
+                      helperText={errors.secondaryCountryCode}
+                      style={{ width: '25%' }}
+                    >
+                      {countryCodes.map(({ code, country, cca2 }) => (
+                        <MenuItem key={code} value={code}>
+                          <img
+                            src={`https://flagcdn.com/w20/${cca2.toLowerCase()}.png`}
+                            alt={`${country} flag`}
+                            className="mr-2 w-5 h-4"
+                          />
+                          {`(${code})`}
+                        </MenuItem>
+                      ))}
+                    </TextField>
+
                     <TextField
                       fullWidth
                       label="Alternative number"
@@ -434,6 +586,7 @@ setLoading(true)
                       onChange={handleContactChange}
                       error={!!errors.secondaryNumber}
                       helperText={errors.secondaryNumber}
+                      style={{ width: '75%' }}
                     />
                   </div>
                 </div>
@@ -443,6 +596,28 @@ setLoading(true)
                 <div className="col-12 mt-2 mt-sm-0">
                   <div className="input-group mt-2 w-100">
                     <TextField
+                      select
+                      label="Country Code"
+                      variant="filled"
+                      name="whatsappCountryCode"
+                      value={newFormData.contactDetails.whatsappCountryCode}
+                      onChange={handleContactChange}
+                      error={!!errors.whatsappCountryCode}
+                      helperText={errors.whatsappCountryCode}
+                      style={{ width: '25%' }}// Adjust width for mobile and desktop
+                    >
+                      {countryCodes.map(({ code, country, cca2 }) => (
+                        <MenuItem key={code} value={code}>
+                          <img
+                            src={`https://flagcdn.com/w20/${cca2.toLowerCase()}.png`}
+                            alt={`${country} flag`}
+                            className="mr-2 w-5 h-4"
+                          />
+                          {`(${code})`}
+                        </MenuItem>
+                      ))}
+                    </TextField>
+                    <TextField
                       fullWidth
                       label="WhatsApp number*"
                       variant="filled"
@@ -451,10 +626,13 @@ setLoading(true)
                       onChange={handleContactChange}
                       error={!!errors.whatsappNumber}
                       helperText={errors.whatsappNumber}
+                      style={{ width: '75%' }}// Adjust width for mobile and desktop
                     />
                   </div>
                 </div>
               </div>
+
+
             </div>
 
             <hr />
@@ -497,7 +675,7 @@ setLoading(true)
           </div>
 
           <div className="col-12 mt-3 text-center">
-           {loading ? <Spinner variant="primary"/> : <button
+            {loading ? <Spinner variant="primary" /> : <button
               className="btn btn-primary btn-lg w-100"
               onClick={contactSubmitHandler}
             >
@@ -589,7 +767,7 @@ setLoading(true)
                         </div>
                         <div className="col">
                           <span className="fs-13">Send Email</span>
-                          <p className="fs-16">
+                          <p className="fs-16 text-break">
                             {newFormData.contactDetails.email}
                           </p>
                         </div>
@@ -605,10 +783,10 @@ setLoading(true)
                           <span className="fs-13">Contact</span>
 
                           <p className="fs-16">
-                            {newFormData.contactDetails.primaryNumber}
+                            +91  {newFormData.contactDetails.primaryNumber}
                           </p>
                           <p className="fs-16">
-                            {newFormData.contactDetails.secondaryNumber}
+                            +91 {newFormData.contactDetails.secondaryNumber}
                           </p>
                         </div>
                       </div>

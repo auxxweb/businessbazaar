@@ -24,9 +24,12 @@ const CategorySection = ({
             Discover Diverse Categories
           </h1>
           <p className="mt-3 text-center">
-            Uncover a variety of services and experiences designed to cater to
-            your every need. Explore the finest options available and find
-            exactly what you&apos;re looking for!
+          Explore a wide range of services and experiences 
+          tailored to suit your every need. From local businesses
+           to global enterprises, our local business directory
+            listing helps you find the best options effortlessly. 
+            Connect with trusted businesses, discover new opportunities, 
+          and access the services you need with ease!
           </p>
         </div>
         <div className="mb-5 mt-2" id="category">

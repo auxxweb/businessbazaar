@@ -994,9 +994,17 @@ export default function Template() {
                           <div className="col">
                             <span className="fs-12 sm:fs-10" style={{ color: textColor }}>Address</span>
                             <p
-                              style={{ color: textColor, textDecoration: 'none' }}
+                              style={{ color: textColor, textDecoration: 'none' }}    
 
-                              className="fs-14 sm:fs-12">{`${businessData?.address?.buildingName},${businessData.address?.streetName}, ${businessData?.address?.landMark}, ${businessData?.address?.city},   ${businessData.address?.state}`}</p>
+                              className="fs-14 sm:fs-12"> 
+                             
+                              {`${businessData?.address?.buildingName}`} , 
+                              
+                              {`${businessData?.address?.streetName}`}, 
+                              <br />
+                              {`${businessData?.address?.landMark}`}, 
+                              
+                              {`${businessData?.address?.city}, ${businessData?.address?.state}`}</p>
                           </div>
                         </div>
                       </a>
@@ -1044,7 +1052,7 @@ export default function Template() {
                             style={{ color: textColor, textDecoration: 'none' }}
                             href={`tel:${businessData?.contactDetails?.primaryNumber}`}
                           >
-                            {businessData?.contactDetails?.primaryNumber}
+                         + {businessData?.contactDetails?.primaryCountryCode }   {businessData?.contactDetails?.primaryNumber}
                           </a>
                         </p>
                         <p className="fs-14 sm:fs-12 mt-0">
@@ -1052,7 +1060,7 @@ export default function Template() {
                             style={{ color: textColor, textDecoration: 'none' }}
                             href={`tel:${businessData?.contactDetails?.secondaryNumber}`}
                           >
-                            {businessData?.contactDetails?.secondaryNumber}
+                         + {businessData?.contactDetails?.secondaryCountryCode }  {businessData?.contactDetails?.secondaryNumber}
                           </a>
                         </p>
                       </div>
@@ -1696,7 +1704,7 @@ export default function Template() {
                 />
                 <div className="text-center newsletter-content position-absolute">
                   <div className="d-none d-lg-block">
-                    <h2 className="fs-45 mb-3 fw-bold text-black">
+                    <h2 className="fs-43 mb-3 fw-bold text-black">
                       Create Your Own Business <br />
                       Subscribing To Our Newsletter
                     </h2>

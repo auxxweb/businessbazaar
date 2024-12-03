@@ -20,9 +20,11 @@ const BusinessesSection = ({
             Discover the Top Businesses
           </h1>
           <p className="mt-3 text-center" data-aos="fade-left">
-            Explore the most popular destinations in your area, highly rated by
-            locals and visitors alike. Find out what makes these places stand
-            out and start your next adventure right here!
+          Explore the most popular business listings in your area through our 
+          local business directory listing, highly rated by locals and visitors alike.
+           Our platform makes it easy to find top-rated businesses based on customer reviews and expert
+            recommendations. Whether you're looking for trusted services, shopping options, or professional solutions, 
+          our comprehensive directory ensures you connect with the best businesses available!
           </p>
         </div>
         <div className="row justify-content-around gap-2">

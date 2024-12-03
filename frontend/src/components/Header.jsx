@@ -27,10 +27,10 @@ export default function Header() {
       document.removeEventListener("click", handleClickOutside);
       window.removeEventListener("scroll", handleScroll);
     };
-  }, []);
+  }, []);       
 
-  return (
-    <Navbar
+  return (  
+    <Navbar   
       expand="lg"
       className={`fixed-top home-navbar ${expanded ? "navbar-active" : ""}`}
       expanded={expanded}
@@ -38,7 +38,7 @@ export default function Header() {
     >
       <Container>
         <Navbar.Brand href="/" className="fw-bold w-50" style={{ fontSize: "36px" }}>
-          <img src="/src/assets/images/enconnectLogo.png" alt="" style={{ width: "100px" }} />
+          <img src="/src/assets/images/enConnectLogo.png" alt="" style={{height:'50px', width: "150px" }} />
         </Navbar.Brand>
 
         <Navbar.Toggle
@@ -94,7 +94,7 @@ export default function Header() {
               }}
               onClick={() => setExpanded(false)} // Close on link click
             >
-              My Business
+              My Profile
             </NavLink>
           </Nav>
         </Navbar.Collapse>

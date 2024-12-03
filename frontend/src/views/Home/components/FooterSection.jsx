@@ -122,7 +122,7 @@ const FooterSection = () => {
                   </h3>
                   <div className="col-12 mb-3 text-center text-md-start">
                     <a href="" className="fs-16 text-white">
-                      inconnect@gmail.com
+                      enconnect.nfc@gmail.com
                     </a>
                   </div>
                   <div className="col-12 mb-3 text-center text-md-start">
@@ -132,7 +132,7 @@ const FooterSection = () => {
                     >
                       <span>
                         <i className="bi bi-telephone text-white me-1"></i> +91
-                        7994085695
+                        9745004569
                       </span>
                     </a>
                   </div>
@@ -182,6 +182,7 @@ const FooterSection = () => {
             </div>
           </div>
         </div>
+
       </div>
     </footer>
   )
