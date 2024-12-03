@@ -1,7 +1,7 @@
-import { useNavigate } from "react-router";
+import { useNavigate } from 'react-router'
 
 const FooterSection = () => {
-  const navigate = useNavigate();
+  const navigate = useNavigate()
   return (
     <footer className=" h-auto footer-section">
       <div className="container">
@@ -15,7 +15,7 @@ const FooterSection = () => {
             <div className="col-12 col-md-6 text-center text-md-end">
               <button
                 className="btn btn-theme mt-3"
-                onClick={() => navigate("/create-business")}
+                onClick={() => navigate('/create-business')}
               >
                 Create Profile
               </button>
@@ -38,7 +38,8 @@ const FooterSection = () => {
                 <div className="mt-3 mb-2">
                   <a
                     href="#"
-                    className="fs-14 text-decoration-none text-orange " style={{color:'#fff'}}
+                    className="fs-14 text-decoration-none text-orange "
+                    style={{ color: '#fff' }}
                   >
                     FOLLOW US
                   </a>
@@ -47,25 +48,48 @@ const FooterSection = () => {
                 {/* Social Media Icons */}
                 <div className="d-flex justify-content-center justify-content-lg-start gap-3">
                   <a
-                    href="#" className="contact-banner text-orange d-flex align-items-center justify-content-center"
-                    style={{ fontSize: "1.5rem", width: "50px", height: "50px", backgroundColor: "transparent",color:'#107D93', border: "none" }}
+                    href="#"
+                    className="contact-banner text-orange d-flex align-items-center justify-content-center"
+                    style={{
+                      fontSize: '1.5rem',
+                      width: '50px',
+                      height: '50px',
+                      backgroundColor: 'transparent',
+                      color: '#107D93',
+                      border: 'none',
+                    }}
                   >
                     <i className="bi bi-facebook"></i>
                   </a>
                   <a
-                    href="#" className="contact-banner text-orange d-flex align-items-center justify-content-center"
-                    style={{ fontSize: "1.5rem", width: "50px", height: "50px", backgroundColor: "transparent", color:'#107D93', border: "none" }}
+                    href="#"
+                    className="contact-banner text-orange d-flex align-items-center justify-content-center"
+                    style={{
+                      fontSize: '1.5rem',
+                      width: '50px',
+                      height: '50px',
+                      backgroundColor: 'transparent',
+                      color: '#107D93',
+                      border: 'none',
+                    }}
                   >
                     <i className="bi bi-instagram"></i>
                   </a>
                   <a
-                    href="#" className="contact-banner text-orange d-flex align-items-center justify-content-center"
-                    style={{ fontSize: "1.5rem", width: "50px", height: "50px", backgroundColor: "transparent", color:'#107D93', border: "none" }}
+                    href="#"
+                    className="contact-banner text-orange d-flex align-items-center justify-content-center"
+                    style={{
+                      fontSize: '1.5rem',
+                      width: '50px',
+                      height: '50px',
+                      backgroundColor: 'transparent',
+                      color: '#107D93',
+                      border: 'none',
+                    }}
                   >
                     <i className="bi bi-twitter"></i>
                   </a>
                 </div>
-
               </div>
             </div>
 
@@ -129,13 +153,30 @@ const FooterSection = () => {
         <div className="footer-bottom p-4">
           <div className="row w-full justify-content-between">
             <div className="col-sm-4 text-left">
-              <a href={`/terms-and-conditions`} >Terms and Conditions</a>
+              <a href={`/terms-and-conditions`}>Terms and Conditions</a>
             </div>
-            <div className="col-sm-4 text-right">
-              <div style={{ color: "#A4B3CB" }} className="text-right">
+            <div className="col-sm-4 text-center">
+              <img src="" alt="" />
+              <p style={{ color: '#A4B3CB' }}>
+                {' '}
                 <span>
                   Copyright &copy;
                   {new Date().getFullYear()} En Connect. All Rights Reserved
+                </span>{' '}
+              </p>
+            </div>
+            <div className="col-sm-4 text-right">
+              <div style={{ color: '#A4B3CB' }} className="text-right">
+                <img src="/images/2 (1).png" alt="" />
+                <span>
+                  Technical Partner :{' '}
+                  <a
+                    style={{ textDecoration: 'none' }}
+                    href="https://www.auxxweb.in"
+                  >
+                    {' '}
+                    Auxxweb IT Solutions
+                  </a>
                 </span>
               </div>
             </div>
@@ -143,7 +184,7 @@ const FooterSection = () => {
         </div>
       </div>
     </footer>
-  );
-};
+  )
+}
 
-export default FooterSection;
+export default FooterSection
