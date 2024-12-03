@@ -24,6 +24,7 @@ import {
   ReviewSection,
 } from "./components";
 import { ReviewModal } from "../../containers/BusinessReviews";
+import { useDispatch } from "react-redux";
 
 export default function Home() {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -54,6 +55,7 @@ export default function Home() {
   });
 
   const [categoryData, setCategoryData] = useState([]);
+  const [categoryLoading, setCategoryLoading] = useState(false);
   const [bannerData, setBannerData] = useState([]);
   const [businessData, setBusinessData] = useState([]);
   const [totalBusinessData, setTotalBusinessData] = useState(0);
@@ -72,6 +74,8 @@ export default function Home() {
     },
   ]);
 
+
+  const dispatch= useDispatch()
   useEffect(() => {
     const fetchReviews = async () => {
       try {
@@ -161,9 +165,9 @@ export default function Home() {
           location
         );
 
-        const categoryDetails = await fetchCategories(visibleCategories);
+        // const categoryDetails = await fetchCategories(visibleCategories);
 
-        setCategoryData(categoryDetails.data.data);
+        // setCategoryData(categoryDetails.data.data);
         setBusinessData(businessDetails.data.data);
 
         setTotalBusinessData(businessDetails.data.totalCount);
@@ -175,7 +179,29 @@ export default function Home() {
       }
     };
     fetchData();
-  }, [visibleBusiness, visibleCategories, location]);
+  }, [visibleBusiness, location]);
+
+
+  useEffect(()=>{
+    const fetchCategory = async () => {
+      try {
+        setCategoryLoading(true)
+        const categoryDetails = await fetchCategories(visibleCategories);
+        setCategoryData(categoryDetails.data.data);
+        
+        
+        
+      } catch (error) {
+        setCategoryLoading(false)
+        console.error("Error fetching data:", error);
+      } finally {
+        setCategoryLoading(false);
+      }
+    };
+    fetchCategory();
+  }, [visibleCategories])
+
+  console.log(categoryData,'ithenne')
 
   useEffect(() => {
     const fetchBanner = async () => {
@@ -185,8 +211,11 @@ export default function Home() {
     fetchBanner();
   }, []);
 
-  const loadMoreCategories = () => {
+  const loadMoreCategories = async () => {
+    // setCategoryLoading(true)
     setVisibleCategories((prev) => prev + 20);
+    const categoryDetails = await fetchCategories(visibleCategories);
+    setCategoryData(categoryDetails.data.data)
   };
 
   const loadMoreBusiness = () => {
@@ -234,7 +263,7 @@ export default function Home() {
       <CategorySection
         categoryData={categoryData}
         loadMoreCategories={loadMoreCategories}
-        loading={loading}
+        loading={categoryLoading}
         visibleCategories={visibleCategories}
       />
 

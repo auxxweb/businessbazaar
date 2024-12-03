@@ -2,6 +2,7 @@ import PropTypes from "prop-types";
 import Placeholder from "../../../assets/images/placeholder.jpg";
 import { Link } from "react-router-dom";
 import Loader from "../../../components/Loader/Loader";
+import { useState } from "react"; // Import useState for managing button loading state
 
 const CategorySection = ({
   loading,
@@ -9,17 +10,22 @@ const CategorySection = ({
   visibleCategories,
   loadMoreCategories,
 }) => {
+  const [buttonLoading, setButtonLoading] = useState(false); // Track button loading state
+ 
+  const handleLoadMore = async () => {
+    setButtonLoading(true); // Show loader when button is clicked
+    await loadMoreCategories(); // Call the loadMoreCategories function
+    setButtonLoading(false); // Hide loader after categories are loaded
+  };
+   
   return (
     <section id="category" className=" bg-light h-auto" data-aos="fade-up">
       <div className="container" style={{ width: "90%" }}>
         <div className="mb-5 p-4">
-          <h1
-            className="text-center fw-bold mt-4"
-            style={{ marginTop: "20px" }}
-          >
+          <h1 className="text-center fw-bold mt-4" style={{ marginTop: "20px" }}>
             Discover Diverse Categories
           </h1>
-          <p className="mt-3 text-center  ">
+          <p className="mt-3 text-center">
             Uncover a variety of services and experiences designed to cater to
             your every need. Explore the finest options available and find
             exactly what you&apos;re looking for!
@@ -50,13 +56,19 @@ const CategorySection = ({
                 </Link>
               ))}
           </div>
+
           {visibleCategories <= categoryData.length && ( // Check if more categories are available
             <div className="mb-3 mt-5 text-center">
               <button
-                onClick={loadMoreCategories}
+                onClick={handleLoadMore} // Trigger the load more with loading state
                 className="btn btn-dark btn-md"
+                disabled={buttonLoading} // Disable the button when loading
               >
-                View More <i className="bi bi-arrow-right"></i>
+                {buttonLoading ? (
+                  <Loader /> // Show loader inside button while loading
+                ) : (
+                  <>View More <i className="bi bi-arrow-right"></i></> // Regular button text when not loading
+                )}
               </button>
             </div>
           )}
