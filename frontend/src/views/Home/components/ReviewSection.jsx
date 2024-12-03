@@ -22,9 +22,10 @@ const ReviewSection = ({
             Reviews
           </h1>
           <p className="mt-3 text-center" data-aos="zoom-in">
-            Hear from those who have experienced our services firsthand. Read
-            their stories and see why we’re a trusted choice for so many. Their
-            feedback is a testament to our commitment to excellence!
+          Take a look at genuine reviews and heartfelt testimonials
+           that highlight experiences, impressions, and the impact of our work. 
+           Whether it’s about personal achievements or professional services,
+           these reviews reflect the trust and value we bring to every interaction.
           </p>
           <div className="col-12">
             <div className="col-12 text-center mb-3">

@@ -49,14 +49,14 @@ export default function Razorpay() {
       }
     }
 
-    const options = {
+    const options = {  
       key: "rzp_test_DBApSwEptkCDdS", // Dummy Razorpay key ID for testing
       amount: planDetails?.amount * 100, // Amount in paise (50000 paise = ₹500)
       currency: "INR",
       name: "EnConnect",
       description:
         "EnConnect is a comprehensive platform designed to simplify and enhance professional networking, providing seamless tools for business growth, collaboration, and community building",
-      image: "https://instant-connect.in/src/assets/images/enconnectLogo.png", // Dummy logo URL
+      image: "https://instant-connect.in/src/assets/images/enConnectLogo.png", // Dummy logo URL
       handler: async function (response) {
         console.log(response, "response");
         setLoader(true);
@@ -134,7 +134,7 @@ export default function Razorpay() {
         contact: businessState?.contactDetails?.primaryNumber,
       },
       notes: {
-        businessId: id,
+        payment_id: id,
       },
       theme: {
         color: businessState.theme, // Customize theme color
@@ -154,7 +154,7 @@ export default function Razorpay() {
          const paymentRes = await createPayment(planDetails,paymentToken);
          if(paymentRes.success) {
 
-           handlePayment(id,paymentToken);
+           handlePayment(paymentRes?.data?._id,paymentToken);
          }
         return;
       }else{
@@ -169,7 +169,7 @@ export default function Razorpay() {
           console.log("business", id);
           const paymentRes = await createPayment(planDetails,token);
           if(paymentRes.success) {
-            handlePayment(id, token);
+            handlePayment(paymentRes?.data?._id, token);
           }
   
         } catch (error) {

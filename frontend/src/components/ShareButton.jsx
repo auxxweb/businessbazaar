@@ -92,7 +92,7 @@ const ShareButton = ({ number }) => {
             },
             workPhone: "+1-425-936-5522",
             workFax: "+1-425-936-7329",
-            mobilePhone: "+1-425-936-0000",
+            mobilePhone: "+1-425-936-0000",   
             email: "deriks@Microsoft.com"
         };
         // Properly formatted vCard with correct date format and encoding
