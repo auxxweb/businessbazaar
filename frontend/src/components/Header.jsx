@@ -38,7 +38,7 @@ export default function Header() {
     >
       <Container>
         <Navbar.Brand href="/" className="fw-bold w-50" style={{ fontSize: "36px" }}>
-          <img src="/src/assets/images/enConnectLogo.png" alt="" style={{height:'50px', width: "150px" }} />
+          <img src="/src/assets/images/enconnectLogo.png" alt="" style={{height:'50px', width: "150px" }} />
         </Navbar.Brand>
 
         <Navbar.Toggle
