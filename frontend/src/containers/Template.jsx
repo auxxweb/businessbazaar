@@ -302,7 +302,7 @@ export default function Template() {
     fetchData()
   }, [id])
 
-  console.log(businessData,'lll;l;l;l;l;;ll;;;l')
+  console.log(businessData, 'lll;l;l;l;l;;ll;;;l')
 
   const getContrastingColor = (hexColor) => {
     // Remove '#' if present
@@ -648,8 +648,6 @@ export default function Template() {
                   borderRadius: '50%',
                   border: '2px solid #1D4ED8', // Highlight with theme color
                   marginBottom: '15px',
-                  borderRadius: '50%',
-                  border: '2px solid #1D4ED8', // Highlight with theme color
                 }}
               />
               <p style={{ margin: 0 }}>We couldn't find the profile you're looking for.</p>
@@ -994,16 +992,16 @@ export default function Template() {
                           <div className="col">
                             <span className="fs-12 sm:fs-10" style={{ color: textColor }}>Address</span>
                             <p
-                              style={{ color: textColor, textDecoration: 'none' }}    
+                              style={{ color: textColor, textDecoration: 'none' }}
 
-                              className="fs-14 sm:fs-12"> 
-                             
-                              {`${businessData?.address?.buildingName}`} , 
-                              
-                              {`${businessData?.address?.streetName}`}, 
+                              className="fs-14 sm:fs-12">
+
+                              {`${businessData?.address?.buildingName}`} ,
+
+                              {`${businessData?.address?.streetName}`},
                               <br />
-                              {`${businessData?.address?.landMark}`}, 
-                              
+                              {`${businessData?.address?.landMark}`},
+
                               {`${businessData?.address?.city}, ${businessData?.address?.state}`}</p>
                           </div>
                         </div>
@@ -1052,7 +1050,7 @@ export default function Template() {
                             style={{ color: textColor, textDecoration: 'none' }}
                             href={`tel:${businessData?.contactDetails?.primaryNumber}`}
                           >
-                         + {businessData?.contactDetails?.primaryCountryCode }   {businessData?.contactDetails?.primaryNumber}
+                            + {businessData?.contactDetails?.primaryCountryCode}   {businessData?.contactDetails?.primaryNumber}
                           </a>
                         </p>
                         <p className="fs-14 sm:fs-12 mt-0">
@@ -1060,7 +1058,7 @@ export default function Template() {
                             style={{ color: textColor, textDecoration: 'none' }}
                             href={`tel:${businessData?.contactDetails?.secondaryNumber}`}
                           >
-                         + {businessData?.contactDetails?.secondaryCountryCode }  {businessData?.contactDetails?.secondaryNumber}
+                            + {businessData?.contactDetails?.secondaryCountryCode}  {businessData?.contactDetails?.secondaryNumber}
                           </a>
                         </p>
                       </div>
@@ -1214,42 +1212,42 @@ export default function Template() {
 
               <div className="mt-5 david-font">
                 <div className="mb-5">
-                  
-                    {businessData?.productSection?.data?.length > 0 && (
-                      <div className="row mb-3">
-                        {businessData.productSection.data.map((item, index) => (
-                          <div
-                            className="col-12 col-lg-6 mt-3 mx-auto"
-                            style={{ padding: '0 30px' }}
-                            key={index}
-                          >
-                            <div className="row product-section align-items-center">
-                              <div className="col-2">
-                                <img
-                                  src={
-                                    item?.image && item?.image.length > 0
-                                      ? item.image
-                                      : ''  
-                                  }
-                                  alt=""
-                                  className="w-100"
-                                />
-                              </div>
-                              <div className="col-8">
-                                <h1 className="fs-20 fw-bold">{item.title}</h1>
-                                <p className="mt-2">{item.description}</p>
-                              </div>
-                              <div className="col-2 p-0">
-                                <span className="fw-bold">{item.price ? 'Price : ₹' : ''}</span>
-                                <span className="fw-bold">{item.price}</span>
-                              </div>
+
+                  {businessData?.productSection?.data?.length > 0 && (
+                    <div className="row mb-3">
+                      {businessData.productSection.data.map((item, index) => (
+                        <div
+                          className="col-12 col-lg-6 mt-3 mx-auto"
+                          style={{ padding: '0 30px' }}
+                          key={index}
+                        >
+                          <div className="row product-section align-items-center">
+                            <div className="col-2">
+                              <img
+                                src={
+                                  item?.image && item?.image.length > 0
+                                    ? item.image
+                                    : ''
+                                }
+                                alt=""
+                                className="w-100"
+                              />
+                            </div>
+                            <div className="col-8">
+                              <h1 className="fs-20 fw-bold">{item.title}</h1>
+                              <p className="mt-2">{item.description}</p>
+                            </div>
+                            <div className="col-2 p-0">
+                              <span className="fw-bold">{item.price ? 'Price : ₹' : ''}</span>
+                              <span className="fw-bold">{item.price}</span>
                             </div>
                           </div>
-                        ))}
-                      </div>
-                    )}
+                        </div>
+                      ))}
+                    </div>
+                  )}
 
-               
+
                 </div>
               </div>
             </div>
