@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
-import { TextField } from "@mui/material";
+import { Button, TextField } from "@mui/material";
 import { updateBusinessDetails } from "../store/businessSlice";
 import Loader from "../../../components/Loader/Loader";
 import { Spinner } from "react-bootstrap";
@@ -11,7 +11,7 @@ const SeoDetails = () => {
   const dispatch = useDispatch();
   const businessState = useSelector((state) => state.business);
   const [errorMessage, setErrorMessage] = useState("");
- const [descriptionErrorMessage, setDescriptionErrorMessage] = useState('')
+  const [descriptionErrorMessage, setDescriptionErrorMessage] = useState('')
 
   const [socialMediaLinks, setSocialMediaLinks] = useState([
     { tag: "instagram", link: "" },
@@ -108,7 +108,7 @@ const SeoDetails = () => {
     }));
   };
 
-  
+
 
   // Handle social media input changes
   const handleSocialMediaChange = (index, value) => {
@@ -168,52 +168,49 @@ const SeoDetails = () => {
 
             {/* Form Fields */}
             <div className="col-12">
-              <div className="input-group mt-2 w-100">
-                <TextField
-                  fullWidth
-                  label="Title (Max 8 Words)"
-                  id="title"
-                  variant="filled"
-                  name="title"
-                  autoComplete="title"
-                  value={seoData.title}
-                  onChange={handleSeoInputChange}
-                  helperText={errorMessage || "Enter a title with up to 8 words."}
-                  error={!!errorMessage}
-                />
+              <TextField
+                fullWidth
+                label="Title (Max 8 Words)"
+                id="title"
+                className="my-2"
+                variant="outlined"
+                name="title"
+                autoComplete="title"
+                value={seoData.title}
+                onChange={handleSeoInputChange}
+                helperText={errorMessage || "Enter a title with up to 8 words."}
+                error={!!errorMessage}
+              />
+              {errorMessage && <span className="text-danger">{errorMessage}</span>}
 
-                {errorMessage && <span>{errorMessage}</span>}
-              </div>
+              <TextField
+                fullWidth
+                label="Description (50 Words)"
+                id="description"
+                className="my-2"
+                variant="outlined"
+                name="description"
+                autoComplete="description"
+                multiline
+                rows={4} // Adjust rows as needed
+                value={seoData.description}
+                onChange={handleDescriptionInputChange} // Use the new function
+                helperText={descriptionErrorMessage || "Enter a title with up to 8 words."}
+                error={!!descriptionErrorMessage}
+              />
 
-              <div className="input-group mb-3 mt-4 w-100">
-                <TextField
-                  fullWidth
-                  label="Description (50 Words)"
-                  id="description"
-                  variant="filled"
-                  name="description"
-                  autoComplete="description"
-                  multiline
-                  rows={4} // Adjust rows as needed
-                  value={seoData.description}
-                  onChange={handleDescriptionInputChange} // Use the new function
-                  helperText={descriptionErrorMessage || "Enter a title with up to 8 words."}
-                  error={!!descriptionErrorMessage}
-
-                />
-                
-                {descriptionErrorMessage && <span>{descriptionErrorMessage}</span>}
-              </div>
+              {descriptionErrorMessage && <span className="text-danger">{descriptionErrorMessage}</span>}
 
               {/* Tags Section */}
-              <div className="input-group mb-3 mt-4 w-100">
+              <div className="input-group my-4 w-100">
                 {seoData.metaTags.map((tag, index) => (
                   <div className="input-group mb-2" key={index}>
                     <TextField
                       fullWidth
                       type="text "
                       label="Tag"
-                      variant="filled"
+                      className="my-2"
+                      variant="outlined"
                       inputProps={{ maxLength: 35 }}
                       value={tag}
                       onChange={(e) => handleTagChange(index, e.target.value)}
@@ -238,13 +235,15 @@ const SeoDetails = () => {
                   </div>
                 ))}
               </div>
-              <button
-                className="text-decoration-none btn btn-primary w-100 mb-3"
-                type="button"
-                onClick={addTag}
-              >
-                Add More
-              </button>
+              <div className="text-center">
+                <Button
+                  variant="contained"
+                  type="button"
+                  onClick={addTag}
+                >
+                  Add More tags
+                </Button>
+              </div>
               <div className=" h-100">
                 {/* Social Media Links */}
                 {socialMediaLinks.map((link, index) => (
@@ -269,12 +268,12 @@ const SeoDetails = () => {
 
           {/* Save & Next Button */}
           <div className="col-12 text-center p-3 p-md-5">
-            {loading ? <Spinner variant="primary" /> : <button
-              className="btn btn-primary w-100 text-white p-2"
+            {loading ? <Spinner variant="primary" /> : <Button
+              variant="contained"
               onClick={handleSeoSubmit}
             >
               Save & Next
-            </button>}
+            </Button>}
           </div>
         </div>
 

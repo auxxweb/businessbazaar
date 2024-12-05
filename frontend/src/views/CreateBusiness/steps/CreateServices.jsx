@@ -3,10 +3,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
 import Cropper from "react-easy-crop";
 import Slider from "react-slick";
-import { TextField } from "@mui/material";
+import { Button, TextField } from "@mui/material";
 import { updateBusinessDetails } from "../store/businessSlice";
 import { preRequestFun } from "../service/s3url";
-import { Button, Spinner } from "react-bootstrap";
+import { Spinner } from "react-bootstrap";
 import getCroppedImg from "../../../utils/cropper.utils";
 
 const CreateServices = () => {
@@ -22,8 +22,8 @@ const CreateServices = () => {
   const [isLoading, setIsLoading] = useState({
     specialService: {},
   });
-  const [cropLoading,setCropLoading] = useState(false)
-  const [loading,setLoading] = useState(false)
+  const [cropLoading, setCropLoading] = useState(false)
+  const [loading, setLoading] = useState(false)
   const [errors] = useState([]);
   const [crop1, setCrop1] = useState({ x: 0, y: 0 });
   const [zoom1, setZoom1] = useState(1);
@@ -212,7 +212,7 @@ const CreateServices = () => {
       JSON.parse(JSON.stringify(businessState?.service))
     );
     console.log(businessState);
-    
+
   }, [businessState]);
 
   return (
@@ -253,15 +253,16 @@ const CreateServices = () => {
                   </div>
                 </div>
                 <div className="modal-footer">
-                { cropLoading ? <Spinner variant="primary"/> : <Button variant="primary" onClick={handleCropSave1}>
-                    Save Crop
-                  </Button>}
                   <Button
-                    variant="outlined"
+                    variant="contained"
+                    className="mx-2 bg-danger border-danger"
                     onClick={() => setShowCropper1(false)}
                   >
                     Cancel
                   </Button>
+                  {cropLoading ? <Spinner variant="primary" /> : <Button color="primary" variant="contained" className="mx-2" onClick={handleCropSave1}>
+                    Save Crop
+                  </Button>}
                 </div>
               </div>
             </div>
@@ -293,49 +294,47 @@ const CreateServices = () => {
 
               <div className="col-12">
                 {/* Special Service Title */}
-                <div className="input-group mt-2 w-100">
-                  <TextField
-                    fullWidth
-                    label="Title (8 words)"
-                    id="title-1"
-                    variant="filled"
-                    name="title"
-                    autoComplete="title-1"
-                    onChange={handleChange}
-                    inputProps={{maxLength:35}}
-                    error={specialService?.title?.split("")?.length >= 35 ? true : false}
-                    helperText={specialService?.title?.split("")?.length >= 35 ? "exceeded the limit" : ""}
-                    value={specialService.title}
-                  />
-                </div>
-                <div className="input-group mb-3 mt-4 w-100">
-                  <TextField
-                    fullWidth
-                    label="Description (50 words)"
-                    id="description-1"
-                    variant="filled"
-                    name="description"
-                    autoComplete="description-1"
-                    multiline // Makes the TextField behave like a textarea
-                    rows={4} // You can adjust the number of rows (height) here
-                    value={specialService.description}
-                    inputProps={{maxLength:250}}
-                    onChange={handleChange}
-                    error={specialService?.description?.split("")?.length >= 250 ? true : false}
-                    helperText={specialService?.description?.split("")?.length >= 250 ? "exceeded the limit" : ""}
-                    sx={{
-                      "& .MuiInputBase-root": {
-                        padding: "12px", // Padding inside the textarea
-                      },
-                      "& .MuiFilledInput-root": {
-                        backgroundColor: "#f9f9f9", // Optional: Background color for the filled variant
-                      },
-                      "& .MuiFormLabel-root": {
-                        top: "-6px", // Adjust label positioning if needed
-                      },
-                    }}
-                  />
-                </div>
+                <TextField
+                  fullWidth
+                  className="my-2"
+                  label="Title (8 words)"
+                  id="title-1"
+                  variant="outlined"
+                  name="title"
+                  autoComplete="title-1"
+                  onChange={handleChange}
+                  inputProps={{ maxLength: 35 }}
+                  error={specialService?.title?.split("")?.length >= 35 ? true : false}
+                  helperText={specialService?.title?.split("")?.length >= 35 ? "exceeded the limit" : ""}
+                  value={specialService.title}
+                />
+                <TextField
+                  fullWidth
+                  className="my-2"
+                  label="Description (50 words)"
+                  id="description-1"
+                  variant="outlined"
+                  name="description"
+                  autoComplete="description-1"
+                  multiline // Makes the TextField behave like a textarea
+                  rows={4} // You can adjust the number of rows (height) here
+                  value={specialService.description}
+                  inputProps={{ maxLength: 250 }}
+                  onChange={handleChange}
+                  error={specialService?.description?.split("")?.length >= 250 ? true : false}
+                  helperText={specialService?.description?.split("")?.length >= 250 ? "exceeded the limit" : ""}
+                  sx={{
+                    "& .MuiInputBase-root": {
+                      padding: "12px", // Padding inside the textarea
+                    },
+                    "& .MuiFilledInput-root": {
+                      backgroundColor: "#f9f9f9", // Optional: Background color for the filled variant
+                    },
+                    "& .MuiFormLabel-root": {
+                      top: "-6px", // Adjust label positioning if needed
+                    },
+                  }}
+                />
                 <hr
                   style={{
                     border: "3px solid #105193",
@@ -382,45 +381,34 @@ const CreateServices = () => {
                       fullWidth
                       label="Title (8 words)"
                       id="title"
-                      variant="filled"
+                      className="my-2"
+                      variant="outlined"
                       name="title"
                       autoComplete="Service Name"
                       value={p.title}
-                      inputProps={{maxLength:35}}
+                      inputProps={{ maxLength: 35 }}
                       onChange={(e) => handleProductChange(index, e)}
                       error={p?.title?.split("")?.length >= 35 ? true : false}
                       helperText={p?.title?.split("")?.length >= 35 ? "exceeded the limit" : ""}
                     />
 
-                    <div className="input-group mb-3 mt-4 w-100">
-                      <TextField
-                        fullWidth
-                        label="Description (50 words)"
-                        id="description"
-                        variant="filled"
-                        name="description"
-                        autoComplete="description"
-                        multiline
-                        rows={4}
-                        inputProps={{maxLength:250}}
-                        error={p?.description?.split("")?.length >= 250 ? true : false}
+                    <TextField
+                      fullWidth
+                      className="my-2"
+                      label="Description (50 words)"
+                      id="description"
+                      variant="outlined"
+                      name="description"
+                      autoComplete="description"
+                      multiline
+                      rows={4}
+                      inputProps={{ maxLength: 250 }}
+                      error={p?.description?.split("")?.length >= 250 ? true : false}
                       helperText={p?.description?.split("")?.length >= 250 ? "exceeded the limit" : ""}
-                        sx={{
-                          "& .MuiInputBase-root": {
-                            padding: "12px",
-                          },
-                          "& .MuiFilledInput-root": {
-                            backgroundColor: "#f9f9f9",
-                          },
-                          "& .MuiFormLabel-root": {
-                            top: "-6px",
-                          },
-                        }}
-                        onChange={(e) => handleProductChange(index, e)}
-                      />
-                    </div>
+                      onChange={(e) => handleProductChange(index, e)}
+                    />
 
-                    <div className="col-12 col-md-3 mb-3">
+                    <div className="col-12 col-md-3 mb-3 mx-auto">
                       <input
                         type="file"
                         hidden
@@ -456,21 +444,24 @@ const CreateServices = () => {
                 ))}
 
                 {/* Add Service Button */}
-                <a
-                  href="#"
-                  onClick={() =>
-                    setSpecialService((prevData) => ({
-                      ...prevData,
-                      data: [
-                        ...prevData.data,
-                        { title: "", description: "", image: "" },
-                      ],
-                    }))
-                  }
-                  className="text-decoration-none btn btn-primary w-100 mb-3"
-                >
-                  + Add More Special Service
-                </a>
+                <div className="text-center">
+
+                  <Button
+                    href="#"
+                    onClick={() =>
+                      setSpecialService((prevData) => ({
+                        ...prevData,
+                        data: [
+                          ...prevData.data,
+                          { title: "", description: "", image: "" },
+                        ],
+                      }))
+                    }
+                    color="primary" className="mx-2 mx-auto" variant="contained"
+                  >
+                    + Add  Service Card
+                  </Button>
+                </div>
 
               </div>
               {errors && (
@@ -482,12 +473,12 @@ const CreateServices = () => {
 
             {/* Save & Next Button */}
             <div className="col-12 mt-4 text-center">
-             {loading ? <Spinner variant="primary"/> : <button
-                className="btn btn-primary btn-md w-100"
+              {loading ? <Spinner variant="primary" /> : <Button
+                color="primary" className="mx-2 mx-auto" variant="contained"
                 onClick={handleServiceSubmit}
               >
                 Save & Next
-              </button>}
+              </Button>}
             </div>
           </div>
 

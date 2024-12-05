@@ -110,6 +110,14 @@ const ContactDetails = () => {
   return (
     <div className="h-100vh create-business-div">
       <div className="row px-4 h-100">
+        <div className="col-12 mt-4 text-start">
+          <button
+            className="btn btn-dark w-auto float-start"
+            onClick={handlePrevStep}
+          >
+            <i className="bi bi-arrow-left"></i>
+          </button>
+        </div>
         <div className="col-12 col-md-6 row align-items-center right-portion p-md-5 p-0">
           <Box component={"form"} className="mb-3" onSubmit={handleSubmitFunction} validated={false} noValidate={false} >
             <ContactForm state={addressData} setState={setAddressData} w />
@@ -117,8 +125,8 @@ const ContactDetails = () => {
             {showLocation && <CreateBusinessLocation placeDetails={placeDetails} setPlaceDetails={setPlaceDetails} libraries={libraries} visible={showLocation} setVisible={setShowLocation} setLocation={setLocation} />}
 
             <div className=" d-md-flex  justify-content-between  m-2">
-              <Button variant="contained" color="primary" type="submit" onClick={(() => setShowLocation(!showLocation))} >
-                <button className="border-0 bg-transparent ">
+              <Button variant="contained" color="primary" type="button" onClick={(() => setShowLocation(!showLocation))} >
+                <button type="button" className="border-0 bg-transparent ">
                   <svg fill="#fff" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
                     width="17px" height="17px" viewBox="0 0 395.71 395.71"
                     xml:space="preserve">
@@ -130,7 +138,7 @@ const ContactDetails = () => {
                     </g>
                   </svg>
                 </button>
-                <button style={{ width: "7rem", fontSize: "14px" }} className="border-0 bg-transparent text-white text-wrap ">Add Location</button>
+                <button type="button" style={{ width: "7rem", fontSize: "14px" }} className="border-0 bg-transparent text-white text-wrap ">Add Location</button>
               </Button>
               <p style={{ fontSize: "12px" }} className="text-secondary my-2 my-md-0 ms-md-2">{placeDetails}</p>
             </div>

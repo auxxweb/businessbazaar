@@ -6,8 +6,9 @@ import CloseIcon from '@mui/icons-material/Close'
 import Slider from 'react-slick'
 import axios from 'axios'
 import { updateBusinessDetails } from '../store/businessSlice'
-import { Button, Spinner } from 'react-bootstrap'
+import { Spinner } from 'react-bootstrap'
 import getCroppedImg from '../../../utils/cropper.utils'
+import { Button } from '@mui/material'
 
 const gallery = {
   infinite: true,
@@ -188,9 +189,9 @@ const MoreImages = () => {
         setLoading(false)
       }
     } else {
-      if(images.length !==0){
+      if (images.length !== 0) {
         const imageData = [];
-        images.map((item)=>imageData.push(item?.accessLink))
+        images.map((item) => imageData.push(item?.accessLink))
         dispatch(updateBusinessDetails({ gallery: imageData }))
       }
       navigate('/create-business/subscription') // Proceed if no new files to upload
@@ -200,13 +201,13 @@ const MoreImages = () => {
   const handlePrevStep = () => navigate('/create-business/seo')
 
   useEffect(() => {
-    if (businessState?.gallery?.length >0) {
+    if (businessState?.gallery?.length > 0) {
       setImages(
         businessState?.gallery?.map((accessLink) => ({
           accessLink,
         })),
       )
-    }else{
+    } else {
       setImages([initialImgState])
     }
   }, [businessState])
@@ -248,16 +249,17 @@ const MoreImages = () => {
                   />
                 </div>
               </div>
-              <div className="modal-footer">
-                {imageLoading ? <Spinner variant="primary" /> : <Button variant="primary" onClick={handleCropSave}>
-                  Save Crop
-                </Button>}
+              <div className="modal-footer ">
                 <Button
-                  variant="outlined"
+                  variant="contained"
+                  className="mx-2 bg-danger border-danger"
                   onClick={() => setShowCropper(false)}
                 >
                   Cancel
                 </Button>
+                {imageLoading ? <Spinner variant="primary" /> : <Button variant="contained" className="mx-2" onClick={handleCropSave}>
+                  Save Crop
+                </Button>}
               </div>
             </div>
           </div>
@@ -288,7 +290,7 @@ const MoreImages = () => {
             <div className="col-12 p-md-12 flex justify-content-start">
               <div className="row mb-3 gap-2">
                 {images.map((image, index) => (
-                  <div className="col-4 col-md-3 mb-3 mx-2" key={index}>
+                  <div className="col-4 col-md-3 mb-3 mx-2 text-center" key={index}>
                     <input
                       type="file"
                       hidden
@@ -296,7 +298,7 @@ const MoreImages = () => {
                       accept="image/*"
                       onChange={(e) => handleFileChange(index, e)}
                     />
-                    <div className="p-2 add-logo-div">
+                    <div className="p-2 add-logo-div ">
                       {/* Remove Button for all except the first image */}
                       {images?.length > 1 || image.file ? (
                         <div className="d-flex justify-content-end">
@@ -339,6 +341,7 @@ const MoreImages = () => {
                             src="/src/assets/images/add_image.png"
                             width="50"
                             alt="Add Image"
+                            className='mx-auto'
                             style={{ height: '70px', objectFit: 'contain' }}
                           />
                         )}
@@ -350,12 +353,12 @@ const MoreImages = () => {
 
               {images?.length < GALLERY_IMAGES_LIMIT && (
                 <div className="col-12 mb-3 text-center">
-                  <button
-                    className="btn w-100 btn btn-primary"
+                  <Button
+                    variant='contained'
                     onClick={addImageInput}
                   >
                     + Add another image
-                  </button>
+                  </Button>
                 </div>
               )}
             </div>
@@ -364,12 +367,12 @@ const MoreImages = () => {
           {/* Save & Next Button */}
           <div className="col-12 text-center p-3 p-md-5">
             {loading ? <Spinner variant='primary' /> : (
-              <button
-                className="btn btn-primary w-100 text-white p-2"
+              <Button
+                variant='contained'
                 onClick={handleGallerySubmit}
               >
                 Save & Next
-              </button>
+              </Button>
             )}
           </div>
         </div>

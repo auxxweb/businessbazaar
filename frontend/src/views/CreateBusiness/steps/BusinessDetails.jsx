@@ -3,8 +3,7 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
 import Cropper from "react-easy-crop";
-import { TextField } from "@mui/material";
-import { Button } from "react-bootstrap";
+import { Button, TextField } from "@mui/material";
 import { updateBusinessDetails } from "../store/businessSlice";
 import { preRequestFun } from "../service/s3url";
 import getCroppedImg from "../../../utils/cropper.utils";
@@ -15,7 +14,7 @@ const BusinessDetails = () => {
   const businessState = useSelector((state) => state.business);
 
   const [logo, setLogo] = useState(businessState?.logo || "");
-  const [cropLogo,setCropLogo] = useState(null)
+  const [cropLogo, setCropLogo] = useState(null)
   const [businessName, setBusinessName] = useState(
     businessState?.businessName || ""
   );
@@ -31,12 +30,12 @@ const BusinessDetails = () => {
   const handleLogoChange = (event) => {
     const file = event.target.files[0];
     if (file) {
-      
+
       // setLogoFile(file);
       setError((prev) => ({ ...prev, logo: null }));
       const reader = new FileReader();
       reader.onload = function (e) {
-        
+
         setLogoPrev(e.target.result);
         setShowCropper(true);
       };
@@ -50,10 +49,10 @@ const BusinessDetails = () => {
   const onCropComplete = (croppedAreaPercentage, croppedAreaPixels) => {
     setCroppedArea(croppedAreaPixels);
   };
- 
+
   const handleCropSave = async () => {
     try {
-      
+
       const { fileUrl, blob } = await getCroppedImg(logoPrev, croppedArea);
       // setLogoPrev(fileUrl);
       setCropLogo(fileUrl)
@@ -156,11 +155,12 @@ const BusinessDetails = () => {
                 </div>
               </div>
               <div className="modal-footer">
-                <Button variant="primary" onClick={handleCropSave}>
+                <Button className="mx-2" variant="contained" color="primary" onClick={handleCropSave}>
                   Save Crop
                 </Button>
                 <Button
                   variant="outlined"
+                  color="warning"
                   onClick={() => setShowCropper(false)}
                 >
                   Cancel
@@ -190,13 +190,14 @@ const BusinessDetails = () => {
               <div className="input-group mb-4 mt-2 w-100">
                 <TextField
                   fullWidth
-                  label="Business Name*"
+                  required
+                  label="Business Name"
                   id="businessName"
-                  variant="filled"
+                  variant="outlined"
                   name="businessName"
                   autoComplete="businessName"
                   value={businessName}
-                  inputProps={{maxLength:35}}
+                  inputProps={{ maxLength: 35 }}
                   onChange={(e) => setBusinessName(e.target.value)}
                   error={error?.name || businessName?.split("")?.length >= 35 ? true : false}
                   helperText={error?.name || businessName?.split("")?.length >= 35 ? "exceeded the limit" : ""}
@@ -248,13 +249,9 @@ const BusinessDetails = () => {
               {error?.logo && (
                 <div className="text-danger mb-4">{error?.logo}</div>
               )}
-
-              <button
-                className="btn btn-primary w-100 text-white p-2"
-                onClick={handleBusinessSubmit}
-              >
-                Save & Next
-              </button>
+              <div className="text-center">
+                <Button onClick={handleBusinessSubmit} variant="contained" color="primary" type="submit">save & next</Button>
+              </div>
             </div>
           </div>
 

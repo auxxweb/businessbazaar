@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
 import { updateBusinessDetails } from "../store/businessSlice";
-import { TextField } from "@mui/material";
+import { Button, TextField } from "@mui/material";
 import { Spinner } from "react-bootstrap";
 
 const allDays = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
@@ -169,12 +169,11 @@ const BusinessTiming = () => {
 
             {/* Save & Next Button */}
             <div className="col-12 text-center p-3 p-md-5">
-              {loading ? <Spinner variant="primary" /> : <button
-                className="btn btn-primary w-100 text-white p-2"
+              {loading ? <Spinner variant="primary" /> : <Button variant="contained" color="primary" type="submit"
                 onClick={handleSubmit}
               >
                 Save & Next
-              </button>}
+              </Button>}
             </div>
           </div>
 
