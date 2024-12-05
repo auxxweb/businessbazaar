@@ -41,6 +41,7 @@ items.forEach((el) => {
   }
 })
 import ShareButton from '../components/ShareButton'
+import ResponsiveGalleryCarousel from '../components/GalleryComponent'
 
 export default function Template() {
   const [currentSlide, setCurrentSlide] = useState(0)
@@ -54,7 +55,6 @@ export default function Template() {
   const [reviewFetch, setreviewFetch] = useState(false)
   const [showAllReviews, setShowAllReviews] = useState(false)
   const [textColor, setTextColor] = useState('');
-  const [toggle, setToggle] = useState(false)
 
   const [review, setReview] = useState({
     rating: '',
@@ -220,16 +220,6 @@ export default function Template() {
     }))
   }
 
-  useEffect(() => {
-    const fetchReview = async () => {
-      const response = await getAllBusinessReviews({ businessId: id })
-      console.log(response, 'data-validation')
-      setReviews(response?.data?.data)
-      setReviewCount(response?.data?.totalCount)
-    }
-    fetchReview()
-  }, [id, reviewFetch])
-
   const handleReviewSubmit = (e) => {
     e.preventDefault()
     console.log(review, 'review')
@@ -298,8 +288,15 @@ export default function Template() {
         setTextColor(contrastColor);
       }
     }
-
+    const fetchReview = async () => {
+      const response = await getAllBusinessReviews({ businessId: id })
+      console.log(response, 'data-validation')
+      setReviews(response?.data?.data)
+      setReviewCount(response?.data?.totalCount)
+    }
     fetchData()
+    fetchReview()
+
   }, [id])
 
   console.log(businessData, 'lll;l;l;l;l;;ll;;;l')
@@ -420,80 +417,6 @@ export default function Template() {
       },
     ],
   };
-
-
-  const settings3 = {
-    dots: false,
-    infinite: true,
-    speed: 500,
-    slidesToShow: 2,
-    slidesToScroll: 1,
-    autoplay: true,
-    // centerMode: true,
-    arrows: false,
-    responsive: [
-      {
-        breakpoint: 1024,
-        settings: {
-          slidesToShow: 2,
-          slidesToScroll: 1,
-          infinite: true,
-        },
-      },
-      {
-        breakpoint: 768,
-        settings: {
-          slidesToShow: 1,
-          slidesToScroll: 1,
-        },
-      },
-      {
-        breakpoint: 600,
-        settings: {
-          slidesToShow: 1,
-          slidesToScroll: 1,
-        },
-      },
-      {
-        breakpoint: 480,
-        settings: {
-          slidesToShow: 1,
-          slidesToScroll: 1,
-        },
-      },
-      {
-        breakpoint: 390,
-        settings: {
-          slidesToShow: 1,
-          slidesToScroll: 1,
-        },
-      },
-    ],
-  }
-
-  const gallery = {
-    dots: true,
-    infinite: true,
-    speed: 500,
-    slidesToShow: 3,
-    slidesToScroll: 1,
-    responsive: [
-      {
-        breakpoint: 1024,
-        settings: {
-          slidesToShow: 2,
-          slidesToScroll: 1,
-        },
-      },
-      {
-        breakpoint: 600,
-        settings: {
-          slidesToShow: 1,
-          slidesToScroll: 1,
-        },
-      },
-    ],
-  }
 
   if (loading) {
     return (
@@ -1099,7 +1022,7 @@ export default function Template() {
             </div>
           </section>
 
-          <section
+          {businessData?.specialServices?.title && businessData?.specialServices?.description && <section
             className="h-auto"
             id="services"
             style={{ backgroundColor: '#F3F3F4' }}
@@ -1190,8 +1113,8 @@ export default function Template() {
                 </div>
               </div>
             </div>
-          </section>
-          <section className="bg-white h-auto david-font" id="menu">
+          </section>}
+          {businessData?.productSection?.title && businessData?.productSection?.description && <section className="bg-white h-auto david-font" id="menu">
             <div className="container  p-top">
               <div className="col-12 mb-5">
                 <div className="row justify-content-center">
@@ -1251,9 +1174,8 @@ export default function Template() {
                 </div>
               </div>
             </div>
-          </section>
-
-          <section
+          </section>}
+          {businessData?.service?.title && businessData?.service?.description && <section
             className="h-auto david-font"
             style={{ backgroundColor: '#F3F3F4' }}
           >
@@ -1368,105 +1290,22 @@ export default function Template() {
                   )}
                 </div>
               </div>
-
-              <div className="col-12  mb-5" id="gallery">
-                <div className="col-12 mb-5 mt-5">
-                  <h1 className="fw-bold text-center">Gallery</h1>
-                </div>
-                <Carousel controls={false} touch={true} indicators={false}>
-                  <Carousel.Item interval={1000}>
-                    <div className="row">
-                      {businessData?.gallery
-                        ?.slice(0, 3)
-                        .map((image, index) => (
-                          <div key={index} className="col-4">
-                            <img
-                              src={
-                                image && image.length > 0 ? image : Placeholder
-                              }
-                              alt=""
-                              className="w-100 gallery-img"
-                            />
-                          </div>
-                        ))}
-                    </div>
-                  </Carousel.Item>
-
-                  {/* Repeat for next items if you want to show more images */}
-                  {businessData?.gallery?.slice(3).map((image, index) => (
-                    <Carousel.Item key={index} interval={1000}>
-                      <div className="row">
-                        {businessData?.gallery
-                          .slice(index * 3, (index + 1) * 3)
-                          .map((image, subIndex) => (
-                            <div key={subIndex} className="col-4">
-                              <img
-                                src={
-                                  image && image.length > 0
-                                    ? image
-                                    : Placeholder
-                                }
-                                alt=""
-                                className="w-100 gallery-img"
-                              />
-                            </div>
-                          ))}
-                      </div>
-                    </Carousel.Item>
-                  ))}
-                </Carousel>
-
-                {/* <Slider {...gallery} className="gallery-slider">
-               
-              </Slider> */}
-              </div>
             </div>
-          </section>
-          <section className="bg-white d-none">
+          </section>}
+
+
+          {businessData?.gallery[0]?.startsWith("https") && <section className='bg-white '>
             <div className="container p-top">
               <div className="row align-items-center">
-                <div className="col-12 col-lg-6 row align-items-center">
-                  <div>
-                    <div className="col-12 text-center text-lg-start">
-                      <h1 className="fw-bold fs-45">Our Expert Chef</h1>
-                    </div>
-                    <div className="col-12 text-center text-lg-start">
-                      <p className="fs-25">
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                        Sed non neque elit. Sed ut tellus ac neque fermentum
-                        tristique. Donec sed facilisis tellus, a vulputate
-                        turpis. Duis eget turpis non tellus tincidunt fermentum.
-                      </p>
-                    </div>
+                <div className="col-10 col-md-12 mx-auto  " id="gallery">
+                  <div className="col-12 my-5">
+                    <h1 className="fw-bold text-center">Gallery</h1>
                   </div>
-                  <div className="mt-3 col-12 mb-5">
-                    <div className="row">
-                      <div className="menu-button">
-                        <button className="btn btn-dark text-white radius-theme box-shadow w-100">
-                          Menu
-                        </button>
-                      </div>
-                      <div className="book-a-table">
-                        <button className="btn btn-dark text-white radius-theme box-shadow theme w-100">
-                          Book a table
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="col-12 col-lg-6">
-                  <div className="col-12 text-center">
-                    <img
-                      src="/src/assets/images/chef.png"
-                      alt=""
-                      className="chef-div img-fluid w-100"
-                    />
-                  </div>
+                  <ResponsiveGalleryCarousel galleryArray={businessData?.gallery} />
                 </div>
               </div>
             </div>
-          </section>
+          </section>}
           <section className="" style={{ backgroundColor: '#F3F3F4' }}>
             <div className="container david-font p-top">
               <div className="col-12 text-center">
@@ -1906,7 +1745,6 @@ export default function Template() {
                         </a>
                       </>
                     ))}
-                    {/* <hr style={{width:"fit-content",opacity: 0.15,}}></hr> */}
                   </div>
                 </div>
               </div>
