@@ -3,10 +3,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
 import Cropper from "react-easy-crop";
 import Slider from "react-slick";
-import { TextField } from "@mui/material";
+import { Button, TextField } from "@mui/material";
 import { updateBusinessDetails } from "../store/businessSlice";
 import { preRequestFun } from "../service/s3url";
-import { Button, Spinner } from "react-bootstrap";
+import { Spinner } from "react-bootstrap";
 import getCroppedImg from "../../../utils/cropper.utils";
 
 const CreateProductPart = () => {
@@ -22,8 +22,8 @@ const CreateProductPart = () => {
   const [isLoading, setIsLoading] = useState({
     specialService: {},
   });
-  const [cropLoading,setCropLoading] = useState(false)
-  const [loading,setLoading] = useState(false)
+  const [cropLoading, setCropLoading] = useState(false)
+  const [loading, setLoading] = useState(false)
   const [errors] = useState([]);
   const [crop1, setCrop1] = useState({ x: 0, y: 0 });
   const [zoom1, setZoom1] = useState(1);
@@ -254,15 +254,17 @@ const CreateProductPart = () => {
                   </div>
                 </div>
                 <div className="modal-footer">
-                 {cropLoading ? <Spinner variant="primary"/> : <Button variant="primary" onClick={handleCropSave1}>
-                    Save Crop
-                  </Button>}
                   <Button
-                    variant="outlined"
+                    variant="contained"
+                    className="bg-danger border-danger mx-2"
                     onClick={() => setShowCropper1(false)}
                   >
                     Cancel
                   </Button>
+                  {cropLoading ? <Spinner variant="primary" /> : <Button variant="contained"
+                    className=" mx-2" onClick={handleCropSave1}>
+                    Save Crop
+                  </Button>}
                 </div>
               </div>
             </div>
@@ -293,53 +295,39 @@ const CreateProductPart = () => {
 
               <div className="col-12">
                 {/* Special Service Title */}
-                <div className="input-group mt-2 w-100">
-                  <TextField
-                    fullWidth
-                    label="Title (8 words)"
-                    id="title-1"
-                    variant="filled"
-                    name="title"
-                    autoComplete="title-1"
-                    onChange={handleChange}
-                    inputProps={{ maxLength: 35 }}
-                    error={specialService?.title?.split("")?.length >= 35 ? true : false}
-                    helperText={specialService?.title?.split("")?.length >= 35 ? "exceeded the limit" : ""}
-                    value={specialService.title}
-                  />
-                </div>
-                <div className="input-group mb-3 mt-4 w-100">
-                  <TextField
-                    fullWidth
-                    label="Description (50 words)"
-                    id="description-1"
-                    variant="filled"
-                    name="description"
-                    autoComplete="description-1"
-                    multiline // Makes the TextField behave like a textarea
-                    rows={4} // You can adjust the number of rows (height) here
-                    value={specialService.description}
-                    onChange={handleChange}
-                    inputProps={{ maxLength: 250 }}
-                    error={specialService?.description?.split("")?.length >= 250 ? true : false}
-                    helperText={specialService?.description?.split("")?.length >= 250 ? "exceeded the limit" : ""}
-                    sx={{
-                      "& .MuiInputBase-root": {
-                        padding: "12px", // Padding inside the textarea
-                      },
-                      "& .MuiFilledInput-root": {
-                        backgroundColor: "#f9f9f9", // Optional: Background color for the filled variant
-                      },
-                      "& .MuiFormLabel-root": {
-                        top: "-6px", // Adjust label positioning if needed
-                      },
-                    }}
-                  />
-                </div>
-
+                <TextField
+                  fullWidth
+                  className="my-2"
+                  label="Title (8 words)"
+                  id="title-1"
+                  variant="outlined"
+                  name="title"
+                  autoComplete="title-1"
+                  onChange={handleChange}
+                  inputProps={{ maxLength: 35 }}
+                  error={specialService?.title?.split("")?.length >= 35 ? true : false}
+                  helperText={specialService?.title?.split("")?.length >= 35 ? "exceeded the limit" : ""}
+                  value={specialService.title}
+                />
+                <TextField
+                  fullWidth
+                  className="my-2"
+                  label="Description (50 words)"
+                  id="description-1"
+                  variant="outlined"
+                  name="description"
+                  autoComplete="description-1"
+                  multiline // Makes the TextField behave like a textarea
+                  rows={4} // You can adjust the number of rows (height) here
+                  value={specialService.description}
+                  onChange={handleChange}
+                  inputProps={{ maxLength: 250 }}
+                  error={specialService?.description?.split("")?.length >= 250 ? true : false}
+                  helperText={specialService?.description?.split("")?.length >= 250 ? "exceeded the limit" : ""}
+                />
                 <hr
                   style={{
-                    border: "3px solid #105193",
+                    border: "2px solid #105193",
                     borderRadius: "5px",
                     margin: "35px 0",
                   }}
@@ -381,9 +369,10 @@ const CreateProductPart = () => {
 
                     <TextField
                       fullWidth
+                      className="my-2"
                       label="Title (8 words)"
                       id="title"
-                      variant="filled"
+                      variant="outlined"
                       name="title"
                       autoComplete="Service Name"
                       value={p.title}
@@ -393,60 +382,36 @@ const CreateProductPart = () => {
                       helperText={p?.title?.split("")?.length >= 35 ? "exceeded the limit" : ""}
                     />
 
-                    <div className="input-group mb-3 mt-4 w-100">
-                      <TextField
-                        fullWidth
-                        label="Description (50 words)"
-                        id="description"
-                        variant="filled"
-                        name="description"
-                        autoComplete="description"
-                        multiline
-                        rows={4}
-                        inputProps={{ maxLength: 200 }}
-                        error={p?.description?.split("")?.length >= 250 ? true : false}
-                        helperText={p?.description?.split("")?.length >= 250 ? "exceeded the limit" : ""}
-                        sx={{
-                          "& .MuiInputBase-root": {
-                            padding: "12px",
-                          },
-                          "& .MuiFilledInput-root": {
-                            backgroundColor: "#f9f9f9",
-                          },
-                          "& .MuiFormLabel-root": {
-                            top: "-6px",
-                          },
-                        }}
-                        onChange={(e) => handleProductChange(index, e)}
-                      />
-                    </div>
+                    <TextField
+                      fullWidth
+                      className="my-2"
+                      label="Description (50 words)"
+                      id="description"
+                      variant="outlined"
+                      name="description"
+                      autoComplete="description"
+                      multiline
+                      rows={4}
+                      inputProps={{ maxLength: 200 }}
+                      error={p?.description?.split("")?.length >= 250 ? true : false}
+                      helperText={p?.description?.split("")?.length >= 250 ? "exceeded the limit" : ""}
+                      onChange={(e) => handleProductChange(index, e)}
+                    />
 
-                    <div className="input-group mb-3 mt-4 w-100">
-                      <TextField
-                        fullWidth
-                        type="number"
-                        id="price"
-                        name="price"
-                        variant="filled"
-                        label="Price"
-                        error={!!errors?.landingPageHeroDescription}
-                        helperText={errors?.landingPageHeroDescription}
-                        sx={{
-                          "& .MuiInputBase-root": {
-                            padding: "12px",
-                          },
-                          "& .MuiFilledInput-root": {
-                            backgroundColor: "#f9f9f9",
-                          },
-                          "& .MuiFormLabel-root": {
-                            top: "-6px",
-                          },
-                        }}
-                        onChange={(e) => handleProductChange(index, e)}
-                      />
-                    </div>
+                    <TextField
+                      fullWidth
+                      className="my-2"
+                      type="number"
+                      id="price"
+                      name="price"
+                      variant="outlined"
+                      label="Price"
+                      error={!!errors?.landingPageHeroDescription}
+                      helperText={errors?.landingPageHeroDescription}
+                      onChange={(e) => handleProductChange(index, e)}
+                    />
 
-                    <div className="col-12 col-md-3 mb-3">
+                    <div className="col-12 col-md-3 mb-3 mx-auto">
                       <input
                         type="file"
                         hidden
@@ -482,22 +447,24 @@ const CreateProductPart = () => {
                 ))}
 
                 {/* Add Service Button */}
+                <div className="text-center">
+                  <Button
+                    variant="contained"
+                    href="#"
+                    onClick={() =>
+                      setSpecialService((prevData) => ({
+                        ...prevData,
+                        data: [
+                          ...prevData?.data,
+                          { title: "", description: "", image: "", price: "" },
+                        ],
+                      }))
+                    }
 
-                <a
-                  href="#"
-                  onClick={() =>
-                    setSpecialService((prevData) => ({
-                      ...prevData,
-                      data: [
-                        ...prevData?.data,
-                        { title: "", description: "", image: "", price: "" },
-                      ],
-                    }))
-                  }
-                  className="text-decoration-none btn btn-primary w-100 mb-3"
-                >
-                  + Add More Products
-                </a>
+                  >
+                    + Add Products cards
+                  </Button>
+                </div>
 
               </div>
               {errors && (
@@ -508,12 +475,12 @@ const CreateProductPart = () => {
             </div>
             {/* Save & Next Button */}
             <div className="col-12 mt-4 text-center">
-             {loading ? <Spinner variant="primary"/> : <button
-                className="btn btn-primary btn-md w-100"
+              {loading ? <Spinner variant="primary" /> : <Button
+                variant="contained"
                 onClick={handleServiceSubmit}
               >
                 Save & Next
-              </button>}
+              </Button>}
             </div>
           </div>
 

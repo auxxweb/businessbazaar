@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
 import { updateBusinessDetails } from "../store/businessSlice";
-import { TextField } from "@mui/material";
+import { Button, TextField } from "@mui/material";
 import { Spinner } from "react-bootstrap";
 
 const BusinessDesc = () => {
@@ -13,6 +13,14 @@ const BusinessDesc = () => {
   const [description, setDescription] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false)
+
+  useEffect(() => {
+    if (description) {
+      setError("")
+    }
+
+  }, [description])
+
 
   const handleDescSubmit = () => {
     setLoading(true)
@@ -59,17 +67,18 @@ const BusinessDesc = () => {
                 {/* <label>Business Description*</label> */}
                 <TextField
                   fullWidth
-                  label="Business description* (50 words)"
+                  required
+                  label="Business description (50 words)"
                   id="businessName"
-                  variant="filled"
+                  variant="outlined"
                   name="description_main"
                   autoComplete="businessName"
                   multiline
                   value={description}
                   inputProps={{ maxLength: 250 }}
                   onChange={(e) => setDescription(e.target.value)}
-                  error={error?.name || description?.split("")?.length >= 250 ? true : false}
-                  helperText={error?.name || description?.split("")?.length >= 250 ? "exceeded the limit" : ""}
+                  error={error || description?.split("")?.length >= 250 ? true : false}
+                  helperText={error || description?.split("")?.length >= 250 ? "exceeded the limit" : ""}
                   rows={5}
                 />
                 {/* <textarea
@@ -91,12 +100,11 @@ const BusinessDesc = () => {
 
             {/* Save & Next Button */}
             <div className="col-12 text-center p-3 ">
-              {loading ? <Spinner variant="primary" /> : <button
-                className="btn btn-primary w-100 text-white p-2"
+              {loading ? <Spinner variant="primary" /> : <Button variant="contained" color="primary" type="submit"
                 onClick={handleDescSubmit}
               >
                 Save & Next
-              </button>}
+              </Button>}
             </div>
           </div>
 

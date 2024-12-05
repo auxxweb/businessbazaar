@@ -2,9 +2,9 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
 import Cropper from "react-easy-crop";
-import { TextField } from "@mui/material";
+import { Button, TextField } from "@mui/material";
 import { updateBusinessDetails } from "../store/businessSlice";
-import { Button, Container, Nav, Navbar, NavLink } from "react-bootstrap";
+import { Container, Nav, Navbar, NavLink } from "react-bootstrap";
 import { preRequestFun } from "../service/s3url";
 import getCroppedImg from "../../../utils/cropper.utils";
 import Loader from "../../../components/Loader/Loader";
@@ -22,19 +22,19 @@ const LandingPageDetails = () => {
   const [landingPageHero, setLandingPageHero] = useState({
     title: "",
     description: "",
-    
+
     loading: "",
   });
   const [welcomePart, setWelcomePart] = useState({
     title: "",
     description: "",
-    
+
     loading: "",
   });
 
-const [currentImage, setCurrentImage] = useState({image:null ,bannerFile:null,welcomeFile:null,preview:null,banner:null,welcome:null});
+  const [currentImage, setCurrentImage] = useState({ image: null, bannerFile: null, welcomeFile: null, preview: null, banner: null, welcome: null });
 
-  const [cropLandImage,setCropLandImage]= useState(null)
+  const [cropLandImage, setCropLandImage] = useState(null)
   const [welcomeFile, setWelcomeFile] = useState();
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false); // Loader state
@@ -50,7 +50,7 @@ const [currentImage, setCurrentImage] = useState({image:null ,bannerFile:null,we
 
   const handleCropSave = async () => {
     try {
-      
+
       const filePrev =
         imageFieldName === "landingPageHeroImage"
           ? landingPageHero?.coverImage
@@ -60,7 +60,7 @@ const [currentImage, setCurrentImage] = useState({image:null ,bannerFile:null,we
         imageFieldName === "landingPageHeroImage" ? cropLandImage : welcomeFile;
 
       const { fileUrl, blob } = await getCroppedImg(currentImage.preview, croppedArea);
-     
+
       setShowCropper(false);
 
       const croppedFile = new File([blob], file?.name || "cropped-logo.png", {
@@ -68,7 +68,7 @@ const [currentImage, setCurrentImage] = useState({image:null ,bannerFile:null,we
       });
 
       if (imageFieldName === "landingPageHeroImage") {
-        setCurrentImage((prev)=>({...prev,banner:fileUrl,bannerFile:blob}));
+        setCurrentImage((prev) => ({ ...prev, banner: fileUrl, bannerFile: blob }));
         // setCropLandImage(croppedFile);
         // setLandingFile(croppedFile);
         // setLandingPageHero((prevData) => ({
@@ -76,7 +76,7 @@ const [currentImage, setCurrentImage] = useState({image:null ,bannerFile:null,we
         //   coverImage: fileUrl,
         // }));
       } else {
-        setCurrentImage((prev)=>({...prev,welcome:fileUrl,welcomeFile:blob}));
+        setCurrentImage((prev) => ({ ...prev, welcome: fileUrl, welcomeFile: blob }));
         // setWelcomeFile(croppedFile);
         // setWelcomePart((prevData) => ({
         //   ...prevData,
@@ -92,7 +92,7 @@ const [currentImage, setCurrentImage] = useState({image:null ,bannerFile:null,we
   const handleFileChange = (name, e, sectionSetter) => {
     const file = e.target.files[0];
 
-    setCurrentImage((prev)=>({
+    setCurrentImage((prev) => ({
       ...prev,
       preview: URL.createObjectURL(file)
     }))
@@ -179,11 +179,11 @@ const [currentImage, setCurrentImage] = useState({image:null ,bannerFile:null,we
     try {
       let landingPreReq = null
       let welcomePreReq = null;
-      console.log(landingPreReq,welcomePreReq,'daattaattata')
+      console.log(landingPreReq, welcomePreReq, 'daattaattata')
       if (currentImage.bannerFile) {
-        landingPreReq = await preRequestFun(currentImage.bannerFile , "Landing");
+        landingPreReq = await preRequestFun(currentImage.bannerFile, "Landing");
       }
-       
+
 
       if (currentImage.welcomeFile) {
         welcomePreReq = await preRequestFun(currentImage.welcomeFile, "Welcome");
@@ -208,19 +208,19 @@ const [currentImage, setCurrentImage] = useState({image:null ,bannerFile:null,we
           updateBusinessDetails({
             landingPageHero: {
               ...landingPageHero,
-              ...(currentImage.bannerFile&&{
+              ...(currentImage.bannerFile && {
 
                 coverImage:
-                  landingPreReq?.accessLink  ,
+                  landingPreReq?.accessLink,
               })
             },
             theme,
             secondaryTheme,
             welcomePart: {
               ...welcomePart,
-              ...(currentImage.welcomeFile&&{
+              ...(currentImage.welcomeFile && {
 
-                coverImage: welcomePreReq?.accessLink ,
+                coverImage: welcomePreReq?.accessLink,
               })
             },
           })
@@ -247,14 +247,14 @@ const [currentImage, setCurrentImage] = useState({image:null ,bannerFile:null,we
     setLandingPageHero(businessState?.landingPageHero);
     setWelcomePart(businessState?.welcomePart);
     console.log(businessState)
-    setCurrentImage(((prev)=>({...prev,banner:businessState.landingPageHero.coverImage,welcome:businessState.welcomePart.coverImage})));
+    setCurrentImage(((prev) => ({ ...prev, banner: businessState.landingPageHero.coverImage, welcome: businessState.welcomePart.coverImage })));
   }, [businessState]);
 
   if (loading) {
     return (
       <div className="h-100vh">
         <div className="d-flex h-100 justify-content-center align-items-center">
-        <Loader />
+          <Loader />
         </div>
       </div>
     );
@@ -300,14 +300,15 @@ const [currentImage, setCurrentImage] = useState({image:null ,bannerFile:null,we
                 </div>
               </div>
               <div className="modal-footer">
-                <Button variant="primary" onClick={handleCropSave}>
-                  Save Crop
-                </Button>
                 <Button
                   variant="outlined"
+                  className="mx-2 bg-danger text-white border-danger"
                   onClick={() => setShowCropper(false)}
                 >
                   Cancel
+                </Button>
+                <Button color="primary" className="mx-2" variant="contained" onClick={handleCropSave}>
+                  Save Crop
                 </Button>
               </div>
             </div>
@@ -371,50 +372,38 @@ const [currentImage, setCurrentImage] = useState({image:null ,bannerFile:null,we
               <h5 className="fs-18 mb-4 text-dark fw-bold mt-4">
                 Add Landing Page Banner
               </h5>
-
-              <div className="input-group mt-2 w-100">
-                <TextField
-                  fullWidth
-                  label="Title*"
-                  id="title"
-                  variant="filled"
-                  name="title"
-                  autoComplete="title"
-                  value={landingPageHero.title}
-                  inputProps={{maxLength:35}}
-                  onChange={(e) => handleInputChange(e, setLandingPageHero)}
-                  error={errors?.landingPageHeroTitle || landingPageHero?.title?.split("")?.length >= 35 ? true : false}
-                  helperText={errors?.landingPageHeroTitle || landingPageHero?.title?.split("")?.length >= 35 ? "exceeded the limit" : ""}
-                />
-              </div>
-              <div className="input-group mb-3 mt-4 w-100">
-                <TextField
-                  fullWidth
-                  label="Description*"
-                  id="description"
-                  variant="filled"
-                  name="description"
-                  autoComplete="description"
-                  multiline // Makes the TextField behave like a textarea
-                  rows={4} // You can adjust the number of rows (height) here
-                  value={landingPageHero.description}
-                  inputProps={{maxLength:200}}
-                  onChange={(e) => handleInputChange(e, setLandingPageHero)}
-                  error={errors?.landingPageHeroDescription || landingPageHero?.description?.split("")?.length >= 200 ? true : false}
-                  helperText={errors?.landingPageHeroDescription || landingPageHero?.description?.split("")?.length >= 200 ? "exceeded the limit" : ""}
-                  sx={{
-                    "& .MuiInputBase-root": {
-                      padding: "12px", // Padding inside the textarea
-                    },
-                    "& .MuiFilledInput-root": {
-                      backgroundColor: "#f9f9f9", // Optional: Background color for the filled variant
-                    },
-                    "& .MuiFormLabel-root": {
-                      top: "-6px", // Adjust label positioning if needed
-                    },
-                  }}
-                />
-              </div>
+              <TextField
+                fullWidth
+                required
+                className="my-2 border-0"
+                label="Title"
+                id="title"
+                variant="outlined"
+                name="title"
+                autoComplete="title"
+                value={landingPageHero.title}
+                inputProps={{ maxLength: 35 }}
+                onChange={(e) => handleInputChange(e, setLandingPageHero)}
+                error={errors?.landingPageHeroTitle || landingPageHero?.title?.split("")?.length >= 35 ? true : false}
+                helperText={errors?.landingPageHeroTitle || landingPageHero?.title?.split("")?.length >= 35 ? "exceeded the limit" : ""}
+              />
+              <TextField
+                className="my-2"
+                fullWidth
+                required
+                label="Description"
+                id="description"
+                variant="outlined"
+                name="description"
+                autoComplete="description"
+                multiline // Makes the TextField behave like a textarea
+                rows={4} // You can adjust the number of rows (height) here
+                value={landingPageHero.description}
+                inputProps={{ maxLength: 200 }}
+                onChange={(e) => handleInputChange(e, setLandingPageHero)}
+                error={errors?.landingPageHeroDescription || landingPageHero?.description?.split("")?.length >= 200 ? true : false}
+                helperText={errors?.landingPageHeroDescription || landingPageHero?.description?.split("")?.length >= 200 ? "exceeded the limit" : ""}
+              />
 
               {/* Hero Image Upload */}
               <input
@@ -431,7 +420,7 @@ const [currentImage, setCurrentImage] = useState({image:null ,bannerFile:null,we
               />
               <div
                 onClick={() => triggerFileUpload("LandingHeroImageInput")}
-                className="p-2 mt-2 mb-3 add-logo-div"
+                className="p-2 mt-2 mb-3 add-logo-div mx-auto"
               >
                 <span style={{ color: "grey" }}>(Ratio 16 : 9)</span>
                 <div className="text-center">
@@ -443,7 +432,7 @@ const [currentImage, setCurrentImage] = useState({image:null ,bannerFile:null,we
                   ) : (
                     <img
                       src={
-                        currentImage?.banner || 
+                        currentImage?.banner ||
                         "/src/assets/images/add_image.png"
                       }
                       width="50"
@@ -462,49 +451,38 @@ const [currentImage, setCurrentImage] = useState({image:null ,bannerFile:null,we
               <h5 className="fs-18 mb-2 text-dark fw-bold mt-3">
                 Add Welcome Part
               </h5>
-              <div className="input-group mt-2 w-100">
-                <TextField
-                  fullWidth
-                  label="Title*"
-                  id="title"
-                  variant="filled"
-                  name="title"
-                  autoComplete="title"
-                  inputProps={{maxLength:35}}
-                  value={welcomePart.title}
-                  onChange={(e) => handleInputChange(e, setWelcomePart)}
-                  error={errors?.welcomePartTitle || welcomePart?.title?.split("")?.length >= 35 ? true : false}
-                  helperText={errors?.welcomePartTitle || welcomePart?.title?.split("")?.length >= 35 ? "exceeded the limit" : ""}
-                />
-              </div>
-              <div className="input-group mb-3 mt-4 w-100">
-                <TextField
-                  fullWidth
-                  label="Description*"
-                  id="description"
-                  variant="filled"
-                  name="description"
-                  autoComplete="description"
-                  multiline // Makes the TextField behave like a textarea
-                  rows={4} // You can adjust the number of rows (height) here
-                  value={welcomePart.description}
-                  inputProps={{maxLength:200}}
-                  onChange={(e) => handleInputChange(e, setWelcomePart)}
-                  error={errors?.welcomePartDescription || welcomePart?.description?.split("")?.length >= 200 ? true : false}
-                  helperText={errors?.welcomePartDescription || welcomePart?.description?.split("")?.length >= 200 ? "exceeded the limit" : ""}
-                  sx={{
-                    "& .MuiInputBase-root": {
-                      padding: "12px", // Padding inside the textarea
-                    },
-                    "& .MuiFilledInput-root": {
-                      backgroundColor: "#f9f9f9", // Optional: Background color for the filled variant
-                    },
-                    "& .MuiFormLabel-root": {
-                      top: "-6px", // Adjust label positioning if needed
-                    },
-                  }}
-                />
-              </div>
+              <TextField
+                className="my-2"
+                fullWidth
+                required
+                label="Title"
+                id="title"
+                variant="outlined"
+                name="title"
+                autoComplete="title"
+                inputProps={{ maxLength: 35 }}
+                value={welcomePart.title}
+                onChange={(e) => handleInputChange(e, setWelcomePart)}
+                error={errors?.welcomePartTitle || welcomePart?.title?.split("")?.length >= 35 ? true : false}
+                helperText={errors?.welcomePartTitle || welcomePart?.title?.split("")?.length >= 35 ? "exceeded the limit" : ""}
+              />
+              <TextField
+                className="my-2"
+                fullWidth
+                required
+                label="Description"
+                id="description"
+                variant="outlined"
+                name="description"
+                autoComplete="description"
+                multiline // Makes the TextField behave like a textarea
+                rows={4} // You can adjust the number of rows (height) here
+                value={welcomePart.description}
+                inputProps={{ maxLength: 200 }}
+                onChange={(e) => handleInputChange(e, setWelcomePart)}
+                error={errors?.welcomePartDescription || welcomePart?.description?.split("")?.length >= 200 ? true : false}
+                helperText={errors?.welcomePartDescription || welcomePart?.description?.split("")?.length >= 200 ? "exceeded the limit" : ""}
+              />
 
               {/* Welcome Image Upload */}
               <input
@@ -517,7 +495,7 @@ const [currentImage, setCurrentImage] = useState({image:null ,bannerFile:null,we
               />
               <div
                 onClick={() => triggerFileUpload("WelcomeImageInput")}
-                className="p-2 mt-2 mb-3 add-logo-div"
+                className="p-2 mt-2 mb-3 add-logo-div mx-auto"
               >
                 <span style={{ color: "grey" }}>(Ratio 5 : 7)</span>
                 <div className="text-center">
@@ -545,12 +523,11 @@ const [currentImage, setCurrentImage] = useState({image:null ,bannerFile:null,we
               )}
 
               <div className="col-12 mt-4 text-center">
-                <button
-                  className="btn btn-primary w-100"
+                <Button variant="contained" color="primary"
                   onClick={handleLandingSubmit}
                 >
                   Save & Next
-                </button>
+                </Button>
               </div>
             </div>
           </div>

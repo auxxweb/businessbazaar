@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
-import { IconButton, InputAdornment, TextField } from "@mui/material";
+import { Box, Button, IconButton, InputAdornment, TextField } from "@mui/material";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { toast } from "react-toastify";
@@ -47,7 +47,8 @@ function AuthenticationDetails() {
     }
   }
 
-  const handleAuthSubmit = async () => {
+  const handleAuthSubmit = async (e) => {
+    e.preventDefault()
     setLoading(true)
     const isEmailValid = validateEmail(email);
     const isPasswordValid = validatePassword(password);
@@ -68,7 +69,7 @@ function AuthenticationDetails() {
 
         toast.error(
           error?.response?.data?.message ??
-            "An error occurred. Please try again.",
+          "An error occurred. Please try again.",
           {
             position: "top-right",
             autoClose: 3000,
@@ -146,26 +147,27 @@ function AuthenticationDetails() {
               <span className="title-highlight">Authentication Details</span>
             </h1>
           </div>
-
-          <div className="input-group mt-2 w-100">
+          <Box component={"form"} className="mb-3 w-sm-100 w-md-50 w-lg-50  w-xl-50 " onSubmit={handleAuthSubmit} validated={false} noValidate={false}>
             <TextField
+              required
               fullWidth
-              label="Email*"
-              variant="filled"
+              label="Email"
               name="email"
               value={authData.email}
               onChange={handleInputChange}
               error={!!emailError}
               helperText={emailError}
+              variant="outlined"
+              className="my-2"
             />
-          </div>
 
-          <div className="input-group mt-3 w-100">
             <TextField
+              required
               fullWidth
-              label="Password*"
+              label="Password"
+              className="my-2"
               type={showPassword ? "text" : "password"}
-              variant="filled"
+              variant="outlined"
               name="password"
               value={authData.password}
               onChange={handleInputChange}
@@ -181,16 +183,12 @@ function AuthenticationDetails() {
                 ),
               }}
             />
-          </div>
-
-          <div className="col-12 text-center mt-4">
-          { loading ? <Spinner variant="primary"/> : <button
-              className="btn btn-primary w-100 text-white p-2"
-              onClick={handleAuthSubmit}
-            >
-              Save & Next
-            </button>}
-          </div>
+            <div className="col-12 text-center mt-4">
+              {loading ?
+                <Spinner variant="primary" /> :
+                <Button variant="contained" color="primary" type="submit">save & next</Button>}
+            </div>
+          </Box>
         </div>
       </div>
 

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
-import { MenuItem, TextField } from "@mui/material";
+import { Box, Button, MenuItem, TextField } from "@mui/material";
 import CreateBusinessLocation from "../../../components/CreateBusinessLocation";
 import { updateBusinessDetails } from "../store/businessSlice";
 import { Spinner } from "react-bootstrap";
@@ -16,51 +16,34 @@ const ContactDetails = () => {
   const [placeDetails, setPlaceDetails] = useState("")
   const [loading, setLoading] = useState(false)
 
-  const [newFormData, setNewFormData] = useState({
-    contactDetails: {
-      name: "",
-      primaryNumber: "",
-      secondaryNumber: "",
-      whatsappNumber: "",
-      primaryCountryCode: "",
-      secondaryCountryCode: "",
-      whatsappCountryCode: "",
-      email: "",
-      website: "",
+  const [addressData, setAddressData] = useState([
+    { name: "name", value: "", type: "text", required: true, label: "Name", pattern: "^[a-zA-Z0-9]+$", },
+    { name: "buildingName", value: "", type: "text", required: true, label: "Building Name", pattern: "^[a-zA-Z0-9]+$" },
+    { name: "streetName", value: "", type: "text", required: true, label: "Street Name", pattern: "^[a-zA-Z0-9]+$" },
+    { name: "landMark", value: "", type: "text", required: true, label: "Landmark", pattern: "^[a-zA-Z0-9]+$" },
+    { name: "city", value: "", type: "text", required: true, label: "City", pattern: "^[a-zA-Z0-9]+$" },
+    { name: "state", value: "", type: "text", required: true, label: "State", pattern: "^[a-zA-Z0-9]+$" },
+    { name: "pinCode", value: "", type: "number", required: true, label: "Pincode", pattern: "^[0-9]{6}$", },
+  ])
+  const [contactNumbers, setContactNumbers] = useState([
+    { name: "primaryCountryCode", fieldName: "select", value: "+91", type: "text", required: true, label: "Primary Country Code", },
+    { name: "primaryNumber", value: "", type: "number", label: "Primary Number", required: true, pattern: "^[+]?[0-9]{10,15}$" },
+    { name: "secondaryCountryCode", fieldName: "select", value: "+91", type: "text", required: false, label: "Secondary Country Code", },
+    { name: "secondaryNumber", value: "", type: "number", required: false, label: "Secondary Number", pattern: "^[+]?[0-9]{10,15}$" },
+    { name: "whatsappCountryCode", fieldName: "select", value: "+91", type: "text", required: true, label: "Whatsapp Country Code", },
+    { name: "whatsappNumber", value: "", type: "number", required: true, label: "Whatsapp Number", pattern: "^[+]?[0-9]{10,15}$" },
 
+  ])
 
-    },
-  });
-
-
-
-  const [address, setAddress] = useState({
-    buildingName: "",
-    streetName: "",
-    landMark: "",
-    city: "",
-    state: "",
-    pinCode: "",
-  });
+  const [contactDetails, setContactDetails] = useState([
+    { name: "email", value: "", type: "text", required: true, label: "Email", fullWidth: true, pattern: "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$" },
+    { name: "website", value: "", type: "text", required: false, label: "Website", fullWidth: true },
+  ])
 
   const [location, setLocation] = useState({
     lat: "",
     lon: "",
   });
-
-  const [errors, setErrors] = useState({});
-
-  const handleContactChange = (event) => {
-    const { name, value } = event.target;
-    setNewFormData((prevData) => ({
-      ...prevData,
-      contactDetails: {
-        ...prevData.contactDetails,
-        [name]: value,
-      },
-    }));
-    validateField(name, value);
-  };
 
   const countryCodes = [
 
@@ -70,430 +53,80 @@ const ContactDetails = () => {
     { code: "+973", country: "Bahrain", cca2: "BH" },
   ]
 
-  // const countryCodes = [
-  //   { code: "+1", country: "US/CA", cca2: "US" },
-  //   { code: "+44", country: "UK", cca2: "GB" },
-  //   { code: "+91", country: "India", cca2: "IN" },
-  //   { code: "+61", country: "Aust.", cca2: "AU" },
-  //   { code: "+81", country: "Japan", cca2: "JP" },
-  //   { code: "+49", country: "Ger.", cca2: "DE" },
-  //   { code: "+86", country: "China", cca2: "CN" },
-  //   { code: "+33", country: "France", cca2: "FR" },
-  //   { code: "+39", country: "Italy", cca2: "IT" },
-  //   { code: "+7", country: "Russia", cca2: "RU" },
-  //   { code: "+55", country: "Brazil", cca2: "BR" },
-  //   { code: "+27", country: "S.Af.", cca2: "ZA" },
-  //   { code: "+34", country: "Spain", cca2: "ES" },
-  //   { code: "+64", country: "NZ", cca2: "NZ" },
-  //   { code: "+82", country: "Korea", cca2: "KR" },
-  //   { code: "+971", country: "UAE", cca2: "AE" },
-  //   { code: "+353", country: "Irel.", cca2: "IE" },
-  //   { code: "+47", country: "Norw.", cca2: "NO" },
-  //   { code: "+46", country: "Swed.", cca2: "SE" },
-  //   { code: "+48", country: "Pol.", cca2: "PL" },
-  //   { code: "+41", country: "Switz.", cca2: "CH" },
-  //   { code: "+31", country: "Neth.", cca2: "NL" },
-  //   { code: "+30", country: "Gree.", cca2: "GR" },
-  //   { code: "+351", country: "Port.", cca2: "PT" },
-  //   { code: "+52", country: "Mex.", cca2: "MX" },
-  //   { code: "+90", country: "Turkey", cca2: "TR" },
-  //   { code: "+94", country: "S.Lan", cca2: "LK" },
-  //   { code: "+92", country: "Pak.", cca2: "PK" },
-  //   { code: "+880", country: "B.Desh", cca2: "BD" },
-  //   { code: "+62", country: "Indo.", cca2: "ID" },
-  //   { code: "+66", country: "Thai.", cca2: "TH" },
-  //   { code: "+63", country: "Phil.", cca2: "PH" },
-  //   { code: "+60", country: "Mal.", cca2: "MY" },
-  //   { code: "+65", country: "Sing.", cca2: "SG" },
-  //   { code: "+45", country: "Den.", cca2: "DK" },
-  //   { code: "+20", country: "Egypt", cca2: "EG" },
-  //   { code: "+54", country: "Arg.", cca2: "AR" },
-  //   { code: "+58", country: "Venez.", cca2: "VE" },
-  //   { code: "+598", country: "Uru.", cca2: "UY" },
-  //   { code: "+56", country: "Chile", cca2: "CL" },
-  //   { code: "+51", country: "Peru", cca2: "PE" },
-  //   { code: "+505", country: "Nica.", cca2: "NI" },
-  //   { code: "+506", country: "C.R.", cca2: "CR" },
-  //   { code: "+372", country: "Est.", cca2: "EE" },
-  //   { code: "+370", country: "Lith.", cca2: "LT" },
-  //   { code: "+371", country: "Latv.", cca2: "LV" },
-  //   { code: "+994", country: "Azer.", cca2: "AZ" },
-  //   { code: "+374", country: "Armen.", cca2: "AM" },
-  //   { code: "+995", country: "Georg.", cca2: "GE" },
-  //   { code: "+998", country: "Uzbek", cca2: "UZ" },
-  //   { code: "+977", country: "Nepal", cca2: "NP" },
-  //   { code: "+976", country: "Mong.", cca2: "MN" },
-  //   { code: "+853", country: "Macau", cca2: "MO" },
-  //   { code: "+852", country: "H.K.", cca2: "HK" },
-  //   { code: "+855", country: "Camb.", cca2: "KH" },
-  //   { code: "+856", country: "Laos", cca2: "LA" },
-  //   { code: "+212", country: "Moro.", cca2: "MA" },
-  //   { code: "+213", country: "Alg.", cca2: "DZ" },
-  //   { code: "+216", country: "Tuni.", cca2: "TN" },
-  //   { code: "+218", country: "Libya", cca2: "LY" },
-  //   { code: "+254", country: "Kenya", cca2: "KE" },
-  //   { code: "+255", country: "Tanz.", cca2: "TZ" },
-  //   { code: "+256", country: "Ugand", cca2: "UG" },
-  //   { code: "+234", country: "Nig.", cca2: "NG" },
-  //   { code: "+233", country: "Ghana", cca2: "GH" },
-  //   { code: "+225", country: "Ivory", cca2: "CI" },
-  //   { code: "+221", country: "Sen.", cca2: "SN" },
-  //   { code: "+250", country: "Rw.", cca2: "RW" },
-  //   { code: "+231", country: "Liber", cca2: "LR" },
-  //   { code: "+967", country: "Yemen", cca2: "YE" },
-  //   { code: "+963", country: "Syria", cca2: "SY" },
-  //   { code: "+964", country: "Iraq", cca2: "IQ" },
-  //   { code: "+962", country: "Jorda", cca2: "JO" },
-  //   { code: "+961", country: "Leb.", cca2: "LB" },
-  //   { code: "+972", country: "Isr.", cca2: "IL" },
-  //   { code: "+357", country: "Cyp.", cca2: "CY" },
-  //   { code: "+84", country: "Viet.", cca2: "VN" },
-  //   { code: "+673", country: "Brunei", cca2: "BN" },
-  //   { code: "+975", country: "Bhut.", cca2: "BT" }
-  // ];
-
-
-
-
-  const validateField = (field, value) => {
-    const phoneNumberRegex = /^[+]?[0-9]{10,15}$/;
-    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-    const pinCodeRegex = /^[0-9]{6}$/;
-
-    const newErrors = { ...errors }; // Keep current errors
-
-    // Perform validation based on field type
-    switch (field) {
-      case "primaryNumber":
-        if (!value) {
-          newErrors.primaryNumber = "Primary number is required.";
-        } else if (!phoneNumberRegex.test(value)) {
-          newErrors.primaryNumber =
-            "Invalid primary number. Must be between 10-15 digits.";
-        } else {
-          delete newErrors.primaryNumber;
-        }
-        break;
-
-      case "whatsappNumber":
-        if (!value) {
-          newErrors.whatsappNumber = "WhatsApp number is required.";
-        } else if (!phoneNumberRegex.test(value)) {
-          newErrors.whatsappNumber =
-            "Invalid WhatsApp number. Must be between 10-15 digits.";
-        } else {
-          delete newErrors.whatsappNumber;
-        }
-        break;
-
-      case "email":
-        if (!value) {
-          newErrors.email = "Email is required.";
-        } else if (!emailRegex.test(value)) {
-          newErrors.email = "Invalid email format.";
-        } else {
-          delete newErrors.email;
-        }
-        break;
-
-      case "secondaryNumber":
-        if (value && !phoneNumberRegex.test(value)) {
-          newErrors.secondaryNumber =
-            "Invalid secondary number. Must be between 10-15 digits.";
-        } else {
-          delete newErrors.secondaryNumber;
-        }
-        break;
-
-      case "pinCode":
-        if (!value) {
-          newErrors.pinCode = "PinCode is required.";
-        } else if (!pinCodeRegex.test(value)) {
-          newErrors.pinCode = "Invalid pin code. It should be 6 digits.";
-        } else {
-          delete newErrors.pinCode;
-        }
-        break;
-
-      case "buildingName":
-        if (!value) {
-          newErrors.buildingName = "Building name is required.";
-        } else {
-          delete newErrors.buildingName;
-        }
-        break;
-
-      case "state":
-        if (!value) {
-          newErrors.state = "State is required.";
-        } else {
-          delete newErrors.state;
-        }
-        break;
-
-      case "city":
-        if (!value) {
-          newErrors.city = "City is required.";
-        } else {
-          delete newErrors.city;
-        }
-        break;
-
-      case "streetName":
-        if (!value) {
-          newErrors.streetName = "Street / Colony name is required.";
-        } else {
-          delete newErrors.streetName;
-        }
-        break;
-
-      default:
-        break;
-    }
-
-    // Update errors state
-    setErrors(newErrors);
-    return !newErrors[field]; // Returns true if the specific field has no error
-  };
-
-  const validateRequiredFields = () => {
-    const requiredFields = [
-      "primaryNumber",
-      "whatsappNumber",
-      "email",
-      "pinCode",
-      "buildingName",
-      "state",
-      "city",
-      "streetName",
-    ];
-
-    const newErrors = { ...errors }; // Keep current errors
-    let isValid = true;
-
-    // Loop through required fields and check if they are filled
-    requiredFields.forEach((field) => {
-      let value;
-
-      switch (field) {
-        case "primaryNumber":
-          value = newFormData?.contactDetails?.primaryNumber;
-          break;
-        case "whatsappNumber":
-          value = newFormData?.contactDetails?.whatsappNumber;
-          break;
-        case "primaryCountryCode":
-          value = newFormData?.contactDetails?.primaryCountryCode;
-          break;
-        case "whatsappCountryCode":
-          value = newFormData?.contactDetails?.whatsappCountryCode;
-          break;
-        case "email":
-          value = newFormData?.contactDetails?.email;
-          break;
-        case "pinCode":
-          value = address?.pinCode;
-          break;
-        case "buildingName":
-          value = address?.buildingName;
-          break;
-        case "state":
-          value = address?.state;
-          break;
-        case "city":
-          value = address?.city;
-          break;
-        case "streetName":
-          value = address?.streetName;
-          break;
-        default:
-          break;
-      }
-
-      // Check if value is missing
-      if (!value) {
-        newErrors[field] = `${field} is required.`;
-        isValid = false;
-      } else {
-        delete newErrors[field]; // Remove any previous errors for that field
-      }
-    });
-
-    // Update errors state
-    setErrors(newErrors);
-    return isValid; // Returns true if all required fields are filled
-  };
-
-  const contactSubmitHandler = () => {
-    console.log(newFormData, "new-formData");
-
-    setLoading(true)
-    if (validateRequiredFields()) {
-      dispatch(
-        updateBusinessDetails({
-          contactDetails: newFormData.contactDetails,
-          address: address,
-          location: location,
-        })
-      );
-
-      navigate("/create-business/category");
-      setLoading(false)
-    }
-  };
 
   const handlePrevStep = () => navigate("/create-business/details");
 
-  const handleAddressChange = (event) => {
-    const { name, value } = event.target;
-    setAddress((prevAddress) => ({
-      ...prevAddress,
-      [name]: value,
+
+  const mapFormData = (initialData, setState, state) => {
+    const updatedFields = state.map(field => ({
+      ...field, // Preserve original properties
+      value: initialData[field.name] || field.value, // Use mapped value
+      error: field.required && !initialData[field.name], // Optional validation
+      helperText: field.required && !initialData[field.name]
+        ? `${field.label} is required`
+        : ''
     }));
-    setNewFormData((prevData) => ({
-      ...prevData,
-      contactDetails: {
-        ...prevData.contactDetails,
-        [name]: value,
-      },
-    }));
-    validateField(name, value);
+
+    setState(updatedFields);
   };
 
   useEffect(() => {
-    if (Object.keys(businessState?.contactDetails)?.length) {
-      setNewFormData({
-        contactDetails: businessState?.contactDetails,
-      });
-    }
-    setAddress(businessState?.address);
-    setLocation(businessState?.location);
+
+    mapFormData(businessState?.address, setAddressData, addressData)
+    mapFormData(businessState?.contactDetails, setContactNumbers, contactNumbers)
+    mapFormData(businessState?.contactDetails, setContactDetails, contactDetails)
+
   }, [businessState]);
 
-  const showCaseAddress = [
-    address?.buildingName,
-    address?.streetName,
-    address?.landMark,
-    address?.city,
-    address?.state,
-    address?.pinCode,
-  ]
-    .filter(Boolean)
-    .toString();
+  const arrayToObject = (arrayValues) => {
+    const result = Object.fromEntries(
+      arrayValues.map(field => [field.name, field.value])
+    );
+    return result;
+  }
+
+  const handleSubmitFunction = (e) => {
+    e.preventDefault()
+    const contact = arrayToObject(contactDetails);
+    const numbers = arrayToObject(contactNumbers);
+    const address = arrayToObject(addressData);
+
+    const data = {
+      contactDetails: { ...numbers, ...contact },
+      address,
+      location
+    }
+    console.log(data);
+
+    setLoading(true)
+    dispatch(
+      updateBusinessDetails(data)
+    );
+    navigate("/create-business/category");
+    setLoading(false)
+
+  }
+
   return (
     <div className="h-100vh create-business-div">
       <div className="row px-4 h-100">
-        <div className="col-12 col-md-6 row align-items-center right-portion p-5">
-          <div className="col-12 text-start">
-            <button
-              className="btn btn-dark w-auto float-start"
-              onClick={handlePrevStep}
-            >
-              <i className="bi bi-arrow-left"></i>
-            </button>
-          </div>
-          <div className="col-12">
-            <h1 className="fw-bold text-center text-md-start mb-2">
-              <span className="title-main">Add</span> <br />
-              <span className="title-highlight">Contact Details</span>
-            </h1>
-          </div>
-          <div className="col-12 p-5 p-sm-0 mt-3">
-            {/* Building Name */}
-            <div className="input-group mt-2 w-100">
-              <TextField
-                fullWidth
-                label="Building name*"
-                id="buildingName"
-                variant="filled"
-                name="buildingName"
-                autoComplete="buildingName"
-                value={address.buildingName}
-                onChange={handleAddressChange}
-                error={!!errors?.buildingName}
-                helperText={errors?.buildingName}
-              />
-            </div>
-
-            {/* City */}
-            <div className="input-group mt-2 w-100">
-              <TextField
-                fullWidth
-                label="City*"
-                variant="filled"
-                name="city"
-                value={address.city}
-                onChange={handleAddressChange}
-                error={!!errors?.city}
-                helperText={errors?.city}
-              />
-            </div>
-
-            {/* Street Name */}
-            <div className="input-group mt-2 w-100">
-              <TextField
-                fullWidth
-                label="Street / Colony name*"
-                variant="filled"
-                name="streetName"
-                value={address.streetName}
-                onChange={handleAddressChange}
-                error={!!errors?.streetName}
-                helperText={errors?.streetName}
-              />
-            </div>
-
-            {/* Landmark */}
-            <div className="input-group mt-2 w-100">
-              <TextField
-                fullWidth
-                label="Landmark"
-                variant="filled"
-                name="landMark"
-                value={address.landMark}
-                onChange={handleAddressChange}
-              />
-            </div>
-
-            {/* State and Pincode in the same row */}
-            <div className="row">
-              <div className="col-12 col-md-6 mt-3">
-                <div className="input-group mt-2 w-100">
-                  <TextField
-                    fullWidth
-                    label="State*"
-                    variant="filled"
-                    name="state"
-                    value={address.state}
-                    onChange={handleAddressChange}
-                    error={!!errors?.state}
-                    helperText={errors?.state}
-                  />
-                </div>
-              </div>
-              <div className="col-12 col-md-6 mt-3">
-                <div className="input-group mt-2 w-100">
-                  <TextField
-                    fullWidth
-                    label="Pincode*"
-                    variant="filled"
-                    type="number"
-                    name="pinCode"
-                    value={address.pinCode}
-                    onChange={handleAddressChange}
-                    error={!!errors?.pinCode}
-                    helperText={errors?.pinCode}
-                  />
-                </div>
-              </div>
-            </div>
-
+        <div className="col-12 mt-4 text-start">
+          <button
+            className="btn btn-dark w-auto float-start"
+            onClick={handlePrevStep}
+          >
+            <i className="bi bi-arrow-left"></i>
+          </button>
+        </div>
+        <div className="col-12 col-md-6 row align-items-center right-portion p-md-5 p-0">
+          <Box component={"form"} className="mb-3" onSubmit={handleSubmitFunction} validated={false} noValidate={false} >
+            <ContactForm state={addressData} setState={setAddressData} w />
             {/* Location */}
             {showLocation && <CreateBusinessLocation placeDetails={placeDetails} setPlaceDetails={setPlaceDetails} libraries={libraries} visible={showLocation} setVisible={setShowLocation} setLocation={setLocation} />}
-            <div className="d-flex justify-content-between  mt-2">
-              <p style={{ fontSize: "12px" }} className="text-secondary m-0 p-0">{placeDetails}</p>
-              <span onClick={(() => setShowLocation(!showLocation))} className="w-fit border btn btn-primary d-flex align-items-center">
-                <button className="border-0 bg-transparent ">
+
+            <div className=" d-md-flex  justify-content-between  m-2">
+              <Button variant="contained" color="primary" type="button" onClick={(() => setShowLocation(!showLocation))} >
+                <button type="button" className="border-0 bg-transparent ">
                   <svg fill="#fff" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
                     width="17px" height="17px" viewBox="0 0 395.71 395.71"
                     xml:space="preserve">
@@ -505,183 +138,19 @@ const ContactDetails = () => {
                     </g>
                   </svg>
                 </button>
-                <button style={{ width: "7rem", fontSize: "14px" }} className="border-0 bg-transparent text-white text-wrap ">Add Location</button>
-              </span>
-            </div>
-            {/* Contact Numbers */}
-            <div id="mobileNumberDiv" className="mt-4">
-              <div className="row mt-3">
-                <div className="col-12 mt-2 mt-sm-0">
-                  <div className="input-group mt-2 w-100">
-                    <TextField
-                      select
-                      label="Country Code"
-                      variant="filled"
-                      name="primaryCountryCode"
-                      value={newFormData.contactDetails.primaryCountryCode}
-                      onChange={handleContactChange}
-                      error={!!errors.primaryCountryCode}
-                      helperText={errors.primaryCountryCode}
-                      style={{ width: '25%' }}
-                    >
-                      {countryCodes.map(({ code, country, cca2 }) => (
-                        <MenuItem key={code} value={code}>
-                          <img
-                            src={`https://flagcdn.com/w20/${cca2.toLowerCase()}.png`}
-                            alt={`${country} flag`}
-                            className="mr-2 w-5 h-4"
-                          />
-
-                          {`(${code})`}
-                        </MenuItem>
-                      ))}
-                    </TextField>
-                    <TextField
-                      fullWidth
-                      label="Primary number*"
-                      variant="filled"
-                      name="primaryNumber"
-                      value={newFormData.contactDetails.primaryNumber}
-                      onChange={handleContactChange}
-                      error={!!errors.primaryNumber}
-                      helperText={errors.primaryNumber}
-                      style={{ width: '75%' }}
-                    />
-                  </div>
-                </div>
-              </div>
-
-              <div className="row mt-3">
-                <div className="col-12 mt-2 mt-sm-0">
-                  <div className="input-group mt-2 w-100">
-                    <TextField
-                      select
-                      label="Country Code"
-                      variant="filled"
-                      name="secondaryCountryCode"
-                      value={newFormData.contactDetails.secondaryCountryCode} // Default to India
-                      onChange={handleContactChange}
-                      error={!!errors.secondaryCountryCode}
-                      helperText={errors.secondaryCountryCode}
-                      style={{ width: '25%' }}
-                    >
-                      {countryCodes.map(({ code, country, cca2 }) => (
-                        <MenuItem key={code} value={code}>
-                          <img
-                            src={`https://flagcdn.com/w20/${cca2.toLowerCase()}.png`}
-                            alt={`${country} flag`}
-                            className="mr-2 w-5 h-4"
-                          />
-                          {`(${code})`}
-                        </MenuItem>
-                      ))}
-                    </TextField>
-
-                    <TextField
-                      fullWidth
-                      label="Alternative number"
-                      variant="filled"
-                      name="secondaryNumber"
-                      value={newFormData.contactDetails.secondaryNumber}
-                      onChange={handleContactChange}
-                      error={!!errors.secondaryNumber}
-                      helperText={errors.secondaryNumber}
-                      style={{ width: '75%' }}
-                    />
-                  </div>
-                </div>
-              </div>
-
-              <div className="row mt-3">
-                <div className="col-12 mt-2 mt-sm-0">
-                  <div className="input-group mt-2 w-100">
-                    <TextField
-                      select
-                      label="Country Code"
-                      variant="filled"
-                      name="whatsappCountryCode"
-                      value={newFormData.contactDetails.whatsappCountryCode}
-                      onChange={handleContactChange}
-                      error={!!errors.whatsappCountryCode}
-                      helperText={errors.whatsappCountryCode}
-                      style={{ width: '25%' }}// Adjust width for mobile and desktop
-                    >
-                      {countryCodes.map(({ code, country, cca2 }) => (
-                        <MenuItem key={code} value={code}>
-                          <img
-                            src={`https://flagcdn.com/w20/${cca2.toLowerCase()}.png`}
-                            alt={`${country} flag`}
-                            className="mr-2 w-5 h-4"
-                          />
-                          {`(${code})`}
-                        </MenuItem>
-                      ))}
-                    </TextField>
-                    <TextField
-                      fullWidth
-                      label="WhatsApp number*"
-                      variant="filled"
-                      name="whatsappNumber"
-                      value={newFormData.contactDetails.whatsappNumber}
-                      onChange={handleContactChange}
-                      error={!!errors.whatsappNumber}
-                      helperText={errors.whatsappNumber}
-                      style={{ width: '75%' }}// Adjust width for mobile and desktop
-                    />
-                  </div>
-                </div>
-              </div>
-
-
+                <button type="button" style={{ width: "7rem", fontSize: "14px" }} className="border-0 bg-transparent text-white text-wrap ">Add Location</button>
+              </Button>
+              <p style={{ fontSize: "12px" }} className="text-secondary my-2 my-md-0 ms-md-2">{placeDetails}</p>
             </div>
 
-            <hr />
-            {/* Email Address */}
-            <div id="emailDiv" className="mt-4">
-              <div className="row mt-3">
-                <div className="col-12">
-                  <div className="input-group mt-2 w-100">
-                    <TextField
-                      fullWidth
-                      label="Email address*"
-                      variant="filled"
-                      name="email"
-                      value={newFormData.contactDetails.email}
-                      onChange={handleContactChange}
-                      error={!!errors.email}
-                      helperText={errors.email}
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
+            <ContactForm state={contactNumbers} setState={setContactNumbers} countryCodes={countryCodes} />
+            <ContactForm state={contactDetails} setState={setContactDetails} w />
+            <div className="d-flex justify-content-center align-items-center">
+              {loading ? <Spinner variant="primary" /> : <Button variant="contained" color="primary" type="submit">save & next</Button>}
 
-            {/* Website Link */}
-            <div className="mt-4">
-              <div className="input-group mt-2 w-100">
-                <TextField
-                  fullWidth
-                  label="Website link"
-                  variant="filled"
-                  name="website"
-                  inputProps={{ maxLength: 200 }}
-                  value={newFormData.contactDetails.website}
-                  onChange={handleContactChange}
-                  error={!!errors.website}
-                  helperText={errors.website}
-                />
-              </div>
             </div>
-          </div>
+          </Box>
 
-          <div className="col-12 mt-3 text-center">
-            {loading ? <Spinner variant="primary" /> : <button
-              className="btn btn-primary btn-lg w-100"
-              onClick={contactSubmitHandler}
-            >
-              Save & Continue
-            </button>}
-          </div>
         </div>
 
         <div className="left-portion p-3 col-12 col-lg-6 row align-items-center">
@@ -750,12 +219,14 @@ const ContactDetails = () => {
                         </div>
                         <div className="col">
                           <span className="fs-13">Address</span>
-                          <p className="fs-16 text-break">{showCaseAddress}</p>
-                          {/* <p className="fs-16">
-                            {address.buildingName},{address.city},
-                            {address.landMark},{address.streetName},{" "}
-                            {address.state},{address.pinCode}
-                          </p> */}
+                          <p className="fs-16 text-break">
+                            {addressData[1].value},
+                            {addressData[4].value},
+                            {addressData[3].value},
+                            {addressData[2].value},
+                            {addressData[5].value},
+                            {addressData[6].value}
+                          </p>
                         </div>
                       </div>
                     </div>
@@ -768,7 +239,7 @@ const ContactDetails = () => {
                         <div className="col">
                           <span className="fs-13">Send Email</span>
                           <p className="fs-16 text-break">
-                            {newFormData.contactDetails.email}
+                            {contactDetails[0].value}
                           </p>
                         </div>
                       </div>
@@ -783,10 +254,10 @@ const ContactDetails = () => {
                           <span className="fs-13">Contact</span>
 
                           <p className="fs-16">
-                            +91  {newFormData.contactDetails.primaryNumber}
+                            {contactNumbers[0].value} {contactNumbers[1].value}
                           </p>
                           <p className="fs-16">
-                            +91 {newFormData.contactDetails.secondaryNumber}
+                            {contactNumbers[2].value} {contactNumbers[3].value}
                           </p>
                         </div>
                       </div>
@@ -803,3 +274,111 @@ const ContactDetails = () => {
 };
 
 export default ContactDetails;
+
+
+const ContactForm = ({ state, setState, countryCodes, w }) => {
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setState(prevFields =>
+      prevFields.map(field => {
+        if (field.name === name) {
+          // Check if pattern exists and validate
+          let isPatternValid = true;
+          let errorMessage = '';
+
+          if (field.pattern) {
+            const regex = new RegExp(field.pattern);
+            isPatternValid = regex.test(value);
+
+            // Set specific error messages based on field
+            if (!isPatternValid) {
+              switch (field.name) {
+                case 'name':
+                  errorMessage = 'Only alphabetic characters allowed';
+                  break;
+                case 'buildingName':
+                  errorMessage = 'Only alphabetic characters allowed';
+                  break;
+                case 'streetName':
+                  errorMessage = 'Only alphabetic characters allowed';
+                  break;
+                case 'landMark':
+                  errorMessage = 'Only alphabetic characters allowed';
+                  break;
+                case 'city':
+                  errorMessage = 'Only alphabetic characters allowed';
+                  break;
+                case 'state':
+                  errorMessage = 'Only alphabetic characters allowed';
+                  break;
+                case 'pinCode':
+                  errorMessage = 'Invalid pin code. It should be 6 digits.';
+                  break;
+                case 'primaryNumber':
+                  errorMessage = 'Invalid primary number. Must be between 10-15 digits.';
+                  break;
+                case 'secondaryNumber':
+                  errorMessage = 'Invalid secondary number. Must be between 10-15 digits.';
+                  break;
+                case 'whatsappNumber':
+                  errorMessage = 'Invalid WhatsApp number. Must be between 10-15 digits.';
+                  break;
+                case 'email':
+                  errorMessage = 'Invalid email format.';
+                  break;
+                default:
+                  errorMessage = 'Invalid input';
+              }
+            }
+          }
+
+          return {
+            ...field,
+            value: value,
+            // Validate both pattern and required fields
+            error: field.required && (!value.trim() || !isPatternValid),
+            helperText: field.required && (!value.trim() || !isPatternValid)
+              ? (value.trim() ? errorMessage : `${field.label} is required`)
+              : ''
+          };
+        }
+        return field;
+      })
+    );
+  };
+
+  return (
+    <div className="  w-100  ">
+      {state.map((field) => (
+        <TextField
+          select={field.fieldName === 'select'}
+          key={field.name}
+          name={field.name}
+          label={field.fieldName === "select" ? "Code" : field.label}
+          type={field.type}
+          value={field.value}
+          onChange={handleChange}
+          required={field.required}
+          error={field.error}
+          helperText={field.error ? field.helperText : ''}
+          inputProps={{
+            pattern: field.pattern
+          }}
+          variant="outlined"
+          className={`m-2  ${field.fieldName === "select" ? "w-25" : "w-50 "} ${w && "w-100"}  `}
+        >
+          {field.fieldName === "select" && countryCodes.map(({ code, country, cca2 }) => (
+            <MenuItem key={code} value={code}>
+              <img
+                src={`https://flagcdn.com/w20/${cca2.toLowerCase()}.png`}
+                alt={`${country} flag`}
+                className=" w-5 h-4"
+              />
+              {`(${code})`}
+            </MenuItem>
+          ))}
+        </TextField>
+      ))}
+    </div>
+  )
+}

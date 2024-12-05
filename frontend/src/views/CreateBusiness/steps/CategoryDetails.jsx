@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
-import { Autocomplete, CircularProgress, TextField } from "@mui/material";
+import { Autocomplete, Button, CircularProgress, TextField } from "@mui/material";
 import { updateBusinessDetails } from "../store/businessSlice";
 import { fetchCategories } from "../../../Functions/functions";
 import { Spinner } from "react-bootstrap";
@@ -68,7 +68,7 @@ const CategoryDetails = () => {
 
           <div className="input-group mt-4 w-100 align-items-center">
             <span
-              className="input-group-text bg-white p-3"
+              className=" bg-white p-3"
               style={{ flexBasis: "50px" }}
             >
               <i className="bi bi-search"></i>
@@ -98,7 +98,7 @@ const CategoryDetails = () => {
                     <TextField
                       {...params}
                       label="Categories*"
-                      variant="filled"
+                      variant="outlined"
                       fullWidth
                       error={!!error} // Display error style if there's an error
                       helperText={error}
@@ -119,12 +119,12 @@ const CategoryDetails = () => {
           <div className="col-12 mt-5"></div>
 
           <div className="col-12 text-center mt-5">
-            {loading ? <Spinner variant="primary" /> : <button
-              className="btn btn-primary w-100 text-white p-2"
+            {loading ? <Spinner variant="primary" /> : <Button
+              variant="contained" color="primary" type="submit"
               onClick={handleNext}
             >
               Save & Next
-            </button>}
+            </Button>}
           </div>
         </div>
 
