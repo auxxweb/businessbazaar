@@ -4,6 +4,7 @@ import { useNavigate } from "react-router";
 import { updateBusinessDetails } from "../store/businessSlice";
 import { Button, TextField } from "@mui/material";
 import { Spinner } from "react-bootstrap";
+import { handleWordExceeded } from "../../../utils/app.utils";
 
 const BusinessDesc = () => {
   const navigate = useNavigate();
@@ -11,22 +12,25 @@ const BusinessDesc = () => {
   const businessState = useSelector((state) => state.business);
 
   const [description, setDescription] = useState("");
-  const [error, setError] = useState("");
+  const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false)
 
-  useEffect(() => {
-    if (description) {
-      setError("")
-    }
-
-  }, [description])
-
+  const handleInputChange = (e) => {
+    e.preventDefault()
+    setDescription(e.target.value)
+    setError(handleWordExceeded(e.target.value, 50))
+  }
 
   const handleDescSubmit = () => {
     setLoading(true)
+
     if (!description) {
-      setError("Description is required");
+      return setError("Description is required");
     } else {
+      if (error) {
+        setLoading(false)
+        return
+      }
       dispatch(updateBusinessDetails({ description }));
       navigate("/create-business/landing");
     }
@@ -75,26 +79,11 @@ const BusinessDesc = () => {
                   autoComplete="businessName"
                   multiline
                   value={description}
-                  inputProps={{ maxLength: 250 }}
-                  onChange={(e) => setDescription(e.target.value)}
-                  error={error || description?.split("")?.length >= 250 ? true : false}
-                  helperText={error || description?.split("")?.length >= 250 ? "exceeded the limit" : ""}
+                  onChange={handleInputChange}
+                  error={error}
+                  helperText={error ? "Maximum 50 words allowed (excluding 1-2 letter words)" : ""}
                   rows={5}
                 />
-                {/* <textarea
-                  name="description_main"
-                  className="w-100 form-control form-control-lg"
-                  rows={5}
-                  onChange={(e) => {
-                    setDescription(e.target.value);
-                  }}
-                  id=""
-                  value={description}
-                  placeholder="Business description"
-                >
-                  {description}
-                </textarea> */}
-                <span style={{ color: "red" }}>{error && error}</span>
               </div>
             </div>
 
