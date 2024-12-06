@@ -181,15 +181,15 @@ export default function Home() {
   }, [visibleBusiness, location]);
 
 
-  useEffect(() => {
+  useEffect(()=>{
     const fetchCategory = async () => {
       try {
         setCategoryLoading(true)
         const categoryDetails = await fetchCategories(visibleCategories);
         setCategoryData(categoryDetails.data.data);
-
-
-
+        
+        
+        
       } catch (error) {
         setCategoryLoading(false)
         console.error("Error fetching data:", error);
@@ -200,7 +200,7 @@ export default function Home() {
     fetchCategory();
   }, [visibleCategories])
 
-  console.log(categoryData, 'ithenne')
+  console.log(categoryData,'ithenne')
 
   useEffect(() => {
     const fetchBanner = async () => {
@@ -214,22 +214,22 @@ export default function Home() {
     setCategoryLoading(true)
     const categoryDetails = await fetchCategories(visibleCategories);
     setVisibleCategories((prev) => prev + 20);
-    setCategoryData(((prev) => ([...prev, categoryDetails.data.data])))
+    setCategoryData(((prev)=> ([...prev,categoryDetails.data.data])))
     setCategoryLoading(false)
 
   };
 
-  const loadMoreBusiness = async () => {
+  const loadMoreBusiness = async() => {  
     setLoading(true)
-    const businessDetails = await fetchBusiness(BUSINESS_PAGE,
+    const businessDetails = await fetchBusiness( BUSINESS_PAGE,
       visibleBusiness,
       "",
       location);
-    setVisibleBusiness((prev) => prev + 10);
-    setCategoryData(((prev) => ([...prev, businessDetails.data.data])))
+      setVisibleBusiness((prev) => prev + 10);
+    setCategoryData(((prev)=> ([...prev,businessDetails.data.data])))
     setLoading(false)
   };
-
+   
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setReview((prevState) => ({
@@ -258,7 +258,7 @@ export default function Home() {
     },
     [location, visibleBusiness]
   );
-  console.log(businessData, 'asasasasasasa')
+  console.log(businessData,'asasasasasasa')
 
   return (
     <Layout title="Home" navClass="home">
@@ -297,7 +297,7 @@ export default function Home() {
         review={review}
         setReview={setReview}
         handleInputChange={handleInputChange}
-        handleReviewSubmit={handleReviewSubmit}
+        handleReviewSubmit={handleReviewSubmit} 
         reviewLoading={reviewLoading} />
 
       <FooterSection />
