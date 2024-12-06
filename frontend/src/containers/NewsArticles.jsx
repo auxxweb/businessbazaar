@@ -69,13 +69,13 @@ function NewsArticles({ colorTheme }) {
   }
 
 
-  console.log(newsData, "newsData",bannerData)
+  console.log(newsData, "newsData", bannerData)
 
 
   return (
     <div id='news' style={{ minHeight: "100vh" }}>
       {/* Banner Section */}
-      {bannerData&&bannerData?.length !== 0 && <section className="banner-section" style={styles.bannerSection}>
+      {bannerData && bannerData?.length !== 0 && <section className="banner-section" style={styles.bannerSection}>
         <div className="container">
           <div className="row">
             <div className="col-12 col-lg-6">
@@ -121,12 +121,12 @@ function NewsArticles({ colorTheme }) {
               >
                 <div style={styles.card}>
                   <div style={styles.cardImage}>
-                    {/* <img
-                        src={item?.image || PlaceholderBanner}
-                        alt="Article"
-                        style={styles.image}
-                      /> */}
-                    <LinkPreview url={item?.link} />
+                    {item?.image ? <img
+                      src={item?.image}
+                      alt="Banner"
+                      style={styles.image}
+                    />
+                      : <LinkPreview url={bannerData?.link} />}
                   </div>
                   <div style={styles.cardContent}>
                     <h2 style={styles.cardTitle}>{item?.title}</h2>
