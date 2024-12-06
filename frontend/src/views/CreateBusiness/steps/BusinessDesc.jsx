@@ -15,25 +15,20 @@ const BusinessDesc = () => {
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false)
 
-  const handleInputChange = (e) => {
-    e.preventDefault()
-    setDescription(e.target.value)
-    setError(handleWordExceeded(e.target.value, 50))
-  }
-
   const handleDescSubmit = () => {
-    setLoading(true)
+    if (error) {
+      setLoading(false)
+      return
+    }
 
     if (!description) {
       return setError("Description is required");
-    } else {
-      if (error) {
-        setLoading(false)
-        return
-      }
-      dispatch(updateBusinessDetails({ description }));
-      navigate("/create-business/landing");
     }
+    setLoading(true)
+
+    dispatch(updateBusinessDetails({ description }));
+    navigate("/create-business/landing");
+
     setLoading(false)
   };
 
@@ -79,9 +74,9 @@ const BusinessDesc = () => {
                   autoComplete="businessName"
                   multiline
                   value={description}
-                  onChange={handleInputChange}
-                  error={error}
-                  helperText={error ? "Maximum 50 words allowed (excluding 1-2 letter words)" : ""}
+                  onChange={((e) => setDescription(e.target.value))}
+                  error={handleWordExceeded(description, 50)}
+                  helperText={handleWordExceeded(description, 50) ? "exceeded the limit" : ""}
                   rows={5}
                 />
               </div>
