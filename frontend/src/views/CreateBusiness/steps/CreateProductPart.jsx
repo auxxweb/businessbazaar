@@ -18,7 +18,7 @@ const CreateProductPart = () => {
   const [specialService, setSpecialService] = useState({
     title: "",
     description: "",
-    data: [{ title: "", description: "", image: "", price: "" }],
+    data: [{ title: "", description: "", image: "", price: "", link: "" }],
   });
   const [isLoading, setIsLoading] = useState({
     specialService: {},
@@ -403,8 +403,17 @@ const CreateProductPart = () => {
                       name="price"
                       variant="outlined"
                       label="Price"
-                      error={!!errors?.landingPageHeroDescription}
-                      helperText={errors?.landingPageHeroDescription}
+                      required
+                      onChange={(e) => handleProductChange(index, e)}
+                    />
+                    <TextField
+                      fullWidth
+                      className="my-2"
+                      type="text"
+                      id="link"
+                      name="link"
+                      variant="outlined"
+                      label="Link"
                       onChange={(e) => handleProductChange(index, e)}
                     />
 

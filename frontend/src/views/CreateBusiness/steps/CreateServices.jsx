@@ -322,17 +322,6 @@ const CreateServices = () => {
                   onChange={handleChange}
                   error={handleWordExceeded(specialService.description, 50) ? true : false}
                   helperText={handleWordExceeded(specialService.description, 50) ? "exceeded the limit" : ""}
-                  sx={{
-                    "& .MuiInputBase-root": {
-                      padding: "12px", // Padding inside the textarea
-                    },
-                    "& .MuiFilledInput-root": {
-                      backgroundColor: "#f9f9f9", // Optional: Background color for the filled variant
-                    },
-                    "& .MuiFormLabel-root": {
-                      top: "-6px", // Adjust label positioning if needed
-                    },
-                  }}
                 />
                 <hr
                   style={{
@@ -402,6 +391,18 @@ const CreateServices = () => {
                       rows={4}
                       error={handleWordExceeded(p?.description, 50) ? true : false}
                       helperText={handleWordExceeded(p?.description, 50) ? "exceeded the limit" : ""}
+                      onChange={(e) => handleProductChange(index, e)}
+                    />
+                    <TextField
+                      fullWidth
+                      className="my-2"
+                      label="Link "
+                      id="link"
+                      variant="outlined"
+                      name="link"
+                      autoComplete="link"
+                      error={handleWordExceeded(p?.link, 50) ? true : false}
+                      helperText={handleWordExceeded(p?.link, 50) ? "exceeded the limit" : ""}
                       onChange={(e) => handleProductChange(index, e)}
                     />
 

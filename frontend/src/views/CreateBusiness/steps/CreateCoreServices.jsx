@@ -18,7 +18,7 @@ const CreateCoreServices = () => {
   const [specialService, setSpecialService] = useState({
     title: "",
     description: "",
-    data: [{ title: "", description: "", image: "" }],
+    data: [{ title: "", description: "", image: "", link: "", }],
   });
   const [isLoading, setIsLoading] = useState({
     specialService: {},
@@ -379,13 +379,12 @@ const CreateCoreServices = () => {
                       className="my-2"
                       name="title"
                       autoComplete="Service Name"
+                      type="text"
                       value={p.title}
                       onChange={(e) => handleProductChange(index, e)}
                       error={handleWordExceeded(p.title, 8) ? true : false}
                       helperText={handleWordExceeded(p.title, 8) ? "exceeded the limit" : ""}
                     />
-
-
                     <TextField
                       fullWidth
                       label="Description (50 words)"
@@ -395,13 +394,25 @@ const CreateCoreServices = () => {
                       name="description"
                       autoComplete="description"
                       multiline
+                      type="text"
                       rows={4}
                       error={handleWordExceeded(p.description, 50)}
                       helperText={handleWordExceeded(p.description, 50) ? "exceeded the limit" : ""}
                       onChange={(e) => handleProductChange(index, e)}
                     />
-
-
+                    <TextField
+                      fullWidth
+                      label="Link"
+                      id="link"
+                      variant="outlined"
+                      className="my-2"
+                      name="link"
+                      autoComplete="link"
+                      type="text"
+                      error={handleWordExceeded(p.link, 80)}
+                      helperText={handleWordExceeded(p.link, 80) ? "exceeded the limit" : ""}
+                      onChange={(e) => handleProductChange(index, e)}
+                    />
                     <div className="col-12 col-md-3 mb-3 mx-auto">
                       <input
                         type="file"

@@ -42,6 +42,7 @@ items.forEach((el) => {
 })
 import ShareButton from '../components/ShareButton'
 import ResponsiveGalleryCarousel from '../components/GalleryComponent'
+import { Button } from '@mui/material'
 
 export default function Template() {
   const [currentSlide, setCurrentSlide] = useState(0)
@@ -1075,6 +1076,9 @@ export default function Template() {
                             <div className="col-12 mt-3 mb-3">
                               <p>{dish.description}</p>
                             </div>
+                            {dish?.link && <div className="col-12 mt-3 mb-3 text-end">
+                              <Button data-bs-toggle="tooltip" data-bs-placement="top" title="Visit to know more">visit<i style={{ transform: "rotate(90deg)" }} class="bi bi-arrow-up"></i></Button>
+                            </div>}
                           </div>
                         ),
                       )}
@@ -1107,6 +1111,9 @@ export default function Template() {
                         <div className="col-12 mt-3 mb-3">
                           <p>{dish.description}</p>
                         </div>
+                        {dish?.link && <div className="col-12 mt-3 mb-3 text-end">
+                          <Button data-bs-toggle="tooltip" data-bs-placement="top" title="Visit to know more">visit<i style={{ transform: "rotate(90deg)" }} class="bi bi-arrow-up"></i></Button>
+                        </div>}
                       </div>
                     ))
                   )}
@@ -1164,6 +1171,9 @@ export default function Template() {
                               <span className="fw-bold">{item.price ? 'Price : ₹' : ''}</span>
                               <span className="fw-bold">{item.price}</span>
                             </div>
+                            {item?.link && <div className="col-12 mt-3 mb-3 text-end">
+                              <Button data-bs-toggle="tooltip" data-bs-placement="top" title="Visit to know more">visit<i style={{ transform: "rotate(90deg)" }} class="bi bi-arrow-up"></i></Button>
+                            </div>}
                           </div>
                         </div>
                       ))}
@@ -1240,6 +1250,9 @@ export default function Template() {
                           >
                             <p>{dish.description}</p>
                           </div>
+                          {dish?.link && <div className="col-12 mt-3 mb-3 text-end">
+                            <Button data-bs-toggle="tooltip" data-bs-placement="top" title="Visit to know more">visit<i style={{ transform: "rotate(90deg)" }} class="bi bi-arrow-up"></i></Button>
+                          </div>}
                         </div>
                       ))}
                     </Slider>
