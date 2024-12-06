@@ -8,6 +8,7 @@ import { updateBusinessDetails } from "../store/businessSlice";
 import { preRequestFun } from "../service/s3url";
 import { Spinner } from "react-bootstrap";
 import getCroppedImg from "../../../utils/cropper.utils";
+import { handleWordExceeded } from "../../../utils/app.utils";
 
 const CreateCoreServices = () => {
   const navigate = useNavigate();
@@ -17,7 +18,7 @@ const CreateCoreServices = () => {
   const [specialService, setSpecialService] = useState({
     title: "",
     description: "",
-    data: [{ title: "", description: "", image: "" }],
+    data: [{ title: "", description: "", image: "", link: "", }],
   });
   const [isLoading, setIsLoading] = useState({
     specialService: {},
@@ -298,9 +299,8 @@ const CreateCoreServices = () => {
                   name="title"
                   autoComplete="title-1"
                   onChange={handleChange}
-                  inputProps={{ maxLength: 35 }}
-                  error={specialService?.title?.split("")?.length >= 35 ? true : false}
-                  helperText={specialService?.title?.split("")?.length >= 35 ? "exceeded the limit" : ""}
+                  error={handleWordExceeded(specialService.title, 8) ? true : false}
+                  helperText={handleWordExceeded(specialService.title, 8) ? "exceeded the limit" : ""}
                   value={specialService.title}
                 />
                 <TextField
@@ -315,9 +315,8 @@ const CreateCoreServices = () => {
                   rows={4} // You can adjust the number of rows (height) here
                   value={specialService.description}
                   onChange={handleChange}
-                  inputProps={{ maxLength: 250 }}
-                  error={specialService?.description?.split("")?.length >= 250 ? true : false}
-                  helperText={specialService?.description?.split("")?.length >= 250 ? "exceeded the limit" : ""}
+                  error={handleWordExceeded(specialService.description, 50) ? true : false}
+                  helperText={handleWordExceeded(specialService.description, 50) ? "exceeded the limit" : ""}
                   sx={{
                     "& .MuiInputBase-root": {
                       padding: "12px", // Padding inside the textarea
@@ -380,14 +379,12 @@ const CreateCoreServices = () => {
                       className="my-2"
                       name="title"
                       autoComplete="Service Name"
+                      type="text"
                       value={p.title}
-                      inputProps={{ maxLength: 35 }}
                       onChange={(e) => handleProductChange(index, e)}
-                      error={p?.title?.split("")?.length >= 35 ? true : false}
-                      helperText={p?.title?.split("")?.length >= 35 ? "exceeded the limit" : ""}
+                      error={handleWordExceeded(p.title, 8) ? true : false}
+                      helperText={handleWordExceeded(p.title, 8) ? "exceeded the limit" : ""}
                     />
-
-
                     <TextField
                       fullWidth
                       label="Description (50 words)"
@@ -397,25 +394,25 @@ const CreateCoreServices = () => {
                       name="description"
                       autoComplete="description"
                       multiline
+                      type="text"
                       rows={4}
-                      inputProps={{ maxLength: 250 }}
-                      error={p?.description?.split("")?.length >= 250 ? true : false}
-                      helperText={p?.description?.split("")?.length >= 250 ? "exceeded the limit" : ""}
-                      sx={{
-                        "& .MuiInputBase-root": {
-                          padding: "12px",
-                        },
-                        "& .MuiFilledInput-root": {
-                          backgroundColor: "#f9f9f9",
-                        },
-                        "& .MuiFormLabel-root": {
-                          top: "-6px",
-                        },
-                      }}
+                      error={handleWordExceeded(p.description, 50)}
+                      helperText={handleWordExceeded(p.description, 50) ? "exceeded the limit" : ""}
                       onChange={(e) => handleProductChange(index, e)}
                     />
-
-
+                    <TextField
+                      fullWidth
+                      label="Link"
+                      id="link"
+                      variant="outlined"
+                      className="my-2"
+                      name="link"
+                      autoComplete="link"
+                      type="text"
+                      error={handleWordExceeded(p.link, 80)}
+                      helperText={handleWordExceeded(p.link, 80) ? "exceeded the limit" : ""}
+                      onChange={(e) => handleProductChange(index, e)}
+                    />
                     <div className="col-12 col-md-3 mb-3 mx-auto">
                       <input
                         type="file"

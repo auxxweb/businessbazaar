@@ -58,17 +58,17 @@ const initialState = {
   specialServices: {
     title: "",
     description: "",
-    data: [{ title: "", description: "", image: "" }],
+    data: [{ title: "", description: "", image: "", link: "" }],
   },
   productSection: {
     title: "",
     description: "",
-    data: [{ title: "", description: "", image: "",price:"" }],
+    data: [{ title: "", description: "", image: "", price: "", link: "" }],
   },
   service: {
     title: "",
     description: "",
-    data: [{ title: "", description: "", image: "" }],
+    data: [{ title: "", description: "", image: "", link: "" }],
   },
   testimonial: {
     description: "",
