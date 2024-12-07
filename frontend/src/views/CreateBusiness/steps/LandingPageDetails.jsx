@@ -151,24 +151,50 @@ const LandingPageDetails = () => {
     }
   };
 
-  const handleInputChange = (e, sectionSetter) => {
+  const handleLandingPart = (e) => {
     const { name, value } = e.target;
-    sectionSetter((prevData) => ({ ...prevData, [name]: value }));
-  };
 
-  useEffect(() => {
-    let hasStarted = false
-
-    console.log("data");
-    if (!landingPageHero?.title && hasStarted) {
-
-      setErrors((prev) => ({ ...prev, landingPageHeroTitle: "Title is required" }))
-      hasStarted = true
-    } else {
-      console.log("data");
-      setErrors((prev) => ({ ...prev, landingPageHeroTitle: "" }))
+    if (name == 'title') {
+      if (!value) {
+        setErrors((prev) => ({ ...prev, landingPageHeroTitle: "title required" }))
+      } else {
+        setErrors((prev) => ({ ...prev, landingPageHeroTitle: "" }))
+      }
     }
-  }, [landingPageHero?.title])
+
+    if (name == 'description') {
+      if (!value) {
+        setErrors((prev) => ({ ...prev, landingPageHeroDescription: "Description required" }))
+      } else {
+        setErrors((prev) => ({ ...prev, landingPageHeroDescription: "" }))
+
+      }
+    }
+
+
+    setLandingPageHero((prev) => ({ ...prev, [name]: value }))
+  }
+
+  const handleWelcomePart = (e) => {
+    const { name, value } = e.target;
+    if (name == 'title') {
+      if (value) {
+        setErrors((prev) => ({ ...prev, welcomePartTitle: "" }))
+      } else {
+        setErrors((prev) => ({ ...prev, welcomePartTitle: "title required" }))
+      }
+    }
+
+    if (name == 'description') {
+      if (value) {
+        setErrors((prev) => ({ ...prev, welcomePartDescription: "" }))
+      } else {
+        setErrors((prev) => ({ ...prev, welcomePartDescription: "Description required" }))
+      }
+    }
+    setWelcomePart((prev) => ({ ...prev, [name]: value }))
+
+  }
 
 
   const validateForm = () => {
@@ -398,7 +424,7 @@ const LandingPageDetails = () => {
                 name="title"
                 autoComplete="title"
                 value={landingPageHero.title}
-                onChange={(e) => handleInputChange(e, setLandingPageHero)}
+                onChange={handleLandingPart}
                 error={errors?.landingPageHeroTitle || handleWordExceeded(landingPageHero?.title, 8) ? true : false}
                 helperText={handleWordExceeded(landingPageHero?.title, 8) ? "exceeded the limit" : ""}
               />
@@ -415,7 +441,7 @@ const LandingPageDetails = () => {
                 multiline // Makes the TextField behave like a textarea
                 rows={4} // You can adjust the number of rows (height) here
                 value={landingPageHero.description}
-                onChange={(e) => handleInputChange(e, setLandingPageHero)}
+                onChange={handleLandingPart}
                 error={errors?.landingPageHeroDescription || handleWordExceeded(landingPageHero?.description, 50) ? true : false}
                 helperText={handleWordExceeded(landingPageHero?.description, 50) ? "exceeded the limit" : ""}
               />
@@ -476,7 +502,7 @@ const LandingPageDetails = () => {
                 name="title"
                 autoComplete="title"
                 value={welcomePart.title}
-                onChange={(e) => handleInputChange(e, setWelcomePart)}
+                onChange={handleWelcomePart}
                 error={errors?.welcomePartTitle || handleWordExceeded(welcomePart?.title, 8) ? true : false}
                 helperText={handleWordExceeded(welcomePart?.title, 8) ? "exceeded the limit" : ""}
               />
@@ -493,7 +519,7 @@ const LandingPageDetails = () => {
                 multiline // Makes the TextField behave like a textarea
                 rows={4} // You can adjust the number of rows (height) here
                 value={welcomePart.description}
-                onChange={(e) => handleInputChange(e, setWelcomePart)}
+                onChange={handleWelcomePart}
                 error={errors?.welcomePartDescription || handleWordExceeded(welcomePart?.description, 50) ? true : false}
                 helperText={handleWordExceeded(welcomePart?.description, 50) ? "exceeded the limit" : ""}
               />
