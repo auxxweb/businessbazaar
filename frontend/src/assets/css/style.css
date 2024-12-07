@@ -28,6 +28,12 @@ body{
       font-size:22px;
 }
 }
+
+ @media only screen and (max-width: 690px) {
+      .input-primary-number {
+        width: 100% !important;
+      }
+    }
   
   .contact-form {
     background-color: #fff;

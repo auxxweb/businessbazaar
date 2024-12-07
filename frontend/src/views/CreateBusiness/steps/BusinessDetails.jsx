@@ -7,6 +7,7 @@ import { Button, TextField } from "@mui/material";
 import { updateBusinessDetails } from "../store/businessSlice";
 import { preRequestFun } from "../service/s3url";
 import getCroppedImg from "../../../utils/cropper.utils";
+import { handleWordExceeded } from "../../../utils/app.utils";
 
 const BusinessDetails = () => {
   const navigate = useNavigate();
@@ -77,15 +78,18 @@ const BusinessDetails = () => {
     document.getElementById("ImageLogo").click();
   };
 
+
+
   // Handle form submission with validation
-  const handleBusinessSubmit = async () => {
+  const handleBusinessSubmit = async (e) => {
+    e.preventDefault()
     let hasError = false;
     if (!businessName) {
-      setError({ ...error, name: "Business Name is required." });
+      setError((prev => ({ ...prev, name: "Business name is required." })))
       hasError = true;
     }
     if (!logoFile && !logo) {
-      setError({ ...error, logo: "Business Logo is required." });
+      setError((prev => ({ ...prev, logo: "Business logo is required." })))
       hasError = true;
     }
     if (hasError) return;
@@ -110,6 +114,17 @@ const BusinessDetails = () => {
       setIsLoading(false);
     }
   };
+  useEffect(() => {
+    let isHappened = false
+    if (isHappened && businessName) {
+      setError((prev => ({ ...prev, name: "Business name is required." })))
+      isHappened = true
+    } else {
+      setError((prev => ({ ...prev, name: null })))
+    }
+
+  }, [businessName])
+
 
   const handlePrevStep = () => navigate("/create-business");
 
@@ -191,19 +206,20 @@ const BusinessDetails = () => {
                 <TextField
                   fullWidth
                   required
-                  label="Business Name"
+                  label="Business Name (8 words)"
                   id="businessName"
                   variant="filled"
                   name="businessName"
                   autoComplete="businessName"
                   value={businessName}
-                  inputProps={{ maxLength: 35 }}
                   onChange={(e) => setBusinessName(e.target.value)}
-                  error={error?.name || businessName?.split("")?.length >= 35 ? true : false}
-                  helperText={error?.name || businessName?.split("")?.length >= 35 ? "exceeded the limit" : ""}
+                  error={handleWordExceeded(businessName, 8)}
+                  helperText={handleWordExceeded(businessName, 8) ? "exceeded the limit" : ""}
                 />
               </div>
-
+              {error?.name && (
+                <div className="text-danger mb-4">{error?.name}</div>
+              )}
               <div className="mb-4">
                 <label htmlFor="ImageLogo" className="form-label">
                   Upload Business Logo*
@@ -250,13 +266,13 @@ const BusinessDetails = () => {
                 <div className="text-danger mb-4">{error?.logo}</div>
               )}
               <div className="text-center">
-                <Button onClick={handleBusinessSubmit} variant="contained" className="w-100 submit-button" type="submit">save & next</Button>
+                <Button disabled={isLoading} onClick={handleBusinessSubmit} variant="contained" className="w-100 submit-button" type="submit">save & next</Button>
               </div>
             </div>
           </div>
 
           {/* Right Section - Business Name Display */}
-          <div className="col-12 col-md-6 p-5">
+          <div className="col-12 col-md-6 p-5 left-portion vh-100  ">
             <div className="business-preview">
               <div className="text-center mb-4">
                 <h3 className="fw-bold">Business Name Preview</h3>

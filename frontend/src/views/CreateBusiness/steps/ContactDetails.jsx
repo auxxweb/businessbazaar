@@ -90,6 +90,7 @@ const libraries = ['places'];
 //   { code: "+975", country: "Bhut.", cca2: "BT" }
 // ];
 
+
 const ContactDetails = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -99,12 +100,12 @@ const ContactDetails = () => {
   const [loading, setLoading] = useState(false)
 
   const [addressData, setAddressData] = useState([
-    { name: "name", value: "", type: "text", required: true, label: "Name", pattern: "^[a-zA-Z0-9]+$", },
-    { name: "buildingName", value: "", type: "text", required: true, label: "Building Name", pattern: "^[a-zA-Z0-9]+$" },
-    { name: "streetName", value: "", type: "text", required: true, label: "Street Name", pattern: "^[a-zA-Z0-9]+$" },
-    { name: "landMark", value: "", type: "text", required: true, label: "Landmark", pattern: "^[a-zA-Z0-9]+$" },
-    { name: "city", value: "", type: "text", required: true, label: "City", pattern: "^[a-zA-Z0-9]+$" },
-    { name: "state", value: "", type: "text", required: true, label: "State", pattern: "^[a-zA-Z0-9]+$" },
+    { name: "name", value: "", type: "text", required: true, label: "Name", },
+    { name: "buildingName", value: "", type: "text", required: true, label: "Building Name", },
+    { name: "streetName", value: "", type: "text", required: true, label: "Street Name", },
+    { name: "landMark", value: "", type: "text", required: true, label: "Landmark", },
+    { name: "city", value: "", type: "text", required: true, label: "City", },
+    { name: "state", value: "", type: "text", required: true, label: "State", },
     { name: "pinCode", value: "", type: "number", required: true, label: "Pincode", pattern: "^[0-9]{6}$", },
   ])
   const [contactNumbers, setContactNumbers] = useState([
@@ -143,10 +144,7 @@ const ContactDetails = () => {
     const updatedFields = state.map(field => ({
       ...field, // Preserve original properties
       value: initialData[field.name] || field.value, // Use mapped value
-      error: field.required && !initialData[field.name], // Optional validation
-      helperText: field.required && !initialData[field.name]
-        ? `${field.label} is required`
-        : ''
+      // Optional validation
     }));
 
     setState(updatedFields);
@@ -167,11 +165,47 @@ const ContactDetails = () => {
     return result;
   }
 
+  const handleSubmitCheck = (array) => {
+    let error = false;
+    const updatedFields = array.map(field => ({
+      ...field,
+      // Show errors on submission for all fields
+      error: field.required && (!field.value.trim() ||
+        (field.pattern && !new RegExp(field.pattern).test(field.value))),
+      helperText: field.required && (!field.value.trim() ||
+        (field.pattern && !new RegExp(field.pattern).test(field.value)))
+        ? (field.value.trim()
+          ? (field.pattern
+            ? 'Invalid input'
+            : `${field.label} is required`)
+          : `${field.label} is required`)
+        : ''
+    }));
+    const filteredArray = updatedFields.filter((item) => item.error && item.required)
+    const isError = filteredArray?.length > 0 ? true : false
+    return { updatedFields, isError }
+  }
+
   const handleSubmitFunction = (e) => {
     e.preventDefault()
+    let toggle = true
+    if (toggle) {
+      const contact = handleSubmitCheck(contactDetails)
+      const number = handleSubmitCheck(contactNumbers)
+      const address = handleSubmitCheck(addressData)
+      setAddressData(address.updatedFields)
+      setContactDetails(contact.updatedFields)
+      setContactNumbers(number.updatedFields)
+
+      if (contact.isError || number.isError || address.isError) {
+        return
+      }
+    }
+
     const contact = arrayToObject(contactDetails);
     const numbers = arrayToObject(contactNumbers);
     const address = arrayToObject(addressData);
+
 
     const data = {
       contactDetails: { ...numbers, ...contact },
@@ -192,21 +226,27 @@ const ContactDetails = () => {
   return (
     <div className="h-100vh create-business-div">
       <div className="row px-4 h-100">
-        <div className="col-12 mt-4 text-start">
-          <button
-            className="btn btn-dark w-auto float-start"
-            onClick={handlePrevStep}
-          >
-            <i className="bi bi-arrow-left"></i>
-          </button>
-        </div>
-        <div className="col-12 col-md-6 row align-items-center right-portion p-5">
-          <Box component={"form"} className="mb-3 " onSubmit={handleSubmitFunction} validated={false} noValidate={false} >
+        <div className="col-12 col-sm-12 col-md-6 col-lg-6   row align-items-center right-portion p-sm-5">
+          <div className="col-12 mt-4 text-start">
+            <button
+              className="btn btn-dark w-auto float-start"
+              onClick={handlePrevStep}
+            >
+              <i className="bi bi-arrow-left"></i>
+            </button>
+          </div>
+          <div className="col-12 mt-5 text-center text-md-start">
+            <h1 className="fw-bold title-text">
+              <span className="title-main">Add </span>
+              <span className="title-highlight">Contact Details</span>
+            </h1>
+          </div>
+          <Box component={"form"} className="mb-3  " onSubmit={handleSubmitFunction} validated={false} noValidate={false} >
             <ContactForm state={addressData} setState={setAddressData} w />
             {/* Location */}
             {showLocation && <CreateBusinessLocation placeDetails={placeDetails} setPlaceDetails={setPlaceDetails} libraries={libraries} visible={showLocation} setVisible={setShowLocation} setLocation={setLocation} />}
 
-            <div className=" d-md-flex  justify-content-between  m-2">
+            <div className="   justify-content-between  m-2">
               <Button variant="contained" color="primary" type="button" onClick={(() => setShowLocation(!showLocation))} >
                 <button type="button" className="border-0 bg-transparent ">
                   <svg fill="#fff" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -222,7 +262,7 @@ const ContactDetails = () => {
                 </button>
                 <button type="button" style={{ width: "7rem", fontSize: "14px" }} className="border-0 bg-transparent text-white text-wrap ">Add Location</button>
               </Button>
-              <p style={{ fontSize: "12px" }} className="text-secondary my-2 my-md-0 ms-md-2">{placeDetails}</p>
+              <p style={{ fontSize: "13px", wordSpacing: "2px", wordBreak: "break-all" }} className="text-secondary fw-bold my-2 my-md-0 ms-md-2">{placeDetails}</p>
             </div>
 
             <ContactForm state={contactNumbers} setState={setContactNumbers} countryCodes={countryCodes} />
@@ -233,7 +273,7 @@ const ContactDetails = () => {
           </Box>
         </div>
 
-        <div className="left-portion p-3 col-12 col-lg-6 row align-items-center">
+        <div className="left-portion p-3 col-12 col-md-6 col-lg-6 row align-items-center">
           <link rel="preconnect" href="https://fonts.googleapis.com" />
           <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin />
           <link
@@ -357,6 +397,7 @@ export default ContactDetails;
 
 
 const ContactForm = ({ state, setState, countryCodes, w }) => {
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setState(prevFields =>
@@ -427,10 +468,12 @@ const ContactForm = ({ state, setState, countryCodes, w }) => {
     );
   };
 
+
   return (
-    <div className="  w-100 pe-2 ">
+    <div className=" w-100 pe-2 ">
       {state.map((field) => (
         <TextField
+          style={{ maxWidth: `${field.fieldName === "select" && "7rem"}` }}
           select={field.fieldName === 'select'}
           key={field.name}
           name={field.name}
@@ -438,14 +481,13 @@ const ContactForm = ({ state, setState, countryCodes, w }) => {
           type={field.type}
           value={field.value}
           onChange={handleChange}
-          required={field.required}
           error={field.error}
           helperText={field.error ? field.helperText : ''}
           inputProps={{
             pattern: field.pattern
           }}
           variant="filled"
-          className={`m-2  ${field.fieldName === "select" ? "w-25" : "w-50 "} ${w && "w-100"}  `}
+          className={`m-2  ${field.fieldName !== "select" && "input-primary-number w-75 "} ${w && "w-100"}  `}
         >
           {field.fieldName === "select" && countryCodes.map(({ code, country, cca2 }) => (
             <MenuItem key={code} value={code}>

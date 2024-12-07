@@ -12,7 +12,7 @@ const BusinessDesc = () => {
   const businessState = useSelector((state) => state.business);
 
   const [description, setDescription] = useState("");
-  const [error, setError] = useState(false);
+  const [error, setError] = useState("");
   const [loading, setLoading] = useState(false)
 
   const handleDescSubmit = () => {
@@ -33,10 +33,22 @@ const BusinessDesc = () => {
   };
 
   const handlePrevStep = () => navigate("/create-business/timing");
+  const handleChange = (e) => {
+    const value = e.target.value;
+    if (value) {
+      setError("")
+    } else {
+      setError("Description is required !")
+    }
+    setDescription(value)
+  }
 
   useEffect(() => {
-    setDescription(businessState?.description);
-  }, [businessState]);
+    if (businessState?.description) {
+      setDescription(businessState.description)
+    }
+  }, [businessState])
+
   return (
     <>
       <div className="h-100vh create-business-div">
@@ -66,7 +78,6 @@ const BusinessDesc = () => {
                 {/* <label>Business Description*</label> */}
                 <TextField
                   fullWidth
-                  required
                   label="Business description (50 words)"
                   id="businessName"
                   variant="filled"
@@ -74,12 +85,13 @@ const BusinessDesc = () => {
                   autoComplete="businessName"
                   multiline
                   value={description}
-                  onChange={((e) => setDescription(e.target.value))}
-                  error={handleWordExceeded(description, 50)}
+                  onChange={handleChange}
+                  error={error || handleWordExceeded(description, 50)}
                   helperText={handleWordExceeded(description, 50) ? "exceeded the limit" : ""}
                   rows={5}
                 />
               </div>
+              <p className="text-danger">{error}</p>
             </div>
 
             {/* Save & Next Button */}
