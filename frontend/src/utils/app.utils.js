@@ -17,12 +17,12 @@ const formattedDate = formatDate(isoDate);
 console.log(formattedDate); // Output: 05-11-2024
 
 
-export const handleWordExceeded = (text, limit) => {
+export const handleWordExceeded = (text='', limit) => {
   let error = true;
   const excludeWords = new Set(['is', 'a', 'in', 'as', 'of', 'an', 'to', 'on', 'at', 'my', 'i', 'us']);
   const words = text
-    .toLowerCase() // Convert to lowercase
-    .match(/\b\w+\b/g); // Extract words using regex
+    ?.toLowerCase() // Convert to lowercase
+    ?.match(/\b\w+\b/g); // Extract words using regex
   const filteredWords = words ? words.filter(word => !excludeWords.has(word)) : [];
 
   // Check if words exceed 50
