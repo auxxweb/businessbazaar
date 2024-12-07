@@ -3,7 +3,7 @@ import { Button, Spinner } from "react-bootstrap"
 import Cropper from "react-easy-crop"
 import getCroppedImg from "../utils/cropper.utils";
 
-export const ReactCropperComponent = ({ 
+export const ReactCropperComponent = ({
     setShowCropper,
     setResultImage,
     resultImage,
@@ -63,10 +63,10 @@ export const ReactCropperComponent = ({
     const imageUpload = () => {
         document.getElementById("ImageLogo").click();
     };
-const handleCancel = (e)=>{
-    e.preventDefault()
-    setShowCropper(false)
-}
+    const handleCancel = (e) => {
+        e.preventDefault()
+        setShowCropper(false)
+    }
     return (
         <>
             <div className="">
@@ -87,7 +87,7 @@ const handleCancel = (e)=>{
                         className="logo-upload p-4 text-center"
                         style={{ cursor: "pointer" }}
                     >
-                        {loading ? <Spinner variant="primary"/> : resultImage || previewImage ? (
+                        {loading ? <Spinner variant="primary" /> : resultImage || previewImage ? (
                             <img
                                 src={previewImage ?? resultImage}
                                 alt="Business Logo"
@@ -145,7 +145,7 @@ const handleCancel = (e)=>{
                                 Save Crop
                             </Button>
                             <Button
-                                variant="outlined"
+                                variant="filled"
                                 onClick={handleCancel}
                             >
                                 Cancel

@@ -159,7 +159,7 @@ const BusinessDetails = () => {
                   Save Crop
                 </Button>
                 <Button
-                  variant="outlined"
+                  variant="filled"
                   color="warning"
                   onClick={() => setShowCropper(false)}
                 >
@@ -193,7 +193,7 @@ const BusinessDetails = () => {
                   required
                   label="Business Name"
                   id="businessName"
-                  variant="outlined"
+                  variant="filled"
                   name="businessName"
                   autoComplete="businessName"
                   value={businessName}
@@ -250,7 +250,7 @@ const BusinessDetails = () => {
                 <div className="text-danger mb-4">{error?.logo}</div>
               )}
               <div className="text-center">
-                <Button onClick={handleBusinessSubmit} variant="contained" color="primary" type="submit">save & next</Button>
+                <Button onClick={handleBusinessSubmit} variant="contained" className="w-100 submit-button" type="submit">save & next</Button>
               </div>
             </div>
           </div>

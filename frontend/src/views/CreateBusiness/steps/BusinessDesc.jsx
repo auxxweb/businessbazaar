@@ -62,14 +62,14 @@ const BusinessDesc = () => {
               </div>
 
               {/* Text Editor Section */}
-              <div className="col-12  p-3 p-md-5">
+              <div className="col-12   p-3 p-md-5">
                 {/* <label>Business Description*</label> */}
                 <TextField
                   fullWidth
                   required
                   label="Business description (50 words)"
                   id="businessName"
-                  variant="outlined"
+                  variant="filled"
                   name="description_main"
                   autoComplete="businessName"
                   multiline
@@ -84,7 +84,7 @@ const BusinessDesc = () => {
 
             {/* Save & Next Button */}
             <div className="col-12 text-center p-3 ">
-              {loading ? <Spinner variant="primary" /> : <Button variant="contained" color="primary" type="submit"
+              {loading ? <Spinner variant="primary" /> : <Button variant="contained" className="w-100 submit-button" type="submit"
                 onClick={handleDescSubmit}
               >
                 Save & Next

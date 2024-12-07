@@ -8,6 +8,7 @@ import { Container, Nav, Navbar, NavLink } from "react-bootstrap";
 import { preRequestFun } from "../service/s3url";
 import getCroppedImg from "../../../utils/cropper.utils";
 import Loader from "../../../components/Loader/Loader";
+import { handleWordExceeded } from "../../../utils/app.utils";
 
 const initialCropState = { x: 0, y: 0 };
 
@@ -301,7 +302,7 @@ const LandingPageDetails = () => {
               </div>
               <div className="modal-footer">
                 <Button
-                  variant="outlined"
+                  variant="filled"
                   className="mx-2 bg-danger text-white border-danger"
                   onClick={() => setShowCropper(false)}
                 >
@@ -347,7 +348,7 @@ const LandingPageDetails = () => {
                 <div>
                   <label>Choose Primary Color</label>
                   <TextField
-                    variant="outlined"
+                    variant="filled"
                     type="color"
                     name="color"
                     className="form-control form-control-lg"
@@ -378,14 +379,13 @@ const LandingPageDetails = () => {
                 className="my-2 border-0"
                 label="Title"
                 id="title"
-                variant="outlined"
+                variant="filled"
                 name="title"
                 autoComplete="title"
                 value={landingPageHero.title}
-                inputProps={{ maxLength: 35 }}
                 onChange={(e) => handleInputChange(e, setLandingPageHero)}
-                error={errors?.landingPageHeroTitle || landingPageHero?.title?.split("")?.length >= 35 ? true : false}
-                helperText={errors?.landingPageHeroTitle || landingPageHero?.title?.split("")?.length >= 35 ? "exceeded the limit" : ""}
+                error={handleWordExceeded(landingPageHero?.title, 8) ? true : false}
+                helperText={handleWordExceeded(landingPageHero?.title, 8) ? "exceeded the limit" : ""}
               />
               <TextField
                 className="my-2"
@@ -393,16 +393,15 @@ const LandingPageDetails = () => {
                 required
                 label="Description"
                 id="description"
-                variant="outlined"
+                variant="filled"
                 name="description"
                 autoComplete="description"
                 multiline // Makes the TextField behave like a textarea
                 rows={4} // You can adjust the number of rows (height) here
                 value={landingPageHero.description}
-                inputProps={{ maxLength: 200 }}
                 onChange={(e) => handleInputChange(e, setLandingPageHero)}
-                error={errors?.landingPageHeroDescription || landingPageHero?.description?.split("")?.length >= 200 ? true : false}
-                helperText={errors?.landingPageHeroDescription || landingPageHero?.description?.split("")?.length >= 200 ? "exceeded the limit" : ""}
+                error={handleWordExceeded(landingPageHero?.description, 50) ? true : false}
+                helperText={handleWordExceeded(landingPageHero?.description, 50) ? "exceeded the limit" : ""}
               />
 
               {/* Hero Image Upload */}
@@ -457,14 +456,13 @@ const LandingPageDetails = () => {
                 required
                 label="Title"
                 id="title"
-                variant="outlined"
+                variant="filled"
                 name="title"
                 autoComplete="title"
-                inputProps={{ maxLength: 35 }}
                 value={welcomePart.title}
                 onChange={(e) => handleInputChange(e, setWelcomePart)}
-                error={errors?.welcomePartTitle || welcomePart?.title?.split("")?.length >= 35 ? true : false}
-                helperText={errors?.welcomePartTitle || welcomePart?.title?.split("")?.length >= 35 ? "exceeded the limit" : ""}
+                error={handleWordExceeded(welcomePart?.title, 8) ? true : false}
+                helperText={handleWordExceeded(welcomePart?.title, 8) ? "exceeded the limit" : ""}
               />
               <TextField
                 className="my-2"
@@ -472,16 +470,15 @@ const LandingPageDetails = () => {
                 required
                 label="Description"
                 id="description"
-                variant="outlined"
+                variant="filled"
                 name="description"
                 autoComplete="description"
                 multiline // Makes the TextField behave like a textarea
                 rows={4} // You can adjust the number of rows (height) here
                 value={welcomePart.description}
-                inputProps={{ maxLength: 200 }}
                 onChange={(e) => handleInputChange(e, setWelcomePart)}
-                error={errors?.welcomePartDescription || welcomePart?.description?.split("")?.length >= 200 ? true : false}
-                helperText={errors?.welcomePartDescription || welcomePart?.description?.split("")?.length >= 200 ? "exceeded the limit" : ""}
+                error={handleWordExceeded(welcomePart?.description, 50) ? true : false}
+                helperText={handleWordExceeded(welcomePart?.description, 50) ? "exceeded the limit" : ""}
               />
 
               {/* Welcome Image Upload */}
@@ -523,7 +520,7 @@ const LandingPageDetails = () => {
               )}
 
               <div className="col-12 mt-4 text-center">
-                <Button variant="contained" color="primary"
+                <Button variant="contained" className="w-100 submit-button"
                   onClick={handleLandingSubmit}
                 >
                   Save & Next

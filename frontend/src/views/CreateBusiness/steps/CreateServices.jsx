@@ -18,7 +18,7 @@ const CreateServices = () => {
   const [specialService, setSpecialService] = useState({
     title: "",
     description: "",
-    data: [{ title: "", description: "", image: "" }],
+    data: [{ title: "", description: "", image: "", link: "" }],
   });
   const [isLoading, setIsLoading] = useState({
     specialService: {},
@@ -300,7 +300,7 @@ const CreateServices = () => {
                   className="my-2"
                   label="Title (8 words)"
                   id="title-1"
-                  variant="outlined"
+                  variant="filled"
                   name="title"
                   autoComplete="title-1"
                   onChange={handleChange}
@@ -313,7 +313,7 @@ const CreateServices = () => {
                   className="my-2"
                   label="Description (50 words)"
                   id="description-1"
-                  variant="outlined"
+                  variant="filled"
                   name="description"
                   autoComplete="description-1"
                   multiline // Makes the TextField behave like a textarea
@@ -370,7 +370,7 @@ const CreateServices = () => {
                       label="Title (8 words)"
                       id="title"
                       className="my-2"
-                      variant="outlined"
+                      variant="filled"
                       name="title"
                       autoComplete="Service Name"
                       value={p.title}
@@ -384,7 +384,7 @@ const CreateServices = () => {
                       className="my-2"
                       label="Description (50 words)"
                       id="description"
-                      variant="outlined"
+                      variant="filled"
                       name="description"
                       autoComplete="description"
                       multiline
@@ -398,7 +398,7 @@ const CreateServices = () => {
                       className="my-2"
                       label="Link "
                       id="link"
-                      variant="outlined"
+                      variant="filled"
                       name="link"
                       autoComplete="link"
                       error={handleWordExceeded(p?.link, 50) ? true : false}
@@ -455,7 +455,7 @@ const CreateServices = () => {
                         ],
                       }))
                     }
-                    color="primary" className="mx-2 mx-auto" variant="contained"
+                    color="primary" className="w-100 submit-button" variant="contained"
                   >
                     + Add  Service Card
                   </Button>
@@ -472,7 +472,7 @@ const CreateServices = () => {
             {/* Save & Next Button */}
             <div className="col-12 mt-4 text-center">
               {loading ? <Spinner variant="primary" /> : <Button
-                color="primary" className="mx-2 mx-auto" variant="contained"
+                className="w-100 submit-button" variant="contained"
                 onClick={handleServiceSubmit}
               >
                 Save & Next

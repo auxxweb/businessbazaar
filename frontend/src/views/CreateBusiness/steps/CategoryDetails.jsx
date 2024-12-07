@@ -98,7 +98,7 @@ const CategoryDetails = () => {
                     <TextField
                       {...params}
                       label="Categories*"
-                      variant="outlined"
+                      variant="filled"
                       fullWidth
                       error={!!error} // Display error style if there's an error
                       helperText={error}
@@ -120,7 +120,7 @@ const CategoryDetails = () => {
 
           <div className="col-12 text-center mt-5">
             {loading ? <Spinner variant="primary" /> : <Button
-              variant="contained" color="primary" type="submit"
+              variant="contained" className="w-100 submit-button" type="submit"
               onClick={handleNext}
             >
               Save & Next

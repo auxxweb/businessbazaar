@@ -288,14 +288,14 @@ const CreateCoreServices = () => {
                 </h1>
               </div>
 
-              <div className="col-12">
+              <div className="col-12 ">
                 {/* Special Service Title */}
                 <TextField
                   fullWidth
                   className="my-2"
                   label="Title (8 words)"
                   id="title-1"
-                  variant="outlined"
+                  variant="filled"
                   name="title"
                   autoComplete="title-1"
                   onChange={handleChange}
@@ -308,7 +308,7 @@ const CreateCoreServices = () => {
                   className="my-2"
                   label="Description (50 words)"
                   id="description-1"
-                  variant="outlined"
+                  variant="filled"
                   name="description"
                   autoComplete="description-1"
                   multiline // Makes the TextField behave like a textarea
@@ -375,7 +375,7 @@ const CreateCoreServices = () => {
                       fullWidth
                       label="Title (8 words)"
                       id="title"
-                      variant="outlined"
+                      variant="filled"
                       className="my-2"
                       name="title"
                       autoComplete="Service Name"
@@ -389,7 +389,7 @@ const CreateCoreServices = () => {
                       fullWidth
                       label="Description (50 words)"
                       id="description"
-                      variant="outlined"
+                      variant="filled"
                       className="my-2"
                       name="description"
                       autoComplete="description"
@@ -404,7 +404,7 @@ const CreateCoreServices = () => {
                       fullWidth
                       label="Link"
                       id="link"
-                      variant="outlined"
+                      variant="filled"
                       className="my-2"
                       name="link"
                       autoComplete="link"
@@ -447,7 +447,7 @@ const CreateCoreServices = () => {
                     </div>
                   </div>
                 ))}
-                <div className="text-center">
+                <div className="text-center ">
                   <Button
                     href="#"
                     onClick={() =>
@@ -459,7 +459,7 @@ const CreateCoreServices = () => {
                         ],
                       }))
                     }
-                    color="primary" className="mx-2 mx-auto" variant="contained"
+                    color="primary" className="w-100 submit-button " variant="contained"
                   >
                     + Add Service Cards
                   </Button>
@@ -476,7 +476,7 @@ const CreateCoreServices = () => {
             {/* Save & Next Button */}
             <div className="col-12 mt-4 text-center">
               {loading ? <Spinner variant="primary" /> : <Button
-                color="primary" className="mx-2 mx-auto" variant="contained"
+                color="primary" className="w-100 submit-button" variant="contained"
                 onClick={handleServiceSubmit}
               >
                 Save & Next

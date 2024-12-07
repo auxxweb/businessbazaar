@@ -200,8 +200,8 @@ const ContactDetails = () => {
             <i className="bi bi-arrow-left"></i>
           </button>
         </div>
-        <div className="col-12 col-md-6 row align-items-center right-portion p-md-5 p-0">
-          <Box component={"form"} className="mb-3" onSubmit={handleSubmitFunction} validated={false} noValidate={false} >
+        <div className="col-12 col-md-6 row align-items-center right-portion p-5">
+          <Box component={"form"} className="mb-3 " onSubmit={handleSubmitFunction} validated={false} noValidate={false} >
             <ContactForm state={addressData} setState={setAddressData} w />
             {/* Location */}
             {showLocation && <CreateBusinessLocation placeDetails={placeDetails} setPlaceDetails={setPlaceDetails} libraries={libraries} visible={showLocation} setVisible={setShowLocation} setLocation={setLocation} />}
@@ -227,12 +227,10 @@ const ContactDetails = () => {
 
             <ContactForm state={contactNumbers} setState={setContactNumbers} countryCodes={countryCodes} />
             <ContactForm state={contactDetails} setState={setContactDetails} w />
-            <div className="d-flex justify-content-center align-items-center">
-              {loading ? <Spinner variant="primary" /> : <Button variant="contained" color="primary" type="submit">save & next</Button>}
-
+            <div className="d-flex justify-content-center align-items-center w-100 my-5 ">
+              {loading ? <Spinner variant="primary" /> : <Button variant="contained" className="w-100 submit-button" type="submit">save & next</Button>}
             </div>
           </Box>
-
         </div>
 
         <div className="left-portion p-3 col-12 col-lg-6 row align-items-center">
@@ -430,7 +428,7 @@ const ContactForm = ({ state, setState, countryCodes, w }) => {
   };
 
   return (
-    <div className="  w-100  ">
+    <div className="  w-100 pe-2 ">
       {state.map((field) => (
         <TextField
           select={field.fieldName === 'select'}
@@ -446,7 +444,7 @@ const ContactForm = ({ state, setState, countryCodes, w }) => {
           inputProps={{
             pattern: field.pattern
           }}
-          variant="outlined"
+          variant="filled"
           className={`m-2  ${field.fieldName === "select" ? "w-25" : "w-50 "} ${w && "w-100"}  `}
         >
           {field.fieldName === "select" && countryCodes.map(({ code, country, cca2 }) => (
