@@ -145,7 +145,7 @@ const BusinessTiming = () => {
                     </label>
                     <TextField
                       type="time"
-                      variant="outlined"
+                      variant="filled"
                       className="form-control form-control-lg"
                       value={openTime}
                       onChange={handleOpenTimeChange}
@@ -157,7 +157,7 @@ const BusinessTiming = () => {
                     </label>
                     <TextField
                       type="time"
-                      variant="outlined"
+                      variant="filled"
                       className="form-control form-control-lg"
                       value={closeTime}
                       onChange={handleCloseTimeChange}
@@ -168,8 +168,8 @@ const BusinessTiming = () => {
             </div>
 
             {/* Save & Next Button */}
-            <div className="col-12 text-center p-3 p-md-5">
-              {loading ? <Spinner variant="primary" /> : <Button variant="contained" color="primary" type="submit"
+            <div className="col-12 ">
+              {loading ? <Spinner variant="primary" /> : <Button variant="contained" className="w-100 submit-button" type="submit"
                 onClick={handleSubmit}
               >
                 Save & Next

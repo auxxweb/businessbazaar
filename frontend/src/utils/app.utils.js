@@ -26,7 +26,7 @@ export const handleWordExceeded = (text, limit) => {
   const filteredWords = words ? words.filter(word => !excludeWords.has(word)) : [];
 
   // Check if words exceed 50
-  if (filteredWords.length > limit) {
+  if (filteredWords.length >= limit) {
     error = true;
   } else {
     error = false;

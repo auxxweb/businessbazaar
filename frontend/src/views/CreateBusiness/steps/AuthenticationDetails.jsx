@@ -49,11 +49,11 @@ function AuthenticationDetails() {
 
   const handleAuthSubmit = async (e) => {
     e.preventDefault()
-    setLoading(true)
     const isEmailValid = validateEmail(email);
     const isPasswordValid = validatePassword(password);
 
     if (isEmailValid && isPasswordValid) {
+      setLoading(true)
       try {
         const business = await checkBusinessExists({ email, password });
         console.log(business, "business---");
@@ -90,7 +90,7 @@ function AuthenticationDetails() {
   };
 
   // Updated Email validation function
-  function validateEmail(value = email) {
+  function validateEmail(value) {
     if (!value) {
       setEmailError("Email is required.");
       return false;
@@ -147,17 +147,17 @@ function AuthenticationDetails() {
               <span className="title-highlight">Authentication Details</span>
             </h1>
           </div>
-          <Box component={"form"} className="mb-3 w-sm-100 w-md-50 w-lg-50  w-xl-50 " onSubmit={handleAuthSubmit} validated={false} noValidate={false}>
+          <Box className="mb-3 w-sm-100 w-100 " validated={false} noValidate={false}>
             <TextField
-              required
               fullWidth
+              required
               label="Email"
               name="email"
               value={authData.email}
               onChange={handleInputChange}
-              error={!!emailError}
+              error={emailError}
               helperText={emailError}
-              variant="outlined"
+              variant="filled"
               className="my-2"
             />
 
@@ -167,7 +167,7 @@ function AuthenticationDetails() {
               label="Password"
               className="my-2"
               type={showPassword ? "text" : "password"}
-              variant="outlined"
+              variant="filled"
               name="password"
               value={authData.password}
               onChange={handleInputChange}
@@ -186,7 +186,7 @@ function AuthenticationDetails() {
             <div className="col-12 text-center mt-4">
               {loading ?
                 <Spinner variant="primary" /> :
-                <Button variant="contained" color="primary" type="submit">save & next</Button>}
+                <Button className="w-100 submit-button" onClick={handleAuthSubmit} variant="contained" type="submit">save & next</Button>}
             </div>
           </Box>
         </div>

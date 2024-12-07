@@ -8,6 +8,7 @@ import { Container, Nav, Navbar, NavLink } from "react-bootstrap";
 import { preRequestFun } from "../service/s3url";
 import getCroppedImg from "../../../utils/cropper.utils";
 import Loader from "../../../components/Loader/Loader";
+import { handleWordExceeded } from "../../../utils/app.utils";
 
 const initialCropState = { x: 0, y: 0 };
 
@@ -150,15 +151,56 @@ const LandingPageDetails = () => {
     }
   };
 
-  const handleInputChange = (e, sectionSetter) => {
+  const handleLandingPart = (e) => {
     const { name, value } = e.target;
-    sectionSetter((prevData) => ({ ...prevData, [name]: value }));
-  };
+
+    if (name == 'title') {
+      if (!value) {
+        setErrors((prev) => ({ ...prev, landingPageHeroTitle: "title required" }))
+      } else {
+        setErrors((prev) => ({ ...prev, landingPageHeroTitle: "" }))
+      }
+    }
+
+    if (name == 'description') {
+      if (!value) {
+        setErrors((prev) => ({ ...prev, landingPageHeroDescription: "Description required" }))
+      } else {
+        setErrors((prev) => ({ ...prev, landingPageHeroDescription: "" }))
+
+      }
+    }
+
+
+    setLandingPageHero((prev) => ({ ...prev, [name]: value }))
+  }
+
+  const handleWelcomePart = (e) => {
+    const { name, value } = e.target;
+    if (name == 'title') {
+      if (value) {
+        setErrors((prev) => ({ ...prev, welcomePartTitle: "" }))
+      } else {
+        setErrors((prev) => ({ ...prev, welcomePartTitle: "title required" }))
+      }
+    }
+
+    if (name == 'description') {
+      if (value) {
+        setErrors((prev) => ({ ...prev, welcomePartDescription: "" }))
+      } else {
+        setErrors((prev) => ({ ...prev, welcomePartDescription: "Description required" }))
+      }
+    }
+    setWelcomePart((prev) => ({ ...prev, [name]: value }))
+
+  }
+
 
   const validateForm = () => {
     const newErrors = {};
     if (!landingPageHero.title)
-      newErrors.landingPageHeroTitle = "Title is required";
+      newErrors.landingPageHeroTitle = "Landing Title is required";
     if (!landingPageHero.description)
       newErrors.landingPageHeroDescription = "Description is required";
     if (!currentImage.banner)
@@ -301,7 +343,7 @@ const LandingPageDetails = () => {
               </div>
               <div className="modal-footer">
                 <Button
-                  variant="outlined"
+                  variant="filled"
                   className="mx-2 bg-danger text-white border-danger"
                   onClick={() => setShowCropper(false)}
                 >
@@ -347,7 +389,7 @@ const LandingPageDetails = () => {
                 <div>
                   <label>Choose Primary Color</label>
                   <TextField
-                    variant="outlined"
+                    variant="filled"
                     type="color"
                     name="color"
                     className="form-control form-control-lg"
@@ -376,35 +418,34 @@ const LandingPageDetails = () => {
                 fullWidth
                 required
                 className="my-2 border-0"
-                label="Title"
+                label="Title (8 words)"
                 id="title"
-                variant="outlined"
+                variant="filled"
                 name="title"
                 autoComplete="title"
                 value={landingPageHero.title}
-                inputProps={{ maxLength: 35 }}
-                onChange={(e) => handleInputChange(e, setLandingPageHero)}
-                error={errors?.landingPageHeroTitle || landingPageHero?.title?.split("")?.length >= 35 ? true : false}
-                helperText={errors?.landingPageHeroTitle || landingPageHero?.title?.split("")?.length >= 35 ? "exceeded the limit" : ""}
+                onChange={handleLandingPart}
+                error={errors?.landingPageHeroTitle || handleWordExceeded(landingPageHero?.title, 8) ? true : false}
+                helperText={handleWordExceeded(landingPageHero?.title, 8) ? "exceeded the limit" : ""}
               />
+              {errors?.landingPageHeroTitle && <p className="text-danger">{errors?.landingPageHeroTitle}</p>}
               <TextField
                 className="my-2"
                 fullWidth
                 required
-                label="Description"
+                label="Description (50 words)"
                 id="description"
-                variant="outlined"
+                variant="filled"
                 name="description"
                 autoComplete="description"
                 multiline // Makes the TextField behave like a textarea
                 rows={4} // You can adjust the number of rows (height) here
                 value={landingPageHero.description}
-                inputProps={{ maxLength: 200 }}
-                onChange={(e) => handleInputChange(e, setLandingPageHero)}
-                error={errors?.landingPageHeroDescription || landingPageHero?.description?.split("")?.length >= 200 ? true : false}
-                helperText={errors?.landingPageHeroDescription || landingPageHero?.description?.split("")?.length >= 200 ? "exceeded the limit" : ""}
+                onChange={handleLandingPart}
+                error={errors?.landingPageHeroDescription || handleWordExceeded(landingPageHero?.description, 50) ? true : false}
+                helperText={handleWordExceeded(landingPageHero?.description, 50) ? "exceeded the limit" : ""}
               />
-
+              {errors?.landingPageHeroDescription && <p className="text-danger">{errors?.landingPageHeroDescription}</p>}
               {/* Hero Image Upload */}
               <input
                 type="file"
@@ -455,35 +496,34 @@ const LandingPageDetails = () => {
                 className="my-2"
                 fullWidth
                 required
-                label="Title"
+                label="Title (8 words)"
                 id="title"
-                variant="outlined"
+                variant="filled"
                 name="title"
                 autoComplete="title"
-                inputProps={{ maxLength: 35 }}
                 value={welcomePart.title}
-                onChange={(e) => handleInputChange(e, setWelcomePart)}
-                error={errors?.welcomePartTitle || welcomePart?.title?.split("")?.length >= 35 ? true : false}
-                helperText={errors?.welcomePartTitle || welcomePart?.title?.split("")?.length >= 35 ? "exceeded the limit" : ""}
+                onChange={handleWelcomePart}
+                error={errors?.welcomePartTitle || handleWordExceeded(welcomePart?.title, 8) ? true : false}
+                helperText={handleWordExceeded(welcomePart?.title, 8) ? "exceeded the limit" : ""}
               />
+              {errors?.welcomePartTitle && <p className="text-danger">{errors?.welcomePartTitle}</p>}
               <TextField
                 className="my-2"
                 fullWidth
                 required
-                label="Description"
+                label="Description (50 words)"
                 id="description"
-                variant="outlined"
+                variant="filled"
                 name="description"
                 autoComplete="description"
                 multiline // Makes the TextField behave like a textarea
                 rows={4} // You can adjust the number of rows (height) here
                 value={welcomePart.description}
-                inputProps={{ maxLength: 200 }}
-                onChange={(e) => handleInputChange(e, setWelcomePart)}
-                error={errors?.welcomePartDescription || welcomePart?.description?.split("")?.length >= 200 ? true : false}
-                helperText={errors?.welcomePartDescription || welcomePart?.description?.split("")?.length >= 200 ? "exceeded the limit" : ""}
+                onChange={handleWelcomePart}
+                error={errors?.welcomePartDescription || handleWordExceeded(welcomePart?.description, 50) ? true : false}
+                helperText={handleWordExceeded(welcomePart?.description, 50) ? "exceeded the limit" : ""}
               />
-
+              {errors?.welcomePartDescription && <p className="text-danger">{errors?.welcomePartDescription}</p>}
               {/* Welcome Image Upload */}
               <input
                 type="file"
@@ -523,7 +563,7 @@ const LandingPageDetails = () => {
               )}
 
               <div className="col-12 mt-4 text-center">
-                <Button variant="contained" color="primary"
+                <Button variant="contained" className="w-100 submit-button"
                   onClick={handleLandingSubmit}
                 >
                   Save & Next

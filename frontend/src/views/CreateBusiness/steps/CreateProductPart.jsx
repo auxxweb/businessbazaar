@@ -301,7 +301,7 @@ const CreateProductPart = () => {
                   className="my-2"
                   label="Title (8 words)"
                   id="title-1"
-                  variant="outlined"
+                  variant="filled"
                   name="title"
                   autoComplete="title-1"
                   onChange={handleChange}
@@ -314,7 +314,7 @@ const CreateProductPart = () => {
                   className="my-2"
                   label="Description (50 words)"
                   id="description-1"
-                  variant="outlined"
+                  variant="filled"
                   name="description"
                   autoComplete="description-1"
                   multiline // Makes the TextField behave like a textarea
@@ -371,7 +371,7 @@ const CreateProductPart = () => {
                       className="my-2"
                       label="Title (8 words)"
                       id="title"
-                      variant="outlined"
+                      variant="filled"
                       name="title"
                       autoComplete="Service Name"
                       value={p.title}
@@ -385,7 +385,7 @@ const CreateProductPart = () => {
                       className="my-2"
                       label="Description (50 words)"
                       id="description"
-                      variant="outlined"
+                      variant="filled"
                       name="description"
                       autoComplete="description"
                       multiline
@@ -394,16 +394,14 @@ const CreateProductPart = () => {
                       helperText={handleWordExceeded(p.description, 50) ? "exceeded the limit" : ""}
                       onChange={(e) => handleProductChange(index, e)}
                     />
-
                     <TextField
                       fullWidth
                       className="my-2"
                       type="number"
                       id="price"
                       name="price"
-                      variant="outlined"
+                      variant="filled"
                       label="Price"
-                      required
                       onChange={(e) => handleProductChange(index, e)}
                     />
                     <TextField
@@ -412,7 +410,7 @@ const CreateProductPart = () => {
                       type="text"
                       id="link"
                       name="link"
-                      variant="outlined"
+                      variant="filled"
                       label="Link"
                       onChange={(e) => handleProductChange(index, e)}
                     />
@@ -455,6 +453,7 @@ const CreateProductPart = () => {
                 {/* Add Service Button */}
                 <div className="text-center">
                   <Button
+                    className="w-100 submit-button"
                     variant="contained"
                     href="#"
                     onClick={() =>
@@ -483,6 +482,7 @@ const CreateProductPart = () => {
             <div className="col-12 mt-4 text-center">
               {loading ? <Spinner variant="primary" /> : <Button
                 variant="contained"
+                className="w-100 submit-button"
                 onClick={handleServiceSubmit}
               >
                 Save & Next

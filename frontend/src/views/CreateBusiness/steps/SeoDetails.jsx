@@ -5,6 +5,7 @@ import { Button, TextField } from "@mui/material";
 import { updateBusinessDetails } from "../store/businessSlice";
 import Loader from "../../../components/Loader/Loader";
 import { Spinner } from "react-bootstrap";
+import { handleWordExceeded } from "../../../utils/app.utils";
 
 const SeoDetails = () => {
   const navigate = useNavigate();
@@ -173,13 +174,13 @@ const SeoDetails = () => {
                 label="Title (Max 8 Words)"
                 id="title"
                 className="my-2"
-                variant="outlined"
+                variant="filled"
                 name="title"
                 autoComplete="title"
                 value={seoData.title}
                 onChange={handleSeoInputChange}
-                helperText={errorMessage || "Enter a title with up to 8 words."}
-                error={!!errorMessage}
+                error={handleWordExceeded(seoData?.title, 8) ? true : false}
+                helperText={handleWordExceeded(seoData?.title, 8) ? "exceeded the limit" : ""}
               />
               {errorMessage && <span className="text-danger">{errorMessage}</span>}
 
@@ -188,15 +189,15 @@ const SeoDetails = () => {
                 label="Description (50 Words)"
                 id="description"
                 className="my-2"
-                variant="outlined"
+                variant="filled"
                 name="description"
                 autoComplete="description"
                 multiline
                 rows={4} // Adjust rows as needed
                 value={seoData.description}
                 onChange={handleDescriptionInputChange} // Use the new function
-                helperText={descriptionErrorMessage || "Enter a title with up to 8 words."}
-                error={!!descriptionErrorMessage}
+                error={handleWordExceeded(seoData?.description, 50) ? true : false}
+                helperText={handleWordExceeded(seoData?.description, 50) ? "exceeded the limit" : ""}
               />
 
               {descriptionErrorMessage && <span className="text-danger">{descriptionErrorMessage}</span>}
@@ -207,10 +208,10 @@ const SeoDetails = () => {
                   <div className="input-group mb-2" key={index}>
                     <TextField
                       fullWidth
-                      type="text "
+                      type="text"
                       label="Tag"
                       className="my-2"
-                      variant="outlined"
+                      variant="filled"
                       inputProps={{ maxLength: 35 }}
                       value={tag}
                       onChange={(e) => handleTagChange(index, e.target.value)}
@@ -238,6 +239,7 @@ const SeoDetails = () => {
               <div className="text-center">
                 <Button
                   variant="contained"
+                  className="w-100 submit-button"
                   type="button"
                   onClick={addTag}
                 >
@@ -247,7 +249,7 @@ const SeoDetails = () => {
               <div className=" h-100">
                 {/* Social Media Links */}
                 {socialMediaLinks.map((link, index) => (
-                  <div className="input-grou mb-3 mt-4 w-100 " key={index}>
+                  <div className="input-group mb-3 mt-4 w-100 " key={index}>
                     <TextField
                       fullWidth
                       type="text"
@@ -267,9 +269,10 @@ const SeoDetails = () => {
           </div>
 
           {/* Save & Next Button */}
-          <div className="col-12 text-center p-3 p-md-5">
+          <div className="col-12 text-center">
             {loading ? <Spinner variant="primary" /> : <Button
               variant="contained"
+              className="w-100 submit-button"
               onClick={handleSeoSubmit}
             >
               Save & Next

@@ -287,7 +287,7 @@ const MoreImages = () => {
             </div>
 
             {/* Image Upload Fields */}
-            <div className="col-12 p-md-12 flex justify-content-start">
+            <div className="col-12  flex justify-content-start">
               <div className="row mb-3 gap-2">
                 {images.map((image, index) => (
                   <div className="col-4 col-md-3 mb-3 mx-2 text-center" key={index}>
@@ -352,23 +352,23 @@ const MoreImages = () => {
               </div>
 
               {images?.length < GALLERY_IMAGES_LIMIT && (
-                <div className="col-12 mb-3 text-center">
-                  <Button
-                    variant='contained'
-                    onClick={addImageInput}
-                  >
-                    + Add another image
-                  </Button>
-                </div>
+                <Button
+                  variant='contained'
+                  className="w-100 submit-button"
+                  onClick={addImageInput}
+                >
+                  + Add another image
+                </Button>
               )}
             </div>
           </div>
 
           {/* Save & Next Button */}
-          <div className="col-12 text-center p-3 p-md-5">
+          <div className="col-12 text-center ">
             {loading ? <Spinner variant='primary' /> : (
               <Button
                 variant='contained'
+                className="w-100 submit-button"
                 onClick={handleGallerySubmit}
               >
                 Save & Next

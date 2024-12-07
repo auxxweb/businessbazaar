@@ -28,6 +28,12 @@ body{
       font-size:22px;
 }
 }
+
+ @media only screen and (max-width: 690px) {
+      .input-primary-number {
+        width: 100% !important;
+      }
+    }
   
   .contact-form {
     background-color: #fff;
@@ -58,7 +64,7 @@ body{
   }
   
   .submit-button {
-    background-color: #105193;
+    background-color: #105193 !important;
     color: #fff;
     padding: 10px 20px;
     border: none;
@@ -67,7 +73,7 @@ body{
   }
   
   .submit-button:hover {
-    background-color: #107D93;
+    background-color: #107D93 !important;
   }
 
 .custom-placeholder::placeholder {
