@@ -289,14 +289,15 @@ export default function Template() {
       }
       if (businessDetails?.success) {
         const data = {
-          address: `${businessDetails?.address?.buildingName ?? ""} ${businessDetails?.address?.streetName ?? ""} ${businessDetails?.address?.landMark ?? ""} ${businessDetails?.address?.city ?? ""} ${businessDetails?.address?.state ?? ""} ${businessDetails?.address?.pinCode ?? ""}`,
-          primaryNumber: businessDetails?.contactDetails?.primaryNumber ?? "",
-          secondaryNumber: businessDetails?.contactDetails?.secondaryNumber ?? "",
-          email: businessDetails?.email ?? "",
-          title: businessDetails?.businessName ?? "",
-          businessName: businessDetails?.businessName ?? "",
-          website: businessDetails?.contactDetails?.website ?? ""
+          address: `${businessDetails?.data?.address?.buildingName ?? ""} ${businessDetails?.data?.address?.streetName ?? ""} ${businessDetails?.data?.address?.landMark ?? ""} ${businessDetails?.data?.address?.city ?? ""} ${businessDetails?.data?.address?.state ?? ""} ${businessDetails?.data?.address?.pinCode ?? ""}`,
+          primaryNumber: businessDetails?.data?.contactDetails?.primaryNumber ?? "",
+          secondaryNumber: businessDetails?.data?.contactDetails?.secondaryNumber ?? "",
+          email: businessDetails?.data?.email ?? "",
+          title: businessDetails?.data?.businessName ?? "",
+          businessName: businessDetails?.data?.businessName ?? "",
+          website: businessDetails?.data?.contactDetails?.website ?? ""
         }
+
         setSaveContact(data)
       }
 
