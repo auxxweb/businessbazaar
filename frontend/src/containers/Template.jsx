@@ -48,6 +48,7 @@ export default function Template() {
   const [currentSlide, setCurrentSlide] = useState(0)
   const [showNews, setShowNews] = useState(false)
   const [businessData, setBusinessData] = useState(null)
+  const [saveContact, setSaveContact] = useState(null)
   const { id } = useParams()
   const [loading, setLoading] = useState(true)
   const [reviewLoading, setReviewLoading] = useState(false)
@@ -62,9 +63,6 @@ export default function Template() {
     name: '',
     review: '',
   })
-  useEffect(() => {
-    window.scrollTo(0, 0)
-  }, [id])
 
   const [reviews, setReviews] = useState([])
   const [reviewCount, setReviewCount] = useState(0)
@@ -173,6 +171,7 @@ export default function Template() {
     }
   }, [window?.location?.hash])
 
+
   const handleNewsLetterSubmit = async (e) => {
     e.preventDefault()
     console.log('newsLetterEmail', newsLetterEmail)
@@ -270,7 +269,7 @@ export default function Template() {
     const fetchData = async () => {
       const businessDetails = await fetchBusinessTemplate(id, setLoading)
       setBusinessData(businessDetails?.data)
-      console.log(businessDetails)
+      console.log(businessDetails.success)
       setColorTheme(businessDetails.data.theme)
       setLoading(false)
       const closed = allDays.filter(
@@ -288,6 +287,19 @@ export default function Template() {
         const contrastColor = getContrastingColor(themeColor);
         setTextColor(contrastColor);
       }
+      if (businessDetails?.success) {
+        const data = {
+          address: `${businessDetails?.address?.buildingName ?? ""} ${businessDetails?.address?.streetName ?? ""} ${businessDetails?.address?.landMark ?? ""} ${businessDetails?.address?.city ?? ""} ${businessDetails?.address?.state ?? ""} ${businessDetails?.address?.pinCode ?? ""}`,
+          primaryNumber: businessDetails?.contactDetails?.primaryNumber ?? "",
+          secondaryNumber: businessDetails?.contactDetails?.secondaryNumber ?? "",
+          email: businessDetails?.email ?? "",
+          title: businessDetails?.businessName ?? "",
+          businessName: businessDetails?.businessName ?? "",
+          website: businessDetails?.contactDetails?.website ?? ""
+        }
+        setSaveContact(data)
+      }
+
     }
     const fetchReview = async () => {
       const response = await getAllBusinessReviews({ businessId: id })
@@ -952,6 +964,7 @@ export default function Template() {
                           </p>
                         </a>
                         <ShareButton
+                          saveContactDetails={saveContact}
                           number={businessData?.contactDetails?.primaryNumber}
                           logo={businessData?.logo}
                         />
