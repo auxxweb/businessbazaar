@@ -8,6 +8,30 @@ export const saveContactToDevice = (contactDetails) => {
         saveViaFallbackMethods(contactDetails);
     }
     else {
+        const contactString = `BEGIN:VCARD
+VERSION:4.0
+N:${contactDetails.businessName}
+TITLE:${contactDetails.title}
+ORG:${contactDetails.businessName}
+ADR;TYPE=WORK:${contactDetails.address}
+TEL:${contactDetails.primaryNumber}
+TEL;TYPE=WORK:${contactDetails.secondaryNumber}
+EMAIL;TYPE=WORK:${contactDetails.email}
+URL:EMAIL:${contactDetails.email}
+URL;TYPE=WORK:${contactDetails.website}
+END:VCARD`;
+
+        // Create a Blob with vCard data
+        const blob = new Blob([contactString], { type: 'text/vcard' });
+
+        // Create download link
+        const downloadLink = document.createElement('a');
+        downloadLink.href = URL.createObjectURL(blob);
+        downloadLink.download = `${contact.name}.vcf`;
+
+        document.body.appendChild(downloadLink);
+        downloadLink.click();
+        document.body.removeChild(downloadLink);
         alert('Contact saving not supported on this device.');
     }
 }
@@ -81,6 +105,32 @@ const saveContactForIOS = (contact) => {
     try {
         // Trigger iOS contact prompt
         anchorTag.click();
+        console.log(contact);
+
+        const contactString = `BEGIN:VCARD
+VERSION:4.0
+N:${contact.businessName}
+TITLE:${contact.title}
+ORG:${contact.businessName}
+ADR;TYPE=WORK:${contact.address}
+TEL:${contact.primaryNumber}
+TEL;TYPE=WORK:${contact.secondaryNumber}
+EMAIL;TYPE=WORK:${contact.email}
+URL:EMAIL:${contact.email}
+URL;TYPE=WORK:${contact.website}
+END:VCARD`;
+
+        // Create a Blob with vCard data
+        const blob = new Blob([contactString], { type: 'text/vcard' });
+
+        // Create download link
+        const downloadLink = document.createElement('a');
+        downloadLink.href = URL.createObjectURL(blob);
+        downloadLink.download = `${contact.name}.vcf`;
+
+        document.body.appendChild(downloadLink);
+        downloadLink.click();
+        document.body.removeChild(downloadLink);
         alert('Please save the contact in the iOS prompt');
     } catch (error) {
         fallbackManualCopy(contact);

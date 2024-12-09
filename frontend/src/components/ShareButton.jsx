@@ -79,7 +79,6 @@ const ShareButton = ({ number, saveContactDetails }) => {
     const handleSaveContact = (data) => {
 
         saveContactToDevice(data)
-
         //     const contact = {
         //         firstName: "Derik",
         //         lastName: "Stenerson",
