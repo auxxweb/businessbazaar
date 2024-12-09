@@ -500,6 +500,7 @@ textarea:enabled{
     border-radius: 2px;
 }
 .back-to-top {
+
     position: fixed;
     /* display: none; */
     right: 45px;
@@ -508,13 +509,26 @@ textarea:enabled{
 }
 
 .back-to-top1{
-
+     color: #105193;
+    background-color: #107d93;
+    border-color: #107d93;
+     width: 42px;
+    height: 42px;
     position: fixed;
-    /* display: none; */       
-    right: 14px;
-    bottom: 200px; 
+    right: 16px;
+    bottom: 210px; 
     z-index: 99;
-    
+}
+.back-to-top2{
+     color: #105193;
+    background-color: #107d93;
+    border-color: #107d93;
+    width: 42px;
+    height: 42px;
+    position: fixed;
+    right: 18px;
+    bottom: 147px; 
+    z-index: 99;
 }
 .custom-button{
     border-radius: 0 8px 8px 0 !important;
@@ -565,6 +579,7 @@ textarea:enabled{
     background-color: #107d93;
     border-color: #107d93
   }
+  
   @media (max-width: 768px) {
     .right-portion {
       padding: 1rem;
