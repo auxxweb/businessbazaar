@@ -1802,7 +1802,14 @@ export default function Template() {
       </footer>
       <a
         href="#"
-        className="btn btn-lg btn-bottom btn-lg-square bg-transparent rounded-circle back-to-top1"
+
+        className="btn   justify-content-center align-items-center d-none  d-sm-none d-lg-flex bg-transparent rounded-circle  back-to-top2"
+      >
+        <i className="bi bi-arrow-up"></i>
+      </a>
+      <a
+        href="#"
+        className="btn  justify-content-center align-items-center d-flex d-sm-flex d-lg-none d-xl-none  bg-transparent rounded-circle back-to-top1"
       >
         <i className="bi bi-arrow-up"></i>
       </a>

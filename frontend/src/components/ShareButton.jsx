@@ -211,7 +211,7 @@ const ShareButton = ({ number, saveContactDetails }) => {
             </button>
 
             <button
-                className="btn btn-success rounded-circle p-2 border-0 text-white position-fixed"
+                className="btn btn-success rounded-circle p-2 border-0 text-white position-fixed d-sm-block d-lg-none"
                 style={{
                     right: '16px',
                     bottom: '144px', // Adjust positioning
