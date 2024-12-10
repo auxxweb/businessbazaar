@@ -7,7 +7,7 @@ export default function Layout({ title, children, sidebar = "true" }) {
   return (
     <>
       <Helmet>
-        <title>{title} - Business Bazar</title>
+        <title>{title} - Enconnect</title>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link
