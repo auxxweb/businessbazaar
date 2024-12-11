@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { QRCodeCanvas } from "qrcode.react";
-import { FaShareAlt, FaLink, FaQrcode, FaShareSquare, FaWhatsapp, FaAddressCard } from "react-icons/fa";
+import { FaShareAlt, FaLink, FaQrcode, FaShareSquare, FaWhatsapp, FaUserPlus } from "react-icons/fa";
 import QRCode from "qrcode";
 import { saveContactToDevice } from "./saveContact";
 
@@ -218,7 +218,7 @@ const ShareButton = ({ number, saveContactDetails }) => {
                 }}
                 onClick={(() => handleSaveContact(saveContactDetails))}
             >
-                <FaAddressCard size={26} />
+                <FaUserPlus size={26} />
             </button>
 
 
