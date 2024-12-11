@@ -908,11 +908,11 @@ export default function Template() {
           </section>
 
           <div className="mt-2 mb-3 sm:mt-0 sm:mb-0">
-            <div className="container px-4 sm:px-0">
-              <div className="col-12 address-section">
-                <div className="row justify-content-between">
+            <div className="container  sm:px-0">
+              <div className="col-12 address-section pt-2 ">
+                <div className="row d-flex justify-content-around align-items-center">
                   {/* Address Section */}
-                  <div className="col-12 col-sm-4 mb-3 mb-sm-0">
+                  <div className="col-12 col-sm-4  mb-sm-0 my-2  ">
                     <div className="row align-items-center justify-content-start">
                       <a
                         href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
@@ -922,7 +922,7 @@ export default function Template() {
                         rel="noopener noreferrer"
                         className="text-decoration-none text-dark"
                       >
-                        <div className="row">
+                        <div className="row d-flex justify-content-around align-items-center">
                           <div className="col-auto address-logo">
                             <i className="bi bi-geo-alt-fill text-2xl sm:text-lg" />
                           </div>
@@ -947,18 +947,18 @@ export default function Template() {
                   </div>
 
                   {/* Email Section */}
-                  <div className="col-12 col-sm-4 mb-3 mb-sm-0">
-                    <div className="row align-items-center justify-content-start">
+                  <div className="col-12 col-sm-4 mb-sm-0 my-2 ">
+                    <div className="row  d-flex align-items-center justify-content-start">
                       <div className="col-auto address-logo">
                         <i className="bi bi-envelope-fill text-2xl sm:text-lg" />
                       </div>
-                      <div className="col">
+                      <div className="col ">
                         <a
                           href={`mailto:${businessData?.contactDetails?.email}`}
-                          className="text-decoration-none text-dark"
+                          className="text-decoration-none text-dark  "
                         >
-                          <span className="fs-12 sm:fs-10 " style={{ color: textColor }}>Send Email</span>
-                          <p className="fs-14 sm:fs-12"
+                          <span className="fs-12 sm:fs-10  " style={{ color: textColor }}>Send Email</span>
+                          <p className="fs-14 sm:fs-12 p-0 m-0"
                             style={{ color: textColor, textDecoration: 'none' }}
                           >
                             {businessData?.contactDetails?.email}
@@ -974,8 +974,8 @@ export default function Template() {
                   </div>
 
                   {/* Contact Section */}
-                  <div className="col-12 col-sm-4 mb-3 mb-sm-0">
-                    <div className="row align-items-center justify-content-start">
+                  <div className="col-12 col-sm-3  mb-sm-0 my-2 ">
+                    <div className="row d-flex align-items-center justify-content-start">
                       <div className="col-auto address-logo">
                         <i className="bi bi-telephone text-2xl sm:text-lg" />
                       </div>
@@ -993,6 +993,7 @@ export default function Template() {
                         </p>
                         <p className="fs-14 sm:fs-12 mt-0">
                           <a
+                            className={`${businessData?.contactDetails?.secondaryNumber ?? "d-none"}`}
                             style={{ color: textColor, textDecoration: 'none' }}
                             href={`tel:${businessData?.contactDetails?.secondaryNumber}`}
                           >
