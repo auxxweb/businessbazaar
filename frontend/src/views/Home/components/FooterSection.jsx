@@ -55,7 +55,7 @@ const FooterSection = () => {
                       width: '50px',
                       height: '50px',
                       backgroundColor: 'transparent',
-                      color: '#107D93',
+                      color: 'rgb(248 58 76)',
                       border: 'none',
                     }}
                   >
@@ -69,7 +69,7 @@ const FooterSection = () => {
                       width: '50px',
                       height: '50px',
                       backgroundColor: 'transparent',
-                      color: '#107D93',
+                      color: 'rgb(248 58 76)',
                       border: 'none',
                     }}
                   >
@@ -83,7 +83,7 @@ const FooterSection = () => {
                       width: '50px',
                       height: '50px',
                       backgroundColor: 'transparent',
-                      color: '#107D93',
+                      color:'rgb(248 58 76)',
                       border: 'none',
                     }}
                   >

@@ -503,8 +503,8 @@ textarea:enabled{
 
     position: fixed;
     /* display: none; */
-    right: 45px;
-    bottom: 50px;
+    right: 27px;
+    bottom: 90px;
     z-index: 99;
 }
 
