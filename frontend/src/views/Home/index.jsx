@@ -5,6 +5,8 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import { FaWhatsapp } from "react-icons/fa";
+
 import { toast } from "react-toastify";
 import "./Home.css";
 
@@ -153,6 +155,12 @@ export default function Home() {
     setReviewLoading(false)
   };
 
+
+  const handleClick = () => {
+    window.open(`https://wa.me/${9745004569}`, "_blank");
+  };
+
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -181,15 +189,15 @@ export default function Home() {
   }, [visibleBusiness, location]);
 
 
-  useEffect(()=>{
+  useEffect(() => {
     const fetchCategory = async () => {
       try {
         setCategoryLoading(true)
         const categoryDetails = await fetchCategories(visibleCategories);
         setCategoryData(categoryDetails.data.data);
-        
-        
-        
+
+
+
       } catch (error) {
         setCategoryLoading(false)
         console.error("Error fetching data:", error);
@@ -200,7 +208,7 @@ export default function Home() {
     fetchCategory();
   }, [visibleCategories])
 
-  console.log(categoryData,'ithenne')
+  console.log(categoryData, 'ithenne')
 
   useEffect(() => {
     const fetchBanner = async () => {
@@ -214,22 +222,22 @@ export default function Home() {
     setCategoryLoading(true)
     const categoryDetails = await fetchCategories(visibleCategories);
     setVisibleCategories((prev) => prev + 20);
-    setCategoryData(((prev)=> ([...prev,categoryDetails.data.data])))
+    setCategoryData(((prev) => ([...prev, categoryDetails.data.data])))
     setCategoryLoading(false)
 
   };
 
-  const loadMoreBusiness = async() => {  
+  const loadMoreBusiness = async () => {
     setLoading(true)
-    const businessDetails = await fetchBusiness( BUSINESS_PAGE,
+    const businessDetails = await fetchBusiness(BUSINESS_PAGE,
       visibleBusiness,
       "",
       location);
-      setVisibleBusiness((prev) => prev + 10);
-    setCategoryData(((prev)=> ([...prev,businessDetails.data.data])))
+    setVisibleBusiness((prev) => prev + 10);
+    setCategoryData(((prev) => ([...prev, businessDetails.data.data])))
     setLoading(false)
   };
-   
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setReview((prevState) => ({
@@ -258,7 +266,7 @@ export default function Home() {
     },
     [location, visibleBusiness]
   );
-  console.log(businessData,'asasasasasasa')
+  console.log(businessData, 'asasasasasasa')
 
   return (
     <Layout title="Home" navClass="home">
@@ -297,10 +305,32 @@ export default function Home() {
         review={review}
         setReview={setReview}
         handleInputChange={handleInputChange}
-        handleReviewSubmit={handleReviewSubmit} 
+        handleReviewSubmit={handleReviewSubmit}
         reviewLoading={reviewLoading} />
 
       <FooterSection />
+      {/* <a
+      href="https://wa.me/<your_phone_number>?text=Hello!"
+      className="whatsapp-button"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      <img
+        src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg"
+        alt="WhatsApp Icon"
+      />
+    </a> */}
+      <button
+        className="btn btn-success rounded-circle p-2 border-0 text-white position-fixed"
+        style={{
+          right: "26px", // Adjust for consistent alignment
+          bottom: "32px", // Ensure visibility on smaller screens
+          zIndex: 1050,
+        }}
+        onClick={handleClick}
+      >
+        <FaWhatsapp size={28} />
+      </button>
 
       <a href="#" className="btn btn-lg btn-bottom btn-lg-square back-to-top">
         <i className="bi bi-arrow-up"></i>

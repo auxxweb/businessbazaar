@@ -1557,10 +1557,11 @@ export default function Template() {
               </form>
             </div>
           </Dialog>
+          <div id="contact" >
+            <ContactForm handleFormSubmit={handleFormSubmit} businessData={businessData} />
+          </div>
 
-          <ContactForm handleFormSubmit={handleFormSubmit} businessData={businessData} />
-
-          <section className="h-auto david-font" id="contact">
+          <section className="h-auto david-font" >
             <div className="container p-top">
               <div className="col-12 newsletter position-relative">
                 <img
@@ -1766,10 +1767,10 @@ export default function Template() {
                         <a
                           href={social?.link}
                           target="_blank"
-                          className="contact-banner text-dark"
+                          className="contact-banner text-dark "
                         >
                           <i
-                            className={`bi bi-${social?.tag} text-3xl sm:text-xl`}
+                            className={`bi bi-${social?.tag} text-5xl sm:text-2xl`}
                           ></i>
                         </a>
                       </>
