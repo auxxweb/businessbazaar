@@ -1557,10 +1557,11 @@ export default function Template() {
               </form>
             </div>
           </Dialog>
+          <div id="contact" >
+            <ContactForm handleFormSubmit={handleFormSubmit} businessData={businessData} />
+          </div>
 
-          <ContactForm handleFormSubmit={handleFormSubmit} businessData={businessData} />
-
-          <section className="h-auto david-font" id="contact">
+          <section className="h-auto david-font" >
             <div className="container p-top">
               <div className="col-12 newsletter position-relative">
                 <img

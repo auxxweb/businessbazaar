@@ -6,6 +6,7 @@ import { createReveiw, getAllReviews } from '../Functions/functions';
 import { ReviewModal, ViewReview } from './BusinessReviews';
 import { formatDate } from '../utils/app.utils';
 import { Rating } from '@mui/material';
+import { FooterSection } from '../views/Home/components';
 
 
 const Testimonials = () =>{
@@ -196,7 +197,8 @@ const handleLoadMoreReview =(e)=>{
           </div>
         </div>
       </div>
-      <footer className=" h-auto footer-section">
+      <FooterSection/>
+      {/* <footer className=" h-auto footer-section">
         <div className="container">
           <div className="p-4 mt-0 mt-md-5">
             <div className="row ">
@@ -292,7 +294,7 @@ const handleLoadMoreReview =(e)=>{
             </div>
           </div>
         </div>
-      </footer>
+      </footer> */}
     </Layout>
   )
 }
