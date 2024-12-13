@@ -11,9 +11,10 @@ function NewsArticles({ colorTheme }) {
   const [newsData, setNewsData] = useState([])
   const [bannerData, setBannerData] = useState([])
   const [index, setIndex] = useState(2)
-  const [totalNews, setTotalNews] = useState(6)
+  const [totalNews, setTotalNews] = useState(3)
   const [loading, setLoading] = useState(false)
-
+  const [totalNewsCount, setTotalNewsCount] = useState(0);
+  const [isAllNewsLoaded, setIsAllNewsLoaded] = useState(false);
   useEffect(() => {
     window.scrollTo(0, 0)
   }, [id])
@@ -58,11 +59,24 @@ function NewsArticles({ colorTheme }) {
   const loadMoreNews = () => {
     fetchNewsArticles(id, index)
       .then((res) => {
-        setNewsData((prevItems) => [...prevItems, ...res.data.data])
+        const newNews = res.data.data;
+        setNewsData((prevItems) => [...prevItems, ...newNews]);
+
+        // Set total count if not already set
+        if (!totalNewsCount) {
+          setTotalNewsCount(res.data.total || 0);
+        }
+
+        // Check if all news are loaded
+        const totalLoaded = [...newsData, ...newNews].length;
+        if (totalLoaded >= totalNewsCount) {
+          setIsAllNewsLoaded(true);
+        }
       })
-      .catch((err) => console.error(err))
-    setIndex((prevIndex) => prevIndex + 1)
-  }
+      .catch((err) => console.error("Error loading news:", err));
+
+    setIndex((prevIndex) => prevIndex + 1);
+  };
 
   if (loading) {
     return <Loader />
@@ -156,9 +170,16 @@ function NewsArticles({ colorTheme }) {
               </div>
             ))}
             <div className={`${newsData?.length === 0 && "d-none"} d-flex justify-content-center align-items-center w-full `}>
-              <button className='btn btn-dark text-white radius-theme box-shadow theme' onClick={loadMoreNews}>
-                load more
-              </button>
+              {totalNewsCount > 0 && !isAllNewsLoaded && newsData.length < totalNewsCount && (
+                <div className="text-center mt-4">
+                  <button
+                    className='btn btn-dark text-white radius-theme box-shadow theme'
+                    onClick={loadMoreNews}
+                  >
+                    Load More
+                  </button>
+                </div>
+              )}
             </div>
           </div>
         </div>
