@@ -51,7 +51,7 @@ const FooterSection = () => {
                     href="#"
                     className="contact-banner text-orange d-flex align-items-center justify-content-center"
                     style={{
-                      fontSize: '1.5rem',
+                      fontSize: '2rem',
                       width: '50px',
                       height: '50px',
                       backgroundColor: 'transparent',
@@ -65,7 +65,7 @@ const FooterSection = () => {
                     href="#"
                     className="contact-banner text-orange d-flex align-items-center justify-content-center"
                     style={{
-                      fontSize: '1.5rem',
+                      fontSize: '2rem',
                       width: '50px',
                       height: '50px',
                       backgroundColor: 'transparent',
@@ -79,7 +79,7 @@ const FooterSection = () => {
                     href="#"
                     className="contact-banner text-orange d-flex align-items-center justify-content-center"
                     style={{
-                      fontSize: '1.5rem',
+                      fontSize: '2rem',
                       width: '50px',
                       height: '50px',
                       backgroundColor: 'transparent',

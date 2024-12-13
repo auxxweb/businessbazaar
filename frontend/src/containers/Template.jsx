@@ -1766,10 +1766,10 @@ export default function Template() {
                         <a
                           href={social?.link}
                           target="_blank"
-                          className="contact-banner text-dark"
+                          className="contact-banner text-dark "
                         >
                           <i
-                            className={`bi bi-${social?.tag} text-3xl sm:text-xl`}
+                            className={`bi bi-${social?.tag} text-5xl sm:text-2xl`}
                           ></i>
                         </a>
                       </>
