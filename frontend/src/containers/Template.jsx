@@ -43,6 +43,7 @@ items.forEach((el) => {
 import ShareButton from '../components/ShareButton'
 import ResponsiveGalleryCarousel from '../components/GalleryComponent'
 import { Button } from '@mui/material'
+import { size } from 'lodash'
 
 export default function Template() {
   const [currentSlide, setCurrentSlide] = useState(0)
@@ -474,7 +475,7 @@ export default function Template() {
                 }
                 alt={businessData?.businessName || 'Logo Placeholder'}
               />
-              <span className="ms-2">{businessData?.businessName}</span>
+              <span className="ms-2 ">{businessData?.businessName}</span>
             </Navbar.Brand>
 
             <Navbar.Toggle
@@ -685,8 +686,7 @@ export default function Template() {
           {/* Align Brand to the start (left side) */}
           <Navbar.Brand
             href="#"
-            className="fw-bold w-50 nav-logo"
-            style={{ fontSize: '36px' }}
+            className="fw-bold w-50 nav-logo d-flex align-items-center flex-nowrap"
           >
             <img
               src={
@@ -694,10 +694,23 @@ export default function Template() {
                   ? businessData?.logo
                   : Placeholder
               }
-              alt={businessData?.businessName || 'Logo Placeholder'}
+              // alt={businessData?.businessName || 'Logo Placeholder'}
+              style={{ maxWidth: '50px', maxHeight: '50px' }} // Optional: Set a max size for the logo
             />
-            <span className="ms-2">{businessData?.businessName}</span>
+            <span
+              className="ms-2"
+              style={{
+                overflow: businessData?.businessName?.length > 25 ? 'hidden' : window.innerWidth < 768 ? 'visible' : 'hidden',
+                // whiteSpace: businessData?.businessName?.length > 20 ? 'nowrap' : window.innerWidth < 768 ? 'normal' : 'nowrap',
+                textOverflow: businessData?.businessName?.length > 25 ? 'ellipsis' : window.innerWidth < 768 ? 'unset' : 'ellipsis',
+                fontSize: businessData?.businessName?.length > 25 ? '22px' : '30px', // Adjust font size
+              }}
+            >
+              {businessData?.businessName}
+            </span>
           </Navbar.Brand>
+
+
 
           <Navbar.Toggle
             aria-controls="basic-navbar-nav"

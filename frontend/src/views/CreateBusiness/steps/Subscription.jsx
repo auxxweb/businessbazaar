@@ -28,7 +28,7 @@ const Subscription = () => {
     if (String(id) != String(freePlan)) {
       console.log("first", freePlan, "free plan", id);
       dispatch(updateBusinessDetails({ selectedPlan: id }));
-      dispatch(updatePlanDetails({ name, price ,plan:id}));
+      dispatch(updatePlanDetails({ name, price, plan: id }));
       navigate("/create-business/template");
     } else {
       const submitData = async () => {
@@ -115,7 +115,13 @@ const Subscription = () => {
                           </div>
                           <div className="d-flex justify-content-between align-items-center mt-2 mb-2">
                             <div className="price-section">
-                              <h2 className="fw-bold fs-28 text-primary mb-0">
+                              <h5
+                                className="fs-16 text-muted text-decoration-line-through mb-0"
+                                style={{ color: "gray" }}
+                              >
+                                ₹{plan?.amount + 200}
+                              </h5>
+                              <h2 className="fw-bold fs-28 mt-0 text-primary mb-0">
                                 ₹{plan?.amount}
                               </h2>
                             </div>
