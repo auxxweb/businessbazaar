@@ -119,7 +119,7 @@ const Subscription = () => {
                                 className="fs-16 text-muted text-decoration-line-through mb-0"
                                 style={{ color: "gray" }}
                               >
-                                ₹{plan?.amount + 200}
+                                ₹{plan?.actualAmount}
                               </h5>
                               <h2 className="fw-bold fs-28 mt-0 text-primary mb-0">
                                 ₹{plan?.amount}
