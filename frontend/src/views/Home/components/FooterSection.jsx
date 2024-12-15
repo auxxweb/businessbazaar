@@ -27,7 +27,7 @@ const FooterSection = () => {
           <div className="row ">
             <div className="col-12 col-md-6">
               <h1 className="fs-45 text-white text-center text-md-start fw-bold mb-3">
-                EnConnect
+                Enconnect
               </h1>
               <span className="fs-20 text-white text-center text-md-start">
                 where requirements are found
@@ -48,7 +48,7 @@ const FooterSection = () => {
                 {/* Social Media Icons */}
                 <div className="d-flex justify-content-center justify-content-lg-start gap-3">
                   <a
-                    href="#"
+                    href="https://www.facebook.com/profile.php?id=61570312289347&mibextid=ZbWKwL"
                     className="contact-banner text-orange d-flex align-items-center justify-content-center"
                     style={{
                       fontSize: '2rem',
@@ -62,7 +62,7 @@ const FooterSection = () => {
                     <i className="bi bi-facebook"></i>
                   </a>
                   <a
-                    href="#"
+                    href="https://www.instagram.com/enconnect.nfc"
                     className="contact-banner text-orange d-flex align-items-center justify-content-center"
                     style={{
                       fontSize: '2rem',
@@ -76,7 +76,7 @@ const FooterSection = () => {
                     <i className="bi bi-instagram"></i>
                   </a>
                   <a
-                    href="#"
+                    href="https://www.linkedin.com/company/enconnect/"
                     className="contact-banner text-orange d-flex align-items-center justify-content-center"
                     style={{
                       fontSize: '2rem',
@@ -87,7 +87,7 @@ const FooterSection = () => {
                       border: 'none',
                     }}
                   >
-                    <i className="bi bi-twitter"></i>
+                    <i className="bi bi-linkedin"></i>
                   </a>
                 </div>
               </div>
@@ -121,7 +121,7 @@ const FooterSection = () => {
                     Contact Info
                   </h3>
                   <div className="col-12 mb-3 text-center text-md-start">
-                    <a href="" className="fs-16 text-white">
+                    <a href="mailto:enconnect.nfc@gmail.com" className="fs-16 text-white">
                       enconnect.nfc@gmail.com
                     </a>
                   </div>
@@ -130,14 +130,14 @@ const FooterSection = () => {
                       href=""
                       className=" fs-20 text-decoration-none text-white"
                     >
-                      <span>
+                      <a style={{color:"white"}} href='tel:9745004569'>
                         <i className="bi bi-telephone text-white me-1"></i> +91
                         9745004569
-                      </span>
+                      </a>
                     </a>
                   </div>
                   <div className="col-12 mb-3 text-center text-md-start">
-                    <a href="" className="fs-20 text-white">
+                    <a href="https://www.google.com/maps/search/?api=1&query=Hilite%20Business%20Park%20%2CPalazhi%20%20%2C%20Hilite%20mall%20%2C%20Calicut%2C%20%20%20Kerala%20" className="fs-20 text-white">
                       <span>
                         <i className="bi bi-geo-alt-fill text-white me-1"></i>
                         Calicut
