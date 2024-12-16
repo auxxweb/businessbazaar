@@ -122,7 +122,7 @@ const FooterSection = () => {
                   </h3>
                   <div className="col-12 mb-3 text-center text-md-start">
                     <a href="mailto:enconnect.nfc@gmail.com" className="fs-16 text-white">
-                      enconnect.nfc@gmail.com
+                    connect@enconnect.in
                     </a>
                   </div>
                   <div className="col-12 mb-3 text-center text-md-start">
@@ -132,7 +132,8 @@ const FooterSection = () => {
                     >
                       <a style={{color:"white"}} href='tel:9745004569'>
                         <i className="bi bi-telephone text-white me-1"></i> +91
-                        9745004569
+                        9447020270
+
                       </a>
                     </a>
                   </div>
