@@ -28,7 +28,7 @@ function NewsArticles({ colorTheme }) {
           const updatedBannerArray = []
           const updatedNewsArray = []
           if (response?.data?.data?.length === 1) {
-            setBannerData(response.data.data[0])
+            setBannerData(response.data.data.isBanner === true || response.data.data[0])
           } else {
             response.data.data.forEach((item) => {
               if (item?.isBanner && updatedBannerArray?.length === 0) {

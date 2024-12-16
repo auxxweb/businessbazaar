@@ -1,285 +1,323 @@
-import React, { useEffect, useState } from 'react'
-import { Carousel, Container, Nav, Navbar, NavLink } from 'react-bootstrap'
-import '/src/assets/css/template.css'
-import Slider from 'react-slick'
-import 'slick-carousel/slick/slick.css'
-import 'slick-carousel/slick/slick-theme.css'
-import { useParams } from 'react-router-dom'
+import React, { useEffect, useState } from "react";
+import { Carousel, Container, Nav, Navbar, NavLink } from "react-bootstrap";
+import "/src/assets/css/template.css";
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+import { useParams } from "react-router-dom";
 import {
   createBusinessReview,
   fetchBusinessTemplate,
   getAllBusinessReviews,
   submitContactForm,
   submitNewsLetter,
-} from '../Functions/functions'
-import { Dialog } from 'primereact/dialog'
-import Rating from '@mui/material/Rating'
-import { InputText } from 'primereact/inputtext'
-import { InputTextarea } from 'primereact/inputtextarea'
-import ContactForm from '/src/components/Business/contactForm'
-import { formatDate } from '../utils/app.utils'
-import { toast } from 'react-toastify'
-import PlaceholderBanner from '../assets/images/BannerPlaceholder.png'
-import Placeholder from '../assets/images/Placeholder.jpg'
-import Loader from '../components/Loader/Loader'
-import NewsArticles from './NewsArticles'
-import BusinessReviews from './BusinessReviews'
+} from "../Functions/functions";
+import { Dialog } from "primereact/dialog";
+import Rating from "@mui/material/Rating";
+import { InputText } from "primereact/inputtext";
+import { InputTextarea } from "primereact/inputtextarea";
+import ContactForm from "/src/components/Business/contactForm";
+import { formatDate } from "../utils/app.utils";
+import { toast } from "react-toastify";
+import PlaceholderBanner from "../assets/images/BannerPlaceholder.png";
+import Placeholder from "../assets/images/Placeholder.jpg";
+import Loader from "../components/Loader/Loader";
+import NewsArticles from "./NewsArticles";
+import BusinessReviews from "./BusinessReviews";
 
-let items = document?.querySelectorAll('.carousel .carousel-item')
+let items = document?.querySelectorAll(".carousel .carousel-item");
 
 items.forEach((el) => {
-  const minPerSlide = 4
-  let next = el.nextElementSibling
+  const minPerSlide = 4;
+  let next = el.nextElementSibling;
   for (var i = 1; i < minPerSlide; i++) {
     if (!next) {
       // wrap carousel by using first child
-      next = items[0]
+      next = items[0];
     }
-    let cloneChild = next.cloneNode(true)
-    el.appendChild(cloneChild.children[0])
-    next = next.nextElementSibling
+    let cloneChild = next.cloneNode(true);
+    el.appendChild(cloneChild.children[0]);
+    next = next.nextElementSibling;
   }
-})
-import ShareButton from '../components/ShareButton'
-import ResponsiveGalleryCarousel from '../components/GalleryComponent'
-import { Button } from '@mui/material'
-import { size } from 'lodash'
+});
+import ShareButton from "../components/ShareButton";
+import ResponsiveGalleryCarousel from "../components/GalleryComponent";
+import { Button } from "@mui/material";
+import { size } from "lodash";
 
 export default function Template() {
-  const [currentSlide, setCurrentSlide] = useState(0)
-  const [showNews, setShowNews] = useState(false)
-  const [businessData, setBusinessData] = useState(null)
-  const [saveContact, setSaveContact] = useState(null)
-  const { id } = useParams()
-  const [loading, setLoading] = useState(true)
-  const [reviewLoading, setReviewLoading] = useState(false)
-  const [colorTheme, setColorTheme] = useState('')
-  const [visible, setVisible] = useState(false)
-  const [reviewFetch, setreviewFetch] = useState(false)
-  const [showAllReviews, setShowAllReviews] = useState(false)
-  const [textColor, setTextColor] = useState('');
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const [showNews, setShowNews] = useState(false);
+  const [businessData, setBusinessData] = useState(null);
+  const [saveContact, setSaveContact] = useState(null);
+  const { id } = useParams();
+  const [loading, setLoading] = useState(true);
+  const [reviewLoading, setReviewLoading] = useState(false);
+  const [colorTheme, setColorTheme] = useState("");
+  const [visible, setVisible] = useState(false);
+  const [reviewFetch, setreviewFetch] = useState(false);
+  const [showAllReviews, setShowAllReviews] = useState(false);
+  const [textColor, setTextColor] = useState("");
 
   const [review, setReview] = useState({
-    rating: '',
-    name: '',
-    review: '',
-  })
+    rating: "",
+    name: "",
+    review: "",
+  });
 
-  const [reviews, setReviews] = useState([])
-  const [reviewCount, setReviewCount] = useState(0)
+  const [reviews, setReviews] = useState([]);
+  const [reviewCount, setReviewCount] = useState(0);
 
-  const [closeDays, setCloseDays] = useState([])
+  const [closeDays, setCloseDays] = useState([]);
   const allDays = [
-    'monday',
-    'tuesday',
-    'wednesday',
-    'thursday',
-    'friday',
-    'saturday',
-    'sunday',
-  ]
+    "monday",
+    "tuesday",
+    "wednesday",
+    "thursday",
+    "friday",
+    "saturday",
+    "sunday",
+  ];
 
-  const [isTruncated, setIsTruncated] = useState(true)
+  const [isTruncated, setIsTruncated] = useState(true);
 
-
-
-  const convertTo12HourFormat = (time = '') => {
+  const convertTo12HourFormat = (time = "") => {
     // Split the time into hours and minutes
-    let [hours, minutes] = time.split(':').map(Number)
+    let [hours, minutes] = time.split(":").map(Number);
 
     // Determine if it's AM or PM
-    let amOrPm = hours >= 12 ? 'PM' : 'AM'
+    let amOrPm = hours >= 12 ? "PM" : "AM";
 
     // Convert hours from 24-hour to 12-hour format
-    hours = hours % 12 || 12
+    hours = hours % 12 || 12;
 
     // Format the time string
-    return `${hours}:${minutes?.toString()?.padStart(2, '0')
-      ? minutes?.toString()?.padStart(2, '0')
-      : `00`
-      } ${amOrPm}`
-  }
+    return `${hours}:${
+      minutes?.toString()?.padStart(2, "0")
+        ? minutes?.toString()?.padStart(2, "0")
+        : `00`
+    } ${amOrPm}`;
+  };
 
   // Function to truncate text after a specified character limit
   const truncateText = (text, limit = 100) => {
     if (text?.length > limit && isTruncated) {
-      return text.slice(0, limit) + ''
+      return text.slice(0, limit) + "";
     }
-    return text
-  }
+    return text;
+  };
 
   // Toggle the truncation state when clicked
   const toggleTruncation = () => {
-    setIsTruncated(!isTruncated)
-  }
+    setIsTruncated(!isTruncated);
+  };
 
-  const [newsLetterEmail, setNewsLetterEmail] = useState('')
+  const [newsLetterEmail, setNewsLetterEmail] = useState("");
 
   const handleFormSubmit = async (e, formData) => {
-    e.preventDefault()
+    e.preventDefault();
 
     const response = await submitContactForm({
       ...formData,
       businessId: id,
-    })
+    });
     if (response?.data) {
-      toast.success('Form submitted successfully!', {
-        position: 'top-right',
+      toast.success("Form submitted successfully!", {
+        position: "top-right",
         autoClose: 3000,
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,
         draggable: true,
-        theme: 'colored',
+        theme: "colored",
         style: {
-          backgroundColor: '#38a20e', // Custom red color for error
-          color: '#FFFFFF', // White text
+          backgroundColor: "#38a20e", // Custom red color for error
+          color: "#FFFFFF", // White text
         },
-      })
-      return true
+      });
+      return true;
     } else {
-      toast.success('Failed submission failed!', {
-        position: 'top-right',
+      toast.success("Failed submission failed!", {
+        position: "top-right",
         autoClose: 3000,
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,
         draggable: true,
-        theme: 'colored',
+        theme: "colored",
         style: {
-          backgroundColor: '#aa0808', // Custom red color for error
-          color: '#FFFFFF', // White text
+          backgroundColor: "#aa0808", // Custom red color for error
+          color: "#FFFFFF", // White text
         },
-      })
-      return false
+      });
+      return false;
     }
-  }
+  };
 
   useEffect(() => {
-    window.scrollTo(0, 0)
-  }, [id])
+    window.scrollTo(0, 0);
+  }, [id]);
 
   useEffect(() => {
-    if (window?.location?.hash == '#news') {
-      setShowNews(true)
+    if (window?.location?.hash == "#news") {
+      setShowNews(true);
     } else {
-      setShowNews(false)
+      setShowNews(false);
     }
-    if (window?.location?.hash == '#reviews') {
-      setShowAllReviews(true)
+    if (window?.location?.hash == "#reviews") {
+      setShowAllReviews(true);
     } else {
-      setShowAllReviews(false)
+      setShowAllReviews(false);
     }
-  }, [window?.location?.hash])
-
+  }, [window?.location?.hash]);
 
   const handleNewsLetterSubmit = async (e) => {
-    e.preventDefault()
-    console.log('newsLetterEmail', newsLetterEmail)
+    e.preventDefault();
 
-    const response = await submitNewsLetter({
-      email: newsLetterEmail,
-    })
-    if (response?.data) {
-      toast.success('Subscribed successfully!', {
-        position: 'top-right',
+    // Remove leading/trailing spaces
+    const trimmedEmail = newsLetterEmail.trim();
+
+    // Check if the email is blank or invalid
+    if (!trimmedEmail) {
+      toast.error("Email cannot be empty!", {
+        position: "top-right",
         autoClose: 3000,
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,
         draggable: true,
-        theme: 'colored',
+        theme: "colored",
         style: {
-          backgroundColor: '#38a20e', // Custom red color for error
-          color: '#FFFFFF', // White text
+          backgroundColor: "#aa0808", // Custom red color for error
+          color: "#FFFFFF", // White text
         },
-      })
-      setNewsLetterEmail('')
-    } else {
-      toast.success('Failed to Subscribe!', {
-        position: 'top-right',
-        autoClose: 3000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        theme: 'colored',
-        style: {
-          backgroundColor: '#aa0808', // Custom red color for error
-          color: '#FFFFFF', // White text
-        },
-      })
+      });
+      return;
     }
-  }
+
+    // Regular expression to validate email
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(trimmedEmail)) {
+      toast.error("Please enter a valid email address!", {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        theme: "colored",
+        style: {
+          backgroundColor: "#aa0808", // Custom red color for error
+          color: "#FFFFFF", // White text
+        },
+      });
+      return;
+    }
+
+    console.log("newsLetterEmail", trimmedEmail);
+
+    // Submit email
+    const response = await submitNewsLetter({ email: trimmedEmail });
+    if (response?.data) {
+      toast.success("Subscribed successfully!", {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        theme: "colored",
+        style: {
+          backgroundColor: "#38a20e", // Custom green color for success
+          color: "#FFFFFF", // White text
+        },
+      });
+      setNewsLetterEmail("");
+    } else {
+      toast.error("Failed to Subscribe!", {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        theme: "colored",
+        style: {
+          backgroundColor: "#aa0808", // Custom red color for error
+          color: "#FFFFFF", // White text
+        },
+      });
+    }
+  };
 
   const handleInputChange = (e) => {
-    const { name, value } = e.target
+    const { name, value } = e.target;
     setReview((prevState) => ({
       ...prevState,
       [name]: value,
       getAllBusinessReviews,
-    }))
-  }
+    }));
+  };
 
   const handleReviewSubmit = (e) => {
-    e.preventDefault()
-    console.log(review, 'review')
-    setReviewLoading(true)
+    e.preventDefault();
+    console.log(review, "review");
+    setReviewLoading(true);
 
     createBusinessReview({
       ...review,
       businessId: id,
     })
       .then((response) => {
-        setReviewLoading(false)
+        setReviewLoading(false);
         setReview({
-          rating: '',
-          name: '',
-          review: '',
-        })
+          rating: "",
+          name: "",
+          review: "",
+        });
         if (response?.data) {
-          toast.success('Thank you for your review!', {
-            position: 'top-right',
+          toast.success("Thank you for your review!", {
+            position: "top-right",
             autoClose: 3000,
             hideProgressBar: false,
             closeOnClick: true,
             pauseOnHover: true,
             draggable: true,
-            theme: 'colored',
+            theme: "colored",
             style: {
-              backgroundColor: '#38a20e', // Custom red color for error
-              color: '#FFFFFF', // White text
+              backgroundColor: "#38a20e", // Custom red color for error
+              color: "#FFFFFF", // White text
             },
-          })
-          setreviewFetch(!reviewFetch)
-          setVisible(false)
+          });
+          setreviewFetch(!reviewFetch);
+          setVisible(false);
         }
       })
       .catch((err) => {
         setReview({
-          rating: '',
-          name: '',
-          review: '',
-        })
-        setReviewLoading(false)
-        console.log(err.message)
-      })
-  }
+          rating: "",
+          name: "",
+          review: "",
+        });
+        setReviewLoading(false);
+        console.log(err.message);
+      });
+  };
 
   useEffect(() => {
     const fetchData = async () => {
-      const businessDetails = await fetchBusinessTemplate(id, setLoading)
-      setBusinessData(businessDetails?.data)
-      console.log(businessDetails.success)
-      setColorTheme(businessDetails.data.theme)
-      setLoading(false)
+      const businessDetails = await fetchBusinessTemplate(id, setLoading);
+      setBusinessData(businessDetails?.data);
+      console.log(businessDetails.success);
+      setColorTheme(businessDetails.data.theme);
+      setLoading(false);
       const closed = allDays.filter(
         (day) =>
           !businessDetails.data.businessTiming.workingDays
             .map((d) => d.toLowerCase())
-            .includes(day),
-      )
-      setCloseDays(closed)
+            .includes(day)
+      );
+      setCloseDays(closed);
       if (businessDetails?.data?.theme) {
         const themeColor = businessDetails.data.theme;
         setColorTheme(themeColor);
@@ -290,35 +328,41 @@ export default function Template() {
       }
       if (businessDetails?.success) {
         const data = {
-          address: `${businessDetails?.data?.address?.buildingName ?? ""} ${businessDetails?.data?.address?.streetName ?? ""} ${businessDetails?.data?.address?.landMark ?? ""} ${businessDetails?.data?.address?.city ?? ""} ${businessDetails?.data?.address?.state ?? ""} ${businessDetails?.data?.address?.pinCode ?? ""}`,
-          primaryNumber: businessDetails?.data?.contactDetails?.primaryNumber ?? "",
-          secondaryNumber: businessDetails?.data?.contactDetails?.secondaryNumber ?? "",
+          address: `${businessDetails?.data?.address?.buildingName ?? ""} ${
+            businessDetails?.data?.address?.streetName ?? ""
+          } ${businessDetails?.data?.address?.landMark ?? ""} ${
+            businessDetails?.data?.address?.city ?? ""
+          } ${businessDetails?.data?.address?.state ?? ""} ${
+            businessDetails?.data?.address?.pinCode ?? ""
+          }`,
+          primaryNumber:
+            businessDetails?.data?.contactDetails?.primaryNumber ?? "",
+          secondaryNumber:
+            businessDetails?.data?.contactDetails?.secondaryNumber ?? "",
           email: businessDetails?.data?.email ?? "",
           title: businessDetails?.data?.businessName ?? "",
           businessName: businessDetails?.data?.businessName ?? "",
-          website: businessDetails?.data?.contactDetails?.website ?? ""
-        }
+          website: businessDetails?.data?.contactDetails?.website ?? "",
+        };
 
-        setSaveContact(data)
+        setSaveContact(data);
       }
-
-    }
+    };
     const fetchReview = async () => {
-      const response = await getAllBusinessReviews({ businessId: id })
-      console.log(response, 'data-validation')
-      setReviews(response?.data?.data)
-      setReviewCount(response?.data?.totalCount)
-    }
-    fetchData()
-    fetchReview()
+      const response = await getAllBusinessReviews({ businessId: id });
+      console.log(response, "data-validation");
+      setReviews(response?.data?.data);
+      setReviewCount(response?.data?.totalCount);
+    };
+    fetchData();
+    fetchReview();
+  }, [id]);
 
-  }, [id])
-
-  console.log(businessData, 'lll;l;l;l;l;;ll;;;l')
+  console.log(businessData, "lll;l;l;l;l;;ll;;;l");
 
   const getContrastingColor = (hexColor) => {
     // Remove '#' if present
-    const color = hexColor.replace('#', '');
+    const color = hexColor.replace("#", "");
 
     // Convert to RGB
     const r = parseInt(color.substring(0, 2), 16);
@@ -326,10 +370,10 @@ export default function Template() {
     const b = parseInt(color.substring(4, 6), 16);
 
     // Calculate brightness
-    const brightness = (0.299 * r + 0.587 * g + 0.114 * b);
+    const brightness = 0.299 * r + 0.587 * g + 0.114 * b;
 
     // Return black or white based on brightness
-    return brightness > 186 ? '#000000' : '#FFFFFF'; // Adjust threshold if needed
+    return brightness > 186 ? "#000000" : "#FFFFFF"; // Adjust threshold if needed
   };
 
   const settings = {
@@ -381,7 +425,7 @@ export default function Template() {
         },
       },
     ],
-  }
+  };
   const setting2 = {
     dots: false,
     infinite: !businessData?.service?.length, // Infinite scroll only for more than 3 items
@@ -396,8 +440,7 @@ export default function Template() {
       {
         breakpoint: 1024,
         settings: {
-          slidesToShow:
-            businessData?.service?.length ? 2 : 3,
+          slidesToShow: businessData?.service?.length ? 2 : 3,
           slidesToScroll: 1,
           infinite: true,
         },
@@ -440,7 +483,7 @@ export default function Template() {
           <div className="col-3 "> {loading && <Loader />}</div>
         </div>
       </div>
-    )
+    );
   }
 
   // If there's no business data (e.g., fetch failed), show an error message
@@ -450,13 +493,13 @@ export default function Template() {
         <Navbar
           expand="lg"
           className="bg-white pjs fixed-top"
-          style={{ paddingBlock: '5px' }}
+          style={{ paddingBlock: "5px" }}
         >
           <Container>
             {/* Back button for large screens (before the logo) */}
             <button
               className="btn btn-outline-secondary d-none d-lg-inline-block me-2"
-              onClick={() => (window.location.href = '/')} // Modify the onClick action as needed
+              onClick={() => (window.location.href = "/")} // Modify the onClick action as needed
             >
               <i className="bi bi-arrow-left"></i> Home
             </button>
@@ -465,7 +508,7 @@ export default function Template() {
             <Navbar.Brand
               href="#"
               className="fw-bold w-50 nav-logo"
-              style={{ fontSize: '36px' }}
+              style={{ fontSize: "36px" }}
             >
               <img
                 src={
@@ -473,14 +516,14 @@ export default function Template() {
                     ? businessData?.logo
                     : Placeholder
                 }
-                alt={businessData?.businessName || 'Logo Placeholder'}
+                alt={businessData?.businessName || "Logo Placeholder"}
               />
               <span className="ms-2 ">{businessData?.businessName}</span>
             </Navbar.Brand>
 
             <Navbar.Toggle
               aria-controls="basic-navbar-nav"
-              style={{ color: 'black' }}
+              style={{ color: "black" }}
             />
 
             <Navbar.Collapse id="basic-navbar-nav">
@@ -488,28 +531,28 @@ export default function Template() {
                 <NavLink
                   href="#home"
                   className="text-black text-center text-lg-start text-decoration-none fs-14"
-                  style={{ color: 'black' }}
+                  style={{ color: "black" }}
                 >
                   Home
                 </NavLink>
                 <NavLink
                   href="#about"
                   className="text-black text-center text-lg-start text-decoration-none fs-14"
-                  style={{ color: 'black' }}
+                  style={{ color: "black" }}
                 >
                   About
                 </NavLink>
                 <NavLink
                   href="#gallery"
                   className="text-black text-center text-lg-start text-decoration-none fs-14"
-                  style={{ color: 'black' }}
+                  style={{ color: "black" }}
                 >
                   Gallery
                 </NavLink>
                 <NavLink
                   href="#contact"
                   className="text-black text-center text-lg-start text-decoration-none fs-14"
-                  style={{ color: 'black' }}
+                  style={{ color: "black" }}
                 >
                   Contact
                 </NavLink>
@@ -517,19 +560,19 @@ export default function Template() {
                   href="#news"
                   onClick={(e) => setShowNews(true)}
                   className="text-black text-center text-lg-start text-decoration-none fs-14"
-                  style={{ color: 'black' }}
+                  style={{ color: "black" }}
                 >
-                  News
+                  Blogs
                 </NavLink>
                 <NavLink
                   href="#services"
                   style={{
-                    backgroundColor: '#105193',
-                    color: 'white',
-                    borderRadius: '10px 0px',
-                    padding: '8px 20px',
-                    fontSize: '13px',
-                    boxShadow: '0px 15px 30px rgba(0, 0, 0, 0.15)',
+                    backgroundColor: "#105193",
+                    color: "white",
+                    borderRadius: "10px 0px",
+                    padding: "8px 20px",
+                    fontSize: "13px",
+                    boxShadow: "0px 15px 30px rgba(0, 0, 0, 0.15)",
                   }}
                   className="fw-bold text-decoration-none text-center text-lg-start"
                 >
@@ -539,7 +582,7 @@ export default function Template() {
                 {/* Back button for smaller screens (inside menu items) */}
                 <button
                   className="btn btn-outline-secondary d-lg-none mt-2"
-                  onClick={() => (window.location.href = '/')} // Modify the onClick action as needed
+                  onClick={() => (window.location.href = "/")} // Modify the onClick action as needed
                 >
                   Back to Home
                 </button>
@@ -551,52 +594,56 @@ export default function Template() {
           <div
             className="container p-top"
             style={{
-              height: '100vh',
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
+              height: "100vh",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
             }}
           >
             <div
               style={{
-                display: 'flex',
-                flexDirection: 'column',
-                justifyContent: 'center',
-                alignItems: 'center',
-                height: '250px',
-                width: '300px',
-                margin: '0 auto',
-                backgroundColor: '#F3F4F6', // Light gray for card background
-                borderRadius: '12px', // Rounded corners
-                boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)', // Subtle shadow for depth
-                color: '#1D4ED8', // Tailwind [#1D4ED8]
-                fontSize: '18px', // Clean font size
-                textAlign: 'center',
-                fontWeight: '500', // Medium weight
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                alignItems: "center",
+                height: "250px",
+                width: "300px",
+                margin: "0 auto",
+                backgroundColor: "#F3F4F6", // Light gray for card background
+                borderRadius: "12px", // Rounded corners
+                boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)", // Subtle shadow for depth
+                color: "#1D4ED8", // Tailwind [#1D4ED8]
+                fontSize: "18px", // Clean font size
+                textAlign: "center",
+                fontWeight: "500", // Medium weight
                 fontFamily: "'Inter', sans-serif",
-                padding: '20px', // Padding for internal spacing
+                padding: "20px", // Padding for internal spacing
               }}
             >
               <img
                 src="https://st.depositphotos.com/1006899/2650/i/450/depositphotos_26505551-stock-photo-error-metaphor.jpg"
                 alt="Profile Not Found Icon"
                 style={{
-                  width: '60px',
-                  height: '60px',
-                  borderRadius: '50%',
-                  border: '2px solid #1D4ED8', // Highlight with theme color
-                  marginBottom: '15px',
+                  width: "60px",
+                  height: "60px",
+                  borderRadius: "50%",
+                  border: "2px solid #1D4ED8", // Highlight with theme color
+                  marginBottom: "15px",
                 }}
               />
-              <p style={{ margin: 0 }}>We couldn't find the profile you're looking for.</p>
-              <span style={{ fontSize: '14px', color: '#6B7280', marginTop: '8px' }}>
+              <p style={{ margin: 0 }}>
+                We couldn't find the profile you're looking for.
+              </p>
+              <span
+                style={{ fontSize: "14px", color: "#6B7280", marginTop: "8px" }}
+              >
                 Please check the details or try again later.
               </span>
             </div>
           </div>
         </section>
       </>
-    )
+    );
   }
 
   return (
@@ -608,7 +655,7 @@ export default function Template() {
         rel="stylesheet"
       />
       <style>
-        {' '}
+        {" "}
         {`
                     ::-webkit-scrollbar {
                         width: 12px; /* Width of the entire scrollbar */
@@ -654,28 +701,28 @@ export default function Template() {
         collapseOnSelect={true}
         expand="lg"
         className="bg-white pjs fixed-top"
-        style={{ paddingBlock: '5px' }}
+        style={{ paddingBlock: "5px" }}
       >
         <button
           className="btn d-none d-lg-inline-block me-2 mr-4"
           style={{
-            marginLeft: '18px',
+            marginLeft: "18px",
 
-            backgroundColor: 'transparent', // Default transparent background
+            backgroundColor: "transparent", // Default transparent background
             color: colorTheme, // Text color based on colorTheme
             border: ` 1.5px solid ${colorTheme}`, // Border color based on colorTheme
-            padding: '4px 10px', // Reduced padding for smaller button size
-            fontSize: '12px', // Smaller font size
-            borderRadius: '6px', // Optional: Make edges slightly rounded
+            padding: "4px 10px", // Reduced padding for smaller button size
+            fontSize: "12px", // Smaller font size
+            borderRadius: "6px", // Optional: Make edges slightly rounded
           }}
-          onClick={() => (window.location.href = '/')}
+          onClick={() => (window.location.href = "/")}
           onMouseEnter={(e) => {
-            e.target.style.backgroundColor = colorTheme // Full background color on hover
-            e.target.style.color = '#fff' // Text turns white on hover
+            e.target.style.backgroundColor = colorTheme; // Full background color on hover
+            e.target.style.color = "#fff"; // Text turns white on hover
           }}
           onMouseLeave={(e) => {
-            e.target.style.backgroundColor = 'transparent' // Transparent background when not hovering
-            e.target.style.color = colorTheme // Text returns to colorTheme
+            e.target.style.backgroundColor = "transparent"; // Transparent background when not hovering
+            e.target.style.color = colorTheme; // Text returns to colorTheme
           }}
         >
           <i className="bi bi-arrow-left"></i> Home
@@ -695,27 +742,35 @@ export default function Template() {
                   : Placeholder
               }
               // alt={businessData?.businessName || 'Logo Placeholder'}
-              style={{ maxWidth: '50px', maxHeight: '50px' }} // Optional: Set a max size for the logo
+              style={{ maxWidth: "50px", maxHeight: "50px" }} // Optional: Set a max size for the logo
             />
             <span
               className="ms-2"
               style={{
-                overflow: businessData?.businessName?.length > 25 ? 'hidden' : window.innerWidth < 768 ? 'visible' : 'hidden',
+                overflow:
+                  businessData?.businessName?.length > 25
+                    ? "hidden"
+                    : window.innerWidth < 768
+                    ? "visible"
+                    : "hidden",
                 // whiteSpace: businessData?.businessName?.length > 20 ? 'nowrap' : window.innerWidth < 768 ? 'normal' : 'nowrap',
-                textOverflow: businessData?.businessName?.length > 25 ? 'ellipsis' : window.innerWidth < 768 ? 'unset' : 'ellipsis',
-                fontSize: businessData?.businessName?.length > 25 ? '22px' : '30px', // Adjust font size
+                textOverflow:
+                  businessData?.businessName?.length > 25
+                    ? "ellipsis"
+                    : window.innerWidth < 768
+                    ? "unset"
+                    : "ellipsis",
+                fontSize:
+                  businessData?.businessName?.length > 25 ? "22px" : "30px", // Adjust font size
               }}
             >
               {businessData?.businessName}
             </span>
           </Navbar.Brand>
 
-
-
           <Navbar.Toggle
             aria-controls="basic-navbar-nav"
-            style={{ color: 'black' }}
-
+            style={{ color: "black" }}
           />
 
           <Navbar.Collapse id="basic-navbar-nav">
@@ -723,47 +778,47 @@ export default function Template() {
               <NavLink
                 href="#home"
                 className="text-black text-center text-lg-start text-decoration-none fs-14"
-                style={{ color: 'black' }}
+                style={{ color: "black" }}
               >
                 Home
               </NavLink>
               <NavLink
                 href="#about"
                 className="text-black text-center text-lg-start text-decoration-none fs-14"
-                style={{ color: 'black' }}
+                style={{ color: "black" }}
               >
                 About
               </NavLink>
               <NavLink
                 href="#gallery"
                 className="text-black text-center text-lg-start text-decoration-none fs-14"
-                style={{ color: 'black' }}
+                style={{ color: "black" }}
               >
                 Gallery
               </NavLink>
               <NavLink
                 href="#contact"
                 className="text-black text-center text-lg-start text-decoration-none fs-14"
-                style={{ color: 'black' }}
+                style={{ color: "black" }}
               >
                 Contact
               </NavLink>
               <NavLink
                 href="#news"
                 className="text-black text-center text-lg-start text-decoration-none fs-14"
-                style={{ color: 'black' }}
+                style={{ color: "black" }}
               >
-                News
+                Blogs
               </NavLink>
               <NavLink
                 href="#services"
                 style={{
                   backgroundColor: colorTheme,
-                  color: 'white',
-                  borderRadius: '10px 0px',
-                  padding: '8px 20px',
-                  fontSize: '13px',
-                  boxShadow: '0px 15px 30px rgba(0, 0, 0, 0.15)',
+                  color: "white",
+                  borderRadius: "10px 0px",
+                  padding: "8px 20px",
+                  fontSize: "13px",
+                  boxShadow: "0px 15px 30px rgba(0, 0, 0, 0.15)",
                 }}
                 className="fw-bold text-decoration-none text-center text-lg-start"
               >
@@ -774,21 +829,21 @@ export default function Template() {
               <button
                 className="btn btn-outline-secondary d-lg-none mt-2"
                 style={{
-                  backgroundColor: 'transparent', // Default transparent background
+                  backgroundColor: "transparent", // Default transparent background
                   color: colorTheme, // Text color based on colorTheme
                   border: `2px solid ${colorTheme}`, // Border color based on colorTheme
-                  padding: '6px 16px', // Adjust padding if needed
-                  fontSize: '13px', // Adjust font size for smaller screens
-                  borderRadius: '0px 10px', // Optional: Rounded edges for better UI
+                  padding: "6px 16px", // Adjust padding if needed
+                  fontSize: "13px", // Adjust font size for smaller screens
+                  borderRadius: "0px 10px", // Optional: Rounded edges for better UI
                 }}
-                onClick={() => (window.location.href = '/')}
+                onClick={() => (window.location.href = "/")}
                 onMouseEnter={(e) => {
-                  e.target.style.backgroundColor = colorTheme // Full background color on hover
-                  e.target.style.color = '#fff' // Text turns white on hover
+                  e.target.style.backgroundColor = colorTheme; // Full background color on hover
+                  e.target.style.color = "#fff"; // Text turns white on hover
                 }}
                 onMouseLeave={(e) => {
-                  e.target.style.backgroundColor = 'transparent' // Transparent background when not hovering
-                  e.target.style.color = colorTheme // Text returns to colorTheme
+                  e.target.style.backgroundColor = "transparent"; // Transparent background when not hovering
+                  e.target.style.color = colorTheme; // Text returns to colorTheme
                 }}
               >
                 Back to Home
@@ -796,7 +851,6 @@ export default function Template() {
             </Nav>
           </Navbar.Collapse>
         </Container>
-
       </Navbar>
 
       {showAllReviews && (
@@ -817,7 +871,7 @@ export default function Template() {
 
       {!showAllReviews && !showNews && (
         <>
-          <section className="h-auto" id='home'>
+          <section className="h-auto" id="home">
             <div className="container">
               <div className="row align-items-center banner-section">
                 {/* Left Image for Mobile View */}
@@ -825,7 +879,7 @@ export default function Template() {
                   <img
                     src={
                       businessData?.landingPageHero?.coverImage &&
-                        businessData?.landingPageHero?.coverImage?.length > 0
+                      businessData?.landingPageHero?.coverImage?.length > 0
                         ? businessData?.landingPageHero?.coverImage
                         : PlaceholderBanner
                     }
@@ -847,7 +901,7 @@ export default function Template() {
                       <p className="text-secondary text-center text-lg-start david-font">
                         {truncateText(
                           businessData?.landingPageHero?.description,
-                          100,
+                          100
                         )}
                         {businessData?.landingPageHero?.description?.length >
                           100 &&
@@ -868,7 +922,7 @@ export default function Template() {
                           <NavLink
                             to="#about"
                             className="btn btn-dark text-white radius-theme box-shadow w-100 p-1"
-                            style={{ backgroundColor: '#212529' }}
+                            style={{ backgroundColor: "#212529" }}
                           >
                             View More
                           </NavLink>
@@ -908,7 +962,7 @@ export default function Template() {
                   <img
                     src={
                       businessData?.landingPageHero?.coverImage &&
-                        businessData?.landingPageHero?.coverImage?.length > 0
+                      businessData?.landingPageHero?.coverImage?.length > 0
                         ? businessData?.landingPageHero?.coverImage
                         : PlaceholderBanner
                     }
@@ -929,7 +983,7 @@ export default function Template() {
                     <div className="row align-items-center justify-content-start">
                       <a
                         href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
-                          `${businessData?.address?.buildingName},${businessData.address?.streetName}, ${businessData?.address?.landMark}, ${businessData?.address?.city},   ${businessData.address?.state}`,
+                          `${businessData?.address?.buildingName},${businessData.address?.streetName}, ${businessData?.address?.landMark}, ${businessData?.address?.city},   ${businessData.address?.state}`
                         )}`}
                         target="_blank"
                         rel="noopener noreferrer"
@@ -940,19 +994,25 @@ export default function Template() {
                             <i className="bi bi-geo-alt-fill text-2xl sm:text-lg" />
                           </div>
                           <div className="col">
-                            <span className="fs-12 sm:fs-10" style={{ color: textColor }}>Address</span>
+                            <span
+                              className="fs-12 sm:fs-10"
+                              style={{ color: textColor }}
+                            >
+                              Address
+                            </span>
                             <p
-                              style={{ color: textColor, textDecoration: 'none' }}
-
-                              className="fs-14 sm:fs-12">
-
+                              style={{
+                                color: textColor,
+                                textDecoration: "none",
+                              }}
+                              className="fs-14 sm:fs-12"
+                            >
                               {`${businessData?.address?.buildingName}`} ,
-
                               {`${businessData?.address?.streetName}`},
                               <br />
                               {`${businessData?.address?.landMark}`},
-
-                              {`${businessData?.address?.city}, ${businessData?.address?.state}`}</p>
+                              {`${businessData?.address?.city}, ${businessData?.address?.state}`}
+                            </p>
                           </div>
                         </div>
                       </a>
@@ -970,9 +1030,15 @@ export default function Template() {
                           href={`mailto:${businessData?.contactDetails?.email}`}
                           className="text-decoration-none text-dark  "
                         >
-                          <span className="fs-12 sm:fs-10  " style={{ color: textColor }}>Send Email</span>
-                          <p className="fs-14 sm:fs-12 p-0 m-0"
-                            style={{ color: textColor, textDecoration: 'none' }}
+                          <span
+                            className="fs-12 sm:fs-10  "
+                            style={{ color: textColor }}
+                          >
+                            Send Email
+                          </span>
+                          <p
+                            className="fs-14 sm:fs-12 p-0 m-0"
+                            style={{ color: textColor, textDecoration: "none" }}
                           >
                             {businessData?.contactDetails?.email}
                           </p>
@@ -993,24 +1059,33 @@ export default function Template() {
                         <i className="bi bi-telephone text-2xl sm:text-lg" />
                       </div>
                       <div className="col">
-                        <span className="fs-12 sm:fs-10" style={{ color: textColor }}>
+                        <span
+                          className="fs-12 sm:fs-10"
+                          style={{ color: textColor }}
+                        >
                           Contact
                         </span>
                         <p className="fs-14 sm:fs-12 mb-0">
                           <a
-                            style={{ color: textColor, textDecoration: 'none' }}
+                            style={{ color: textColor, textDecoration: "none" }}
                             href={`tel:${businessData?.contactDetails?.primaryNumber}`}
                           >
-                            + {businessData?.contactDetails?.primaryCountryCode}   {businessData?.contactDetails?.primaryNumber}
+                            + {businessData?.contactDetails?.primaryCountryCode}{" "}
+                            {businessData?.contactDetails?.primaryNumber}
                           </a>
                         </p>
                         <p className="fs-14 sm:fs-12 mt-0">
                           <a
-                            className={`${businessData?.contactDetails?.secondaryNumber ?? "d-none"}`}
-                            style={{ color: textColor, textDecoration: 'none' }}
+                            className={`${
+                              businessData?.contactDetails?.secondaryNumber ??
+                              "d-none"
+                            }`}
+                            style={{ color: textColor, textDecoration: "none" }}
                             href={`tel:${businessData?.contactDetails?.secondaryNumber}`}
                           >
-                            + {businessData?.contactDetails?.secondaryCountryCode}  {businessData?.contactDetails?.secondaryNumber}
+                            +{" "}
+                            {businessData?.contactDetails?.secondaryCountryCode}{" "}
+                            {businessData?.contactDetails?.secondaryNumber}
                           </a>
                         </p>
                       </div>
@@ -1023,7 +1098,7 @@ export default function Template() {
 
           <section
             className="h-auto"
-            style={{ backgroundColor: '#F3F3F4' }}
+            style={{ backgroundColor: "#F3F3F4" }}
             id="about"
           >
             <div className="container p-top">
@@ -1051,105 +1126,134 @@ export default function Template() {
             </div>
           </section>
 
-          {(businessData?.specialServices?.title || businessData?.specialServices?.description) && <section
-            className="h-auto"
-            id="services"
-            style={{ backgroundColor: '#F3F3F4' }}
-          >
-            <div className="container p-top">
-              <div className="col-12 mb-5">
-                <div className="mt-5 text-center">
-                  <div className="col-12">
-                    <h1 className="text-center text-dark fw-bold david-font fw-bold banner-title fs-45">
-                      {businessData?.specialServices?.title}
-                    </h1>
-                  </div>
-                  <div className="row justify-content-center">
-                    <div className="col-12 col-lg-6 ">
-                      <p className="text-secondary text-center mb-2">
-                        {businessData?.specialServices?.description}
-                      </p>
+          {(businessData?.specialServices?.title ||
+            businessData?.specialServices?.description) && (
+            <section
+              className="h-auto"
+              id="services"
+              style={{ backgroundColor: "#F3F3F4" }}
+            >
+              <div className="container p-top">
+                <div className="col-12 mb-5">
+                  <div className="mt-5 text-center">
+                    <div className="col-12">
+                      <h1 className="text-center text-dark fw-bold david-font fw-bold banner-title fs-45">
+                        {businessData?.specialServices?.title}
+                      </h1>
+                    </div>
+                    <div className="row justify-content-center">
+                      <div className="col-12 col-lg-6 ">
+                        <p className="text-secondary text-center mb-2">
+                          {businessData?.specialServices?.description}
+                        </p>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-              <div className="col-12">
-                <div className="col-12 mb-5 david-font row justify-content-center gap-3">
-                  {businessData.specialServices.data.length > 2 ? (
-                    <Slider {...setting2}>
-                      {businessData?.specialServices?.data.map(
-                        (dish, index) => (
-                          <div
-                            key={index}
-                            className="dish-div col-12 text-center p-3"
-                          >
-                            <div className="col-12 position-relative text-center">
-                              <img
-                                src={
-                                  dish.image && dish.image.length > 0
-                                    ? dish.image
-                                    : Placeholder
-                                }
-                                alt={dish.title}
-                                style={{
-                                  width: '300px',
-                                  height: '300px',
-                                  objectFit: 'cover',
-                                }}
-                              />
+                <div className="col-12">
+                  <div className="col-12 mb-5 david-font row justify-content-center gap-3">
+                    {businessData.specialServices.data.length > 2 ? (
+                      <Slider {...setting2}>
+                        {businessData?.specialServices?.data.map(
+                          (dish, index) => (
+                            <div
+                              key={index}
+                              className="dish-div col-12 text-center p-3"
+                            >
+                              <div className="col-12 position-relative text-center">
+                                <img
+                                  src={
+                                    dish.image && dish.image.length > 0
+                                      ? dish.image
+                                      : Placeholder
+                                  }
+                                  alt={dish.title}
+                                  className="img-fluid"
+                                  style={{
+                                    width: "250px",
+                                    maxWidth: "250px",
+                                    objectFit: "cover",
+                                  }}
+                                />
+                              </div>
+                              <div className="col-12">
+                                <h2 className="fs-20 fw-bold">{dish.title}</h2>
+                              </div>
+                              <div className="col-12 mt-3 mb-3">
+                                <p>{dish.description}</p>
+                              </div>
+                              {dish?.link && (
+                                <div className="col-12 mt-3 mb-3 text-end">
+                                  <Button
+                                    data-bs-toggle="tooltip"
+                                    data-bs-placement="top"
+                                    title="Visit to know more"
+                                  >
+                                    visit
+                                    <i
+                                      style={{ transform: "rotate(90deg)" }}
+                                      class="bi bi-arrow-up"
+                                    ></i>
+                                  </Button>
+                                </div>
+                              )}
                             </div>
-                            <div className="col-12">
-                              <h2 className="fs-20 fw-bold">{dish.title}</h2>
-                            </div>
-                            <div className="col-12 mt-3 mb-3">
-                              <p>{dish.description}</p>
-                            </div>
-                            {dish?.link && <div className="col-12 mt-3 mb-3 text-end">
-                              <Button data-bs-toggle="tooltip" data-bs-placement="top" title="Visit to know more">visit<i style={{ transform: "rotate(90deg)" }} class="bi bi-arrow-up"></i></Button>
-                            </div>}
+                          )
+                        )}
+                      </Slider>
+                    ) : (
+                      businessData.specialServices.data.map((dish, index) => (
+                        <div
+                          key={index}
+                          className="dish-div col-12 col-lg-6 text-center p-3"
+                        >
+                          <div className="col-12 position-relative">
+                            <img
+                              src={
+                                dish.image && dish.image.length > 0
+                                  ? dish.image
+                                  : Placeholder
+                              }
+                              alt={dish.title}
+                              style={{
+                                width: "100%",
+                                height: "250px",
+                                maxWidth: "250px",
+                                objectFit: "cover",
+                              }}
+                            />
                           </div>
-                        ),
-                      )}
-                    </Slider>
-                  ) : (
-                    businessData.specialServices.data.map((dish, index) => (
-                      <div
-                        key={index}
-                        className="dish-div col-12 col-lg-6 text-center p-3"
-                      >
-                        <div className="col-12 position-relative">
-                          <img
-                            src={
-                              dish.image && dish.image.length > 0
-                                ? dish.image
-                                : Placeholder
-                            }
-                            alt={dish.title}
-                            style={{
-                              width: '100%',
-                              height: 'auto',
-                              maxWidth: '300px',
-                              objectFit: 'cover',
-                            }}
-                          />
+                          <div className="col-12">
+                            <h2 className="fs-20 fw-bold">{dish.title}</h2>
+                          </div>
+                          <div className="col-12 mt-3 mb-3">
+                            <p>{dish.description}</p>
+                          </div>
+                          {dish?.link && (
+                            <div className="col-12 mt-3 mb-3 text-end">
+                              <Button
+                                data-bs-toggle="tooltip"
+                                data-bs-placement="top"
+                                title="Visit to know more"
+                              >
+                                visit
+                                <i
+                                  style={{ transform: "rotate(90deg)" }}
+                                  class="bi bi-arrow-up"
+                                ></i>
+                              </Button>
+                            </div>
+                          )}
                         </div>
-                        <div className="col-12">
-                          <h2 className="fs-20 fw-bold">{dish.title}</h2>
-                        </div>
-                        <div className="col-12 mt-3 mb-3">
-                          <p>{dish.description}</p>
-                        </div>
-                        {dish?.link && <div className="col-12 mt-3 mb-3 text-end">
-                          <Button data-bs-toggle="tooltip" data-bs-placement="top" title="Visit to know more">visit<i style={{ transform: "rotate(90deg)" }} class="bi bi-arrow-up"></i></Button>
-                        </div>}
-                      </div>
-                    ))
-                  )}
+                      ))
+                    )}
+                  </div>
                 </div>
               </div>
-            </div>
-          </section>}
-          {(businessData?.productSection?.title || businessData?.productSection?.description) &&
+            </section>
+          )}
+          {(businessData?.productSection?.title ||
+            businessData?.productSection?.description) && (
             <section className="bg-white h-auto david-font" id="menu">
               <div className="container  p-top">
                 <div className="col-12 mb-5">
@@ -1176,7 +1280,7 @@ export default function Template() {
                         {businessData.productSection.data.map((item, index) => (
                           <div
                             className="col-12 col-lg-6 mt-3 mx-auto"
-                            style={{ padding: '0 30px' }}
+                            style={{ padding: "0 30px" }}
                             key={index}
                           >
                             <div className="row product-section align-items-center">
@@ -1185,7 +1289,7 @@ export default function Template() {
                                   src={
                                     item?.image && item?.image.length > 0
                                       ? item.image
-                                      : ''
+                                      : ""
                                   }
                                   alt=""
                                   className="w-100"
@@ -1196,27 +1300,41 @@ export default function Template() {
                                 <p className="mt-2">{item.description}</p>
                               </div>
                               <div className="col-2 p-0">
-                                <span className="fw-bold">{item.price ? 'Price : ₹' : ''}</span>
+                                <span className="fw-bold">
+                                  {item.price ? "Price : ₹" : ""}
+                                </span>
                                 <span className="fw-bold">{item.price}</span>
                               </div>
-                              {item?.link && <div className="col-12 mt-3 mb-3 text-end">
-                                <Button data-bs-toggle="tooltip" data-bs-placement="top" title="Visit to know more">visit<i style={{ transform: "rotate(90deg)" }} class="bi bi-arrow-up"></i></Button>
-                              </div>}
+                              {item?.link && (
+                                <div className="col-12 mt-3 mb-3 text-end">
+                                  <Button
+                                    data-bs-toggle="tooltip"
+                                    data-bs-placement="top"
+                                    title="Visit to know more"
+                                  >
+                                    visit
+                                    <i
+                                      style={{ transform: "rotate(90deg)" }}
+                                      class="bi bi-arrow-up"
+                                    ></i>
+                                  </Button>
+                                </div>
+                              )}
                             </div>
                           </div>
                         ))}
                       </div>
                     )}
-
-
                   </div>
                 </div>
               </div>
-            </section>}
-          {(businessData?.service?.title || businessData?.service?.description) &&
+            </section>
+          )}
+          {(businessData?.service?.title ||
+            businessData?.service?.description) && (
             <section
               className="h-auto david-font"
-              style={{ backgroundColor: '#F3F3F4' }}
+              style={{ backgroundColor: "#F3F3F4" }}
             >
               <div className="container p-top">
                 <div className="col-12 mb-5">
@@ -1253,9 +1371,9 @@ export default function Template() {
                                 }
                                 alt={dish?.title}
                                 style={{
-                                  width: '300px',
-                                  height: '300px',
-                                  objectFit: 'cover',
+                                  width: "250px",
+                                  height: "250px",
+                                  objectFit: "cover",
                                 }}
                               />
                             </div>
@@ -1263,8 +1381,8 @@ export default function Template() {
                               <h2
                                 className="fs-20 fw-bold text-wrap"
                                 style={{
-                                  wordBreak: 'break-word',
-                                  overflowWrap: 'break-word',
+                                  wordBreak: "break-word",
+                                  overflowWrap: "break-word",
                                 }}
                               >
                                 {dish.title}
@@ -1273,15 +1391,27 @@ export default function Template() {
                             <div
                               className="col-12 mt-3 mb-3 text-wrap"
                               style={{
-                                wordBreak: 'break-word',
-                                overflowWrap: 'break-word',
+                                wordBreak: "break-word",
+                                overflowWrap: "break-word",
                               }}
                             >
                               <p>{dish.description}</p>
                             </div>
-                            {dish?.link && <div className="col-12 mt-3 mb-3 text-end">
-                              <Button data-bs-toggle="tooltip" data-bs-placement="top" title="Visit to know more">visit<i style={{ transform: "rotate(90deg)" }} class="bi bi-arrow-up"></i></Button>
-                            </div>}
+                            {dish?.link && (
+                              <div className="col-12 mt-3 mb-3 text-end">
+                                <Button
+                                  data-bs-toggle="tooltip"
+                                  data-bs-placement="top"
+                                  title="Visit to know more"
+                                >
+                                  visit
+                                  <i
+                                    style={{ transform: "rotate(90deg)" }}
+                                    class="bi bi-arrow-up"
+                                  ></i>
+                                </Button>
+                              </div>
+                            )}
                           </div>
                         ))}
                       </Slider>
@@ -1299,11 +1429,11 @@ export default function Template() {
                                   : Placeholder
                               }
                               alt={dish.title}
+                              className="img-fluid" // Bootstrap class to make the image responsive
                               style={{
-                                width: '100%',
-                                height: 'auto',
-                                maxWidth: '300px',
-                                objectFit: 'cover',
+                                maxWidth: "100%", // Ensures the image scales to the container width
+                                height: "auto", // Maintains the aspect ratio of the image
+                                objectFit: "cover", // Keeps the image covering the space without distortion
                               }}
                             />
                           </div>
@@ -1311,20 +1441,15 @@ export default function Template() {
                             <h2
                               className="fs-20 fw-bold text-wrap"
                               style={{
-                                wordBreak: 'break-word',
-                                overflowWrap: 'break-word',
+                                wordBreak: "break-word",
+                                overflowWrap: "break-word",
+                                fontSize: "1.2rem", // Adjust font size for smaller screens
                               }}
                             >
                               {dish.title}
                             </h2>
                           </div>
-                          <div
-                            className="col-12 mt-3 mb-3 text-wrap"
-                            style={{
-                              wordBreak: 'break-word',
-                              overflowWrap: 'break-word',
-                            }}
-                          >
+                          <div className="col-12 mt-3 mb-3 text-wrap">
                             <p>{dish.description}</p>
                           </div>
                         </div>
@@ -1333,29 +1458,37 @@ export default function Template() {
                   </div>
                 </div>
               </div>
-            </section>}
+            </section>
+          )}
 
-
-          {businessData?.gallery[0]?.startsWith("https") && <section className='bg-white '>
-            <div className="container p-top">
-              <div className="row align-items-center">
-                <div className="col-10 col-md-12 mx-auto  " id="gallery">
-                  <div className="col-12 my-5">
-                    <h1 className="fw-bold text-center">Gallery</h1>
+          {businessData?.gallery[0]?.startsWith("https") && (
+            <section className="bg-white ">
+              <div className="container p-top">
+                <div className="row align-items-center">
+                  <div className="col-10 col-md-12 mx-auto  " id="gallery">
+                    <div className="col-12 my-5">
+                      <h1 className="fw-bold text-center">Gallery</h1>
+                    </div>
+                    <ResponsiveGalleryCarousel
+                      galleryArray={businessData?.gallery}
+                    />
                   </div>
-                  <ResponsiveGalleryCarousel galleryArray={businessData?.gallery} />
                 </div>
               </div>
-            </div>
-          </section>}
-          <section className="" style={{ backgroundColor: '#F3F3F4' }}>
+            </section>
+          )}
+          <section className="" style={{ backgroundColor: "#F3F3F4" }}>
             <div className="container david-font p-top">
               <div className="col-12 text-center">
                 <h1>Reviews</h1>
               </div>
               <div className="col-12">
                 <p className="text-center">
-                  Take a look at genuine reviews and heartfelt testimonials that highlight experiences, impressions, and the impact of our work. Whether it’s about personal achievements or professional services, these reviews reflect the trust and value we bring to every interaction
+                  Take a look at genuine reviews and heartfelt testimonials that
+                  highlight experiences, impressions, and the impact of our
+                  work. Whether it’s about personal achievements or professional
+                  services, these reviews reflect the trust and value we bring
+                  to every interaction
                 </p>
               </div>
 
@@ -1364,30 +1497,31 @@ export default function Template() {
                   {reviews?.map((testimonial, index) => (
                     <div key={index} className="testi-slide">
                       <div
-                        className={`testi-div p-4 ${index === currentSlide ? 'testi-theme' : ''
-                          }`}
+                        className={`testi-div p-4 ${
+                          index === currentSlide ? "testi-theme" : ""
+                        }`}
                         style={{
                           backgroundColor:
-                            index === currentSlide ? '#f0f8ff' : '#fff', // Light blue background for the active card
-                          borderRadius: '12px', // Rounded corners
-                          boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', // Lighter shadow for premium feel
-                          padding: '16px', // Reduced padding for smaller card height
+                            index === currentSlide ? "#f0f8ff" : "#fff", // Light blue background for the active card
+                          borderRadius: "12px", // Rounded corners
+                          boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)", // Lighter shadow for premium feel
+                          padding: "16px", // Reduced padding for smaller card height
                           transition:
-                            'transform 0.3s ease-in-out, background-color 0.3s ease', // Smooth hover effect and background color transition
-                          maxWidth: '100%', // Ensure card size is responsive
-                          margin: '10px', // Add margin between cards
-                          cursor: 'pointer', // Indicating that it's interactive
-                          transform: 'scale(1)', // Default scale
-                          minHeight: '250px', // Set the minHeight to 250px for further reduction
-                          display: 'flex',
-                          flexDirection: 'column', // Flexbox to manage content alignment
-                          justifyContent: 'space-between', // Space out elements evenly
+                            "transform 0.3s ease-in-out, background-color 0.3s ease", // Smooth hover effect and background color transition
+                          maxWidth: "100%", // Ensure card size is responsive
+                          margin: "10px", // Add margin between cards
+                          cursor: "pointer", // Indicating that it's interactive
+                          transform: "scale(1)", // Default scale
+                          minHeight: "250px", // Set the minHeight to 250px for further reduction
+                          display: "flex",
+                          flexDirection: "column", // Flexbox to manage content alignment
+                          justifyContent: "space-between", // Space out elements evenly
                         }}
                         onMouseEnter={(e) =>
-                          (e.currentTarget.style.transform = 'scale(1.05)')
+                          (e.currentTarget.style.transform = "scale(1.05)")
                         } // Hover effect
                         onMouseLeave={(e) =>
-                          (e.currentTarget.style.transform = 'scale(1)')
+                          (e.currentTarget.style.transform = "scale(1)")
                         } // Revert hover effect
                       >
                         <div className="row">
@@ -1396,11 +1530,11 @@ export default function Template() {
                               src="/src/assets/images/user.png"
                               alt={testimonial?.name}
                               style={{
-                                objectFit: 'cover',
-                                width: '40px', // Adjusted image size
-                                height: '40px', // Adjusted image size
-                                borderRadius: '50%',
-                                border: '2px solid #ddd', // Premium border around the image
+                                objectFit: "cover",
+                                width: "40px", // Adjusted image size
+                                height: "40px", // Adjusted image size
+                                borderRadius: "50%",
+                                border: "2px solid #ddd", // Premium border around the image
                               }}
                             />
                           </div>
@@ -1408,10 +1542,10 @@ export default function Template() {
                             <h3
                               className="fs-20 p-0 m-0 ms-4"
                               style={{
-                                fontSize: '16px', // Slightly smaller font size for name
-                                fontWeight: '600',
-                                color: '#333',
-                                marginBottom: '4px', // Reduced margin
+                                fontSize: "16px", // Slightly smaller font size for name
+                                fontWeight: "600",
+                                color: "#333",
+                                marginBottom: "4px", // Reduced margin
                               }}
                             >
                               {testimonial?.name}
@@ -1419,19 +1553,20 @@ export default function Template() {
                             <div className="text-warning text-center mt-0 m-0">
                               {[...Array(5)].map((star, i) => {
                                 const isFilled =
-                                  i < Math.floor(testimonial?.rating)
+                                  i < Math.floor(testimonial?.rating);
                                 return (
                                   <i
                                     key={i}
-                                    className={`bi ${isFilled ? 'bi-star-fill' : 'bi-star'
-                                      }`}
+                                    className={`bi ${
+                                      isFilled ? "bi-star-fill" : "bi-star"
+                                    }`}
                                     style={{
-                                      fontSize: '14px', // Reduced star size
-                                      color: isFilled ? '#FFD700' : '#ddd',
-                                      transition: 'color 0.3s ease', // Smooth color transition for stars
+                                      fontSize: "14px", // Reduced star size
+                                      color: isFilled ? "#FFD700" : "#ddd",
+                                      transition: "color 0.3s ease", // Smooth color transition for stars
                                     }}
                                   ></i>
-                                )
+                                );
                               })}
                             </div>
                           </div>
@@ -1439,17 +1574,17 @@ export default function Template() {
                         <div className="col-12 mt-3">
                           <p
                             style={{
-                              maxHeight: '60px', // Shortened max height for the review text
-                              overflow: 'hidden',
-                              textOverflow: 'ellipsis',
-                              display: '-webkit-box',
+                              maxHeight: "60px", // Shortened max height for the review text
+                              overflow: "hidden",
+                              textOverflow: "ellipsis",
+                              display: "-webkit-box",
                               WebkitLineClamp: 2, // Truncate after 2 lines
-                              WebkitBoxOrient: 'vertical',
-                              fontSize: '14px', // Smaller font size for review text
-                              color: '#555', // Slightly lighter text color
-                              lineHeight: '1.4',
+                              WebkitBoxOrient: "vertical",
+                              fontSize: "14px", // Smaller font size for review text
+                              color: "#555", // Slightly lighter text color
+                              lineHeight: "1.4",
                               fontFamily: '"Roboto", sans-serif', // Modern font for better readability
-                              fontWeight: '400',
+                              fontWeight: "400",
                             }}
                           >
                             {testimonial?.review}
@@ -1458,14 +1593,14 @@ export default function Template() {
                         <div className="col-12 mt-2">
                           <p
                             style={{
-                              fontSize: '12px',
-                              color: '#999',
-                              fontStyle: 'italic',
-                              textAlign: 'right', // Align date to the right for a clean look
-                              marginTop: '4px',
+                              fontSize: "12px",
+                              color: "#999",
+                              fontStyle: "italic",
+                              textAlign: "right", // Align date to the right for a clean look
+                              marginTop: "4px",
                             }}
                           >
-                            {formatDate(testimonial?.createdAt ?? '')}
+                            {formatDate(testimonial?.createdAt ?? "")}
                           </p>
                         </div>
                       </div>
@@ -1499,15 +1634,15 @@ export default function Template() {
             header="Write a Review"
             visible={visible}
             onHide={() => {
-              if (!visible) return
-              setVisible(false)
+              if (!visible) return;
+              setVisible(false);
             }}
             style={{
-              minWidth: '50vw',
-              borderRadius: '12px',
-              overflow: 'hidden',
+              minWidth: "50vw",
+              borderRadius: "12px",
+              overflow: "hidden",
             }}
-            breakpoints={{ '960px': '75vw', '641px': '100vw' }}
+            breakpoints={{ "960px": "75vw", "641px": "100vw" }}
           >
             <div className="container ">
               <form onSubmit={handleReviewSubmit}>
@@ -1517,7 +1652,7 @@ export default function Template() {
                     value={review.rating}
                     color="warning"
                     onChange={(event, newValue) => {
-                      setReview({ ...review, rating: newValue })
+                      setReview({ ...review, rating: newValue });
                     }}
                   />
                 </div>
@@ -1570,11 +1705,14 @@ export default function Template() {
               </form>
             </div>
           </Dialog>
-          <div id="contact" >
-            <ContactForm handleFormSubmit={handleFormSubmit} businessData={businessData} />
+          <div id="contact">
+            <ContactForm
+              handleFormSubmit={handleFormSubmit}
+              businessData={businessData}
+            />
           </div>
 
-          <section className="h-auto david-font" >
+          <section className="h-auto david-font">
             <div className="container p-top">
               <div className="col-12 newsletter position-relative">
                 <img
@@ -1593,12 +1731,18 @@ export default function Template() {
                         <input
                           type="email"
                           placeholder="Enter Your Email"
-                          style={{ border: '0 !important' }}
+                          style={{ border: "0 !important" }}
                           required
                           value={newsLetterEmail}
                           onChange={(e) =>
                             setNewsLetterEmail(e.target?.value?.trim())
                           }
+                          onInvalid={(e) =>
+                            e.target.setCustomValidity(
+                              "Please enter a valid email address"
+                            )
+                          }
+                          onInput={(e) => e.target.setCustomValidity("")}
                           className="form-control form-control-lg"
                         />
                       </div>
@@ -1619,24 +1763,27 @@ export default function Template() {
                       Subscribing To Our Newsletter
                     </h2>
                     <div className="row">
-                      <div className="col-12">
+                      <div className="col-lg-8">
                         <input
                           type="email"
                           placeholder="Enter Your Email"
-                          style={{ border: '0 !important' }}
+                          style={{ border: "0 !important" }}
                           required
                           value={newsLetterEmail}
-                          onChange={(e) =>
-                            setNewsLetterEmail(e.target?.value?.trim())
+                          onChange={(e) => setNewsLetterEmail(e.target?.value)}
+                          onInvalid={(e) =>
+                            e.target.setCustomValidity(
+                              "Please enter a valid email address"
+                            )
                           }
-                          className="form-control form-control-sm"
+                          onInput={(e) => e.target.setCustomValidity("")}
+                          className="form-control form-control-lg"
                         />
                       </div>
-                      <div className="col-12">
+                      <div className="col-lg-4">
                         <button
-                          type="button"
                           onClick={handleNewsLetterSubmit}
-                          className="btn theme btn-sm mt-1 w-100"
+                          className="btn theme btn-lg w-100"
                         >
                           Subscribe
                         </button>
@@ -1672,7 +1819,7 @@ export default function Template() {
                 </div>
                 <div
                   className="col-12 mt-4  text-center text-lg-start"
-                  style={{ color: '#A4B3CB' }}
+                  style={{ color: "#A4B3CB" }}
                 >
                   <p>{businessData?.description}</p>
                 </div>
@@ -1692,7 +1839,7 @@ export default function Template() {
                     <a
                       href="#"
                       className="fs-14 text-decoration-none"
-                      style={{ color: '#A4B3CB' }}
+                      style={{ color: "#A4B3CB" }}
                     >
                       Home
                     </a>
@@ -1701,7 +1848,7 @@ export default function Template() {
                     <a
                       href="#about"
                       className="fs-14 text-decoration-none"
-                      style={{ color: '#A4B3CB' }}
+                      style={{ color: "#A4B3CB" }}
                     >
                       About Us
                     </a>
@@ -1710,7 +1857,7 @@ export default function Template() {
                     <a
                       href="#contact"
                       className="fs-14 text-decoration-none"
-                      style={{ color: '#A4B3CB' }}
+                      style={{ color: "#A4B3CB" }}
                     >
                       Contact Us
                     </a>
@@ -1719,7 +1866,7 @@ export default function Template() {
                     <a
                       href="#gallery"
                       className="fs-14 text-decoration-none"
-                      style={{ color: '#A4B3CB' }}
+                      style={{ color: "#A4B3CB" }}
                     >
                       Gallery
                     </a>
@@ -1741,22 +1888,22 @@ export default function Template() {
                       </div>
                       <div
                         className="mt-3 text-center text-lg-start"
-                        style={{ color: '#A4B3CB' }}
+                        style={{ color: "#A4B3CB" }}
                       >
                         {businessData?.businessTiming?.workingDays?.map(
                           (day, index) => (
                             <p key={index}>{day}</p>
-                          ),
+                          )
                         )}
                       </div>
                       <div
                         className="mt-3 text-center text-lg-start"
-                        style={{ color: '#A4B3CB' }}
+                        style={{ color: "#A4B3CB" }}
                       >
                         <span>{`${convertTo12HourFormat(
-                          businessData?.businessTiming?.time?.open,
+                          businessData?.businessTiming?.time?.open
                         )} to ${convertTo12HourFormat(
-                          businessData?.businessTiming?.time?.close,
+                          businessData?.businessTiming?.time?.close
                         )}`}</span>
                       </div>
                     </div>
@@ -1792,7 +1939,7 @@ export default function Template() {
                 </div>
               </div>
               <div className="col-12">
-                <hr style={{ width: '100%', opacity: 0.25, color: 'white' }} />
+                <hr style={{ width: "100%", opacity: 0.25, color: "white" }} />
                 <div className="footer-bottom">
                   <div className="row w-full justify-content-between">
                     <div className="col-sm-4 text-left">
@@ -1801,7 +1948,7 @@ export default function Template() {
                       </a>
                     </div>
                     <div className="col-sm-4 text-right">
-                      <div style={{ color: '#A4B3CB' }} className="text-right">
+                      <div style={{ color: "#A4B3CB" }} className="text-right">
                         <span>
                           Copyright &copy;
                           {new Date().getFullYear()} En Connect. All Rights
@@ -1818,7 +1965,6 @@ export default function Template() {
       </footer>
       <a
         href="#"
-
         className="btn   justify-content-center align-items-center d-none  d-sm-none d-lg-flex bg-transparent rounded-circle  back-to-top2"
       >
         <i className="bi bi-arrow-up"></i>
@@ -1830,5 +1976,5 @@ export default function Template() {
         <i className="bi bi-arrow-up"></i>
       </a>
     </>
-  )
+  );
 }
