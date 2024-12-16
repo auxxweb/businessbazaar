@@ -920,6 +920,7 @@ export default function Template() {
                       <div className="row">
                         <div className="col-6 col-lg-3 mb-2">
                           <NavLink
+                          href="#about"
                             to="#about"
                             className="btn btn-dark text-white radius-theme box-shadow w-100 p-1"
                             style={{ backgroundColor: "#212529" }}
@@ -1354,7 +1355,7 @@ export default function Template() {
                   </div>
                 </div>
                 <div className="col-12">
-                  <div className="col-12 mb-5 david-font row justify-content-center gap-3">
+                  <div id="services" className="col-12 mb-5 david-font row justify-content-center gap-3">
                     {businessData?.service?.data?.length > 2 ? (
                       <Slider {...setting2}>
                         {businessData?.service?.data?.map((dish, index) => (
