@@ -23,8 +23,8 @@ const CreateProductPart = () => {
   const [isLoading, setIsLoading] = useState({
     specialService: {},
   });
-  const [cropLoading, setCropLoading] = useState(false)
-  const [loading, setLoading] = useState(false)
+  const [cropLoading, setCropLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [errors] = useState([]);
   const [crop1, setCrop1] = useState({ x: 0, y: 0 });
   const [zoom1, setZoom1] = useState(1);
@@ -38,10 +38,9 @@ const CreateProductPart = () => {
     setCroppedArea1(croppedAreaPixels);
   };
 
-
   const handleCropSave1 = async () => {
     try {
-      setCropLoading(true)
+      setCropLoading(true);
       const { fileUrl, blob } = await getCroppedImg(
         spServiceImgPrev,
         croppedArea1
@@ -69,10 +68,10 @@ const CreateProductPart = () => {
       setSpServiceImgPrev(fileUrl);
       setSpServiceFile(croppedFile);
     } catch (e) {
-      setCropLoading(false)
+      setCropLoading(false);
       console.error("Error cropping image:", e);
     } finally {
-      setCropLoading(false)
+      setCropLoading(false);
       setShowCropper1(false);
     }
   };
@@ -83,15 +82,19 @@ const CreateProductPart = () => {
     setSpecialService((prevData) => {
       const updatedData = [...prevData.data];
       updatedData[index][name] = value;
+
+      // Validate the current product
+      const product = updatedData[index];
+      product.errors = getValidationErrors(product);
+
       return { ...prevData, data: updatedData };
     });
   };
-
-
   const handleFileChange = async (type, index, e) => {
     const file = e.target.files[0];
+
     if (file) {
-      // Set loading state
+      // Set loading state for the specific type and index
       setIsLoading((prevLoading) => ({
         ...prevLoading,
         [type]: { ...prevLoading[type], [index]: true },
@@ -99,25 +102,45 @@ const CreateProductPart = () => {
 
       const reader = new FileReader();
 
+      // Update state with the selected file and index for cropping or further processing
       if (type === "specialService") {
-        setSpServiceFile(file);
-        setSelectedSpServiceIndex(index);
+        setSpServiceFile(file); // Store file for further use
+        setSelectedSpServiceIndex(index); // Track the specific index for cropping or processing
       }
 
-      reader.onload = async (e) => {
+      reader.onload = async (event) => {
+        const imagePreview = event.target.result;
+
+        // Set the image preview and trigger the cropper for "specialService"
         if (type === "specialService") {
-          setSpServiceImgPrev(e.target.result);
-          setShowCropper1(true);
+          setSpServiceImgPrev(imagePreview); // Set preview for cropping
+          setShowCropper1(true); // Open cropper modal
         }
+
+        // Update the corresponding product data in the state
+        setSpecialService((prevData) => {
+          const updatedData = [...prevData.data];
+          updatedData[index].image = imagePreview; // Add image preview to the product
+          updatedData[index].errors = getValidationErrors(updatedData[index]); // Validate the product
+          return { ...prevData, data: updatedData };
+        });
       };
 
-      reader.readAsDataURL(file);
+      reader.readAsDataURL(file); // Read file as Data URL for preview
 
-      // Remove loading state
+      // Remove loading state after the file is processed
       setIsLoading((prevLoading) => ({
         ...prevLoading,
         [type]: { ...prevLoading[type], [index]: false },
       }));
+    } else {
+      // Clear image and validation errors if no file is selected
+      setSpecialService((prevData) => {
+        const updatedData = [...prevData.data];
+        updatedData[index].image = null; // Reset image
+        updatedData[index].errors = getValidationErrors(updatedData[index]); // Validate the product
+        return { ...prevData, data: updatedData };
+      });
     }
   };
 
@@ -130,22 +153,68 @@ const CreateProductPart = () => {
     document.querySelectorAll(inputClass)[index].click();
   };
 
+  const handleWordExceeded = (text, limit) => {
+    if (!text) return false; // No error if field is empty
+    const wordCount = text.trim().split(/\s+/).length;
+    return wordCount > limit;
+  };
+
+  const isValidationNeeded = (product) => {
+    return Boolean(
+      product.title || product.description || product.price || product.image
+    );
+  };
+
+  const getValidationErrors = (product) => {
+    const errors = {};
+    if (isValidationNeeded(product)) {
+      if (!product.title) errors.titleError = "Title is required.";
+      else if (handleWordExceeded(product.title, 8))
+        errors.titleError = "Title exceeded the word limit.";
+
+      if (!product.description)
+        errors.descriptionError = "Description is required.";
+      else if (handleWordExceeded(product.description, 50))
+        errors.descriptionError = "Description exceeded the word limit.";
+
+      if (!product.image) errors.imageError = "Image is required.";
+    }
+    return errors;
+  };
+
   // Submit function to store data
   const handleServiceSubmit = () => {
-    setLoading(true)
+    let isValid = true;
+
+    setSpecialService((prevData) => {
+      const updatedData = prevData.data.map((product) => {
+        const errors = getValidationErrors(product);
+        if (Object.keys(errors).length > 0) isValid = false;
+        return { ...product, errors };
+      });
+
+      return { ...prevData, data: updatedData };
+    });
+
+    if (!isValid) {
+      toast.error("Please fill in the required fields.");
+      return;
+    }
+
+    // Proceed with submission
+    setLoading(true);
     dispatch(
       updateBusinessDetails({
         productSection: specialService,
       })
     );
     navigate("/create-business/seo");
-    setLoading(false)
+    setLoading(false);
   };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    if (name === 'description') {
-
+    if (name === "description") {
     }
     setSpecialService((prevData) => ({
       ...prevData,
@@ -216,7 +285,6 @@ const CreateProductPart = () => {
     );
   }, [businessState]);
 
-
   return (
     <>
       <div className="h-100vh create-business-div">
@@ -262,16 +330,22 @@ const CreateProductPart = () => {
                   >
                     Cancel
                   </Button>
-                  {cropLoading ? <Spinner variant="primary" /> : <Button variant="contained"
-                    className=" mx-2" onClick={handleCropSave1}>
-                    Save Crop
-                  </Button>}
+                  {cropLoading ? (
+                    <Spinner variant="primary" />
+                  ) : (
+                    <Button
+                      variant="contained"
+                      className=" mx-2"
+                      onClick={handleCropSave1}
+                    >
+                      Save Crop
+                    </Button>
+                  )}
                 </div>
               </div>
             </div>
           </div>
         )}
-
 
         <div className="row h-100 justify-content-center">
           {/* Left Image Section */}
@@ -290,7 +364,7 @@ const CreateProductPart = () => {
             <div className="row justify-content-center">
               <div className="col-12 mt-5 text-center text-md-start">
                 <h1 className="fw-bold title-text title-main">
-                  Add  <span className="title-highlight">Product Details</span>
+                  Add <span className="title-highlight">Product Details</span>
                 </h1>
               </div>
 
@@ -306,7 +380,11 @@ const CreateProductPart = () => {
                   autoComplete="title-1"
                   onChange={handleChange}
                   error={handleWordExceeded(specialService.title, 8)}
-                  helperText={handleWordExceeded(specialService.title, 8) ? "exceeded the limit" : ""}
+                  helperText={
+                    handleWordExceeded(specialService.title, 8)
+                      ? "exceeded the limit"
+                      : ""
+                  }
                   value={specialService.title}
                 />
                 <TextField
@@ -322,7 +400,11 @@ const CreateProductPart = () => {
                   value={specialService.description}
                   onChange={handleChange}
                   error={handleWordExceeded(specialService.description, 50)}
-                  helperText={handleWordExceeded(specialService.description, 50) ? "exceeded the limit" : ""}
+                  helperText={
+                    handleWordExceeded(specialService.description, 50)
+                      ? "exceeded the limit"
+                      : ""
+                  }
                 />
                 <hr
                   style={{
@@ -365,7 +447,6 @@ const CreateProductPart = () => {
                     )}
 
                     {index !== 0 && <div className="divider"></div>}
-
                     <TextField
                       fullWidth
                       className="my-2"
@@ -376,8 +457,8 @@ const CreateProductPart = () => {
                       autoComplete="Service Name"
                       value={p.title}
                       onChange={(e) => handleProductChange(index, e)}
-                      error={handleWordExceeded(p.title, 8)}
-                      helperText={handleWordExceeded(p.title, 8) ? "exceeded the limit" : ""}
+                      error={Boolean(p.errors?.titleError)}
+                      helperText={p.errors?.titleError || ""}
                     />
 
                     <TextField
@@ -390,10 +471,12 @@ const CreateProductPart = () => {
                       autoComplete="description"
                       multiline
                       rows={4}
-                      error={handleWordExceeded(p.description, 50)}
-                      helperText={handleWordExceeded(p.description, 50) ? "exceeded the limit" : ""}
+                      value={p.description}
                       onChange={(e) => handleProductChange(index, e)}
+                      error={Boolean(p.errors?.descriptionError)}
+                      helperText={p.errors?.descriptionError || ""}
                     />
+
                     <TextField
                       fullWidth
                       className="my-2"
@@ -402,8 +485,10 @@ const CreateProductPart = () => {
                       name="price"
                       variant="filled"
                       label="Price"
+                      value={p.price}
                       onChange={(e) => handleProductChange(index, e)}
                     />
+
                     <TextField
                       fullWidth
                       className="my-2"
@@ -412,6 +497,7 @@ const CreateProductPart = () => {
                       name="link"
                       variant="filled"
                       label="Link"
+                      value={p.link}
                       onChange={(e) => handleProductChange(index, e)}
                     />
 
@@ -426,7 +512,9 @@ const CreateProductPart = () => {
                       />
                       <div
                         onClick={() => uploadImage("specialService", index)}
-                        className="p-2 mt-2 add-logo-div"
+                        className={`p-2 mt-2 add-logo-div ${
+                          p.errors?.imageError ? "error-border" : ""
+                        }`}
                       >
                         <span style={{ color: "grey" }}>(Ratio 4 : 3) </span>
                         <div className="text-center">
@@ -445,6 +533,9 @@ const CreateProductPart = () => {
                             />
                           )}
                         </div>
+                        {p.errors?.imageError && (
+                          <p className="text-danger">{p.errors.imageError}</p>
+                        )}
                       </div>
                     </div>
                   </div>
@@ -465,12 +556,10 @@ const CreateProductPart = () => {
                         ],
                       }))
                     }
-
                   >
                     + Add Products cards
                   </Button>
                 </div>
-
               </div>
               {errors && (
                 <p className="text-danger text-danger mt-3">
@@ -480,13 +569,17 @@ const CreateProductPart = () => {
             </div>
             {/* Save & Next Button */}
             <div className="col-12 mt-4 text-center">
-              {loading ? <Spinner variant="primary" /> : <Button
-                variant="contained"
-                className="w-100 submit-button"
-                onClick={handleServiceSubmit}
-              >
-                Save & Next
-              </Button>}
+              {loading ? (
+                <Spinner variant="primary" />
+              ) : (
+                <Button
+                  variant="contained"
+                  className="w-100 submit-button"
+                  onClick={handleServiceSubmit}
+                >
+                  Save & Next
+                </Button>
+              )}
             </div>
           </div>
 
@@ -640,6 +733,5 @@ const CreateProductPart = () => {
     </>
   );
 };
-
 
 export default CreateProductPart;
