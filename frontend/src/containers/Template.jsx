@@ -92,11 +92,10 @@ export default function Template() {
     hours = hours % 12 || 12;
 
     // Format the time string
-    return `${hours}:${
-      minutes?.toString()?.padStart(2, "0")
-        ? minutes?.toString()?.padStart(2, "0")
-        : `00`
-    } ${amOrPm}`;
+    return `${hours}:${minutes?.toString()?.padStart(2, "0")
+      ? minutes?.toString()?.padStart(2, "0")
+      : `00`
+      } ${amOrPm}`;
   };
 
   // Function to truncate text after a specified character limit
@@ -328,13 +327,10 @@ export default function Template() {
       }
       if (businessDetails?.success) {
         const data = {
-          address: `${businessDetails?.data?.address?.buildingName ?? ""} ${
-            businessDetails?.data?.address?.streetName ?? ""
-          } ${businessDetails?.data?.address?.landMark ?? ""} ${
-            businessDetails?.data?.address?.city ?? ""
-          } ${businessDetails?.data?.address?.state ?? ""} ${
-            businessDetails?.data?.address?.pinCode ?? ""
-          }`,
+          address: `${businessDetails?.data?.address?.buildingName ?? ""} ${businessDetails?.data?.address?.streetName ?? ""
+            } ${businessDetails?.data?.address?.landMark ?? ""} ${businessDetails?.data?.address?.city ?? ""
+            } ${businessDetails?.data?.address?.state ?? ""} ${businessDetails?.data?.address?.pinCode ?? ""
+            }`,
           primaryNumber:
             businessDetails?.data?.contactDetails?.primaryNumber ?? "",
           secondaryNumber:
@@ -751,15 +747,15 @@ export default function Template() {
                   businessData?.businessName?.length > 25
                     ? "hidden"
                     : window.innerWidth < 768
-                    ? "visible"
-                    : "hidden",
+                      ? "visible"
+                      : "hidden",
                 // whiteSpace: businessData?.businessName?.length > 20 ? 'nowrap' : window.innerWidth < 768 ? 'normal' : 'nowrap',
                 textOverflow:
                   businessData?.businessName?.length > 25
                     ? "ellipsis"
                     : window.innerWidth < 768
-                    ? "unset"
-                    : "ellipsis",
+                      ? "unset"
+                      : "ellipsis",
                 fontSize:
                   businessData?.businessName?.length > 25 ? "22px" : "30px", // Adjust font size
               }}
@@ -879,7 +875,7 @@ export default function Template() {
                   <img
                     src={
                       businessData?.landingPageHero?.coverImage &&
-                      businessData?.landingPageHero?.coverImage?.length > 0
+                        businessData?.landingPageHero?.coverImage?.length > 0
                         ? businessData?.landingPageHero?.coverImage
                         : PlaceholderBanner
                     }
@@ -920,7 +916,7 @@ export default function Template() {
                       <div className="row">
                         <div className="col-6 col-lg-3 mb-2">
                           <NavLink
-                          href="#about"
+                            href="#about"
                             to="#about"
                             className="btn btn-dark text-white radius-theme box-shadow w-100 p-1"
                             style={{ backgroundColor: "#212529" }}
@@ -963,7 +959,7 @@ export default function Template() {
                   <img
                     src={
                       businessData?.landingPageHero?.coverImage &&
-                      businessData?.landingPageHero?.coverImage?.length > 0
+                        businessData?.landingPageHero?.coverImage?.length > 0
                         ? businessData?.landingPageHero?.coverImage
                         : PlaceholderBanner
                     }
@@ -1077,10 +1073,9 @@ export default function Template() {
                         </p>
                         <p className="fs-14 sm:fs-12 mt-0">
                           <a
-                            className={`${
-                              businessData?.contactDetails?.secondaryNumber ??
+                            className={`${businessData?.contactDetails?.secondaryNumber ??
                               "d-none"
-                            }`}
+                              }`}
                             style={{ color: textColor, textDecoration: "none" }}
                             href={`tel:${businessData?.contactDetails?.secondaryNumber}`}
                           >
@@ -1129,273 +1124,107 @@ export default function Template() {
 
           {(businessData?.specialServices?.title ||
             businessData?.specialServices?.description) && (
-            <section
-              className="h-auto"
-              id="services"
-              style={{ backgroundColor: "#F3F3F4" }}
-            >
-              <div className="container p-top">
-                <div className="col-12 mb-5">
-                  <div className="mt-5 text-center">
-                    <div className="col-12">
-                      <h1 className="text-center text-dark fw-bold david-font fw-bold banner-title fs-45">
-                        {businessData?.specialServices?.title}
-                      </h1>
-                    </div>
-                    <div className="row justify-content-center">
-                      <div className="col-12 col-lg-6 ">
-                        <p className="text-secondary text-center mb-2">
-                          {businessData?.specialServices?.description}
-                        </p>
+              <section
+                className="h-auto"
+                id="services"
+                style={{ backgroundColor: "#F3F3F4" }}
+              >
+                <div className="container p-top">
+                  <div className="col-12 mb-5">
+                    <div className="mt-5 text-center">
+                      <div className="col-12">
+                        <h1 className="text-center text-dark fw-bold david-font fw-bold banner-title fs-45">
+                          {businessData?.specialServices?.title}
+                        </h1>
                       </div>
-                    </div>
-                  </div>
-                </div>
-                <div className="col-12">
-                  <div className="col-12 mb-5 david-font row justify-content-center gap-3">
-                    {businessData.specialServices.data.length > 2 ? (
-                      <Slider {...setting2}>
-                        {businessData?.specialServices?.data.map(
-                          (dish, index) => (
-                            <div
-                              key={index}
-                              className="dish-div col-12 text-center p-3"
-                            >
-                              <div className="col-12 position-relative text-center">
-                                <img
-                                  src={
-                                    dish.image && dish.image.length > 0
-                                      ? dish.image
-                                      : Placeholder
-                                  }
-                                  alt={dish.title}
-                                  className="img-fluid"
-                                  style={{
-                                    width: "250px",
-                                    maxWidth: "250px",
-                                    objectFit: "cover",
-                                  }}
-                                />
-                              </div>
-                              <div className="col-12">
-                                <h2 className="fs-20 fw-bold">{dish.title}</h2>
-                              </div>
-                              <div className="col-12 mt-3 mb-3">
-                                <p>{dish.description}</p>
-                              </div>
-                              {dish?.link && (
-                                <div className="col-12 mt-3 mb-3 text-end">
-                                  <Button
-                                    data-bs-toggle="tooltip"
-                                    data-bs-placement="top"
-                                    title="Visit to know more"
-                                  >
-                                    visit
-                                    <i
-                                      style={{ transform: "rotate(90deg)" }}
-                                      class="bi bi-arrow-up"
-                                    ></i>
-                                  </Button>
-                                </div>
-                              )}
-                            </div>
-                          )
-                        )}
-                      </Slider>
-                    ) : (
-                      businessData.specialServices.data.map((dish, index) => (
-                        <div
-                          key={index}
-                          className="dish-div col-12 col-lg-6 text-center p-3"
-                        >
-                          <div className="col-12 position-relative">
-                            <img
-                              src={
-                                dish.image && dish.image.length > 0
-                                  ? dish.image
-                                  : Placeholder
-                              }
-                              alt={dish.title}
-                              style={{
-                                width: "100%",
-                                height: "250px",
-                                maxWidth: "250px",
-                                objectFit: "cover",
-                              }}
-                            />
-                          </div>
-                          <div className="col-12">
-                            <h2 className="fs-20 fw-bold">{dish.title}</h2>
-                          </div>
-                          <div className="col-12 mt-3 mb-3">
-                            <p>{dish.description}</p>
-                          </div>
-                          {dish?.link && (
-                            <div className="col-12 mt-3 mb-3 text-end">
-                              <Button
-                                data-bs-toggle="tooltip"
-                                data-bs-placement="top"
-                                title="Visit to know more"
-                              >
-                                visit
-                                <i
-                                  style={{ transform: "rotate(90deg)" }}
-                                  class="bi bi-arrow-up"
-                                ></i>
-                              </Button>
-                            </div>
-                          )}
+                      <div className="row justify-content-center">
+                        <div className="col-12 col-lg-6 ">
+                          <p className="text-secondary text-center mb-2">
+                            {businessData?.specialServices?.description}
+                          </p>
                         </div>
-                      ))
-                    )}
-                  </div>
-                </div>
-              </div>
-            </section>
-          )}
-          {(businessData?.productSection?.title ||
-            businessData?.productSection?.description) && (
-            <section className="bg-white h-auto david-font" id="menu">
-              <div className="container  p-top">
-                <div className="col-12 mb-5">
-                  <div className="row justify-content-center">
-                    <div className="col-12 col-md-6 text-center">
-                      <h1 className="text-dark fw-bold david-font banner-title fs-45">
-                        {businessData?.productSection?.title}
-                      </h1>
-                    </div>
-                    <div className="row justify-content-center">
-                      <div className="col-12 col-lg-6 ">
-                        <p className="text-secondary text-center mb-2">
-                          {businessData?.productSection?.description}
-                        </p>
                       </div>
                     </div>
                   </div>
-                </div>
-
-                <div className="mt-5 david-font">
-                  <div className="mb-5">
-                    {businessData?.productSection?.data?.length > 0 && (
-                      <div className="row mb-3">
-                        {businessData.productSection.data.map((item, index) => (
-                          <div
-                            className="col-12 col-lg-6 mt-3 mx-auto"
-                            style={{ padding: "0 30px" }}
-                            key={index}
-                          >
-                            <div className="row product-section align-items-center">
-                              <div className="col-2">
-                                <img
-                                  src={
-                                    item?.image && item?.image.length > 0
-                                      ? item.image
-                                      : ""
-                                  }
-                                  alt=""
-                                  className="w-100"
-                                />
-                              </div>
-                              <div className="col-8">
-                                <h1 className="fs-20 fw-bold">{item.title}</h1>
-                                <p className="mt-2">{item.description}</p>
-                              </div>
-                              <div className="col-2 p-0">
-                                <span className="fw-bold">
-                                  {item.price ? "Price : ₹" : ""}
-                                </span>
-                                <span className="fw-bold">{item.price}</span>
-                              </div>
-                              {item?.link && (
-                                <div className="col-12 mt-3 mb-3 text-end">
-                                  <Button
-                                    data-bs-toggle="tooltip"
-                                    data-bs-placement="top"
-                                    title="Visit to know more"
-                                  >
-                                    visit
-                                    <i
-                                      style={{ transform: "rotate(90deg)" }}
-                                      class="bi bi-arrow-up"
-                                    ></i>
-                                  </Button>
+                  <div className="col-12">
+                    <div className="col-12 mb-5 david-font row justify-content-center gap-3">
+                      {businessData.specialServices.data.length > 2 ? (
+                        <Slider {...setting2}>
+                          {businessData?.specialServices?.data.map(
+                            (dish, index) => (
+                              <div
+                                key={index}
+                                className="dish-div col-12 text-center p-3"
+                              >
+                                <div className="col-12 position-relative text-center">
+                                  <img
+                                    src={
+                                      dish.image && dish.image.length > 0
+                                        ? dish.image
+                                        : Placeholder
+                                    }
+                                    alt={dish.title}
+                                    className="img-fluid"
+                                    style={{
+                                      width: "250px",
+                                      maxWidth: "250px",
+                                      objectFit: "cover",
+                                    }}
+                                  />
                                 </div>
-                              )}
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                </div>
-              </div>
-            </section>
-          )}
-          {(businessData?.service?.title ||
-            businessData?.service?.description) && (
-            <section
-              className="h-auto david-font"
-              style={{ backgroundColor: "#F3F3F4" }}
-            >
-              <div className="container p-top">
-                <div className="col-12 mb-5">
-                  <div className="row justify-content-center">
-                    <div className="col-12 col-md-6 text-center">
-                      <h1 className="text-dark fw-bold david-font banner-title fs-45">
-                        {businessData?.service?.title}
-                      </h1>
-                    </div>
-                    <div className="row justify-content-center">
-                      <div className="col-12 col-lg-6 ">
-                        <p className="text-secondary text-center mb-2">
-                          {businessData?.service?.description}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div className="col-12">
-                  <div id="services" className="col-12 mb-5 david-font row justify-content-center gap-3">
-                    {businessData?.service?.data?.length > 2 ? (
-                      <Slider {...setting2}>
-                        {businessData?.service?.data?.map((dish, index) => (
+                                <div className="col-12">
+                                  <h2 className="fs-20 fw-bold">{dish.title}</h2>
+                                </div>
+                                <div className="col-12 mt-3 mb-3">
+                                  <p>{dish.description}</p>
+                                </div>
+                                {dish?.link && (
+                                  <div className="col-12 mt-3 mb-3 text-end">
+                                    <Button
+                                      data-bs-toggle="tooltip"
+                                      data-bs-placement="top"
+                                      title="Visit to know more"
+                                      target="_blank"
+                                      href={dish?.link}
+                                    >
+                                      visit
+                                      <i
+                                        style={{ transform: "rotate(90deg)" }}
+                                        class="bi bi-arrow-up"
+                                      ></i>
+                                    </Button>
+                                  </div>
+                                )}
+                              </div>
+                            )
+                          )}
+                        </Slider>
+                      ) : (
+                        businessData.specialServices.data.map((dish, index) => (
                           <div
                             key={index}
-                            className="dish-div col-12 text-center p-3"
+                            className="dish-div col-12 col-lg-6 text-center p-3"
                           >
-                            <div className="col-12 position-relative text-center">
+                            <div className="col-12 position-relative">
                               <img
                                 src={
-                                  dish?.image && dish?.image?.length > 0
+                                  dish.image && dish.image.length > 0
                                     ? dish.image
                                     : Placeholder
                                 }
-                                alt={dish?.title}
+                                alt={dish.title}
                                 style={{
-                                  width: "250px",
+                                  width: "100%",
                                   height: "250px",
+                                  maxWidth: "250px",
                                   objectFit: "cover",
                                 }}
                               />
                             </div>
                             <div className="col-12">
-                              <h2
-                                className="fs-20 fw-bold text-wrap"
-                                style={{
-                                  wordBreak: "break-word",
-                                  overflowWrap: "break-word",
-                                }}
-                              >
-                                {dish.title}
-                              </h2>
+                              <h2 className="fs-20 fw-bold">{dish.title}</h2>
                             </div>
-                            <div
-                              className="col-12 mt-3 mb-3 text-wrap"
-                              style={{
-                                wordBreak: "break-word",
-                                overflowWrap: "break-word",
-                              }}
-                            >
+                            <div className="col-12 mt-3 mb-3">
                               <p>{dish.description}</p>
                             </div>
                             {dish?.link && (
@@ -1404,6 +1233,8 @@ export default function Template() {
                                   data-bs-toggle="tooltip"
                                   data-bs-placement="top"
                                   title="Visit to know more"
+                                  target="_blank"
+                                  href={dish?.link}
                                 >
                                   visit
                                   <i
@@ -1414,53 +1245,242 @@ export default function Template() {
                               </div>
                             )}
                           </div>
-                        ))}
-                      </Slider>
-                    ) : (
-                      businessData?.service?.data?.map((dish, index) => (
-                        <div
-                          key={index}
-                          className="dish-div col-12 col-lg-6 text-center p-3"
-                        >
-                          <div className="col-12 position-relative">
-                            <img
-                              src={
-                                dish.image && dish.image.length > 0
-                                  ? dish.image
-                                  : Placeholder
-                              }
-                              alt={dish.title}
-                              className="img-fluid" // Bootstrap class to make the image responsive
-                              style={{
-                                maxWidth: "100%", // Ensures the image scales to the container width
-                                height: "auto", // Maintains the aspect ratio of the image
-                                objectFit: "cover", // Keeps the image covering the space without distortion
-                              }}
-                            />
-                          </div>
-                          <div className="col-12">
-                            <h2
-                              className="fs-20 fw-bold text-wrap"
-                              style={{
-                                wordBreak: "break-word",
-                                overflowWrap: "break-word",
-                                fontSize: "1.2rem", // Adjust font size for smaller screens
-                              }}
-                            >
-                              {dish.title}
-                            </h2>
-                          </div>
-                          <div className="col-12 mt-3 mb-3 text-wrap">
-                            <p>{dish.description}</p>
-                          </div>
-                        </div>
-                      ))
-                    )}
+                        ))
+                      )}
+                    </div>
                   </div>
                 </div>
-              </div>
-            </section>
-          )}
+              </section>
+            )}
+          {(businessData?.productSection?.title ||
+            businessData?.productSection?.description) && (
+              <section className="bg-white h-auto david-font" id="menu">
+                <div className="container  p-top">
+                  <div className="col-12 mb-5">
+                    <div className="row justify-content-center">
+                      <div className="col-12 col-md-6 text-center">
+                        <h1 className="text-dark fw-bold david-font banner-title fs-45">
+                          {businessData?.productSection?.title}
+                        </h1>
+                      </div>
+                      <div className="row justify-content-center">
+                        <div className="col-12 col-lg-6 ">
+                          <p className="text-secondary text-center mb-2">
+                            {businessData?.productSection?.description}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="mt-5 david-font">
+                    <div className="mb-5">
+                      {businessData?.productSection?.data?.length > 0 && (
+                        <div className="row mb-3">
+                          {businessData.productSection.data.map((item, index) => (
+                            <div
+                              className="col-12 col-lg-6 mt-3 mx-auto"
+                              style={{ padding: "0 30px" }}
+                              key={index}
+                            >
+                              <div className="row product-section align-items-center">
+                                <div className="col-2">
+                                  <img
+                                    src={
+                                      item?.image && item?.image.length > 0
+                                        ? item.image
+                                        : ""
+                                    }
+                                    alt=""
+                                    className="w-100"
+                                  />
+                                </div>
+                                <div className="col-8">
+                                  <h1 className="fs-20 fw-bold">{item.title}</h1>
+                                  <p className="mt-2">{item.description}</p>
+                                </div>
+                                <div className="col-2 p-0">
+                                  <span className="fw-bold">
+                                    {item.price ? "Price : ₹" : ""}
+                                  </span>
+                                  <span className="fw-bold">{item.price}</span>
+                                </div>
+                                {item?.link && (
+                                  <div className="col-12 mt-3 mb-3 text-end">
+                                    <Button
+                                      data-bs-toggle="tooltip"
+                                      data-bs-placement="top"
+                                      title="Visit to know more"
+                                      target="_blank"
+                                      href={item?.link}
+                                    >
+                                      visit
+                                      <i
+                                        style={{ transform: "rotate(90deg)" }}
+                                        class="bi bi-arrow-up"
+                                      ></i>
+                                    </Button>
+                                  </div>
+                                )}
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </section>
+            )}
+          {(businessData?.service?.title ||
+            businessData?.service?.description) && (
+              <section
+                className="h-auto david-font"
+                style={{ backgroundColor: "#F3F3F4" }}
+              >
+                <div className="container p-top">
+                  <div className="col-12 mb-5">
+                    <div className="row justify-content-center">
+                      <div className="col-12 col-md-6 text-center">
+                        <h1 className="text-dark fw-bold david-font banner-title fs-45">
+                          {businessData?.service?.title}
+                        </h1>
+                      </div>
+                      <div className="row justify-content-center">
+                        <div className="col-12 col-lg-6 ">
+                          <p className="text-secondary text-center mb-2">
+                            {businessData?.service?.description}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="col-12">
+                    <div id="services" className="col-12 mb-5 david-font row justify-content-center gap-3">
+                      {businessData?.service?.data?.length > 2 ? (
+                        <Slider {...setting2}>
+                          {businessData?.service?.data?.map((dish, index) => (
+                            <div
+                              key={index}
+                              className="dish-div col-12 text-center p-3"
+                            >
+                              <div className="col-12 position-relative text-center">
+                                <img
+                                  src={
+                                    dish?.image && dish?.image?.length > 0
+                                      ? dish.image
+                                      : Placeholder
+                                  }
+                                  alt={dish?.title}
+                                  style={{
+                                    width: "250px",
+                                    height: "250px",
+                                    objectFit: "cover",
+                                  }}
+                                />
+                              </div>
+                              <div className="col-12">
+                                <h2
+                                  className="fs-20 fw-bold text-wrap"
+                                  style={{
+                                    wordBreak: "break-word",
+                                    overflowWrap: "break-word",
+                                  }}
+                                >
+                                  {dish.title}
+                                </h2>
+                              </div>
+                              <div
+                                className="col-12 mt-3 mb-3 text-wrap"
+                                style={{
+                                  wordBreak: "break-word",
+                                  overflowWrap: "break-word",
+                                }}
+                              >
+                                <p>{dish.description}</p>
+                              </div>
+                              {dish?.link && (
+                                <div className="col-12 mt-3 mb-3 text-end">
+                                  <Button
+                                    data-bs-toggle="tooltip"
+                                    data-bs-placement="top"
+                                    title="Visit to know more"
+                                    target="_blank"
+                                    href={dish?.link}
+                                  >
+                                    visit
+                                    <i
+                                      style={{ transform: "rotate(90deg)" }}
+                                      class="bi bi-arrow-up"
+                                    ></i>
+                                  </Button>
+                                </div>
+                              )}
+                            </div>
+                          ))}
+                        </Slider>
+                      ) : (
+                        businessData?.service?.data?.map((dish, index) => (
+                          <div
+                            key={index}
+                            className="dish-div col-12 col-lg-6 text-center p-3"
+                          >
+                            <div className="col-12 position-relative">
+                              <img
+                                src={
+                                  dish.image && dish.image.length > 0
+                                    ? dish.image
+                                    : Placeholder
+                                }
+                                alt={dish.title}
+                                className="img-fluid" // Bootstrap class to make the image responsive
+                                style={{
+                                  maxWidth: "100%", // Ensures the image scales to the container width
+                                  height: "auto", // Maintains the aspect ratio of the image
+                                  objectFit: "cover", // Keeps the image covering the space without distortion
+                                }}
+                              />
+                            </div>
+                            <div className="col-12">
+                              <h2
+                                className="fs-20 fw-bold text-wrap"
+                                style={{
+                                  wordBreak: "break-word",
+                                  overflowWrap: "break-word",
+                                  fontSize: "1.2rem", // Adjust font size for smaller screens
+                                }}
+                              >
+                                {dish.title}
+                              </h2>
+                            </div>
+                            <div className="col-12 mt-3 mb-3 text-wrap">
+                              <p>{dish.description}</p>
+                            </div>
+                            {dish?.link && (
+                              <div className="col-12 mt-3 mb-3 text-end">
+                                <Button
+                                  data-bs-toggle="tooltip"
+                                  data-bs-placement="top"
+                                  title="Visit to know more"
+                                  target="_blank"
+                                  href={dish?.link}
+                                >
+                                  visit
+                                  <i
+                                    style={{ transform: "rotate(90deg)" }}
+                                    class="bi bi-arrow-up"
+                                  ></i>
+                                </Button>
+                              </div>
+                            )}
+                          </div>
+                        ))
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </section>
+            )}
 
           {businessData?.gallery[0]?.startsWith("https") && (
             <section className="bg-white ">
@@ -1498,9 +1518,8 @@ export default function Template() {
                   {reviews?.map((testimonial, index) => (
                     <div key={index} className="testi-slide">
                       <div
-                        className={`testi-div p-4 ${
-                          index === currentSlide ? "testi-theme" : ""
-                        }`}
+                        className={`testi-div p-4 ${index === currentSlide ? "testi-theme" : ""
+                          }`}
                         style={{
                           backgroundColor:
                             index === currentSlide ? "#f0f8ff" : "#fff", // Light blue background for the active card
@@ -1558,9 +1577,8 @@ export default function Template() {
                                 return (
                                   <i
                                     key={i}
-                                    className={`bi ${
-                                      isFilled ? "bi-star-fill" : "bi-star"
-                                    }`}
+                                    className={`bi ${isFilled ? "bi-star-fill" : "bi-star"
+                                      }`}
                                     style={{
                                       fontSize: "14px", // Reduced star size
                                       color: isFilled ? "#FFD700" : "#ddd",

@@ -1,11 +1,15 @@
-import React, { useEffect, useState } from 'react';
-import Layout from '../components/Layout';
-import { Link, useParams } from 'react-router-dom';
-import { fetchBusiness, getCategoryBusiness, getCategoryData } from '../Functions/functions';
-import Loader from '../components/Loader/Loader';
+import React, { useEffect, useState } from "react";
+import Layout from "../components/Layout";
+import { Link, useParams } from "react-router-dom";
+import {
+  fetchBusiness,
+  getCategoryBusiness,
+  getCategoryData,
+} from "../Functions/functions";
+import Loader from "../components/Loader/Loader";
 import Placeholder from "../assets/images/placeholder.jpg";
 import PlaceholderBanner from "../assets/images/BannerPlaceholder.png";
-import debounce from 'lodash.debounce';
+import debounce from "lodash.debounce";
 
 export default function Business() {
   const [categoryData, setCategoryData] = useState([]);
@@ -13,7 +17,7 @@ export default function Business() {
   const [totalBusinessData, setTotalBusinessData] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const [loading, setLoading] = useState(true);
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
   const [limit, setLimit] = useState(10); // Adjusting the limit as needed
   const [visibleBusiness, setVisibleBusiness] = useState(10);
   const { id } = useParams();
@@ -30,32 +34,37 @@ export default function Business() {
       try {
         if (id) {
           // Fetch data for a specific category
-          console.log('Fetching category data...');
+          console.log("Fetching category data...");
           const category = await getCategoryData({
             categoryId: id,
             searchTerm,
             page: currentPage,
             limit,
           });
-          console.log('Category Data:', category);
+          console.log("Category Data:", category);
           setCategoryData(category.data);
 
-          const business = await getCategoryBusiness(currentPage, id, searchTerm, visibleBusiness);
-          console.log('Business Data:', business);
+          const business = await getCategoryBusiness(
+            currentPage,
+            id,
+            searchTerm,
+            visibleBusiness
+          );
+          console.log("Business Data:", business);
           setTotalBusinessData(business.data.totalCount);
           setBusinessData(business.data.data);
         } else {
           // Fetch all businesses if no category id is provided
-          console.log('Fetching all business data...');
+          console.log("Fetching all business data...");
           const business = await fetchBusiness(currentPage, visibleBusiness);
-          console.log('Business Data:', business);
+          console.log("Business Data:", business);
           setTotalBusinessData(business.data.totalCount);
           setBusinessData(business.data.data);
         }
       } catch (error) {
-        console.error('Error fetching data:', error);
+        console.error("Error fetching data:", error);
       } finally {
-        console.log('Data fetch complete');
+        console.log("Data fetch complete");
         setLoading(false); // Make sure this is being reached
       }
     };
@@ -87,18 +96,28 @@ export default function Business() {
   // if (loading) {
   //   return <Loader />;
   // }
+  const slugify = (text) => {
+    return text
+      .toLowerCase()
+      .replace(/ /g, "-") // Replace spaces with hyphens
+      .replace(/[^\w-]+/g, ""); // Remove non-word characters
+  };
 
   return (
     <Layout title="Business" navClass="home">
       <section className="business-view-banner">
         <img
-          src={id ? categoryData.coverImage : "/src/assets/images/businesses.jpg"}
+          src={
+            id ? categoryData.coverImage : "/src/assets/images/businesses.jpg"
+          }
           className="w-100 h-100"
           style={{ filter: "brightness(0.4)" }}
           alt=""
         />
         <div className="text-center image-title">
-          <h2 className="text-white">{id ? categoryData.name : "All Businesses"}</h2>
+          <h2 className="text-white">
+            {id ? categoryData.name : "All Businesses"}
+          </h2>
         </div>
       </section>
 
@@ -111,10 +130,10 @@ export default function Business() {
                   <span
                     className="input-group-text"
                     style={{
-                      backgroundColor: 'white',
-                      borderTopLeftRadius: '50px',
-                      borderBottomLeftRadius: '50px',
-                      border: '1px solid #ced4da',
+                      backgroundColor: "white",
+                      borderTopLeftRadius: "50px",
+                      borderBottomLeftRadius: "50px",
+                      border: "1px solid #ced4da",
                     }}
                   >
                     <i className="bi bi-search fw-bold"></i>
@@ -127,9 +146,9 @@ export default function Business() {
                     value={searchTerm}
                     onChange={handleSearch} // Immediate update with debounce for API call
                     style={{
-                      borderTopRightRadius: '50px',
-                      borderBottomRightRadius: '50px',
-                      borderLeft: 'none',
+                      borderTopRightRadius: "50px",
+                      borderBottomRightRadius: "50px",
+                      borderLeft: "none",
                     }}
                   />
                 </div>
@@ -144,10 +163,10 @@ export default function Business() {
           <div className="text-center mb-5">
             <h1 className="fw-bold">Discover the Top Businesses</h1>
             <p className="mt-3 text-center">
-            Explore the top-rated businesses in your area, 
-            highly recommended by locals and visitors alike.
-             Discover what makes these establishments stand out
-             and start your next great experience here!!
+              Explore the top-rated businesses in your area, highly recommended
+              by locals and visitors alike. Discover what makes these
+              establishments stand out and start your next great experience
+              here!!
             </p>
           </div>
 
@@ -156,12 +175,16 @@ export default function Business() {
               businessData.map((business) => (
                 <Link
                   to={
-                    business.selectedPlan?.isPremium
-                      ? `/business/premium/${business?._id}`
-                      : `/business/${business?._id}`
+                    business?.selectedPlan?.isPremium
+                      ? `/business/premium/${slugify(
+                          business.businessName
+                        )}/${business?._id}`
+                      : `/business/${slugify(
+                          business.businessName
+                        )}/${business?._id}`
                   }
                   key={business._id}
-                  className="text-decoration-none text-dark col-12 col-md-5 b-theme location-card mt-3"
+                  className="text-decoration-none text-dark col-12 col-md-5 b-theme location-card mt-3 business-card"
                 >
                   <div className="row p-2">
                     <div className="col-4 p-0">
@@ -173,7 +196,9 @@ export default function Business() {
                     </div>
                     <div className="col-8">
                       <div className="col-12 mb-2 mt-2">
-                        <h2 className='responsive-input '>{business.businessName}</h2>
+                        <h2 className="responsive-input ">
+                          {business.businessName}
+                        </h2>
                       </div>
                       <div className="col-12">
                         <span>{business.category.name}</span>
@@ -182,8 +207,9 @@ export default function Business() {
                         <h3 className="fs-16">
                           <i className="bi bi-crosshair"></i>
                           <span className="ms-1 fs-15">
-                            {business.address.buildingName}, {business.address.city},{" "}
-                            {business.address.landMark}, {business.address.streetName},{" "}
+                            {business.address.buildingName},{" "}
+                            {business.address.city}, {business.address.landMark}
+                            , {business.address.streetName},{" "}
                             {business.address.state}
                           </span>
                         </h3>
