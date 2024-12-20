@@ -34,6 +34,8 @@ const CreateProductPart = () => {
   const [spServiceImgPrev, setSpServiceImgPrev] = useState(null);
   const [selectedSpServiceIndex, setSelectedSpServiceIndex] = useState(null);
 
+  const [currentImage, setCurrentImage] = useState({ image: null, file: null, preview: null })
+
   const onCropComplete1 = (croppedAreaPercentage, croppedAreaPixels) => {
     setCroppedArea1(croppedAreaPixels);
   };
@@ -42,7 +44,7 @@ const CreateProductPart = () => {
     try {
       setCropLoading(true);
       const { fileUrl, blob } = await getCroppedImg(
-        spServiceImgPrev,
+        currentImage?.preview,
         croppedArea1
       );
 
@@ -105,6 +107,7 @@ const CreateProductPart = () => {
       // Update state with the selected file and index for cropping or further processing
       if (type === "specialService") {
         setSpServiceFile(file); // Store file for further use
+        setCurrentImage((prev) => ({ ...prev, file: file }))
         setSelectedSpServiceIndex(index); // Track the specific index for cropping or processing
       }
 
@@ -113,17 +116,18 @@ const CreateProductPart = () => {
 
         // Set the image preview and trigger the cropper for "specialService"
         if (type === "specialService") {
-          setSpServiceImgPrev(imagePreview); // Set preview for cropping
+          setCurrentImage((prev) => ({ ...prev, preview: imagePreview }))
+          // setSpServiceImgPrev(imagePreview); // Set preview for cropping
           setShowCropper1(true); // Open cropper modal
         }
 
         // Update the corresponding product data in the state
-        setSpecialService((prevData) => {
-          const updatedData = [...prevData.data];
-          updatedData[index].image = imagePreview; // Add image preview to the product
-          updatedData[index].errors = getValidationErrors(updatedData[index]); // Validate the product
-          return { ...prevData, data: updatedData };
-        });
+        // setSpecialService((prevData) => {
+        //   const updatedData = [...prevData.data];
+        //   updatedData[index].image = imagePreview; // Add image preview to the product
+        //   updatedData[index].errors = getValidationErrors(updatedData[index]); // Validate the product
+        //   return { ...prevData, data: updatedData };
+        // });
       };
 
       reader.readAsDataURL(file); // Read file as Data URL for preview
@@ -312,7 +316,7 @@ const CreateProductPart = () => {
                     style={{ height: "400px" }}
                   >
                     <Cropper
-                      image={spServiceImgPrev}
+                      image={currentImage?.preview}
                       crop={crop1}
                       zoom={zoom1}
                       aspect={4 / 3}
@@ -512,9 +516,8 @@ const CreateProductPart = () => {
                       />
                       <div
                         onClick={() => uploadImage("specialService", index)}
-                        className={`p-2 mt-2 add-logo-div ${
-                          p.errors?.imageError ? "error-border" : ""
-                        }`}
+                        className={`p-2 mt-2 add-logo-div ${p.errors?.imageError ? "error-border" : ""
+                          }`}
                       >
                         <span style={{ color: "grey" }}>(Ratio 4 : 3) </span>
                         <div className="text-center">
@@ -668,7 +671,7 @@ const CreateProductPart = () => {
                               key={index}
                               className="dish-div col-12 col-lg-6 text-center p-3"
                             >
-                              <div className="col-12 position-relative">
+                              <div className="col-12 position-relative ">
                                 <img
                                   src={dish.image}
                                   alt={dish.title}
@@ -696,9 +699,9 @@ const CreateProductPart = () => {
                         specialService?.data?.map((dish, index) => (
                           <div
                             key={index}
-                            className="dish-div col-12 col-lg-6 text-center p-3"
+                            className="dish-div col-12 col-lg-6 text-center p-3 "
                           >
-                            <div className="col-12 position-relative">
+                            <div className="col-12 position-relative ">
                               <img
                                 src={dish.image}
                                 alt={dish.title}

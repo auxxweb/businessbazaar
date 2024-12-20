@@ -38,9 +38,10 @@ const Subscription = () => {
         requestBody.selectedPlan = id;
         const res = await CreateBusinessDetails(requestBody);
         const resId = res?.data?._id || res?.data?.data?._id;
+        const resName = res?.data?.businessName || res?.data?.data?.businessName;
+
         if (res.success) {
-          navigate(`/business/${resId}`);
-          // dispatch(resetBusinessState());
+          navigate(`/business/${resName}/${resId}`);          // dispatch(resetBusinessState());
         }
       };
       submitData();
