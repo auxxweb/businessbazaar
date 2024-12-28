@@ -110,8 +110,8 @@ const router = createBrowserRouter([
   { path: "/business", element: <Business /> },
   { path: "/category/:id", element: <Business /> },
   // { path: "/business/:id", element: (<div className="relative"><Template /></div>),},
-  { path: "/business/:name/:id", element: (<div className="relative"><Template /></div>) },
-  { path: "/business/premium/:name/:id", element: <PremiumTemplate /> },
+  { path: "/profile/:name/:id", element: (<div className="relative"><Template /></div>) },
+  { path: "/profile/premium/:name/:id", element: <PremiumTemplate /> },
   { path: "/terms-and-conditions", element: <TermsAndConditions /> },
   {
     path: "/terms-and-conditions/:id",

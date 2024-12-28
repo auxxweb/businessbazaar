@@ -40,10 +40,10 @@ const BusinessesSection = ({
             <Link
               to={
                 business?.selectedPlan?.isPremium
-                  ? `/business/premium/${slugify(
+                  ? `/profile/premium/${slugify(
                       business.businessName
                     )}/${business?._id}`
-                  : `/business/${slugify(
+                  : `/profile/${slugify(
                       business.businessName
                     )}/${business?._id}`
               }

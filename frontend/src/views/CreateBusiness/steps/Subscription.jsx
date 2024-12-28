@@ -41,7 +41,7 @@ const Subscription = () => {
         const resName = res?.data?.businessName || res?.data?.data?.businessName;
 
         if (res.success) {
-          navigate(`/business/${resName}/${resId}`);          // dispatch(resetBusinessState());
+          navigate(`/profile/${resName}/${resId}`);          // dispatch(resetBusinessState());
         }
       };
       submitData();
