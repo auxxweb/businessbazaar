@@ -149,65 +149,68 @@ const ShareButton = ({ number, saveContactDetails }) => {
   // Trigger vCard generation
   // generateVCard(contact);
 
-  const handleScreenshot = async () => {
-    try {
-      // Select the screenshot button
-      const button = document.querySelector(".screenshot-button");
+  // const handleScreenshot = async () => {
+  //   try {
+  //     // Select the screenshot button
+  //     const button = document.querySelector(".screenshot-button");
+  
+  //     // Temporarily hide the button
+  //     if (button) {
+  //       button.style.visibility = "hidden"; // Make the button invisible
+  //     }
+  
+  //     // Ensure all images are fully loaded
+  //     const ensureImagesLoaded = async () => {
+  //       const images = Array.from(document.querySelectorAll("img"));
+  //       await Promise.all(
+  //         images.map((img) => {
+  //           return new Promise((resolve, reject) => {
+  //             if (img.complete) {
+  //               resolve(true); // Image is already loaded
+  //             } else {
+  //               img.onload = () => resolve(true); // Image loaded successfully
+  //               img.onerror = () => reject(new Error(`Failed to load image: ${img.src}`)); // Failed to load
+  //             }
+  //           });
+  //         })
+  //       );
+  //     };
+  
+  //     await ensureImagesLoaded(); // Ensure all images are ready before capturing
+  
+  //     // Capture the visible viewport (not the full page)
+  //     const canvas = await html2canvas(document.body, {
+  //       useCORS: true, // Fix for cross-origin images
+  //       allowTaint: false, // Do not taint the canvas
+  //       width: window.innerWidth, // Set width to the visible viewport
+  //       height: window.innerHeight, // Set height to the visible viewport
+  //       windowWidth: window.innerWidth, // Match the viewport width
+  //       windowHeight: window.innerHeight, // Match the viewport height
+  //       scrollX: window.scrollX, // Include scroll position in canvas
+  //       scrollY: window.scrollY, // Include scroll position in canvas
+  //     });
+  
+  //     // Restore the button visibility
+  //     if (button) {
+  //       button.style.visibility = "visible";
+  //     }
+  
+  //     // Convert the canvas to a PNG image
+  //     const image = canvas.toDataURL("image/png");
+  
+  //     // Create a link to download the image
+  //     const link = document.createElement("a");
+  //     link.href = image;
+  //     link.download = "screenshot.png"; // File name for the screenshot
+  //     document.body.appendChild(link); // Append the link to the DOM
+  //     link.click(); // Trigger the download
+  //     document.body.removeChild(link); // Remove the link from the DOM after clicking
+  //   } catch (error) {
+  //     console.error("Error taking screenshot:", error);
+  //   }
+  // };
 
-      // Temporarily hide the button
-      if (button) {
-        button.style.visibility = "hidden"; // Make the button invisible
-      }
-
-      // Ensure all images are fully loaded
-      const ensureImagesLoaded = async () => {
-        const images = Array.from(document.querySelectorAll("img"));
-        await Promise.all(
-          images.map((img) => {
-            return new Promise((resolve, reject) => {
-              if (img.complete) {
-                resolve(true); // Image is already loaded
-              } else {
-                img.onload = () => resolve(true); // Image loaded successfully
-                img.onerror = () =>
-                  reject(new Error(`Failed to load image: ${img.src}`)); // Failed to load
-              }
-            });
-          })
-        );
-      };
-
-      await ensureImagesLoaded(); // Ensure all images are ready before capturing
-
-      // Capture the visible viewport (not the full page)
-      const canvas = await html2canvas(document.documentElement, {
-        useCORS: true, // Fix for cross-origin images
-        allowTaint: false, // Do not taint the canvas
-        width: window.innerWidth, // Set width to the visible viewport
-        height: window.innerHeight, // Set height to the visible viewport
-        windowWidth: window.innerWidth, // Match the viewport width
-        windowHeight: window.innerHeight, // Match the viewport height
-      });
-
-      // Restore the button visibility
-      if (button) {
-        button.style.visibility = "visible";
-      }
-
-      // Convert the canvas to a PNG image
-      const image = canvas.toDataURL("image/png");
-
-      // Create a link to download the image
-      const link = document.createElement("a");
-      link.href = image;
-      link.download = "screenshot.png"; // File name for the screenshot
-      document.body.appendChild(link); // Append the link to the DOM
-      link.click(); // Trigger the download
-      document.body.removeChild(link); // Remove the link from the DOM after clicking
-    } catch (error) {
-      console.error("Error taking screenshot:", error);
-    }
-  };
+  
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -325,13 +328,13 @@ const ShareButton = ({ number, saveContactDetails }) => {
               Share on Social
             </button>
             {/* Mobile-Only Button */}
-            <button
+            {/* <button
               className="btn btn-outline-danger d-flex align-items-center gap-2 px-4 py-3 text-sm rounded shadow-sm d-md-none "
               onClick={handleScreenshot}
             >
               <FaCamera size={16} />
               Download Card
-            </button>
+            </button> */}
             {showQRCode && (
               <div
                 className="position inset-0 justify-content-center align-items-center   z-20"
