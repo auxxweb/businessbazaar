@@ -238,8 +238,8 @@ const ShareButton = ({ number, saveContactDetails }) => {
 
   console.log(showOptions);
   const handleOpenDialer = (phoneNumber) => {
-    // Format the phone number for dialer (remove spaces, add tel: protocol)
-    const formattedNumber = `tel:${phoneNumber.replace(/\s/g, '')}`;
+    // Ensure phoneNumber is a string
+    const formattedNumber = `tel:${String(phoneNumber).replace(/\s/g, '')}`;
     window.location.href = formattedNumber;
   };
 
