@@ -4,7 +4,7 @@ import "/src/assets/css/template.css";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import {
   createBusinessReview,
   fetchBusinessTemplate,
@@ -1181,32 +1181,28 @@ export default function Template() {
                                 <h2 className="fs-20 fw-bold">{dish.title}</h2>
                               </div>
                               <div className="col-12 mt-3 mb-3">
-                                <p>{dish?.description}</p>
+                                <p>{dish.description}</p>
                               </div>
                               {dish?.link && (
                                 <div className="col-12 mt-2 mb-4 text-end">
                                   {/* Button for mobile screens */}
-                                  <Link to={dish?.link}>
-                                  <button
-                                    className="btn btn-dark btn-xs mb-2 d-md-none" // Smaller button for mobile
+                                  <Button
+                                    data-bs-toggle="tooltip"
+                                    data-bs-placement="top"
+                                    title="Visit to know more"
+                                    target="_blank"
                                     href={dish?.link}
+                                    className="btn btn-dark btn-sm d-none d-md-inline-block"
                                   >
-                                  <a href={dish?.link} >View More{" "}</a>
-                                    
-                                    <i className="bi bi-arrow-right"></i>
-                                  </button>
-                                  </Link>
+                                    View More
+                                    <i
+                                      style={{ transform: "rotate(90deg)" }}
+                                      class="bi bi-arrow-right"
+                                    ></i>
+                                  </Button>
 
                                   {/* Button for larger screens */}
-                                  <Link to={dish?.link}>
-                                  <button
-                                    className="btn btn-dark btn-sm d-none d-md-inline-block" // Default size for larger screens
-                                    href={dish?.link}
-                                  >
-                                    View More{" "}
-                                    <i className="bi bi-arrow-right"></i>
-                                  </button>
-                                  </Link>
+                                
                                 </div>
                               )}
                             </div>
@@ -1249,11 +1245,12 @@ export default function Template() {
                                 title="Visit to know more"
                                 target="_blank"
                                 href={dish?.link}
+                                className="btn btn-dark btn-sm d-inline-block"
                               >
-                                visit
+                                View More
                                 <i
                                   style={{ transform: "rotate(90deg)" }}
-                                  className="bi bi-arrow-up"
+                                  class="bi bi-arrow-right"
                                 ></i>
                               </Button>
                             </div>
@@ -1327,11 +1324,12 @@ export default function Template() {
                                     title="Visit to know more"
                                     target="_blank"
                                     href={item?.link}
+                                    className="btn btn-dark btn-sm d-none d-md-inline-block"
                                   >
-                                    visit
+                                    View More
                                     <i
                                       style={{ transform: "rotate(90deg)" }}
-                                      className="bi bi-arrow-up"
+                                      class="bi bi-arrow-right"
                                     ></i>
                                   </Button>
                                 </div>
@@ -1424,11 +1422,12 @@ export default function Template() {
                                   title="Visit to know more"
                                   target="_blank"
                                   href={dish?.link}
+                                  className="btn btn-dark btn-sm d-inline-block"
                                 >
-                                  visit
+                                  View More
                                   <i
                                     style={{ transform: "rotate(90deg)" }}
-                                    className="bi bi-arrow-up"
+                                    className="bi bi-arrow-right"
                                   ></i>
                                 </Button>
                               </div>
@@ -1481,11 +1480,12 @@ export default function Template() {
                                 title="Visit to know more"
                                 target="_blank"
                                 href={dish?.link}
+                                className="btn btn-dark btn-sm d-inline-block"
                               >
-                                visit
+                                View More
                                 <i
                                   style={{ transform: "rotate(90deg)" }}
-                                  className="bi bi-arrow-up"
+                                  class="bi bi-arrow-right"
                                 ></i>
                               </Button>
                             </div>
