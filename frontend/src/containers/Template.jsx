@@ -4,7 +4,7 @@ import "/src/assets/css/template.css";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import {
   createBusinessReview,
   fetchBusinessTemplate,
@@ -1181,27 +1181,32 @@ export default function Template() {
                                 <h2 className="fs-20 fw-bold">{dish.title}</h2>
                               </div>
                               <div className="col-12 mt-3 mb-3">
-                                <p>{dish.description}</p>
+                                <p>{dish?.description}</p>
                               </div>
                               {dish?.link && (
                                 <div className="col-12 mt-2 mb-4 text-end">
                                   {/* Button for mobile screens */}
+                                  <Link to={dish?.link}>
                                   <button
                                     className="btn btn-dark btn-xs mb-2 d-md-none" // Smaller button for mobile
-                                    href={dish.link}
+                                    href={dish?.link}
                                   >
-                                    View More{" "}
+                                  <a href={dish?.link} >View More{" "}</a>
+                                    
                                     <i className="bi bi-arrow-right"></i>
                                   </button>
+                                  </Link>
 
                                   {/* Button for larger screens */}
+                                  <Link to={dish?.link}>
                                   <button
                                     className="btn btn-dark btn-sm d-none d-md-inline-block" // Default size for larger screens
-                                    href={dish.link}
+                                    href={dish?.link}
                                   >
                                     View More{" "}
                                     <i className="bi bi-arrow-right"></i>
                                   </button>
+                                  </Link>
                                 </div>
                               )}
                             </div>
@@ -1248,7 +1253,7 @@ export default function Template() {
                                 visit
                                 <i
                                   style={{ transform: "rotate(90deg)" }}
-                                  class="bi bi-arrow-up"
+                                  className="bi bi-arrow-up"
                                 ></i>
                               </Button>
                             </div>
@@ -1326,7 +1331,7 @@ export default function Template() {
                                     visit
                                     <i
                                       style={{ transform: "rotate(90deg)" }}
-                                      class="bi bi-arrow-up"
+                                      className="bi bi-arrow-up"
                                     ></i>
                                   </Button>
                                 </div>
@@ -1423,7 +1428,7 @@ export default function Template() {
                                   visit
                                   <i
                                     style={{ transform: "rotate(90deg)" }}
-                                    class="bi bi-arrow-up"
+                                    className="bi bi-arrow-up"
                                   ></i>
                                 </Button>
                               </div>
@@ -1480,7 +1485,7 @@ export default function Template() {
                                 visit
                                 <i
                                   style={{ transform: "rotate(90deg)" }}
-                                  class="bi bi-arrow-up"
+                                  className="bi bi-arrow-up"
                                 ></i>
                               </Button>
                             </div>
