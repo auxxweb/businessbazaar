@@ -14,7 +14,7 @@ import { saveContactToDevice } from "./saveContact";
 import html2canvas from "html2canvas";
 import domtoimage from "dom-to-image-more";
 
-const ShareButton = ({ number, saveContactDetails }) => {
+const ShareButton = ({ number, countryCode, saveContactDetails }) => {
   const [showOptions, setShowOptions] = useState(false);
   const [showQRCode, setShowQRCode] = useState(false);
   const [toastMessage, setToastMessage] = useState(""); // Toast message state
@@ -23,7 +23,9 @@ const ShareButton = ({ number, saveContactDetails }) => {
   const phoneNumber = number; // Replace with your WhatsApp number including the country code
 
   const handleClick = () => {
-    window.open(`https://wa.me/${phoneNumber}`, "_blank");
+    const defaultCountryCode = "+91"; // Default country code
+    const finalCountryCode = countryCode || defaultCountryCode; // Use default if not available
+    window.open(`https://wa.me/${finalCountryCode}${phoneNumber}`, "_blank");
   };
 
   const url = window.location.href; // Current page URL
@@ -153,12 +155,12 @@ const ShareButton = ({ number, saveContactDetails }) => {
   //   try {
   //     // Select the screenshot button
   //     const button = document.querySelector(".screenshot-button");
-  
+
   //     // Temporarily hide the button
   //     if (button) {
   //       button.style.visibility = "hidden"; // Make the button invisible
   //     }
-  
+
   //     // Ensure all images are fully loaded
   //     const ensureImagesLoaded = async () => {
   //       const images = Array.from(document.querySelectorAll("img"));
@@ -175,9 +177,9 @@ const ShareButton = ({ number, saveContactDetails }) => {
   //         })
   //       );
   //     };
-  
+
   //     await ensureImagesLoaded(); // Ensure all images are ready before capturing
-  
+
   //     // Capture the visible viewport (not the full page)
   //     const canvas = await html2canvas(document.body, {
   //       useCORS: true, // Fix for cross-origin images
@@ -189,15 +191,15 @@ const ShareButton = ({ number, saveContactDetails }) => {
   //       scrollX: window.scrollX, // Include scroll position in canvas
   //       scrollY: window.scrollY, // Include scroll position in canvas
   //     });
-  
+
   //     // Restore the button visibility
   //     if (button) {
   //       button.style.visibility = "visible";
   //     }
-  
+
   //     // Convert the canvas to a PNG image
   //     const image = canvas.toDataURL("image/png");
-  
+
   //     // Create a link to download the image
   //     const link = document.createElement("a");
   //     link.href = image;
@@ -209,8 +211,6 @@ const ShareButton = ({ number, saveContactDetails }) => {
   //     console.error("Error taking screenshot:", error);
   //   }
   // };
-
-  
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -239,7 +239,7 @@ const ShareButton = ({ number, saveContactDetails }) => {
   console.log(showOptions);
   const handleOpenDialer = (phoneNumber) => {
     // Ensure phoneNumber is a string
-    const formattedNumber = `tel:${String(phoneNumber).replace(/\s/g, '')}`;
+    const formattedNumber = `tel:${String(phoneNumber).replace(/\s/g, "")}`;
     window.location.href = formattedNumber;
   };
 
@@ -261,7 +261,7 @@ const ShareButton = ({ number, saveContactDetails }) => {
         onClick={() => setShowOptions(!showOptions)}
         style={{
           right: "16px", // Adjust for better visibility on all screen sizes
-          bottom: "16px",
+          bottom: phoneNumber ? "16px" : "80px",
           zIndex: 1050,
         }}
         ref={buttonRef}
@@ -270,18 +270,19 @@ const ShareButton = ({ number, saveContactDetails }) => {
       </button>
 
       {/* WhatsApp Button */}
-      <button
-        className="btn btn-success rounded-circle p-2 border-0 text-white position-fixed"
-        style={{
-          right: "16px", // Keep the same right value for alignment
-          bottom: "80px", // Adjust the bottom value to be below the Share Button
-          zIndex: 1050,
-        }}
-        onClick={handleClick}
-      >
-        <FaWhatsapp size={26} />
-      </button>
-
+      {phoneNumber && (
+        <button
+          className="btn btn-success rounded-circle p-2 border-0 text-white position-fixed"
+          style={{
+            right: "16px", // Keep the same right value for alignment
+            bottom: "80px", // Adjust the bottom value to be below the Share Button
+            zIndex: 1050,
+          }}
+          onClick={handleClick}
+        >
+          <FaWhatsapp size={26} />
+        </button>
+      )}
       <button
         className="btn btn-success rounded-circle p-2 border-0 text-white position-fixed d-sm-block d-lg-none"
         style={{

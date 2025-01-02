@@ -57,8 +57,8 @@ export const fetchBusiness = async (page, limit, search, location) => {
     if (response.status !== 200) {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
-
     const data = response.data;
+    console.log(data,'ithan slugggg testt')
 
     if (data.success) {
       return data;
