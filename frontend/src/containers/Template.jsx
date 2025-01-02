@@ -474,6 +474,7 @@ export default function Template() {
       },
     ],
   };
+  
 
   if (loading) {
     return (
@@ -1045,7 +1046,8 @@ export default function Template() {
                         </a>
                         <ShareButton
                           saveContactDetails={saveContact}
-                          number={businessData?.contactDetails?.primaryNumber}
+                          number={businessData?.contactDetails?.whatsAppNumber}
+                          countryCode={businessData?.contactDetails?.whatsappCountryCode}
                           logo={businessData?.logo}
                         />
                       </div>

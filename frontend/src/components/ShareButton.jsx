@@ -14,7 +14,7 @@ import { saveContactToDevice } from "./saveContact";
 import html2canvas from "html2canvas";
 import domtoimage from "dom-to-image-more";
 
-const ShareButton = ({ number, saveContactDetails }) => {
+const ShareButton = ({ number,countryCode, saveContactDetails }) => {
   const [showOptions, setShowOptions] = useState(false);
   const [showQRCode, setShowQRCode] = useState(false);
   const [toastMessage, setToastMessage] = useState(""); // Toast message state
@@ -22,9 +22,13 @@ const ShareButton = ({ number, saveContactDetails }) => {
   const buttonRef = useRef(null);
   const phoneNumber = number; // Replace with your WhatsApp number including the country code
 
+
   const handleClick = () => {
-    window.open(`https://wa.me/${phoneNumber}`, "_blank");
+    const defaultCountryCode = "+91"; // Default country code
+    const finalCountryCode = countryCode || defaultCountryCode; // Use default if not available
+    window.open(`https://wa.me/${finalCountryCode}${phoneNumber}`, "_blank");
   };
+  
 
   const url = window.location.href; // Current page URL
 

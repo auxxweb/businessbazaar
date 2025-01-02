@@ -13,11 +13,13 @@ const BusinessesSection = ({
   loadMoreBusiness,
 }) => {
   const slugify = (text) => {
+    if(!text) return text;
     return text
       .toLowerCase()
       .replace(/ /g, "-") // Replace spaces with hyphens
       .replace(/[^\w-]+/g, ""); // Remove non-word characters
   };
+  
   return (
     <section className="home-spot h-auto mb-5">
       <div className="container padding" id="business">
@@ -38,15 +40,12 @@ const BusinessesSection = ({
         <div className="row justify-content-around gap-2">
           {businessData?.map((business) => (
             <Link
-              to={
-                business?.selectedPlan?.isPremium
-                  ? `/profile/premium/${slugify(
-                      business.businessName
-                    )}/${business?._id}`
-                  : `/profile/${slugify(
-                      business.businessName
-                    )}/${business?._id}`
-              }
+            to={
+              business?.selectedPlan?.isPremium
+                ? `/profile/premium/${slugify(business?.slug) }/${business?._id}`
+                : `/profile/${slugify(business?.slug)}/${business?._id}`
+            }
+            
               key={business._id}
               className="text-decoration-none text-dark col-12 col-md-5 b-theme location-card mt-3 business-card"
             >
