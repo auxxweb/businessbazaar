@@ -58,13 +58,12 @@ export default function Template() {
   const [reviewFetch, setreviewFetch] = useState(false);
   const [showAllReviews, setShowAllReviews] = useState(false);
   const [textColor, setTextColor] = useState("");
-
   const [review, setReview] = useState({
     rating: "",
     name: "",
     review: "",
   });
-
+  console.log(businessData, "sasasass");
   const [reviews, setReviews] = useState([]);
   const [reviewCount, setReviewCount] = useState(0);
 
@@ -1202,7 +1201,6 @@ export default function Template() {
                                   </Button>
 
                                   {/* Button for larger screens */}
-                                
                                 </div>
                               )}
                             </div>
@@ -1316,7 +1314,32 @@ export default function Template() {
                                 </span>
                                 <span className="fw-bold">{item.price}</span>
                               </div>
+
                               {item?.link && (
+                                <div className="col-12 mt-3 mb-3 text-end">
+                                  <Button
+                                    data-bs-toggle="tooltip"
+                                    data-bs-placement="top"
+                                    title="Visit to know more"
+                                    target="_blank"
+                                    href={
+                                      item?.link.startsWith("http://") ||
+                                      item?.link.startsWith("https://")
+                                        ? item?.link
+                                        : `https://${item?.link}` // Ensure the URL is absolute
+                                    }
+                                    className="btn btn-dark btn-sm d-inline-block"
+                                  >
+                                    View More
+                                    <i
+                                      style={{ transform: "rotate(90deg)" }}
+                                      className="bi bi-arrow-right"
+                                    ></i>
+                                  </Button>
+                                </div>
+                              )}
+
+                              {/* {item?.link && (
                                 <div className="col-12 mt-3 mb-3 text-end">
                                   <Button
                                     data-bs-toggle="tooltip"
@@ -1326,14 +1349,14 @@ export default function Template() {
                                     href={item?.link}
                                     className="btn btn-dark btn-sm d-none d-md-inline-block"
                                   >
-                                    View More
+                                    View Moreeee
                                     <i
                                       style={{ transform: "rotate(90deg)" }}
                                       class="bi bi-arrow-right"
                                     ></i>
                                   </Button>
                                 </div>
-                              )}
+                              )} */}
                             </div>
                           </div>
                         ))}
