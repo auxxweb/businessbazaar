@@ -10,10 +10,10 @@ const config = {
 const baseUrl = import.meta.env.VITE_APP_BE_API_KEY ?? "" ;
 // const baseUrl = "https://server.enconnect.in";
 
-export const fetchCategories = async (limit) => {
+export const fetchCategories = async (page,limit) => {
   try {
     const response = await axios.get(
-      `${baseUrl}/api/v1/category?limit=${limit}`,
+      `${baseUrl}/api/v1/category?page=${page}&limit=${limit}`,
       config
     );
 
@@ -34,25 +34,28 @@ export const fetchCategories = async (limit) => {
 
 export const fetchBusiness = async (page, limit, search, location) => {
   try {
-    console.log(location, "location");
-    const query = {
-      page: page,
-      limit: limit,
-    };
+    console.log(page,limit, "locationnnn");
+   
+    
+    // const query = {
+    //   page: page,
+    //   limit: 10,
+    // };
 
-    if (search) {
-      query.searchTerm = search;
-    }
+    // if (search) {
+    //   query.searchTerm = search;
+    // }
 
-    if (location.lat && location.lon) {
-      query.lat = location.lat;
-      query.lon = location.lon;
-    }
+    // if (location.lat && location.lon) {
+    //   query.lat = location.lat;
+    //   query.lon = location.lon;
+    // }
+    const response = await axios.get(`${baseUrl}/api/v1/business?page=${page}&limit=${limit}&searchTerm=${search}`, config);
 
-    const response = await axios.get(`${baseUrl}/api/v1/business`, {
-      params: query,
-      ...config,
-    });
+    // const response = await axios.get(`${baseUrl}/api/v1/business`, {
+    //   params: query,
+    //   ...config,
+    // });
 
     if (response.status !== 200) {
       throw new Error(`HTTP error! Status: ${response.status}`);
@@ -69,6 +72,39 @@ export const fetchBusiness = async (page, limit, search, location) => {
     console.error("Error fetching Business:", error.message);
   }
 };
+
+export const fetchBusinesses = async (page, limit, search, location) => {
+  try {
+
+    // const response = await axios.get(`${baseUrl}/api/v1/review?page=${page}&limit=${limit}&searchTerm=${searchTerm}`, config);
+    // const query = {
+    //   page,
+    //   limit,
+    // };
+
+    // if (search) {
+    //   query.searchTerm = search;
+    // }
+
+    // if (location?.lat && location?.lon) {
+    //   query.lat = location.lat;
+    //   query.lon = location.lon;
+    // }
+    const response = await axios.get(`${baseUrl}/api/v1/business?page=${page}&limit=${limit}&searchTerm=${search}`, config);
+
+
+    
+    if (response.status !== 200) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching businesses:", error.message);
+    return null;
+  }
+};
+
 
 export const fetchSearchCategory = async (search) => {
   try {
