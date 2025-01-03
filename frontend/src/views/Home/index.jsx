@@ -14,6 +14,7 @@ import {
   createReveiw,
   fetchBanners,
   fetchBusiness,
+  fetchBusinesses,
   fetchCategories,
   getAllReviews,
 } from "../../Functions/functions";
@@ -186,14 +187,14 @@ export default function Home() {
       }
     };
     fetchData();
-  }, [visibleBusiness, location]);
+  }, []);
 
 
   useEffect(() => {
     const fetchCategory = async () => {
       try {
         setCategoryLoading(true)
-        const categoryDetails = await fetchCategories(visibleCategories);
+        const categoryDetails = await fetchCategories(1,visibleCategories);
         setCategoryData(categoryDetails.data.data);
 
 
@@ -206,7 +207,7 @@ export default function Home() {
       }
     };
     fetchCategory();
-  }, [visibleCategories])
+  }, [])
 
   console.log(categoryData, 'ithenne')
 
@@ -217,24 +218,29 @@ export default function Home() {
     };
     fetchBanner();
   }, []);
+  const [currentPage1,setCurrentPage1]=useState(2)
 
   const loadMoreCategories = async () => {
     setCategoryLoading(true)
-    const categoryDetails = await fetchCategories(visibleCategories);
+    const categoryDetails = await fetchCategories(currentPage1,18);
+    setCurrentPage1(currentPage1+1)
     setVisibleCategories((prev) => prev + 20);
-    setCategoryData(((prev) => ([...prev, categoryDetails.data.data])))
+    setCategoryData((prev) => [...prev, ...categoryDetails.data.data])
     setCategoryLoading(false)
 
   };
 
+  const [currentPage,setCurrentPage]=useState(2)
   const loadMoreBusiness = async () => {
     setLoading(true)
-    const businessDetails = await fetchBusiness(BUSINESS_PAGE,
-      visibleBusiness,
+    const businessDetails = await fetchBusinesses(currentPage,
+      10,
       "",
       location);
+      setCurrentPage(currentPage + 1)
     setVisibleBusiness((prev) => prev + 10);
-    setCategoryData(((prev) => ([...prev, businessDetails.data.data])))
+    console.log(businessDetails.data)
+    setBusinessData((prev) => [...prev, ...businessDetails.data.data]);
     setLoading(false)
   };
 

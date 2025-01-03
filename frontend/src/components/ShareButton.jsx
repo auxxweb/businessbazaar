@@ -12,7 +12,6 @@ import {
 import QRCode from "qrcode";
 import { saveContactToDevice } from "./saveContact";
 import html2canvas from "html2canvas";
-import domtoimage from "dom-to-image-more";
 
 const ShareButton = ({ number, countryCode, saveContactDetails }) => {
   const [showOptions, setShowOptions] = useState(false);

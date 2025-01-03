@@ -1046,9 +1046,10 @@ export default function Template() {
                         </a>
                         <ShareButton
                           saveContactDetails={saveContact}
+                          logo={businessData?.logo}
+                          businessName={businessData?.businessName}
                           number={businessData?.contactDetails?.whatsAppNumber}
                           countryCode={businessData?.contactDetails?.whatsappCountryCode}
-                          logo={businessData?.logo}
                         />
                       </div>
                     </div>
