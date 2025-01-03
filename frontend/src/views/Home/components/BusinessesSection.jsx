@@ -42,8 +42,8 @@ const BusinessesSection = ({
             <Link
             to={
               business?.selectedPlan?.isPremium
-                ? `/profile/premium/${slugify(business?.slug) }/${business?._id}`
-                : `/profile/${slugify(business?.slug)}/${business?._id}`
+                ? `/profile/premium/${slugify(business?.businessName) }/${business?._id}`
+                : `/profile/${slugify(business?.businessName)}/${business?._id}`
             }
             
               key={business._id}
