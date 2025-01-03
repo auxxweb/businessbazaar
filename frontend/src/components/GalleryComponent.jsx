@@ -3,11 +3,6 @@ import { Carousel } from 'react-bootstrap';
 import Placeholder from '../assets/images/placeholder.jpg'; // Adjust the import path
 
 const ResponsiveGalleryCarousel = ({ galleryArray }) => {
-    // Sanitize the gallery array to replace invalid or empty images with the placeholder
-    const sanitizedGallery = (galleryArray || []).map((image) =>
-        image && image.trim().length > 0 ? image : Placeholder
-    );
-
     // Determine number of images per slide based on screen size
     const getImagesPerSlide = () => {
         return window.innerWidth >= 768 ? 3 : 1;
@@ -16,51 +11,35 @@ const ResponsiveGalleryCarousel = ({ galleryArray }) => {
     // Generate carousel items dynamically
     const generateCarouselItems = () => {
         const imagesPerSlide = getImagesPerSlide();
+        const gallery = galleryArray || [];
         const items = [];
 
         // Calculate total number of slides needed
-        const totalSlides = Math.ceil(sanitizedGallery.length / imagesPerSlide);
+        const totalSlides = Math.ceil(gallery.length / imagesPerSlide);
 
         for (let i = 0; i < totalSlides; i++) {
             const startIndex = i * imagesPerSlide;
             const endIndex = startIndex + imagesPerSlide;
-            const slideImages = sanitizedGallery.slice(startIndex, endIndex);
+            const slideImages = gallery.slice(startIndex, endIndex);
 
-            // Handle case when there's only one item on a slide (responsive)
-            if (slideImages.length === 1) {
-                items.push(
-                    <Carousel.Item key={i} interval={3000}>
-                        <div className="row d-flex justify-content-center">
-                            <div className="col-12">
+            items.push(
+                <Carousel.Item key={i} interval={3000}>
+                    <div className="row d-flex justify-content-around ">
+                        {slideImages.map((image, subIndex) => (
+                            <div
+                                key={subIndex}
+                                className={`col-${9 / imagesPerSlide}`}
+                            >
                                 <img
-                                    src={slideImages[0]}
-                                    alt={`Gallery image ${startIndex + 1}`}
+                                    src={image && image.length > 0 ? image : Placeholder}
+                                    alt={`Gallery image ${startIndex + subIndex + 1}`}
                                     className="w-100"
                                 />
                             </div>
-                        </div>
-                    </Carousel.Item>
-                );
-            } else {
-                items.push(
-                    <Carousel.Item key={i} interval={3000}>
-                        <div className="row d-flex justify-content-around">
-                            {slideImages.map((image, subIndex) => (
-                                <div
-                                    key={subIndex}
-                                    className={`col-${12 / imagesPerSlide}`}
-                                >
-                                    <img
-                                        src={image}
-                                        alt={`Gallery image ${startIndex + subIndex + 1}`}
-                                        className="w-100"
-                                    />
-                                </div>
-                            ))}
-                        </div>
-                    </Carousel.Item>
-                );
-            }
+                        ))}
+                    </div>
+                </Carousel.Item>
+            );
         }
 
         return items;
