@@ -178,8 +178,8 @@ export default function Business() {
                 <Link
                 to={
                   business?.selectedPlan?.isPremium
-                    ? `/profile/premium/${slugify(business?.slug )}/${business?._id}`
-                    : `/profile/${slugify(business?.slug) }/${business?._id}`
+                    ? `/profile/premium/${slugify(business?.businessName )}/${business?._id}`
+                    : `/profile/${slugify(business?.businessName) }/${business?._id}`
                 }
                   key={business._id}
                   className="text-decoration-none text-dark col-12 col-md-5 b-theme location-card mt-3 business-card"
