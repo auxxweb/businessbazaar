@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { QRCodeCanvas } from "qrcode.react";
+import  QRCodeStyling  from "qr-code-styling";
+
 import {
   FaShareAlt,
   FaLink,
@@ -13,73 +15,129 @@ import QRCode from "qrcode";
 import { saveContactToDevice } from "./saveContact";
 import html2canvas from "html2canvas";
 
-const ShareButton = ({ number, countryCode, saveContactDetails }) => {
+const ShareButton = ({ number, countryCode,logoUrl,businessName,theme, saveContactDetails }) => {
   const [showOptions, setShowOptions] = useState(false);
   const [showQRCode, setShowQRCode] = useState(false);
   const [toastMessage, setToastMessage] = useState(""); // Toast message state
   const optionsRef = useRef(null);
   const buttonRef = useRef(null);
   const phoneNumber = number; // Replace with your WhatsApp number including the country code
+  const qrCodeRef = useRef(null);
 
   const handleClick = () => {
     const defaultCountryCode = "+91"; // Default country code
     const finalCountryCode = countryCode || defaultCountryCode; // Use default if not available
     window.open(`https://wa.me/${finalCountryCode}${phoneNumber}`, "_blank");
   };
-
   const url = window.location.href; // Current page URL
 
+  useEffect(() => {
+    if (url && showQRCode && qrCodeRef.current) {
+      const qrCode = new QRCodeStyling({
+        width: 220,
+        height: 220,
+        data: url,
+        dotsOptions: {
+          color: "#000000",
+          type: "dots",
+        },
+        cornersSquareOptions: {
+          color: "#000000",
+          type: "extra-rounded",
+        },
+        cornersDotOptions: {
+          color: "#000000",
+          type: "dot",
+        },
+        backgroundOptions: {
+          color: "#FFFFFF",
+        },
+        imageOptions: {
+          crossOrigin: "anonymous",
+          margin: 0, // Remove padding around the logo
+          imageSize: 0.4, // Logo size
+        },
+        image: "/titleEnconnectLogo.png",
+      });
+  
+      // Clear previous QR code
+      qrCodeRef.current.innerHTML = "";
+      qrCode.append(qrCodeRef.current);
+    }
+  }, [url, showQRCode]);
+  
+  
   const handleCopyLink = () => {
     navigator.clipboard.writeText(url).then(() => {
       setToastMessage("Link copied to clipboard!");
       setTimeout(() => setToastMessage(""), 2000); // Hide toast after 3 seconds
     });
   };
+ 
 
   const handleShareSocial = async () => {
     const url = window.location.href; // Current page URL
     const text = `Explore this page using the link below or scan the QR code:\n${url}`;
-
+  
     try {
-      // Create a temporary canvas element for the QR code
-      const tempCanvas = document.createElement("canvas");
-      const qrCodeSize = 200;
-
-      // Generate the QR Code
-      await QRCode.toCanvas(tempCanvas, url, {
-        width: qrCodeSize,
-        margin: 1,
+      // Create a new QRCodeStyling instance
+      const qrCode = new QRCodeStyling({
+        width: 220,
+        height: 220,
+        data: url,
+        dotsOptions: {
+          color: "#000000",
+          type: "dots",
+        },
+        cornersSquareOptions: {
+          color: "#000000",
+          type: "extra-rounded",
+        },
+        cornersDotOptions: {
+          color: "#000000",
+          type: "dot",
+        },
+        backgroundOptions: {
+          color: "#FFFFFF",
+        },
+        imageOptions: {
+          crossOrigin: "anonymous",
+          margin: 0, // Remove padding around the logo
+          imageSize: 0.4, // Logo size
+        },
+        image: "/titleEnconnectLogo.png",
       });
-
-      // Convert the QR code canvas to a Blob
-      tempCanvas.toBlob(async (blob) => {
-        if (!blob) {
-          alert("Failed to generate QR code image. Please try again.");
-          return;
+  
+      // Generate the QR code as a Blob
+      const blob = await new Promise((resolve, reject) => {
+        qrCode.getRawData("png").then((data) => {
+          resolve(data);
+        }).catch((err) => {
+          reject(err);
+        });
+      });
+  
+      // Create a file from the QR code blob
+      const qrFile = new File([blob], `${businessName}.png`, { type: "image/png" });
+  
+      // Check if the browser supports sharing files and URLs
+      if (navigator.share && navigator.canShare({ files: [qrFile] })) {
+        try {
+          // Share both text and files (QR code)
+          await navigator.share({
+            title: "Check out this awesome page!",
+            text,
+            url,
+            files: [qrFile],
+          });
+          console.log("Shared successfully!");
+        } catch (error) {
+          console.error("Error during sharing:", error);
+          alert("Failed to share. Please try again.");
         }
-
-        // Create a file from the QR code blob
-        const qrFile = new File([blob], "qrcode.png", { type: "image/png" });
-
-        // Check if the browser supports sharing files and URLs
-        if (navigator.share && navigator.canShare({ files: [qrFile] })) {
-          try {
-            // Share both text and files (QR code)
-            await navigator.share({
-              title: "Check out this awesome page!",
-              text,
-              url,
-              files: [qrFile],
-            });
-            console.log("Shared successfully!");
-          } catch (error) {
-            console.error("Error during sharing:", error);
-            alert("Failed to share. Please try again.");
-          }
-        } else {
-          alert("Sharing is not supported on this browser or device.");
-        }
-      }, "image/png");
+      } else {
+        alert("Sharing is not supported on this browser or device.");
+      }
     } catch (error) {
       console.error("Error generating QR code or sharing:", error);
       alert("Something went wrong. Please try again.");
@@ -337,14 +395,13 @@ const ShareButton = ({ number, countryCode, saveContactDetails }) => {
             </button> */}
             {showQRCode && (
               <div
-                className="position inset-0 justify-content-center align-items-center   z-20"
+                className="position inset-0 justify-content-center align-items-center z-20"
                 onClick={() => setShowQRCode(false)} // Close on outside click
               >
                 <div
                   className="bg-white p-8 rounded shadow-lg text-center position-relative"
                   style={{
                     width: "70%",
-
                     maxWidth: "400px",
                     margin: "0 auto",
                   }}
@@ -363,22 +420,25 @@ const ShareButton = ({ number, countryCode, saveContactDetails }) => {
                     style={{
                       width: "200px",
                       height: "200px",
-                      boxShadow: "0 4px 8px rgba(0, 0, 0, 0)",
+                      boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
                     }}
                   >
-                    <QRCodeCanvas value={url} size={190} />
+                    <div ref={qrCodeRef}></div>
                   </div>
 
                   <div className="mt-4 d-flex gap-2 justify-content-center">
                     <button
                       className="btn btn-success px-4"
                       onClick={() => {
-                        const qrCanvas = document.querySelector("canvas");
-                        const qrData = qrCanvas.toDataURL("image/png");
-                        const link = document.createElement("a");
-                        link.href = qrData;
-                        link.download = "qrcode.png";
-                        link.click();
+                        const qrCanvas =
+                          qrCodeRef.current.querySelector("canvas");
+                        if (qrCanvas) {
+                          const qrData = qrCanvas.toDataURL("image/png");
+                          const link = document.createElement("a");
+                          link.href = qrData;
+                          link.download = `${businessName}.png`;
+                          link.click();
+                        }
                       }}
                     >
                       Download

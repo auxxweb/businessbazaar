@@ -37,20 +37,21 @@ export const fetchBusiness = async (page, limit, search, location) => {
     console.log(page,limit, "locationnnn");
    
     
-    // const query = {
-    //   page: page,
-    //   limit: 10,
-    // };
+    const query = {
+     
+    };
 
     // if (search) {
     //   query.searchTerm = search;
     // }
 
-    // if (location.lat && location.lon) {
-    //   query.lat = location.lat;
-    //   query.lon = location.lon;
-    // }
-    const response = await axios.get(`${baseUrl}/api/v1/business?page=${page}&limit=${limit}&searchTerm=${search}`, config);
+    if (location.lat && location.lon) {
+      query.lat = location.lat;
+      query.lon = location.lon;
+    }
+    const response = await axios.get(`${baseUrl}/api/v1/business?page=${page}&limit=${limit}&searchTerm=${search}`,{
+      params: query,
+      config});
 
     // const response = await axios.get(`${baseUrl}/api/v1/business`, {
     //   params: query,
@@ -77,20 +78,21 @@ export const fetchBusinesses = async (page, limit, search, location) => {
   try {
 
     // const response = await axios.get(`${baseUrl}/api/v1/review?page=${page}&limit=${limit}&searchTerm=${searchTerm}`, config);
-    // const query = {
-    //   page,
-    //   limit,
-    // };
+    const query = {
+     
+    };
 
     // if (search) {
     //   query.searchTerm = search;
     // }
 
-    // if (location?.lat && location?.lon) {
-    //   query.lat = location.lat;
-    //   query.lon = location.lon;
-    // }
-    const response = await axios.get(`${baseUrl}/api/v1/business?page=${page}&limit=${limit}&searchTerm=${search}`, config);
+    if (location?.lat && location?.lon) {
+      query.lat = location.lat;
+      query.lon = location.lon;
+    }
+    const response = await axios.get(`${baseUrl}/api/v1/business?page=${page}&limit=${limit}&searchTerm=${search}`,{
+      params: query,
+      config});
 
 
     

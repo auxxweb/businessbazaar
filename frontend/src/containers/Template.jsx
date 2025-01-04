@@ -474,7 +474,6 @@ export default function Template() {
       },
     ],
   };
-  
 
   if (loading) {
     return (
@@ -1045,11 +1044,14 @@ export default function Template() {
                           </p>
                         </a>
                         <ShareButton
+                          theme={colorTheme}
                           saveContactDetails={saveContact}
-                          logo={businessData?.logo}
+                          logoUrl={businessData?.logo}
                           businessName={businessData?.businessName}
                           number={businessData?.contactDetails?.whatsAppNumber}
-                          countryCode={businessData?.contactDetails?.whatsappCountryCode}
+                          countryCode={
+                            businessData?.contactDetails?.whatsappCountryCode
+                          }
                         />
                       </div>
                     </div>
@@ -1525,7 +1527,9 @@ export default function Template() {
             </section>
           )}
 
-          {businessData?.gallery[0]?.startsWith("https") && (
+          {businessData?.gallery?.find((image) =>
+            image?.startsWith("https")
+          ) && (
             <section className="bg-white ">
               <div className="container p-top">
                 <div className="row align-items-center">
