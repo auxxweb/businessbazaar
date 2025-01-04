@@ -1045,11 +1045,13 @@ export default function Template() {
                           </p>
                         </a>
                         <ShareButton
+                          theme={colorTheme}
                           saveContactDetails={saveContact}
-                          logo={businessData?.logo}
+                          logoUrl={businessData?.logo}
                           businessName={businessData?.businessName}
                           number={businessData?.contactDetails?.whatsAppNumber}
                           countryCode={businessData?.contactDetails?.whatsappCountryCode}
+                          
                         />
                       </div>
                     </div>
