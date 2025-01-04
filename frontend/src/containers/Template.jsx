@@ -474,6 +474,7 @@ export default function Template() {
       },
     ],
   };
+  
 
   if (loading) {
     return (
@@ -1048,9 +1049,7 @@ export default function Template() {
                           logo={businessData?.logo}
                           businessName={businessData?.businessName}
                           number={businessData?.contactDetails?.whatsAppNumber}
-                          countryCode={
-                            businessData?.contactDetails?.whatsappCountryCode
-                          }
+                          countryCode={businessData?.contactDetails?.whatsappCountryCode}
                         />
                       </div>
                     </div>
@@ -1526,13 +1525,11 @@ export default function Template() {
             </section>
           )}
 
-          {businessData?.gallery?.find((image) =>
-            image?.startsWith("https")
-          ) && (
-            <section className="bg-white">
+          {businessData?.gallery[0]?.startsWith("https") && (
+            <section className="bg-white ">
               <div className="container p-top">
                 <div className="row align-items-center">
-                  <div className="col-10 col-md-12 mx-auto" id="gallery">
+                  <div className="col-10 col-md-12 mx-auto  " id="gallery">
                     <div className="col-12 my-5">
                       <h1 className="fw-bold text-center">Gallery</h1>
                     </div>
@@ -1544,7 +1541,6 @@ export default function Template() {
               </div>
             </section>
           )}
-
           <section className="" style={{ backgroundColor: "#F3F3F4" }}>
             <div className="container david-font p-top">
               <div className="col-12 text-center">
