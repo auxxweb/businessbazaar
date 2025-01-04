@@ -118,7 +118,7 @@ const ShareButton = ({ number, countryCode,logoUrl,businessName,theme, saveConta
       });
   
       // Create a file from the QR code blob
-      const qrFile = new File([blob], "qrcode.png", { type: "image/png" });
+      const qrFile = new File([blob], `${businessName}.png`, { type: "image/png" });
   
       // Check if the browser supports sharing files and URLs
       if (navigator.share && navigator.canShare({ files: [qrFile] })) {
@@ -436,7 +436,7 @@ const ShareButton = ({ number, countryCode,logoUrl,businessName,theme, saveConta
                           const qrData = qrCanvas.toDataURL("image/png");
                           const link = document.createElement("a");
                           link.href = qrData;
-                          link.download = "qrcode.png";
+                          link.download = `${businessName}.png`;
                           link.click();
                         }
                       }}

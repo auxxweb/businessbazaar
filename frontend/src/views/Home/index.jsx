@@ -187,7 +187,7 @@ export default function Home() {
       }
     };
     fetchData();
-  }, []);
+  }, [location]);
 
 
   useEffect(() => {
