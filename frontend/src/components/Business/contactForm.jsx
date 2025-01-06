@@ -3,6 +3,7 @@ import React, { useState } from 'react'
 // import 'src/ContactForm.css'; // Import the CSS file
 import 'react-phone-input-2/lib/style.css'
 import { useParams } from 'react-router'
+import { toast } from 'react-toastify'
 function ContactForm({ handleFormSubmit, businessData }) {
   const { id } = useParams()
   const [formData, setFormData] = useState({
@@ -17,20 +18,29 @@ function ContactForm({ handleFormSubmit, businessData }) {
   }
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
+  
+    // Validate phone number
+    if (!/^\d+$/.test(formData.phoneNumber)) {
+      toast.error("Please enter a valid phone number.");
+      return;
+    }
+  
     // Add your form submission logic here, e.g., sending data to a server
-    console.log(formData)
-    const success = await handleFormSubmit(e, formData)
-    // Reset form after submission
+    console.log(formData);
+    const success = await handleFormSubmit(e, formData);
+  
+    // Reset form after successful submission
     if (success) {
       setFormData({
         name: '',
         email: '',
         phoneNumber: '',
         message: '',
-      })
+      });
     }
-  }
+  };
+  
 
   return (
     <div className="contact-form-container bg-light">
