@@ -1234,7 +1234,7 @@ export default function Template() {
                                           </span>
                                         </span>
                                       ) : (
-                                        dish.description
+                                        dish.description 
                                       )}
                                     </p>
                                   </div>
@@ -1242,7 +1242,7 @@ export default function Template() {
                                     <div
                                       className="col-12 mt-3 mb-3 text-end"
                                       id={`view-more-btn-${index}`}
-                                      style={{ display: "none" }} // Initially hidden
+                                     
                                     >
                                       <Button
                                         data-bs-toggle="tooltip"
@@ -1336,7 +1336,7 @@ export default function Template() {
                                 <div
                                   className="col-12 mt-3 mb-3 text-end"
                                   id={`view-more-btn-${index}`}
-                                  style={{ display: "none" }} // Initially hidden
+                                 
                                 >
                                   <Button
                                     data-bs-toggle="tooltip"
@@ -1420,7 +1420,7 @@ export default function Template() {
                                     src={
                                       item?.image && item?.image.length > 0
                                         ? item.image
-                                        : ""
+                                        : Placeholder
                                     }
                                     alt="Product"
                                     className="w-100 h-100 rounded"
@@ -1531,9 +1531,7 @@ export default function Template() {
             </section>
           )}
 
-
-
-{(businessData?.service?.title ||
+          {(businessData?.service?.title ||
             businessData?.service?.description) && (
             <section
               className="h-auto"
@@ -1568,102 +1566,101 @@ export default function Template() {
                     ).length > 0 ? (
                       businessData.service.data.length > 2 ? (
                         <Slider {...setting2}>
-                          {businessData?.service?.data.map(
-                            (dish, index) =>
-                              dish.title ||
-                              dish.description ||
-                              dish.image ||
-                              dish.link ? (
-                                <div
-                                  key={index}
-                                  className="dish-div col-12 text-center p-3"
-                                  style={{ transition: "all 0.3s ease" }}
-                                >
-                                  <div className="col-12 position-relative text-center">
-                                    <img
-                                      src={
-                                        dish.image?.length > 0
-                                          ? dish.image
-                                          : Placeholder
-                                      }
-                                      alt={dish.title}
-                                      className="img-fluid"
-                                      style={{
-                                        width: "250px",
-                                        maxWidth: "250px",
-                                        objectFit: "cover",
-                                        height: "300px",
-                                      }}
-                                    />
-                                  </div>
-                                  <div className="col-12">
-                                    <h2 className="fs-20 fw-bold">
-                                      {dish.title}
-                                    </h2>
-                                  </div>
-                                  <div className="col-12 mt-3 mb-3">
-                                    <p>
-                                      {dish.description.length > 150 ? (
-                                        <span>
-                                          {dish.description.substring(0, 150)}
-                                          ...
-                                          <button
-                                            onClick={(e) => {
-                                              e.target.style.display = "none";
-                                              const fullText =
-                                                document.getElementById(
-                                                  `full-text-${index}`
-                                                );
-                                              fullText.style.display = "inline";
-                                              fullText.parentElement.parentElement.parentElement.style.height =
-                                                "auto"; // Dynamically increase card size
-                                              const viewMoreButton =
-                                                document.getElementById(
-                                                  `view-more-btn-${index}`
-                                                );
-                                              viewMoreButton.style.display =
-                                                "block"; // Show View More
-                                            }}
-                                            className="btn btn-link p-0"
-                                          >
-                                            Read More
-                                          </button>
-                                          <span
-                                            id={`full-text-${index}`}
-                                            style={{ display: "none" }}
-                                          >
-                                            {dish.description.substring(150)}
-                                          </span>
-                                        </span>
-                                      ) : (
-                                        dish.description
-                                      )}
-                                    </p>
-                                  </div>
-                                  {dish?.link && (
-                                    <div
-                                      className="col-12 mt-3 mb-3 text-end"
-                                      id={`view-more-btn-${index}`}
-                                      style={{ display: "none" }} // Initially hidden
-                                    >
-                                      <Button
-                                        data-bs-toggle="tooltip"
-                                        data-bs-placement="top"
-                                        title="Visit to know more"
-                                        target="_blank"
-                                        href={dish?.link}
-                                        className="btn btn-dark btn-sm d-inline-block"
-                                      >
-                                        View More
-                                        <i
-                                          style={{ transform: "rotate(90deg)" }}
-                                          className="bi bi-arrow-right"
-                                        ></i>
-                                      </Button>
-                                    </div>
-                                  )}
+                          {businessData?.service?.data.map((dish, index) =>
+                            dish.title ||
+                            dish.description ||
+                            dish.image ||
+                            dish.link ? (
+                              <div
+                                key={index}
+                                className="dish-div col-12 text-center p-3"
+                                style={{ transition: "all 0.3s ease" }}
+                              >
+                                <div className="col-12 position-relative text-center">
+                                  <img
+                                    src={
+                                      dish.image?.length > 0
+                                        ? dish.image
+                                        : Placeholder
+                                    }
+                                    alt={dish.title}
+                                    className="img-fluid"
+                                    style={{
+                                      width: "250px",
+                                      maxWidth: "250px",
+                                      objectFit: "cover",
+                                      height: "300px",
+                                    }}
+                                  />
                                 </div>
-                              ) : null
+                                <div className="col-12">
+                                  <h2 className="fs-20 fw-bold">
+                                    {dish.title}
+                                  </h2>
+                                </div>
+                                <div className="col-12 mt-3 mb-3">
+                                  <p>
+                                    {dish.description.length > 150 ? (
+                                      <span>
+                                        {dish.description.substring(0, 150)}
+                                        ...
+                                        <button
+                                          onClick={(e) => {
+                                            e.target.style.display = "none";
+                                            const fullText =
+                                              document.getElementById(
+                                                `full-text-${index}`
+                                              );
+                                            fullText.style.display = "inline";
+                                            fullText.parentElement.parentElement.parentElement.style.height =
+                                              "auto"; // Dynamically increase card size
+                                            const viewMoreButton =
+                                              document.getElementById(
+                                                `view-more-btn-${index}`
+                                              );
+                                            viewMoreButton.style.display =
+                                              "block"; // Show View More
+                                          }}
+                                          className="btn btn-link p-0"
+                                        >
+                                          Read More
+                                        </button>
+                                        <span
+                                          id={`full-text-${index}`}
+                                          style={{ display: "none" }}
+                                        >
+                                          {dish.description.substring(150)}
+                                        </span>
+                                      </span>
+                                    ) : (
+                                      dish.description
+                                    )}
+                                  </p>
+                                </div>
+                                {dish?.link && (
+                                  <div
+                                    className="col-12 mt-3 mb-3 text-end"
+                                    id={`view-more-btn-${index}`}
+                                   
+                                  >
+                                    <Button
+                                      data-bs-toggle="tooltip"
+                                      data-bs-placement="top"
+                                      title="Visit to know more"
+                                      target="_blank"
+                                      href={dish?.link}
+                                      className="btn btn-dark btn-sm d-inline-block"
+                                    >
+                                      View More
+                                      <i
+                                        style={{ transform: "rotate(90deg)" }}
+                                        className="bi bi-arrow-right"
+                                      ></i>
+                                    </Button>
+                                  </div>
+                                )}
+                              </div>
+                            ) : null
                           )}
                         </Slider>
                       ) : (
@@ -1738,7 +1735,7 @@ export default function Template() {
                                 <div
                                   className="col-12 mt-3 mb-3 text-end"
                                   id={`view-more-btn-${index}`}
-                                  style={{ display: "none" }} // Initially hidden
+                                 
                                 >
                                   <Button
                                     data-bs-toggle="tooltip"
@@ -1766,7 +1763,7 @@ export default function Template() {
               </div>
             </section>
           )}
- 
+
           {/* {(businessData?.service?.title ||
             businessData?.service?.description) && (
             <section
