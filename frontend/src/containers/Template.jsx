@@ -1157,15 +1157,82 @@ export default function Template() {
                 </div>
                 <div className="col-12">
                   <div className="col-12 mb-5 david-font row justify-content-center gap-3">
-                    {businessData.specialServices.data.length > 2 ? (
-                      <Slider {...setting2}>
-                        {businessData?.specialServices?.data.map(
-                          (dish, index) => (
+                    {businessData?.specialServices?.data?.filter(
+                      (dish) =>
+                        dish.title ||
+                        dish.description ||
+                        dish.image ||
+                        dish.link
+                    ).length > 0 ? (
+                      businessData.specialServices.data.length > 2 ? (
+                        <Slider {...setting2}>
+                          {businessData?.specialServices?.data.map(
+                            (dish, index) =>
+                              dish.title ||
+                              dish.description ||
+                              dish.image ||
+                              dish.link ? (
+                                <div
+                                  key={index}
+                                  className="dish-div col-12 text-center p-3"
+                                >
+                                  <div className="col-12 position-relative text-center">
+                                    <img
+                                      src={
+                                        dish.image && dish.image.length > 0
+                                          ? dish.image
+                                          : Placeholder
+                                      }
+                                      alt={dish.title}
+                                      className="img-fluid"
+                                      style={{
+                                        width: "250px",
+                                        maxWidth: "250px",
+                                        objectFit: "cover",
+                                      }}
+                                    />
+                                  </div>
+                                  <div className="col-12">
+                                    <h2 className="fs-20 fw-bold">
+                                      {dish.title}
+                                    </h2>
+                                  </div>
+                                  <div className="col-12 mt-3 mb-3">
+                                    <p>{dish.description}</p>
+                                  </div>
+                                  {dish?.link && (
+                                    <div className="col-12 mt-2 mb-4 text-end">
+                                      <Button
+                                        data-bs-toggle="tooltip"
+                                        data-bs-placement="top"
+                                        title="Visit to know more"
+                                        target="_blank"
+                                        href={dish?.link}
+                                        className="btn btn-dark btn-sm d-none d-md-inline-block"
+                                      >
+                                        View More
+                                        <i
+                                          style={{ transform: "rotate(90deg)" }}
+                                          className="bi bi-arrow-right"
+                                        ></i>
+                                      </Button>
+                                    </div>
+                                  )}
+                                </div>
+                              ) : null
+                          )}
+                        </Slider>
+                      ) : (
+                        businessData.specialServices.data.map((dish, index) =>
+                          dish.title ||
+                          dish.description ||
+                          dish.image ||
+                          dish.link ? (
                             <div
                               key={index}
-                              className="dish-div col-12 text-center p-3"
+                              className="dish-div col-12 col-lg-6 text-center p-3"
                             >
-                              <div className="col-12 position-relative text-center">
+                              <div className="col-12 position-relative">
                                 <img
                                   src={
                                     dish.image && dish.image.length > 0
@@ -1173,9 +1240,9 @@ export default function Template() {
                                       : Placeholder
                                   }
                                   alt={dish.title}
-                                  className="img-fluid"
                                   style={{
-                                    width: "250px",
+                                    width: "100%",
+                                    height: "250px",
                                     maxWidth: "250px",
                                     objectFit: "cover",
                                   }}
@@ -1188,79 +1255,28 @@ export default function Template() {
                                 <p>{dish.description}</p>
                               </div>
                               {dish?.link && (
-                                <div className="col-12 mt-2 mb-4 text-end">
-                                  {/* Button for mobile screens */}
+                                <div className="col-12 mt-3 mb-3 text-end">
                                   <Button
                                     data-bs-toggle="tooltip"
                                     data-bs-placement="top"
                                     title="Visit to know more"
                                     target="_blank"
                                     href={dish?.link}
-                                    className="btn btn-dark btn-sm d-none d-md-inline-block"
+                                    className="btn btn-dark btn-sm d-inline-block"
                                   >
                                     View More
                                     <i
                                       style={{ transform: "rotate(90deg)" }}
-                                      class="bi bi-arrow-right"
+                                      className="bi bi-arrow-right"
                                     ></i>
                                   </Button>
-
-                                  {/* Button for larger screens */}
                                 </div>
                               )}
                             </div>
-                          )
-                        )}
-                      </Slider>
-                    ) : (
-                      businessData.specialServices.data.map((dish, index) => (
-                        <div
-                          key={index}
-                          className="dish-div col-12 col-lg-6 text-center p-3"
-                        >
-                          <div className="col-12 position-relative">
-                            <img
-                              src={
-                                dish.image && dish.image.length > 0
-                                  ? dish.image
-                                  : Placeholder
-                              }
-                              alt={dish.title}
-                              style={{
-                                width: "100%",
-                                height: "250px",
-                                maxWidth: "250px",
-                                objectFit: "cover",
-                              }}
-                            />
-                          </div>
-                          <div className="col-12">
-                            <h2 className="fs-20 fw-bold">{dish.title}</h2>
-                          </div>
-                          <div className="col-12 mt-3 mb-3">
-                            <p>{dish.description}</p>
-                          </div>
-                          {dish?.link && (
-                            <div className="col-12 mt-3 mb-3 text-end">
-                              <Button
-                                data-bs-toggle="tooltip"
-                                data-bs-placement="top"
-                                title="Visit to know more"
-                                target="_blank"
-                                href={dish?.link}
-                                className="btn btn-dark btn-sm d-inline-block"
-                              >
-                                View More
-                                <i
-                                  style={{ transform: "rotate(90deg)" }}
-                                  class="bi bi-arrow-right"
-                                ></i>
-                              </Button>
-                            </div>
-                          )}
-                        </div>
-                      ))
-                    )}
+                          ) : null
+                        )
+                      )
+                    ) : null}
                   </div>
                 </div>
               </div>
@@ -1786,9 +1802,9 @@ export default function Template() {
                 <img
                   src="/src/assets/images/newsImage1.jpg"
                   alt=""
-                  className="w-100 rounded"
+                  className="w-100  rounded"
                 />
-                <div className="text-center newsletter-content position-absolute">
+                <div className=" text-center newsletter-content position-absolute">
                   <div className="d-none d-lg-block">
                     <h2 className="fs-43 mb-3 fw-bold text-black">
                       Create Your Own Business <br />
@@ -1826,35 +1842,49 @@ export default function Template() {
                   </div>
 
                   <div className="d-block d-lg-none">
-                    <h2 className="fs-16 fw-bold text-white">
-                      Create Your Own Business <br />
-                      Subscribing To Our Newsletter
-                    </h2>
-                    <div className="row">
-                      <div className="col-lg-8">
-                        <input
-                          type="email"
-                          placeholder="Enter Your Email"
-                          style={{ border: "0 !important" }}
-                          required
-                          value={newsLetterEmail}
-                          onChange={(e) => setNewsLetterEmail(e.target?.value)}
-                          onInvalid={(e) =>
-                            e.target.setCustomValidity(
-                              "Please enter a valid email address"
-                            )
-                          }
-                          onInput={(e) => e.target.setCustomValidity("")}
-                          className="form-control form-control-lg"
-                        />
-                      </div>
-                      <div className="col-lg-4">
-                        <button
-                          onClick={handleNewsLetterSubmit}
-                          className="btn theme btn-lg w-100"
-                        >
-                          Subscribe
-                        </button>
+                    <div className="d-flex flex-column align-items-center">
+                      <h2 className="fs-16 fw-bold text-white text-center mb-3">
+                        Create Your Own Business <br />
+                        Subscribing To Our Newsletter
+                      </h2>
+                      <div className="row w-100">
+                        <div className="col-7">
+                          <input
+                            type="email"
+                            placeholder="Enter Your Email"
+                            style={{
+                              border: "0 !important",
+                              fontSize: "14px", // For input text size
+                            }}
+                            required
+                            value={newsLetterEmail}
+                            onChange={(e) =>
+                              setNewsLetterEmail(e.target?.value)
+                            }
+                            onInvalid={(e) =>
+                              e.target.setCustomValidity(
+                                "Please enter a valid email address"
+                              )
+                            }
+                            onInput={(e) => e.target.setCustomValidity("")}
+                            className="form-control form-control-lg placeholder-small"
+                          />
+                        </div>
+                        <div className="col-5">
+                          <button
+                            style={{
+                              fontSize: "16px",
+                              paddingBottom: "10px",
+                              paddingLeft: "10px",
+                              paddingTop: "10px",
+                              paddingRight: "10px",
+                            }}
+                            onClick={handleNewsLetterSubmit}
+                            className="btn theme btn-lg w-100"
+                          >
+                            Subscribe
+                          </button>
+                        </div>
                       </div>
                     </div>
                   </div>
