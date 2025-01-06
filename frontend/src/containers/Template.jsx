@@ -1142,12 +1142,12 @@ export default function Template() {
                 <div className="col-12 mb-5">
                   <div className="mt-5 text-center">
                     <div className="col-12">
-                      <h1 className="text-center text-dark fw-bold david-font fw-bold banner-title fs-45">
+                      <h1 className="text-center text-dark fw-bold david-font banner-title fs-45">
                         {businessData?.specialServices?.title}
                       </h1>
                     </div>
                     <div className="row justify-content-center">
-                      <div className="col-12 col-lg-6 ">
+                      <div className="col-12 col-lg-6">
                         <p className="text-secondary text-center mb-2">
                           {businessData?.specialServices?.description}
                         </p>
@@ -1156,7 +1156,7 @@ export default function Template() {
                   </div>
                 </div>
                 <div className="col-12">
-                  <div className="col-12 mb-5 david-font row justify-content-center gap-3">
+                  <div className="row justify-content-center gap-3">
                     {businessData?.specialServices?.data?.filter(
                       (dish) =>
                         dish.title ||
@@ -1175,11 +1175,12 @@ export default function Template() {
                                 <div
                                   key={index}
                                   className="dish-div col-12 text-center p-3"
+                                  style={{ transition: "all 0.3s ease" }}
                                 >
                                   <div className="col-12 position-relative text-center">
                                     <img
                                       src={
-                                        dish.image && dish.image.length > 0
+                                        dish.image?.length > 0
                                           ? dish.image
                                           : Placeholder
                                       }
@@ -1189,6 +1190,7 @@ export default function Template() {
                                         width: "250px",
                                         maxWidth: "250px",
                                         objectFit: "cover",
+                                        height: "300px",
                                       }}
                                     />
                                   </div>
@@ -1198,17 +1200,57 @@ export default function Template() {
                                     </h2>
                                   </div>
                                   <div className="col-12 mt-3 mb-3">
-                                    <p>{dish.description}</p>
+                                    <p>
+                                      {dish.description.length > 150 ? (
+                                        <span>
+                                          {dish.description.substring(0, 150)}
+                                          ...
+                                          <button
+                                            onClick={(e) => {
+                                              e.target.style.display = "none";
+                                              const fullText =
+                                                document.getElementById(
+                                                  `full-text-${index}`
+                                                );
+                                              fullText.style.display = "inline";
+                                              fullText.parentElement.parentElement.parentElement.style.height =
+                                                "auto"; // Dynamically increase card size
+                                              const viewMoreButton =
+                                                document.getElementById(
+                                                  `view-more-btn-${index}`
+                                                );
+                                              viewMoreButton.style.display =
+                                                "block"; // Show View More
+                                            }}
+                                            className="btn btn-link p-0"
+                                          >
+                                            Read More
+                                          </button>
+                                          <span
+                                            id={`full-text-${index}`}
+                                            style={{ display: "none" }}
+                                          >
+                                            {dish.description.substring(150)}
+                                          </span>
+                                        </span>
+                                      ) : (
+                                        dish.description
+                                      )}
+                                    </p>
                                   </div>
                                   {dish?.link && (
-                                    <div className="col-12 mt-2 mb-4 text-end">
+                                    <div
+                                      className="col-12 mt-3 mb-3 text-end"
+                                      id={`view-more-btn-${index}`}
+                                      style={{ display: "none" }} // Initially hidden
+                                    >
                                       <Button
                                         data-bs-toggle="tooltip"
                                         data-bs-placement="top"
                                         title="Visit to know more"
                                         target="_blank"
                                         href={dish?.link}
-                                        className="btn btn-dark btn-sm d-none d-md-inline-block"
+                                        className="btn btn-dark btn-sm d-inline-block"
                                       >
                                         View More
                                         <i
@@ -1231,18 +1273,19 @@ export default function Template() {
                             <div
                               key={index}
                               className="dish-div col-12 col-lg-6 text-center p-3"
+                              style={{ transition: "all 0.3s ease" }}
                             >
                               <div className="col-12 position-relative">
                                 <img
                                   src={
-                                    dish.image && dish.image.length > 0
+                                    dish.image?.length > 0
                                       ? dish.image
                                       : Placeholder
                                   }
                                   alt={dish.title}
                                   style={{
                                     width: "100%",
-                                    height: "250px",
+                                    height: "300px",
                                     maxWidth: "250px",
                                     objectFit: "cover",
                                   }}
@@ -1252,10 +1295,49 @@ export default function Template() {
                                 <h2 className="fs-20 fw-bold">{dish.title}</h2>
                               </div>
                               <div className="col-12 mt-3 mb-3">
-                                <p>{dish.description}</p>
+                                <p>
+                                  {dish.description.length > 150 ? (
+                                    <span>
+                                      {dish.description.substring(0, 150)}...
+                                      <button
+                                        onClick={(e) => {
+                                          e.target.style.display = "none";
+                                          const fullText =
+                                            document.getElementById(
+                                              `full-text-${index}`
+                                            );
+                                          fullText.style.display = "inline";
+                                          fullText.parentElement.parentElement.parentElement.style.height =
+                                            "auto"; // Dynamically increase card size
+                                          const viewMoreButton =
+                                            document.getElementById(
+                                              `view-more-btn-${index}`
+                                            );
+                                          viewMoreButton.style.display =
+                                            "block"; // Show View More
+                                        }}
+                                        className="btn btn-link p-0"
+                                      >
+                                        Read More
+                                      </button>
+                                      <span
+                                        id={`full-text-${index}`}
+                                        style={{ display: "none" }}
+                                      >
+                                        {dish.description.substring(150)}
+                                      </span>
+                                    </span>
+                                  ) : (
+                                    dish.description
+                                  )}
+                                </p>
                               </div>
                               {dish?.link && (
-                                <div className="col-12 mt-3 mb-3 text-end">
+                                <div
+                                  className="col-12 mt-3 mb-3 text-end"
+                                  id={`view-more-btn-${index}`}
+                                  style={{ display: "none" }} // Initially hidden
+                                >
                                   <Button
                                     data-bs-toggle="tooltip"
                                     data-bs-placement="top"
@@ -1282,10 +1364,11 @@ export default function Template() {
               </div>
             </section>
           )}
+
           {(businessData?.productSection?.title ||
             businessData?.productSection?.description) && (
             <section className="bg-white h-auto david-font" id="menu">
-              <div className="container  p-top">
+              <div className="container p-top">
                 <div className="col-12 mb-5">
                   <div className="row justify-content-center">
                     <div className="col-12 col-md-6 text-center">
@@ -1294,7 +1377,7 @@ export default function Template() {
                       </h1>
                     </div>
                     <div className="row justify-content-center">
-                      <div className="col-12 col-lg-6 ">
+                      <div className="col-12 col-lg-6">
                         <p className="text-secondary text-center mb-2">
                           {businessData?.productSection?.description}
                         </p>
@@ -1306,49 +1389,363 @@ export default function Template() {
                 <div className="mt-5 david-font">
                   <div className="mb-5">
                     {businessData?.productSection?.data?.length > 0 && (
-                      <div className="row mb-3">
-                        {businessData.productSection.data.map((item, index) => (
-                          <div
-                            className="col-12 col-lg-6 mt-3 mx-auto"
-                            style={{ padding: "0 30px" }}
-                            key={index}
-                          >
-                            <div className="row product-section align-items-center">
-                              <div className="col-2">
+                      <div className="row g-4">
+                        {businessData.productSection.data.map((item, index) =>
+                          item.title ||
+                          item.description ||
+                          item.image ||
+                          item.price ? (
+                            <div
+                              className="col-12 col-md-6 mx-auto"
+                              key={index}
+                            >
+                              <div
+                                className="d-flex align-items-center bg-light rounded shadow-sm"
+                                style={{
+                                  minHeight: "180px",
+                                  maxWidth: "100%",
+                                  padding: "15px",
+                                }}
+                              >
+                                {/* Image Section */}
+                                <div
+                                  className="me-3"
+                                  style={{
+                                    flex: "0 0 30%",
+                                    maxHeight: "150px",
+                                    overflow: "hidden",
+                                  }}
+                                >
+                                  <img
+                                    src={
+                                      item?.image && item?.image.length > 0
+                                        ? item.image
+                                        : ""
+                                    }
+                                    alt="Product"
+                                    className="w-100 h-100 rounded"
+                                    style={{
+                                      objectFit: "cover",
+                                    }}
+                                  />
+                                </div>
+
+                                {/* Content Section */}
+                                <div className="flex-grow-1">
+                                  <h1 className="fs-20 fw-bold mb-2">
+                                    {item.title}
+                                  </h1>
+
+                                  {/* Description with Read More */}
+                                  <p
+                                    className="text-muted mb-2"
+                                    style={{
+                                      overflow: "hidden",
+                                      display: "-webkit-box",
+                                      WebkitBoxOrient: "vertical",
+                                      WebkitLineClamp: "3",
+                                      transition: "all 0.3s",
+                                    }}
+                                    id={`desc-${index}`}
+                                  >
+                                    {item.description}
+                                  </p>
+                                  {item.description &&
+                                    item.description.length > 100 && (
+                                      <button
+                                        className="btn btn-link p-0"
+                                        style={{
+                                          fontSize: "14px",
+                                          textDecoration: "none",
+                                          color: "#007bff",
+                                          cursor: "pointer",
+                                        }}
+                                        onClick={() => {
+                                          const desc = document.getElementById(
+                                            `desc-${index}`
+                                          );
+                                          if (
+                                            desc.style.WebkitLineClamp === "3"
+                                          ) {
+                                            desc.style.WebkitLineClamp =
+                                              "unset";
+                                          } else {
+                                            desc.style.WebkitLineClamp = "3";
+                                          }
+                                        }}
+                                      >
+                                        Read More
+                                      </button>
+                                    )}
+
+                                  {/* Price Highlight */}
+                                  <div className="d-flex justify-content-between align-items-center mt-2">
+                                    <div>
+                                      {item.price && (
+                                        <span
+                                          className="fw-bold"
+                                          style={{
+                                            color: "black",
+                                            fontSize: "18px",
+                                          }}
+                                        >
+                                          <span style={{ color: "blue" }}>
+                                            Price:
+                                          </span>
+                                          ₹{item.price}
+                                        </span>
+                                      )}
+                                    </div>
+                                    {item?.link && (
+                                      <Button
+                                        data-bs-toggle="tooltip"
+                                        data-bs-placement="top"
+                                        title="Visit to know more"
+                                        target="_blank"
+                                        href={
+                                          item?.link.startsWith("http://") ||
+                                          item?.link.startsWith("https://")
+                                            ? item?.link
+                                            : `https://${item?.link}` // Ensure the URL is absolute
+                                        }
+                                        className="btn btn-dark btn-sm"
+                                      >
+                                        View More
+                                        <i
+                                          style={{ transform: "rotate(90deg)" }}
+                                          className="bi bi-arrow-right ms-1"
+                                        ></i>
+                                      </Button>
+                                    )}
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          ) : null
+                        )}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </section>
+          )}
+
+
+
+{(businessData?.service?.title ||
+            businessData?.service?.description) && (
+            <section
+              className="h-auto"
+              id="services"
+              style={{ backgroundColor: "#F3F3F4" }}
+            >
+              <div className="container p-top">
+                <div className="col-12 mb-5">
+                  <div className="mt-5 text-center">
+                    <div className="col-12">
+                      <h1 className="text-center text-dark fw-bold david-font banner-title fs-45">
+                        {businessData?.service?.title}
+                      </h1>
+                    </div>
+                    <div className="row justify-content-center">
+                      <div className="col-12 col-lg-6">
+                        <p className="text-secondary text-center mb-2">
+                          {businessData?.service?.description}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="col-12">
+                  <div className="row justify-content-center gap-3">
+                    {businessData?.service?.data?.filter(
+                      (dish) =>
+                        dish.title ||
+                        dish.description ||
+                        dish.image ||
+                        dish.link
+                    ).length > 0 ? (
+                      businessData.service.data.length > 2 ? (
+                        <Slider {...setting2}>
+                          {businessData?.service?.data.map(
+                            (dish, index) =>
+                              dish.title ||
+                              dish.description ||
+                              dish.image ||
+                              dish.link ? (
+                                <div
+                                  key={index}
+                                  className="dish-div col-12 text-center p-3"
+                                  style={{ transition: "all 0.3s ease" }}
+                                >
+                                  <div className="col-12 position-relative text-center">
+                                    <img
+                                      src={
+                                        dish.image?.length > 0
+                                          ? dish.image
+                                          : Placeholder
+                                      }
+                                      alt={dish.title}
+                                      className="img-fluid"
+                                      style={{
+                                        width: "250px",
+                                        maxWidth: "250px",
+                                        objectFit: "cover",
+                                        height: "300px",
+                                      }}
+                                    />
+                                  </div>
+                                  <div className="col-12">
+                                    <h2 className="fs-20 fw-bold">
+                                      {dish.title}
+                                    </h2>
+                                  </div>
+                                  <div className="col-12 mt-3 mb-3">
+                                    <p>
+                                      {dish.description.length > 150 ? (
+                                        <span>
+                                          {dish.description.substring(0, 150)}
+                                          ...
+                                          <button
+                                            onClick={(e) => {
+                                              e.target.style.display = "none";
+                                              const fullText =
+                                                document.getElementById(
+                                                  `full-text-${index}`
+                                                );
+                                              fullText.style.display = "inline";
+                                              fullText.parentElement.parentElement.parentElement.style.height =
+                                                "auto"; // Dynamically increase card size
+                                              const viewMoreButton =
+                                                document.getElementById(
+                                                  `view-more-btn-${index}`
+                                                );
+                                              viewMoreButton.style.display =
+                                                "block"; // Show View More
+                                            }}
+                                            className="btn btn-link p-0"
+                                          >
+                                            Read More
+                                          </button>
+                                          <span
+                                            id={`full-text-${index}`}
+                                            style={{ display: "none" }}
+                                          >
+                                            {dish.description.substring(150)}
+                                          </span>
+                                        </span>
+                                      ) : (
+                                        dish.description
+                                      )}
+                                    </p>
+                                  </div>
+                                  {dish?.link && (
+                                    <div
+                                      className="col-12 mt-3 mb-3 text-end"
+                                      id={`view-more-btn-${index}`}
+                                      style={{ display: "none" }} // Initially hidden
+                                    >
+                                      <Button
+                                        data-bs-toggle="tooltip"
+                                        data-bs-placement="top"
+                                        title="Visit to know more"
+                                        target="_blank"
+                                        href={dish?.link}
+                                        className="btn btn-dark btn-sm d-inline-block"
+                                      >
+                                        View More
+                                        <i
+                                          style={{ transform: "rotate(90deg)" }}
+                                          className="bi bi-arrow-right"
+                                        ></i>
+                                      </Button>
+                                    </div>
+                                  )}
+                                </div>
+                              ) : null
+                          )}
+                        </Slider>
+                      ) : (
+                        businessData.service.data.map((dish, index) =>
+                          dish.title ||
+                          dish.description ||
+                          dish.image ||
+                          dish.link ? (
+                            <div
+                              key={index}
+                              className="dish-div col-12 col-lg-6 text-center p-3"
+                              style={{ transition: "all 0.3s ease" }}
+                            >
+                              <div className="col-12 position-relative">
                                 <img
                                   src={
-                                    item?.image && item?.image.length > 0
-                                      ? item.image
-                                      : ""
+                                    dish.image?.length > 0
+                                      ? dish.image
+                                      : Placeholder
                                   }
-                                  alt=""
-                                  className="w-100"
+                                  alt={dish.title}
+                                  style={{
+                                    width: "100%",
+                                    height: "300px",
+                                    maxWidth: "250px",
+                                    objectFit: "cover",
+                                  }}
                                 />
                               </div>
-                              <div className="col-8">
-                                <h1 className="fs-20 fw-bold">{item.title}</h1>
-                                <p className="mt-2">{item.description}</p>
+                              <div className="col-12">
+                                <h2 className="fs-20 fw-bold">{dish.title}</h2>
                               </div>
-                              <div className="col-2 p-0">
-                                <span className="fw-bold">
-                                  {item.price ? "Price : ₹" : ""}
-                                </span>
-                                <span className="fw-bold">{item.price}</span>
+                              <div className="col-12 mt-3 mb-3">
+                                <p>
+                                  {dish.description.length > 150 ? (
+                                    <span>
+                                      {dish.description.substring(0, 150)}...
+                                      <button
+                                        onClick={(e) => {
+                                          e.target.style.display = "none";
+                                          const fullText =
+                                            document.getElementById(
+                                              `full-text-${index}`
+                                            );
+                                          fullText.style.display = "inline";
+                                          fullText.parentElement.parentElement.parentElement.style.height =
+                                            "auto"; // Dynamically increase card size
+                                          const viewMoreButton =
+                                            document.getElementById(
+                                              `view-more-btn-${index}`
+                                            );
+                                          viewMoreButton.style.display =
+                                            "block"; // Show View More
+                                        }}
+                                        className="btn btn-link p-0"
+                                      >
+                                        Read More
+                                      </button>
+                                      <span
+                                        id={`full-text-${index}`}
+                                        style={{ display: "none" }}
+                                      >
+                                        {dish.description.substring(150)}
+                                      </span>
+                                    </span>
+                                  ) : (
+                                    dish.description
+                                  )}
+                                </p>
                               </div>
-
-                              {item?.link && (
-                                <div className="col-12 mt-3 mb-3 text-end">
+                              {dish?.link && (
+                                <div
+                                  className="col-12 mt-3 mb-3 text-end"
+                                  id={`view-more-btn-${index}`}
+                                  style={{ display: "none" }} // Initially hidden
+                                >
                                   <Button
                                     data-bs-toggle="tooltip"
                                     data-bs-placement="top"
                                     title="Visit to know more"
                                     target="_blank"
-                                    href={
-                                      item?.link.startsWith("http://") ||
-                                      item?.link.startsWith("https://")
-                                        ? item?.link
-                                        : `https://${item?.link}` // Ensure the URL is absolute
-                                    }
+                                    href={dish?.link}
                                     className="btn btn-dark btn-sm d-inline-block"
                                   >
                                     View More
@@ -1359,36 +1756,18 @@ export default function Template() {
                                   </Button>
                                 </div>
                               )}
-
-                              {/* {item?.link && (
-                                <div className="col-12 mt-3 mb-3 text-end">
-                                  <Button
-                                    data-bs-toggle="tooltip"
-                                    data-bs-placement="top"
-                                    title="Visit to know more"
-                                    target="_blank"
-                                    href={item?.link}
-                                    className="btn btn-dark btn-sm d-none d-md-inline-block"
-                                  >
-                                    View Moreeee
-                                    <i
-                                      style={{ transform: "rotate(90deg)" }}
-                                      class="bi bi-arrow-right"
-                                    ></i>
-                                  </Button>
-                                </div>
-                              )} */}
                             </div>
-                          </div>
-                        ))}
-                      </div>
-                    )}
+                          ) : null
+                        )
+                      )
+                    ) : null}
                   </div>
                 </div>
               </div>
             </section>
           )}
-          {(businessData?.service?.title ||
+
+          {/* {(businessData?.service?.title ||
             businessData?.service?.description) && (
             <section
               className="h-auto david-font"
@@ -1403,7 +1782,7 @@ export default function Template() {
                       </h1>
                     </div>
                     <div className="row justify-content-center">
-                      <div className="col-12 col-lg-6 ">
+                      <div className="col-12 col-lg-6">
                         <p className="text-secondary text-center mb-2">
                           {businessData?.service?.description}
                         </p>
@@ -1418,23 +1797,95 @@ export default function Template() {
                   >
                     {businessData?.service?.data?.length > 2 ? (
                       <Slider {...setting2}>
-                        {businessData?.service?.data?.map((dish, index) => (
+                        {businessData?.service?.data?.map((dish, index) =>
+                          dish.title ||
+                          dish.description ||
+                          dish.image ||
+                          dish.link ? (
+                            <div
+                              key={index}
+                              className="dish-div col-12 text-center p-3"
+                            >
+                              <div className="col-12 position-relative text-center">
+                                <img
+                                  src={
+                                    dish?.image && dish?.image?.length > 0
+                                      ? dish.image
+                                      : Placeholder
+                                  }
+                                  alt={dish?.title}
+                                  style={{
+                                    width: "250px",
+                                    height: "250px",
+                                    objectFit: "cover",
+                                  }}
+                                />
+                              </div>
+                              <div className="col-12">
+                                <h2
+                                  className="fs-20 fw-bold text-wrap"
+                                  style={{
+                                    wordBreak: "break-word",
+                                    overflowWrap: "break-word",
+                                  }}
+                                >
+                                  {dish.title}
+                                </h2>
+                              </div>
+                              <div
+                                className="col-12 mt-3 mb-3 text-wrap"
+                                style={{
+                                  wordBreak: "break-word",
+                                  overflowWrap: "break-word",
+                                }}
+                              >
+                                <p>{dish.description}</p>
+                              </div>
+                              {dish?.link && (
+                                <div className="col-12 mt-3 mb-3 text-end">
+                                  <Button
+                                    data-bs-toggle="tooltip"
+                                    data-bs-placement="top"
+                                    title="Visit to know more"
+                                    target="_blank"
+                                    href={dish?.link}
+                                    className="btn btn-dark btn-sm d-inline-block"
+                                  >
+                                    View More
+                                    <i
+                                      style={{ transform: "rotate(90deg)" }}
+                                      className="bi bi-arrow-right"
+                                    ></i>
+                                  </Button>
+                                </div>
+                              )}
+                            </div>
+                          ) : null
+                        )}
+                      </Slider>
+                    ) : (
+                      businessData?.service?.data?.map((dish, index) =>
+                        dish.title ||
+                        dish.description ||
+                        dish.image ||
+                        dish.link ? (
                           <div
                             key={index}
-                            className="dish-div col-12 text-center p-3"
+                            className="dish-div col-12 col-lg-6 text-center p-3"
                           >
-                            <div className="col-12 position-relative text-center">
+                            <div className="col-12 position-relative">
                               <img
                                 src={
-                                  dish?.image && dish?.image?.length > 0
+                                  dish.image && dish.image.length > 0
                                     ? dish.image
                                     : Placeholder
                                 }
-                                alt={dish?.title}
+                                alt={dish.title}
+                                className="img-fluid" // Bootstrap class to make the image responsive
                                 style={{
-                                  width: "250px",
-                                  height: "250px",
-                                  objectFit: "cover",
+                                  maxWidth: "100%", // Ensures the image scales to the container width
+                                  height: "auto", // Maintains the aspect ratio of the image
+                                  objectFit: "cover", // Keeps the image covering the space without distortion
                                 }}
                               />
                             </div>
@@ -1444,18 +1895,13 @@ export default function Template() {
                                 style={{
                                   wordBreak: "break-word",
                                   overflowWrap: "break-word",
+                                  fontSize: "1.2rem", // Adjust font size for smaller screens
                                 }}
                               >
                                 {dish.title}
                               </h2>
                             </div>
-                            <div
-                              className="col-12 mt-3 mb-3 text-wrap"
-                              style={{
-                                wordBreak: "break-word",
-                                overflowWrap: "break-word",
-                              }}
-                            >
+                            <div className="col-12 mt-3 mb-3 text-wrap">
                               <p>{dish.description}</p>
                             </div>
                             {dish?.link && (
@@ -1477,90 +1923,36 @@ export default function Template() {
                               </div>
                             )}
                           </div>
-                        ))}
-                      </Slider>
-                    ) : (
-                      businessData?.service?.data?.map((dish, index) => (
-                        <div
-                          key={index}
-                          className="dish-div col-12 col-lg-6 text-center p-3"
-                        >
-                          <div className="col-12 position-relative">
-                            <img
-                              src={
-                                dish.image && dish.image.length > 0
-                                  ? dish.image
-                                  : Placeholder
-                              }
-                              alt={dish.title}
-                              className="img-fluid" // Bootstrap class to make the image responsive
-                              style={{
-                                maxWidth: "100%", // Ensures the image scales to the container width
-                                height: "auto", // Maintains the aspect ratio of the image
-                                objectFit: "cover", // Keeps the image covering the space without distortion
-                              }}
-                            />
-                          </div>
-                          <div className="col-12">
-                            <h2
-                              className="fs-20 fw-bold text-wrap"
-                              style={{
-                                wordBreak: "break-word",
-                                overflowWrap: "break-word",
-                                fontSize: "1.2rem", // Adjust font size for smaller screens
-                              }}
-                            >
-                              {dish.title}
-                            </h2>
-                          </div>
-                          <div className="col-12 mt-3 mb-3 text-wrap">
-                            <p>{dish.description}</p>
-                          </div>
-                          {dish?.link && (
-                            <div className="col-12 mt-3 mb-3 text-end">
-                              <Button
-                                data-bs-toggle="tooltip"
-                                data-bs-placement="top"
-                                title="Visit to know more"
-                                target="_blank"
-                                href={dish?.link}
-                                className="btn btn-dark btn-sm d-inline-block"
-                              >
-                                View More
-                                <i
-                                  style={{ transform: "rotate(90deg)" }}
-                                  class="bi bi-arrow-right"
-                                ></i>
-                              </Button>
-                            </div>
-                          )}
-                        </div>
-                      ))
+                        ) : null
+                      )
                     )}
                   </div>
                 </div>
               </div>
             </section>
-          )}
+          )} */}
 
-          {businessData?.gallery?.find((image) =>
+          {businessData?.gallery?.some((image) =>
             image?.startsWith("https")
           ) && (
-            <section className="bg-white ">
+            <section className="bg-white">
               <div className="container p-top">
                 <div className="row align-items-center">
-                  <div className="col-10 col-md-12 mx-auto  " id="gallery">
+                  <div className="col-10 col-md-12 mx-auto" id="gallery">
                     <div className="col-12 my-5">
                       <h1 className="fw-bold text-center">Gallery</h1>
                     </div>
                     <ResponsiveGalleryCarousel
-                      galleryArray={businessData?.gallery}
+                      galleryArray={businessData?.gallery.filter((image) =>
+                        image?.startsWith("https")
+                      )}
                     />
                   </div>
                 </div>
               </div>
             </section>
           )}
+
           <section className="" style={{ backgroundColor: "#F3F3F4" }}>
             <div className="container david-font p-top">
               <div className="col-12 text-center">
