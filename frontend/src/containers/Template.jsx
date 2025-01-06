@@ -1234,7 +1234,7 @@ export default function Template() {
                                           </span>
                                         </span>
                                       ) : (
-                                        dish.description
+                                        dish.description 
                                       )}
                                     </p>
                                   </div>
@@ -1242,7 +1242,7 @@ export default function Template() {
                                     <div
                                       className="col-12 mt-3 mb-3 text-end"
                                       id={`view-more-btn-${index}`}
-                                      style={{ display: "none" }} // Initially hidden
+                                     
                                     >
                                       <Button
                                         data-bs-toggle="tooltip"
@@ -1336,7 +1336,7 @@ export default function Template() {
                                 <div
                                   className="col-12 mt-3 mb-3 text-end"
                                   id={`view-more-btn-${index}`}
-                                  style={{ display: "none" }} // Initially hidden
+                                 
                                 >
                                   <Button
                                     data-bs-toggle="tooltip"
@@ -1641,7 +1641,7 @@ export default function Template() {
                                   <div
                                     className="col-12 mt-3 mb-3 text-end"
                                     id={`view-more-btn-${index}`}
-                                    style={{ display: "none" }} // Initially hidden
+                                   
                                   >
                                     <Button
                                       data-bs-toggle="tooltip"
@@ -1735,7 +1735,7 @@ export default function Template() {
                                 <div
                                   className="col-12 mt-3 mb-3 text-end"
                                   id={`view-more-btn-${index}`}
-                                  style={{ display: "none" }} // Initially hidden
+                                 
                                 >
                                   <Button
                                     data-bs-toggle="tooltip"
