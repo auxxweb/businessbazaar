@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import Layout from "../../components/Layout";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -69,6 +69,10 @@ export default function Home() {
   const [reviews, setReviews] = useState([]);
   const [visibleCategories, setVisibleCategories] = useState(18);
   const [visibleBusiness, setVisibleBusiness] = useState(10);
+
+  const businessSectionRef = useRef(null);
+  const isInitialRender = useRef(true); // Track if it's the initial render
+
   const [review, setReview] = useState([
     {
       rating: "",
@@ -161,7 +165,6 @@ export default function Home() {
     window.open(`https://wa.me/${9447020270}`, "_blank");
   };
 
-
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -173,22 +176,28 @@ export default function Home() {
           location
         );
 
-        // const categoryDetails = await fetchCategories(visibleCategories);
-
-        // setCategoryData(categoryDetails.data.data);
         setBusinessData(businessDetails.data.data);
-
         setTotalBusinessData(businessDetails.data.totalCount);
       } catch (error) {
-        setLoading(false);
         console.error("Error fetching data:", error);
       } finally {
         setLoading(false);
       }
     };
-    fetchData();
-  }, [location]);
 
+    // Fetch data
+    fetchData();
+
+      if (businessSectionRef.current) {
+        if(location.lat && location.lon){
+          businessSectionRef.current.scrollIntoView({
+            behavior: "smooth",
+            block: "start",
+          });
+        }
+      }
+  
+  }, [location]);
 
   useEffect(() => {
     const fetchCategory = async () => {
@@ -290,6 +299,7 @@ export default function Home() {
       />
 
       <BusinessSection
+        scroll={businessSectionRef}
         businessData={businessData}
         loadMoreBusiness={loadMoreBusiness}
         loading={loading}

@@ -2,6 +2,7 @@ import { Helmet } from "react-helmet";
 import Header from "./Header";
 import "../assets/css/slick.css";
 import "../assets/css/slick-theme.css";
+import BusinessHeader from "./HeaderBusiness";
 
 export default function Layout({ title, children, sidebar = "true" }) {
   return (
@@ -39,7 +40,8 @@ export default function Layout({ title, children, sidebar = "true" }) {
       </Helmet>
       {sidebar === "true" ? (
         <div className="layout-sidebar overflow-hidden">
-          <Header />
+          {title ==='Business'? <BusinessHeader/>:<Header />}
+          
           <div className="">{children}</div>
         </div>
       ) : (

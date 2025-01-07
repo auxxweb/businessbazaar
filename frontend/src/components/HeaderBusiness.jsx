@@ -3,8 +3,9 @@ import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import { NavLink, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 
-export default function Header() {
+export default function BusinessHeader() {
   const [expanded, setExpanded] = useState(false);
   const navbarRef = useRef(null);
   const location = useLocation();
@@ -41,7 +42,11 @@ export default function Header() {
       ref={navbarRef}
     >
       <Container>
-        <Navbar.Brand href="/" className="fw-bold w-50" style={{ fontSize: "36px" }}>
+        <Navbar.Brand
+          href="/"
+          className="fw-bold w-50"
+          style={{ fontSize: "36px" }}
+        >
           <img
             src="/src/assets/images/enconnectLogo.png"
             alt=""
@@ -59,14 +64,14 @@ export default function Header() {
           <Nav className="ms-auto d-flex justify-content-between w-100">
             {!isReviewsPage ? (
               <>
-                <a
-                  href="#category"
+                <Link
+                  to="/#category" // Root-relative path with hash
                   className="text-decoration-none mx-3 my-auto"
                   style={{ fontSize: "16px" }}
-                  onClick={() => setExpanded(false)} // Close on link click
+                  onClick={() => setExpanded(false)}
                 >
                   Categories
-                </a>
+                </Link>
                 <a
                   href="#business"
                   className="text-decoration-none mx-3 my-auto"
@@ -75,14 +80,14 @@ export default function Header() {
                 >
                   Profile
                 </a>
-                <a
-                  href="#review"
+                <Link
+                  to="/reviews" // Root-relative path with hash
                   className="text-decoration-none mx-3 my-auto"
                   style={{ fontSize: "16px" }}
-                  onClick={() => setExpanded(false)} // Close on link click
+                  onClick={() => setExpanded(false)}
                 >
-                  Review
-                </a>
+                  Reviews 
+                </Link>
                 <a
                   href="https://admin.enconnect.in/"
                   target="_blank"
@@ -127,16 +132,13 @@ export default function Header() {
                     borderRadius: "50px",
                     padding: "8px 20px",
                     fontSize: "15px",
-
                   }}
                   onClick={() => setExpanded(false)} // Close on link click
                 >
                   Back to Home
                 </NavLink>
-
               </>
             )}
-
           </Nav>
         </Navbar.Collapse>
       </Container>

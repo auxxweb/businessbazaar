@@ -11,6 +11,7 @@ const BusinessesSection = ({
   visibleBusiness,
   totalBusinessData,
   loadMoreBusiness,
+  scroll
 }) => {
   const slugify = (text) => {
     if(!text) return text;
@@ -19,22 +20,21 @@ const BusinessesSection = ({
       .replace(/ /g, "-") // Replace spaces with hyphens
       .replace(/[^\w-]+/g, ""); // Remove non-word characters
   };
-  
   return (
-    <section className="home-spot h-auto mb-5">
+    <section className="home-spot h-auto mb-5" ref={scroll}>
       <div className="container padding" id="business">
         <div className="text-center mb-5 ">
           <h1 className="fw-bold" data-aos="fade-right">
-            Discover the Top Businesses
+            Discover the Top Profiles
           </h1>
           <p className="mt-3 text-center" data-aos="fade-left">
-            Explore the most popular business listings in your area through our
-            local business directory listing, highly rated by locals and
+            Explore the most popular profile listings in your area through our
+            local profile directory listing, highly rated by locals and
             visitors alike. Our platform makes it easy to find top-rated
-            businesses based on customer reviews and expert recommendations.
+            profiles based on customer reviews and expert recommendations.
             Whether you're looking for trusted services, shopping options, or
             professional solutions, our comprehensive directory ensures you
-            connect with the best businesses available!
+            connect with the best profiles available!
           </p>
         </div>
         <div className="row justify-content-around gap-2">

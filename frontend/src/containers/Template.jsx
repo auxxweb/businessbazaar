@@ -269,12 +269,26 @@ export default function Template() {
     })
       .then((response) => {
         setReviewLoading(false);
+
+        // Clear the form
         setReview({
           rating: "",
           name: "",
           review: "",
         });
+
         if (response?.data) {
+          // Update the reviews list directly
+          setReviews((prevReviews) => [
+            ...prevReviews,
+            {
+              ...review, // Use the review from state
+              createdAt: new Date().toISOString(), // Add timestamp
+              id: response.data.id, // Assuming the API returns the ID of the new review
+            },
+          ]);
+
+          // Show success toast
           toast.success("Thank you for your review!", {
             position: "top-right",
             autoClose: 3000,
@@ -284,21 +298,26 @@ export default function Template() {
             draggable: true,
             theme: "colored",
             style: {
-              backgroundColor: "#38a20e", // Custom red color for error
+              backgroundColor: "#38a20e", // Custom green color
               color: "#FFFFFF", // White text
             },
           });
+
+          // Trigger UI updates
           setreviewFetch(!reviewFetch);
           setVisible(false);
         }
       })
       .catch((err) => {
+        setReviewLoading(false);
+
+        // Clear the form
         setReview({
           rating: "",
           name: "",
           review: "",
         });
-        setReviewLoading(false);
+
         console.log(err.message);
       });
   };
@@ -1234,7 +1253,7 @@ export default function Template() {
                                           </span>
                                         </span>
                                       ) : (
-                                        dish.description 
+                                        dish.description
                                       )}
                                     </p>
                                   </div>
@@ -1242,7 +1261,6 @@ export default function Template() {
                                     <div
                                       className="col-12 mt-3 mb-3 text-end"
                                       id={`view-more-btn-${index}`}
-                                     
                                     >
                                       <Button
                                         data-bs-toggle="tooltip"
@@ -1336,7 +1354,6 @@ export default function Template() {
                                 <div
                                   className="col-12 mt-3 mb-3 text-end"
                                   id={`view-more-btn-${index}`}
-                                 
                                 >
                                   <Button
                                     data-bs-toggle="tooltip"
@@ -1443,7 +1460,7 @@ export default function Template() {
                                       overflow: "hidden",
                                       display: "-webkit-box",
                                       WebkitBoxOrient: "vertical",
-                                      WebkitLineClamp: "3",
+                                      WebkitLineClamp: "2", // Limit to 2 lines
                                       transition: "all 0.3s",
                                     }}
                                     id={`desc-${index}`}
@@ -1464,15 +1481,22 @@ export default function Template() {
                                           const desc = document.getElementById(
                                             `desc-${index}`
                                           );
+                                          const button =
+                                            document.getElementById(
+                                              `btn-${index}`
+                                            );
                                           if (
-                                            desc.style.WebkitLineClamp === "3"
+                                            desc.style.WebkitLineClamp === "2"
                                           ) {
                                             desc.style.WebkitLineClamp =
-                                              "unset";
+                                              "unset"; // Expand the text
+                                            button.textContent = "Read Less"; // Change button text to 'Read Less'
                                           } else {
-                                            desc.style.WebkitLineClamp = "3";
+                                            desc.style.WebkitLineClamp = "2"; // Collapse the text
+                                            button.textContent = "Read More"; // Change button text to 'Read More'
                                           }
                                         }}
+                                        id={`btn-${index}`} // Unique button ID
                                       >
                                         Read More
                                       </button>
@@ -1491,7 +1515,7 @@ export default function Template() {
                                         >
                                           <span style={{ color: "blue" }}>
                                             Price:
-                                          </span>
+                                          </span>{" "}
                                           ₹{item.price}
                                         </span>
                                       )}
@@ -1641,7 +1665,6 @@ export default function Template() {
                                   <div
                                     className="col-12 mt-3 mb-3 text-end"
                                     id={`view-more-btn-${index}`}
-                                   
                                   >
                                     <Button
                                       data-bs-toggle="tooltip"
@@ -1735,7 +1758,6 @@ export default function Template() {
                                 <div
                                   className="col-12 mt-3 mb-3 text-end"
                                   id={`view-more-btn-${index}`}
-                                 
                                 >
                                   <Button
                                     data-bs-toggle="tooltip"

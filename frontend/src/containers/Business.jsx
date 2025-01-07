@@ -163,9 +163,9 @@ export default function Business() {
       <section className="home-spot h-auto mb-5">
         <div className="container padding" id="business">
           <div className="text-center mb-5">
-            <h1 className="fw-bold">Discover the Top Businesses</h1>
+            <h1 className="fw-bold">Discover the Top Profiles</h1>
             <p className="mt-3 text-center">
-              Explore the top-rated businesses in your area, highly recommended
+              Explore the top-rated profiles in your area, highly recommended
               by locals and visitors alike. Discover what makes these
               establishments stand out and start your next great experience
               here!!
