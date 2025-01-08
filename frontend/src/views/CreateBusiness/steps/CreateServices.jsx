@@ -246,11 +246,12 @@ const CreateServices = () => {
                       image={spServiceImgPrev}
                       crop={crop1}
                       zoom={zoom1}
-                      aspect={4 / 3}
+                      aspect={3 / 4}
                       onCropChange={setCrop1}
                       onZoomChange={setZoom1}
                       onCropComplete={onCropComplete1}
                     />
+
                   </div>
                 </div>
                 <div className="modal-footer">
@@ -419,7 +420,7 @@ const CreateServices = () => {
                         onClick={() => uploadImage("specialService", index)}
                         className="p-2 mt-2 add-logo-div"
                       >
-                        <span style={{ color: "grey" }}>(Ratio 4 : 3) </span>
+                        <span style={{ color: "grey" }}>(Ratio 3 : 4) </span>
                         <div className="text-center">
                           {isLoading?.specialService[index] ? (
                             <div
