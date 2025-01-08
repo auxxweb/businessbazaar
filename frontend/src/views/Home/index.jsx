@@ -28,6 +28,7 @@ import {
 } from "./components";
 import { ReviewModal } from "../../containers/BusinessReviews";
 import { useDispatch } from "react-redux";
+import ShareButtonHome from "../../components/ShareButtonHome";
 
 export default function Home() {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -330,13 +331,14 @@ export default function Home() {
         className="btn btn-success rounded-circle p-2 border-0 text-white position-fixed"
         style={{
           right: "26px", // Adjust for consistent alignment
-          bottom: "32px", // Ensure visibility on smaller screens
+          bottom: "72px", // Ensure visibility on smaller screens
           zIndex: 1050,
         }}
         onClick={handleClick}
       >
         <FaWhatsapp size={28} />
       </button>
+      <ShareButtonHome/>
 
       <a href="#" className="btn btn-lg btn-bottom btn-lg-square back-to-top">
         <i className="bi bi-arrow-up"></i>
