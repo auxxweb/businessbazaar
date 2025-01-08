@@ -24,6 +24,7 @@ import Placeholder from "../assets/images/Placeholder.jpg";
 import Loader from "../components/Loader/Loader";
 import NewsArticles from "./NewsArticles";
 import BusinessReviews from "./BusinessReviews";
+import { Globe } from "lucide-react";
 
 let items = document?.querySelectorAll(".carousel .carousel-item");
 
@@ -914,7 +915,6 @@ export default function Template() {
                         {businessData?.landingPageHero?.title}
                       </h1>
                     </div>
-
                     <div className="col-12">
                       <p className="text-secondary text-center text-lg-start david-font">
                         {truncateText(
@@ -956,9 +956,23 @@ export default function Template() {
                         </div>
                       </div>
                     </div>
-
                     {/* Social Media Links */}
                     <div className=" col-12 social-media gap-2">
+                      {businessData?.contactDetails?.website && (
+                       
+                          <a
+                            href={`https://${businessData?.contactDetails?.website.replace(
+                              /^https?:\/\//,
+                              ""
+                            )}`}
+                            target="_blank"
+                            className="flex contact-banner items-center justify-center w-12 h-12 rounded-full bg-blue-500 text-black hover:bg-blue-600 transition duration-200"
+                            rel="noopener noreferrer"
+                          >
+                            <i className="bi bi-globe text-2xl"></i>
+                          </a>
+                        
+                      )}
                       {businessData?.socialMediaLinks?.map((social) => (
                         <>
                           <a
