@@ -333,7 +333,7 @@ const LandingPageDetails = () => {
                     crop={crop}
                     zoom={zoom}
                     aspect={
-                      imageFieldName === "landingPageHeroImage" ? 16 / 9 : 5 / 7
+                      imageFieldName === "landingPageHeroImage" ? 16 / 9 : 7 / 5
                     }
                     onCropChange={setCrop}
                     onZoomChange={setZoom}
@@ -537,7 +537,7 @@ const LandingPageDetails = () => {
                 onClick={() => triggerFileUpload("WelcomeImageInput")}
                 className="p-2 mt-2 mb-3 add-logo-div mx-auto"
               >
-                <span style={{ color: "grey" }}>(Ratio 5 : 7)</span>
+                <span style={{ color: "grey" }}>(Ratio 7 : 5)</span>
                 <div className="text-center">
                   {welcomePart.loading ? (
                     <div
