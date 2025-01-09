@@ -516,9 +516,23 @@ textarea:enabled{
     height: 42px;
     position: fixed;
     right: 16px;
-    bottom: 210px; 
+    bottom: 140px; 
     z-index: 99;
 }
+
+@media (max-width: 768px) {
+    .back-to-top1 {
+        color: #105193;
+        background-color: #107d93;
+        border-color: #107d93;
+         width: 42px;
+        height: 42px;
+        position: fixed;
+        right: 16px;
+        bottom: 200px; 
+        z-index: 99; /* Optional different color for mobile */
+    }
+  }
 .back-to-top2{
      color: #105193;
     background-color: #107d93;

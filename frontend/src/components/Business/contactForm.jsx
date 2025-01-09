@@ -1,50 +1,77 @@
 /* eslint-disable react/prop-types */
-import React, { useState } from 'react'
-// import 'src/ContactForm.css'; // Import the CSS file
-import 'react-phone-input-2/lib/style.css'
-import { useParams } from 'react-router'
-import { toast } from 'react-toastify'
-function ContactForm({ handleFormSubmit, businessData }) {
-  const { id } = useParams()
+import React, { useState } from 'react';
+import 'react-phone-input-2/lib/style.css';
+import { useParams } from 'react-router';
+import { toast } from 'react-toastify';
+import { submitContactForm } from '../../Functions/functions';
+
+function ContactForm({ businessData }) {
+  const { id } = useParams();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     phoneNumber: '',
     message: '',
-  })
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false); // To track form submission
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value })
-  }
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
 
-  const handleSubmit = async (e) => {
+  const handleFormSubmit = async (e) => {
     e.preventDefault();
-  
-    // Validate phone number
-    if (!/^\d+$/.test(formData.phoneNumber)) {
-      toast.error("Please enter a valid phone number.");
-      return;
-    }
-  
-    // Add your form submission logic here, e.g., sending data to a server
-    console.log(formData);
-    const success = await handleFormSubmit(e, formData);
-  
-    // Reset form after successful submission
-    if (success) {
-      setFormData({
-        name: '',
-        email: '',
-        phoneNumber: '',
-        message: '',
+    setIsSubmitting(true); // Start submitting
+
+    try {
+      const response = await submitContactForm({
+        ...formData,
+        businessId: id,
       });
+
+      if (response?.data) {
+        toast.success("Form submitted successfully!", {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          theme: "colored",
+          style: {
+            backgroundColor: "#38a20e", // Green color for success
+            color: "#FFFFFF", // White text
+          },
+        });
+        setFormData({
+          name: '',
+          email: '',
+          phoneNumber: '',
+          message: '',
+        });
+      }
+    } catch (error) {
+      toast.error("Failed to submit the form. Please try again later.", {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        theme: "colored",
+        style: {
+          backgroundColor: "#aa0808", // Red color for error
+          color: "#FFFFFF", // White text
+        },
+      });
+    } finally {
+      setIsSubmitting(false); // Stop submitting
     }
   };
-  
 
   return (
     <div className="contact-form-container bg-light">
-      <form onSubmit={handleSubmit} className="contact-form">
+      <form onSubmit={handleFormSubmit} className="contact-form">
         <h2 className="form-title">Contact Us</h2>
         <div className="form-group">
           <div className="row">
@@ -104,17 +131,16 @@ function ContactForm({ handleFormSubmit, businessData }) {
             style={{
               backgroundColor: businessData?.theme,
               borderRadius: '10px',
-            
-              //   borderBottomLeftRadius: "50px",
               border: '1px solid #ced4da',
             }}
+            disabled={isSubmitting} // Disable button when submitting
           >
-            Send Message
+            {isSubmitting ? "Submitting..." : "Send Message"}
           </button>
         </div>
       </form>
     </div>
-  )
+  );
 }
 
-export default ContactForm
+export default ContactForm;
