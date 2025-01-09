@@ -115,7 +115,7 @@ const BusinessReviews = ({ theme, secondaryTheme, bgBanner }) => {
                             <button style={{ backgroundColor: theme }} className="btn  text-white radius-theme" onClick={(() => setVisible(true))}>write Review</button>
                         </div>
                         {allReviews && allReviews?.map((item) => (
-                            <div data-aos="zoom-out" key={item?._id} className="  testi-slide col-12 col-md-6 col-lg-4  mx-auto  p-3  " >
+                            <div  key={item?._id} className="  testi-slide col-12 col-md-6 col-lg-4  mx-auto  p-3  " >
                                 <div
                                     style={{ minHeight: "15.5rem" }}
                                     className={`p-3  rounded shadow position-relative bg-white h-full  d-flex justify-content-between flex-column `}

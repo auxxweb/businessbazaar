@@ -9,7 +9,7 @@ export default function Header() {
   const navbarRef = useRef(null);
   const location = useLocation();
 
-  // handling the toggle when clicking and scrolling time
+  // Handle click outside and scroll events
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (navbarRef.current && !navbarRef.current.contains(event.target)) {
@@ -21,11 +21,11 @@ export default function Header() {
       setExpanded(false);
     };
 
-    document.addEventListener("click", handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
     window.addEventListener("scroll", handleScroll);
 
     return () => {
-      document.removeEventListener("click", handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutside);
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
@@ -43,8 +43,8 @@ export default function Header() {
       <Container>
         <Navbar.Brand href="/" className="fw-bold w-50" style={{ fontSize: "36px" }}>
           <img
-            src="/src/assets/images/enconnectLogo.png"
-            alt=""
+            src={process.env.PUBLIC_URL + "/assets/images/enconnectLogo.png"}
+            alt="Logo"
             style={{ height: "50px", width: "150px" }}
           />
         </Navbar.Brand>
@@ -63,7 +63,7 @@ export default function Header() {
                   href="#category"
                   className="text-decoration-none mx-3 my-auto"
                   style={{ fontSize: "16px" }}
-                  onClick={() => setExpanded(false)} // Close on link click
+                  onClick={() => setExpanded(false)}
                 >
                   Categories
                 </a>
@@ -71,7 +71,7 @@ export default function Header() {
                   href="#business"
                   className="text-decoration-none mx-3 my-auto"
                   style={{ fontSize: "16px" }}
-                  onClick={() => setExpanded(false)} // Close on link click
+                  onClick={() => setExpanded(false)}
                 >
                   Profile
                 </a>
@@ -79,16 +79,17 @@ export default function Header() {
                   href="#review"
                   className="text-decoration-none mx-3 my-auto"
                   style={{ fontSize: "16px" }}
-                  onClick={() => setExpanded(false)} // Close on link click
+                  onClick={() => setExpanded(false)}
                 >
                   Review
                 </a>
                 <a
                   href="https://admin.enconnect.in/"
                   target="_blank"
+                  rel="noopener noreferrer"
                   className="text-decoration-none mx-3 my-auto"
                   style={{ fontSize: "16px" }}
-                  onClick={() => setExpanded(false)} // Close on link click
+                  onClick={() => setExpanded(false)}
                 >
                   Go to Dashboard
                 </a>
@@ -102,7 +103,7 @@ export default function Header() {
                     padding: "8px 20px",
                     fontSize: "15px",
                   }}
-                  onClick={() => setExpanded(false)} // Close on link click
+                  onClick={() => setExpanded(false)}
                 >
                   My Profile
                 </NavLink>
@@ -113,7 +114,7 @@ export default function Header() {
                   href="#review"
                   className="text-decoration-none mx-3 my-auto"
                   style={{ fontSize: "16px" }}
-                  onClick={() => setExpanded(false)} // Close on link click
+                  onClick={() => setExpanded(false)}
                 >
                   Review
                 </a>
@@ -127,16 +128,13 @@ export default function Header() {
                     borderRadius: "50px",
                     padding: "8px 20px",
                     fontSize: "15px",
-
                   }}
-                  onClick={() => setExpanded(false)} // Close on link click
+                  onClick={() => setExpanded(false)}
                 >
                   Back to Home
                 </NavLink>
-
               </>
             )}
-
           </Nav>
         </Navbar.Collapse>
       </Container>

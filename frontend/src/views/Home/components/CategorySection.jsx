@@ -17,7 +17,7 @@ const CategorySection = ({
   };
 
   return (
-    <section id="category" className=" bg-light h-auto" data-aos="fade-up">
+    <section id="category" className=" bg-light h-auto">
       <div className="container" style={{ width: "90%" }}>
         <div className="mb-5 p-4">
           <h1 className="text-center fw-bold mt-4" style={{ marginTop: "20px" }}>
@@ -38,7 +38,7 @@ const CategorySection = ({
               categoryData.map((category) => (
                 <Link
                   className="cat-div text-decoration-none"
-                  data-aos="zoom-in"
+                 
                   to={`/category/${category._id}`} // Dynamically generate the URL with the category ID
                   key={category._id} // Unique key for each category
                 >
