@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router';
 import InfiniteScroll from "react-infinite-scroll-component";
 
-import PlaceholderBanner from "../assets/images/BannerPlaceholder.png";
+import PlaceholderBanner from "/images/BannerPlaceholder.png";
 import { fetchNewsArticles } from '../Functions/functions';
 import { formatDate } from '../utils/app.utils';
 

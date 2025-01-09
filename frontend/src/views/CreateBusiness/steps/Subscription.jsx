@@ -83,7 +83,7 @@ const Subscription = () => {
           {/* Left Image Section - Hidden on small screens */}
           <div className="d-none d-md-block left-portion p-0 col-md-5 h-100">
             <img
-              src="/src/assets/images/subscription.jpg"
+              src="/images/subscription.jpg"
               alt=""
               className="w-100 h-100"
             />

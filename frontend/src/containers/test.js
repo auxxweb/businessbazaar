@@ -209,7 +209,7 @@ export default function CreateBusiness() {
             <div className="h-100vh">
                 <div className="row h-100 justify-content-center">
                     <div className="d-none d-md-block left-portion col-md-5 h-100 p-0">
-                        <img src="/src/assets/images/login.jpg" alt="" className="w-100 h-100 object-fit-cover" />
+                        <img src="/images/login.jpg" alt="" className="w-100 h-100 object-fit-cover" />
                     </div>
 
                     <div className="col-12 col-md-7 d-flex flex-column justify-content-between align-items-center right-portion h-100 p-5">
@@ -350,7 +350,7 @@ export default function CreateBusiness() {
                                         <img src={logo} alt="Business Logo" width="100" className="img-thumbnail" />
                                     ) : (
                                         <div className="text-center" id="addImageDiv">
-                                            <img src="/src/assets/images/add_image.png" width="50" alt="Add Logo" />
+                                            <img src="/images/add_image.png" width="50" alt="Add Logo" />
                                             <div className="col-12">
                                                 <span>Add Logo</span>
                                             </div>
@@ -942,7 +942,7 @@ export default function CreateBusiness() {
                 <div className="h-100vh">
                     <div className="row h-100 justify-content-center">
                         <div className="d-none d-md-block left-portion p-0 col-md-5 h-100">
-                            <img src="/src/assets/images/service_offering.jpg" alt="" className="w-100 h-100" />
+                            <img src="/images/service_offering.jpg" alt="" className="w-100 h-100" />
                         </div>
                         <div className="col-12 col-md-7 row align-items-end justify-content-center h-100 p-3 p-md-5 right-portion">
                             <div className="col-12 text-start">
@@ -1063,7 +1063,7 @@ export default function CreateBusiness() {
                     <div className="row  h-100 justify-content-center">
                         {/* Left Image Section */}
                         <div className="d-none d-md-block left-portion p-0 col-md-5 h-100">
-                            <img src="/src/assets/images/timing.jpg" alt="" className='w-100 h-100' />
+                            <img src="/images/timing.jpg" alt="" className='w-100 h-100' />
                         </div>
 
                         {/* Right Form Section */}
@@ -1161,7 +1161,7 @@ export default function CreateBusiness() {
                     <div className="row  h-100 justify-content-center">
                         {/* Left Image Section */}
                         <div className="d-none d-md-block left-portion p-0 col-md-5 h-100">
-                            <img src="/src/assets/images/business-description.jpg" alt="" className='w-100 h-100' />
+                            <img src="/images/business-description.jpg" alt="" className='w-100 h-100' />
                         </div>
 
                         {/* Right Form Section */}
@@ -1256,7 +1256,7 @@ export default function CreateBusiness() {
                 <div className="row h-100 justify-content-center">
                     {/* Left Image Section */}
                     <div className="d-none d-md-block left-portion p-0 col-md-5 h-100">
-                        <img src="/src/assets/images/landing-page.jpg" alt="" className='w-100 h-100' />
+                        <img src="/images/landing-page.jpg" alt="" className='w-100 h-100' />
                     </div>
 
                     {/* Right Form Section */}
@@ -1313,7 +1313,7 @@ export default function CreateBusiness() {
                                 <input type="file" hidden id='LandingHeroImageInput' onChange={(e) => handleFileChange("landingPageHeroImage", e, setLandingPageHero)} />
                                 <div onClick={() => triggerFileUpload('LandingHeroImageInput')} className="p-2 mt-2 mb-3 add-logo-div">
                                     <div className="text-center">
-                                        <img src={landingPageHero.coverImage || "/src/assets/images/add_image.png"} width="50" alt="Add Hero Image" />
+                                        <img src={landingPageHero.coverImage || "/images/add_image.png"} width="50" alt="Add Hero Image" />
                                         <div className="col-12">
                                             <span>Add Image</span>
                                         </div>
@@ -1346,7 +1346,7 @@ export default function CreateBusiness() {
                                 <input type="file" hidden id='WelcomeImageInput' onChange={(e) => handleFileChange("welcomePartImage", e, setWelcomePart)} />
                                 <div onClick={() => triggerFileUpload('WelcomeImageInput')} className="p-2 mt-2 mb-3 add-logo-div">
                                     <div className="text-center">
-                                        <img src={welcomePart.coverImage || "/src/assets/images/add_image.png"} width="50" alt="Add Welcome Image" />
+                                        <img src={welcomePart.coverImage || "/images/add_image.png"} width="50" alt="Add Welcome Image" />
                                         <div className="col-12">
                                             <span>Add Image</span>
                                         </div>
@@ -1469,7 +1469,7 @@ export default function CreateBusiness() {
                     <div className="row h-100 justify-content-center">
                         {/* Left Image Section */}
                         <div className="d-none d-md-block left-portion p-0 col-md-5 h-100">
-                            <img src="/src/assets/images/landing-page.jpg" alt="" className='w-100 h-100' />
+                            <img src="/images/landing-page.jpg" alt="" className='w-100 h-100' />
                         </div>
 
                         {/* Right Form Section */}
@@ -1543,7 +1543,7 @@ export default function CreateBusiness() {
                                                 <div onClick={() => uploadImage(index)} className="p-2 mt-2 add-logo-div">
                                                     <div className="text-center">
                                                         <img
-                                                            src={p.image || "/src/assets/images/add_image.png"}
+                                                            src={p.image || "/images/add_image.png"}
                                                             width="50"
                                                             alt="Add Service Image"
                                                         />
@@ -1688,7 +1688,7 @@ export default function CreateBusiness() {
                     <div className="row h-100 justify-content-center">
                         {/* Left Image Section */}
                         <div className="d-none d-md-block left-portion p-0 col-md-5 h-100">
-                            <img src="/src/assets/images/landing-page.jpg" alt="" className='w-100 h-100' />
+                            <img src="/images/landing-page.jpg" alt="" className='w-100 h-100' />
                         </div>
 
                         {/* Right Form Section */}
@@ -1741,7 +1741,7 @@ export default function CreateBusiness() {
                                                 <div onClick={() => uploadImage(index)} className="p-2 mt-2 add-logo-div">
                                                     <div className="text-center">
                                                         <img
-                                                            src={item.image || "/src/assets/images/add_image.png"}
+                                                            src={item.image || "/images/add_image.png"}
                                                             width="50"
                                                             alt="Add Product Image"
                                                         />
@@ -1859,7 +1859,7 @@ export default function CreateBusiness() {
                 <div className="row h-100 justify-content-center">
                     {/* Left Image Section - Hidden on small screens */}
                     <div className="d-none d-md-block left-portion p-0 col-md-5 h-100">
-                        <img src="/src/assets/images/landing-page.jpg" alt="" className='w-100 h-100' />
+                        <img src="/images/landing-page.jpg" alt="" className='w-100 h-100' />
                     </div>
 
                     {/* Right Form Section */}
@@ -2040,7 +2040,7 @@ export default function CreateBusiness() {
                 <div className="row h-100 justify-content-center">
                     {/* Left Image Section - Hidden on small screens */}
                     <div className="d-none d-md-block left-portion p-0 col-md-5 h-100">
-                        <img src="/src/assets/images/landing-page.jpg" alt="Landing Page" className='w-100 h-100' />
+                        <img src="/images/landing-page.jpg" alt="Landing Page" className='w-100 h-100' />
                     </div>
 
                     {/* Right Form Section */}
@@ -2078,7 +2078,7 @@ export default function CreateBusiness() {
                                                             width="100"
                                                         />
                                                     ) : (
-                                                        <img src="/src/assets/images/add_image.png" width="50" alt="Add Image" />
+                                                        <img src="/images/add_image.png" width="50" alt="Add Image" />
                                                     )}
                                                 </div>
                                             </div>
@@ -2197,7 +2197,7 @@ export default function CreateBusiness() {
             <div className='h-100vh'>
                 <div className="row h-100 justify-content-center">
                     <div className="d-none d-md-block left-portion p-0 col-md-5 h-100">
-                        <img src="/src/assets/images/landing-page.jpg" alt="Landing Page" className='w-100 h-100' />
+                        <img src="/images/landing-page.jpg" alt="Landing Page" className='w-100 h-100' />
                     </div>
 
                     <div className="col-12 col-md-7 row align-items-end justify-content-center h-100 p-3 p-md-5 right-portion">
@@ -2229,7 +2229,7 @@ export default function CreateBusiness() {
                                                             Your browser does not support the video tag.
                                                         </video>
                                                     ) : (
-                                                        <img src="/src/assets/images/add-video.png" width="50" alt="Add Video" />
+                                                        <img src="/images/add-video.png" width="50" alt="Add Video" />
                                                     )}
                                                     <div className="col-12">
                                                         <span>Add Video</span>
@@ -2684,7 +2684,7 @@ export default function CreateBusiness() {
                             <div className="col-12 col-lg-6 text-end d-block d-lg-none">
                                 <img src={businessData.landingPageHero.coverImage} alt="" className='banner-image' />
                                 <div className='banner-image-2 d-none'>
-                                    <img src="/src/assets/images/baner-image2.png" alt="" />
+                                    <img src="/images/baner-image2.png" alt="" />
                                 </div>
                             </div>
 
@@ -2729,7 +2729,7 @@ export default function CreateBusiness() {
                             <div className="col-12 col-lg-6 text-end d-none d-lg-block">
                                 <img src={businessData.landingPageHero.coverImage} alt="" className='banner-image' />
                                 <div className='banner-image-2 d-none'>
-                                    <img src="/src/assets/images/baner-image2.png" alt="" />
+                                    <img src="/images/baner-image2.png" alt="" />
                                 </div>
                             </div>
                         </div>
@@ -2961,7 +2961,7 @@ export default function CreateBusiness() {
 
                             <div className="col-12 col-lg-6">
                                 <div className="col-12 text-center">
-                                    <img src="/src/assets/images/chef.png" alt="" className='chef-div img-fluid w-100' />
+                                    <img src="/images/chef.png" alt="" className='chef-div img-fluid w-100' />
 
                                 </div>
                             </div>
@@ -3064,7 +3064,7 @@ export default function CreateBusiness() {
                 <section className="h-auto david-font" id='contact'>
                     <div className="container p-top">
                         <div className="col-12 newsletter position-relative">
-                            <img src="/src/assets/images/newsletter.png" alt="" className='w-100' />
+                            <img src="/images/newsletter.png" alt="" className='w-100' />
                             <div className="text-center newsletter-content position-absolute">
                                 <div className='d-none d-lg-block'>
                                     <h2 className="fs-45 mb-3 fw-bold text-white">
@@ -3235,7 +3235,7 @@ export default function CreateBusiness() {
                     <div className="row h-100 justify-content-center">
                         {/* Left Image Section - Hidden on small screens */}
                         <div className="d-none d-md-block left-portion p-0 col-md-5 h-100">
-                            <img src="/src/assets/images/subscription.jpg" alt="" className="w-100 h-100" />
+                            <img src="/images/subscription.jpg" alt="" className="w-100 h-100" />
                         </div>
                         {/* Right Form Section */}
                         <div className="col-12 col-md-7 row align-items-end justify-content-center h-100 p-3 p-md-5 right-portion">

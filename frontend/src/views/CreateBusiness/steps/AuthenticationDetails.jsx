@@ -128,7 +128,7 @@ function AuthenticationDetails() {
       <div className="row h-100 justify-content-center">
         <div className="d-none d-md-block left-portion col-md-5 h-100 p-0">
           <img
-            src="/src/assets/images/login.jpg"
+            src="/images/login.jpg"
             alt="Login"
             className="w-100 h-100 object-fit-cover"
           />

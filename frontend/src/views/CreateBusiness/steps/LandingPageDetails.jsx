@@ -474,7 +474,7 @@ const LandingPageDetails = () => {
                     <img
                       src={
                         currentImage?.banner ||
-                        "/src/assets/images/add_image.png"
+                        "/images/add_image.png"
                       }
                       width="50"
                       alt="Add Hero Image"
@@ -548,7 +548,7 @@ const LandingPageDetails = () => {
                     <img
                       src={
                         currentImage?.welcome ||
-                        "/src/assets/images/add_image.png"
+                        "/images/add_image.png"
                       }
                       width="50"
                       alt="Add Welcome Image"
@@ -691,7 +691,7 @@ const LandingPageDetails = () => {
                     className="banner-image"
                   />
                   <div className="banner-image-2 d-none">
-                    <img src="/src/assets/images/baner-image2.png" alt="" />
+                    <img src="/images/baner-image2.png" alt="" />
                   </div>
                 </div>
 
@@ -763,7 +763,7 @@ const LandingPageDetails = () => {
                     className="banner-image"
                   />
                   <div className="banner-image-2 d-none">
-                    <img src="/src/assets/images/baner-image2.png" alt="" />
+                    <img src="/images/baner-image2.png" alt="" />
                   </div>
                 </div>
               </div>

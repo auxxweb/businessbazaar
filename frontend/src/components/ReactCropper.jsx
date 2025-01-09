@@ -97,7 +97,7 @@ export const ReactCropperComponent = ({
                         ) : (
                             <div>
                                 <img
-                                    src="/src/assets/images/add_image.png"
+                                    src="/images/add_image.png"
                                     width="50"
                                     alt="Add Logo"
                                 />

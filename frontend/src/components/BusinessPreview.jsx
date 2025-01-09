@@ -13,8 +13,7 @@ import { Rating } from "primereact/rating";
 import { InputText } from "primereact/inputtext";
 import { InputTextarea } from "primereact/inputtextarea";
 import { width } from "@fortawesome/free-brands-svg-icons/fa42Group";
-import Placeholder from "../assets/images/placeholder.jpg";
-import PlaceholderBanner from "../assets/images/BannerPlaceholder.png";
+import Placeholder from "/images/placeholder.jpg";
 import Loader from "./Loader/Loader";
 
 function BusinessPreview({ formData }) {
@@ -274,7 +273,7 @@ function BusinessPreview({ formData }) {
                 className="banner-image"
               />
               <div className="banner-image-2 d-none">
-                <img src="/src/assets/images/baner-image2.png" alt="" />
+                <img src="/images/baner-image2.png" alt="" />
               </div>
             </div>
 
@@ -346,7 +345,7 @@ function BusinessPreview({ formData }) {
                 className="banner-image"
               />
               <div className="banner-image-2 d-none">
-                <img src="/src/assets/images/baner-image2.png" alt="" />
+                <img src="/images/baner-image2.png" alt="" />
               </div>
             </div>
           </div>
@@ -665,7 +664,7 @@ function BusinessPreview({ formData }) {
             <div className="col-12 col-lg-6">
               <div className="col-12 text-center">
                 <img
-                  src="/src/assets/images/chef.png"
+                  src="/images/chef.png"
                   alt=""
                   className="chef-div img-fluid w-100"
                 />
@@ -698,7 +697,7 @@ function BusinessPreview({ formData }) {
                 >
                   <div className="col-12 text-center test-button-img-div">
                     <img
-                      src="/src/assets/images/user.png"
+                      src="/images/user.png"
                       alt={testimonial.name}
                       className="img-fluid"
                     />
@@ -795,7 +794,7 @@ function BusinessPreview({ formData }) {
         <div className="container p-top">
           <div className="col-12 newsletter position-relative">
             <img
-              src="/src/assets/images/newsletter.png"
+              src="/images/newsletter.png"
               alt=""
               className="w-100"
             />

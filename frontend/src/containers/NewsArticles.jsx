@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router'
-import PlaceholderBanner from '../assets/images/BannerPlaceholder.png'
+import PlaceholderBanner from '/images/BannerPlaceholder.png'
 import { fetchNewsArticles } from '../Functions/functions'
 import { formatDate } from '../utils/app.utils'
 import CardLoader from '../components/cardLoader/CardLoader'

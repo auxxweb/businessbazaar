@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import { useParams } from 'react-router';
-import Placeholder from '../../assets/images/Placeholder.jpg'
+import Placeholder from "/images/placeholder.jpg";
 
 const TemplateFooter = ({ businessData, closeDays }) => {
   const {id} = useParams()

@@ -163,7 +163,7 @@ const ReviewSection = ({ businessData }) => {
                 <div className="row">
                   <div className="col-2">
                     <img
-                      src="/src/assets/images/user.png"
+                      src="/images/user.png"
                       alt={testimonial?.name}
                       style={{
                         objectFit: 'cover',

@@ -51,7 +51,7 @@ const SubscribeSection = () => {
             <div className="container p-top">
               <div className="col-12 newsletter position-relative">
                 <img
-                  src="/src/assets/images/newsletter.png"
+                  src="/images/newsletter.png"
                   alt=""
                   className="w-100"
                 />

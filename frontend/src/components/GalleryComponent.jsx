@@ -1,7 +1,6 @@
 import React from 'react';
 import { Carousel } from 'react-bootstrap';
-import Placeholder from '../assets/images/placeholder.jpg'; // Adjust the import path
-
+import Placeholder from '/images/placeholder.jpg'; // Adjust the import pathimport Placeholder from "/images/placeholder.jpg";
 const ResponsiveGalleryCarousel = ({ galleryArray }) => {
     // Determine number of images per slide based on screen size
     const getImagesPerSlide = () => {

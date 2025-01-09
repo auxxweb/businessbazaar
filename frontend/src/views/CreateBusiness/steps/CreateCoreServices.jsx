@@ -436,7 +436,7 @@ const CreateCoreServices = () => {
                           ) : (
                             <img
                               src={
-                                p.image || "/src/assets/images/add_image.png"
+                                p.image || "/images/add_image.png"
                               }
                               width="50"
                               alt="Add Service Image"

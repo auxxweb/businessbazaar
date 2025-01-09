@@ -18,10 +18,10 @@ const ReviewSection = ({
     <section className="mt-3 bg-light">
       <div className="container" id="review">
         <div className="mt-3 mb-3">
-          <h1 className="text-center p-3 pt-5 fw-bold " data-aos="zoom-out">
+          <h1 className="text-center p-3 pt-5 fw-bold " >
             Reviews
           </h1>
-          <p className="mt-3 text-center" data-aos="zoom-in">
+          <p className="mt-3 text-center" >
           Take a look at genuine reviews and heartfelt testimonials
            that highlight experiences, impressions, and the impact of our work. 
            Whether it’s about personal achievements or professional services,
@@ -74,7 +74,7 @@ const ReviewSection = ({
                   <div className="row">
                     <div className="col-2">
                       <img
-                        src="/src/assets/images/user.png"
+                        src="/images/user.png"
                         alt={testimonial?.name}
                         style={{
                           objectFit: "cover",

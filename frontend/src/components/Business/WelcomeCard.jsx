@@ -1,7 +1,6 @@
 /* eslint-disable react/prop-types */
 import { Box, Button, Container, Typography } from "@mui/material";
-import Placeholder from "../../../src/assets/images/placeholder.jpg";
-import PlaceholderBanner from "../../assets/images/BannerPlaceholder.png";
+import Placeholder from "/images/placeholder.jpg";
 
 const WelcomeCard = ({ businessData }) => {
   return (

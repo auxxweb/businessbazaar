@@ -19,8 +19,8 @@ import { InputTextarea } from "primereact/inputtextarea";
 import ContactForm from "/src/components/Business/contactForm";
 import { formatDate } from "../utils/app.utils";
 import { toast } from "react-toastify";
-import PlaceholderBanner from "../assets/images/BannerPlaceholder.png";
-import Placeholder from "../assets/images/Placeholder.jpg";
+import PlaceholderBanner from "/images/BannerPlaceholder.png";
+import Placeholder from "/images/placeholder.jpg";
 import Loader from "../components/Loader/Loader";
 import NewsArticles from "./NewsArticles";
 import BusinessReviews from "./BusinessReviews";
@@ -2036,7 +2036,7 @@ export default function Template() {
                         <div className="row">
                           <div className="col-2">
                             <img
-                              src="/src/assets/images/user.png"
+                              src="/images/user.png"
                               alt={testimonial?.name}
                               style={{
                                 objectFit: "cover",
@@ -2225,7 +2225,7 @@ export default function Template() {
             <div className="container p-top">
               <div className="col-12 newsletter position-relative">
                 <img
-                  src="/src/assets/images/newsImage1.jpg"
+                  src="/images/newsImage1.jpg"
                   alt=""
                   className="w-100  rounded"
                 />

@@ -2,7 +2,7 @@ import { useCallback, useState } from "react";
 import PropTypes from "prop-types";
 import { Carousel } from "react-bootstrap";
 import LocationAutocomplete from "../../../components/LocationAutoComplete";
-import Placeholder from "../../../assets/images/placeholder.jpg";
+import Placeholder from "/images/placeholder.jpg";
 
 const libraries = ["places"];
 
@@ -41,7 +41,7 @@ const CarouselSection = ({ bannerData, onSearch, setLocation }) => {
           <Carousel.Item className="h-100">
             <img
               className="d-block w-100"
-              src="/src/assets/images/1.jpg"
+              src="/images/1.jpg"
               alt="First slide"
               style={{
                 objectFit: "cover",
@@ -59,11 +59,11 @@ const CarouselSection = ({ bannerData, onSearch, setLocation }) => {
           <div className="row banner-main-div flex flex-row items-center justify-between">
             {/* Left Section */}
             <div className="col-12 col-md-6 banner-head-text" style={{ textAlign: "left" }}>
-              <h1 className="text-5xl sm:text-4xl md:text-7xl text-white fw-bold font-bold text-start" data-aos="fade-right">
+              <h1 className="text-5xl sm:text-4xl md:text-7xl text-white fw-bold font-bold text-start" >
                 En<span className="text-theme2">Connect</span> <br />
                 Your Digital Platform for Growing Your Business
               </h1>
-              <p className="text-white d-none d-md-block" data-aos="zoom-in">
+              <p className="text-white d-none d-md-block" >
                 EnConnect is your one-stop platform to create, showcase, and share your business online. Get a personalized NFC card to connect with clients instantly, boost referrals, and expand your reach. Build a professional online presence effortlessly with subscription-based tools. Connect and grow with EnConnect!
               </p>
             </div>

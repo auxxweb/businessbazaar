@@ -7,8 +7,7 @@ import {
   getCategoryData,
 } from "../Functions/functions";
 import Loader from "../components/Loader/Loader";
-import Placeholder from "../assets/images/placeholder.jpg";
-import PlaceholderBanner from "../assets/images/BannerPlaceholder.png";
+import Placeholder from "/images/placeholder.jpg";
 import debounce from "lodash.debounce";
 
 export default function Business() {
@@ -110,7 +109,7 @@ export default function Business() {
       <section className="business-view-banner">
         <img
           src={
-            id ? categoryData.coverImage : "/src/assets/images/businesses.jpg"
+            id ? categoryData.coverImage : "/images/businesses.jpg"
           }
           className="w-100 h-100"
           style={{ filter: "brightness(0.4)" }}

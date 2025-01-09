@@ -1310,7 +1310,7 @@ useEffect(()=>{
                 <div className="col-12 col-lg-6">
                   <div className="col-12 text-center">
                     <img
-                      src="/src/assets/images/chef.png"
+                      src="/images/chef.png"
                       alt=""
                       className="chef-div img-fluid w-100"
                     />
@@ -1369,7 +1369,7 @@ useEffect(()=>{
                         <div className="row">
                           <div className="col-2">
                             <img
-                              src="/src/assets/images/user.png"
+                              src="/images/user.png"
                               alt={testimonial?.name}
                               style={{
                                 objectFit: 'cover',
@@ -1552,7 +1552,7 @@ useEffect(()=>{
             <div className="container p-top">
               <div className="col-12 newsletter position-relative">
                 <img
-                  src="/src/assets/images/newsletter.png"
+                  src="/images/newsletter.png"
                   alt=""
                   className="w-100"
                 />

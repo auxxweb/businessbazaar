@@ -338,7 +338,7 @@ const MoreImages = () => {
                           />
                         ) : (
                           <img
-                            src="/src/assets/images/add_image.png"
+                            src="/images/add_image.png"
                             width="50"
                             alt="Add Image"
                             className='mx-auto'
@@ -456,7 +456,7 @@ const MoreImages = () => {
                     )}
                   </Slider>
                 ) : <div className={`d-flex justify-content-center align-items-center`} >
-                  {!images[0]?.file && !images[0]?.accessLink ? <img src="/src/assets/images/add_image.png" alt="" /> :
+                  {!images[0]?.file && !images[0]?.accessLink ? <img src="/images/add_image.png" alt="" /> :
                     <img className='w-50' src={images[0].file ? URL.createObjectURL(images[0]?.file) : images[0].accessLink} alt="" />}
                 </div>}
               </div>
