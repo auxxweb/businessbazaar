@@ -51,13 +51,13 @@ const SubscribeSection = () => {
             <div className="container p-top">
               <div className="col-12 newsletter position-relative">
                 <img
-                  src="/src/assets/images/newsletter.png"
+                  src="/src/assets/images/newsImage1.jpg"
                   alt=""
-                  className="w-100"
+                  className="w-100 rouded "
                 />
                 <div className="text-center newsletter-content position-absolute">
                   <div className="d-none d-lg-block">
-                    <h2 className="fs-45 mb-3 fw-bold text-white">
+                    <h2 className="fs-43 mb-3 fw-bold text-black">
                       Create Your Own Business <br />
                       Subscribing To Our Newsletter
                     </h2>
@@ -88,7 +88,7 @@ const SubscribeSection = () => {
                   </div>
 
                   <div className="d-block d-lg-none">
-                    <h2 className="fs-16 fw-bold text-white">
+                    <h2 className="fs-16 fw-bold text-white text-center mb-3">
                       Create Your Own Business <br />
                       Subscribing To Our Newsletter
                     </h2>
