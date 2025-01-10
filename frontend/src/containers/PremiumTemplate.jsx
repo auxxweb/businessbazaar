@@ -18,30 +18,30 @@ import NewsArticles from "./NewsArticles";
 import { useParams } from "react-router";
 import BusinessReviews from "./BusinessReviews";
 
-
 const PremiumTemplate = () => {
   const { businessData, loading, closeDays } = useBusiness();
-  const [showNews, setShowNews] = useState(false)
-  const [showAllReviews, setShowAllReviews] = useState(false)
-  const { id } = useParams()
+  const [showNews, setShowNews] = useState(false);
+  const [showAllReviews, setShowAllReviews] = useState(false);
+  const { id } = useParams();
 
   useEffect(() => {
-    window.scrollTo(0, 0)
-  }, [id])
+    window.scrollTo(0, 0);
+  }, [id]);
 
   useEffect(() => {
-    if (window?.location?.hash == '#news') {
-      setShowNews(true)
+    if (window?.location?.hash == "#news") {
+      setShowNews(true);
     } else {
-      setShowNews(false)
+      setShowNews(false);
     }
-    if (window?.location?.hash == '#reviews') {
-      setShowAllReviews(true)
+    if (window?.location?.hash == "#reviews") {
+      setShowAllReviews(true);
     } else {
-      setShowAllReviews(false)
+      setShowAllReviews(false);
     }
-  }, [window?.location?.hash])
+  }, [window?.location?.hash]);
 
+  
   return (
     <>
       <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -95,339 +95,420 @@ const PremiumTemplate = () => {
       </style>
 
       <Box sx={{ overflowX: "hidden" }}>
-        <TemplateHeader businessData={businessData} colorTheme={businessData?.theme} />
-        <ShareButton number={businessData?.contactDetails?.primaryNumber} />
+        <TemplateHeader
+          businessData={businessData}
+          colorTheme={businessData?.theme}
+        />
+        <ShareButton 
+        number={businessData?.contactDetails?.primaryNumber} 
+        countryCode={businessData?.contactDetails?.countryCode} 
+        businessName={businessData?.businessName}
+        />
         <div id="news">
-        {showNews && (
-          <NewsArticles
-            businessId={id}
-            newsData={businessData?.landingPageHero}
-            colorTheme={businessData?.theme}
-          />
-        )}
+          {showNews && (
+            <NewsArticles
+              businessId={id}
+              newsData={businessData?.landingPageHero}
+              colorTheme={businessData?.theme}
+            />
+          )}
         </div>
 
-{showAllReviews && (
-        <BusinessReviews
-          theme={businessData?.theme}
-          secondaryTheme={businessData?.secondaryTheme}
-          bgBanner={businessData?.logo}
-        />
-      )}
-        {!showAllReviews && !showNews && <>
-          <Box
-            sx={{
-              position: "relative",
-              width: "100vw",
-              height: "760px",
-              display: "flex",
-              justifyContent: "center",
-              overflow: "hidden",
-            }}
-            className="align-items-start align-items-md-center mt-4 pt-4"
-            id='home'
-          >
-            {/* Background Image */}
+        {showAllReviews && (
+          <BusinessReviews
+            theme={businessData?.theme}
+            secondaryTheme={businessData?.secondaryTheme}
+            bgBanner={businessData?.logo}
+          />
+        )}
+        {!showAllReviews && !showNews && (
+          <>
             <Box
               sx={{
-                backgroundImage: `url(${businessData?.landingPageHero?.coverImage ? businessData?.landingPageHero?.coverImage : "https://products.otis.com/hubfs/raw_assets/public/Otis_Oct2020/images/grayscale-mountain.png"})`,
-                backgroundSize: "cover",
-                backgroundPosition: "center",
-                width: "100%",
-                height: "100%",
-                position: "absolute",
-                top: 0,
-                left: 0,
-                filter: "brightness(0.4)",
-                zIndex: 1,
-                opacity: 1
-              }}
-            />
-
-            {/* Overlay Content */}
-            <Box
-              sx={{
+                position: "relative",
+                width: "100vw",
+                height: "760px",
                 display: "flex",
-                flexDirection: "column",
                 justifyContent: "center",
-                alignItems: "center",
-                color: "#D3DFEB",
-                maxWidth: "611px",
-                textAlign: "center",
-                zIndex: 2, // Ensure content is above the background
+                overflow: "hidden",
               }}
-              className=" pt-4 mt-4"
+              className="align-items-start align-items-md-center mt-4 pt-4"
+              id="home"
             >
-              <Typography
-                fontSize={"64px"}
-                lineHeight={"76.8px"}
-                fontWeight={"bold"}
-                marginBottom={"15px"}
-                className={'d-none d-sm-flex'}
+              {/* Background Image */}
+              <Box
+                sx={{
+                  backgroundImage: `url(${
+                    businessData?.landingPageHero?.coverImage
+                      ? businessData?.landingPageHero?.coverImage
+                      : "https://products.otis.com/hubfs/raw_assets/public/Otis_Oct2020/images/grayscale-mountain.png"
+                  })`,
+                  backgroundSize: "cover",
+                  backgroundPosition: "center",
+                  width: "100%",
+                  height: "100%",
+                  position: "absolute",
+                  top: 0,
+                  left: 0,
+                  filter: "brightness(0.4)",
+                  zIndex: 1,
+                  opacity: 1,
+                }}
+              />
+
+              {/* Overlay Content */}
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  color: "#D3DFEB",
+                  maxWidth: "611px",
+                  textAlign: "center",
+                  zIndex: 2, // Ensure content is above the background
+                }}
+                className=" pt-4 mt-4"
               >
-                {businessData?.landingPageHero?.title}
-              </Typography>
-              <Typography
-                fontSize={"40px"}
-                lineHeight={"56.8px"}
-                fontWeight={"bold"}
-                marginBottom={"15px"}
-                className={'d-flex d-sm-none'}
-
-              >
-                {businessData?.landingPageHero?.title}
-              </Typography>
-              <Typography className="" fontSize={"16px"} lineHeight={"24px"}>
-                {businessData?.landingPageHero?.description}
-              </Typography>
-              <Box className={'d-none d-sm-flex'} marginTop={"10px"} marginBottom={"30px"}>
-                <Button
-                  sx={{
-                    textTransform: "capitalize",
-                    background: "#212529",
-                    color: "#ffffff",
-                    borderTopLeftRadius: "10px",
-                    borderBottomRightRadius: "10px",
-                    marginRight: "19px",
-                  }}
+                <Typography
+                  fontSize={"64px"}
+                  lineHeight={"76.8px"}
+                  fontWeight={"bold"}
+                  marginBottom={"15px"}
+                  className={"d-none d-sm-flex"}
                 >
-                  {" "}
-                  View More{" "}
-                </Button>
-                <Button
-                href="#service"
-                  sx={{
-                    textTransform: "capitalize",
-                    background: businessData?.theme,
-                    color: "#ffffff",
-                    borderTopLeftRadius: "10px",
-                    borderBottomRightRadius: "10px",
-                  }}
+                  {businessData?.landingPageHero?.title}
+                </Typography>
+                <Typography
+                  fontSize={"40px"}
+                  lineHeight={"56.8px"}
+                  fontWeight={"bold"}
+                  marginBottom={"15px"}
+                  className={"d-flex d-sm-none"}
                 >
-                  {" "}
-                  Services{" "}
-                </Button>
-              </Box>
-              <div className=" col-12 social-media gap-2 d-flex justify-content-center my-2  ">
-                {businessData?.socialMediaLinks?.map((social) => (
-                  <div className="position-relative">
-                    <div style={{ zIndex: -1 }} className="position-absolute bg-dark w-100 h-100 opacity-75 border border-secondary  rounded-circle "></div>
-                    <a
-                      href={social?.link}
-                      target="_blank"
-                      style={{ width: "2.5rem", height: "2.5rem", zIndex: "999" }}
-                      className=" text-white  rounded-circle  d-flex justify-content-center align-items-center"
-                    >
-                      <i
-                        className={`bi bi-${social?.tag} text-3xl sm:text-xl `}
-                      ></i>
-                    </a>
-                  </div>
-                ))}
-              </div>
-              
-              <div className="mt-2 mb-3 sm:mt-0 sm:mb-0 d-flex d-sm-none">
-                <div className="container px-4 sm:px-0">
+                  {businessData?.landingPageHero?.title}
+                </Typography>
+                <Typography className="" fontSize={"16px"} lineHeight={"24px"}>
+                  {businessData?.landingPageHero?.description}
+                </Typography>
+                <Box
+                  className={"d-none d-sm-flex"}
+                  marginTop={"10px"}
+                  marginBottom={"30px"}
+                >
+                  <Button
+                   href="#about"
+                    sx={{
+                      textTransform: "capitalize",
+                      background: "#212529",
+                      color: "#ffffff",
+                      borderTopLeftRadius: "10px",
+                      borderBottomRightRadius: "10px",
+                      marginRight: "19px",
+                    }}
+                  >
+                    {" "}
+                    View More{" "}
+                  </Button>
+                  <Button
+                    href="#about"
+                    sx={{
+                      textTransform: "capitalize",
+                      background: businessData?.theme,
+                      color: "#ffffff",
+                      borderTopLeftRadius: "10px",
+                      borderBottomRightRadius: "10px",
+                    }}
+                  >
+                    {" "}
+                    Services{" "}
+                  </Button>
+                </Box>
+                <div className=" col-12 social-media gap-2 d-flex justify-content-center my-2  ">
+                {businessData?.contactDetails?.website && (
+                       <div className="position-relative">
+                       <div
+                         style={{ zIndex: -1 }}
+                         className="position-absolute bg-dark w-100 h-100 opacity-75 border border-secondary  rounded-circle "
+                       ></div>
+                       <a
+                         href={`https://${businessData?.contactDetails?.website.replace(
+                           /^https?:\/\//,
+                           ""
+                         )}`}
+                         style={{
+                          width: "2.5rem",
+                          height: "2.5rem",
+                          zIndex: "999",
+                        }}
+                         target="_blank"
+                         className="text-white  rounded-circle  d-flex justify-content-center align-items-center"
+                         rel="noopener noreferrer"
+                       >
+                         <i className="bi bi-globe text-2xl"></i>
+                       </a>
+                       </div>
+                   )}
+                  {businessData?.socialMediaLinks?.map((social) => (
+                    <div className="position-relative">
+                      <div
+                        style={{ zIndex: -1 }}
+                        className="position-absolute bg-dark w-100 h-100 opacity-75 border border-secondary  rounded-circle "
+                      ></div>
+                      <a
+                        href={social?.link}
+                        target="_blank"
+                        style={{
+                          width: "2.5rem",
+                          height: "2.5rem",
+                          zIndex: "999",
+                        }}
+                        className=" text-white  rounded-circle  d-flex justify-content-center align-items-center"
+                      >
+                        <i
+                          className={`bi bi-${social?.tag} text-3xl sm:text-xl `}
+                        ></i>
+                      </a>
+                    </div>
+                  ))}
+                </div>
 
-                  <div className="col-12 address-section">
-                    <div className="row d-flex justify-content-between align-items-center  p-2">
-
-                      {/* Address Section */}
-                      <div className="col-12 col-sm-4  my-1">
-                        <div className=" d-flex align-items-center  justify-content-start">
-                          <a
-                            href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
-                              `${businessData?.address?.buildingName},${businessData.address?.streetName}, ${businessData?.address?.landMark}, ${businessData?.address?.city},   ${businessData.address?.state}`,
-                            )}`}
-                            target="_blank"
-                            rel="noopener noreferrer"
-
-                            className="text-decoration-none   p-0 m-0"
-                          >
-                            <div className="row">
-                              <div className="col-auto address-logo my-auto ">
-                                <i className="bi bi-geo-alt-fill text-2xl sm:text-lg" />
-                              </div>
-                              <div className="col text-start  text-white">
-                                <span className="fs-12 sm:fs-10 ">Address</span>
-                                <p
-                                  style={{ textDecoration: 'none' }}
-
-                                  className="fs-14 sm:fs-12  pt-1 lh-sm ">{`${businessData?.address?.buildingName},${businessData.address?.streetName}, ${businessData?.address?.landMark}, ${businessData?.address?.city},   ${businessData.address?.state}`}</p>
-                              </div>
-                            </div>
-                          </a>
-                        </div>
-                      </div>
-                      {/* Email Section */}
-                      <div className="col-12 col-sm-4 my-1  mb-sm-0">
-                        <div className="row align-items-center justify-content-start">
-                          <div className="col-auto address-logo">
-                            <i className="bi bi-envelope-fill text-2xl sm:text-lg" />
-                          </div>
-                          <div className="col text-start ">
+                <div className="mt-2 mb-3 sm:mt-0 sm:mb-0 d-flex d-sm-none">
+                  <div className="container px-4 sm:px-0">
+                    <div className="col-12 address-section">
+                      <div className="row d-flex justify-content-between align-items-center  p-2">
+                        {/* Address Section */}
+                        <div className="col-12 col-sm-4  my-1">
+                          <div className=" d-flex align-items-center  justify-content-start">
                             <a
-                              href={`mailto:${businessData?.contactDetails?.email}`}
-                              className="text-decoration-none text-white"
+                              href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+                                `${businessData?.address?.buildingName},${businessData.address?.streetName}, ${businessData?.address?.landMark}, ${businessData?.address?.city},   ${businessData.address?.state}`
+                              )}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-decoration-none   p-0 m-0"
                             >
-                              <span className="fs-12 sm:fs-10 ">Send Email</span>
-                              <p className="fs-14 sm:fs-12 pt-1"
-                                style={{ textDecoration: 'none' }}
-                              >
-                                {businessData?.contactDetails?.email}
-                              </p>
+                              <div className="row">
+                                <div className="col-auto address-logo my-auto ">
+                                  <i className="bi bi-geo-alt-fill text-2xl sm:text-lg" />
+                                </div>
+                                <div className="col text-start  text-white">
+                                  <span className="fs-12 sm:fs-10 ">
+                                    Address
+                                  </span>
+                                  <p
+                                    style={{ textDecoration: "none" }}
+                                    className="fs-14 sm:fs-12  pt-1 lh-sm "
+                                  >{`${businessData?.address?.buildingName},${businessData.address?.streetName}, ${businessData?.address?.landMark}, ${businessData?.address?.city},   ${businessData.address?.state}`}</p>
+                                </div>
+                              </div>
                             </a>
-                            <ShareButton
-                              number={businessData?.contactDetails?.primaryNumber}
-                            />
                           </div>
                         </div>
-                      </div>
-
-                      {/* Contact Section */}
-                      <div className="col-12 col-sm-4 my-1 mb-sm-0">
-                        <div className="row align-items-center justify-content-start">
-                          <div className="col-auto address-logo">
-                            <i className="bi bi-telephone text-2xl sm:text-lg" />
-                          </div>
-                          <div className="col text-start  ">
-                            <span className="fs-12 sm:fs-10" >
-                              Contact
-                            </span>
-                            <p className="fs-14 sm:fs-12 mb-0 pt-1 ">
-                              <a className="text-white "
-                                style={{ textDecoration: 'none' }}
-                                href={`tel:${businessData?.contactDetails?.primaryNumber}`}
-                              >
-                                {businessData?.contactDetails?.primaryNumber}
-                              </a>
-                            </p>
-                            <p className="fs-14 sm:fs-12 mt-0">
+                        {/* Email Section */}
+                        <div className="col-12 col-sm-4 my-1  mb-sm-0">
+                          <div className="row align-items-center justify-content-start">
+                            <div className="col-auto address-logo">
+                              <i className="bi bi-envelope-fill text-2xl sm:text-lg" />
+                            </div>
+                            <div className="col text-start ">
                               <a
-                              className="text-white lh-sm"
-                                style={{ textDecoration: 'none' }}
-                                href={`tel:${businessData?.contactDetails?.secondaryNumber}`}
+                                href={`mailto:${businessData?.contactDetails?.email}`}
+                                className="text-decoration-none text-white"
                               >
-                                {businessData?.contactDetails?.secondaryNumber}
+                                <span className="fs-12 sm:fs-10 ">
+                                  Send Email
+                                </span>
+                                <p
+                                  className="fs-14 sm:fs-12 pt-1"
+                                  style={{ textDecoration: "none" }}
+                                >
+                                  {businessData?.contactDetails?.email}
+                                </p>
                               </a>
-                            </p>
+                              <ShareButton
+                                number={
+                                  businessData?.contactDetails?.primaryNumber
+                                }
+                              />
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Contact Section */}
+                        <div className="col-12 col-sm-4 my-1 mb-sm-0">
+                          <div className="row align-items-center justify-content-start">
+                            <div className="col-auto address-logo">
+                              <i className="bi bi-telephone text-2xl sm:text-lg" />
+                            </div>
+                            <div className="col text-start  ">
+                              <span className="fs-12 sm:fs-10">Contact</span>
+                              <p className="fs-14 sm:fs-12 mb-0 pt-1 ">
+                                <a
+                                  className="text-white "
+                                  style={{ textDecoration: "none" }}
+                                  href={`tel:${businessData?.contactDetails?.primaryNumber}`}
+                                >
+                                  {businessData?.contactDetails?.primaryNumber}
+                                </a>
+                              </p>
+                              <p className="fs-14 sm:fs-12 mt-0">
+                                <a
+                                  className="text-white lh-sm"
+                                  style={{ textDecoration: "none" }}
+                                  href={`tel:${businessData?.contactDetails?.secondaryNumber}`}
+                                >
+                                  {
+                                    businessData?.contactDetails
+                                      ?.secondaryNumber
+                                  }
+                                </a>
+                              </p>
+                            </div>
                           </div>
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
-              </div>
+              </Box>
             </Box>
-          </Box>
-          <div className="mt-2 mb-3 sm:mt-0 sm:mb-0 d-none d-sm-flex  ">
-            <div className="container px-4 sm:px-0">
-
-              <div className="col-12 address-section mt-4">
-                <div className="row d-flex justify-content-between align-items-center  p-2">
-
-                  {/* Address Section */}
-                  <div className="col-12 col-sm-4  my-1">
-                    <div className=" d-flex align-items-center  justify-content-start">
-                      <a
-                        href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
-                          `${businessData?.address?.buildingName},${businessData.address?.streetName}, ${businessData?.address?.landMark}, ${businessData?.address?.city},   ${businessData.address?.state}`,
-                        )}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-
-                        className="text-decoration-none   p-0 m-0"
-                      >
-                        <div className="row">
-                          <div className="col-auto address-logo my-auto ">
-                            <i className="bi bi-geo-alt-fill text-2xl sm:text-lg" />
-                          </div>
-                          <div className="col text-white">
-                            <span className="fs-12 sm:fs-10">Address</span>
-                            <p
-                              style={{ textDecoration: 'none' }}
-
-                              className="fs-14 sm:fs-12 ">{`${businessData?.address?.buildingName},${businessData.address?.streetName}, ${businessData?.address?.landMark}, ${businessData?.address?.city},   ${businessData.address?.state}`}</p>
-                          </div>
-                        </div>
-                      </a>
-                    </div>
-                  </div>
-                  {/* Email Section */}
-                  <div className="col-12 col-sm-4 my-1  mb-sm-0">
-                    <div className="row align-items-center justify-content-start">
-                      <div className="col-auto address-logo">
-                        <i className="bi bi-envelope-fill text-2xl sm:text-lg" />
-                      </div>
-                      <div className="col">
+            <div className="mt-2 mb-3 sm:mt-0 sm:mb-0 d-none d-sm-flex  ">
+              <div className="container px-4 sm:px-0">
+                <div className="col-12 address-section mt-4">
+                  <div className="row d-flex justify-content-between align-items-center  p-2">
+                    {/* Address Section */}
+                    <div className="col-12 col-sm-4  my-1">
+                      <div className=" d-flex align-items-center  justify-content-start">
                         <a
-                          href={`mailto:${businessData?.contactDetails?.email}`}
-                          className="text-decoration-none text-white"
+                          href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+                            `${businessData?.address?.buildingName},${businessData.address?.streetName}, ${businessData?.address?.landMark}, ${businessData?.address?.city},   ${businessData.address?.state}`
+                          )}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-decoration-none   p-0 m-0"
                         >
-                          <span className="fs-12 sm:fs-10 ">Send Email</span>
-                          <p className="fs-14 sm:fs-12"
-                            style={{ textDecoration: 'none' }}
-                          >
-                            {businessData?.contactDetails?.email}
-                          </p>
+                          <div className="row">
+                            <div className="col-auto address-logo my-auto ">
+                              <i className="bi bi-geo-alt-fill text-2xl sm:text-lg" />
+                            </div>
+                            <div className="col text-white">
+                              <span className="fs-12 sm:fs-10">Address</span>
+                              <p
+                                style={{ textDecoration: "none" }}
+                                className="fs-14 sm:fs-12 "
+                              >{`${businessData?.address?.buildingName},${businessData.address?.streetName}, ${businessData?.address?.landMark}, ${businessData?.address?.city},   ${businessData.address?.state}`}</p>
+                            </div>
+                          </div>
                         </a>
-                        <ShareButton
-                          number={businessData?.contactDetails?.primaryNumber}
-                        />
                       </div>
                     </div>
-                  </div>
+                    {/* Email Section */}
+                    <div className="col-12 col-sm-4 my-1  mb-sm-0">
+                      <div className="row align-items-center justify-content-start">
+                        <div className="col-auto address-logo">
+                          <i className="bi bi-envelope-fill text-2xl sm:text-lg" />
+                        </div>
+                        <div className="col">
+                          <a
+                            href={`mailto:${businessData?.contactDetails?.email}`}
+                            className="text-decoration-none text-white"
+                          >
+                            <span className="fs-12 sm:fs-10 ">Send Email</span>
+                            <p
+                              className="fs-14 sm:fs-12"
+                              style={{ textDecoration: "none" }}
+                            >
+                              {businessData?.contactDetails?.email}
+                            </p>
+                          </a>
+                          <ShareButton
+                            number={businessData?.contactDetails?.primaryNumber}
+                          />
+                        </div>
+                      </div>
+                    </div>
 
-                  {/* Contact Section */}
-                  <div className="col-12 col-sm-4 my-1 mb-sm-0">
-                    <div className="row align-items-center justify-content-start">
+                     {/* Contact Section */}
+                  <div className="col-12 col-sm-3  mb-sm-0 my-2 ">
+                    <div className="row d-flex align-items-center justify-content-start">
                       <div className="col-auto address-logo">
                         <i className="bi bi-telephone text-2xl sm:text-lg" />
                       </div>
                       <div className="col">
-                        <span className="fs-12 sm:fs-10" >
+                        <span
+                          className="fs-12 sm:fs-10"
+                          style={{ color: 'white' }}
+                        >
                           Contact
                         </span>
                         <p className="fs-14 sm:fs-12 mb-0">
                           <a
-                            style={{ textDecoration: 'none' }}
+                            style={{ color: 'white', textDecoration: "none" }}
                             href={`tel:${businessData?.contactDetails?.primaryNumber}`}
                           >
+                            + {businessData?.contactDetails?.primaryCountryCode}{" "}
                             {businessData?.contactDetails?.primaryNumber}
                           </a>
                         </p>
                         <p className="fs-14 sm:fs-12 mt-0">
                           <a
-                            style={{ textDecoration: 'none' }}
+                            className={`${
+                              businessData?.contactDetails?.secondaryNumber ??
+                              "d-none"
+                            }`}
+                            style={{ color: 'white', textDecoration: "none" }}
                             href={`tel:${businessData?.contactDetails?.secondaryNumber}`}
                           >
+                            +{" "}
+                            {businessData?.contactDetails?.secondaryCountryCode}{" "}
                             {businessData?.contactDetails?.secondaryNumber}
                           </a>
                         </p>
                       </div>
                     </div>
                   </div>
+
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-          <Box mt={{ xs: "10rem", md: "5rem" }}>
-            <WelcomeCard businessData={businessData} />
-          </Box>
-          {/* <SpecialServices service={businessData.specialServices} theme={businessData?.theme} /> */}
-          <MenuSection productSection={businessData?.specialServices} theme={businessData?.theme} />
-          <MenuSection productSection={businessData?.productSection} theme={businessData?.theme} product />
-          <MenuSection productSection={businessData?.service} theme={businessData?.theme} />
-          {/* <ServicesSection businessData={businessData} /> */}
-          <div id="gallery">
-          <Gallery businessData={businessData} />
-          </div>
-          <ReviewSection businessData={businessData} />
-          <ContactForm businessData={businessData} />
-          <SubscribeSection />
-        </>}
+            <Box mt={{ xs: "10rem", md: "5rem" }}>
+              <WelcomeCard businessData={businessData} />
+            </Box>
+            {/* <SpecialServices service={businessData.specialServices} theme={businessData?.theme} /> */}
+            <MenuSection
+              productSection={businessData?.specialServices}
+              theme={businessData?.theme}
+            />
+            <MenuSection
+              productSection={businessData?.productSection}
+              theme={businessData?.theme}
+              product
+            />
+            <MenuSection
+              productSection={businessData?.service}
+              theme={businessData?.theme}
+            />
+            {/* <ServicesSection businessData={businessData} /> */}
+            <div id="gallery">
+              <Gallery businessData={businessData} />
+            </div>
+            <ReviewSection businessData={businessData} />
+            <ContactForm 
+            businessData={businessData} 
+              />
+            <SubscribeSection />
+          </>
+        )}
         <TemplateFooter businessData={businessData} closeDays={closeDays} />
-        <a href="#" style={{ width: "2.5rem", height: "2.5rem", right: "16px", }} className="btn btn-lg btn-bottom btn-lg-square bg-transparent rounded-circle back-to-top1"><i className="bi bi-arrow-up"></i></a>
+        <a
+          href="#"
+          style={{ width: "2.5rem", height: "2.5rem", right: "16px" }}
+          className="btn btn-lg btn-bottom btn-lg-square bg-transparent rounded-circle back-to-top1"
+        >
+          <i className="bi bi-arrow-up"></i>
+        </a>
         {loading && <Loader />}
       </Box>
     </>

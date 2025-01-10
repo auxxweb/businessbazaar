@@ -8,53 +8,57 @@ import { getAllBusinessReviews } from "../../Functions/functions";
 import { formatDate } from "../../utils/app.utils";
 import { NavLink } from "react-bootstrap";
 
-const settings = {
-  dots: false,
-  infinite: true,
-  speed: 500,
-  slidesToShow: 3,
-  slidesToScroll: 1,
-  autoplay: true,
-  arrows: false,
-  responsive: [
-    {
-      breakpoint: 1024,
-      settings: {
-        slidesToShow: 2,
-        slidesToScroll: 1,
-        infinite: true,
-      },
-    },
-    {
-      breakpoint: 768,
-      settings: {
-        slidesToShow: 1,
-        slidesToScroll: 1,
-      },
-    },
-    {
-      breakpoint: 600,
-      settings: {
-        slidesToShow: 1,
-        slidesToScroll: 1,
-      },
-    },
 
-    {
-      breakpoint: 390,
-      settings: {
-        slidesToShow: 1,
-        slidesToScroll: 1,
-      },
-    },
-  ],
-};
 const ReviewSection = ({ businessData }) => {
   const [visible, setVisible] = useState(false);
   const [reviews, setReviews] = useState([])
   const [reviewCount, setReviewCount] = useState(0)
   const [reviewFetch, setreviewFetch] = useState(false)
   const { id } = useParams()
+  const [reviewTrigger, setReviewTrigger] = useState(false); // Dependency for triggering refresh
+
+
+  const settings = {
+    dots: false,
+    infinite: !reviews.length,
+    speed: 500,
+    slidesToShow: 3,
+    slidesToScroll: 1,
+    autoplay: true,
+    arrows: false,
+    responsive: [
+      {
+        breakpoint: 1024,
+        settings: {
+          slidesToShow: 2,
+          slidesToScroll: 1,
+          infinite: true,
+        },
+      },
+      {
+        breakpoint: 768,
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1,
+        },
+      },
+      {
+        breakpoint: 600,
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1,
+        },
+      },
+  
+      {
+        breakpoint: 390,
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1,
+        },
+      },
+    ],
+  };
 
   useEffect(() => {
     const fetchReview = async () => {
@@ -64,17 +68,17 @@ const ReviewSection = ({ businessData }) => {
       setReviewCount(response?.data?.totalCount)
     }
     fetchReview()
-  }, [id, reviewFetch])
+  }, [id, reviewFetch,reviewTrigger])
 
   return (
-    <Box backgroundColor={"#F3F3F4"} padding={"3rem 5rem"}>
+    <Box backgroundColor={"#F3F3F4"} padding={"2rem 3rem"}>
       <Box
         maxWidth={"lg"}
         display={"flex"}
         flexDirection={"column"}
         justifyContent={"center"}
         alignItems={"center"}
-        margin={"1rem 2rem"}
+        margin={"1rem 1rem"}
       >
         <Box
           display={"flex"}
@@ -103,7 +107,7 @@ const ReviewSection = ({ businessData }) => {
               }}
             ></Box>
           </Box>
-          <Box maxWidth={"72%"}>
+          <Box maxWidth={"96%"}>
             <Typography
               sx={{
                 color: "#3C4247",
@@ -243,7 +247,7 @@ const ReviewSection = ({ businessData }) => {
         </Box>
       </Box>
       
-      <WriteReviewModal visible={visible} setVisible={setVisible} theme={businessData?.theme} />
+      <WriteReviewModal visible={visible} setVisible={setVisible} setReviewTrigger={setReviewTrigger} theme={businessData?.theme} />
     </Box>
   );
 };

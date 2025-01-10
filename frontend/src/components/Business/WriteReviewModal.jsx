@@ -10,7 +10,7 @@ import {
   createBusinessReview,
 } from '../../Functions/functions'
 
-const WriteReviewModal = ({ visible, setVisible, theme }) => {
+const WriteReviewModal = ({ visible, setVisible, theme, setReviewTrigger  }) => {
 
   const [review, setReview] = useState(
     {
@@ -42,6 +42,7 @@ const WriteReviewModal = ({ visible, setVisible, theme }) => {
           name: '',
           review: '',
         })
+        setReviewTrigger((prev) => !prev);
         if (response?.data) {
           toast.success('Thank you for your review!', {
             position: 'top-right',
@@ -56,6 +57,8 @@ const WriteReviewModal = ({ visible, setVisible, theme }) => {
               color: '#FFFFFF', // White text
             },
           })
+         
+
           setVisible(false)
         }
       })
