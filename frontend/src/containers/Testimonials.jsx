@@ -129,10 +129,10 @@ return (
       <div className="col-12 h-50-vh"><img src="/src/assets/images/testi-banner.jpg" alt="" className='w-100 h-100' style={{ objectFit: 'cover', filter: "brightness(0.5)" }} /></div>
       <div className="container d-block" id="review">
         <div className="mt-3 mb-3">
-          <h1 className="text-center p-3 pt-5 fw-bold " data-aos="zoom-out">
+          <h1 className="text-center p-3 pt-5 fw-bold ">
             Review
           </h1>
-          <p className="mt-3 text-center" data-aos="zoom-in">
+          <p className="mt-3 text-center" >
             Hear from those who have experienced our services firsthand. Read
             their stories and see why we’re a trusted choice for so many.
             Their feedback is a testament to our commitment to excellence!
@@ -161,7 +161,7 @@ return (
             <button className="btn text-white  btn-theme " onClick={(() => setVisible(true))}>write Review</button>
           </div>
           {allReviews && allReviews?.map((item) => (
-            <div data-aos="zoom-out" key={item?._id} className="  testi-slide col-12 col-md-6 col-lg-4  mx-auto  p-3  " >
+            <div  key={item?._id} className="  testi-slide col-12 col-md-6 col-lg-4  mx-auto  p-3  " >
               <div
                 style={{ minHeight: "15.5rem" }}
                 className={`p-3  rounded shadow position-relative bg-white h-full  d-flex justify-content-between flex-column `}
