@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Carousel, Container, Nav, Navbar, NavLink } from "react-bootstrap";
+import {  Container, Nav, Navbar, NavLink } from "react-bootstrap";
 import "/src/assets/css/template.css";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
@@ -24,7 +24,6 @@ import Placeholder from "/images/placeholder.jpg";
 import Loader from "../components/Loader/Loader";
 import NewsArticles from "./NewsArticles";
 import BusinessReviews from "./BusinessReviews";
-import { Globe } from "lucide-react";
 
 let items = document?.querySelectorAll(".carousel .carousel-item");
 
