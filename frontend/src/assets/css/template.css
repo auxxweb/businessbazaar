@@ -36,9 +36,17 @@
 }
 
 .banner-image {
-  border-radius: 100px 40px;
-  max-height: 400px;
-  object-fit: cover;
+  border-radius: 120px 80px;
+  max-height: 300px;
+  object-fit: contain;
+}
+
+@media (max-width: 768px) {
+  .banner-image {
+    border-radius: 120px 80px;
+    max-height: 500px;
+    object-fit: contain; /* You can adjust the top margin as needed */
+  }
 }
 
 .banner-image-2 {
@@ -311,7 +319,7 @@ footer {
 }
 
 .home-navbar.navbar a {
-  color: white !important;
+  color: rgb(0, 0, 0) !important;
 }
 
 .home-navbar.navbar-active {
@@ -321,6 +329,7 @@ footer {
 .home-navbar.navbar-active a {
   color: rgb(0, 0, 0) !important;
 }
+
 
 #home {
   position: relative;
@@ -390,35 +399,79 @@ footer {
 .banner-main-div {
   padding-inline: 30px !important;
 }
+/* Default for larger screens (e.g., laptop size) */
+.custom-col {
+  max-width: calc(12.5% - 12px);
+  flex: 0 0 calc(12.5% - 12px);
+}
 
-.home-category-div {
-  flex-flow: wrap;
-  gap: 25px;
-  justify-content: center;
-  line-height: 0;
+.custom-row-cols {
   display: flex;
-  margin-top: 15px;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
 }
 
-.cat-img {
-  width: 30px;
-  height: 30px;
-  object-fit: cover;
-  border-radius: 50%;
-  border: 1px solid #dbdbdb;
-  margin-right: 8px;
+.row.mt-5 {
+  display: flex;
+  justify-content: center;
 }
 
-.cat-div {
-  border: 1px solid #cfcfcf;
-  padding: 5px 10px 5px 5px;
-  display: flex !important;
+.card-body {
+  
+  display: flex;
+  flex-direction: column;
   align-items: center;
-  border-radius: 30px;
-  width: fit-content !important;
-  color: #000;
-  background: #fff;
-  box-shadow: rgba(0, 0, 0, 0.04) 0px 3px 5px;
+  justify-content: center;
+  height: 120px;
+  width: 120px;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  transition: transform 0.2s ease-in-out;
+}
+
+img {
+  object-fit: contain;
+  border-radius: 4px;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .custom-col {
+    max-width: calc(33.33% - 8px); /* Three cards per row */
+    flex: 0 0 calc(33.33% - 8px);
+  }
+
+  .card-body {
+    height: 80px; /* Adjust card height for mobile */
+    width: 100px; /* Adjust card width for mobile */
+  }
+
+  img {
+    width: 30px;
+    height: 30px;
+  }
+}
+
+@media (max-width: 576px) {
+  .custom-col {
+    max-width: calc(50% - 8px); /* Two cards per row */
+    flex: 0 0 calc(50% - 8px);
+  }
+
+  .card-body {
+    height: 70px;
+    width: 90px; /* Smaller width for smaller screens */
+    align-items: center;
+    justify-content: center;
+  }
+
+  img {
+    width: 25px;
+    height: 25px;
+  }
 }
 
 .business-card {
@@ -426,4 +479,135 @@ footer {
 }
 
 
+/* Banner Section */
+.banner-section {
+  position: relative;
+  margin-left: 60px;
+  margin-right: 60px;
 
+  margin-top: 110px;
+  text-align: center;
+  border-radius: 2px;
+}
+
+@media (max-width: 768px) {
+  .banner-section {
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 120px; /* You can adjust the top margin as needed */
+  }
+}
+.banner-overlay {
+  position: relative;
+}
+
+.banner-carousel {
+  height: 50vh;
+}
+@media (max-width: 768px) {
+  .banner-carousel {
+    height: 40vh;
+  }
+}
+
+.banner-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: brightness(0.8);
+  border-radius: 30px;
+}
+
+.banner-content {
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  text-align: center;
+}
+@media (max-width: 768px) {
+  .banner-content {
+    position: absolute;
+    top: 32%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    text-align: center;
+  }
+}
+
+.banner-content h1 {
+  font-size: 36px;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+.search-bar {
+  display: flex;
+  flex-direction: row; /* Change from column to row for a horizontal layout */
+  gap: 10px; /* Space between items */
+  justify-content: center;
+  align-items: center;
+}
+
+.search-input-group {
+  display: flex;
+  align-items: center;
+  border: 2px solid white;
+  border-radius: 8px;
+  overflow: hidden;
+  flex-grow: 1; /* Make the input field take available space */
+}
+
+.search-input-group input {
+  padding: 10px;
+  background: transparent;
+  color: white;
+  border: none;
+  outline: none;
+  flex-grow: 1; /* Make the input field take available space */
+}
+
+.search-input-group button {
+  background: #f47a20;
+  border: none;
+  padding: 10px 15px;
+  color: white;
+}
+
+.search-input-group button i {
+  font-size: 16px;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+  .search-bar {
+    flex-direction: column; /* Switch to column on smaller screens */
+  }
+
+  .search-input-group {
+    width: 100%; /* Make input fields take full width on small screens */
+  }
+}
+/* Responsive Styles */
+@media (max-width: 768px) {
+  .profile-options {
+    display: none;
+  }
+
+  .search-bar {
+    flex-direction: column;
+  }
+
+  .search-input-group {
+    width: 100%;
+  }
+
+  .header-nav {
+    padding: 10px 20px;
+  }
+
+  .banner-content h1 {
+    font-size: 24px;
+  }
+}

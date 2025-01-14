@@ -37,54 +37,57 @@ const LocationAutocomplete = ({ setLocation ,libraries}) => {
   };
 
   return (
-    <div className="col-12 col-md-9 mt-5 h-auto pt-3">
-      {isLoaded && (
-        <StandaloneSearchBox
-          onLoad={(ref) => (inputRef.current = ref)}
-          onPlacesChanged={handleOnPlacesChanged}
+    <div className="col-12 col-md-5 h-auto">
+    {isLoaded && (
+      <StandaloneSearchBox
+        onLoad={(ref) => (inputRef.current = ref)}
+        onPlacesChanged={handleOnPlacesChanged}
+      >
+        <div
+          className="input-group banner-input-div w-60"  // Reduced width to 75% or you can set a fixed width like 'w-50' or '300px'
+          style={{
+            border: "1px solid #ced4da",
+            borderRadius: "6px",
+            overflow: "hidden",
+            background: "none",
+            height: "46px", // Reduced height for the input group
+          }}
         >
-          <div
-            className="input-group  banner-input-div w-100"
+          <span
+            className="input-group-text"
             style={{
-              border: "1px solid #ced4da",
-              borderRadius: "8px",
-              overflow: "hidden",
+              backgroundColor: "white",
+              border: "none",
+              padding: "0 12px",
+              display: "flex",
+              alignItems: "center",
+              color: "white",
               background: "none",
+              height: "100%", // Ensures the icon is vertically centered
             }}
           >
-            <span
-              className="input-group-text"
-              style={{
-                backgroundColor: "white",
-                border: "none",
-                padding: "0 12px",
-                display: "flex",
-                alignItems: "center",
-                color: "white",
-                background: "none",
-              }}
-            >
-              <i className="bi bi-crosshair2" style={{ fontSize: "1.2em" }}></i>
-            </span>
-            <input
-              value={searchValue}
-              onChange={onInputChange}
-              type="text"
-              className="form-control custom-placeholder"
-              placeholder="Location"
-              style={{
-                border: "none",
-                boxShadow: "none",
-                paddingLeft: "0",
-                fontSize: "1em",
-                color: "white",
-                background: "none",
-              }}
-            />
-          </div>
-        </StandaloneSearchBox>
-      )}
-    </div>
+            <i className="bi bi-crosshair2" style={{ fontSize: "1.2em" }}></i>
+          </span>
+          <input
+            value={searchValue}
+            onChange={onInputChange}
+            type="text"
+            className="form-control custom-placeholder"
+            placeholder="Location"
+            style={{
+              border: "none",
+              boxShadow: "none",
+              paddingLeft: "0",
+              fontSize: "1em",
+              color: "white",
+              background: "none",
+              height: "100%", // Reduced height for the input field
+            }}
+          />
+        </div>
+      </StandaloneSearchBox>
+    )}
+  </div>
   );
 };
 

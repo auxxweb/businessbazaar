@@ -4,7 +4,13 @@ import "../assets/css/slick.css";
 import "../assets/css/slick-theme.css";
 import BusinessHeader from "./HeaderBusiness";
 
-export default function Layout({ title, children, sidebar = "true" }) {
+export default function Layout({
+  setLocation,
+  onSearch,
+  title,
+  children,
+  sidebar = "true",
+}) {
   return (
     <>
       <Helmet>
@@ -40,12 +46,18 @@ export default function Layout({ title, children, sidebar = "true" }) {
       </Helmet>
       {sidebar === "true" ? (
         <div className="layout-sidebar overflow-hidden">
-          {title ==='Business'? <BusinessHeader/>:<Header />}
-          
+          {title === "Business" ? (
+            <BusinessHeader />
+          ) : (
+            <Header onSearch={onSearch} setLocation={setLocation} />
+          )}
+
           <div className="">{children}</div>
         </div>
       ) : (
-        <div className="layout-children container mt-4 overflow-hidden">{children}</div>
+        <div className="layout-children container mt-4 overflow-hidden">
+          {children}
+        </div>
       )}
 
       <Helmet>

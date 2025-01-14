@@ -23,10 +23,15 @@ import BusinessTermsAndConditions from "./components/Business/BusinessTermsAndCo
 import Loader from "./components/Loader/Loader";
 import ShareButton from "./components/ShareButton";
 import NotFound from "./components/NotFound";
+// import IndexHome from "./views/Home/indexNew";
 
 // Lazy loading components
 const Home = lazy(() =>
   import("./views/Home")
+);
+
+const IndexHome = lazy(() =>
+  import("./views/Home/indexNew")
 );
 // const Business = lazy(() => import("./containers/Business"));
 // const Testimonials = lazy(() => import("./containers/Testimonials"));
@@ -86,6 +91,7 @@ const Razorpay = lazy(() => import("./views/CreateBusiness/steps/Razorpay"));
 
 const router = createBrowserRouter([
   { path: "/", element: <Home /> },
+  { path: "/index", element: <IndexHome/> },
   {
     path: "/create-business",
     children: [
