@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import PropTypes from "prop-types";
 import { Carousel } from "react-bootstrap";
 import LocationAutocomplete from "../../../components/LocationAutoComplete";
@@ -8,16 +8,50 @@ const libraries = ["places"];
 
 const CarousalIndex = ({ bannerData, onSearch, setLocation }) => {
   const [searchData, setSearchData] = useState("");
+  const [showInputs, setShowInputs] = useState(true);
+  const [animationClass, setAnimationClass] = useState("fade-in");
 
   const handleSearchSubmit = useCallback(() => {
     onSearch(searchData);
   }, [searchData, onSearch]);
 
+  useEffect(() => {
+    let lastScrollY = window.scrollY;
+
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+
+      if (currentScrollY > 200) {
+        if (currentScrollY > lastScrollY) {
+          // Scrolling down, hide inputs
+          setAnimationClass("fade-out");
+          setTimeout(() => setShowInputs(false), 300); // Match animation duration
+        } else {
+          // Scrolling up, show inputs
+          setShowInputs(true);
+          setAnimationClass("fade-in");
+        }
+      } else {
+        // Always show inputs if scrolled less than 200px
+        setShowInputs(true);
+        setAnimationClass("fade-in");
+      }
+
+      lastScrollY = currentScrollY;
+    };
+
+    window.addEventListener("scroll", handleScroll);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
   return (
     <div id="home" className="home-section">
       <div className="banner-section relative">
         <div className="banner-overlay relative">
-          <Carousel controls={false} className="banner-carousel">
+          <Carousel controls={false} className="">
             {bannerData && bannerData.length > 0 ? (
               bannerData.map((banner) => (
                 <Carousel.Item
@@ -45,31 +79,35 @@ const CarousalIndex = ({ bannerData, onSearch, setLocation }) => {
           </Carousel>
         </div>
 
-        <div className="banner-content absolute top-2/2 left-2/2 transform -translate-x-1/2 -translate-y-1/2 text-white text-center ">
-          <h1 className="text-2xl md:text-4xl font-bold ">
+        <div className="banner-content absolute top-2/2 left-2/2 transform -translate-x-1/2 -translate-y-1/2 text-white text-center">
+          <h1 className="text-2xl md:text-4xl font-bold">
             Your Digital Platform for Growing Your Business
           </h1>
-          <div className="search-bar flex flex-col sm:flex-row gap-2 justify-center items-center">
-            <LocationAutocomplete
-              setLocation={setLocation}
-              libraries={libraries}
-            />
-            <div className="search-input-group flex items-center border-2 border-white rounded-md overflow-hidden">
-              <input
-                type="text"
-                placeholder="Search for any service..."
-                value={searchData}
-                onInput={(e) => setSearchData(e.target.value)}
-                className="p-2 bg-transparent text-white outline-none"
+          {showInputs && (
+            <div
+              className={`search-bar flex flex-col sm:flex-row gap-2 justify-center items-center ${animationClass}`}
+            >
+              <LocationAutocomplete
+                setLocation={setLocation}
+                libraries={libraries}
               />
-              <button
-                onClick={handleSearchSubmit}
-                className="bg-orange-500 p-3.5 text-white"
-              >
-                <i className="bi bi-search"></i>
-              </button>
+              <div className="search-input-group flex items-center border-2 border-white rounded-md overflow-hidden">
+                <input
+                  type="text"
+                  placeholder="Search for any service..."
+                  value={searchData}
+                  onInput={(e) => setSearchData(e.target.value)}
+                  className="p-2 bg-transparent text-white outline-none"
+                />
+                <button
+                  onClick={handleSearchSubmit}
+                  className="bg-orange-500 p-3.5 text-white"
+                >
+                  <i className="bi bi-search"></i>
+                </button>
+              </div>
             </div>
-          </div>
+          )}
         </div>
       </div>
     </div>

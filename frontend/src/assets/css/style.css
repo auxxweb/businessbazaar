@@ -155,8 +155,8 @@ body{
 }.footer-section{
     background-color: #111111;
 }.btn-theme{
-    background-color: #105193 !important;
-    border-radius: 50px !important;
+    background:linear-gradient(to right,#e72693, #ff7e2b ) ;
+    border-radius: 10px !important;
 }footer{
     font-family:  "Inter", sans-serif;
 }

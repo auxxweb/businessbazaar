@@ -4,14 +4,15 @@ import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import { NavLink, useLocation } from "react-router-dom";
 import LocationAutocomplete from "./LocationAutoComplete";
+
 const libraries = ["places"];
 
-export default function Header({onSearch, setLocation}) {
+export default function Header({ onSearch, setLocation }) {
   const [expanded, setExpanded] = useState(false);
+  const [showInputsOnScroll, setShowInputsOnScroll] = useState(false);
   const navbarRef = useRef(null);
   const location = useLocation();
 
-  // handling the toggle when clicking and scrolling time
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (navbarRef.current && !navbarRef.current.contains(event.target)) {
@@ -20,7 +21,14 @@ export default function Header({onSearch, setLocation}) {
     };
 
     const handleScroll = () => {
-      setExpanded(false);
+      setExpanded(false); // Close menu on scroll
+
+      // Show inputs only after scrolling 200px
+      if (window.scrollY > 200) {
+        setShowInputsOnScroll(true);
+      } else {
+        setShowInputsOnScroll(false);
+      }
     };
 
     document.addEventListener("click", handleClickOutside);
@@ -31,117 +39,114 @@ export default function Header({onSearch, setLocation}) {
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
+
   const [searchData, setSearchData] = useState("");
 
-  
-    const handleSearchSubmit = useCallback(() => {
-      onSearch(searchData);
-    }, [searchData, onSearch]);
-  
+  const handleSearchSubmit = useCallback(() => {
+    onSearch(searchData);
+  }, [searchData, onSearch]);
 
-  // Check if the current route is "/reviews"
   const isReviewsPage = location.pathname === "/reviews";
 
   return (
     <Navbar
       expand="lg"
-      className={`fixed-top home-navbar ${expanded ? "navba" : ""}`}
+      className={`fixed-top home-navbar ${
+        expanded ? "navbar-menu bg-white" : ""
+      }`}
       expanded={expanded}
       ref={navbarRef}
     >
-      <Container>
-        <Navbar.Brand
-          href="/"
-          className="fw-bold w-50"
-          style={{ fontSize: "36px" }}
-        >
-          <img
-            src="/images/enconnectLogo.png"
-            alt=""
-            style={{ height: "50px", width: "150px" }}
+      <Container fluid>
+        <div className="d-flex align-items-center w-100 justify-content-between">
+          {/* Logo */}
+          <Navbar.Brand href="/" className="fw-bold d-flex align-items-center">
+            <img
+              src="/images/enconnectLogo.png"
+              alt="Logo"
+              style={{ height: "50px", width: "150px" }}
+            />
+          </Navbar.Brand>
+
+          {/* Navbar Toggle */}
+          <Navbar.Toggle
+            aria-controls="basic-navbar-nav"
+            onClick={() => setExpanded(!expanded)}
+            className="custom-toggler"
           />
-        </Navbar.Brand>
 
-        <Navbar.Toggle
-          aria-controls="basic-navbar-nav"
-          style={{ color: "black" }}
-          onClick={() => setExpanded(!expanded)}
-        />
+          {/* Inputs: Location & Search */}
+          <div
+            className={`inputs-container d-none d-lg-flex align-items-center gap-2 flex-grow-1 mx-3 ${
+              showInputsOnScroll ? "show" : ""
+            }`}
+          >
+            <div className="location-autocomplete">
+              <LocationAutocomplete
+                setLocation={setLocation}
+                libraries={libraries}
+              />
+            </div>
+            <div
+              className="input-group border border-black rounded overflow-hidden"
+              style={{ height: "48px", width: "268px" }}
+            >
+              <input
+                type="text"
+                placeholder="Search for any service..."
+                value={searchData}
+                onInput={(e) => setSearchData(e.target.value)}
+                className="form-control bg-transparent text-white border-0"
+              />
+              <button
+                onClick={handleSearchSubmit}
+                className="btn search-submit-btn text-white"
+              >
+                <i className="bi bi-search"></i>
+              </button>
+            </div>
+          </div>
+        </div>
 
-        <Navbar.Collapse id="basic-navbar-nav" className="text-center">
-          <Nav className="ms-auto d-flex justify-content-between w-100">
+        {/* Navigation Items */}
+        <Navbar.Collapse id="basic-navbar-nav">
+          <Nav className="ms-auto text-center align-items-center justify-content-center text-lg-start">
             {!isReviewsPage ? (
               <>
-                {/* <div className="banner-content absolute top-2/2 left-2/2 transform -translate-x-1/2 -translate-y-1/2 text-white text-center px-4">
-                  <h1 className="text-3xl md:text-4xl font-bold mb-5">
-                    Your Digital Platform for Growing Your Business
-                  </h1>
-                  <div className="search-bar flex flex-col sm:flex-row gap-4 justify-center items-center">
-                    <LocationAutocomplete
-                      setLocation={setLocation}
-                      libraries={libraries}
-                    />
-                    <div className="search-input-group flex items-center border-2 border-white rounded-md overflow-hidden">
-                      <input
-                        type="text"
-                        placeholder="Search for any service..."
-                        value={searchData}
-                        onInput={(e) => setSearchData(e.target.value)}
-                        className="p-2 bg-transparent text-white outline-none"
-                      />
-                      <button
-                        onClick={handleSearchSubmit}
-                        className="bg-orange-500 p-2 text-white"
-                      >
-                        <i className="bi bi-search"></i>
-                      </button>
-                    </div>
-                  </div>
-                </div> */}
                 <a
                   href="#category"
-                  className="text-decoration-none mx-3 my-auto"
-                  style={{ fontSize: "16px" }}
-                  onClick={() => setExpanded(false)} // Close on link click
+                  className="text-decoration-none py-2"
+                  onClick={() => setExpanded(false)}
                 >
                   Categories
                 </a>
                 <a
                   href="#business"
-                  className="text-decoration-none mx-3 my-auto"
-                  style={{ fontSize: "16px" }}
-                  onClick={() => setExpanded(false)} // Close on link click
+                  className="text-decoration-none mx-2 py-2"
+                  onClick={() => setExpanded(false)}
                 >
                   Profile
                 </a>
                 <a
                   href="#review"
-                  className="text-decoration-none mx-3 my-auto"
-                  style={{ fontSize: "16px" }}
-                  onClick={() => setExpanded(false)} // Close on link click
+                  className="text-decoration-none mx-2 py-2"
+                  onClick={() => setExpanded(false)}
                 >
                   Review
                 </a>
                 <a
                   href="https://admin.enconnect.in/"
                   target="_blank"
-                  className="text-decoration-none mx-3 my-auto"
-                  style={{ fontSize: "16px" }}
-                  onClick={() => setExpanded(false)} // Close on link click
+                  rel="noopener noreferrer"
+                  className="text-decoration-none mx-2 py-2"
+                  onClick={() => setExpanded(false)}
                 >
                   Go to Dashboard
                 </a>
                 <NavLink
                   to="/create-business"
-                  className="fw-bold text-decoration-none mx-3 my-auto"
-                  style={{
-                    backgroundColor: "#105193",
-                    color: "white",
-                    borderRadius: "6px",
-                    padding: "8px 20px",
-                    fontSize: "15px",
-                  }}
-                  onClick={() => setExpanded(false)} // Close on link click
+                  className="btn my-profile-btn text-white mx-2"
+                  onClick={() => setExpanded(false)}
                 >
                   My Profile
                 </NavLink>
@@ -150,24 +155,15 @@ export default function Header({onSearch, setLocation}) {
               <>
                 <a
                   href="#review"
-                  className="text-decoration-none mx-3 my-auto"
-                  style={{ fontSize: "16px" }}
-                  onClick={() => setExpanded(false)} // Close on link click
+                  className="text-decoration-none mx-3 py-2"
+                  onClick={() => setExpanded(false)}
                 >
                   Review
                 </a>
-
                 <NavLink
                   to="/"
-                  className="fw-bold text-decoration-none mx-3 my-auto"
-                  style={{
-                    backgroundColor: "#105193",
-                    color: "white",
-                    borderRadius: "20px",
-                    padding: "8px 20px",
-                    fontSize: "15px",
-                  }}
-                  onClick={() => setExpanded(false)} // Close on link click
+                  className="btn btn-primary text-white mx-3"
+                  onClick={() => setExpanded(false)}
                 >
                   Back to Home
                 </NavLink>

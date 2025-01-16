@@ -31,6 +31,8 @@ import { useDispatch } from "react-redux";
 import ShareButtonHome from "../../components/ShareButtonHome";
 import CategoryIndex from "./components/CategoryIndex";
 import CarousalIndex from "./components/CarousalIndex";
+import BusinessIndex from "./components/BusinessIndex";
+import FooterIndex from "./components/FooterIndex";
 
 export default function Home() {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -70,8 +72,8 @@ export default function Home() {
   const [isReviewed, setIsReviewed] = useState(false);
   const [reviewLoading, setReviewLoading] = useState(false);
   const [reviews, setReviews] = useState([]);
-  const [visibleCategories, setVisibleCategories] = useState(16);
-  const [visibleBusiness, setVisibleBusiness] = useState(10);
+  const [visibleCategories, setVisibleCategories] = useState(21);
+  const [visibleBusiness, setVisibleBusiness] = useState(8);
 
   const businessSectionRef = useRef(null);
   const isInitialRender = useRef(true); // Track if it's the initial render
@@ -234,7 +236,7 @@ export default function Home() {
 
   const loadMoreCategories = async () => {
     setCategoryLoading(true)
-    const categoryDetails = await fetchCategories(currentPage1,16);
+    const categoryDetails = await fetchCategories(currentPage1,22);
     setCurrentPage1(currentPage1+1)
     setVisibleCategories((prev) => prev + 10);
     setCategoryData((prev) => [...prev, ...categoryDetails.data.data])
@@ -246,7 +248,7 @@ export default function Home() {
   const loadMoreBusiness = async () => {
     setLoading(true)
     const businessDetails = await fetchBusinesses(currentPage,
-      10,
+      9,
       "",
       location);
       setCurrentPage(currentPage + 1)
@@ -302,7 +304,7 @@ export default function Home() {
         visibleCategories={visibleCategories}
       />
 
-      <BusinessSection
+      <BusinessIndex
         scroll={businessSectionRef}
         businessData={businessData}
         loadMoreBusiness={loadMoreBusiness}
@@ -328,7 +330,7 @@ export default function Home() {
         handleReviewSubmit={handleReviewSubmit}
         reviewLoading={reviewLoading} />
 
-      <FooterSection />
+      <FooterIndex />
       {/* <a
       href="https://wa.me/<your_phone_number>?text=Hello!"
       className="whatsapp-button"

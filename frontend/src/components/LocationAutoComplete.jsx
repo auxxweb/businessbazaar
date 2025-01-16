@@ -44,13 +44,14 @@ const LocationAutocomplete = ({ setLocation ,libraries}) => {
         onPlacesChanged={handleOnPlacesChanged}
       >
         <div
-          className="input-group banner-input-div w-60"  // Reduced width to 75% or you can set a fixed width like 'w-50' or '300px'
+          className="input-group banner-input-div w-30"  // Reduced width to 75% or you can set a fixed width like 'w-50' or '300px'
           style={{
-            border: "1px solid #ced4da",
+            border: "2.5px solid #ced4da",
             borderRadius: "6px",
             overflow: "hidden",
             background: "none",
-            height: "46px", // Reduced height for the input group
+            height: "48px",
+            width : '260px' // Reduced height for the input group
           }}
         >
           <span
@@ -61,7 +62,7 @@ const LocationAutocomplete = ({ setLocation ,libraries}) => {
               padding: "0 12px",
               display: "flex",
               alignItems: "center",
-              color: "white",
+              color: "black",
               background: "none",
               height: "100%", // Ensures the icon is vertically centered
             }}
@@ -78,8 +79,8 @@ const LocationAutocomplete = ({ setLocation ,libraries}) => {
               border: "none",
               boxShadow: "none",
               paddingLeft: "0",
-              fontSize: "1em",
-              color: "white",
+              fontSize: "0.8em",
+              color: "black",
               background: "none",
               height: "100%", // Reduced height for the input field
             }}

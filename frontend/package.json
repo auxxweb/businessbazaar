@@ -9,12 +9,13 @@
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-     "start:build": "serve -s dist"
+    "start:build": "serve -s dist"
   },
   "dependencies": {
     "@emotion/react": "^11.13.3",
     "@emotion/styled": "^11.13.0",
     "@fortawesome/free-brands-svg-icons": "^6.6.0",
+    "@material-tailwind/react": "^2.1.10",
     "@mui/icons-material": "^6.1.5",
     "@mui/material": "^6.1.2",
     "@react-google-maps/api": "^2.20.3",
@@ -59,11 +60,14 @@
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
     "@vitejs/plugin-react": "^4.3.1",
+    "autoprefixer": "^10.4.20",
     "eslint": "^9.9.0",
     "eslint-plugin-react": "^7.35.0",
     "eslint-plugin-react-hooks": "^5.1.0-rc.0",
     "eslint-plugin-react-refresh": "^0.4.9",
     "globals": "^15.9.0",
+    "postcss": "^8.5.1",
+    "tailwindcss": "^3.4.17",
     "vite": "^5.4.1"
   }
 }
