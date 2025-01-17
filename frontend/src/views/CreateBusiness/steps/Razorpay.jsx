@@ -51,7 +51,7 @@ export default function Razorpay() {
     }
 
     const options = {
-      key: "rzp_test_DBApSwEptkCDdS", // Dummy Razorpay key ID for testing
+      key: import.meta.env.VITE_APP_RAZORPAY_API_KEY, // Dummy Razorpay key ID for testing
       amount: planDetails?.amount * 100, // Amount in paise (50000 paise = ₹500)
       currency: "INR",
       name: "EnConnect",

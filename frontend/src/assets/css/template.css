@@ -37,20 +37,36 @@
   padding: 5px 10px;
 }
 
-.banner-image {
-  border-radius: 120px 80px;
-  max-height: 300px;
-  object-fit: contain;
-}
-
-@media (max-width: 768px) {
+@media screen and (max-width: 768px) {
   .banner-image {
-    border-radius: 120px 80px;
-    max-height: 500px;
-    object-fit: contain; /* You can adjust the top margin as needed */
+      width: 100%;
+      height: auto;
   }
 }
 
+.banner-imageIndex {
+  width: 90%;
+  border-radius: 120px 80px;
+  max-height: 300px;
+  object-fit: contain;
+
+}
+
+.banner-image {
+  border-radius: 100px 40px;
+  max-height: 800px;
+  object-fit: cover;
+}
+
+@media (max-width: 768px) {
+  .banner-imageIndex {
+    border-radius: 120px 80px; /* Optional styling for rounded corners */
+    max-height: 700px; /* Increased height for mobile */
+    object-fit: contain; /* Ensures the image scales properly */
+    margin: 0 20px; /* Adds space to the left and right */
+    width: calc(100% - 20px);
+  }
+}
 .banner-image-2 {
   position: absolute;
   top: 60%;
@@ -146,9 +162,6 @@ footer {
     line-height: 35px;
   }
 
-  .banner-image {
-    width: 100%;
-  }
 
   .banner-image-2 img {
     width: 50%;
@@ -451,10 +464,9 @@ img {
     width: 100px; /* Adjust card width for mobile */
   }
 
-  img {
-    width: 30px;
-    height: 30px;
-  }
+}
+img ,svg{
+  vertical-align: middle;
 }
 
 @media (max-width: 576px) {
@@ -470,10 +482,10 @@ img {
     justify-content: center;
   }
 
-  img {
-    width: 25px;
-    height: 25px;
-  }
+}
+
+img ,svg{
+  vertical-align: middle;
 }
 
 .business-card {
@@ -482,15 +494,17 @@ img {
 
 
 /* Banner Section */
-.banner-section {
+.banner-sectionn {
   position: relative;
-  margin-left: 60px;
-  margin-right: 60px;
+  margin-left: 10px;
+  margin-right: 10px;
 
   margin-top: 110px;
   text-align: center;
   border-radius: 2px;
 }
+
+
 
 @media (max-width: 768px) {
   .banner-section {
@@ -499,6 +513,12 @@ img {
     margin-top: 120px; /* You can adjust the top margin as needed */
   }
 }
+.banner-section {
+  margin-top: 140px;
+  margin-bottom: 25px;
+}
+
+
 .banner-overlay {
   position: relative;
 }
@@ -513,14 +533,14 @@ img {
 }
 
 
-
 .banner-item img {
-  width: 100%;
-  height: 100%;
+  width: 90%;
+  height: 50vh;
   object-fit: contain;
   filter: brightness(0.8);
   border-radius: 30px;
 }
+
 
 .banner-content {
   position: absolute;

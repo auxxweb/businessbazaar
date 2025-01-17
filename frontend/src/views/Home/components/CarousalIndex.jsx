@@ -17,10 +17,18 @@ const CarousalIndex = ({ bannerData, onSearch, setLocation }) => {
 
   useEffect(() => {
     let lastScrollY = window.scrollY;
-
+  
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
-
+      const isMobile = window.innerWidth < 768; // Define a threshold for mobile screens
+  
+      if (isMobile) {
+        // Always show inputs on mobile devices
+        setShowInputs(true);
+        setAnimationClass("fade-in");
+        return;
+      }
+  
       if (currentScrollY > 200) {
         if (currentScrollY > lastScrollY) {
           // Scrolling down, hide inputs
@@ -36,12 +44,12 @@ const CarousalIndex = ({ bannerData, onSearch, setLocation }) => {
         setShowInputs(true);
         setAnimationClass("fade-in");
       }
-
+  
       lastScrollY = currentScrollY;
     };
-
+  
     window.addEventListener("scroll", handleScroll);
-
+  
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
@@ -49,28 +57,22 @@ const CarousalIndex = ({ bannerData, onSearch, setLocation }) => {
 
   return (
     <div id="home" className="home-section">
-      <div className="banner-section relative">
+      <div className="banner-sectionn relative">
         <div className="banner-overlay relative">
           <Carousel controls={false} className="">
             {bannerData && bannerData.length > 0 ? (
               bannerData.map((banner) => (
-                <Carousel.Item
-                  key={`key-${banner?._id}`}
-                  className="banner-item"
-                >
-                  <img
-                    className="banner-image w-full h-full object-cover rounded-lg"
-                    src={
-                      banner?.image?.length > 0 ? banner?.image : Placeholder
-                    }
-                    alt="Banner slide"
-                  />
-                </Carousel.Item>
-              ))
-            ) : (
+                <Carousel.Item key={`key-${banner?._id}`} className="banner-item">
+                <img
+                  className="banner-imageIndex h-full object-cover rounded-lg"
+                  src={banner?.image?.length > 0 ? banner?.image : Placeholder}
+                  alt="Banner slide"
+                />
+              </Carousel.Item>
+              ))) : (
               <Carousel.Item className="banner-item">
                 <img
-                  className="banner-image w-full h-full object-cover rounded-lg"
+                  className="banner-imageIndex h-full object-cover rounded-lg"
                   src="/images/placeholder.jpg"
                   alt="Default slide"
                 />

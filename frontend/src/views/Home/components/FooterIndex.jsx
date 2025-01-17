@@ -1,7 +1,25 @@
 import { useNavigate } from "react-router";
+import { Facebook, Instagram, Linkedin, MapPin, Phone } from "lucide-react";
+import { motion } from "framer-motion";
+import { NavLink } from "react-router-dom";
 
 const FooterIndex = () => {
   const navigate = useNavigate();
+
+  const socialLinks = [
+    {
+      icon: Facebook,
+      href: "https://www.facebook.com/profile.php?id=61570312289347&mibextid=ZbWKwL",
+    },
+    { icon: Instagram, href: "https://www.instagram.com/enconnect.nfc" },
+    { icon: Linkedin, href: "https://www.linkedin.com/company/enconnect/" },
+  ];
+
+  const usefulLinks = [
+    { name: "About Us", href: "#about" },
+    { name: "Services", href: "#" },
+    { name: "Review", href: "#review" },
+  ];
   return (
     <div>
       <div
@@ -15,7 +33,7 @@ const FooterIndex = () => {
           alignItems: "center", // Center align items vertically
         }}
       >
-        <div style={{ width: "60%", textAlign: "left", marginLeft:'10px' }}>
+        <div style={{ width: "60%", textAlign: "left", marginLeft: "10px" }}>
           <h1
             className="fw-bold mb-3"
             style={{ fontSize: "2rem", textAlign: "left" }}
@@ -42,176 +60,196 @@ const FooterIndex = () => {
         </div>
       </div>
 
-      <footer className=" h-auto footer-section">
+      <footer className="bg-white text-black py-5 footer-content border-top">
         <div className="container">
-          <hr className="bg-white" />
-          <div className="p-4 mt-5 pt-0 pt-md-5">
-            <div className="row ">
-              <div className="col-12 col-md-6">
-                <h1 className="fs-45 text-white text-center text-md-start fw-bold mb-3">
-                  Enconnect
-                </h1>
-                <span className="fs-20 text-white text-center text-md-start">
-                  where requirements are found
-                </span>
+          <div className="row gy-4 justify-content-between">
+            {/* Company Info */}
+            <div className="col-12 col-md-6 col-lg-3">
+              <img
+                src="/images/enconnectLogo.png"
+                width={250}
+                height={100}
+                className="imglogo img-fluid mb-3"
+                alt="Enconnect Logo"
+              />
+              <p className="mb-2 sub-txt">where requirements are found</p>
 
-                <div className="col-12 text-center text-lg-start">
-                  {/* Title */}
-                  <div className="mt-3 mb-2">
-                    <a
-                      href="#"
-                      className="fs-14 text-decoration-none text-orange "
-                      style={{ color: "#fff" }}
+              <div className="mb-4 ps-0 ps-md-4">
+                <p className="text-uppercase small mb-3 fw-bold">Follow us</p>
+                <div className="d-flex gap-3">
+                  {socialLinks.map((social, index) => (
+                    <motion.a
+                      key={index}
+                      href={social.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-black"
+                      style={{ textDecoration: "none" }}
+                      whileHover={{ scale: 1.1 }}
+                      whileTap={{ scale: 0.95 }}
                     >
-                      FOLLOW US
-                    </a>
-                  </div>
-
-                  {/* Social Media Icons */}
-                  <div className="d-flex justify-content-center justify-content-lg-start gap-3">
-                    <a
-                      href="https://www.facebook.com/profile.php?id=61570312289347&mibextid=ZbWKwL"
-                      className="contact-banner text-orange d-flex align-items-center justify-content-center"
-                      style={{
-                        fontSize: "2rem",
-                        width: "50px",
-                        height: "50px",
-                        backgroundColor: "transparent",
-                        color: "rgb(248 58 76)",
-                        border: "none",
-                      }}
-                    >
-                      <i className="bi bi-facebook"></i>
-                    </a>
-                    <a
-                      href="https://www.instagram.com/enconnect.nfc"
-                      className="contact-banner text-orange d-flex align-items-center justify-content-center"
-                      style={{
-                        fontSize: "2rem",
-                        width: "50px",
-                        height: "50px",
-                        backgroundColor: "transparent",
-                        color: "rgb(248 58 76)",
-                        border: "none",
-                      }}
-                    >
-                      <i className="bi bi-instagram"></i>
-                    </a>
-                    <a
-                      href="https://www.linkedin.com/company/enconnect/"
-                      className="contact-banner text-orange d-flex align-items-center justify-content-center"
-                      style={{
-                        fontSize: "2rem",
-                        width: "50px",
-                        height: "50px",
-                        backgroundColor: "transparent",
-                        color: "rgb(248 58 76)",
-                        border: "none",
-                      }}
-                    >
-                      <i className="bi bi-linkedin"></i>
-                    </a>
-                  </div>
-                </div>
-              </div>
-
-              <div className="col-12 col-md-6">
-                <div className="row ">
-                  <div className="col-12 col-md-6 text-start usefull-links">
-                    <h3 className="text-white mb-3 fs-20 fw-bold text-center text-md-start mt-3 mt-md-0">
-                      Useful Links
-                    </h3>
-                    <div className="col-12 mb-3 text-center text-md-start">
-                      <a href="#about" className="fs-20 text-white">
-                        About Us
-                      </a>
-                    </div>
-                    <div className="col-12 mb-3 text-center text-md-start">
-                      <a href="#" className="fs-20 text-white">
-                        Services
-                      </a>
-                    </div>
-                    <div className="col-12 mb-3 text-center text-md-start">
-                      <a href="#review" className="fs-20 text-white">
-                        Review
-                      </a>
-                    </div>
-                  </div>
-
-                  <div className="col-12 col-md-6 text-start">
-                    <h3 className="text-white mb-3 fs-20 fw-bold text-center text-md-start">
-                      Contact Info
-                    </h3>
-                    <div className="col-12 mb-3 text-center text-md-start">
-                      <a
-                        href="mailto:enconnect.nfc@gmail.com"
-                        className="fs-16 text-white"
-                      >
-                        connect@enconnect.in
-                      </a>
-                    </div>
-                    <div className="col-12 mb-3 text-center text-md-start">
-                      <a
-                        href=""
-                        className=" fs-20 text-decoration-none text-white"
-                      >
-                        <a style={{ color: "white" }} href="tel:9745004569">
-                          <i className="bi bi-telephone text-white me-1"></i>{" "}
-                          +91 9447020270
-                        </a>
-                      </a>
-                    </div>
-                    <div className="col-12 mb-3 text-center text-md-start">
-                      <a
-                        href="https://www.google.com/maps/search/?api=1&query=Hilite%20Business%20Park%20%2CPalazhi%20%20%2C%20Hilite%20mall%20%2C%20Calicut%2C%20%20%20Kerala%20"
-                        className="fs-20 text-white"
-                      >
-                        <span>
-                          <i className="bi bi-geo-alt-fill text-white me-1"></i>
-                          Calicut
-                        </span>
-                      </a>
-                    </div>
-                  </div>
+                      <social.icon
+                        className="icon"
+                        style={{ width: "30px", height: "30px" }}
+                      />
+                    </motion.a>
+                  ))}
                 </div>
               </div>
             </div>
+
+            {/* Useful Links */}
+            <div className="col-12 col-sm-6 col-lg-3">
+              <h3 className="h5 mb-3 fw-bold">Useful Links</h3>
+              <ul className="list-unstyled">
+                {usefulLinks.map((link, index) => (
+                  <motion.li
+                    key={index}
+                    className="mb-2"
+                    whileHover={{ x: 5 }}
+                    transition={{ type: "spring", stiffness: 300 }}
+                  >
+                    <NavLink
+                      href={link.href}
+                      className="text-black text-decoration-none"
+                      style={{ transition: "color 0.3s" }}
+                    >
+                      {link.name}
+                    </NavLink>
+                  </motion.li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Contact Info */}
+            <div className="col-12 col-sm-6 col-lg-3">
+              <h3 className="h5 mb-3 fw-bold">Contact Info</h3>
+              <ul className="list-unstyled">
+                <motion.li className="mb-3" whileHover={{ x: 5 }}>
+                  <a
+                    href="mailto:connect@enconnect.in"
+                    className="text-black text-decoration-none"
+                  >
+                    connect@enconnect.in
+                  </a>
+                </motion.li>
+                <motion.li className="mb-3" whileHover={{ x: 5 }}>
+                  <a
+                    href="tel:+919447020270"
+                    className="text-black text-decoration-none d-flex align-items-center gap-2"
+                  >
+                    <Phone size={16} />
+                    +91 9447020270
+                  </a>
+                </motion.li>
+                <motion.li whileHover={{ x: 5 }}>
+                  <a
+                    href="https://www.google.com/maps/search/?api=1&query=Hilite%20Business%20Park%20%2CPalazhi%20%2C%20Hilite%20mall%20%2C%20Calicut%2C%20%20%20Kerala%20"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-black text-decoration-none d-flex align-items-center gap-2"
+                  >
+                    <MapPin size={16} />
+                    Calicut
+                  </a>
+                </motion.li>
+              </ul>
+            </div>
+
+            {/* Logo */}
+            <div className="col-12 col-lg-3 d-flex justify-content-center justify-content-lg-end align-items-center mt-4 mt-lg-0">
+              <img
+                src="https://img.freepik.com/free-vector/business-meeting-brainstorming-team-people-working-office-corporate-communication-men-women-sitting-negotiating-studying_575670-2062.jpg"
+                width={300}
+                height={200}
+                className="img-fluid imglogo"
+                alt="Business Meeting"
+              />
+            </div>
           </div>
 
-          <div className="footer-bottom p-4">
-            <div className="row align-items-center text-center text-sm-start">
-              {/* Left Section */}
-              <div className="col-12 col-sm-4 mb-3 mb-sm-0 text-sm-left">
-                <a href="/terms-and-conditions">Terms and Conditions</a>
-              </div>
-
-              {/* Center Section */}
-              <div className="col-12 col-sm-4 mb-3 mb-sm-0 text-center">
-                {/* <img src="" alt="Logo" className="mb-2" /> */}
-                <p style={{ color: "#A4B3CB", margin: 0 }}>
-                  <span>
-                    Copyright &copy; {new Date().getFullYear()} En Connect. All
-                    Rights Reserved.
-                  </span>
-                </p>
-              </div>
-
-              {/* Right Section */}
-              <div className="col-12 col-sm-4 text-sm-right text-center">
-                {/* <img src="/images/2 (1).png" alt="Technical Partner Logo" className="mb-2" /> */}
-                <p style={{ color: "#A4B3CB", margin: 0 }}>
-                  Technical Partner:{" "}
-                  <a
-                    style={{ textDecoration: "none" }}
-                    href="https://www.auxxweb.in"
-                  >
-                    Auxxweb IT Solutions
-                  </a>
-                </p>
-              </div>
+          {/* Bottom Section */}
+          <div className="row mt-5 pt-4 border-top border-secondary align-items-center text-center text-md-start">
+            <div className="col-12 col-md-4 mb-3 mb-md-0">
+              <NavLink
+                href="/terms-and-conditions"
+                className="text-secondary text-decoration-none"
+              >
+                Terms and Conditions
+              </NavLink>
+            </div>
+            <div className="col-12 col-md-4 mb-3 mb-md-0">
+              <p className="text-secondary mb-0">
+                Copyright © 2025 En Connect. All Rights Reserved.
+              </p>
+            </div>
+            <div className="col-12 col-md-4 mb-3 mb-md-0 ">
+              <p className="text-secondary mb-0">
+                Technical Partner:{" "}
+                <a
+                  href="https://www.auxxweb.in"
+                  className="text-secondary text-decoration-none"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Auxxweb IT Solutions
+                </a>
+              </p>
             </div>
           </div>
         </div>
+
+        <style jsx>{`
+          .icon:hover {
+            color: #dc3545 !important;
+            transition: color 0.3s;
+          }
+
+          .text-secondary:hover {
+            color: #dc3545 !important;
+          }
+
+          .footer-content {
+            height: 100%;
+            margin-top: 30px;
+          }
+
+          .tittle {
+            background: linear-gradient(to right, #e72693, #ff7e2b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            padding-right: 1rem;
+          }
+          .sub-txt {
+           margin-left: 1.5rem;
+          }
+          @media (max-width: 767px) {
+            .footer-content {
+              text-align: center;
+            }
+
+            .footer-content .col-12 {
+              margin-bottom: 2rem;
+            }
+
+            .footer-content .d-flex {
+              justify-content: center;
+            }
+
+            .footer-content .text-md-end {
+              text-align: center !important;
+            }
+
+            .footer-content .justify-content-md-end {
+              justify-content: center !important;
+            }
+              .imglogo {
+              width: 80%;
+
+              }
+          }
+
+        `}</style>
       </footer>
     </div>
   );
