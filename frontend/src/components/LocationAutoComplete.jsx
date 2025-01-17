@@ -79,10 +79,11 @@ const LocationAutocomplete = ({ setLocation ,libraries}) => {
               border: "none",
               boxShadow: "none",
               paddingLeft: "0",
-              fontSize: "0.8em",
+              fontSize: "1em",
               color: "black",
               background: "none",
-              height: "100%", // Reduced height for the input field
+              height: "100%",
+               // Reduced height for the input field
             }}
           />
         </div>

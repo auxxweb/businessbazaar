@@ -90,8 +90,8 @@ const PreviewTemplates = lazy(() =>
 const Razorpay = lazy(() => import("./views/CreateBusiness/steps/Razorpay"));
 
 const router = createBrowserRouter([
-  { path: "/", element: <Home /> },
-  { path: "/index", element: <IndexHome/> },
+  { path: "/", element: <IndexHome/> },
+  // { path: "/index", element: <IndexHome/> },
   {
     path: "/create-business",
     children: [

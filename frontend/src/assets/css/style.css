@@ -77,9 +77,9 @@ body{
   }
 
 .custom-placeholder::placeholder {
-    
-    color: #ffffff6f  !important; 
-    opacity: 0.5;
+
+    color: #0000006f  !important; 
+    opacity: 9;
 }.text-theme{
     color: #E5F0FD !important;
 }.b-theme{

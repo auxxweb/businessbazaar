@@ -37,7 +37,9 @@ export default function BusinessHeader() {
   return (
     <Navbar
       expand="lg"
-      className={`fixed-top home-navbar ${expanded ? "navbar-active" : ""}`}
+      className={`fixed-top home-navbar ${
+        expanded ? "navbar-active bg-white" : "bg-white"
+      }`}
       expanded={expanded}
       ref={navbarRef}
     >
@@ -86,7 +88,7 @@ export default function BusinessHeader() {
                   style={{ fontSize: "16px" }}
                   onClick={() => setExpanded(false)}
                 >
-                  Reviews 
+                  Reviews
                 </Link>
                 <a
                   href="https://admin.enconnect.in/"
@@ -99,15 +101,8 @@ export default function BusinessHeader() {
                 </a>
                 <NavLink
                   to="/create-business"
-                  className="fw-bold text-decoration-none mx-3 my-auto"
-                  style={{
-                    backgroundColor: "#105193",
-                    color: "white",
-                    borderRadius: "50px",
-                    padding: "8px 20px",
-                    fontSize: "15px",
-                  }}
-                  onClick={() => setExpanded(false)} // Close on link click
+                  className="btn my-profile-btn text-white mx-2"
+                  onClick={() => setExpanded(false)}
                 >
                   My Profile
                 </NavLink>
@@ -125,17 +120,10 @@ export default function BusinessHeader() {
 
                 <NavLink
                   to="/"
-                  className="fw-bold text-decoration-none mx-3 my-auto"
-                  style={{
-                    backgroundColor: "#105193",
-                    color: "white",
-                    borderRadius: "50px",
-                    padding: "8px 20px",
-                    fontSize: "15px",
-                  }}
-                  onClick={() => setExpanded(false)} // Close on link click
+                  className="btn my-profile-btn text-white mx-2"
+                  onClick={() => setExpanded(false)}
                 >
-                  Back to Home
+                  Back To Home
                 </NavLink>
               </>
             )}

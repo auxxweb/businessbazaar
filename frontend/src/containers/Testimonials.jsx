@@ -7,6 +7,7 @@ import { ReviewModal, ViewReview } from './BusinessReviews';
 import { formatDate } from '../utils/app.utils';
 import { Rating } from '@mui/material';
 import { FooterSection } from '../views/Home/components';
+import FooterIndex from '../views/Home/components/FooterIndex';
 
 
 const Testimonials = () => {
@@ -216,7 +217,7 @@ return (
         </div>
       </div>
     </div>
-    <FooterSection />
+    <FooterIndex />
 
   </Layout>
 )

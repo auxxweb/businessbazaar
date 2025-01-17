@@ -96,7 +96,7 @@ export default function Header({ onSearch, setLocation }) {
                 placeholder="Search for any service..."
                 value={searchData}
                 onInput={(e) => setSearchData(e.target.value)}
-                className="form-control bg-transparent text-white border-0"
+                className="form-control bg-transparent text-black border-0"
               />
               <button
                 onClick={handleSearchSubmit}
@@ -160,12 +160,13 @@ export default function Header({ onSearch, setLocation }) {
                 >
                   Review
                 </a>
+               
                 <NavLink
                   to="/"
-                  className="btn btn-primary text-white mx-3"
+                  className="btn my-profile-btn text-white mx-2"
                   onClick={() => setExpanded(false)}
                 >
-                  Back to Home
+                  Back To Home
                 </NavLink>
               </>
             )}
