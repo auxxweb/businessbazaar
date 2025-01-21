@@ -33,6 +33,8 @@ import CategoryIndex from "./components/CategoryIndex";
 import CarousalIndex from "./components/CarousalIndex";
 import BusinessIndex from "./components/BusinessIndex";
 import FooterIndex from "./components/FooterIndex";
+import FloatButtonIndex from "./components/FloatButtonIndex";
+import FreeListIndex from "./components/FreeListIndex";
 
 export default function Home() {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -313,6 +315,8 @@ export default function Home() {
         totalBusinessData={totalBusinessData}
       />
 
+      {/* <FreeListIndex/> */}
+
       <ReviewSection
         currentSlide={currentSlide}
         review={review}
@@ -330,6 +334,7 @@ export default function Home() {
         handleReviewSubmit={handleReviewSubmit}
         reviewLoading={reviewLoading} />
 
+      <FloatButtonIndex/>
       <FooterIndex />
       {/* <a
       href="https://wa.me/<your_phone_number>?text=Hello!"

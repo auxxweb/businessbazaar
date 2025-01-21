@@ -138,18 +138,18 @@ export default function Header({ onSearch, setLocation }) {
                   href="https://admin.enconnect.in/"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-decoration-none mx-2 py-2"
+                  className="text-decoration-none my-profile-btn mx-2 py-2 px-2"
                   onClick={() => setExpanded(false)}
                 >
                   Go to Dashboard
                 </a>
-                <NavLink
+                {/* <NavLink
                   to="/create-business"
                   className="btn my-profile-btn text-white mx-2"
                   onClick={() => setExpanded(false)}
                 >
                   My Profile
-                </NavLink>
+                </NavLink> */}
               </>
             ) : (
               <>
