@@ -6,15 +6,7 @@ const CryptoCard = ({ data }) => {
     <div className="crypto_card border-0 rounded-4 overflow-hidden">
       <div className="crypto_card_header position-relative">
         <img src="https://gratisography.com/wp-content/uploads/2024/11/gratisography-augmented-reality-800x525.jpg" alt="" />
-        {/* <div className="crypto_diagonal_strip">
-          <div className="crypto_logo_container">
-            <span>{data.logo}</span>
-          </div>
-        </div>
-        <div className="crypto_icons position-absolute">
-          <FaLock className="text-black opacity-75" />
-          <FaDollarSign className="text-success" />
-        </div> */}
+       
       </div>
       <div className="crypto_card_content">
         <h5 className="crypto_title">{data.title}</h5>

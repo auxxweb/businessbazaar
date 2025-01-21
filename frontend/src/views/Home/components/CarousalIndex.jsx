@@ -6,13 +6,18 @@ import Placeholder from "/images/placeholder.jpg";
 
 const libraries = ["places"];
 
-const CarousalIndex = ({ bannerData, onSearch, setLocation }) => {
+const CarousalIndex = ({ bannerData, onSearch, setLocation ,setSerachItem }) => {
   const [searchData, setSearchData] = useState("");
   const [showInputs, setShowInputs] = useState(true);
   const [animationClass, setAnimationClass] = useState("fade-in");
 
   const handleSearchSubmit = useCallback(() => {
     onSearch(searchData);
+    if(searchData){
+      setSerachItem(true);
+    }else{
+      setSerachItem(false);
+    }
   }, [searchData, onSearch]);
 
   useEffect(() => {
@@ -99,7 +104,7 @@ const CarousalIndex = ({ bannerData, onSearch, setLocation }) => {
                   placeholder="Search for any service..."
                   value={searchData}
                   onInput={(e) => setSearchData(e.target.value)}
-                  className="p-2 bg-transparent text-white outline-none"
+                  className="p-2 bg-transparent text-dark outline-none"
                 />
                 <button
                   onClick={handleSearchSubmit}

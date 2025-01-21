@@ -10,6 +10,8 @@ export default function Layout({
   title,
   children,
   sidebar = "true",
+  setSerachItem,
+  searchItem
 }) {
   return (
     <>
@@ -49,7 +51,7 @@ export default function Layout({
           {title === "Business" ? (
             <BusinessHeader />
           ) : (
-            <Header onSearch={onSearch} setLocation={setLocation} />
+            <Header searchItem={searchItem} setSerachItem={setSerachItem}  onSearch={onSearch} setLocation={setLocation} />
           )}
 
           <div className="">{children}</div>

@@ -10,7 +10,7 @@ export default function FloatingButtons() {
   return (
     <>
       {/* Fixed Buttons */}
-      <div className="fixed-buttons d-none d-md-block">
+      <div className="fixed-buttons   d-md-block">
         <motion.button
           className="btn-advertise"
           onClick={() => navigate("/create-business")}
@@ -264,6 +264,8 @@ export default function FloatingButtons() {
           gap: 20px; /* For desktop screens */
         }
 
+
+
         .btn-submit {
           background: linear-gradient(to right, #e72693, #ff7e2b);
         }
@@ -295,9 +297,9 @@ export default function FloatingButtons() {
 
         @media (max-width: 768px) {
           .fixed-buttons {
-            bottom: 20px;
-            top: auto;
-            right: 20px;
+            bottom: 100px;
+            // top: auto;
+            right: 100px;
             transform: none;
             flex-direction: row;
           }

@@ -69,13 +69,15 @@ export default function Home() {
   const [bannerData, setBannerData] = useState([]);
   const [businessData, setBusinessData] = useState([]);
   const [totalBusinessData, setTotalBusinessData] = useState(0);
+  const [totalCategoryData, setTotalCategoryData] = useState(0);
+
   const [loading, setLoading] = useState(true);
   const [visible, setVisible] = useState(false);
   const [isReviewed, setIsReviewed] = useState(false);
   const [reviewLoading, setReviewLoading] = useState(false);
   const [reviews, setReviews] = useState([]);
   const [visibleCategories, setVisibleCategories] = useState(21);
-  const [visibleBusiness, setVisibleBusiness] = useState(8);
+  const [visibleBusiness, setVisibleBusiness] = useState(9);
 
   const businessSectionRef = useRef(null);
   const isInitialRender = useRef(true); // Track if it's the initial render
@@ -212,7 +214,7 @@ export default function Home() {
         setCategoryLoading(true)
         const categoryDetails = await fetchCategories(1,visibleCategories);
         setCategoryData(categoryDetails.data.data);
-
+        setTotalCategoryData(categoryDetails?.data?.totalCount);
 
 
       } catch (error) {
@@ -238,9 +240,9 @@ export default function Home() {
 
   const loadMoreCategories = async () => {
     setCategoryLoading(true)
-    const categoryDetails = await fetchCategories(currentPage1,22);
+    const categoryDetails = await fetchCategories(currentPage1,21);
     setCurrentPage1(currentPage1+1)
-    setVisibleCategories((prev) => prev + 10);
+    setVisibleCategories((prev) => prev + 21);
     setCategoryData((prev) => [...prev, ...categoryDetails.data.data])
     setCategoryLoading(false)
 
@@ -289,11 +291,12 @@ export default function Home() {
     [location, visibleBusiness]
   );
   console.log(businessData, 'asasasasasasa')
-
+  const [searchItem,setSerachItem ]= useState(false)
   return (
-    <Layout title="Home" navClass="home" onSearch={getSearchData}
-    setLocation={setLocation}>
+    <Layout  title="Home" navClass="home" onSearch={getSearchData} searchItem={searchItem} setSerachItem={setSerachItem}
+    setLocation={setLocation}> 
       <CarousalIndex
+       setSerachItem={setSerachItem}
         bannerData={bannerData}
         onSearch={getSearchData}
         setLocation={setLocation}
@@ -304,9 +307,11 @@ export default function Home() {
         loadMoreCategories={loadMoreCategories}
         loading={categoryLoading}
         visibleCategories={visibleCategories}
+        totalCategoryData={totalCategoryData}
       />
 
       <BusinessIndex
+        searchItem={searchItem}
         scroll={businessSectionRef}
         businessData={businessData}
         loadMoreBusiness={loadMoreBusiness}
@@ -315,7 +320,7 @@ export default function Home() {
         totalBusinessData={totalBusinessData}
       />
 
-      {/* <FreeListIndex/> */}
+      <FreeListIndex/>
 
       <ReviewSection
         currentSlide={currentSlide}

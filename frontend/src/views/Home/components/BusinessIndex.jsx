@@ -1,85 +1,98 @@
-import React, { useState } from "react"
-import PropTypes from "prop-types"
-import { FaStar, FaWhatsapp, FaPhone, FaEnvelope } from "react-icons/fa"
-import { Link } from "react-router-dom"
-import { Spinner } from "react-bootstrap"
-import Placeholder from "/images/placeholder.jpg"
-import EnquiryModal from "./EnquiryModal"
-import { submitContactForm } from "../../../Functions/functions"
+import React, { useState } from "react";
+import PropTypes from "prop-types";
+import { FaStar, FaWhatsapp, FaPhone, FaEnvelope } from "react-icons/fa";
+import { Link } from "react-router-dom";
+import { Spinner } from "react-bootstrap";
+import Placeholder from "/images/placeholder.jpg";
+import EnquiryModal from "./EnquiryModal";
+import { submitContactForm } from "../../../Functions/functions";
 import { toast } from "react-toastify";
 
-const BusinessIndex = ({ loading, businessData, visibleBusiness, totalBusinessData, loadMoreBusiness, scroll }) => {
-  const [showEnquiryModal, setShowEnquiryModal] = useState(false)
-  const [selectedBusiness, setSelectedBusiness] = useState(null)
+const BusinessIndex = ({
+  loading,
+  businessData,
+  visibleBusiness,
+  totalBusinessData,
+  loadMoreBusiness,
+  scroll,
+  searchItem,
+}) => {
+  console.log(searchItem, "kkkkkkkkkk:");
+  const [showEnquiryModal, setShowEnquiryModal] = useState(false);
+  const [selectedBusiness, setSelectedBusiness] = useState(null);
 
   const slugify = (text) => {
-    if (!text) return text
+    if (!text) return text;
     return text
       .toLowerCase()
       .replace(/ /g, "-")
-      .replace(/[^\w-]+/g, "")
-  }
-   const handleFormSubmit = async (e, formData,businessId) => {
-       e.preventDefault();
-   
-       const response = await submitContactForm({
-         ...formData,
-         businessId: businessId,
-       });
-       if (response?.data) {
-         toast.success("Form submitted successfully!", {
-           position: "top-right",
-           autoClose: 3000,
-           hideProgressBar: false,
-           closeOnClick: true,
-           pauseOnHover: true,
-           draggable: true,
-           theme: "colored",
-           style: {
-             backgroundColor: "#38a20e", // Custom red color for error
-             color: "#FFFFFF", // White text
-           },
-         });
-         return true;
-       } else {
-         toast.success("Failed submission failed!", {
-           position: "top-right",
-           autoClose: 3000,
-           hideProgressBar: false,
-           closeOnClick: true,
-           pauseOnHover: true,
-           draggable: true,
-           theme: "colored",
-           style: {
-             backgroundColor: "#aa0808", // Custom red color for error
-             color: "#FFFFFF", // White text
-           },
-         });
-         return false;
-       }
-     };
+      .replace(/[^\w-]+/g, "");
+  };
+  const handleFormSubmit = async (e, formData, businessId) => {
+    e.preventDefault();
+
+    const response = await submitContactForm({
+      ...formData,
+      businessId: businessId,
+    });
+    if (response?.data) {
+      toast.success("Form submitted successfully!", {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        theme: "colored",
+        style: {
+          backgroundColor: "#38a20e", // Custom red color for error
+          color: "#FFFFFF", // White text
+        },
+      });
+      return true;
+    } else {
+      toast.success("Failed submission failed!", {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        theme: "colored",
+        style: {
+          backgroundColor: "#aa0808", // Custom red color for error
+          color: "#FFFFFF", // White text
+        },
+      });
+      return false;
+    }
+  };
   const renderStars = (rating) => {
     return [...Array(5)].map((_, index) => (
-      <FaStar key={index} size={12} className={index < Math.floor(rating) ? "text-warning" : "text-muted"} />
-    ))
-  }
+      <FaStar
+        key={index}
+        size={12}
+        className={index < Math.floor(rating) ? "text-warning" : "text-muted"}
+      />
+    ));
+  };
 
-  const handleClick = (countryCode,whatsappNumber ) => {
+  const handleClick = (countryCode, whatsappNumber) => {
     const defaultCountryCode = "+91"; // Default country code
     const finalCountryCode = countryCode || defaultCountryCode; // Use default if not available
     window.open(`https://wa.me/${finalCountryCode}${whatsappNumber}`, "_blank");
-  }
+  };
 
   const handleOpenDialer = (phoneNumber) => {
-    const formattedNumber = `tel:${String(7510115894).replace(/\s/g, "")}`
-    window.location.href = formattedNumber
-  }
+    const formattedNumber = `tel:${String(phoneNumber).replace(/\s/g, "")}`;
+    window.location.href = formattedNumber;
+  };
 
   const handleEnquiryClick = (e, business) => {
-    e.preventDefault()
-    setSelectedBusiness(business)
-    setShowEnquiryModal(true)
-  }
+    e.preventDefault();
+    setSelectedBusiness(business);
+    setShowEnquiryModal(true);
+  };
 
   return (
     <section className="home-spot h-auto mb-2" ref={scroll}>
@@ -87,133 +100,178 @@ const BusinessIndex = ({ loading, businessData, visibleBusiness, totalBusinessDa
         <div className="text-center mb-5">
           <h1 className="fw-bold mb-3">Discover the Top Profiles</h1>
           <p className="text-muted mx-auto" style={{ maxWidth: "800px" }}>
-            Explore the most popular profile listings in your area through our local profile directory listing, highly
-            rated by locals and visitors alike. Our platform makes it easy to find top-rated profiles based on customer
-            reviews and expert recommendations.
+            Explore the most popular profile listings in your area through our
+            local profile directory listing, highly rated by locals and visitors
+            alike. Our platform makes it easy to find top-rated profiles based
+            on customer reviews and expert recommendations.
           </p>
         </div>
 
         <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-lg-4 g-0">
-          {businessData?.map((business) => (
-            <div key={business._id} className="col">
-              <Link
-                to={
-                  business?.selectedPlan?.isPremium
-                    ? `/profile/premium/${slugify(business?.businessName)}/${business?._id}`
-                    : `/profile/${slugify(business?.businessName)}/${business?._id}`
-                }
-                className="text-decoration-none"
-              >
-                <div className="card h-100 border-0 shadow-xl rounded-4 overflow-visible hover-card">
-                  <div className="px-4 py-3 position-relative">
-                    {/* Category */}
-                    <div className="small text-muted">{business?.category?.name || "News & Media"}</div>
+          {businessData?.length > 0 ? (
+            businessData.map((business) => (
+              <div key={business._id} className="col">
+                <Link
+                  to={
+                    business?.selectedPlan?.isPremium
+                      ? `/profile/premium/${slugify(business?.businessName)}/${
+                          business?._id
+                        }`
+                      : `/profile/${slugify(business?.businessName)}/${
+                          business?._id
+                        }`
+                  }
+                  className="text-decoration-none"
+                >
+                  <div className="card  h-100 border-0 shadow-xl  btn-parent rounded-4 overflow-visible hover-card">
+                    <div className="px-4 py-3 position-relative ">
+                      <div className=" ">
+                        {/* Category */}
+                        <div className="small text-muted">
+                          {business?.category?.name || "News & Media"}
+                        </div>
 
-                    <div className="row g-3">
-                      {/* Content Column */}
-                      <div className="col-12">
-                        <h5
-                          className="card-title h6 fw-bold text-dark"
-                          style={{
-                            overflow: "hidden",
-                            textOverflow: "ellipsis",
-                            display: "-webkit-box",
-                            WebkitLineClamp: 2,
-                            WebkitBoxOrient: "vertical",
-                            minHeight: "20px",
-                            paddingRight: "45%",
-                          }}
-                        >
-                          {business?.businessName}
-                        </h5>
+                        <div className="row g-3">
+                          {/* Content Column */}
+                          <div className="col-12">
+                            <h5
+                              className="card-title h6 fw-bold text-dark"
+                              style={{
+                                overflow: "hidden",
+                                textOverflow: "ellipsis",
+                                display: "-webkit-box",
+                                WebkitLineClamp: 2,
+                                WebkitBoxOrient: "vertical",
+                                minHeight: "20px",
+                                paddingRight: "45%",
+                              }}
+                            >
+                              {business?.businessName}
+                            </h5>
 
-                        <p
-                          className="card-text text-muted small"
-                          style={{
-                            overflow: "hidden",
-                            textOverflow: "ellipsis",
-                            display: "-webkit-box",
-                            WebkitLineClamp: 2,
-                            WebkitBoxOrient: "vertical",
-                            paddingRight: "45%",
-                          }}
-                        >
-                          {business?.address?.buildingName} {business?.address?.city} {business?.address?.landMark}
-                        </p>
-                      </div>
+                            <p
+                              className="card-text text-muted small"
+                              style={{
+                                overflow: "hidden",
+                                textOverflow: "ellipsis",
+                                display: "-webkit-box",
+                                WebkitLineClamp: 2,
+                                WebkitBoxOrient: "vertical",
+                                paddingRight: "45%",
+                              }}
+                            >
+                              {business?.address?.buildingName}{" "}
+                              {business?.address?.city}{" "}
+                              {business?.address?.landMark}
+                            </p>
+                          </div>
 
-                      {/* Image positioned at top */}
-                      <div
-                        className="position-absolute"
-                        style={{
-                          width: "130px",
-                          right: "20px",
-                          top: "-30px",
-                          maxWidth: "40%",
-                        }}
-                      >
-                        <img
-                          src={business?.logo || Placeholder}
-                          alt={business?.businessName}
-                          className="rounded-3 w-100 shadow-sm"
-                          style={{
-                            aspectRatio: "1",
-                            objectFit: "cover",
-                          }}
-                        />
-                      </div>
+                          {/* Image positioned at top */}
+                          <div
+                            className="position-absolute"
+                            style={{
+                              width: "130px",
+                              right: "20px",
+                              top: "-30px",
+                              maxWidth: "40%",
+                            }}
+                          >
+                            <img
+                              src={business?.logo || Placeholder}
+                              alt={business?.businessName}
+                              className="rounded-3 w-100 shadow-sm"
+                              style={{
+                                aspectRatio: "1",
+                                objectFit: "cover",
+                              }}
+                            />
+                          </div>
 
-                      {/* Rating fixed under the image */}
-                      <div
-                        className="position-absolute"
-                        style={{
-                          width: "110px",
-                          right: "30px",
-                          top: "80px",
-                        }}
-                      >
-                        <div className="d-flex align-items-center justify-content-center px-2 py-1">
-                          {renderStars(business?.rating || 0)}
-                          <span className="ms-1 small fw-medium">{business?.rating || "0.0"}</span>
+                          {/* Rating fixed under the image */}
+                          <div
+                            className="position-absolute"
+                            style={{
+                              width: "110px",
+                              right: "30px",
+                              top: "80px",
+                            }}
+                          >
+                            <div className="d-flex align-items-center justify-content-center px-2 py-1">
+                              {renderStars(business?.rating || 0)}
+                              <span className="ms-1 small fw-medium">
+                                {business?.rating || "0.0"}
+                              </span>
+                            </div>
+                          </div>
                         </div>
                       </div>
                     </div>
-                    <div className="mt-4 d-flex justify-content-between gap-2">
-                      <a
-                        href={business?.contactDetails?.primaryNumber ?? ''}
-                        className="btn btn-success btn-sm flex-1 d-flex align-items-center justify-content-center gap-1"
-                        onClick={handleOpenDialer}
-                      >
-                        <FaPhone /> {business?.contactDetails?.primaryNumber ?? ''}
-                      </a>
-                      <a
-                        href="#"
-                        className="btn btn-outline-success btn-sm flex-1 d-flex align-items-center justify-content-center gap-1"
-                        onClick={() => handleClick(business?.contactDetails?.whatsappCountryCode,business?.contactDetails?.whatsAppNumber)}
-                      >
-                        <FaWhatsapp /> WhatsApp
-                      </a>
-                      <a
-                        href="#"
-                        className="btn btn-enquiry btn-sm flex-1 d-flex align-items-center justify-content-center gap-1"
-                        onClick={(e) => handleEnquiryClick(e, business)}
-                      >
-                        <FaEnvelope /> Send Enquiry
-                      </a>
+                    <div className="  btn-crd">
+                      {/* Buttons */}
+                      <div className="mt-4 d-flex justify-content-between gap-2">
+                        <a
+                          href="#"
+                          className="btn btn-success btn-sm flex-1 d-flex align-items-center justify-content-center gap-1"
+                          onClick={(e) => {
+                            e.stopPropagation(); // Prevent Link navigation
+                            handleOpenDialer();
+                          }}
+                        >
+                          <FaPhone />{" "}
+                          {business?.contactDetails?.primaryNumber ?? ""}
+                        </a>
+                        <a
+                          href="#"
+                          className="btn btn-outline-success btn-sm flex-1 d-flex align-items-center justify-content-center gap-1"
+                          onClick={(e) => {
+                            e.stopPropagation(); // Prevent Link navigation
+                            handleClick(
+                              business?.contactDetails?.whatsappCountryCode,
+                              business?.contactDetails?.whatsAppNumber
+                            );
+                          }}
+                        >
+                          <FaWhatsapp /> WhatsApp
+                        </a>
+                        <a
+                          href="#"
+                          className="btn btn-enquiry btn-sm flex-1 d-flex align-items-center justify-content-center gap-1"
+                          onClick={(e) => {
+                            e.stopPropagation(); // Prevent Link navigation
+                            handleEnquiryClick(e, business);
+                          }}
+                        >
+                          <FaEnvelope /> Send Enquiry
+                        </a>
+                      </div>
                     </div>
                   </div>
+                </Link>
+              </div>
+            ))
+          ) : (
+            <div className="col">
+              <div className="card h-100 border-0 shadow-xl rounded-4 overflow-visible">
+                <div className="px-4 py-3 text-center">
+                  <h5 className="card-title h6 text-dark">Profile not found</h5>
+                  <p className="card-text text-muted">
+                    No business profiles available at the moment.
+                  </p>
                 </div>
-              </Link>
+              </div>
             </div>
-          ))}
-          {visibleBusiness < totalBusinessData && (
+          )}
+
+          {!searchItem && visibleBusiness < totalBusinessData && (
             <div className="col">
               <div
                 className="card h-100 border-0 shadow-xl rounded-4 overflow-visible hover-card d-flex align-items-center justify-content-center cursor-pointer"
                 onClick={loadMoreBusiness}
               >
                 <div className="text-center">
-                  <h5 className="card-title h6 fw-bold text-dark ">View More</h5>
+                  <h5 className="card-title h6 fw-bold text-dark ">
+                    View More
+                  </h5>
                   <i className="bi bi-arrow-right fs-4"></i>
                 </div>
               </div>
@@ -228,8 +286,8 @@ const BusinessIndex = ({ loading, businessData, visibleBusiness, totalBusinessDa
           show={showEnquiryModal}
           handleFormSubmit={handleFormSubmit}
           onHide={() => {
-            setShowEnquiryModal(false)
-            setSelectedBusiness(null)
+            setShowEnquiryModal(false);
+            setSelectedBusiness(null);
           }}
           businessName={selectedBusiness.businessName}
           businessId={selectedBusiness._id}
@@ -273,6 +331,10 @@ const BusinessIndex = ({ loading, businessData, visibleBusiness, totalBusinessDa
               opacity: 1;
               transform: translateY(0);
             }
+          }
+
+          .btn-crd{
+          padding:10px
           }
 
           @media (max-width: 575px) {
@@ -338,11 +400,18 @@ const BusinessIndex = ({ loading, businessData, visibleBusiness, totalBusinessDa
           .form-control:focus {
             box-shadow: 0 0 0 0.25rem rgba(13,110,253,.25);
           }
+
+          .btn-parent{
+          display:flex;
+          flex-direction: column;
+          justify-content:space-between;
+          
+          }
         `}
       </style>
     </section>
-  )
-}
+  );
+};
 
 BusinessIndex.propTypes = {
   loading: PropTypes.bool.isRequired,
@@ -351,7 +420,6 @@ BusinessIndex.propTypes = {
   totalBusinessData: PropTypes.number.isRequired,
   loadMoreBusiness: PropTypes.func.isRequired,
   scroll: PropTypes.object,
-}
+};
 
-export default BusinessIndex
-
+export default BusinessIndex;
