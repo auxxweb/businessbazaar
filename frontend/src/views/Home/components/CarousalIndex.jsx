@@ -104,7 +104,7 @@ const CarousalIndex = ({ bannerData, onSearch, setLocation ,setSerachItem }) => 
                   placeholder="Search for any service..."
                   value={searchData}
                   onInput={(e) => setSearchData(e.target.value)}
-                  className="p-2 bg-transparent text-dark outline-none"
+                  className="p-2 bg-transparent  outline-none"
                 />
                 <button
                   onClick={handleSearchSubmit}

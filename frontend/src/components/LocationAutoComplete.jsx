@@ -5,6 +5,7 @@ const LocationAutocomplete = ({ setLocation, libraries }) => {
   const inputRef = useRef();
   const [searchValue, setSearchValue] = useState("");
 
+  
   const { isLoaded } = useJsApiLoader({
     id: "google-map-script",
     googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY,
@@ -41,57 +42,57 @@ const LocationAutocomplete = ({ setLocation, libraries }) => {
 
   return (
     <div className="col-12 col-md-5 h-auto">
-      {isLoaded && (
-        <StandaloneSearchBox
-          onLoad={(ref) => (inputRef.current = ref)}
-          onPlacesChanged={handleOnPlacesChanged}
+    {true && (
+      <StandaloneSearchBox
+        onLoad={(ref) => (inputRef.current = ref)}
+        onPlacesChanged={handleOnPlacesChanged}
+      >
+        <div
+          className="input-group banner-input-div w-30"
+          style={{
+            border: "2.5px solid #ced4da",
+            borderRadius: "6px",
+            overflow: "hidden",
+            background: "none",
+            height: "48px",
+            width: "260px",
+          }}
         >
-          <div
-            className="input-group banner-input-div w-30"
+          <span
+            className="input-group-text"
             style={{
-              border: "2.5px solid #ced4da",
-              borderRadius: "6px",
-              overflow: "hidden",
+              backgroundColor: "white",
+              border: "none",
+              padding: "0 12px",
+              display: "flex",
+              alignItems: "center",
+              color: "black",
               background: "none",
-              height: "48px",
-              width: "260px",
+              height: "100%",
             }}
           >
-            <span
-              className="input-group-text"
-              style={{
-                backgroundColor: "white",
-                border: "none",
-                padding: "0 12px",
-                display: "flex",
-                alignItems: "center",
-                color: "black",
-                background: "none",
-                height: "100%",
-              }}
-            >
-              <i className="bi bi-crosshair2" style={{ fontSize: "1.2em" }}></i>
-            </span>
-            <input
-              value={searchValue}
-              onChange={onInputChange}
-              type="text"
-              className="form-control custom-placeholder"
-              placeholder="Location"
-              style={{
-                border: "none",
-                boxShadow: "none",
-                paddingLeft: "0",
-                fontSize: "1em",
-                color: "black",
-                background: "none",
-                height: "100%",
-              }}
-            />
-          </div>
-        </StandaloneSearchBox>
-      )}
-    </div>
+            <i className="bi bi-crosshair2" style={{ fontSize: "1.2em" }}></i>
+          </span>
+          <input
+            value={searchValue}
+            onChange={onInputChange}
+            type="text"
+            className="form-control custom-placeholder"
+            placeholder="Location"
+            style={{
+              border: "none",
+              boxShadow: "none",
+              paddingLeft: "0",
+              fontSize: "1.2em",
+              color: "#6c757d",
+              background: "transparent",
+              height: "100%",
+            }}
+          />
+        </div>
+      </StandaloneSearchBox>
+    )}
+  </div>
   );
 };
 

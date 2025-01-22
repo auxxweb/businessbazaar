@@ -54,7 +54,7 @@ body{
   .form-control {
     width: 100%;
     padding: 10px;
-    border: 1px solid #ccc;
+    border: 1px solid #ffffff;
     border-radius: 5px;
   }
   
@@ -62,6 +62,7 @@ body{
     border-color: #105193;
     outline: none;
   }
+  
   
   .submit-button {
     background-color: #105193 !important;
@@ -78,7 +79,7 @@ body{
 
 .custom-placeholder::placeholder {
 
-    color: #c0c0c0  !important; 
+    color: #d3d3d3  !important; 
     opacity: 9;
 }.text-theme{
     color: #E5F0FD !important;

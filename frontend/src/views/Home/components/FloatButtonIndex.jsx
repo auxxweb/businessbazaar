@@ -10,7 +10,7 @@ export default function FloatingButtons() {
   return (
     <>
       {/* Fixed Buttons */}
-      <div className="fixed-buttons   d-md-block">
+      <div className="fixed-buttons d-md-block">
         <motion.button
           className="btn-advertise"
           onClick={() => navigate("/create-business")}
@@ -264,8 +264,6 @@ export default function FloatingButtons() {
           gap: 20px; /* For desktop screens */
         }
 
-
-
         .btn-submit {
           background: linear-gradient(to right, #e72693, #ff7e2b);
         }
@@ -297,21 +295,31 @@ export default function FloatingButtons() {
 
         @media (max-width: 768px) {
           .fixed-buttons {
-            bottom: 100px;
-            // top: auto;
-            right: 100px;
-            transform: none;
-            flex-direction: row;
+            position: fixed;
+          right: 0;
+          top: 50%;
+          transform: translateY(-50%);
+          z-index: 1000;
+          display: flex;
+          flex-direction: column;
+          gap: 0px; /* For desktop screens */
           }
 
           .btn-advertise,
           .btn-listing {
-            writing-mode: horizontal-tb;
-            width: auto;
-            height: auto;
-            padding: 8px 12px;
-            font-size: 14px;
-            border-radius: 8px;
+          border: none;
+          color: white;
+          padding: 10px 8px;
+          text-align: center;
+          font-size: 16px;
+          cursor: pointer;
+          border-radius: 8px 0 0 8px;
+          width: 40px;
+          transition: all 0.3s ease;
+          writing-mode: vertical-lr;
+          text-orientation: mixed;
+          height: 130px;
+          margin-top: 20px;
           }
 
           .fixed-buttons br {
@@ -358,22 +366,6 @@ export default function FloatingButtons() {
 
         .btn-primary:hover {
           background-color: #0052cc;
-        }
-
-        @media (max-width: 768px) {
-          .fixed-buttons {
-            bottom: 20px;
-            top: auto;
-            right: 20px;
-            transform: none;
-          }
-
-          .btn-advertise,
-          .btn-listing {
-            width: auto;
-            padding: 10px 15px;
-            font-size: 14px;
-          }
         }
       `}</style>
     </>

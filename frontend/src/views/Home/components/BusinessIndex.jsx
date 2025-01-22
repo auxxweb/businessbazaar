@@ -206,9 +206,9 @@ const BusinessIndex = ({
                         </div>
                       </div>
                     </div>
-                    <div className="  btn-crd">
+                    <div className=" btn-crd">
                       {/* Buttons */}
-                      <div className="mt-4 d-flex justify-content-between gap-2">
+                      <div className=" d-flex justify-content-between ">
                         <a
                           href="#"
                           className="btn btn-success btn-sm flex-1 d-flex align-items-center justify-content-center gap-1"
@@ -356,10 +356,10 @@ const BusinessIndex = ({
               margin-bottom: 1rem;
             }
             .row-cols-2 {
-              margin-bottom: 2rem;
+              margin-bottom: 1rem;
             }
             .col .card {
-              margin-bottom: 1.5rem;
+              margin-bottom: 0.5rem;
             }
             .card .position-absolute {
               width: 60px;
@@ -404,7 +404,7 @@ const BusinessIndex = ({
           .btn-parent{
           display:flex;
           flex-direction: column;
-          justify-content:space-between;
+          justify-content:end;
           
           }
         `}
