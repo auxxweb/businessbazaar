@@ -94,10 +94,12 @@ const CarousalIndex = ({ bannerData, onSearch, setLocation ,setSerachItem }) => 
             <div
               className={`search-bar flex flex-col sm:flex-row gap-2 justify-center items-center ${animationClass}`}
             >
+              <div className="location-autocomplete">
               <LocationAutocomplete
                 setLocation={setLocation}
                 libraries={libraries}
               />
+            </div>
               <div className="search-input-group flex items-center border-2 border-white rounded-md overflow-hidden">
                 <input
                   type="text"
