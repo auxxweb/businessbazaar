@@ -208,10 +208,10 @@ const BusinessIndex = ({
                     </div>
                     <div className=" btn-crd">
                       {/* Buttons */}
-                      <div className=" d-flex justify-content-between ">
+                      <div className=" d-flex justify-content-center gap-1 ">
                         <a
                           href="#"
-                          className="btn btn-success btn-sm flex-1 d-flex align-items-center justify-content-center gap-1"
+                          className="btn btn-success btn-sm flex-1 d-flex align-items-center justify-content-center gap-2"
                           onClick={(e) => {
                             e.stopPropagation(); // Prevent Link navigation
                             handleOpenDialer();
@@ -222,7 +222,7 @@ const BusinessIndex = ({
                         </a>
                         <a
                           href="#"
-                          className="btn btn-outline-success btn-sm flex-1 d-flex align-items-center justify-content-center gap-1"
+                          className="btn btn-outline-success btn-sm flex-1 d-flex align-items-center justify-content-center gap-2"
                           onClick={(e) => {
                             e.stopPropagation(); // Prevent Link navigation
                             handleClick(
@@ -235,7 +235,7 @@ const BusinessIndex = ({
                         </a>
                         <a
                           href="#"
-                          className="btn btn-enquiry btn-sm flex-1 d-flex align-items-center justify-content-center gap-1"
+                          className="btn btn-enquiry btn-sm flex-1 d-flex align-items-center justify-content-center gap-2"
                           onClick={(e) => {
                             e.stopPropagation(); // Prevent Link navigation
                             handleEnquiryClick(e, business);
@@ -334,7 +334,8 @@ const BusinessIndex = ({
           }
 
           .btn-crd{
-          padding:10px
+          padding:20px
+          
           }
 
           @media (max-width: 575px) {

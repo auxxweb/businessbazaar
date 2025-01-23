@@ -78,7 +78,7 @@ export default function Home() {
   const [reviewLoading, setReviewLoading] = useState(false);
   const [reviews, setReviews] = useState([]);
   const [visibleCategories, setVisibleCategories] = useState(21);
-  const [visibleBusiness, setVisibleBusiness] = useState(9);
+  const [visibleBusiness, setVisibleBusiness] = useState(8);
   const [visibleFreelist, setVisibleFreelist] = useState(9);
 
   const businessSectionRef = useRef(null);
@@ -342,7 +342,7 @@ export default function Home() {
         totalBusinessData={totalBusinessData}
       /> 
 
-      <FreeListIndex freelist={freelist}/>
+      {/* <FreeListIndex freelist={freelist}/> */}
 
       <ReviewSection
         currentSlide={currentSlide}
