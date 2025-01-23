@@ -16,6 +16,7 @@ import {
   fetchBusiness,
   fetchBusinesses,
   fetchCategories,
+  getAllFreeList,
   getAllReviews,
 } from "../../Functions/functions";
 import { BUSINESS_PAGE, REVIEW_LIMIT, REVIEW_PAGE } from "./constants";
@@ -78,6 +79,7 @@ export default function Home() {
   const [reviews, setReviews] = useState([]);
   const [visibleCategories, setVisibleCategories] = useState(21);
   const [visibleBusiness, setVisibleBusiness] = useState(9);
+  const [visibleFreelist, setVisibleFreelist] = useState(9);
 
   const businessSectionRef = useRef(null);
   const isInitialRender = useRef(true); // Track if it's the initial render
@@ -89,7 +91,6 @@ export default function Home() {
       review: "",
     },
   ]);
-
 
   useEffect(() => {
     const fetchReviews = async () => {
@@ -121,6 +122,7 @@ export default function Home() {
       }
     };
     fetchReviews();
+    
   }, [isReviewed]);
 
   const handleReviewSubmit = async (e) => {
@@ -169,6 +171,26 @@ export default function Home() {
     setReviewLoading(false)
   };
 
+  const [freelist, setFreelist] = useState([]);
+
+  useEffect(() => {
+    const fetchFreeList = async () => {
+      try {
+        const response = await getAllFreeList(BUSINESS_PAGE,
+          visibleFreelist,
+          "",
+          location);
+        if (response && response.data) {
+          setFreelist(response.data);
+        }
+      } catch (error) {
+        console.error("Error fetching freelist:", error);
+      }
+    };
+
+    fetchFreeList();
+  }, [location]);
+  
 
   const handleClick = () => {
     window.open(`https://wa.me/${9447020270}`, "_blank");
@@ -205,7 +227,7 @@ export default function Home() {
           });
         }
       }
-  
+     
   }, [location]);
 
   useEffect(() => {
@@ -318,9 +340,9 @@ export default function Home() {
         loading={loading}
         visibleBusiness={visibleBusiness}
         totalBusinessData={totalBusinessData}
-      />
+      /> 
 
-      <FreeListIndex/>
+      <FreeListIndex freelist={freelist}/>
 
       <ReviewSection
         currentSlide={currentSlide}

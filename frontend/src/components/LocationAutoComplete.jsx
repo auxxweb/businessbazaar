@@ -52,9 +52,9 @@ const LocationAutocomplete = ({ setLocation, libraries }) => {
               border: "2.5px solid #ced4da",
               borderRadius: "6px",
               overflow: "hidden",
-              background: "none",
+              background: "transparent",
               height: "48px",
-              width: "260px",
+              width: "278px",
             }}
           >
             <span
@@ -82,7 +82,7 @@ const LocationAutocomplete = ({ setLocation, libraries }) => {
                 border: "none",
                 boxShadow: "none",
                 paddingLeft: "0",
-                fontSize: "1em",
+                fontSize: "1.2em",
                 color: "#6c757d",
                  background: "transparent",
                 height: "100%",

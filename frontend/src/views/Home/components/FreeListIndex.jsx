@@ -2,6 +2,7 @@ import React from "react"
 import { FaLock, FaDollarSign } from "react-icons/fa"
 
 const CryptoCard = ({ data }) => {
+  
   return (
     <div className="crypto_card border-0 rounded-4 overflow-hidden">
       <div className="crypto_card_header position-relative">
@@ -9,76 +10,37 @@ const CryptoCard = ({ data }) => {
        
       </div>
       <div className="crypto_card_content">
-        <h5 className="crypto_title">{data.title}</h5>
+        <h5 className="crypto_title">{data.name}</h5>
         <p className="crypto_description">{data.description}</p>
 
         <div className="crypto_metrics">
           <div className="crypto_metric_item">
             <span className="crypto_metric_icon">👥</span>
-            <span className="crypto_metric_value">{data.followers}</span>
+            <span className="crypto_metric_value">{data.name}</span>
           </div>
           <div className="crypto_metric_item">
             <span className="crypto_metric_icon">⚡</span>
-            <span className="crypto_metric_value">{data.engagement}</span>
+            <span className="crypto_metric_value">{data.name}</span>
           </div>
         </div>
 
         <div className="crypto_tags">
-          {data.tags.map((tag, index) => (
+          {/* {data.tags.map((tag, index) => (
             <span key={index} className="crypto_tag">
               <span className="crypto_tag_icon">{tag.icon}</span>
               <span className="crypto_tag_text">{tag.name}</span>
             </span>
-          ))}
+          ))} */}
         </div>
       </div>
     </div>
   )
 }
 
-const FreeListIndex = () => {
-  const cardsData = [
-    {
-      id: 1,
-      logo: "SR",
-      title: "SuperRare",
-      description: "The future of CryptoArt markets—a network governed by artists, collectors and curators.",
-      followers: "299.5K",
-      engagement: "71.4K",
-      tags: [
-        { name: "Art", icon: "🎨" },
-        { name: "Crypto", icon: "🌿" },
-        { name: "NFT", icon: "🖼️" },
-      ],
-    },
-    {
-      id: 2,
-      logo: "BA",
-      title: "Bored Ape",
-      description: "To become a member, buy a Bored Ape or Mutant Ape on OpenSea.",
-      followers: "821.5K",
-      engagement: "224.8K",
-      tags: [
-        { name: "Art", icon: "🎨" },
-        { name: "Crypto", icon: "🌿" },
-        { name: "NFT", icon: "🖼️" },
-      ],
-    },
-    {
-      id: 3,
-      logo: "RV",
-      title: "Rivian",
-      description: "Keep the world adventurous forever with sustainable transportation.",
-      followers: "154.7K",
-      engagement: "77.7K",
-      tags: [
-        { name: "Tech", icon: "💻" },
-        { name: "Auto", icon: "🚗" },
-        { name: "Green", icon: "🌱" },
-      ],
-    },
-  ]
+const FreeListIndex = ({freelist}) => {
 
+  
+ 
   return (
     <div className="crypto_container">
          <div className="text-center mb-5">
@@ -90,11 +52,15 @@ const FreeListIndex = () => {
           </p>
         </div>
       <div className="crypto_grid">
-        {cardsData.map((card) => (
-          <div key={card.id} className="crypto_grid_item">
-            <CryptoCard data={card} />
-          </div>
-        ))}
+      {freelist && freelist.length > 0 ? (
+          freelist.map((card) => (
+            <div key={card._id} className="crypto_grid_item">
+              <CryptoCard data={card} />
+            </div>
+          ))
+        ) : (
+          <p>No profiles available.</p>
+        )}
       </div>
 
       <style jsx>{`
