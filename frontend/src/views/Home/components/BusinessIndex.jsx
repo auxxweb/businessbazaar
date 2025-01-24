@@ -107,7 +107,7 @@ const BusinessIndex = ({
           </p>
         </div>
 
-        <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-lg-4 g-0">
+        <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 mt-4 g-lg-4 g-0">
           {businessData?.length > 0 ? (
             businessData.map((business) => (
               <div key={business._id} className="col">
@@ -127,53 +127,62 @@ const BusinessIndex = ({
                     <div className="px-4 py-3 position-relative ">
                       <div className=" ">
                         {/* Category */}
-                        <div className="small text-muted">
-                          {business?.category?.name || "News & Media"}
-                        </div>
 
-                        <div className="row g-3">
-                          {/* Content Column */}
-                          <div className="col-12">
-                            <h5
-                              className="card-title h6 fw-bold text-dark"
-                              style={{
-                                overflow: "hidden",
-                                textOverflow: "ellipsis",
-                                display: "-webkit-box",
-                                WebkitLineClamp: 2,
-                                WebkitBoxOrient: "vertical",
-                                minHeight: "20px",
-                                paddingRight: "45%",
-                              }}
-                            >
-                              {business?.businessName}
-                            </h5>
+                        <div className="">
+                          <div>
+                            <div className="small text-muted">
+                              {business?.category?.name || "News & Media"}
+                            </div>
 
-                            <p
-                              className="card-text text-muted small"
-                              style={{
-                                overflow: "hidden",
-                                textOverflow: "ellipsis",
-                                display: "-webkit-box",
-                                WebkitLineClamp: 2,
-                                WebkitBoxOrient: "vertical",
-                                paddingRight: "45%",
-                              }}
-                            >
-                              {business?.address?.buildingName}{" "}
-                              {business?.address?.city}{" "}
-                              {business?.address?.landMark}
-                            </p>
+                            <div className="row g-3">
+                              {/* Content Column */}
+                              <div className="col-12">
+                                <h5
+                                  className="card-title h6 fw-bold text-dark"
+                                  style={{
+                                    overflow: "hidden",
+                                    textOverflow: "ellipsis",
+                                    display: "-webkit-box",
+                                    WebkitLineClamp: 2,
+                                    WebkitBoxOrient: "vertical",
+                                    minHeight: "20px",
+                                    paddingRight: "45%",
+                                  }}
+                                >
+                                  {business?.businessName}
+                                </h5>
+
+                                <p
+                                  className="card-text text-muted small"
+                                  style={{
+                                    overflow: "hidden",
+                                    textOverflow: "ellipsis",
+                                    display: "-webkit-box",
+                                    WebkitLineClamp: 2,
+                                    WebkitBoxOrient: "vertical",
+                                    paddingRight: "45%",
+                                  }}
+                                >
+                                  {business?.address?.buildingName}{" "}
+                                  {business?.address?.city}{" "}
+                                  {business?.address?.landMark}
+                                </p>
+                              </div>
+                            </div>
                           </div>
 
                           {/* Image positioned at top */}
                           <div
-                            className="position-absolute"
+                            className="position-absolute  shadow-xl"
                             style={{
                               width: "130px",
                               right: "20px",
-                              top: "-30px",
+                              top: "-42px",
                               maxWidth: "40%",
+                               // Optional: Background color for shadow contrast
+                              borderRadius: "8px", // Match the image's rounded corners
+                              // boxShadow: "0px 2px 6px rgba(0, 0, 0, 0.2)", // Shadow effect
+                              padding: "5px", // Optional: Adds spacing between the image and shadow
                             }}
                           >
                             <img
@@ -182,7 +191,8 @@ const BusinessIndex = ({
                               className="rounded-3 w-100 shadow-sm"
                               style={{
                                 aspectRatio: "1",
-                                objectFit: "cover",
+                               
+                                objectFit: "fit",
                               }}
                             />
                           </div>
@@ -193,7 +203,7 @@ const BusinessIndex = ({
                             style={{
                               width: "110px",
                               right: "30px",
-                              top: "80px",
+                              top: "85px",
                             }}
                           >
                             <div className="d-flex align-items-center justify-content-center px-2 py-1">
