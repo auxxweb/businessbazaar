@@ -114,8 +114,8 @@ const BusinessIndex = ({
                   }
                   className="text-decoration-none"
                 >
-                  <div className="card h-100 border-0 shadow-xl btn-parent rounded-4 hover-card">
-                    <div className="px-4   position-relative">
+                  <div className="card  h-100 border-0 shadow-xl btn-parent rounded-4 hover-card">
+                    <div className="px-4 pb-4 position-relative">
                       <div className="">
                         <div className="small text-muted">{business?.category?.name || "News & Media"}</div>
 
@@ -242,7 +242,7 @@ const BusinessIndex = ({
           {!searchItem && visibleBusiness < totalBusinessData && (
             <div className="col">
               <div
-                className="card h-100 border-0 shadow-xl rounded-4 overflow-visible hover-card d-flex align-items-center justify-content-center cursor-pointer"
+                className="cardd h-100 border-0 shadow-xl rounded-4 overflow-visible hover-card d-flex align-items-center justify-content-center cursor-pointer"
                 onClick={loadMoreBusiness}
               >
                 <div className="text-center">
@@ -270,6 +270,10 @@ const BusinessIndex = ({
 
       <style>
         {`
+
+        .cardd{
+        height:80%;
+        }
           .col {
             animation: fadeInUp 0.5s ease-out;
             animation-fill-mode: both;
@@ -382,6 +386,7 @@ const BusinessIndex = ({
           justify-content:end;
           
           }
+          
         `}
       </style>
     </section>
