@@ -124,7 +124,7 @@ const BusinessIndex = ({
                   className="text-decoration-none"
                 >
                   <div className="card  h-100 border-0 shadow-xl  btn-parent rounded-4 overflow-visible hover-card">
-                    <div className="px-4 py-3 position-relative ">
+                    <div className="px-4  position-relative ">
                       <div className=" ">
                         {/* Category */}
 
