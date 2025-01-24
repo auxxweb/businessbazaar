@@ -1,12 +1,12 @@
-import React, { useState } from "react";
-import PropTypes from "prop-types";
-import { FaStar, FaWhatsapp, FaPhone, FaEnvelope } from "react-icons/fa";
-import { Link } from "react-router-dom";
-import { Spinner } from "react-bootstrap";
-import Placeholder from "/images/placeholder.jpg";
-import EnquiryModal from "./EnquiryModal";
-import { submitContactForm } from "../../../Functions/functions";
-import { toast } from "react-toastify";
+import React, { useState } from "react"
+import PropTypes from "prop-types"
+import { FaStar, FaWhatsapp, FaPhone, FaEnvelope } from "react-icons/fa"
+import { Link } from "react-router-dom"
+import { Spinner } from "react-bootstrap"
+import Placeholder from "/images/placeholder.jpg"
+import EnquiryModal from "./EnquiryModal"
+import { submitContactForm } from "../../../Functions/functions"
+import { toast } from "react-toastify"
 
 const BusinessIndex = ({
   loading,
@@ -17,24 +17,24 @@ const BusinessIndex = ({
   scroll,
   searchItem,
 }) => {
-  console.log(searchItem, "kkkkkkkkkk:");
-  const [showEnquiryModal, setShowEnquiryModal] = useState(false);
-  const [selectedBusiness, setSelectedBusiness] = useState(null);
+  console.log(searchItem, "kkkkkkkkkk:")
+  const [showEnquiryModal, setShowEnquiryModal] = useState(false)
+  const [selectedBusiness, setSelectedBusiness] = useState(null)
 
   const slugify = (text) => {
-    if (!text) return text;
+    if (!text) return text
     return text
       .toLowerCase()
       .replace(/ /g, "-")
-      .replace(/[^\w-]+/g, "");
-  };
+      .replace(/[^\w-]+/g, "")
+  }
   const handleFormSubmit = async (e, formData, businessId) => {
-    e.preventDefault();
+    e.preventDefault()
 
     const response = await submitContactForm({
       ...formData,
       businessId: businessId,
-    });
+    })
     if (response?.data) {
       toast.success("Form submitted successfully!", {
         position: "top-right",
@@ -48,8 +48,8 @@ const BusinessIndex = ({
           backgroundColor: "#38a20e", // Custom red color for error
           color: "#FFFFFF", // White text
         },
-      });
-      return true;
+      })
+      return true
     } else {
       toast.success("Failed submission failed!", {
         position: "top-right",
@@ -63,36 +63,32 @@ const BusinessIndex = ({
           backgroundColor: "#aa0808", // Custom red color for error
           color: "#FFFFFF", // White text
         },
-      });
-      return false;
+      })
+      return false
     }
-  };
+  }
   const renderStars = (rating) => {
     return [...Array(5)].map((_, index) => (
-      <FaStar
-        key={index}
-        size={12}
-        className={index < Math.floor(rating) ? "text-warning" : "text-muted"}
-      />
-    ));
-  };
+      <FaStar key={index} size={12} className={index < Math.floor(rating) ? "text-warning" : "text-muted"} />
+    ))
+  }
 
   const handleClick = (countryCode, whatsappNumber) => {
-    const defaultCountryCode = "+91"; // Default country code
-    const finalCountryCode = countryCode || defaultCountryCode; // Use default if not available
-    window.open(`https://wa.me/${finalCountryCode}${whatsappNumber}`, "_blank");
-  };
+    const defaultCountryCode = "+91" // Default country code
+    const finalCountryCode = countryCode || defaultCountryCode // Use default if not available
+    window.open(`https://wa.me/${finalCountryCode}${whatsappNumber}`, "_blank")
+  }
 
   const handleOpenDialer = (phoneNumber) => {
-    const formattedNumber = `tel:${String(phoneNumber).replace(/\s/g, "")}`;
-    window.location.href = formattedNumber;
-  };
+    const formattedNumber = `tel:${String(phoneNumber).replace(/\s/g, "")}`
+    window.location.href = formattedNumber
+  }
 
   const handleEnquiryClick = (e, business) => {
-    e.preventDefault();
-    setSelectedBusiness(business);
-    setShowEnquiryModal(true);
-  };
+    e.preventDefault()
+    setSelectedBusiness(business)
+    setShowEnquiryModal(true)
+  }
 
   return (
     <section className="home-spot h-auto mb-2" ref={scroll}>
@@ -100,159 +96,132 @@ const BusinessIndex = ({
         <div className="text-center mb-5">
           <h1 className="fw-bold mb-3">Discover the Top Profiles</h1>
           <p className="text-muted mx-auto" style={{ maxWidth: "800px" }}>
-            Explore the most popular profile listings in your area through our
-            local profile directory listing, highly rated by locals and visitors
-            alike. Our platform makes it easy to find top-rated profiles based
-            on customer reviews and expert recommendations.
+            Explore the most popular profile listings in your area through our local profile directory listing, highly
+            rated by locals and visitors alike. Our platform makes it easy to find top-rated profiles based on customer
+            reviews and expert recommendations.
           </p>
         </div>
 
         <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 mt-4 g-lg-4 g-0">
           {businessData?.length > 0 ? (
             businessData.map((business) => (
-              <div key={business._id} className="col">
+              <div key={business._id} className="col mb-4">
                 <Link
                   to={
                     business?.selectedPlan?.isPremium
-                      ? `/profile/premium/${slugify(business?.businessName)}/${
-                          business?._id
-                        }`
-                      : `/profile/${slugify(business?.businessName)}/${
-                          business?._id
-                        }`
+                      ? `/profile/premium/${slugify(business?.businessName)}/${business?._id}`
+                      : `/profile/${slugify(business?.businessName)}/${business?._id}`
                   }
                   className="text-decoration-none"
                 >
-                  <div className="card  h-100 border-0 shadow-xl  btn-parent rounded-4 overflow-visible hover-card">
-                    <div className="px-4  position-relative ">
-                      <div className=" ">
-                        {/* Category */}
+                  <div className="card h-100 border-0 shadow-xl btn-parent rounded-4 hover-card">
+                    <div className="px-4   position-relative">
+                      <div className="">
+                        <div className="small text-muted">{business?.category?.name || "News & Media"}</div>
 
-                        <div className="">
-                          <div>
-                            <div className="small text-muted">
-                              {business?.category?.name || "News & Media"}
-                            </div>
+                        <h5
+                          className="card-title h6 fw-bold text-dark mt-2"
+                          style={{
+                            overflow: "hidden",
+                            textOverflow: "ellipsis",
+                            display: "-webkit-box",
+                            WebkitLineClamp: 2,
+                            WebkitBoxOrient: "vertical",
+                            minHeight: "40px",
+                            paddingRight: "45%",
+                          }}
+                        >
+                          {business?.businessName}
+                        </h5>
 
-                            <div className="row g-3">
-                              {/* Content Column */}
-                              <div className="col-12">
-                                <h5
-                                  className="card-title h6 fw-bold text-dark"
-                                  style={{
-                                    overflow: "hidden",
-                                    textOverflow: "ellipsis",
-                                    display: "-webkit-box",
-                                    WebkitLineClamp: 2,
-                                    WebkitBoxOrient: "vertical",
-                                    minHeight: "20px",
-                                    paddingRight: "45%",
-                                  }}
-                                >
-                                  {business?.businessName}
-                                </h5>
+                        <p
+                          className="card-text text-muted small mb-0"
+                          style={{
+                            overflow: "hidden",
+                            textOverflow: "ellipsis",
+                            display: "-webkit-box",
+                            WebkitLineClamp: 2,
+                            WebkitBoxOrient: "vertical",
+                            paddingRight: "45%",
+                          }}
+                        >
+                          {business?.address?.buildingName} {business?.address?.city} {business?.address?.landMark}
+                        </p>
+                      </div>
 
-                                <p
-                                  className="card-text text-muted small"
-                                  style={{
-                                    overflow: "hidden",
-                                    textOverflow: "ellipsis",
-                                    display: "-webkit-box",
-                                    WebkitLineClamp: 2,
-                                    WebkitBoxOrient: "vertical",
-                                    paddingRight: "45%",
-                                  }}
-                                >
-                                  {business?.address?.buildingName}{" "}
-                                  {business?.address?.city}{" "}
-                                  {business?.address?.landMark}
-                                </p>
-                              </div>
-                            </div>
-                          </div>
-
-                          {/* Image positioned at top */}
-                          <div
-                            className="position-absolute  shadow-xl"
-                            style={{
-                              width: "130px",
-                              right: "20px",
-                              top: "-42px",
-                              maxWidth: "40%",
-                               // Optional: Background color for shadow contrast
-                              borderRadius: "8px", // Match the image's rounded corners
-                              // boxShadow: "0px 2px 6px rgba(0, 0, 0, 0.2)", // Shadow effect
-                              padding: "5px", // Optional: Adds spacing between the image and shadow
-                            }}
-                          >
-                            <img
-                              src={business?.logo || Placeholder}
-                              alt={business?.businessName}
-                              className="rounded-3 w-100 shadow-sm"
-                              style={{
-                                aspectRatio: "1",
-                               
-                                objectFit: "fit",
-                              }}
-                            />
-                          </div>
-
-                          {/* Rating fixed under the image */}
-                          <div
+                      <div
+                        className="position-absolute bg-white shadow-sm"
+                        style={{
+                          width: "130px",
+                          height: "130px",
+                          right: "20px",
+                          top: "-45px",
+                          borderRadius: "12px",
+                          padding: "6px",
+                          overflow: "hidden",
+                        }}
+                      >
+                        <div className="w-100 h-100 position-relative">
+                          <img
+                            src={business?.logo || Placeholder}
+                            alt={business?.businessName}
                             className="position-absolute"
                             style={{
-                              width: "110px",
-                              right: "30px",
-                              top: "85px",
+                              width: "100%",
+                              height: "100%",
+                              objectFit: "cover",
+                              borderRadius: "8px",
                             }}
-                          >
-                            <div className="d-flex align-items-center justify-content-center px-2 py-1">
-                              {renderStars(business?.rating || 0)}
-                              <span className="ms-1 small fw-medium">
-                                {business?.rating || "0.0"}
-                              </span>
-                            </div>
-                          </div>
+                          />
+                        </div>
+                      </div>
+
+                      <div
+                        className="position-absolute bg-white px-2 py-1 rounded-pill shadow-sm"
+                        style={{
+                          right: "35px",
+                          top: "100px",
+                          zIndex: 1,
+                        }}
+                      >
+                        <div className="d-flex align-items-center justify-content-center">
+                          {renderStars(business?.rating || 0)}
+                          <span className="ms-1 small fw-medium">{business?.rating || "0.0"}</span>
                         </div>
                       </div>
                     </div>
-                    <div className=" btn-crd">
-                      {/* Buttons */}
-                      <div className=" d-flex justify-content-center gap-1 ">
-                        <a
-                          href="#"
+                    <div className=" p-3">
+                      <div className="d-flex justify-content-center gap-2">
+                        <button
                           className="btn btn-success btn-sm flex-1 d-flex align-items-center justify-content-center gap-2"
                           onClick={(e) => {
-                            e.stopPropagation(); // Prevent Link navigation
-                            handleOpenDialer();
+                            e.preventDefault()
+                            handleOpenDialer(business?.contactDetails?.primaryNumber)
                           }}
                         >
-                          <FaPhone />{" "}
-                          {business?.contactDetails?.primaryNumber ?? ""}
-                        </a>
-                        <a
-                          href="#"
+                          <FaPhone /> {business?.contactDetails?.primaryNumber ?? ""}
+                        </button>
+                        <button
                           className="btn btn-outline-success btn-sm flex-1 d-flex align-items-center justify-content-center gap-2"
                           onClick={(e) => {
-                            e.stopPropagation(); // Prevent Link navigation
+                            e.preventDefault()
                             handleClick(
                               business?.contactDetails?.whatsappCountryCode,
-                              business?.contactDetails?.whatsAppNumber
-                            );
+                              business?.contactDetails?.whatsAppNumber,
+                            )
                           }}
                         >
                           <FaWhatsapp /> WhatsApp
-                        </a>
-                        <a
-                          href="#"
+                        </button>
+                        <button
                           className="btn btn-enquiry btn-sm flex-1 d-flex align-items-center justify-content-center gap-2"
                           onClick={(e) => {
-                            e.stopPropagation(); // Prevent Link navigation
-                            handleEnquiryClick(e, business);
+                            e.preventDefault()
+                            handleEnquiryClick(e, business)
                           }}
                         >
                           <FaEnvelope /> Send Enquiry
-                        </a>
+                        </button>
                       </div>
                     </div>
                   </div>
@@ -264,9 +233,7 @@ const BusinessIndex = ({
               <div className="card h-100 border-0 shadow-xl rounded-4 overflow-visible">
                 <div className="px-4 py-3 text-center">
                   <h5 className="card-title h6 text-dark">Profile not found</h5>
-                  <p className="card-text text-muted">
-                    No business profiles available at the moment.
-                  </p>
+                  <p className="card-text text-muted">No business profiles available at the moment.</p>
                 </div>
               </div>
             </div>
@@ -279,9 +246,7 @@ const BusinessIndex = ({
                 onClick={loadMoreBusiness}
               >
                 <div className="text-center">
-                  <h5 className="card-title h6 fw-bold text-dark ">
-                    View More
-                  </h5>
+                  <h5 className="card-title h6 fw-bold text-dark ">View More</h5>
                   <i className="bi bi-arrow-right fs-4"></i>
                 </div>
               </div>
@@ -290,14 +255,13 @@ const BusinessIndex = ({
         </div>
       </div>
 
-      {/* Enquiry Modal */}
       {selectedBusiness && (
         <EnquiryModal
           show={showEnquiryModal}
           handleFormSubmit={handleFormSubmit}
           onHide={() => {
-            setShowEnquiryModal(false);
-            setSelectedBusiness(null);
+            setShowEnquiryModal(false)
+            setSelectedBusiness(null)
           }}
           businessName={selectedBusiness.businessName}
           businessId={selectedBusiness._id}
@@ -421,8 +385,8 @@ const BusinessIndex = ({
         `}
       </style>
     </section>
-  );
-};
+  )
+}
 
 BusinessIndex.propTypes = {
   loading: PropTypes.bool.isRequired,
@@ -431,6 +395,7 @@ BusinessIndex.propTypes = {
   totalBusinessData: PropTypes.number.isRequired,
   loadMoreBusiness: PropTypes.func.isRequired,
   scroll: PropTypes.object,
-};
+}
 
-export default BusinessIndex;
+export default BusinessIndex
+
