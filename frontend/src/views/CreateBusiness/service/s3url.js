@@ -12,6 +12,7 @@ export const preRequestFun = async (file, position) => {
       },
     ],
   };
+  
 
   try {
     const response = await axios.post(url, requestBody, {

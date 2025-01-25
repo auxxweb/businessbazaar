@@ -40,35 +40,36 @@ export default function FloatingButtons() {
 
   const handleChange = async (e) => {
     const { name, value, files } = e.target;
-
+  
     if (files) {
       // Handle single file upload (e.g., logo)
       if (name === "logo") {
-        alert('logoo')
         const logoFile = files[0];
         const logoLink = await preRequestFun(logoFile, "freelist");
         setFormData((prev) => ({
           ...prev,
-          logo: logoLink,
+          logo: logoLink.accessLink, // Correctly set the accessLink
         }));
       }
-
+  
       // Handle multiple file uploads (e.g., images)
       if (name === "images") {
         const imageFiles = Array.from(files);
         const imageLinks = await Promise.all(
           imageFiles.map((file) => preRequestFun(file, "freelist"))
         );
+  
+        // Ensure the `images` array is updated correctly
         setFormData((prev) => ({
           ...prev,
-          images: imageLinks,
+          images: [...(prev.images || []), ...imageLinks.map(link => link.accessLink)], // Merge with existing images
         }));
       }
-
+  
       return;
     }
-
-    // For nested fields
+  
+    // Handle nested fields
     if (name.includes(".")) {
       const [key, subKey] = name.split(".");
       setFormData((prev) => ({
@@ -79,13 +80,14 @@ export default function FloatingButtons() {
         },
       }));
     } else {
-      // For top-level fields
+      // Handle top-level fields
       setFormData((prev) => ({
         ...prev,
         [name]: value,
       }));
     }
   };
+  
 
   const handleSubmit = async (event) => {
     event.preventDefault();
