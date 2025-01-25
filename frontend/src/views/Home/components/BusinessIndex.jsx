@@ -229,9 +229,9 @@ const BusinessIndex = ({
               </div>
             ))
           ) : (
-            <div className="col">
-              <div className="card h-100 border-0 shadow-xl rounded-4 overflow-visible">
-                <div className="px-4 py-3 text-center">
+            <div className="col-12">
+              <div className="  h-100 border-0  rounded-4 overflow-visible">
+                <div className="px-4  py-3 text-center">
                   <h5 className="card-title h6 text-dark">Profile not found</h5>
                   <p className="card-text text-muted">No business profiles available at the moment.</p>
                 </div>

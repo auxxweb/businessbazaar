@@ -65,7 +65,7 @@ const LocationAutocomplete = ({ setLocation, libraries }) => {
                 padding: "0 12px",
                 display: "flex",
                 alignItems: "center",
-                color: "black",
+                color: "#d6d6d6",
                 background: "none",
                 height: "100%",
               }}
@@ -83,7 +83,7 @@ const LocationAutocomplete = ({ setLocation, libraries }) => {
                 boxShadow: "none",
                 paddingLeft: "0",
                 fontSize: "1.2em",
-                color: "#6c757d",
+                color: "#bfbfbf",
                  background: "transparent",
                 height: "100%",
               }}

@@ -173,33 +173,48 @@ export default function Business() {
 
       <div className="container mt-4">
         <div className="row">
-          <div className="col-md-6">
+          <div className="col-md-12">
             <div className="row justify-content-center">
-              <div className="col-12 mb-3 col-md-8">
-                <div className="input-group">
-                  <span
-                    className="input-group-text"
+              <div className="col-12 col-md-8">
+                <div className="d-flex justify-content-center align-items-center my-4">
+                  <div
+                    className="input-group"
                     style={{
-                      backgroundColor: "white",
-                      borderTopLeftRadius: "50px",
-                      borderBottomLeftRadius: "50px",
-                      border: "1px solid #ced4da",
+                      maxWidth: "350px",
+                      width: "100%",
+                      height:'55px',
+                      borderRadius: "5px",
+                      overflow: "hidden",
+                      boxShadow: "0 2px 5px rgba(0, 0, 0, 0.1)",
                     }}
                   >
-                    <i className="bi bi-search fw-bold"></i>{" "}
-                  </span>
-                  <input
-                    type="text"
-                    className="form-control"
-                    placeholder="Search for Businesses"
-                    value={searchTerm}
-                    onChange={handleSearch}
-                    style={{
-                      borderTopRightRadius: "50px",
-                      borderBottomRightRadius: "50px",
-                      borderLeft: "none",
-                    }}
-                  />
+                    <input
+                      type="text"
+                      className="form-control"
+                      placeholder="Search for Profiles"
+                      value={searchTerm}
+                      onChange={handleSearch}
+                      style={{
+                        border: "none",
+                        borderRadius: "0",
+                        padding: "10px 15px",
+                      }}
+                    />
+                    <button
+
+                      className="btn"
+                      style={{
+                        background:
+                          "linear-gradient(to right, #e72693, #ff7e2b)",
+                        color: "white",
+                        border: "none",
+                        borderRadius: "0",
+                        fontWeight: "bold",
+                      }}
+                    >
+                      <i className="bi bi-search"></i>
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -225,140 +240,157 @@ export default function Business() {
             }`}
           >
             {businessData?.length > 0 ? (
-                       businessData.map((business) => (
-                         <div key={business._id} className="col mb-4">
-                           <Link
-                             to={
-                               business?.selectedPlan?.isPremium
-                                 ? `/profile/premium/${slugify(business?.businessName)}/${business?._id}`
-                                 : `/profile/${slugify(business?.businessName)}/${business?._id}`
-                             }
-                             className="text-decoration-none"
-                           >
-                             <div className="card  h-100 border-0 shadow-xl btn-parent rounded-4 hover-card">
-                               <div className="px-4 pb-4 position-relative">
-                                 <div className="">
-                                   <div className="small text-muted">{business?.category?.name || "News & Media"}</div>
-           
-                                   <h5
-                                     className="card-title h6 fw-bold text-dark mt-2"
-                                     style={{
-                                       overflow: "hidden",
-                                       textOverflow: "ellipsis",
-                                       display: "-webkit-box",
-                                       WebkitLineClamp: 2,
-                                       WebkitBoxOrient: "vertical",
-                                       minHeight: "40px",
-                                       paddingRight: "45%",
-                                     }}
-                                   >
-                                     {business?.businessName}
-                                   </h5>
-           
-                                   <p
-                                     className="card-text text-muted small mb-0"
-                                     style={{
-                                       overflow: "hidden",
-                                       textOverflow: "ellipsis",
-                                       display: "-webkit-box",
-                                       WebkitLineClamp: 2,
-                                       WebkitBoxOrient: "vertical",
-                                       paddingRight: "45%",
-                                     }}
-                                   >
-                                     {business?.address?.buildingName} {business?.address?.city} {business?.address?.landMark}
-                                   </p>
-                                 </div>
-           
-                                 <div
-                                   className="position-absolute bg-white shadow-sm"
-                                   style={{
-                                     width: "130px",
-                                     height: "130px",
-                                     right: "20px",
-                                     top: "-45px",
-                                     borderRadius: "12px",
-                                     padding: "6px",
-                                     overflow: "hidden",
-                                   }}
-                                 >
-                                   <div className="w-100 h-100 position-relative">
-                                     <img
-                                       src={business?.logo || Placeholder}
-                                       alt={business?.businessName}
-                                       className="position-absolute"
-                                       style={{
-                                         width: "100%",
-                                         height: "100%",
-                                         objectFit: "cover",
-                                         borderRadius: "8px",
-                                       }}
-                                     />
-                                   </div>
-                                 </div>
-           
-                                 <div
-                                   className="position-absolute bg-white px-2 py-1 rounded-pill shadow-sm"
-                                   style={{
-                                     right: "35px",
-                                     top: "100px",
-                                     zIndex: 1,
-                                   }}
-                                 >
-                                   <div className="d-flex align-items-center justify-content-center">
-                                     {renderStars(business?.rating || 0)}
-                                     <span className="ms-1 small fw-medium">{business?.rating || "0.0"}</span>
-                                   </div>
-                                 </div>
-                               </div>
-                               <div className=" p-3">
-                                 <div className="d-flex justify-content-center gap-2">
-                                   <button
-                                     className="btn btn-success btn-sm flex-1 d-flex align-items-center justify-content-center gap-2"
-                                     onClick={(e) => {
-                                       e.preventDefault()
-                                       handleOpenDialer(business?.contactDetails?.primaryNumber)
-                                     }}
-                                   >
-                                     <FaPhone /> {business?.contactDetails?.primaryNumber ?? ""}
-                                   </button>
-                                   <button
-                                     className="btn btn-outline-success btn-sm flex-1 d-flex align-items-center justify-content-center gap-2"
-                                     onClick={(e) => {
-                                       e.preventDefault()
-                                       handleClick(
-                                         business?.contactDetails?.whatsappCountryCode,
-                                         business?.contactDetails?.whatsAppNumber,
-                                       )
-                                     }}
-                                   >
-                                     <FaWhatsapp /> WhatsApp
-                                   </button>
-                                   <button
-                                     className="btn btn-enquiry btn-sm flex-1 d-flex align-items-center justify-content-center gap-2"
-                                     onClick={(e) => {
-                                       e.preventDefault()
-                                       handleEnquiryClick(e, business)
-                                     }}
-                                   >
-                                     <FaEnvelope /> Send Enquiry
-                                   </button>
-                                 </div>
-                               </div>
-                             </div>
-                           </Link>
-                         </div>
-                       ))
-                     ) : (
-                       <div className="col">
-                         <div className="card h-100 border-0 shadow-xl rounded-4 overflow-visible">
-                           <div className="px-4 py-3 text-center">
-                             <h5 className="card-title h6 text-dark">Profile not found</h5>
-                             <p className="card-text text-muted">No business profiles available at the moment.</p>
-                           </div>
-                         </div>
-                       </div>
-                     )}
+              businessData.map((business) => (
+                <div key={business._id} className="col mb-4">
+                  <Link
+                    to={
+                      business?.selectedPlan?.isPremium
+                        ? `/profile/premium/${slugify(
+                            business?.businessName
+                          )}/${business?._id}`
+                        : `/profile/${slugify(business?.businessName)}/${
+                            business?._id
+                          }`
+                    }
+                    className="text-decoration-none"
+                  >
+                    <div className="card  h-100 border-0 shadow-xl btn-parent rounded-4 hover-card">
+                      <div className="px-4 pb-4 position-relative">
+                        <div className="">
+                          <div className="small text-muted">
+                            {business?.category?.name || "News & Media"}
+                          </div>
+
+                          <h5
+                            className="card-title h6 fw-bold text-dark mt-2"
+                            style={{
+                              overflow: "hidden",
+                              textOverflow: "ellipsis",
+                              display: "-webkit-box",
+                              WebkitLineClamp: 2,
+                              WebkitBoxOrient: "vertical",
+                              minHeight: "40px",
+                              paddingRight: "45%",
+                            }}
+                          >
+                            {business?.businessName}
+                          </h5>
+
+                          <p
+                            className="card-text text-muted small mb-0"
+                            style={{
+                              overflow: "hidden",
+                              textOverflow: "ellipsis",
+                              display: "-webkit-box",
+                              WebkitLineClamp: 2,
+                              WebkitBoxOrient: "vertical",
+                              paddingRight: "45%",
+                            }}
+                          >
+                            {business?.address?.buildingName}{" "}
+                            {business?.address?.city}{" "}
+                            {business?.address?.landMark}
+                          </p>
+                        </div>
+
+                        <div
+                          className="position-absolute bg-white shadow-sm"
+                          style={{
+                            width: "130px",
+                            height: "130px",
+                            right: "20px",
+                            top: "-45px",
+                            borderRadius: "12px",
+                            padding: "6px",
+                            overflow: "hidden",
+                          }}
+                        >
+                          <div className="w-100 h-100 position-relative">
+                            <img
+                              src={business?.logo || Placeholder}
+                              alt={business?.businessName}
+                              className="position-absolute"
+                              style={{
+                                width: "100%",
+                                height: "100%",
+                                objectFit: "cover",
+                                borderRadius: "8px",
+                              }}
+                            />
+                          </div>
+                        </div>
+
+                        <div
+                          className="position-absolute bg-white px-2 py-1 rounded-pill shadow-sm"
+                          style={{
+                            right: "35px",
+                            top: "100px",
+                            zIndex: 1,
+                          }}
+                        >
+                          <div className="d-flex align-items-center justify-content-center">
+                            {renderStars(business?.rating || 0)}
+                            <span className="ms-1 small fw-medium">
+                              {business?.rating || "0.0"}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                      <div className=" p-3">
+                        <div className="d-flex justify-content-center gap-2">
+                          <button
+                            className="btn btn-success btn-sm flex-1 d-flex align-items-center justify-content-center gap-2"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              handleOpenDialer(
+                                business?.contactDetails?.primaryNumber
+                              );
+                            }}
+                          >
+                            <FaPhone />{" "}
+                            {business?.contactDetails?.primaryNumber ?? ""}
+                          </button>
+                          <button
+                            className="btn btn-outline-success btn-sm flex-1 d-flex align-items-center justify-content-center gap-2"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              handleClick(
+                                business?.contactDetails?.whatsappCountryCode,
+                                business?.contactDetails?.whatsAppNumber
+                              );
+                            }}
+                          >
+                            <FaWhatsapp /> WhatsApp
+                          </button>
+                          <button
+                            className="btn btn-enquiry btn-sm flex-1 d-flex align-items-center justify-content-center gap-2"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              handleEnquiryClick(e, business);
+                            }}
+                          >
+                            <FaEnvelope /> Send Enquiry
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </Link>
+                </div>
+              ))
+            ) : (
+              <div className="col">
+                <div className="card h-100 border-0 shadow-xl rounded-4 overflow-visible">
+                  <div className="px-4 py-3 text-center">
+                    <h5 className="card-title h6 text-dark">
+                      Profile not found
+                    </h5>
+                    <p className="card-text text-muted">
+                      No business profiles available at the moment.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            )}
 
             {visibleBusiness < totalBusinessData && (
               <div className="col mb-4">
