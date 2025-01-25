@@ -16,6 +16,7 @@ import {
   fetchBusiness,
   fetchBusinesses,
   fetchCategories,
+  getAllFreeList,
   getAllReviews,
 } from "../../Functions/functions";
 import { BUSINESS_PAGE, REVIEW_LIMIT, REVIEW_PAGE } from "./constants";
@@ -69,6 +70,8 @@ export default function Home() {
   const [bannerData, setBannerData] = useState([]);
   const [businessData, setBusinessData] = useState([]);
   const [totalBusinessData, setTotalBusinessData] = useState(0);
+  const [totalCategoryData, setTotalCategoryData] = useState(0);
+
   const [loading, setLoading] = useState(true);
   const [visible, setVisible] = useState(false);
   const [isReviewed, setIsReviewed] = useState(false);
@@ -76,6 +79,7 @@ export default function Home() {
   const [reviews, setReviews] = useState([]);
   const [visibleCategories, setVisibleCategories] = useState(21);
   const [visibleBusiness, setVisibleBusiness] = useState(8);
+  const [visibleFreelist, setVisibleFreelist] = useState(9);
 
   const businessSectionRef = useRef(null);
   const isInitialRender = useRef(true); // Track if it's the initial render
@@ -87,7 +91,6 @@ export default function Home() {
       review: "",
     },
   ]);
-
 
   useEffect(() => {
     const fetchReviews = async () => {
@@ -119,6 +122,7 @@ export default function Home() {
       }
     };
     fetchReviews();
+    
   }, [isReviewed]);
 
   const handleReviewSubmit = async (e) => {
@@ -167,6 +171,26 @@ export default function Home() {
     setReviewLoading(false)
   };
 
+  const [freelist, setFreelist] = useState([]);
+
+  useEffect(() => {
+    const fetchFreeList = async () => {
+      try {
+        const response = await getAllFreeList(BUSINESS_PAGE,
+          visibleFreelist,
+          "",
+          location);
+        if (response && response.data) {
+          setFreelist(response.data);
+        }
+      } catch (error) {
+        console.error("Error fetching freelist:", error);
+      }
+    };
+
+    fetchFreeList();
+  }, [location]);
+  
 
   const handleClick = () => {
     window.open(`https://wa.me/${9447020270}`, "_blank");
@@ -203,7 +227,7 @@ export default function Home() {
           });
         }
       }
-  
+     
   }, [location]);
 
   useEffect(() => {
@@ -212,7 +236,7 @@ export default function Home() {
         setCategoryLoading(true)
         const categoryDetails = await fetchCategories(1,visibleCategories);
         setCategoryData(categoryDetails.data.data);
-
+        setTotalCategoryData(categoryDetails?.data?.totalCount);
 
 
       } catch (error) {
@@ -238,9 +262,9 @@ export default function Home() {
 
   const loadMoreCategories = async () => {
     setCategoryLoading(true)
-    const categoryDetails = await fetchCategories(currentPage1,22);
+    const categoryDetails = await fetchCategories(currentPage1,21);
     setCurrentPage1(currentPage1+1)
-    setVisibleCategories((prev) => prev + 10);
+    setVisibleCategories((prev) => prev + 21);
     setCategoryData((prev) => [...prev, ...categoryDetails.data.data])
     setCategoryLoading(false)
 
@@ -289,11 +313,12 @@ export default function Home() {
     [location, visibleBusiness]
   );
   console.log(businessData, 'asasasasasasa')
-
+  const [searchItem,setSerachItem ]= useState(false)
   return (
-    <Layout title="Home" navClass="home" onSearch={getSearchData}
-    setLocation={setLocation}>
+    <Layout  title="Home" navClass="home" onSearch={getSearchData} searchItem={searchItem} setSerachItem={setSerachItem}
+    setLocation={setLocation}> 
       <CarousalIndex
+       setSerachItem={setSerachItem}
         bannerData={bannerData}
         onSearch={getSearchData}
         setLocation={setLocation}
@@ -304,18 +329,20 @@ export default function Home() {
         loadMoreCategories={loadMoreCategories}
         loading={categoryLoading}
         visibleCategories={visibleCategories}
+        totalCategoryData={totalCategoryData}
       />
 
       <BusinessIndex
+        searchItem={searchItem}
         scroll={businessSectionRef}
         businessData={businessData}
         loadMoreBusiness={loadMoreBusiness}
         loading={loading}
         visibleBusiness={visibleBusiness}
         totalBusinessData={totalBusinessData}
-      />
+      /> 
 
-      {/* <FreeListIndex/> */}
+      {/* <FreeListIndex freelist={freelist}/> */}
 
       <ReviewSection
         currentSlide={currentSlide}

@@ -4,10 +4,11 @@ import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import { NavLink, useLocation } from "react-router-dom";
 import LocationAutocomplete from "./LocationAutoComplete";
+import FloatingButtons from "../views/Home/components/FloatButtonIndex";
 
 const libraries = ["places"];
 
-export default function Header({ onSearch, setLocation }) {
+export default function Header({ onSearch, setLocation ,setSerachItem, searchItem}) {
   const [expanded, setExpanded] = useState(false);
   const [showInputsOnScroll, setShowInputsOnScroll] = useState(false);
   const navbarRef = useRef(null);
@@ -44,6 +45,13 @@ export default function Header({ onSearch, setLocation }) {
 
   const handleSearchSubmit = useCallback(() => {
     onSearch(searchData);
+    if(searchData){
+      setSerachItem(true)
+      
+    }else{
+      setSerachItem(false)
+    }
+    
   }, [searchData, onSearch]);
 
   const isReviewsPage = location.pathname === "/reviews";
@@ -52,7 +60,7 @@ export default function Header({ onSearch, setLocation }) {
     <Navbar
       expand="lg"
       className={`fixed-top home-navbar ${
-        expanded ? "navbar-menu bg-white" : ""
+        expanded ? "navbar-meu bg-white" : ""
       }`}
       expanded={expanded}
       ref={navbarRef}
@@ -96,7 +104,7 @@ export default function Header({ onSearch, setLocation }) {
                 placeholder="Search for any service..."
                 value={searchData}
                 onInput={(e) => setSearchData(e.target.value)}
-                className="form-control bg-transparent text-black border-0"
+                className="form-control bg-transparent  border-0"
               />
               <button
                 onClick={handleSearchSubmit}
@@ -104,6 +112,8 @@ export default function Header({ onSearch, setLocation }) {
               >
                 <i className="bi bi-search"></i>
               </button>
+
+             
             </div>
           </div>
         </div>

@@ -1,16 +1,111 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { X } from "lucide-react";
 import { useNavigate } from "react-router";
+import { CreateFreeListDetails, getAllFreeList } from "../../../Functions/functions";
+import { preRequestFun } from "../../CreateBusiness/service/s3url";
 
 export default function FloatingButtons() {
   const [showAdvertiseModal, setShowAdvertiseModal] = useState(false);
   const [showListingModal, setShowListingModal] = useState(false);
   const navigate = useNavigate();
+  const [formData, setFormData] = useState({
+    name: "",
+    brandName: "",
+    logo: null, // For file uploads
+    address: {
+      buildingName: "",
+      streetName: "",
+      landMark: "",
+      district: "",
+      state: "",
+      pinCode: "",
+    },
+    contactDetails: {
+      primaryNumber: "",
+      secondaryNumber: "",
+      whatsAppNumber: "",
+      primaryCountryCode: "",
+      secondaryCountryCode: "",
+      whatsappCountryCode: "",
+      email: "",
+      website: "",
+    },
+    description: "",
+    enconnectUrl: "",
+    images: null, // For multiple file uploads
+  });
+
+  
+
+  const handleChange = async (e) => {
+    const { name, value, files } = e.target;
+  
+    if (files) {
+      // Handle single file upload (e.g., logo)
+      if (name === "logo") {
+        const logoFile = files[0];
+        const logoLink = await preRequestFun(logoFile, "freelist");
+        setFormData((prev) => ({
+          ...prev,
+          logo: logoLink.accessLink, // Correctly set the accessLink
+        }));
+      }
+  
+      // Handle multiple file uploads (e.g., images)
+      if (name === "images") {
+        const imageFiles = Array.from(files);
+        const imageLinks = await Promise.all(
+          imageFiles.map((file) => preRequestFun(file, "freelist"))
+        );
+  
+        // Ensure the `images` array is updated correctly
+        setFormData((prev) => ({
+          ...prev,
+          images: [...(prev.images || []), ...imageLinks.map(link => link.accessLink)], // Merge with existing images
+        }));
+      }
+  
+      return;
+    }
+  
+    // Handle nested fields
+    if (name.includes(".")) {
+      const [key, subKey] = name.split(".");
+      setFormData((prev) => ({
+        ...prev,
+        [key]: {
+          ...prev[key],
+          [subKey]: value,
+        },
+      }));
+    } else {
+      // Handle top-level fields
+      setFormData((prev) => ({
+        ...prev,
+        [name]: value,
+      }));
+    }
+  };
+  
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    console.log("Form submitted!");
+
+    const res = await CreateFreeListDetails(formData);
+    if (res.success) {
+      alert("Success");
+    } else {
+      alert("Failed");
+    }
+  };
+  // Function to handle button click (CreateFreeListDetails)
+
   return (
     <>
       {/* Fixed Buttons */}
-      <div className="fixed-buttons d-none d-md-block">
+      <div className="fixed-buttons d-md-block">
         <motion.button
           className="btn-advertise"
           onClick={() => navigate("/create-business")}
@@ -35,63 +130,7 @@ export default function FloatingButtons() {
         className={`modal fade ${showAdvertiseModal ? "show" : ""}`}
         style={{ display: showAdvertiseModal ? "block" : "none" }}
         tabIndex={-1}
-      >
-        <div className="modal-dialog modal-dialog-centered">
-          <div className="modal-content">
-            <div className="modal-header border-0">
-              <h5 className="modal-title">Advertise with Us</h5>
-              <button
-                type="button"
-                className="btn-close"
-                onClick={() => setShowAdvertiseModal(false)}
-              ></button>
-            </div>
-            <div className="modal-body">
-              <form>
-                <div className="mb-3">
-                  <input
-                    type="text"
-                    className="form-control"
-                    placeholder="Your Name"
-                    required
-                  />
-                </div>
-                <div className="mb-3">
-                  <input
-                    type="email"
-                    className="form-control"
-                    placeholder="Email Address"
-                    required
-                  />
-                </div>
-                <div className="mb-3">
-                  <input
-                    type="tel"
-                    className="form-control"
-                    placeholder="Phone Number"
-                    required
-                  />
-                </div>
-                <div className="mb-3">
-                  <textarea
-                    className="form-control"
-                    rows={4}
-                    placeholder="Message"
-                    required
-                  ></textarea>
-                </div>
-                <motion.button
-                  type="submit"
-                  className="btn btn-primary w-100"
-                  whileTap={{ scale: 0.95 }}
-                >
-                  Submit
-                </motion.button>
-              </form>
-            </div>
-          </div>
-        </div>
-      </div>
+      ></div>
 
       {/* Free Listing Modal */}
       <div
@@ -110,123 +149,211 @@ export default function FloatingButtons() {
               ></button>
             </div>
             <div className="modal-body">
-              <form>
+              <form onSubmit={handleSubmit}>
                 <div className="row g-3">
+                  {/* Name and Brand Name */}
                   <div className="col-md-6">
                     <input
                       type="text"
+                      name="name"
                       className="form-control"
                       placeholder="Your Name"
+                      value={formData.name}
+                      onChange={handleChange}
                       required
                     />
                   </div>
                   <div className="col-md-6">
                     <input
                       type="text"
+                      name="brandName"
                       className="form-control"
                       placeholder="Brand Name"
+                      value={formData.brandName}
+                      onChange={handleChange}
                       required
                     />
                   </div>
+
+                  {/* Logo Upload */}
                   <div className="col-12">
                     <label className="form-label">Logo</label>
                     <input
                       type="file"
+                      name="logo"
                       className="form-control"
                       accept="image/*"
+                      onChange={handleChange}
                       required
                     />
                   </div>
-                  <div className="col-12">
-                    <textarea
-                      className="form-control"
-                      rows={2}
-                      placeholder="Address"
-                      required
-                    ></textarea>
-                  </div>
-                  <div className="col-md-4">
+
+                  {/* Address Fields */}
+                  <div className="col-md-6">
                     <input
                       type="text"
+                      name="address.buildingName"
                       className="form-control"
-                      placeholder="Pincode"
+                      placeholder="Building Name"
+                      value={formData.address.buildingName}
+                      onChange={handleChange}
                       required
                     />
                   </div>
-                  <div className="col-md-4">
+                  <div className="col-md-6">
                     <input
                       type="text"
+                      name="address.streetName"
+                      className="form-control"
+                      placeholder="Street Name"
+                      value={formData.address.streetName}
+                      onChange={handleChange}
+                      required
+                    />
+                  </div>
+                  <div className="col-md-6">
+                    <input
+                      type="text"
+                      name="address.landMark"
+                      className="form-control"
+                      placeholder="Landmark"
+                      value={formData.address.landMark}
+                      onChange={handleChange}
+                      required
+                    />
+                  </div>
+                  <div className="col-md-6">
+                    <input
+                      type="text"
+                      name="address.district"
                       className="form-control"
                       placeholder="District"
+                      value={formData.address.district}
+                      onChange={handleChange}
                       required
                     />
                   </div>
-                  <div className="col-md-4">
+                  <div className="col-md-6">
                     <input
                       type="text"
+                      name="address.state"
                       className="form-control"
-                      placeholder="Location"
+                      placeholder="State"
+                      value={formData.address.state}
+                      onChange={handleChange}
+                      required
+                    />
+                  </div>
+                  <div className="col-md-6">
+                    <input
+                      type="text"
+                      name="address.pinCode"
+                      className="form-control"
+                      placeholder="Pincode"
+                      value={formData.address.pinCode}
+                      onChange={handleChange}
+                      required
+                    />
+                  </div>
+
+                  {/* Contact Details */}
+                  <div className="col-md-4">
+                    <input
+                      type="tel"
+                      name="contactDetails.primaryNumber"
+                      className="form-control"
+                      placeholder="Primary Number"
+                      value={formData.contactDetails.primaryNumber}
+                      onChange={handleChange}
                       required
                     />
                   </div>
                   <div className="col-md-4">
                     <input
                       type="tel"
+                      name="contactDetails.secondaryNumber"
                       className="form-control"
-                      placeholder="Phone Number"
-                      required
+                      placeholder="Secondary Number"
+                      value={formData.contactDetails.secondaryNumber}
+                      onChange={handleChange}
                     />
                   </div>
                   <div className="col-md-4">
                     <input
                       type="tel"
-                      className="form-control"
-                      placeholder="Phone Number 2 (Optional)"
-                    />
-                  </div>
-                  <div className="col-md-4">
-                    <input
-                      type="tel"
+                      name="contactDetails.whatsAppNumber"
                       className="form-control"
                       placeholder="WhatsApp Number"
+                      value={formData.contactDetails.whatsAppNumber}
+                      onChange={handleChange}
                       required
                     />
                   </div>
                   <div className="col-12">
+                    <input
+                      type="email"
+                      name="contactDetails.email"
+                      className="form-control"
+                      placeholder="Email"
+                      value={formData.contactDetails.email}
+                      onChange={handleChange}
+                      required
+                    />
+                  </div>
+
+                  {/* Description */}
+                  <div className="col-12">
                     <textarea
+                      name="description"
                       className="form-control"
                       rows={4}
                       placeholder="Business Description"
+                      value={formData.description}
+                      onChange={handleChange}
                       required
                     ></textarea>
                   </div>
+
+                  {/* Images Upload */}
                   <div className="col-12">
-                    <label className="form-label">Image Size (5 Nos)</label>
+                    <label className="form-label">Images (5 max)</label>
                     <input
                       type="file"
+                      name="images"
                       className="form-control"
                       accept="image/*"
                       multiple
+                      onChange={handleChange}
                       required
                     />
                   </div>
+
+                  {/* URLs */}
                   <div className="col-md-6">
                     <input
                       type="url"
+                      name="contactDetails.website"
                       className="form-control"
                       placeholder="Website URL"
+                      value={formData.contactDetails.website}
+                      onChange={handleChange}
                       required
                     />
                   </div>
                   <div className="col-md-6">
                     <input
                       type="url"
+                      name="enconnectUrl"
                       className="form-control"
                       placeholder="Enconnect Profile URL"
+                      value={formData.enconnectUrl}
+                      onChange={handleChange}
                       required
                     />
                   </div>
                 </div>
+
+                {/* Submit Button */}
                 <div className="mt-4">
                   <motion.button
                     type="submit"
@@ -295,21 +422,31 @@ export default function FloatingButtons() {
 
         @media (max-width: 768px) {
           .fixed-buttons {
-            bottom: 20px;
-            top: auto;
-            right: 20px;
-            transform: none;
-            flex-direction: row;
+            position: fixed;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            gap: 0px; /* For desktop screens */
           }
 
           .btn-advertise,
           .btn-listing {
-            writing-mode: horizontal-tb;
-            width: auto;
-            height: auto;
-            padding: 8px 12px;
-            font-size: 14px;
-            border-radius: 8px;
+            border: none;
+            color: white;
+            padding: 10px 8px;
+            text-align: center;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 8px 0 0 8px;
+            width: 40px;
+            transition: all 0.3s ease;
+            writing-mode: vertical-lr;
+            text-orientation: mixed;
+            height: 130px;
+            margin-top: 20px;
           }
 
           .fixed-buttons br {
@@ -356,22 +493,6 @@ export default function FloatingButtons() {
 
         .btn-primary:hover {
           background-color: #0052cc;
-        }
-
-        @media (max-width: 768px) {
-          .fixed-buttons {
-            bottom: 20px;
-            top: auto;
-            right: 20px;
-            transform: none;
-          }
-
-          .btn-advertise,
-          .btn-listing {
-            width: auto;
-            padding: 10px 15px;
-            font-size: 14px;
-          }
         }
       `}</style>
     </>

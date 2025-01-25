@@ -6,9 +6,18 @@ import { Spinner } from "react-bootstrap"
 import Placeholder from "/images/placeholder.jpg"
 import EnquiryModal from "./EnquiryModal"
 import { submitContactForm } from "../../../Functions/functions"
-import { toast } from "react-toastify";
+import { toast } from "react-toastify"
 
-const BusinessIndex = ({ loading, businessData, visibleBusiness, totalBusinessData, loadMoreBusiness, scroll }) => {
+const BusinessIndex = ({
+  loading,
+  businessData,
+  visibleBusiness,
+  totalBusinessData,
+  loadMoreBusiness,
+  scroll,
+  searchItem,
+}) => {
+  console.log(searchItem, "kkkkkkkkkk:")
   const [showEnquiryModal, setShowEnquiryModal] = useState(false)
   const [selectedBusiness, setSelectedBusiness] = useState(null)
 
@@ -19,59 +28,59 @@ const BusinessIndex = ({ loading, businessData, visibleBusiness, totalBusinessDa
       .replace(/ /g, "-")
       .replace(/[^\w-]+/g, "")
   }
-   const handleFormSubmit = async (e, formData,businessId) => {
-       e.preventDefault();
-   
-       const response = await submitContactForm({
-         ...formData,
-         businessId: businessId,
-       });
-       if (response?.data) {
-         toast.success("Form submitted successfully!", {
-           position: "top-right",
-           autoClose: 3000,
-           hideProgressBar: false,
-           closeOnClick: true,
-           pauseOnHover: true,
-           draggable: true,
-           theme: "colored",
-           style: {
-             backgroundColor: "#38a20e", // Custom red color for error
-             color: "#FFFFFF", // White text
-           },
-         });
-         return true;
-       } else {
-         toast.success("Failed submission failed!", {
-           position: "top-right",
-           autoClose: 3000,
-           hideProgressBar: false,
-           closeOnClick: true,
-           pauseOnHover: true,
-           draggable: true,
-           theme: "colored",
-           style: {
-             backgroundColor: "#aa0808", // Custom red color for error
-             color: "#FFFFFF", // White text
-           },
-         });
-         return false;
-       }
-     };
+  const handleFormSubmit = async (e, formData, businessId) => {
+    e.preventDefault()
+
+    const response = await submitContactForm({
+      ...formData,
+      businessId: businessId,
+    })
+    if (response?.data) {
+      toast.success("Form submitted successfully!", {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        theme: "colored",
+        style: {
+          backgroundColor: "#38a20e", // Custom red color for error
+          color: "#FFFFFF", // White text
+        },
+      })
+      return true
+    } else {
+      toast.success("Failed submission failed!", {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        theme: "colored",
+        style: {
+          backgroundColor: "#aa0808", // Custom red color for error
+          color: "#FFFFFF", // White text
+        },
+      })
+      return false
+    }
+  }
   const renderStars = (rating) => {
     return [...Array(5)].map((_, index) => (
       <FaStar key={index} size={12} className={index < Math.floor(rating) ? "text-warning" : "text-muted"} />
     ))
   }
 
-  const handleClick = (countryCode,whatsappNumber ) => {
-    const defaultCountryCode = "+91"; // Default country code
-    const finalCountryCode = countryCode || defaultCountryCode; // Use default if not available
-    window.open(`https://wa.me/${finalCountryCode}${whatsappNumber}`, "_blank");
+  const handleClick = (countryCode, whatsappNumber) => {
+    const defaultCountryCode = "+91" // Default country code
+    const finalCountryCode = countryCode || defaultCountryCode // Use default if not available
+    window.open(`https://wa.me/${finalCountryCode}${whatsappNumber}`, "_blank")
   }
 
   const handleOpenDialer = (phoneNumber) => {
-    const formattedNumber = `tel:${String(7510115894).replace(/\s/g, "")}`
+    const formattedNumber = `tel:${String(phoneNumber).replace(/\s/g, "")}`
     window.location.href = formattedNumber
   }
 
@@ -93,34 +102,32 @@ const BusinessIndex = ({ loading, businessData, visibleBusiness, totalBusinessDa
           </p>
         </div>
 
-        <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-lg-4 g-0">
-          {businessData?.map((business) => (
-            <div key={business._id} className="col">
-              <Link
-                to={
-                  business?.selectedPlan?.isPremium
-                    ? `/profile/premium/${slugify(business?.businessName)}/${business?._id}`
-                    : `/profile/${slugify(business?.businessName)}/${business?._id}`
-                }
-                className="text-decoration-none"
-              >
-                <div className="card h-100 border-0 shadow-xl rounded-4 overflow-visible hover-card">
-                  <div className="px-4 py-3 position-relative">
-                    {/* Category */}
-                    <div className="small text-muted">{business?.category?.name || "News & Media"}</div>
+        <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 mt-4 g-lg-4 g-0">
+          {businessData?.length > 0 ? (
+            businessData.map((business) => (
+              <div key={business._id} className="col mb-4">
+                <Link
+                  to={
+                    business?.selectedPlan?.isPremium
+                      ? `/profile/premium/${slugify(business?.businessName)}/${business?._id}`
+                      : `/profile/${slugify(business?.businessName)}/${business?._id}`
+                  }
+                  className="text-decoration-none"
+                >
+                  <div className="card  h-100 border-0 shadow-xl btn-parent rounded-4 hover-card">
+                    <div className="px-4 pb-4 position-relative">
+                      <div className="">
+                        <div className="small text-muted">{business?.category?.name || "News & Media"}</div>
 
-                    <div className="row g-3">
-                      {/* Content Column */}
-                      <div className="col-12">
                         <h5
-                          className="card-title h6 fw-bold text-dark"
+                          className="card-title h6 fw-bold text-dark mt-2"
                           style={{
                             overflow: "hidden",
                             textOverflow: "ellipsis",
                             display: "-webkit-box",
                             WebkitLineClamp: 2,
                             WebkitBoxOrient: "vertical",
-                            minHeight: "20px",
+                            minHeight: "40px",
                             paddingRight: "45%",
                           }}
                         >
@@ -128,7 +135,7 @@ const BusinessIndex = ({ loading, businessData, visibleBusiness, totalBusinessDa
                         </h5>
 
                         <p
-                          className="card-text text-muted small"
+                          className="card-text text-muted small mb-0"
                           style={{
                             overflow: "hidden",
                             textOverflow: "ellipsis",
@@ -142,74 +149,100 @@ const BusinessIndex = ({ loading, businessData, visibleBusiness, totalBusinessDa
                         </p>
                       </div>
 
-                      {/* Image positioned at top */}
                       <div
-                        className="position-absolute"
+                        className="position-absolute bg-white shadow-sm"
                         style={{
                           width: "130px",
+                          height: "130px",
                           right: "20px",
-                          top: "-30px",
-                          maxWidth: "40%",
+                          top: "-45px",
+                          borderRadius: "12px",
+                          padding: "6px",
+                          overflow: "hidden",
                         }}
                       >
-                        <img
-                          src={business?.logo || Placeholder}
-                          alt={business?.businessName}
-                          className="rounded-3 w-100 shadow-sm"
-                          style={{
-                            aspectRatio: "1",
-                            objectFit: "cover",
-                          }}
-                        />
+                        <div className="w-100 h-100 position-relative">
+                          <img
+                            src={business?.logo || Placeholder}
+                            alt={business?.businessName}
+                            className="position-absolute"
+                            style={{
+                              width: "100%",
+                              height: "100%",
+                              objectFit: "cover",
+                              borderRadius: "8px",
+                            }}
+                          />
+                        </div>
                       </div>
 
-                      {/* Rating fixed under the image */}
                       <div
-                        className="position-absolute"
+                        className="position-absolute bg-white px-2 py-1 rounded-pill shadow-sm"
                         style={{
-                          width: "110px",
-                          right: "30px",
-                          top: "80px",
+                          right: "35px",
+                          top: "100px",
+                          zIndex: 1,
                         }}
                       >
-                        <div className="d-flex align-items-center justify-content-center px-2 py-1">
+                        <div className="d-flex align-items-center justify-content-center">
                           {renderStars(business?.rating || 0)}
                           <span className="ms-1 small fw-medium">{business?.rating || "0.0"}</span>
                         </div>
                       </div>
                     </div>
-                    <div className="mt-4 d-flex justify-content-between gap-2">
-                      <a
-                        href={business?.contactDetails?.primaryNumber ?? ''}
-                        className="btn btn-success btn-sm flex-1 d-flex align-items-center justify-content-center gap-1"
-                        onClick={handleOpenDialer}
-                      >
-                        <FaPhone /> {business?.contactDetails?.primaryNumber ?? ''}
-                      </a>
-                      <a
-                        href="#"
-                        className="btn btn-outline-success btn-sm flex-1 d-flex align-items-center justify-content-center gap-1"
-                        onClick={() => handleClick(business?.contactDetails?.whatsappCountryCode,business?.contactDetails?.whatsAppNumber)}
-                      >
-                        <FaWhatsapp /> WhatsApp
-                      </a>
-                      <a
-                        href="#"
-                        className="btn btn-enquiry btn-sm flex-1 d-flex align-items-center justify-content-center gap-1"
-                        onClick={(e) => handleEnquiryClick(e, business)}
-                      >
-                        <FaEnvelope /> Send Enquiry
-                      </a>
+                    <div className=" p-3">
+                      <div className="d-flex justify-content-center gap-2">
+                        <button
+                          className="btn btn-success btn-sm flex-1 d-flex align-items-center justify-content-center gap-2"
+                          onClick={(e) => {
+                            e.preventDefault()
+                            handleOpenDialer(business?.contactDetails?.primaryNumber)
+                          }}
+                        >
+                          <FaPhone /> {business?.contactDetails?.primaryNumber ?? ""}
+                        </button>
+                        <button
+                          className="btn btn-outline-success btn-sm flex-1 d-flex align-items-center justify-content-center gap-2"
+                          onClick={(e) => {
+                            e.preventDefault()
+                            handleClick(
+                              business?.contactDetails?.whatsappCountryCode,
+                              business?.contactDetails?.whatsAppNumber,
+                            )
+                          }}
+                        >
+                          <FaWhatsapp /> WhatsApp
+                        </button>
+                        <button
+                          className="btn btn-enquiry btn-sm flex-1 d-flex align-items-center justify-content-center gap-2"
+                          onClick={(e) => {
+                            e.preventDefault()
+                            handleEnquiryClick(e, business)
+                          }}
+                        >
+                          <FaEnvelope /> Send Enquiry
+                        </button>
+                      </div>
                     </div>
                   </div>
+                </Link>
+              </div>
+            ))
+          ) : (
+            <div className="col-12">
+              <div className="  h-100 border-0  rounded-4 overflow-visible">
+                <div className="px-4  py-3 text-center">
+                  <h5 className="card-title h6 text-dark">Profile not found</h5>
+                  <p className="card-text text-muted">No business profiles available at the moment.</p>
                 </div>
-              </Link>
+              </div>
             </div>
-          ))}
-          {visibleBusiness < totalBusinessData && (
+          )}
+
+          {!searchItem && visibleBusiness < totalBusinessData && (
             <div className="col">
               <div
-                className="card h-100 border-0 shadow-xl rounded-4 overflow-visible hover-card d-flex align-items-center justify-content-center cursor-pointer"
+                className="cardd h-100 border-0 shadow-xl rounded-4 overflow-visible hover-card d-flex align-items-center justify-content-center cursor-pointer"
                 onClick={loadMoreBusiness}
               >
                 <div className="text-center">
@@ -222,7 +255,6 @@ const BusinessIndex = ({ loading, businessData, visibleBusiness, totalBusinessDa
         </div>
       </div>
 
-      {/* Enquiry Modal */}
       {selectedBusiness && (
         <EnquiryModal
           show={showEnquiryModal}
@@ -238,6 +270,10 @@ const BusinessIndex = ({ loading, businessData, visibleBusiness, totalBusinessDa
 
       <style>
         {`
+
+        .cardd{
+        height:80%;
+        }
           .col {
             animation: fadeInUp 0.5s ease-out;
             animation-fill-mode: both;
@@ -275,6 +311,11 @@ const BusinessIndex = ({ loading, businessData, visibleBusiness, totalBusinessDa
             }
           }
 
+          .btn-crd{
+          padding:20px
+          
+          }
+
           @media (max-width: 575px) {
             .card {
               font-size: 0.9rem;
@@ -294,10 +335,10 @@ const BusinessIndex = ({ loading, businessData, visibleBusiness, totalBusinessDa
               margin-bottom: 1rem;
             }
             .row-cols-2 {
-              margin-bottom: 2rem;
+              margin-bottom: 1rem;
             }
             .col .card {
-              margin-bottom: 1.5rem;
+              margin-bottom: 0.5rem;
             }
             .card .position-absolute {
               width: 60px;
@@ -338,6 +379,14 @@ const BusinessIndex = ({ loading, businessData, visibleBusiness, totalBusinessDa
           .form-control:focus {
             box-shadow: 0 0 0 0.25rem rgba(13,110,253,.25);
           }
+
+          .btn-parent{
+          display:flex;
+          flex-direction: column;
+          justify-content:end;
+          
+          }
+          
         `}
       </style>
     </section>

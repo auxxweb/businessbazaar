@@ -572,19 +572,25 @@ img ,svg{
   gap: 10px; /* Space between items */
   justify-content: center;
   align-items: center;
+
 }
 
+
+input::placeholder {
+  color: rgb(255, 255, 255) 
+}
 .search-input-group {
   display: flex;
   align-items: center;
   border: 2px solid white;
   border-radius: 8px;
   overflow: hidden;
+  
   flex-grow: 1; /* Make the input field take available space */
 }
 
 .search-input-group input {
-  padding: 10px;
+  padding: 40px;
   background: transparent;
   color: white;
   border: none;
@@ -690,8 +696,9 @@ img ,svg{
 
 
 .search-bar input {
-  font-size: 12px; /* Smaller font size */
+  font-size: 16px; /* Smaller font size */
   padding: 2px 2px; /* Smaller padding */
+  
 }
 
 .search-bar .btn-orange {

@@ -1,47 +1,45 @@
-import React, { useEffect, useState } from "react";
-import Layout from "../components/Layout";
+import React from "react";
+import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
+import { FaStar, FaWhatsapp, FaPhone, FaEnvelope } from "react-icons/fa";
+import debounce from "lodash.debounce";
+import Layout from "../components/Layout";
+import Loader from "../components/Loader/Loader";
 import {
   fetchBusiness,
   getCategoryBusiness,
   getCategoryData,
+  submitContactForm,
 } from "../Functions/functions";
-import Loader from "../components/Loader/Loader";
 import Placeholder from "/images/placeholder.jpg";
-import debounce from "lodash.debounce";
-import { FaStar } from "react-icons/fa";
+import EnquiryModal from "../views/Home/components/EnquiryModal";
+import { toast } from "react-toastify";
 
 export default function Business() {
-  const [categoryData, setCategoryData] = useState([]);
+  const [categoryData, setCategoryData] = useState({});
   const [businessData, setBusinessData] = useState([]);
   const [totalBusinessData, setTotalBusinessData] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
-  const [limit, setLimit] = useState(10); // Adjusting the limit as needed
+  const [limit, setLimit] = useState(10);
   const [visibleBusiness, setVisibleBusiness] = useState(10);
+  const [showEnquiryModal, setShowEnquiryModal] = useState(false);
+  const [selectedBusiness, setSelectedBusiness] = useState(null);
   const { id } = useParams();
-
-  // Scroll to the top when category changes
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [id]);
-
-  // Fetch data whenever currentPage, id, searchTerm, or visibleBusiness changes
   useEffect(() => {
     const fetchData = async () => {
-      // setLoading(true);
       try {
         if (id) {
-          // Fetch data for a specific category
-          console.log("Fetching category data...");
           const category = await getCategoryData({
             categoryId: id,
             searchTerm,
             page: currentPage,
             limit,
           });
-          console.log("Category Data:", category);
           setCategoryData(category.data);
 
           const business = await getCategoryBusiness(
@@ -50,58 +48,40 @@ export default function Business() {
             searchTerm,
             visibleBusiness
           );
-          console.log("Business Data:", business);
           setTotalBusinessData(business.data.totalCount);
           setBusinessData(business.data.data);
         } else {
-          // Fetch all businesses if no category id is provided
-          console.log("Fetching all business data...");
           const business = await fetchBusiness(currentPage, visibleBusiness);
-          console.log("Business Data:", business);
           setTotalBusinessData(business.data.totalCount);
           setBusinessData(business.data.data);
         }
       } catch (error) {
         console.error("Error fetching data:", error);
       } finally {
-        console.log("Data fetch complete");
-        setLoading(false); // Make sure this is being reached
+        setLoading(false);
       }
     };
 
     fetchData();
   }, [currentPage, id, searchTerm, visibleBusiness]);
-
-  const totalPages = Math.ceil(totalBusinessData / limit);
-
-  // Load more businesses when the button is clicked
   const loadMoreBusiness = () => {
     setVisibleBusiness((prev) => prev + 10);
   };
-
-  // Debounced search function
   const debouncedSearch = debounce((value) => {
     setSearchTerm(value);
-    setCurrentPage(1); // Reset to first page on new search
-  }, 500); // 500 ms delay
-
-  // Handle immediate input update
+    setCurrentPage(1);
+  }, 500);
   const handleSearch = (e) => {
     const value = e.target.value;
-    setSearchTerm(value); // Immediate update for the input field
-    debouncedSearch(value); // Trigger debounced search for API call
+    setSearchTerm(value);
+    debouncedSearch(value);
   };
-
-  // If loading, show the Loader component
-  // if (loading) {
-  //   return <Loader />;
-  // }
   const slugify = (text) => {
     if (!text) return "";
     return text
       .toLowerCase()
-      .replace(/ /g, "-") // Replace spaces with hyphens
-      .replace(/[^\w-]+/g, ""); // Remove non-word characters
+      .replace(/ /g, "-")
+      .replace(/[^\w-]+/g, "");
   };
 
   const renderStars = (rating) => {
@@ -113,6 +93,67 @@ export default function Business() {
       />
     ));
   };
+
+  const handleClick = (countryCode, whatsappNumber) => {
+    const defaultCountryCode = "+91";
+    const finalCountryCode = countryCode || defaultCountryCode;
+    window.open(`https://wa.me/${finalCountryCode}${whatsappNumber}`, "_blank");
+  };
+
+  const handleOpenDialer = (phoneNumber) => {
+    const formattedNumber = `tel:${String(phoneNumber).replace(/\s/g, "")}`;
+    window.location.href = formattedNumber;
+  };
+
+  const handleEnquiryClick = (e, business) => {
+    e.preventDefault();
+    setSelectedBusiness(business);
+    setShowEnquiryModal(true);
+  };
+
+  const handleFormSubmit = async (e, formData, businessId) => {
+    e.preventDefault();
+
+    const response = await submitContactForm({
+      ...formData,
+      businessId: businessId,
+    });
+    if (response?.data) {
+      toast.success("Form submitted successfully!", {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        theme: "colored",
+        style: {
+          backgroundColor: "#38a20e", // Custom red color for error
+          color: "#FFFFFF", // White text
+        },
+      });
+      return true;
+    } else {
+      toast.success("Failed submission failed!", {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        theme: "colored",
+        style: {
+          backgroundColor: "#aa0808", // Custom red color for error
+          color: "#FFFFFF", // White text
+        },
+      });
+      return false;
+    }
+  };
+
+  if (loading) {
+    return <Loader />;
+  }
 
   return (
     <Layout title="Business" navClass="home">
@@ -132,34 +173,48 @@ export default function Business() {
 
       <div className="container mt-4">
         <div className="row">
-          <div className="col-md-6">
+          <div className="col-md-12">
             <div className="row justify-content-center">
-              <div className="col-12 mb-3 col-md-8">
-                <div className="input-group">
-                  <span
-                    className="input-group-text"
+              <div className="col-12 col-md-8">
+                <div className="d-flex justify-content-center align-items-center my-4">
+                  <div
+                    className="input-group"
                     style={{
-                      backgroundColor: "white",
-                      borderTopLeftRadius: "50px",
-                      borderBottomLeftRadius: "50px",
-                      border: "1px solid #ced4da",
+                      maxWidth: "350px",
+                      width: "100%",
+                      height:'55px',
+                      borderRadius: "5px",
+                      overflow: "hidden",
+                      boxShadow: "0 2px 5px rgba(0, 0, 0, 0.1)",
                     }}
                   >
-                    <i className="bi bi-search fw-bold"></i>
-                  </span>
+                    <input
+                      type="text"
+                      className="form-control"
+                      placeholder="Search for Profiles"
+                      value={searchTerm}
+                      onChange={handleSearch}
+                      style={{
+                        border: "none",
+                        borderRadius: "0",
+                        padding: "10px 15px",
+                      }}
+                    />
+                    <button
 
-                  <input
-                    type="text"
-                    className="form-control"
-                    placeholder="Search for Businesses"
-                    value={searchTerm}
-                    onChange={handleSearch} // Immediate update with debounce for API call
-                    style={{
-                      borderTopRightRadius: "50px",
-                      borderBottomRightRadius: "50px",
-                      borderLeft: "none",
-                    }}
-                  />
+                      className="btn"
+                      style={{
+                        background:
+                          "linear-gradient(to right, #e72693, #ff7e2b)",
+                        color: "white",
+                        border: "none",
+                        borderRadius: "0",
+                        fontWeight: "bold",
+                      }}
+                    >
+                      <i className="bi bi-search"></i>
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -180,135 +235,320 @@ export default function Business() {
           </div>
 
           <div
-  className={`row row-cols-1 row-cols-md-2 row-cols-lg-3 g-lg-4 g-0 ${
-    businessData.length <= 2 ? "justify-content-center" : ""
-  }`}
->
-  {businessData.length > 0 ? (
-    businessData?.map((business) => (
-      <div key={business._id} className="col">
-        <Link
-          to={
-            business?.selectedPlan?.isPremium
-              ? `/profile/premium/${slugify(business?.businessName)}/${
-                  business?._id
-                }`
-              : `/profile/${slugify(business?.businessName)}/${business?._id}`
-          }
-          className="text-decoration-none"
-        >
-          <div className="card h-100 border-0 shadow-xl rounded-4 overflow-visible hover-card">
-            <div className="px-4 py-3 position-relative">
-              {/* Category */}
-              <div className="small text-muted">
-                {business?.category?.name || "News & Media"}
-              </div>
-
-              <div className="row g-3">
-                {/* Content Column */}
-                <div className="col-12">
-                  <h5
-                    className="card-title h6 fw-bold text-dark"
-                    style={{
-                      overflow: "hidden",
-                      textOverflow: "ellipsis",
-                      display: "-webkit-box",
-                      WebkitLineClamp: 2,
-                      WebkitBoxOrient: "vertical",
-                      minHeight: "20px",
-                      paddingRight: "45%", // Space for image
-                    }}
+            className={`row row-cols-1 row-cols-md-2 row-cols-lg-3 g-lg-4 g-0 ${
+              businessData.length <= 2 ? "justify-content-center" : ""
+            }`}
+          >
+            {businessData?.length > 0 ? (
+              businessData.map((business) => (
+                <div key={business._id} className="col mb-4">
+                  <Link
+                    to={
+                      business?.selectedPlan?.isPremium
+                        ? `/profile/premium/${slugify(
+                            business?.businessName
+                          )}/${business?._id}`
+                        : `/profile/${slugify(business?.businessName)}/${
+                            business?._id
+                          }`
+                    }
+                    className="text-decoration-none"
                   >
-                    {business?.businessName}
-                  </h5>
+                    <div className="card  h-100 border-0 shadow-xl btn-parent rounded-4 hover-card">
+                      <div className="px-4 pb-4 position-relative">
+                        <div className="">
+                          <div className="small text-muted">
+                            {business?.category?.name || "News & Media"}
+                          </div>
 
-                  <p
-                    className="card-text text-muted small"
-                    style={{
-                      overflow: "hidden",
-                      textOverflow: "ellipsis",
-                      display: "-webkit-box",
-                      WebkitLineClamp: 2,
-                      WebkitBoxOrient: "vertical",
-                      paddingRight: "45%", // Space for image
-                    }}
-                  >
-                    {business?.address?.buildingName} {business?.address?.city}{" "}
-                    {business?.address?.landMark}
-                  </p>
+                          <h5
+                            className="card-title h6 fw-bold text-dark mt-2"
+                            style={{
+                              overflow: "hidden",
+                              textOverflow: "ellipsis",
+                              display: "-webkit-box",
+                              WebkitLineClamp: 2,
+                              WebkitBoxOrient: "vertical",
+                              minHeight: "40px",
+                              paddingRight: "45%",
+                            }}
+                          >
+                            {business?.businessName}
+                          </h5>
+
+                          <p
+                            className="card-text text-muted small mb-0"
+                            style={{
+                              overflow: "hidden",
+                              textOverflow: "ellipsis",
+                              display: "-webkit-box",
+                              WebkitLineClamp: 2,
+                              WebkitBoxOrient: "vertical",
+                              paddingRight: "45%",
+                            }}
+                          >
+                            {business?.address?.buildingName}{" "}
+                            {business?.address?.city}{" "}
+                            {business?.address?.landMark}
+                          </p>
+                        </div>
+
+                        <div
+                          className="position-absolute bg-white shadow-sm"
+                          style={{
+                            width: "130px",
+                            height: "130px",
+                            right: "20px",
+                            top: "-45px",
+                            borderRadius: "12px",
+                            padding: "6px",
+                            overflow: "hidden",
+                          }}
+                        >
+                          <div className="w-100 h-100 position-relative">
+                            <img
+                              src={business?.logo || Placeholder}
+                              alt={business?.businessName}
+                              className="position-absolute"
+                              style={{
+                                width: "100%",
+                                height: "100%",
+                                objectFit: "cover",
+                                borderRadius: "8px",
+                              }}
+                            />
+                          </div>
+                        </div>
+
+                        <div
+                          className="position-absolute bg-white px-2 py-1 rounded-pill shadow-sm"
+                          style={{
+                            right: "35px",
+                            top: "100px",
+                            zIndex: 1,
+                          }}
+                        >
+                          <div className="d-flex align-items-center justify-content-center">
+                            {renderStars(business?.rating || 0)}
+                            <span className="ms-1 small fw-medium">
+                              {business?.rating || "0.0"}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                      <div className=" p-3">
+                        <div className="d-flex justify-content-center gap-2">
+                          <button
+                            className="btn btn-success btn-sm flex-1 d-flex align-items-center justify-content-center gap-2"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              handleOpenDialer(
+                                business?.contactDetails?.primaryNumber
+                              );
+                            }}
+                          >
+                            <FaPhone />{" "}
+                            {business?.contactDetails?.primaryNumber ?? ""}
+                          </button>
+                          <button
+                            className="btn btn-outline-success btn-sm flex-1 d-flex align-items-center justify-content-center gap-2"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              handleClick(
+                                business?.contactDetails?.whatsappCountryCode,
+                                business?.contactDetails?.whatsAppNumber
+                              );
+                            }}
+                          >
+                            <FaWhatsapp /> WhatsApp
+                          </button>
+                          <button
+                            className="btn btn-enquiry btn-sm flex-1 d-flex align-items-center justify-content-center gap-2"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              handleEnquiryClick(e, business);
+                            }}
+                          >
+                            <FaEnvelope /> Send Enquiry
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </Link>
                 </div>
-
-                {/* Image positioned at top */}
-                <div
-                  className="position-absolute"
-                  style={{
-                    width: "130px",
-                    right: "20px",
-                    top: "-30px",
-                    maxWidth: "40%",
-                  }}
-                >
-                  <img
-                    src={business?.logo || Placeholder}
-                    alt={business?.businessName}
-                    className="rounded-3 w-100 shadow-sm"
-                    style={{
-                      aspectRatio: "1",
-                      objectFit: "cover",
-                    }}
-                  />
-                </div>
-
-                {/* Rating fixed under the image */}
-                <div
-                  className="position-absolute"
-                  style={{
-                    width: "110px",
-                    right: "30px",
-                    top: "80px", // Updated from bottom: 2px to top: 80px
-                  }}
-                >
-                  <div className="d-flex align-items-center justify-content-center px-2 py-1">
-                    {renderStars(business?.rating || 0)}
-                    <span className="ms-1 small fw-medium">
-                      {business?.rating || "0.0"}
-                    </span>
+              ))
+            ) : (
+              <div className="col">
+                <div className="card h-100 border-0 shadow-xl rounded-4 overflow-visible">
+                  <div className="px-4 py-3 text-center">
+                    <h5 className="card-title h6 text-dark">
+                      Profile not found
+                    </h5>
+                    <p className="card-text text-muted">
+                      No business profiles available at the moment.
+                    </p>
                   </div>
                 </div>
               </div>
-            </div>
+            )}
+
+            {visibleBusiness < totalBusinessData && (
+              <div className="col mb-4">
+                <div
+                  className="card h-100 border-0 shadow-xl rounded-4 overflow-visible hover-card d-flex align-items-center justify-content-center cursor-pointer"
+                  onClick={loadMoreBusiness}
+                  style={{ width: "90%" }}
+                >
+                  <div className="text-center p-4">
+                    <h5 className="card-title h6 fw-bold text-dark mb-2">
+                      View More
+                    </h5>
+                    <i className="bi bi-arrow-right fs-4"></i>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
-        </Link>
-      </div>
-    ))
-  ) : (
-    <div className="text-center mt-5">
-      <h3>No businesses found</h3>
-      <p>Please check back later or refine your search.</p>
-    </div>
-  )}
-
-  {visibleBusiness < totalBusinessData && (
-    <div className="col">
-      <div
-        className="card h-100 border-0 shadow-xl rounded-4 overflow-visible hover-card d-flex align-items-center justify-content-center cursor-pointer"
-        onClick={loadMoreBusiness}
-      >
-        <div className="text-center">
-          <h5 className="card-title h6 fw-bold text-dark ">View More</h5>
-          <i className="bi bi-arrow-right fs-4"></i>
-        </div>
-      </div>
-    </div>
-  )}
-</div>
-
         </div>
       </section>
 
       <a href="#" className="btn btn-lg btn-bottom btn-lg-square back-to-top">
         <i className="bi bi-arrow-up"></i>
       </a>
+
+      {selectedBusiness && (
+        <EnquiryModal
+          show={showEnquiryModal}
+          onHide={() => {
+            setShowEnquiryModal(false);
+            setSelectedBusiness(null);
+          }}
+          handleFormSubmit={handleFormSubmit}
+          businessName={selectedBusiness.businessName}
+          businessId={selectedBusiness._id}
+        />
+      )}
+
+      <style>
+        {`
+        .cardd{
+        height:80%;
+        }
+          .col {
+            animation: fadeInUp 0.5s ease-out;
+            animation-fill-mode: both;
+          }
+          .col:nth-child(3n+1) { animation-delay: 0.1s; }
+          .col:nth-child(3n+2) { animation-delay: 0.2s; }
+          .col:nth-child(3n+3) { animation-delay: 0.3s; }
+
+          .hover-card {
+            transition: all 0.3s ease;
+            background: white;
+          }
+          .hover-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
+          }
+          .text-warning {
+            color: #ffc107 !important;
+          }
+          .overflow-visible {
+            overflow: visible !important;
+          }
+          
+          .btn-enquiry{
+          background:linear-gradient(to right, #e72693, #ff7e2b ); 
+          }
+          @keyframes fadeInUp {
+            from {
+              opacity: 0;
+              transform: translateY(20px);
+            }
+            to {
+              opacity: 1;
+              transform: translateY(0);
+            }
+          }
+
+          .btn-crd{
+          padding:20px
+          
+          }
+
+          @media (max-width: 575px) {
+            .card {
+              font-size: 0.9rem;
+            }
+            .card .position-absolute {
+              width: 80px;
+              right: 10px;
+              top: -20px;
+            }
+            .card-title.h6 {
+              font-size: 1rem;
+            }
+            .card-text {
+              font-size: 0.75rem;
+            }
+            .col {
+              margin-bottom: 1rem;
+            }
+            .row-cols-2 {
+              margin-bottom: 1rem;
+            }
+            .col .card {
+              margin-bottom: 0.5rem;
+            }
+            .card .position-absolute {
+              width: 60px;
+              top: -25px;
+              right: 15px;
+            }
+            .card img {
+              width: 100%;
+              height: auto;
+            }
+          }
+          .cursor-pointer {
+            cursor: pointer;
+          }
+
+          .card .btn-sm {
+            font-size: 0.7rem;
+            padding: 0.25rem 0.5rem;
+          }
+
+          @media (max-width: 575px) {
+            .card .btn-sm {
+              font-size: 0.6rem;
+              padding: 0.2rem 0.4rem;
+            }
+          }
+
+          .modal-content {
+            border-radius: 1rem;
+            border: none;
+          }
+
+          .form-control {
+            border-radius: 0.5rem;
+            padding: 0.75rem 1rem;
+          }
+
+          .form-control:focus {
+            box-shadow: 0 0 0 0.25rem rgba(13,110,253,.25);
+          }
+
+          .btn-parent{
+          display:flex;
+          flex-direction: column;
+          justify-content:end;
+          
+          }
+
+`}
+      </style>
     </Layout>
   );
 }

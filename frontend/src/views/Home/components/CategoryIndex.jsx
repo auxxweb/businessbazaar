@@ -9,6 +9,7 @@ const CategoryIndex = ({
   categoryData,
   visibleCategories,
   loadMoreCategories,
+  totalCategoryData
 }) => {
   const [buttonLoading, setButtonLoading] = useState(false);
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
@@ -71,7 +72,7 @@ const CategoryIndex = ({
           ))}
 
           {/* View More Card */}
-          {visibleCategories <= categoryData.length && (
+          {visibleCategories < totalCategoryData && (
             <motion.div
               className="cat-grid-item"
               onClick={handleLoadMore}
@@ -80,16 +81,16 @@ const CategoryIndex = ({
             >
               <div className="cat-card cat-view-more">
                 <div className="cat-card-body">
-                  {loading ? (
+                  {/* {loading ? (
                     <div className="cat-spinner"></div>
-                  ) : (
+                  ) : ( */}
                     <>
                       <div className="cat-icon-wrapper">
                         <i className="bi bi-plus-lg cat-plus-icon"></i>
                       </div>
                       <h3 className="cat-title">View More</h3>
                     </>
-                  )}
+                  {/* )} */}
                 </div>
               </div>
             </motion.div>

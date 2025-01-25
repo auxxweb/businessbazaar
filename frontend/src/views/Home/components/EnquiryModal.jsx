@@ -46,10 +46,10 @@ const EnquiryModal = ({ show, onHide, businessName, handleFormSubmit,businessId 
       className="fade"
       backdrop="static"
       keyboard={false}
-      size="lg"
+      size="md"
     >
       <Modal.Header closeButton className="border-0 pb-0">
-        <Modal.Title className="h4 fw-bold text-primary">
+        <Modal.Title className="h4 fw-bold text-title">
           Send Enquiry to {businessName}
         </Modal.Title>
       </Modal.Header>
@@ -120,7 +120,7 @@ const EnquiryModal = ({ show, onHide, businessName, handleFormSubmit,businessId 
           <div className="d-grid gap-2">
             <button
               type="submit"
-              className="btn btn-lg btn-warning text-white fw-bold"
+              className="btn btn-lg btn-submitt text-white fw-bold"
             >
               Submit Enquiry
             </button>
@@ -143,17 +143,22 @@ const EnquiryModal = ({ show, onHide, businessName, handleFormSubmit,businessId 
         .form-control {
           border-radius: 0.5rem;
         }
+          .text-title {
+  background: linear-gradient(to right, #e72693, #ff7e2b);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
         .form-control:focus {
           box-shadow: 0 0 0 0.25rem rgba(255, 193, 7, 0.25);
-          border-color: #ffc107;
+          border-color: linear-gradient(to right, #e72693, #ff7e2b);
         }
-        .btn-warning {
-          background-color: #ffa500;
-          border-color: #ffa500;
+        .btn-submitt {
+          background: linear-gradient(to right, #e72693, #ff7e2b);
+          border-color: linear-gradient(to right, #e72693, #ff7e2b);
         }
         .btn-warning:hover {
-          background-color: #ff9000;
-          border-color: #ff9000;
+          background-color: linear-gradient(to right, #e72693, #ff7e2b);
+          border-color: linear-gradient(to right, #e72693, #ff7e2b);
         }
         @media (max-width: 767px) {
           .modal-body {

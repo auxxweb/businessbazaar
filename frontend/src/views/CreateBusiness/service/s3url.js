@@ -1,6 +1,7 @@
 import axios from "axios";
 
 export const preRequestFun = async (file, position) => {
+
   const baseUrl = import.meta.env.VITE_APP_BE_API_KEY ?? "";
   const url = ` ${baseUrl}/api/v1/s3url`;
   const requestBody = {
@@ -11,6 +12,7 @@ export const preRequestFun = async (file, position) => {
       },
     ],
   };
+  
 
   try {
     const response = await axios.post(url, requestBody, {
@@ -24,7 +26,7 @@ export const preRequestFun = async (file, position) => {
     await axios.put(preReq.url, file, {
       headers: { "Content-Type": file.type },
     });
-
+    alert(preReq,'prereq')
     return preReq;
   } catch (error) {
     console.error("Error uploading file:", error.message || error);
