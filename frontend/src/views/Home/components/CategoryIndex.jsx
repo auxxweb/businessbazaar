@@ -35,7 +35,7 @@ const CategoryIndex = ({
   };
 
   return (
-    <section className="cat-section bg-white">
+    <section id="category" className="cat-section bg-white">
       <div className="container-fluid px-4">
         <div className="cat-grid">
           {categoryData.map((category, index) => (
