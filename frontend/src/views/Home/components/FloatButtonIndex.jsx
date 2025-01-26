@@ -117,7 +117,7 @@ export default function FloatingButtons() {
         <br /> {/* Add this line */}
         <motion.button
           className="btn-listing"
-          onClick={() => setShowListingModal(true)}
+          onClick={() => setShowListingModal(false)} //temporarily disabled
           whileHover={{ x: -5 }}
           whileTap={{ scale: 0.95 }}
         >
