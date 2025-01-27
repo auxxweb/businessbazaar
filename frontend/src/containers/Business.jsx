@@ -257,7 +257,7 @@ export default function Business() {
                     <div className="card  h-100 border-0 shadow-xl btn-parent rounded-4 hover-card">
                       <div className="px-4 pb-4 position-relative">
                         <div className="">
-                          <div className="small text-muted">
+                          <div className="small custom-font-size text-muted">
                             {business?.category?.name || "News & Media"}
                           </div>
 
@@ -482,8 +482,8 @@ export default function Business() {
             }
             .card .position-absolute {
               width: 80px;
-              right: 10px;
-              top: -20px;
+              right: 0px;
+              top: 0px;
             }
             .card-title.h6 {
               font-size: 1rem;
@@ -502,8 +502,8 @@ export default function Business() {
             }
             .card .position-absolute {
               width: 60px;
-              top: -25px;
-              right: 15px;
+              top: 0px;
+              right: 0px;
             }
             .card img {
               width: 100%;
@@ -546,6 +546,16 @@ export default function Business() {
           justify-content:end;
           
           }
+            @media (max-width: 1200px) {
+          .custom-font-size {
+           font-size: 12px; /* Default font size for larger screens */
+          }
+        }
+
+          @media (max-width: 370px) {
+         .custom-font-size {
+          font-size: 9px; /* Smaller font size for screens under 370px */
+        }
 
 `}
       </style>

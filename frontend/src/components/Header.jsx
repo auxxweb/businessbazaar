@@ -58,7 +58,7 @@ export default function Header({ onSearch, setLocation ,setSerachItem, searchIte
 
   return (
     <Navbar
-      expand="lg"
+      expand="xl"
       className={`fixed-top home-navbar ${
         expanded ? "navbar-meu bg-white" : ""
       }`}
@@ -85,7 +85,7 @@ export default function Header({ onSearch, setLocation ,setSerachItem, searchIte
 
           {/* Inputs: Location & Search */}
           <div
-            className={`inputs-container d-none d-lg-flex align-items-center gap-2 flex-grow-1 mx-3 ${
+            className={`inputs-container d-none d-xl-flex align-items-center gap-2 flex-grow-1 mx-3 ${
               showInputsOnScroll ? "show" : ""
             }`}
           >
