@@ -249,7 +249,6 @@ export default function Home() {
     fetchCategory();
   }, [])
 
-  console.log(categoryData, 'ithenne')
 
   useEffect(() => {
     const fetchBanner = async () => {
@@ -279,7 +278,7 @@ export default function Home() {
       location);
       setCurrentPage(currentPage + 1)
     setVisibleBusiness((prev) => prev + 10);
-    console.log(businessDetails.data)
+    // console.log(businessDetails.data)
     setBusinessData((prev) => [...prev, ...businessDetails.data.data]);
     setLoading(false)
   };
@@ -312,7 +311,6 @@ export default function Home() {
     },
     [location, visibleBusiness]
   );
-  console.log(businessData, 'asasasasasasa')
   const [searchItem,setSerachItem ]= useState(false)
   return (
     <Layout  title="Home" navClass="home" onSearch={getSearchData} searchItem={searchItem} setSerachItem={setSerachItem}
@@ -342,7 +340,7 @@ export default function Home() {
         totalBusinessData={totalBusinessData}
       /> 
 
-      {/* <FreeListIndex freelist={freelist}/> */}
+      <FreeListIndex freelist={freelist}/>
 
       <ReviewSection
         currentSlide={currentSlide}

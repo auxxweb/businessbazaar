@@ -2,13 +2,18 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { X } from "lucide-react";
 import { useNavigate } from "react-router";
-import { CreateFreeListDetails, getAllFreeList } from "../../../Functions/functions";
+import {
+  CreateFreeListDetails,
+  getAllFreeList,
+} from "../../../Functions/functions";
 import { preRequestFun } from "../../CreateBusiness/service/s3url";
+import { toast } from "react-toastify"; // Import toast from a library like react-toastify
 
 export default function FloatingButtons() {
   const [showAdvertiseModal, setShowAdvertiseModal] = useState(false);
   const [showListingModal, setShowListingModal] = useState(false);
   const navigate = useNavigate();
+
   const [formData, setFormData] = useState({
     name: "",
     brandName: "",
@@ -36,68 +41,157 @@ export default function FloatingButtons() {
     images: null, // For multiple file uploads
   });
 
-  
+  const [errors, setErrors] = useState({});
 
+  const validate = () => {
+    const newErrors = {};
+
+    // Name and Brand Name Validation
+    if (!formData.name.trim()) newErrors.name = "Name is required .";
+    if (!formData.brandName.trim())
+      newErrors.brandName = "Brand Name is required.";
+
+    // Logo and Images Validation
+    if (!formData.logo) newErrors.logo = "Logo is required.";
+    if (!formData.images || formData.images.length === 0)
+      newErrors.images = "At least one image is required.";
+
+    // Address Validation
+    const addressFields = [
+      "buildingName",
+      "streetName",
+      "landMark",
+      "district",
+      "state",
+      "pinCode",
+    ];
+    addressFields.forEach((field) => {
+      if (!formData.address[field].trim()) {
+        newErrors[`address.${field}`] = `${field} is required.`;
+      }
+    });
+
+    // Contact Details Validation
+    if (
+      !formData.contactDetails.primaryNumber.trim() ||
+      isNaN(formData.contactDetails.primaryNumber)
+    ) {
+      newErrors["contactDetails.primaryNumber"] =
+        "Primary number must be a valid number.";
+    }
+
+    if (
+      !formData.contactDetails.whatsAppNumber.trim() ||
+      isNaN(formData.contactDetails.whatsAppNumber)
+    ) {
+      newErrors["contactDetails.whatsAppNumber"] =
+        "WhatsApp number must be a valid number.";
+    }
+
+    if (
+      !formData.contactDetails.email.trim() ||
+      !/\S+@\S+\.\S+/.test(formData.contactDetails.email)
+    ) {
+      newErrors["contactDetails.email"] = "Valid email is required.";
+    }
+    if (
+      !formData.contactDetails.website.trim() ||
+      !/^https?:\/\/[^\s$.?#].[^\s]*$/.test(formData.contactDetails.website)
+    )
+      newErrors["contactDetails.website"] = "Valid website URL is required.";
+
+    // Description and Enconnect URL Validation
+    if (!formData.description.trim())
+      newErrors.description = "Description is required.";
+    if (!formData.enconnectUrl.trim())
+      newErrors.enconnectUrl = "Enconnect Profile URL is required.";
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
   const handleChange = async (e) => {
     const { name, value, files } = e.target;
-  
+
     if (files) {
-      // Handle single file upload (e.g., logo)
       if (name === "logo") {
         const logoFile = files[0];
         const logoLink = await preRequestFun(logoFile, "freelist");
-        setFormData((prev) => ({
-          ...prev,
-          logo: logoLink.accessLink, // Correctly set the accessLink
-        }));
+        setFormData((prev) => ({ ...prev, logo: logoLink.accessLink }));
       }
-  
-      // Handle multiple file uploads (e.g., images)
+
       if (name === "images") {
         const imageFiles = Array.from(files);
         const imageLinks = await Promise.all(
           imageFiles.map((file) => preRequestFun(file, "freelist"))
         );
-  
-        // Ensure the `images` array is updated correctly
         setFormData((prev) => ({
           ...prev,
-          images: [...(prev.images || []), ...imageLinks.map(link => link.accessLink)], // Merge with existing images
+          images: [
+            ...(prev.images || []),
+            ...imageLinks.map((link) => link.accessLink),
+          ],
         }));
       }
-  
+
       return;
     }
-  
-    // Handle nested fields
+
     if (name.includes(".")) {
       const [key, subKey] = name.split(".");
       setFormData((prev) => ({
         ...prev,
-        [key]: {
-          ...prev[key],
-          [subKey]: value,
-        },
+        [key]: { ...prev[key], [subKey]: value },
       }));
     } else {
-      // Handle top-level fields
-      setFormData((prev) => ({
-        ...prev,
-        [name]: value,
-      }));
+      setFormData((prev) => ({ ...prev, [name]: value }));
     }
   };
-  
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    console.log("Form submitted!");
 
-    const res = await CreateFreeListDetails(formData);
-    if (res.success) {
-      alert("Success");
-    } else {
-      alert("Failed");
+    if (!validate()) {
+      toast.error("Please fix the errors in the form.");
+      return;
+    }
+
+    try {
+      const res = await CreateFreeListDetails(formData);
+      if (res.success) {
+        toast.success("Listing created successfully!");
+        setFormData({
+          name: "",
+          brandName: "",
+          logo: null,
+          address: {
+            buildingName: "",
+            streetName: "",
+            landMark: "",
+            district: "",
+            state: "",
+            pinCode: "",
+          },
+          contactDetails: {
+            primaryNumber: "",
+            secondaryNumber: "",
+            whatsAppNumber: "",
+            primaryCountryCode: "",
+            secondaryCountryCode: "",
+            whatsappCountryCode: "",
+            email: "",
+            website: "",
+          },
+          description: "",
+          enconnectUrl: "",
+          images: null,
+        });
+        setShowListingModal(false);
+      } else {
+        toast.error("Failed to create listing.");
+      }
+    } catch (error) {
+      console.error("Error submitting form:", error);
+      toast.error("An unexpected error occurred.");
     }
   };
   // Function to handle button click (CreateFreeListDetails)
@@ -117,7 +211,7 @@ export default function FloatingButtons() {
         <br /> {/* Add this line */}
         <motion.button
           className="btn-listing"
-          onClick={() => setShowListingModal(false)} //temporarily disabled
+          onClick={() => setShowListingModal(true)} //temporarily disabled
           whileHover={{ x: -5 }}
           whileTap={{ scale: 0.95 }}
         >
@@ -156,23 +250,31 @@ export default function FloatingButtons() {
                     <input
                       type="text"
                       name="name"
-                      className="form-control"
+                      className={`form-control ${
+                        errors.name ? "is-invalid" : ""
+                      }`}
                       placeholder="Your Name"
                       value={formData.name}
                       onChange={handleChange}
-                      required
                     />
+                    {errors.name && (
+                      <div className="invalid-feedback">{errors.name}</div>
+                    )}
                   </div>
                   <div className="col-md-6">
                     <input
                       type="text"
                       name="brandName"
-                      className="form-control"
+                      className={`form-control ${
+                        errors.brandName ? "is-invalid" : ""
+                      }`}
                       placeholder="Brand Name"
                       value={formData.brandName}
                       onChange={handleChange}
-                      required
                     />
+                    {errors.brandName && (
+                      <div className="invalid-feedback">{errors.brandName}</div>
+                    )}
                   </div>
 
                   {/* Logo Upload */}
@@ -181,137 +283,100 @@ export default function FloatingButtons() {
                     <input
                       type="file"
                       name="logo"
-                      className="form-control"
+                      className={`form-control ${
+                        errors.logo ? "is-invalid" : ""
+                      }`}
                       accept="image/*"
                       onChange={handleChange}
-                      required
                     />
+                    {errors.logo && (
+                      <div className="invalid-feedback">{errors.logo}</div>
+                    )}
                   </div>
 
                   {/* Address Fields */}
-                  <div className="col-md-6">
-                    <input
-                      type="text"
-                      name="address.buildingName"
-                      className="form-control"
-                      placeholder="Building Name"
-                      value={formData.address.buildingName}
-                      onChange={handleChange}
-                      required
-                    />
-                  </div>
-                  <div className="col-md-6">
-                    <input
-                      type="text"
-                      name="address.streetName"
-                      className="form-control"
-                      placeholder="Street Name"
-                      value={formData.address.streetName}
-                      onChange={handleChange}
-                      required
-                    />
-                  </div>
-                  <div className="col-md-6">
-                    <input
-                      type="text"
-                      name="address.landMark"
-                      className="form-control"
-                      placeholder="Landmark"
-                      value={formData.address.landMark}
-                      onChange={handleChange}
-                      required
-                    />
-                  </div>
-                  <div className="col-md-6">
-                    <input
-                      type="text"
-                      name="address.district"
-                      className="form-control"
-                      placeholder="District"
-                      value={formData.address.district}
-                      onChange={handleChange}
-                      required
-                    />
-                  </div>
-                  <div className="col-md-6">
-                    <input
-                      type="text"
-                      name="address.state"
-                      className="form-control"
-                      placeholder="State"
-                      value={formData.address.state}
-                      onChange={handleChange}
-                      required
-                    />
-                  </div>
-                  <div className="col-md-6">
-                    <input
-                      type="text"
-                      name="address.pinCode"
-                      className="form-control"
-                      placeholder="Pincode"
-                      value={formData.address.pinCode}
-                      onChange={handleChange}
-                      required
-                    />
-                  </div>
+                  {[
+                    "buildingName",
+                    "streetName",
+                    "landMark",
+                    "district",
+                    "state",
+                    "pinCode",
+                  ].map((field) => (
+                    <div className="col-md-6" key={field}>
+                      <input
+                        type="text"
+                        name={`address.${field}`}
+                        className={`form-control ${
+                          errors[`address.${field}`] ? "is-invalid" : ""
+                        }`}
+                        placeholder={field.replace(/([A-Z])/g, " $1").trim()}
+                        value={formData.address[field]}
+                        onChange={handleChange}
+                      />
+                      {errors[`address.${field}`] && (
+                        <div className="invalid-feedback">
+                          {errors[`address.${field}`]}
+                        </div>
+                      )}
+                    </div>
+                  ))}
 
                   {/* Contact Details */}
-                  <div className="col-md-4">
-                    <input
-                      type="tel"
-                      name="contactDetails.primaryNumber"
-                      className="form-control"
-                      placeholder="Primary Number"
-                      value={formData.contactDetails.primaryNumber}
-                      onChange={handleChange}
-                      required
-                    />
-                  </div>
-                  <div className="col-md-4">
-                    <input
-                      type="tel"
-                      name="contactDetails.secondaryNumber"
-                      className="form-control"
-                      placeholder="Secondary Number"
-                      value={formData.contactDetails.secondaryNumber}
-                      onChange={handleChange}
-                    />
-                  </div>
-                  <div className="col-md-4">
-                    <input
-                      type="tel"
-                      name="contactDetails.whatsAppNumber"
-                      className="form-control"
-                      placeholder="WhatsApp Number"
-                      value={formData.contactDetails.whatsAppNumber}
-                      onChange={handleChange}
-                      required
-                    />
-                  </div>
-                  <div className="col-12">
-                    <input
-                      type="email"
-                      name="contactDetails.email"
-                      className="form-control"
-                      placeholder="Email"
-                      value={formData.contactDetails.email}
-                      onChange={handleChange}
-                      required
-                    />
-                  </div>
+                  {[
+                    "primaryNumber",
+                    "secondaryNumber",
+                    "whatsAppNumber",
+                    "email",
+                    "website",
+                  ].map((field) => (
+                    <div
+                      className={`col-md-${
+                        field === "email" || field === "website" ? "12" : "4"
+                      }`}
+                      key={field}
+                    >
+                      <input
+                        type={
+                          field === "email"
+                            ? "email"
+                            : field.includes("Number")
+                            ? "tel"
+                            : "url"
+                        }
+                        name={`contactDetails.${field}`}
+                        className={`form-control ${
+                          errors[`contactDetails.${field}`] ? "is-invalid" : ""
+                        }`}
+                        placeholder={field.replace(/([A-Z])/g, " $1").trim()}
+                        value={formData.contactDetails[field]}
+                        onChange={handleChange}
+                      />
+                      {errors[`contactDetails.${field}`] && (
+                        <div className="invalid-feedback">
+                          {errors[`contactDetails.${field}`]}
+                        </div>
+                      )}
+                    </div>
+                  ))}
 
                   {/* Description */}
                   <div className="col-12">
                     <textarea
                       name="description"
-                      className="form-control"
+                      className={`form-control ${
+                        errors.description ? "is-invalid" : ""
+                      }`}
                       rows={4}
                       placeholder="Business Description"
                       value={formData.description}
                       onChange={handleChange}
-                      required
                     ></textarea>
+                    {errors.description && (
+                      <div className="invalid-feedback">
+                        {errors.description}
+                      </div>
+                    )}
                   </div>
 
                   {/* Images Upload */}
@@ -320,48 +385,43 @@ export default function FloatingButtons() {
                     <input
                       type="file"
                       name="images"
-                      className="form-control"
+                      className={`form-control ${
+                        errors.images ? "is-invalid" : ""
+                      }`}
                       accept="image/*"
                       multiple
                       onChange={handleChange}
-                      required
                     />
+                    {errors.images && (
+                      <div className="invalid-feedback">{errors.images}</div>
+                    )}
                   </div>
 
-                  {/* URLs */}
-                  <div className="col-md-6">
-                    <input
-                      type="url"
-                      name="contactDetails.website"
-                      className="form-control"
-                      placeholder="Website URL"
-                      value={formData.contactDetails.website}
-                      onChange={handleChange}
-                      required
-                    />
-                  </div>
-                  <div className="col-md-6">
+                  {/* Enconnect URL */}
+                  <div className="col-12">
                     <input
                       type="url"
                       name="enconnectUrl"
-                      className="form-control"
+                      className={`form-control ${
+                        errors.enconnectUrl ? "is-invalid" : ""
+                      }`}
                       placeholder="Enconnect Profile URL"
                       value={formData.enconnectUrl}
                       onChange={handleChange}
-                      required
                     />
+                    {errors.enconnectUrl && (
+                      <div className="invalid-feedback">
+                        {errors.enconnectUrl}
+                      </div>
+                    )}
                   </div>
-                </div>
 
-                {/* Submit Button */}
-                <div className="mt-4">
-                  <motion.button
-                    type="submit"
-                    className="btn btn-submit w-100"
-                    whileTap={{ scale: 0.95 }}
-                  >
-                    Submit Listing
-                  </motion.button>
+                  {/* Submit Button */}
+                  <div className="col-12">
+                    <button type="submit" className="btn btn-submit">
+                      Submit
+                    </button>
+                  </div>
                 </div>
               </form>
             </div>
