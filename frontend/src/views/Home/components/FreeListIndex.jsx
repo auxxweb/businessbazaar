@@ -1,67 +1,146 @@
-import React from "react"
-import { FaLock, FaDollarSign } from "react-icons/fa"
+import React, { useState } from "react";
+import { FaLock, FaDollarSign } from "react-icons/fa";
 
-const CryptoCard = ({ data }) => {
-  
+const FreeListCard = ({ data, onCardClick }) => {
   return (
-    <div className="crypto_card border-0 rounded-4 overflow-hidden">
+    <div
+      className="crypto_card border-0 rounded-4 overflow-hidden"
+      onClick={() => onCardClick(data)}
+    >
       <div className="crypto_card_header position-relative">
-        <img src="https://gratisography.com/wp-content/uploads/2024/11/gratisography-augmented-reality-800x525.jpg" alt="" />
-       
+        <img
+          src={data.logo || `/placeholder.svg?height=240&width=400`}
+          alt={data.name}
+          className="w-full h-60 object-cover"
+        />
       </div>
       <div className="crypto_card_content">
         <h5 className="crypto_title">{data.name}</h5>
-        <p className="crypto_description">{data.description}</p>
-
-        <div className="crypto_metrics">
-          <div className="crypto_metric_item">
-            <span className="crypto_metric_icon">👥</span>
-            <span className="crypto_metric_value">{data.name}</span>
-          </div>
-          <div className="crypto_metric_item">
-            <span className="crypto_metric_icon">⚡</span>
-            <span className="crypto_metric_value">{data.name}</span>
-          </div>
-        </div>
-
-        <div className="crypto_tags">
-          {/* {data.tags.map((tag, index) => (
-            <span key={index} className="crypto_tag">
-              <span className="crypto_tag_icon">{tag.icon}</span>
-              <span className="crypto_tag_text">{tag.name}</span>
-            </span>
-          ))} */}
-        </div>
+        <p className="crypto_brand text-sm text-gray-500">{data.brandName}</p>
+        <p className="crypto_description text-gray-600 text-sm line-clamp-2">
+          {data.description}
+        </p>
       </div>
     </div>
-  )
-}
+  );
+};
 
-const FreeListIndex = ({freelist}) => {
+const Modal = ({ data, onClose }) => (
+  <div className="modal_overlay">
+    <div className="modal_content">
+      <button className="modal_close" onClick={onClose}>
+        ✖
+      </button>
+      <h2 className="modal_title">{data.name}</h2>
+      <p className="modal_brand">Brand: {data.brandName}</p>
+      <img
+        src={data.logo || `/placeholder.svg`}
+        alt={data.name}
+        className="modal_image"
+      />
+      <div className="modal_section">
+        <h4>Address:</h4>
+        <p>{data.address.buildingName}</p>
+        <p>{data.address.streetName}</p>
+        <p>{data.address.landMark}</p>
+        <p>{data.address.district}, {data.address.state}, {data.address.pinCode}</p>
+      </div>
+      <div className="modal_section">
+        <h4>Contact Details:</h4>
+        <p>Primary: {data.contactDetails.primaryNumber}</p>
+        <p>Secondary: {data.contactDetails.secondaryNumber}</p>
+        <p>WhatsApp: {data.contactDetails.whatsAppNumber}</p>
+        <p>Email: {data.contactDetails.email}</p>
+        <p>Website: {data.contactDetails.website}</p>
+      </div>
+      <p className="modal_description">{data.description}</p>
+    </div>
+    <style jsx>{`
+      .modal_overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: rgba(0, 0, 0, 0.5);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .modal_content {
+        background: white;
+        padding: 2rem;
+        border-radius: 8px;
+        max-width: 600px;
+        width: 90%;
+        position: relative;
+      }
+      .modal_close {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background: none;
+        border: none;
+        font-size: 1.5rem;
+        cursor: pointer;
+      }
+      .modal_image {
+        width: 100%;
+        height: auto;
+        margin: 1rem 0;
+      }
+      .modal_section {
+        margin-bottom: 1rem;
+      }
+      .modal_title {
+        font-size: 1.5rem;
+        font-weight: bold;
+        margin-bottom: 0.5rem;
+      }
+    `}</style>
+  </div>
+);
 
-  
- 
+const FreeListIndex = ({ freelist }) => {
+  const [selectedCard, setSelectedCard] = useState(null);
+
+  const handleCardClick = (card) => {
+    setSelectedCard(card);
+  };
+
+  const handleCloseModal = () => {
+    setSelectedCard(null);
+  };
+
   return (
     <div className="crypto_container">
-         <div className="text-center mb-5">
-          <h1 className="fw-bold mb-3">Discover the Top Profiles</h1>
-          <p className="text-muted mx-auto" style={{ maxWidth: "800px" }}>
-            Explore the most popular profile listings in your area through our local profile directory listing, highly
-            rated by locals and visitors alike. Our platform makes it easy to find top-rated profiles based on customer
-            reviews and expert recommendations.
-          </p>
-        </div>
+      <div className="text-center mb-5">
+        <h1 className="fw-bold mb-3 text-3xl md:text-4xl lg:text-5xl">
+          Discover the Top Profiles
+        </h1>
+        <p
+          className="text-muted mx-auto text-sm md:text-base lg:text-lg"
+          style={{ maxWidth: "800px" }}
+        >
+          Explore the most popular profile listings in your area through our
+          local profile directory listing, highly rated by locals and visitors
+          alike.
+        </p>
+      </div>
       <div className="crypto_grid">
-      {freelist && freelist.length > 0 ? (
+        {freelist && freelist.length > 0 ? (
           freelist.map((card) => (
             <div key={card._id} className="crypto_grid_item">
-              <CryptoCard data={card} />
+              <FreeListCard data={card} onCardClick={handleCardClick} />
             </div>
           ))
         ) : (
-          <p>No profiles available.</p>
+          <p className="text-center text-gray-500">No profiles available.</p>
         )}
       </div>
+      {selectedCard && (
+        <Modal data={selectedCard} onClose={handleCloseModal} />
+      )}
 
       <style jsx>{`
         .crypto_container {
@@ -69,138 +148,31 @@ const FreeListIndex = ({freelist}) => {
           max-width: 1200px;
           margin: 0 auto;
         }
-
         .crypto_grid {
           display: grid;
-          grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+          grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
           gap: 2rem;
         }
-
         .crypto_card {
           background: white;
           transition: all 0.2s ease-in-out;
           box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+          cursor: pointer;
         }
-
         .crypto_card:hover {
           transform: translateY(-5px);
           box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
         }
-
         .crypto_card_header {
           height: 240px;
-          background: #f8f9fa;
           overflow: hidden;
         }
-
-        .crypto_diagonal_strip {
-          position: absolute;
-          top: -20px;
-          left: -20px;
-          width: 100px;
-          height: 100px;
-          background: linear-gradient(45deg, #000 0%, #333 100%);
-          transform: rotate(-10deg);
-        }
-
-        .crypto_logo_container {
-          position: absolute;
-          top: 25px;
-          left: 15px;
-          color: white;
-          font-weight: bold;
-          font-size: 1.2rem;
-        }
-
-        .crypto_icons {
-          top: 15px;
-          right: 15px;
-          display: flex;
-          gap: 0.5rem;
-        }
-
         .crypto_card_content {
           padding: 1.5rem;
         }
-
-        .crypto_title {
-          font-size: 1.25rem;
-          font-weight: bold;
-          margin-bottom: 0.5rem;
-        }
-
-        .crypto_description {
-          color: #6b7280;
-          font-size: 0.9rem;
-          margin-bottom: 1rem;
-          line-height: 1.5;
-        }
-
-        .crypto_metrics {
-          display: flex;
-          gap: 1rem;
-          margin-bottom: 1rem;
-        }
-
-        .crypto_metric_item {
-          display: flex;
-          align-items: center;
-          gap: 0.5rem;
-        }
-
-        .crypto_metric_icon {
-          opacity: 0.5;
-        }
-
-        .crypto_metric_value {
-          font-weight: 600;
-        }
-
-        .crypto_tags {
-          display: flex;
-          flex-wrap: wrap;
-          gap: 0.5rem;
-        }
-
-        .crypto_tag {
-          display: inline-flex;
-          align-items: center;
-          gap: 0.25rem;
-          padding: 0.375rem 0.75rem;
-          background-color: #f8f9fa;
-          border-radius: 100px;
-          font-size: 0.875rem;
-          color: #4a5568;
-          white-space: nowrap;
-        }
-
-        .crypto_tag_icon {
-          font-size: 1.1rem;
-          line-height: 1;
-        }
-
-        .crypto_tag_text {
-          font-weight: 500;
-        }
-
-        @media (max-width: 768px) {
-          .crypto_card_content {
-            padding: 1.25rem;
-          }
-          
-          .crypto_tag {
-            padding: 0.25rem 0.5rem;
-            font-size: 0.8rem;
-          }
-          
-          .crypto_grid {
-            grid-template-columns: 1fr;
-          }
-        }
       `}</style>
     </div>
-  )
-}
+  );
+};
 
-export default FreeListIndex
-
+export default FreeListIndex;

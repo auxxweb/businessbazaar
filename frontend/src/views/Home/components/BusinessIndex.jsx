@@ -1,12 +1,12 @@
-import React, { useState } from "react"
-import PropTypes from "prop-types"
-import { FaStar, FaWhatsapp, FaPhone, FaEnvelope } from "react-icons/fa"
-import { Link } from "react-router-dom"
-import { Spinner } from "react-bootstrap"
-import Placeholder from "/images/placeholder.jpg"
-import EnquiryModal from "./EnquiryModal"
-import { submitContactForm } from "../../../Functions/functions"
-import { toast } from "react-toastify"
+import React, { useState } from "react";
+import PropTypes from "prop-types";
+import { FaStar, FaWhatsapp, FaPhone, FaEnvelope } from "react-icons/fa";
+import { Link } from "react-router-dom";
+import { Spinner } from "react-bootstrap";
+import Placeholder from "/images/placeholder.jpg";
+import EnquiryModal from "./EnquiryModal";
+import { submitContactForm } from "../../../Functions/functions";
+import { toast } from "react-toastify";
 
 const BusinessIndex = ({
   loading,
@@ -17,24 +17,24 @@ const BusinessIndex = ({
   scroll,
   searchItem,
 }) => {
-  console.log(searchItem, "kkkkkkkkkk:")
-  const [showEnquiryModal, setShowEnquiryModal] = useState(false)
-  const [selectedBusiness, setSelectedBusiness] = useState(null)
+  console.log(searchItem, "kkkkkkkkkk:");
+  const [showEnquiryModal, setShowEnquiryModal] = useState(false);
+  const [selectedBusiness, setSelectedBusiness] = useState(null);
 
   const slugify = (text) => {
-    if (!text) return text
+    if (!text) return text;
     return text
       .toLowerCase()
       .replace(/ /g, "-")
-      .replace(/[^\w-]+/g, "")
-  }
+      .replace(/[^\w-]+/g, "");
+  };
   const handleFormSubmit = async (e, formData, businessId) => {
-    e.preventDefault()
+    e.preventDefault();
 
     const response = await submitContactForm({
       ...formData,
       businessId: businessId,
-    })
+    });
     if (response?.data) {
       toast.success("Form submitted successfully!", {
         position: "top-right",
@@ -48,8 +48,8 @@ const BusinessIndex = ({
           backgroundColor: "#38a20e", // Custom red color for error
           color: "#FFFFFF", // White text
         },
-      })
-      return true
+      });
+      return true;
     } else {
       toast.success("Failed submission failed!", {
         position: "top-right",
@@ -63,32 +63,36 @@ const BusinessIndex = ({
           backgroundColor: "#aa0808", // Custom red color for error
           color: "#FFFFFF", // White text
         },
-      })
-      return false
+      });
+      return false;
     }
-  }
+  };
   const renderStars = (rating) => {
     return [...Array(5)].map((_, index) => (
-      <FaStar key={index} size={12} className={index < Math.floor(rating) ? "text-warning" : "text-muted"} />
-    ))
-  }
+      <FaStar
+        key={index}
+        size={12}
+        className={index < Math.floor(rating) ? "text-warning" : "text-muted"}
+      />
+    ));
+  };
 
   const handleClick = (countryCode, whatsappNumber) => {
-    const defaultCountryCode = "+91" // Default country code
-    const finalCountryCode = countryCode || defaultCountryCode // Use default if not available
-    window.open(`https://wa.me/${finalCountryCode}${whatsappNumber}`, "_blank")
-  }
+    const defaultCountryCode = "+91"; // Default country code
+    const finalCountryCode = countryCode || defaultCountryCode; // Use default if not available
+    window.open(`https://wa.me/${finalCountryCode}${whatsappNumber}`, "_blank");
+  };
 
   const handleOpenDialer = (phoneNumber) => {
-    const formattedNumber = `tel:${String(phoneNumber).replace(/\s/g, "")}`
-    window.location.href = formattedNumber
-  }
+    const formattedNumber = `tel:${String(phoneNumber).replace(/\s/g, "")}`;
+    window.location.href = formattedNumber;
+  };
 
   const handleEnquiryClick = (e, business) => {
-    e.preventDefault()
-    setSelectedBusiness(business)
-    setShowEnquiryModal(true)
-  }
+    e.preventDefault();
+    setSelectedBusiness(business);
+    setShowEnquiryModal(true);
+  };
 
   return (
     <section className="home-spot h-auto mb-2" ref={scroll}>
@@ -96,9 +100,10 @@ const BusinessIndex = ({
         <div className="text-center mb-5">
           <h1 className="fw-bold mb-3">Discover the Top Profiles</h1>
           <p className="text-muted mx-auto" style={{ maxWidth: "800px" }}>
-            Explore the most popular profile listings in your area through our local profile directory listing, highly
-            rated by locals and visitors alike. Our platform makes it easy to find top-rated profiles based on customer
-            reviews and expert recommendations.
+            Explore the most popular profile listings in your area through our
+            local profile directory listing, highly rated by locals and visitors
+            alike. Our platform makes it easy to find top-rated profiles based
+            on customer reviews and expert recommendations.
           </p>
         </div>
 
@@ -109,15 +114,21 @@ const BusinessIndex = ({
                 <Link
                   to={
                     business?.selectedPlan?.isPremium
-                      ? `/profile/premium/${slugify(business?.businessName)}/${business?._id}`
-                      : `/profile/${slugify(business?.businessName)}/${business?._id}`
+                      ? `/profile/premium/${slugify(business?.businessName)}/${
+                          business?._id
+                        }`
+                      : `/profile/${slugify(business?.businessName)}/${
+                          business?._id
+                        }`
                   }
                   className="text-decoration-none"
                 >
                   <div className="card  h-100 border-0 shadow-xl btn-parent rounded-4 hover-card">
                     <div className="px-4 pb-4 position-relative">
                       <div className="">
-                        <div className="small text-muted">{business?.category?.name || "News & Media"}</div>
+                        <div className="custom-font-size small text-muted">
+                          {business?.category?.name || "News & Media"}
+                        </div>
 
                         <h5
                           className="card-title h6 fw-bold text-dark mt-2"
@@ -145,7 +156,9 @@ const BusinessIndex = ({
                             paddingRight: "45%",
                           }}
                         >
-                          {business?.address?.buildingName} {business?.address?.city} {business?.address?.landMark}
+                          {business?.address?.buildingName}{" "}
+                          {business?.address?.city}{" "}
+                          {business?.address?.landMark}
                         </p>
                       </div>
 
@@ -186,7 +199,9 @@ const BusinessIndex = ({
                       >
                         <div className="d-flex align-items-center justify-content-center">
                           {renderStars(business?.rating || 0)}
-                          <span className="ms-1 small fw-medium">{business?.rating || "0.0"}</span>
+                          <span className="ms-1 small fw-medium">
+                            {business?.rating || "0.0"}
+                          </span>
                         </div>
                       </div>
                     </div>
@@ -195,20 +210,23 @@ const BusinessIndex = ({
                         <button
                           className="btn btn-success btn-sm flex-1 d-flex align-items-center justify-content-center gap-2"
                           onClick={(e) => {
-                            e.preventDefault()
-                            handleOpenDialer(business?.contactDetails?.primaryNumber)
+                            e.preventDefault();
+                            handleOpenDialer(
+                              business?.contactDetails?.primaryNumber
+                            );
                           }}
                         >
-                          <FaPhone /> {business?.contactDetails?.primaryNumber ?? ""}
+                          <FaPhone />{" "}
+                          {business?.contactDetails?.primaryNumber ?? ""}
                         </button>
                         <button
                           className="btn btn-outline-success btn-sm flex-1 d-flex align-items-center justify-content-center gap-2"
                           onClick={(e) => {
-                            e.preventDefault()
+                            e.preventDefault();
                             handleClick(
                               business?.contactDetails?.whatsappCountryCode,
-                              business?.contactDetails?.whatsAppNumber,
-                            )
+                              business?.contactDetails?.whatsAppNumber
+                            );
                           }}
                         >
                           <FaWhatsapp /> WhatsApp
@@ -216,8 +234,8 @@ const BusinessIndex = ({
                         <button
                           className="btn btn-enquiry btn-sm flex-1 d-flex align-items-center justify-content-center gap-2"
                           onClick={(e) => {
-                            e.preventDefault()
-                            handleEnquiryClick(e, business)
+                            e.preventDefault();
+                            handleEnquiryClick(e, business);
                           }}
                         >
                           <FaEnvelope /> Send Enquiry
@@ -233,7 +251,9 @@ const BusinessIndex = ({
               <div className="  h-100 border-0  rounded-4 overflow-visible">
                 <div className="px-4  py-3 text-center">
                   <h5 className="card-title h6 text-dark">Profile not found</h5>
-                  <p className="card-text text-muted">No business profiles available at the moment.</p>
+                  <p className="card-text text-muted">
+                    No business profiles available at the moment.
+                  </p>
                 </div>
               </div>
             </div>
@@ -246,7 +266,9 @@ const BusinessIndex = ({
                 onClick={loadMoreBusiness}
               >
                 <div className="text-center">
-                  <h5 className="card-title h6 fw-bold text-dark ">View More</h5>
+                  <h5 className="card-title h6 fw-bold text-dark ">
+                    View More
+                  </h5>
                   <i className="bi bi-arrow-right fs-4"></i>
                 </div>
               </div>
@@ -260,8 +282,8 @@ const BusinessIndex = ({
           show={showEnquiryModal}
           handleFormSubmit={handleFormSubmit}
           onHide={() => {
-            setShowEnquiryModal(false)
-            setSelectedBusiness(null)
+            setShowEnquiryModal(false);
+            setSelectedBusiness(null);
           }}
           businessName={selectedBusiness.businessName}
           businessId={selectedBusiness._id}
@@ -322,8 +344,8 @@ const BusinessIndex = ({
             }
             .card .position-absolute {
               width: 80px;
-              right: 10px;
-              top: -20px;
+              right: 0px;
+              top: 0px;
             }
             .card-title.h6 {
               font-size: 1rem;
@@ -342,8 +364,8 @@ const BusinessIndex = ({
             }
             .card .position-absolute {
               width: 60px;
-              top: -25px;
-              right: 15px;
+              top: 0px;
+              right: 0px;
             }
             .card img {
               width: 100%;
@@ -386,12 +408,23 @@ const BusinessIndex = ({
           justify-content:end;
           
           }
+          @media (max-width: 1200px) {
+          .custom-font-size {
+           font-size: 12px; /* Default font size for larger screens */
+          }
+        }
+
+          @media (max-width: 370px) {
+         .custom-font-size {
+          font-size: 9px; /* Smaller font size for screens under 370px */
+        }
+}
           
         `}
       </style>
     </section>
-  )
-}
+  );
+};
 
 BusinessIndex.propTypes = {
   loading: PropTypes.bool.isRequired,
@@ -400,7 +433,6 @@ BusinessIndex.propTypes = {
   totalBusinessData: PropTypes.number.isRequired,
   loadMoreBusiness: PropTypes.func.isRequired,
   scroll: PropTypes.object,
-}
+};
 
-export default BusinessIndex
-
+export default BusinessIndex;
