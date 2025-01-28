@@ -340,7 +340,7 @@ export default function Home() {
         totalBusinessData={totalBusinessData}
       /> 
 
-      {/* <FreeListIndex freelist={freelist}/> */}
+      <FreeListIndex freelist={freelist}/>
 
       <ReviewSection
         currentSlide={currentSlide}

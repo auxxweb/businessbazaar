@@ -1,177 +1,305 @@
 import React, { useState } from "react";
-import { FaLock, FaDollarSign } from "react-icons/fa";
+import { FaPhone, FaWhatsapp, FaEnvelope } from "react-icons/fa";
+import { Link } from "react-router-dom";
+import { Modal, Button, Row, Col, Image } from "react-bootstrap";
 
-const FreeListCard = ({ data, onCardClick }) => {
-  return (
-    <div
-      className="crypto_card border-0 rounded-4 overflow-hidden"
-      onClick={() => onCardClick(data)}
-    >
-      <div className="crypto_card_header position-relative">
-        <img
-          src={data.logo || `/placeholder.svg?height=240&width=400`}
-          alt={data.name}
-          className="w-full h-60 object-cover"
-        />
-      </div>
-      <div className="crypto_card_content">
-        <h5 className="crypto_title">{data.name}</h5>
-        <p className="crypto_brand text-sm text-gray-500">{data.brandName}</p>
-        <p className="crypto_description text-gray-600 text-sm line-clamp-2">
-          {data.description}
-        </p>
-      </div>
-    </div>
-  );
-};
+import { motion, AnimatePresence } from "framer-motion";
 
-const Modal = ({ data, onClose }) => (
-  <div className="modal_overlay">
-    <div className="modal_content">
-      <button className="modal_close" onClick={onClose}>
-        ✖
-      </button>
-      <h2 className="modal_title">{data.name}</h2>
-      <p className="modal_brand">Brand: {data.brandName}</p>
-      <img
-        src={data.logo || `/placeholder.svg`}
-        alt={data.name}
-        className="modal_image"
-      />
-      <div className="modal_section">
-        <h4>Address:</h4>
-        <p>{data.address.buildingName}</p>
-        <p>{data.address.streetName}</p>
-        <p>{data.address.landMark}</p>
-        <p>{data.address.district}, {data.address.state}, {data.address.pinCode}</p>
-      </div>
-      <div className="modal_section">
-        <h4>Contact Details:</h4>
-        <p>Primary: {data.contactDetails.primaryNumber}</p>
-        <p>Secondary: {data.contactDetails.secondaryNumber}</p>
-        <p>WhatsApp: {data.contactDetails.whatsAppNumber}</p>
-        <p>Email: {data.contactDetails.email}</p>
-        <p>Website: {data.contactDetails.website}</p>
-      </div>
-      <p className="modal_description">{data.description}</p>
-    </div>
-    <style jsx>{`
-      .modal_overlay {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100vw;
-        height: 100vh;
-        background: rgba(0, 0, 0, 0.5);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      }
-      .modal_content {
-        background: white;
-        padding: 2rem;
-        border-radius: 8px;
-        max-width: 600px;
-        width: 90%;
-        position: relative;
-      }
-      .modal_close {
-        position: absolute;
-        top: 10px;
-        right: 10px;
-        background: none;
-        border: none;
-        font-size: 1.5rem;
-        cursor: pointer;
-      }
-      .modal_image {
-        width: 100%;
-        height: auto;
-        margin: 1rem 0;
-      }
-      .modal_section {
-        margin-bottom: 1rem;
-      }
-      .modal_title {
-        font-size: 1.5rem;
-        font-weight: bold;
-        margin-bottom: 0.5rem;
-      }
-    `}</style>
-  </div>
-);
+const FreeListIndex = ({
+  freelist,
+  renderStars,
+  handleOpenDialer,
+  handleClick,
+  handleEnquiryClick,
+}) => {
+  const [showModal, setShowModal] = useState(false); // State for modal visibility
+  const [selectedBusiness, setSelectedBusiness] = useState(null); // State to store selected business data
 
-const FreeListIndex = ({ freelist }) => {
-  const [selectedCard, setSelectedCard] = useState(null);
-
-  const handleCardClick = (card) => {
-    setSelectedCard(card);
+  const handleCardClick = (business) => {
+    setSelectedBusiness(business); // Set the selected business when a card is clicked
+    setShowModal(true); // Show the modal
   };
 
   const handleCloseModal = () => {
-    setSelectedCard(null);
+    setShowModal(false); // Close the modal
   };
 
   return (
-    <div className="crypto_container">
-      <div className="text-center mb-5">
-        <h1 className="fw-bold mb-3 text-3xl md:text-4xl lg:text-5xl">
-          Discover the Top Profiles
-        </h1>
-        <p
-          className="text-muted mx-auto text-sm md:text-base lg:text-lg"
-          style={{ maxWidth: "800px" }}
-        >
-          Explore the most popular profile listings in your area through our
-          local profile directory listing, highly rated by locals and visitors
-          alike.
-        </p>
-      </div>
-      <div className="crypto_grid">
-        {freelist && freelist.length > 0 ? (
-          freelist.map((card) => (
-            <div key={card._id} className="crypto_grid_item">
-              <FreeListCard data={card} onCardClick={handleCardClick} />
-            </div>
-          ))
-        ) : (
-          <p className="text-center text-gray-500">No profiles available.</p>
-        )}
-      </div>
-      {selectedCard && (
-        <Modal data={selectedCard} onClose={handleCloseModal} />
-      )}
+    <section className="home-spot h-auto mb-2">
+      <div className="container py-5" id="freelist">
+        <div className="text-center mb-5">
+          <h1 className="fw-bold mb-3">Discover the Top Profiles</h1>
+          <p className="text-muted mx-auto" style={{ maxWidth: "800px" }}>
+            Explore the most popular profile listings in your area through our
+            local profile directory listing, highly rated by locals and visitors
+            alike.
+          </p>
+        </div>
 
-      <style jsx>{`
-        .crypto_container {
-          padding: 3rem 1rem;
-          max-width: 1200px;
-          margin: 0 auto;
-        }
-        .crypto_grid {
-          display: grid;
-          grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-          gap: 2rem;
-        }
-        .crypto_card {
-          background: white;
-          transition: all 0.2s ease-in-out;
-          box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-          cursor: pointer;
-        }
-        .crypto_card:hover {
-          transform: translateY(-5px);
-          box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
-        }
-        .crypto_card_header {
-          height: 240px;
-          overflow: hidden;
-        }
-        .crypto_card_content {
-          padding: 1.5rem;
-        }
-      `}</style>
-    </div>
+        <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 mt-4 g-lg-4 g-0">
+          {freelist?.length > 0 ? (
+            freelist.map((business) => (
+              <div key={business._id} className="col mb-4">
+                <div
+                  className="card h-100 border-0 shadow-xl btn-parent rounded-4 hover-card"
+                  onClick={() => handleCardClick(business)} // Trigger modal on card click
+                >
+                  <div className="px-4 pb-4 position-relative">
+                    {/* Business Details */}
+                    <div>
+                      <div className="custom-font-size small text-muted">
+                        {business?.brandName || "No Brand Name"}
+                      </div>
+                      <h5
+                        className="card-title h6 fw-bold text-dark mt-2"
+                        style={{
+                          overflow: "hidden",
+                          textOverflow: "ellipsis",
+                          display: "-webkit-box",
+                          WebkitLineClamp: 2,
+                          WebkitBoxOrient: "vertical",
+                          minHeight: "40px",
+                          paddingRight: "45%",
+                        }}
+                      >
+                        {business?.name}
+                      </h5>
+                      <p
+                        className="card-text text-muted small mb-0"
+                        style={{
+                          overflow: "hidden",
+                          textOverflow: "ellipsis",
+                          display: "-webkit-box",
+                          WebkitLineClamp: 2,
+                          WebkitBoxOrient: "vertical",
+                          paddingRight: "45%",
+                        }}
+                      >
+                        {business?.address?.buildingName},{" "}
+                        {business?.address?.streetName},{" "}
+                        {business?.address?.district},{" "}
+                        {business?.address?.state} -{" "}
+                        {business?.address?.pinCode}
+                      </p>
+                    </div>
+
+                    {/* Business Logo */}
+                    <div
+                      className="position-absolute bg-white shadow-sm"
+                      style={{
+                        width: "130px",
+                        height: "130px",
+                        right: "20px",
+                        top: "-45px",
+                        borderRadius: "12px",
+                        padding: "6px",
+                        overflow: "hidden",
+                      }}
+                    >
+                      <div className="w-100 h-100 position-relative">
+                        <img
+                          src={business?.logo || "PlaceholderImageURL"}
+                          alt={business?.name}
+                          className="position-absolute"
+                          style={{
+                            width: "100%",
+                            height: "100%",
+                            objectFit: "cover",
+                            borderRadius: "8px",
+                          }}
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Action Buttons */}
+                  <div className="p-3">
+                    <div className="d-flex justify-content-center gap-2">
+                      <button
+                        className="btn btn-success btn-sm flex-1 d-flex align-items-center justify-content-center gap-2"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          handleOpenDialer(
+                            business?.contactDetails?.primaryNumber
+                          );
+                        }}
+                      >
+                        <FaPhone />{" "}
+                        {business?.contactDetails?.primaryNumber || "N/A"}
+                      </button>
+                      <button
+                        className="btn btn-outline-success btn-sm flex-1 d-flex align-items-center justify-content-center gap-2"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          handleClick(
+                            business?.contactDetails?.whatsappCountryCode,
+                            business?.contactDetails?.whatsAppNumber
+                          );
+                        }}
+                      >
+                        <FaWhatsapp /> WhatsApp
+                      </button>
+                      <button
+                        className="btn btn-primary btn-sm flex-1 d-flex align-items-center justify-content-center gap-2"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          handleEnquiryClick(e, business);
+                        }}
+                      >
+                        <FaEnvelope /> Send Enquiry
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))
+          ) : (
+            <div className="col-12">
+              <div className="text-center">No profiles available.</div>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Modal */}
+      <AnimatePresence>
+        {showModal && (
+          <Modal show={showModal} onHide={handleCloseModal} size="lg" centered>
+            <motion.div
+              initial={{ opacity: 0, y: -50 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -50 }}
+              transition={{ type: "spring", damping: 20, stiffness: 300 }}
+            >
+              <Modal.Header closeButton>
+                <Modal.Title>{selectedBusiness.name}</Modal.Title>
+              </Modal.Header>
+              <Modal.Body>
+                <Row>
+                  <Col md={6}>
+                    <h5 className="mb-3">Brand Information</h5>
+                    <p>
+                      <strong>Brand Name:</strong>{" "}
+                      {selectedBusiness.brandName || "N/A"}
+                    </p>
+                    {selectedBusiness.logo && (
+                      <Image
+                        src={selectedBusiness.logo || "/placeholder.svg"}
+                        alt={`${selectedBusiness.brandName} logo`}
+                        roundedCircle
+                        width={100}
+                        height={100}
+                        className="mt-2 border"
+                      />
+                    )}
+                  </Col>
+                  <Col md={6}>
+                    <h5 className="mb-3">Address</h5>
+                    <p>
+                      {selectedBusiness.address.buildingName},{" "}
+                      {selectedBusiness.address.streetName},<br />
+                      {selectedBusiness.address.landMark &&
+                        `${selectedBusiness.address.landMark}, `}
+                      {selectedBusiness.address.district},{" "}
+                      {selectedBusiness.address.state} -{" "}
+                      {selectedBusiness.address.pinCode}
+                    </p>
+                  </Col>
+                </Row>
+                <Row className="mt-4">
+                  <Col md={6}>
+                    <h5 className="mb-3">Contact Details</h5>
+                    <p>
+                      <strong>Primary:</strong>{" "}
+                      {selectedBusiness.contactDetails.primaryCountryCode}{" "}
+                      {selectedBusiness.contactDetails.primaryNumber}
+                    </p>
+                    {selectedBusiness.contactDetails.secondaryNumber && (
+                      <p>
+                        <strong>Secondary:</strong>{" "}
+                        {selectedBusiness.contactDetails.secondaryCountryCode}{" "}
+                        {selectedBusiness.contactDetails.secondaryNumber}
+                      </p>
+                    )}
+                    <p>
+                      <strong>WhatsApp:</strong>{" "}
+                      {selectedBusiness.contactDetails.whatsappCountryCode}{" "}
+                      {selectedBusiness.contactDetails.whatsAppNumber}
+                    </p>
+                    <p>
+                      <strong>Email:</strong>{" "}
+                      {selectedBusiness.contactDetails.email}
+                    </p>
+                    {selectedBusiness.contactDetails.website && (
+                      <p>
+                        <strong>Website:</strong>{" "}
+                        <a
+                          href={selectedBusiness.contactDetails.website}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          {selectedBusiness.contactDetails.website}
+                        </a>
+                      </p>
+                    )}
+                  </Col>
+                  <Col md={6}>
+                    <h5 className="mb-3">Description</h5>
+                    <p>{selectedBusiness.description}</p>
+                  </Col>
+                </Row>
+                {selectedBusiness.enconnectUrl && (
+                  <Row className="mt-4">
+                    <Col>
+                      <h5 className="mb-3">Enconnect URL</h5>
+                      <a
+                        href={selectedBusiness.enconnectUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        {selectedBusiness.enconnectUrl}
+                      </a>
+                    </Col>
+                  </Row>
+                )}
+                {selectedBusiness.images &&
+                  selectedBusiness.images.length > 0 && (
+                    <Row className="mt-4">
+                      <Col>
+                        <h5 className="mb-3">Images</h5>
+                        <Row>
+                          {selectedBusiness.images.map((image, index) => (
+                            <Col key={index} xs={6} md={4} className="mb-3">
+                              <Image
+                                src={image || "/placeholder.svg"}
+                                alt={`${selectedBusiness.name} image ${
+                                  index + 1
+                                }`}
+                                fluid
+                                rounded
+                                style={{
+                                  objectFit: "cover", // Ensures the image covers the area without distortion
+                                  width: "100%", // Makes the image responsive and fills the container width
+                                  height: "200px", // Fixes the height of the image to 200px
+                                }}
+                              />
+                            </Col>
+                          ))}
+                        </Row>
+                      </Col>
+                    </Row>
+                  )}
+              </Modal.Body>
+              <Modal.Footer>
+                <Button variant="secondary" onClick={handleCloseModal}>
+                  Close
+                </Button>
+              </Modal.Footer>
+            </motion.div>
+          </Modal>
+        )}
+      </AnimatePresence>
+    </section>
   );
 };
 
