@@ -1,15 +1,24 @@
 import React, { useState } from "react";
-import { FaPhone, FaWhatsapp, FaEnvelope } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { Modal, Button, Row, Col, Image } from "react-bootstrap";
-
+import {
+  Phone,
+  Mail,
+  Globe,
+  MapPin,
+  PhoneIcon as Phone2,
+  MessageCircle,
+  Building2,
+  Navigation,
+  LinkIcon,
+} from "lucide-react"
+import { FaWhatsapp, FaInstagram, FaFacebookF, FaTwitter, FaLinkedinIn ,FaEnvelope,FaPhone} from "react-icons/fa"
 import { motion, AnimatePresence } from "framer-motion";
-
+ 
 const FreeListIndex = ({
   freelist,
   renderStars,
-  handleOpenDialer,
-  handleClick,
+
   handleEnquiryClick,
 }) => {
   const [showModal, setShowModal] = useState(false); // State for modal visibility
@@ -18,6 +27,17 @@ const FreeListIndex = ({
   const handleCardClick = (business) => {
     setSelectedBusiness(business); // Set the selected business when a card is clicked
     setShowModal(true); // Show the modal
+  };
+
+  const handleClick = (countryCode, whatsappNumber) => {
+    const defaultCountryCode = "+91"; // Default country code
+    const finalCountryCode = countryCode || defaultCountryCode; // Use default if not available
+    window.open(`https://wa.me/${finalCountryCode}${whatsappNumber}`, "_blank");
+  };
+
+  const handleOpenDialer = (phoneNumber) => {
+    const formattedNumber = `tel:${String(phoneNumber).replace(/\s/g, "")}`;
+    window.location.href = formattedNumber;
   };
 
   const handleCloseModal = () => {
@@ -119,6 +139,7 @@ const FreeListIndex = ({
                         className="btn btn-success btn-sm flex-1 d-flex align-items-center justify-content-center gap-2"
                         onClick={(e) => {
                           e.preventDefault();
+                          e.stopPropagation(); // Prevents the parent card's onClick from triggering
                           handleOpenDialer(
                             business?.contactDetails?.primaryNumber
                           );
@@ -127,10 +148,12 @@ const FreeListIndex = ({
                         <FaPhone />{" "}
                         {business?.contactDetails?.primaryNumber || "N/A"}
                       </button>
+
                       <button
                         className="btn btn-outline-success btn-sm flex-1 d-flex align-items-center justify-content-center gap-2"
                         onClick={(e) => {
                           e.preventDefault();
+                          e.stopPropagation(); // Prevents the parent card's onClick from triggering
                           handleClick(
                             business?.contactDetails?.whatsappCountryCode,
                             business?.contactDetails?.whatsAppNumber
@@ -138,15 +161,6 @@ const FreeListIndex = ({
                         }}
                       >
                         <FaWhatsapp /> WhatsApp
-                      </button>
-                      <button
-                        className="btn btn-primary btn-sm flex-1 d-flex align-items-center justify-content-center gap-2"
-                        onClick={(e) => {
-                          e.preventDefault();
-                          handleEnquiryClick(e, business);
-                        }}
-                      >
-                        <FaEnvelope /> Send Enquiry
                       </button>
                     </div>
                   </div>
@@ -163,144 +177,268 @@ const FreeListIndex = ({
 
       {/* Modal */}
       <AnimatePresence>
-        {showModal && (
-          <Modal show={showModal} onHide={handleCloseModal} size="lg" centered>
-            <motion.div
-              initial={{ opacity: 0, y: -50 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -50 }}
-              transition={{ type: "spring", damping: 20, stiffness: 300 }}
-            >
-              <Modal.Header closeButton>
-                <Modal.Title>{selectedBusiness.name}</Modal.Title>
-              </Modal.Header>
-              <Modal.Body>
-                <Row>
-                  <Col md={6}>
-                    <h5 className="mb-3">Brand Information</h5>
-                    <p>
-                      <strong>Brand Name:</strong>{" "}
-                      {selectedBusiness.brandName || "N/A"}
-                    </p>
-                    {selectedBusiness.logo && (
-                      <Image
-                        src={selectedBusiness.logo || "/placeholder.svg"}
-                        alt={`${selectedBusiness.brandName} logo`}
-                        roundedCircle
-                        width={100}
-                        height={100}
-                        className="mt-2 border"
-                      />
-                    )}
-                  </Col>
-                  <Col md={6}>
-                    <h5 className="mb-3">Address</h5>
-                    <p>
-                      {selectedBusiness.address.buildingName},{" "}
-                      {selectedBusiness.address.streetName},<br />
-                      {selectedBusiness.address.landMark &&
-                        `${selectedBusiness.address.landMark}, `}
-                      {selectedBusiness.address.district},{" "}
-                      {selectedBusiness.address.state} -{" "}
-                      {selectedBusiness.address.pinCode}
-                    </p>
-                  </Col>
-                </Row>
-                <Row className="mt-4">
-                  <Col md={6}>
-                    <h5 className="mb-3">Contact Details</h5>
-                    <p>
-                      <strong>Primary:</strong>{" "}
-                      {selectedBusiness.contactDetails.primaryCountryCode}{" "}
-                      {selectedBusiness.contactDetails.primaryNumber}
-                    </p>
-                    {selectedBusiness.contactDetails.secondaryNumber && (
-                      <p>
-                        <strong>Secondary:</strong>{" "}
-                        {selectedBusiness.contactDetails.secondaryCountryCode}{" "}
-                        {selectedBusiness.contactDetails.secondaryNumber}
-                      </p>
-                    )}
-                    <p>
-                      <strong>WhatsApp:</strong>{" "}
-                      {selectedBusiness.contactDetails.whatsappCountryCode}{" "}
-                      {selectedBusiness.contactDetails.whatsAppNumber}
-                    </p>
-                    <p>
-                      <strong>Email:</strong>{" "}
-                      {selectedBusiness.contactDetails.email}
-                    </p>
-                    {selectedBusiness.contactDetails.website && (
-                      <p>
-                        <strong>Website:</strong>{" "}
-                        <a
-                          href={selectedBusiness.contactDetails.website}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                        >
-                          {selectedBusiness.contactDetails.website}
-                        </a>
-                      </p>
-                    )}
-                  </Col>
-                  <Col md={6}>
-                    <h5 className="mb-3">Description</h5>
-                    <p>{selectedBusiness.description}</p>
-                  </Col>
-                </Row>
-                {selectedBusiness.enconnectUrl && (
-                  <Row className="mt-4">
-                    <Col>
-                      <h5 className="mb-3">Enconnect URL</h5>
-                      <a
-                        href={selectedBusiness.enconnectUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
+      {showModal && (
+        <Modal show={showModal} onHide={handleCloseModal} size="xl" centered>
+          <motion.div
+            initial={{ opacity: 0, y: -50 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -50 }}
+            transition={{ type: "spring", damping: 20, stiffness: 300 }}
+            className="modal-content bg-gradient-to-br from-gray-100 to-gray-200"
+          >
+            <Modal.Body className="p-4">
+              <Row className="g-0">
+                {/* Left Section - 60% */}
+                <Col md={8}>
+                  <motion.div
+                    className="pe-4"
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.2 }}
+                  >
+                    {/* Header Section */}
+                    <div className="d-flex mb-4">
+                      <motion.div
+                        className="me-4"
+                        whileHover={{ scale: 1.05, rotate: 5 }}
+                        transition={{ type: "spring", stiffness: 300 }}
                       >
-                        {selectedBusiness.enconnectUrl}
-                      </a>
-                    </Col>
-                  </Row>
-                )}
-                {selectedBusiness.images &&
-                  selectedBusiness.images.length > 0 && (
-                    <Row className="mt-4">
-                      <Col>
-                        <h5 className="mb-3">Images</h5>
-                        <Row>
+                        {selectedBusiness.logo && (
+                          <Image
+                            src={selectedBusiness.logo || "/placeholder.svg"}
+                            alt={`${selectedBusiness.brandName} logo`}
+                            width={140}
+                            height={140}
+                            className="border-4 border-amber-400 rounded-lg shadow-lg"
+                          />
+                        )}
+                      </motion.div>
+                      <div className="flex-grow-1">
+                        <div className="d-flex justify-content-between align-items-start">
+                          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3 }}>
+                            <h2 className="h4 mt-4 pt-2 mb-2 text-emerald-600 fw-bold">{selectedBusiness.name}</h2>
+                            <p className="mb-0 text-gray-600">
+                              <Building2 className="me-2 inline-block text-amber-500" size={16} />
+                              <strong>Brand Name:</strong> {selectedBusiness.brandName || "N/A"}
+                            </p>
+                          </motion.div>
+                          <Button
+                            variant="link"
+                            onClick={handleCloseModal}
+                            className="p-0 text-gray-500 hover:text-gray-700 transition-all"
+                          >
+                            ×
+                          </Button>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Description Section */}
+                    <motion.div
+                      className="mb-4 p-3 bg-white rounded-lg shadow-md"
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.4 }}
+                      whileHover={{ boxShadow: "0 8px 15px rgba(0,0,0,0.1)" }}
+                    >
+                      <h5 className="mb-3 text-emerald-600">Description</h5>
+                      <p className="text-gray-700 mb-0">
+                        {selectedBusiness.description || "No description available."}
+                      </p>
+                    </motion.div>
+
+                    {/* Images Section */}
+                    {selectedBusiness.images && selectedBusiness.images.length > 0 && (
+                      <motion.div
+                        className="mb-4"
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.5 }}
+                      >
+                        <h5 className="mb-3 text-emerald-600">Gallery</h5>
+                        <div
+                          className="d-flex flex-wrap gap-3 p-3 border rounded-lg bg-white overflow-auto"
+                          style={{ maxHeight: "250px" }}
+                        >
                           {selectedBusiness.images.map((image, index) => (
-                            <Col key={index} xs={6} md={4} className="mb-3">
+                            <motion.div
+                              key={index}
+                              className="rounded-lg overflow-hidden shadow-md"
+                              style={{
+                                width: "22%",
+                                aspectRatio: "1 / 1",
+                                minWidth: "80px",
+                              }}
+                              whileHover={{
+                                scale: 1.05,
+                                boxShadow: "0 8px 15px rgba(0,0,0,0.1)",
+                                rotate: 5,
+                              }}
+                              transition={{ type: "spring", stiffness: 300 }}
+                            >
                               <Image
                                 src={image || "/placeholder.svg"}
-                                alt={`${selectedBusiness.name} image ${
-                                  index + 1
-                                }`}
-                                fluid
-                                rounded
-                                style={{
-                                  objectFit: "cover", // Ensures the image covers the area without distortion
-                                  width: "100%", // Makes the image responsive and fills the container width
-                                  height: "200px", // Fixes the height of the image to 200px
-                                }}
+                                alt={`${selectedBusiness.name} image ${index + 1}`}
+                                width={200}
+                                height={200}
+                                className="w-100 h-100 hover-scale transition-all"
+                                style={{ objectFit: "cover" }}
                               />
-                            </Col>
+                            </motion.div>
                           ))}
-                        </Row>
-                      </Col>
-                    </Row>
-                  )}
-              </Modal.Body>
-              <Modal.Footer>
-                <Button variant="secondary" onClick={handleCloseModal}>
+                        </div>
+                      </motion.div>
+                    )}
+                  </motion.div>
+                </Col>
+
+                {/* Right Section - 40% */}
+                <Col md={4}>
+                  <motion.div
+                    className="h-100 border"
+                    initial={{ opacity: 0, x: 20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.3 }}
+                  >
+                    {/* Address Section */}
+                    <motion.div
+                      className="mb-4 p-3 rounded-lg shadow-md bg-gradient-to-r from-amber-100 to-amber-200  border-amber-300"
+                      whileHover={{ boxShadow: "0 8px 15px rgba(0,0,0,0.1)", scale: 1.02 }}
+                    >
+                      <h5 className="mb-3 fw-bold text-amber-700 d-flex align-items-center">
+                        <MapPin className="me-2 text-amber-500" /> Address
+                      </h5>
+                      <p className="mb-0 fs-8 text-gray-700">
+                        <Navigation className="me-2 text-amber-500 inline-block" size={16} />
+                        <strong>{selectedBusiness.address.buildingName},</strong> <br />
+                        {selectedBusiness.address.streetName}, <br />
+                        {selectedBusiness.address.district}, {selectedBusiness.address.state} -
+                        <strong> {selectedBusiness.address.pinCode}</strong>
+                      </p>
+                    </motion.div>
+
+                    {/* Contact Details */}
+                    <motion.div
+                      className="mb-4 p-3 rounded-lg shadow-md bg-gradient-to-r from-emerald-100 to-emerald-200"
+                      whileHover={{ boxShadow: "0 8px 15px rgba(0,0,0,0.1)", scale: 1.02 }}
+                    >
+                      <h5 className="mb-3 text-emerald-700">Contact Details</h5>
+                      <div className="d-flex flex-column gap-2">
+                        <ContactItem
+                          icon={<Phone className="text-blue-500" size={16} />}
+                          label="Primary"
+                          value={`${selectedBusiness.contactDetails.primaryCountryCode} ${selectedBusiness.contactDetails.primaryNumber}`}
+                        />
+                        {selectedBusiness.contactDetails.secondaryNumber && (
+                          <ContactItem
+                            icon={<Phone2 className="text-indigo-500" size={16} />}
+                            label="Secondary"
+                            value={`${selectedBusiness.contactDetails.secondaryCountryCode} ${selectedBusiness.contactDetails.secondaryNumber}`}
+                          />
+                        )}
+                        <ContactItem
+                          icon={<FaWhatsapp className="text-green-500" size={16} />}
+                          label="WhatsApp"
+                          value={`${selectedBusiness.contactDetails.whatsappCountryCode} ${selectedBusiness.contactDetails.whatsAppNumber}`}
+                        />
+                        <ContactItem
+                          icon={<Mail className="text-red-500" size={16} />}
+                          label="Email"
+                          value={selectedBusiness.contactDetails.email}
+                        />
+                        {selectedBusiness.contactDetails.website && (
+                          <ContactItem
+                            icon={<Globe className="text-purple-500" size={16} />}
+                            label="Website"
+                            value={
+                              <a
+                                href={selectedBusiness.contactDetails.website}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="text-decoration-none text-purple-600 hover:text-purple-700 hover:underline"
+                              >
+                                {selectedBusiness.contactDetails.website}
+                              </a>
+                            }
+                          />
+                        )}
+                      </div>
+                    </motion.div>
+
+                    {/* Enconnect URL */}
+                    {selectedBusiness.enconnectUrl && (
+                      <motion.div
+                        className="p-3 rounded-lg shadow-md bg-gradient-to-r from-purple-100 to-purple-200"
+                        whileHover={{ boxShadow: "0px 8px 15px rgba(0,0,0,0.1)", scale: 1.02 }}
+                      >
+                        <h5 className="mb-3 text-purple-700 d-flex align-items-center">
+                          <LinkIcon className="me-2 text-purple-500" /> Enconnect URL
+                        </h5>
+                        <motion.a
+                          href={selectedBusiness.enconnectUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-decoration-none text-break text-purple-600 hover:text-purple-700 hover:underline d-flex align-items-center"
+                          whileHover={{ x: 5 }}
+                        >
+                          {selectedBusiness.enconnectUrl}
+                        </motion.a>
+                      </motion.div>
+                    )}
+                  </motion.div>
+                </Col>
+              </Row>
+            </Modal.Body>
+
+            <div className="d-flex justify-content-center p-3">
+              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                <Button
+                  variant="outline-secondary"
+                  onClick={handleCloseModal}
+                  className="px-4 py-2 rounded-full shadow-sm bg-gradient-to-r from-gray-200 to-gray-300 text-gray-700 hover:from-gray-300 hover:to-gray-400"
+                >
                   Close
                 </Button>
-              </Modal.Footer>
-            </motion.div>
-          </Modal>
-        )}
-      </AnimatePresence>
+              </motion.div>
+            </div>
+          </motion.div>
+        </Modal>
+      )}
+    </AnimatePresence>
+    <style>
+      {`
+      .hover-scale {
+  transition: transform 0.3s ease;
+}
+
+.hover-scale:hover {
+  transform: scale(1.05);
+}
+
+.hover-opacity-100:hover {
+  opacity: 1 !important;
+}
+
+.hover-underline:hover {
+  text-decoration: underline !important;
+}
+
+.transition-all {
+  transition: all 0.3s ease;
+}
+
+`}
+    </style>
     </section>
   );
 };
 
 export default FreeListIndex;
+
+
+const ContactItem = ({ icon, label, value }) => (
+  <motion.p className="mb-1 d-flex align-items-center" whileHover={{ x: 5, color: "#059669" }}>
+    <span className="me-2">{icon}</span>
+    <strong>{label}:</strong> <span className="ms-1 text-gray-700">{value}</span>
+  </motion.p>
+)

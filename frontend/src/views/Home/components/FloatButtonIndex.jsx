@@ -41,111 +41,122 @@ export default function FloatingButtons() {
     images: null, // For multiple file uploads
   });
 
+  const [logoPreview, setLogoPreview] = useState(null);
+  const [imagePreviews, setImagePreviews] = useState([]);
+
   const [errors, setErrors] = useState({});
 
   const validate = () => {
     const newErrors = {};
 
     // Name and Brand Name Validation
-    if (!formData.name.trim()) newErrors.name = "Name is required .";
-    if (!formData.brandName.trim())
-      newErrors.brandName = "Brand Name is required.";
+    if (!formData.name.trim()) newErrors.name = "Name is required.";
+    if (!formData.brandName.trim()) newErrors.brandName = "Brand Name is required.";
 
     // Logo and Images Validation
-    if (!formData.logo) newErrors.logo = "Logo is required.";
     if (!formData.images || formData.images.length === 0)
-      newErrors.images = "At least one image is required.";
+        newErrors.images = "At least one image is required.";
 
     // Address Validation
-    const addressFields = [
-      "buildingName",
-      "streetName",
-      "landMark",
-      "district",
-      "state",
-      "pinCode",
-    ];
+    const addressFields = ["buildingName", "streetName", "landMark", "district", "state", "pinCode"];
     addressFields.forEach((field) => {
-      if (!formData.address[field].trim()) {
-        newErrors[`address.${field}`] = `${field} is required.`;
-      }
+        if (!formData.address[field].trim()) {
+            newErrors[`address.${field}`] = `${field} is required.`;
+        }
     });
 
     // Contact Details Validation
-    if (
-      !formData.contactDetails.primaryNumber.trim() ||
-      isNaN(formData.contactDetails.primaryNumber)
-    ) {
-      newErrors["contactDetails.primaryNumber"] =
-        "Primary number must be a valid number.";
+    if (!formData.contactDetails.primaryNumber.trim() ||
+        isNaN(formData.contactDetails.primaryNumber) ||
+        formData.contactDetails.primaryNumber.length !== 10) {
+        newErrors["contactDetails.primaryNumber"] = "Primary number must be a valid 10-digit number.";
     }
 
-    if (
-      !formData.contactDetails.whatsAppNumber.trim() ||
-      isNaN(formData.contactDetails.whatsAppNumber)
-    ) {
-      newErrors["contactDetails.whatsAppNumber"] =
-        "WhatsApp number must be a valid number.";
+    if (!formData.contactDetails.whatsAppNumber.trim() ||
+        isNaN(formData.contactDetails.whatsAppNumber) ||
+        formData.contactDetails.whatsAppNumber.length !== 10) {
+        newErrors["contactDetails.whatsAppNumber"] = "WhatsApp number must be a valid 10-digit number.";
     }
 
-    if (
-      !formData.contactDetails.email.trim() ||
-      !/\S+@\S+\.\S+/.test(formData.contactDetails.email)
-    ) {
-      newErrors["contactDetails.email"] = "Valid email is required.";
+    if (!formData.contactDetails.email.trim() || !/\S+@\S+\.\S+/.test(formData.contactDetails.email)) {
+        newErrors["contactDetails.email"] = "Valid email is required.";
     }
-    if (
-      !formData.contactDetails.website.trim() ||
-      !/^https?:\/\/[^\s$.?#].[^\s]*$/.test(formData.contactDetails.website)
-    )
-      newErrors["contactDetails.website"] = "Valid website URL is required.";
 
-    // Description and Enconnect URL Validation
-    if (!formData.description.trim())
-      newErrors.description = "Description is required.";
-    if (!formData.enconnectUrl.trim())
-      newErrors.enconnectUrl = "Enconnect Profile URL is required.";
+    if (!formData.contactDetails.website.trim() ||
+        !/^https?:\/\/[^\s$.?#].[^\s]*$/.test(formData.contactDetails.website)) {
+        newErrors["contactDetails.website"] = "Valid website URL is required.";
+    }
+
+    if (!formData.description.trim()) newErrors.description = "Description is required.";
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
-  };
-  const handleChange = async (e) => {
-    const { name, value, files } = e.target;
+};
 
-    if (files) {
-      if (name === "logo") {
-        const logoFile = files[0];
-        const logoLink = await preRequestFun(logoFile, "freelist");
-        setFormData((prev) => ({ ...prev, logo: logoLink.accessLink }));
-      }
+const handleChange = async (e) => {
+  const { name, value, files } = e.target;
 
-      if (name === "images") {
-        const imageFiles = Array.from(files);
-        const imageLinks = await Promise.all(
-          imageFiles.map((file) => preRequestFun(file, "freelist"))
-        );
-        setFormData((prev) => ({
-          ...prev,
-          images: [
-            ...(prev.images || []),
-            ...imageLinks.map((link) => link.accessLink),
-          ],
-        }));
-      }
-
-      return;
+  if (files) {
+    if (name === "logo") {
+      const logoFile = files[0];
+      const logoLink = await preRequestFun(logoFile, "freelist");
+      setFormData((prev) => ({ ...prev, logo: logoLink.accessLink }));
+      setLogoPreview(URL.createObjectURL(logoFile));
     }
 
-    if (name.includes(".")) {
-      const [key, subKey] = name.split(".");
+    if (name === "images") {
+      const imageFiles = Array.from(files);
+      const imageLinks = await Promise.all(
+        imageFiles.map((file) => preRequestFun(file, "freelist"))
+      );
       setFormData((prev) => ({
         ...prev,
-        [key]: { ...prev[key], [subKey]: value },
+        images: imageLinks.map((link) => link.accessLink),
       }));
-    } else {
-      setFormData((prev) => ({ ...prev, [name]: value }));
+      setImagePreviews(imageFiles.map((file) => URL.createObjectURL(file)));
     }
-  };
+    return;
+  }
+
+  let updatedErrors = { ...errors };
+
+  // Handle nested fields (address, contactDetails, etc.)
+  if (name.includes(".")) {
+    const [key, subKey] = name.split(".");
+    setFormData((prev) => ({
+      ...prev,
+      [key]: { ...prev[key], [subKey]: value },
+    }));
+
+    // Validate and remove error if corrected
+    if (value.trim()) {
+      delete updatedErrors[name];
+    } else {
+      updatedErrors[name] = `${subKey} is required.`;
+    }
+  } else {
+    setFormData((prev) => ({ ...prev, [name]: value }));
+
+    // Validate and remove error if corrected
+    if (value.trim()) {
+      delete updatedErrors[name];
+    } else {
+      updatedErrors[name] = `${name} is required.`;
+    }
+  }
+
+  // Specific validation for primary number and WhatsApp number
+  if (name === "contactDetails.primaryNumber" || name === "contactDetails.whatsAppNumber") {
+    if (value.trim() && (!isNaN(value) && value.length === 10)) {
+      delete updatedErrors[name];
+    } else {
+      updatedErrors[name] = `${name === "contactDetails.primaryNumber" ? "Primary number" : "WhatsApp number"} must be a valid 10-digit number.`;
+    }
+  }
+
+  setErrors(updatedErrors);
+};
+
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -278,7 +289,7 @@ export default function FloatingButtons() {
                   </div>
 
                   {/* Logo Upload */}
-                  <div className="col-12">
+                  {/* <div className="col-12">
                     <label className="form-label">Logo</label>
                     <input
                       type="file"
@@ -291,6 +302,25 @@ export default function FloatingButtons() {
                     />
                     {errors.logo && (
                       <div className="invalid-feedback">{errors.logo}</div>
+                    )}
+                  </div> */}
+
+                  <div className="col-12">
+                    <label className="form-label">Logo</label>
+                    <input
+                      type="file"
+                      name="logo"
+                      className="form-control"
+                      accept="image/*"
+                      onChange={handleChange}
+                    />
+                    {logoPreview && (
+                      <img
+                        src={logoPreview}
+                        alt="Logo Preview"
+                        className="img-thumbnail mt-2"
+                        style={{ width: "100px" }}
+                      />
                     )}
                   </div>
 
@@ -380,7 +410,7 @@ export default function FloatingButtons() {
                   </div>
 
                   {/* Images Upload */}
-                  <div className="col-12">
+                  {/* <div className="col-12">
                     <label className="form-label">Images (5 max)</label>
                     <input
                       type="file"
@@ -395,6 +425,29 @@ export default function FloatingButtons() {
                     {errors.images && (
                       <div className="invalid-feedback">{errors.images}</div>
                     )}
+                  </div> */}
+
+                  <div className="col-12">
+                    <label className="form-label">Images (5 max)</label>
+                    <input
+                      type="file"
+                      name="images"
+                      className="form-control"
+                      accept="image/*"
+                      multiple
+                      onChange={handleChange}
+                    />
+                    <div className="d-flex gap-2 flex-wrap mt-2">
+                      {imagePreviews.map((src, index) => (
+                        <img
+                          key={index}
+                          src={src}
+                          alt={`Preview ${index + 1}`}
+                          className="img-thumbnail"
+                          style={{ width: "100px" }}
+                        />
+                      ))}
+                    </div>
                   </div>
 
                   {/* Enconnect URL */}
@@ -418,7 +471,7 @@ export default function FloatingButtons() {
 
                   {/* Submit Button */}
                   <div className="col-12">
-                    <button type="submit" className="btn btn-submit">
+                    <button type="submit" className="btn btn-submit w-100">
                       Submit
                     </button>
                   </div>
