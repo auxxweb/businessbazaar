@@ -4,6 +4,7 @@ import { X } from "lucide-react";
 import { useNavigate } from "react-router";
 import {
   CreateFreeListDetails,
+  fetchCategories,
   getAllFreeList,
 } from "../../../Functions/functions";
 import { preRequestFun } from "../../CreateBusiness/service/s3url";
@@ -12,11 +13,15 @@ import { toast } from "react-toastify"; // Import toast from a library like reac
 export default function FloatingButtons() {
   const [showAdvertiseModal, setShowAdvertiseModal] = useState(false);
   const [showListingModal, setShowListingModal] = useState(false);
+  const [categoryData, setCategoryData] = useState([]);
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
     name: "",
     brandName: "",
+    password: "",
+    confirmPassword: "",
+    category: "",
     logo: null, // For file uploads
     address: {
       buildingName: "",
@@ -51,112 +56,163 @@ export default function FloatingButtons() {
 
     // Name and Brand Name Validation
     if (!formData.name.trim()) newErrors.name = "Name is required.";
-    if (!formData.brandName.trim()) newErrors.brandName = "Brand Name is required.";
+    if (!formData.brandName.trim())
+      newErrors.brandName = "Brand Name is required.";
 
     // Logo and Images Validation
     if (!formData.images || formData.images.length === 0)
-        newErrors.images = "At least one image is required.";
+      newErrors.images = "At least one image is required.";
 
     // Address Validation
-    const addressFields = ["buildingName", "streetName", "landMark", "district", "state", "pinCode"];
+    const addressFields = [
+      "buildingName",
+      "streetName",
+      "landMark",
+      "district",
+      "state",
+      "pinCode",
+    ];
     addressFields.forEach((field) => {
-        if (!formData.address[field].trim()) {
-            newErrors[`address.${field}`] = `${field} is required.`;
-        }
+      if (!formData.address[field].trim()) {
+        newErrors[`address.${field}`] = `${field} is required.`;
+      }
     });
 
+    if (!formData.password.trim()) {
+      newErrors.password = "Password is required.";
+    } else if (formData.password.length < 6) {
+      newErrors.password = "Password must be at least 6 characters long.";
+    }
+
+    if (!formData.confirmPassword.trim()) {
+      newErrors.confirmPassword = "Confirm Password is required.";
+    } else if (formData.password !== formData.confirmPassword) {
+      newErrors.confirmPassword = "Passwords do not match.";
+    }
+
+    // Handle nested fields (address, contactDetails, etc.)
+    if (name === "confirmPassword") {
+      setFormData((prev) => ({ ...prev, confirmPassword: value }));
+
+      // Check if passwords match
+      if (value !== formData.password) {
+        updatedErrors.confirmPassword = "Passwords do not match.";
+      } else {
+        delete updatedErrors.confirmPassword;
+      }
+    }
+
+    if (!formData.category) newErrors.category = "Category is required.";
     // Contact Details Validation
-    if (!formData.contactDetails.primaryNumber.trim() ||
-        isNaN(formData.contactDetails.primaryNumber) ||
-        formData.contactDetails.primaryNumber.length !== 10) {
-        newErrors["contactDetails.primaryNumber"] = "Primary number must be a valid 10-digit number.";
+    if (
+      !formData.contactDetails.primaryNumber.trim() ||
+      isNaN(formData.contactDetails.primaryNumber) ||
+      formData.contactDetails.primaryNumber.length !== 10
+    ) {
+      newErrors["contactDetails.primaryNumber"] =
+        "Primary number must be a valid 10-digit number.";
     }
 
-    if (!formData.contactDetails.whatsAppNumber.trim() ||
-        isNaN(formData.contactDetails.whatsAppNumber) ||
-        formData.contactDetails.whatsAppNumber.length !== 10) {
-        newErrors["contactDetails.whatsAppNumber"] = "WhatsApp number must be a valid 10-digit number.";
+    if (
+      !formData.contactDetails.whatsAppNumber.trim() ||
+      isNaN(formData.contactDetails.whatsAppNumber) ||
+      formData.contactDetails.whatsAppNumber.length !== 10
+    ) {
+      newErrors["contactDetails.whatsAppNumber"] =
+        "WhatsApp number must be a valid 10-digit number.";
     }
 
-    if (!formData.contactDetails.email.trim() || !/\S+@\S+\.\S+/.test(formData.contactDetails.email)) {
-        newErrors["contactDetails.email"] = "Valid email is required.";
+    if (
+      !formData.contactDetails.email.trim() ||
+      !/\S+@\S+\.\S+/.test(formData.contactDetails.email)
+    ) {
+      newErrors["contactDetails.email"] = "Valid email is required.";
     }
 
-    if (!formData.contactDetails.website.trim() ||
-        !/^https?:\/\/[^\s$.?#].[^\s]*$/.test(formData.contactDetails.website)) {
-        newErrors["contactDetails.website"] = "Valid website URL is required.";
+    if (
+      !formData.contactDetails.website.trim() ||
+      !/^https?:\/\/[^\s$.?#].[^\s]*$/.test(formData.contactDetails.website)
+    ) {
+      newErrors["contactDetails.website"] = "Valid website URL is required.";
     }
 
-    if (!formData.description.trim()) newErrors.description = "Description is required.";
+    if (!formData.description.trim())
+      newErrors.description = "Description is required.";
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
-};
+  };
 
-const handleChange = async (e) => {
-  const { name, value, files } = e.target;
+  const handleChange = async (e) => {
+    const { name, value, files } = e.target;
 
-  if (files) {
-    if (name === "logo") {
-      const logoFile = files[0];
-      const logoLink = await preRequestFun(logoFile, "freelist");
-      setFormData((prev) => ({ ...prev, logo: logoLink.accessLink }));
-      setLogoPreview(URL.createObjectURL(logoFile));
+    if (files) {
+      if (name === "logo") {
+        const logoFile = files[0];
+        const logoLink = await preRequestFun(logoFile, "freelist");
+        setFormData((prev) => ({ ...prev, logo: logoLink.accessLink }));
+        setLogoPreview(URL.createObjectURL(logoFile));
+      }
+
+      if (name === "images") {
+        const imageFiles = Array.from(files);
+        const imageLinks = await Promise.all(
+          imageFiles.map((file) => preRequestFun(file, "freelist"))
+        );
+        setFormData((prev) => ({
+          ...prev,
+          images: imageLinks.map((link) => link.accessLink),
+        }));
+        setImagePreviews(imageFiles.map((file) => URL.createObjectURL(file)));
+      }
+      return;
     }
 
-    if (name === "images") {
-      const imageFiles = Array.from(files);
-      const imageLinks = await Promise.all(
-        imageFiles.map((file) => preRequestFun(file, "freelist"))
-      );
+    let updatedErrors = { ...errors };
+
+    // Handle nested fields (address, contactDetails, etc.)
+    if (name.includes(".")) {
+      const [key, subKey] = name.split(".");
       setFormData((prev) => ({
         ...prev,
-        images: imageLinks.map((link) => link.accessLink),
+        [key]: { ...prev[key], [subKey]: value },
       }));
-      setImagePreviews(imageFiles.map((file) => URL.createObjectURL(file)));
-    }
-    return;
-  }
 
-  let updatedErrors = { ...errors };
-
-  // Handle nested fields (address, contactDetails, etc.)
-  if (name.includes(".")) {
-    const [key, subKey] = name.split(".");
-    setFormData((prev) => ({
-      ...prev,
-      [key]: { ...prev[key], [subKey]: value },
-    }));
-
-    // Validate and remove error if corrected
-    if (value.trim()) {
-      delete updatedErrors[name];
+      // Validate and remove error if corrected
+      if (value.trim()) {
+        delete updatedErrors[name];
+      } else {
+        updatedErrors[name] = `${subKey} is required.`;
+      }
     } else {
-      updatedErrors[name] = `${subKey} is required.`;
+      setFormData((prev) => ({ ...prev, [name]: value }));
+
+      // Validate and remove error if corrected
+      if (value.trim()) {
+        delete updatedErrors[name];
+      } else {
+        updatedErrors[name] = `${name} is required.`;
+      }
     }
-  } else {
-    setFormData((prev) => ({ ...prev, [name]: value }));
 
-    // Validate and remove error if corrected
-    if (value.trim()) {
-      delete updatedErrors[name];
-    } else {
-      updatedErrors[name] = `${name} is required.`;
+    // Specific validation for primary number and WhatsApp number
+    if (
+      name === "contactDetails.primaryNumber" ||
+      name === "contactDetails.whatsAppNumber"
+    ) {
+      if (value.trim() && !isNaN(value) && value.length === 10) {
+        delete updatedErrors[name];
+      } else {
+        updatedErrors[name] = `${
+          name === "contactDetails.primaryNumber"
+            ? "Primary number"
+            : "WhatsApp number"
+        } must be a valid 10-digit number.`;
+      }
     }
-  }
 
-  // Specific validation for primary number and WhatsApp number
-  if (name === "contactDetails.primaryNumber" || name === "contactDetails.whatsAppNumber") {
-    if (value.trim() && (!isNaN(value) && value.length === 10)) {
-      delete updatedErrors[name];
-    } else {
-      updatedErrors[name] = `${name === "contactDetails.primaryNumber" ? "Primary number" : "WhatsApp number"} must be a valid 10-digit number.`;
-    }
-  }
-
-  setErrors(updatedErrors);
-};
-
+    setErrors(updatedErrors);
+  };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -205,7 +261,20 @@ const handleChange = async (e) => {
       toast.error("An unexpected error occurred.");
     }
   };
-  // Function to handle button click (CreateFreeListDetails)
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const categoryDetails = await fetchCategories();
+        setCategoryData(categoryDetails?.data?.data);
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, []);
 
   return (
     <>
@@ -285,6 +354,67 @@ const handleChange = async (e) => {
                     />
                     {errors.brandName && (
                       <div className="invalid-feedback">{errors.brandName}</div>
+                    )}
+                  </div>
+
+                  <div className="col-md-6">
+                    <input
+                      type="password"
+                      name="password"
+                      className={`form-control ${
+                        errors.password ? "is-invalid" : ""
+                      }`}
+                      placeholder="Password"
+                      value={formData.password}
+                      onChange={handleChange}
+                    />
+                    {errors.password && (
+                      <div className="invalid-feedback">{errors.password}</div>
+                    )}
+                  </div>
+                  <div className="col-md-6">
+                    <input
+                      type="password"
+                      name="confirmPassword"
+                      className={`form-control ${
+                        errors.confirmPassword ? "is-invalid" : ""
+                      }`}
+                      placeholder="Confirm Password"
+                      value={formData.confirmPassword}
+                      onChange={handleChange}
+                    />
+                    {errors.confirmPassword && (
+                      <div className="invalid-feedback">
+                        {errors.confirmPassword}
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="col-md-12">
+                    <select
+                      name="category"
+                      className={`form-control ${
+                        errors.category ? "is-invalid" : ""
+                      }`}
+                      value={formData.category} // This should store _id
+                      onChange={(e) => {
+                        setFormData((prev) => ({
+                          ...prev,
+                          category: e.target.value, // Store the selected category's _id
+                        }));
+                      }}
+                    >
+                      <option value="">Select Category</option>
+                      {categoryData.map((category, index) => (
+                        <option key={index} value={category._id}>
+                          {" "}
+                          {/* Pass _id instead of name */}
+                          {category.name}
+                        </option>
+                      ))}
+                    </select>
+                    {errors.category && (
+                      <div className="invalid-feedback">{errors.category}</div>
                     )}
                   </div>
 
