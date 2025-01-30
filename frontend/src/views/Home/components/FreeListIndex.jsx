@@ -154,7 +154,6 @@ const FreeListIndex = ({ freelist, renderStars, handleEnquiryClick }) => {
     }
   };
 
-
   const handleUpdateSubmit = async (e) => {
     e.preventDefault();
 
@@ -171,11 +170,15 @@ const FreeListIndex = ({ freelist, renderStars, handleEnquiryClick }) => {
     <section className="home-spot h-auto mb-2">
       <div className="container py-5" id="freelist">
         <div className="text-center mb-5">
-          <h1 className="fw-bold mb-3">Discover the Top Profiles</h1>
+          <h1 className="fw-bold mb-3">
+            Find & Connect with Local Businesses – Absolutely Free!
+          </h1>
           <p className="text-muted mx-auto" style={{ maxWidth: "800px" }}>
-            Explore the most popular profile listings in your area through our
-            local profile directory listing, highly rated by locals and visitors
-            alike.
+            Find various businesses near you from the free profile listing
+            directory. Top-rated services can be discovered through genuine
+            customer reviews and recommendations from the community. No fees, no
+            fuss; simply unhindered access to the best local
+            businesses around you!
           </p>
         </div>
 
@@ -361,9 +364,33 @@ const FreeListIndex = ({ freelist, renderStars, handleEnquiryClick }) => {
                             {/* Wrap the buttons in a div to align them to the top-right */}
                             <div className="position-absolute top-0 end-0 d-flex">
                               <Button
+                               style={{
+                                fontSize: "32px",
+                                fontWeight: "bold",
+                                color: "#6b7280",
+                                transition: "color 0.3s ease-in-out",
+                              }}
+                                variant="link"
+                                onClick={handleEditOpenModal}
+                                className="p-0 me-3 text-blue-500 hover:text-blue-700 transition-all"
+                              >
+                                <FaEdit size={24} />
+                              </Button>
+                              <Button
                                 variant="link"
                                 onClick={handleCloseModal}
-                                className="p-0 text-gray-500 hover:text-gray-700 transition-all"
+                                style={{
+                                  fontSize: "32px",
+                                  fontWeight: "bold",
+                                  color: "#6b7280",
+                                  transition: "color 0.3s ease-in-out",
+                                }}
+                                onMouseEnter={(e) =>
+                                  (e.target.style.color = "#374151")
+                                }
+                                onMouseLeave={(e) =>
+                                  (e.target.style.color = "#6b7280")
+                                }
                               >
                                 ×
                               </Button>
@@ -570,13 +597,6 @@ const FreeListIndex = ({ freelist, renderStars, handleEnquiryClick }) => {
                   whileTap={{ scale: 0.95 }}
                 >
                   <Button
-                    variant="link"
-                    onClick={handleEditOpenModal}
-                    className="p-0 me-3 text-blue-500 hover:text-blue-700 transition-all"
-                  >
-                    <FaEdit size={24} />
-                  </Button>
-                  <Button
                     variant="outline-secondary"
                     onClick={handleCloseModal}
                     className="px-4 py-2 rounded-full shadow-sm bg-gradient-to-r from-gray-200 to-gray-300 text-gray-700 hover:from-gray-300 hover:to-gray-400"
@@ -637,256 +657,262 @@ const FreeListIndex = ({ freelist, renderStars, handleEnquiryClick }) => {
       </Modal>
 
       <Modal show={showListingModal} onHide={() => setShowListingModal(false)}>
-      <div className="modal-dialog modal-dialog-centered modal-xl">
-        <div className="modal-content">
-          <div className="modal-header border-0">
-            <h5 className="modal-title fw-bold">Edit Free Listing</h5>
-            <button
-              type="button"
-              className="btn-close"
-              onClick={() => setShowListingModal(false)}
-            ></button>
-          </div>
-          <div className="modal-body">
-            <form onSubmit={handleUpdateSubmit}>
-              <div className="row g-3">
-                <div className="col-md-6">
-                  <label className="form-label">Your Name</label>
-                  <input
-                    type="text"
-                    name="name"
-                    className="form-control"
-                    placeholder="Your Name"
-                    value={updateFormData.name || ""}
-                    onChange={handleChange}
-                  />
-                </div>
-                <div className="col-md-6">
-                  <label className="form-label">Brand Name</label>
-                  <input
-                    type="text"
-                    name="brandName"
-                    className="form-control"
-                    placeholder="Brand Name"
-                    value={updateFormData.brandName || ""}
-                    onChange={handleChange}
-                  />
-                </div>
+        <div className="modal-dialog modal-dialog-centered modal-xl">
+          <div className="modal-content">
+            <div className="modal-header border-0">
+              <h5 className="modal-title fw-bold">Edit Free Listing</h5>
+              <button
+                type="button"
+                className="btn-close"
+                onClick={() => setShowListingModal(false)}
+              ></button>
+            </div>
+            <div className="modal-body">
+              <form onSubmit={handleUpdateSubmit}>
+                <div className="row g-3">
+                  <div className="col-md-6">
+                    <label className="form-label">Your Name</label>
+                    <input
+                      type="text"
+                      name="name"
+                      className="form-control"
+                      placeholder="Your Name"
+                      value={updateFormData.name || ""}
+                      onChange={handleChange}
+                    />
+                  </div>
+                  <div className="col-md-6">
+                    <label className="form-label">Brand Name</label>
+                    <input
+                      type="text"
+                      name="brandName"
+                      className="form-control"
+                      placeholder="Brand Name"
+                      value={updateFormData.brandName || ""}
+                      onChange={handleChange}
+                    />
+                  </div>
 
-                <div className="col-md-6">
-                  <label className="form-label">Email</label>
-                  <input
-                    type="email"
-                    name="contactDetails.email"
-                    className="form-control"
-                    placeholder="Email"
-                    value={updateFormData.contactDetails?.email || ""}
-                    onChange={handleChange}
-                  />
-                </div>
+                  <div className="col-md-6">
+                    <label className="form-label">Email</label>
+                    <input
+                      type="email"
+                      name="contactDetails.email"
+                      className="form-control"
+                      placeholder="Email"
+                      value={updateFormData.contactDetails?.email || ""}
+                      onChange={handleChange}
+                    />
+                  </div>
 
-                <div className="col-md-6">
-                  <label className="form-label">Primary Number</label>
-                  <input
-                    type="tel"
-                    name="contactDetails.primaryNumber"
-                    className="form-control"
-                    placeholder="Primary Number"
-                    value={updateFormData.contactDetails?.primaryNumber || ""}
-                    onChange={handleChange}
-                  />
-                </div>
+                  <div className="col-md-6">
+                    <label className="form-label">Primary Number</label>
+                    <input
+                      type="tel"
+                      name="contactDetails.primaryNumber"
+                      className="form-control"
+                      placeholder="Primary Number"
+                      value={updateFormData.contactDetails?.primaryNumber || ""}
+                      onChange={handleChange}
+                    />
+                  </div>
 
-                <div className="col-md-6">
-                  <label className="form-label">Secondary Number</label>
-                  <input
-                    type="tel"
-                    name="contactDetails.secondaryNumber"
-                    className="form-control"
-                    placeholder="Secondary Number"
-                    value={updateFormData.contactDetails?.secondaryNumber || ""}
-                    onChange={handleChange}
-                  />
-                </div>
+                  <div className="col-md-6">
+                    <label className="form-label">Secondary Number</label>
+                    <input
+                      type="tel"
+                      name="contactDetails.secondaryNumber"
+                      className="form-control"
+                      placeholder="Secondary Number"
+                      value={
+                        updateFormData.contactDetails?.secondaryNumber || ""
+                      }
+                      onChange={handleChange}
+                    />
+                  </div>
 
-                <div className="col-md-6">
-                  <label className="form-label">WhatsApp Number</label>
-                  <input
-                    type="tel"
-                    name="contactDetails.whatsAppNumber"
-                    className="form-control"
-                    placeholder="WhatsApp Number"
-                    value={updateFormData.contactDetails?.whatsAppNumber || ""}
-                    onChange={handleChange}
-                  />
-                </div>
+                  <div className="col-md-6">
+                    <label className="form-label">WhatsApp Number</label>
+                    <input
+                      type="tel"
+                      name="contactDetails.whatsAppNumber"
+                      className="form-control"
+                      placeholder="WhatsApp Number"
+                      value={
+                        updateFormData.contactDetails?.whatsAppNumber || ""
+                      }
+                      onChange={handleChange}
+                    />
+                  </div>
 
-                <div className="col-md-6">
-                  <label className="form-label">Website</label>
-                  <input
-                    type="url"
-                    name="contactDetails.website"
-                    className="form-control"
-                    placeholder="Website"
-                    value={updateFormData.contactDetails?.website || ""}
-                    onChange={handleChange}
-                  />
-                </div>
+                  <div className="col-md-6">
+                    <label className="form-label">Website</label>
+                    <input
+                      type="url"
+                      name="contactDetails.website"
+                      className="form-control"
+                      placeholder="Website"
+                      value={updateFormData.contactDetails?.website || ""}
+                      onChange={handleChange}
+                    />
+                  </div>
 
-                <div className="col-md-6">
-                  <label className="form-label">Category</label>
-                  <input
-                    type="text"
-                    name="category"
-                    className="form-control"
-                    placeholder="Category"
-                    value={updateFormData.category || ""}
-                    onChange={handleChange}
-                  />
-                </div>
+                  <div className="col-md-6">
+                    <label className="form-label">Category</label>
+                    <input
+                      type="text"
+                      name="category"
+                      className="form-control"
+                      placeholder="Category"
+                      value={updateFormData.category || ""}
+                      onChange={handleChange}
+                    />
+                  </div>
 
-                <div className="col-md-6">
-                  <label className="form-label">Building Name</label>
-                  <input
-                    type="text"
-                    name="address.buildingName"
-                    className="form-control"
-                    placeholder="Building Name"
-                    value={updateFormData.address?.buildingName || ""}
-                    onChange={handleChange}
-                  />
-                </div>
+                  <div className="col-md-6">
+                    <label className="form-label">Building Name</label>
+                    <input
+                      type="text"
+                      name="address.buildingName"
+                      className="form-control"
+                      placeholder="Building Name"
+                      value={updateFormData.address?.buildingName || ""}
+                      onChange={handleChange}
+                    />
+                  </div>
 
-                <div className="col-md-6">
-                  <label className="form-label">Street Name</label>
-                  <input
-                    type="text"
-                    name="address.streetName"
-                    className="form-control"
-                    placeholder="Street Name"
-                    value={updateFormData.address?.streetName || ""}
-                    onChange={handleChange}
-                  />
-                </div>
+                  <div className="col-md-6">
+                    <label className="form-label">Street Name</label>
+                    <input
+                      type="text"
+                      name="address.streetName"
+                      className="form-control"
+                      placeholder="Street Name"
+                      value={updateFormData.address?.streetName || ""}
+                      onChange={handleChange}
+                    />
+                  </div>
 
-                <div className="col-md-6">
-                  <label className="form-label">Landmark</label>
-                  <input
-                    type="text"
-                    name="address.landMark"
-                    className="form-control"
-                    placeholder="Landmark"
-                    value={updateFormData.address?.landMark || ""}
-                    onChange={handleChange}
-                  />
-                </div>
+                  <div className="col-md-6">
+                    <label className="form-label">Landmark</label>
+                    <input
+                      type="text"
+                      name="address.landMark"
+                      className="form-control"
+                      placeholder="Landmark"
+                      value={updateFormData.address?.landMark || ""}
+                      onChange={handleChange}
+                    />
+                  </div>
 
-                <div className="col-md-6">
-                  <label className="form-label">District</label>
-                  <input
-                    type="text"
-                    name="address.district"
-                    className="form-control"
-                    placeholder="District"
-                    value={updateFormData.address?.district || ""}
-                    onChange={handleChange}
-                  />
-                </div>
+                  <div className="col-md-6">
+                    <label className="form-label">District</label>
+                    <input
+                      type="text"
+                      name="address.district"
+                      className="form-control"
+                      placeholder="District"
+                      value={updateFormData.address?.district || ""}
+                      onChange={handleChange}
+                    />
+                  </div>
 
-                <div className="col-md-6">
-                  <label className="form-label">State</label>
-                  <input
-                    type="text"
-                    name="address.state"
-                    className="form-control"
-                    placeholder="State"
-                    value={updateFormData.address?.state || ""}
-                    onChange={handleChange}
-                  />
-                </div>
+                  <div className="col-md-6">
+                    <label className="form-label">State</label>
+                    <input
+                      type="text"
+                      name="address.state"
+                      className="form-control"
+                      placeholder="State"
+                      value={updateFormData.address?.state || ""}
+                      onChange={handleChange}
+                    />
+                  </div>
 
-                <div className="col-md-6">
-                  <label className="form-label">Pin Code</label>
-                  <input
-                    type="text"
-                    name="address.pinCode"
-                    className="form-control"
-                    placeholder="Pin Code"
-                    value={updateFormData.address?.pinCode || ""}
-                    onChange={handleChange}
-                  />
-                </div>
+                  <div className="col-md-6">
+                    <label className="form-label">Pin Code</label>
+                    <input
+                      type="text"
+                      name="address.pinCode"
+                      className="form-control"
+                      placeholder="Pin Code"
+                      value={updateFormData.address?.pinCode || ""}
+                      onChange={handleChange}
+                    />
+                  </div>
 
-                <div className="col-12">
-                  <label className="form-label">Business Description</label>
-                  <textarea
-                    name="description"
-                    className="form-control"
-                    rows={4}
-                    placeholder="Business Description"
-                    value={updateFormData.description || ""}
-                    onChange={handleChange}
-                  ></textarea>
-                </div>
+                  <div className="col-12">
+                    <label className="form-label">Business Description</label>
+                    <textarea
+                      name="description"
+                      className="form-control"
+                      rows={4}
+                      placeholder="Business Description"
+                      value={updateFormData.description || ""}
+                      onChange={handleChange}
+                    ></textarea>
+                  </div>
 
-                <div className="col-12">
-                  <label className="form-label">Logo</label>
-                  <input
-                    type="file"
-                    name="logo"
-                    className="form-control"
-                    accept="image/*"
-                    onChange={handleChange}
-                  />
-                </div>
+                  <div className="col-12">
+                    <label className="form-label">Logo</label>
+                    <input
+                      type="file"
+                      name="logo"
+                      className="form-control"
+                      accept="image/*"
+                      onChange={handleChange}
+                    />
+                  </div>
 
-                <div className="col-12">
-                  <label className="form-label">Images (5 max)</label>
-                  <input
-                    type="file"
-                    name="images"
-                    className="form-control"
-                    accept="image/*"
-                    multiple
-                    onChange={handleChange}
-                  />
-                  <div className="image-previews">
-                    {imagePreviews.map((preview, index) => (
-                      <img
-                        key={index}
-                        src={preview}
-                        alt={`preview-${index}`}
-                        className="img-thumbnail"
-                        style={{ width: 100, height: 100, margin: 5 }}
-                      />
-                    ))}
+                  <div className="col-12">
+                    <label className="form-label">Images (5 max)</label>
+                    <input
+                      type="file"
+                      name="images"
+                      className="form-control"
+                      accept="image/*"
+                      multiple
+                      onChange={handleChange}
+                    />
+                    <div className="image-previews">
+                      {imagePreviews.map((preview, index) => (
+                        <img
+                          key={index}
+                          src={preview}
+                          alt={`preview-${index}`}
+                          className="img-thumbnail"
+                          style={{ width: 100, height: 100, margin: 5 }}
+                        />
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="col-12">
+                    <label className="form-label">Enconnect URL</label>
+                    <input
+                      type="url"
+                      name="enconnectUrl"
+                      className="form-control"
+                      placeholder="Enconnect URL"
+                      value={updateFormData.enconnectUrl || ""}
+                      onChange={handleChange}
+                    />
+                  </div>
+
+                  <div className="col-12">
+                    <button
+                      type="submit"
+                      className="btn btn-primary w-100 mt-3"
+                    >
+                      Update Listing
+                    </button>
                   </div>
                 </div>
-
-                <div className="col-12">
-                  <label className="form-label">Enconnect URL</label>
-                  <input
-                    type="url"
-                    name="enconnectUrl"
-                    className="form-control"
-                    placeholder="Enconnect URL"
-                    value={updateFormData.enconnectUrl || ""}
-                    onChange={handleChange}
-                  />
-                </div>
-
-                <div className="col-12">
-                  <button type="submit" className="btn btn-primary w-100 mt-3">
-                    Update Listing
-                  </button>
-                </div>
-              </div>
-            </form>
+              </form>
+            </div>
           </div>
         </div>
-      </div>
-    </Modal>
-
+      </Modal>
 
       <style>
         {`

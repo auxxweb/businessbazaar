@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { X } from "lucide-react";
+import { X, Eye, EyeOff } from "lucide-react";
 import { useNavigate } from "react-router";
 import {
   CreateFreeListDetails,
@@ -47,6 +47,7 @@ export default function FloatingButtons() {
 
   const [logoPreview, setLogoPreview] = useState(null);
   const [imagePreviews, setImagePreviews] = useState([]);
+  const [showPassword, setShowPassword] = useState(false);
 
   const [errors, setErrors] = useState({});
 
@@ -255,6 +256,10 @@ export default function FloatingButtons() {
     }
   };
 
+  const handleRemoveImage = (index) => {
+    setImagePreviews((prev) => prev.filter((_, i) => i !== index));
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -279,7 +284,7 @@ export default function FloatingButtons() {
           whileHover={{ x: -5 }}
           whileTap={{ scale: 0.95 }}
         >
-          My Profile
+          Create Profile
         </motion.button>
         <br /> {/* Add this line */}
         <motion.button
@@ -370,17 +375,30 @@ export default function FloatingButtons() {
                   </div>
 
                   {/* Password */}
-                  <div className="col-md-6">
-                    <input
-                      type="password"
-                      name="password"
-                      className={`form-control ${
-                        errors.password ? "is-invalid" : ""
-                      }`}
-                      placeholder="Password"
-                      value={formData.password}
-                      onChange={handleChange}
-                    />
+                  <div className="col-md-6 position-relative">
+                    <div className="input-group">
+                      <input
+                        type={showPassword ? "text" : "password"}
+                        name="password"
+                        className={`form-control ${
+                          errors.password ? "is-invalid" : ""
+                        }`}
+                        placeholder="Password"
+                        value={formData.password}
+                        onChange={handleChange}
+                      />
+                      <button
+                        type="button"
+                        className="btn btn-outline-secondary"
+                        onClick={() => setShowPassword(!showPassword)}
+                      >
+                        {showPassword ? (
+                          <EyeOff size={20} />
+                        ) : (
+                          <Eye size={20} />
+                        )}
+                      </button>
+                    </div>
                     {errors.password && (
                       <div className="invalid-feedback">{errors.password}</div>
                     )}
@@ -520,17 +538,37 @@ export default function FloatingButtons() {
                     />
                     <div className="d-flex gap-2 flex-wrap mt-2">
                       {imagePreviews.map((src, index) => (
-                        <img
-                          key={index}
-                          src={src}
-                          alt={`Preview ${index + 1}`}
-                          className="img-thumbnail"
-                          style={{ width: "100px" }}
-                        />
+                        <div key={index} className="position-relative">
+                          <img
+                            src={src}
+                            alt={`Preview ${index + 1}`}
+                            className="img-thumbnail"
+                            style={{
+                              width: "100px",
+                              height: "100px",
+                              objectFit: "cover",
+                            }}
+                          />
+                          <button
+                            type="button"
+                            className="position-absolute top-0 start-100 translate-middle badge bg-danger border-0"
+                            onClick={() => handleRemoveImage(index)}
+                            style={{
+                              width: "20px",
+                              height: "20px",
+                              display: "flex",
+                              alignItems: "center",
+                              justifyContent: "center",
+                              borderRadius: "50%",
+                              cursor: "pointer",
+                            }}
+                          >
+                            X
+                          </button>
+                        </div>
                       ))}
                     </div>
                   </div>
-
                   {/* Enconnect URL */}
                   <div className="col-12">
                     <input
