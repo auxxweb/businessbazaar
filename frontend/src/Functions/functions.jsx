@@ -641,3 +641,42 @@ export const getAllFreeList = async ( page, limit, search, location ) => {
     console.error("Failed to fetch reviews");
   }
 };
+
+
+
+export const freeListLogin = async (formData) => {
+  try {
+    const response = await axios.post(
+      `${baseUrl}/api/v1/freelist/login`,
+      formData, // Send formData in the request body
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    return response.data; // Return response data if needed
+  } catch (error) {
+    console.error("Login failed:", error);
+    throw error; // Re-throw the error for handling in the calling function
+  }
+};
+
+
+export const updateFreelist = async (id, formData) => {
+  try {
+    const response = await axios.patch(
+      `${baseUrl}/api/v1/freelist/${id}`,  // Include the `id` in the URL
+      formData, // Send formData in the request body
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    return response.data; // Return response data if needed
+  } catch (error) {
+    console.error("Update failed:", error);
+    throw error; // Re-throw the error for handling in the calling function
+  }
+};

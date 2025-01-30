@@ -20,7 +20,6 @@ export default function FloatingButtons() {
     name: "",
     brandName: "",
     password: "",
-    confirmPassword: "",
     category: "",
     logo: null, // For file uploads
     address: {
@@ -82,12 +81,6 @@ export default function FloatingButtons() {
       newErrors.password = "Password is required.";
     } else if (formData.password.length < 6) {
       newErrors.password = "Password must be at least 6 characters long.";
-    }
-
-    if (!formData.confirmPassword.trim()) {
-      newErrors.confirmPassword = "Confirm Password is required.";
-    } else if (formData.password !== formData.confirmPassword) {
-      newErrors.confirmPassword = "Passwords do not match.";
     }
 
     // Handle nested fields (address, contactDetails, etc.)
@@ -357,6 +350,26 @@ export default function FloatingButtons() {
                     )}
                   </div>
 
+                  {/* Email */}
+                  <div className="col-md-6">
+                    <input
+                      type="email"
+                      name="contactDetails.email"
+                      className={`form-control ${
+                        errors["contactDetails.email"] ? "is-invalid" : ""
+                      }`}
+                      placeholder="Email"
+                      value={formData.contactDetails.email}
+                      onChange={handleChange}
+                    />
+                    {errors["contactDetails.email"] && (
+                      <div className="invalid-feedback">
+                        {errors["contactDetails.email"]}
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Password */}
                   <div className="col-md-6">
                     <input
                       type="password"
@@ -372,43 +385,25 @@ export default function FloatingButtons() {
                       <div className="invalid-feedback">{errors.password}</div>
                     )}
                   </div>
-                  <div className="col-md-6">
-                    <input
-                      type="password"
-                      name="confirmPassword"
-                      className={`form-control ${
-                        errors.confirmPassword ? "is-invalid" : ""
-                      }`}
-                      placeholder="Confirm Password"
-                      value={formData.confirmPassword}
-                      onChange={handleChange}
-                    />
-                    {errors.confirmPassword && (
-                      <div className="invalid-feedback">
-                        {errors.confirmPassword}
-                      </div>
-                    )}
-                  </div>
 
+                  {/* Category */}
                   <div className="col-md-12">
                     <select
                       name="category"
                       className={`form-control ${
                         errors.category ? "is-invalid" : ""
                       }`}
-                      value={formData.category} // This should store _id
+                      value={formData.category}
                       onChange={(e) => {
                         setFormData((prev) => ({
                           ...prev,
-                          category: e.target.value, // Store the selected category's _id
+                          category: e.target.value,
                         }));
                       }}
                     >
                       <option value="">Select Category</option>
                       {categoryData.map((category, index) => (
                         <option key={index} value={category._id}>
-                          {" "}
-                          {/* Pass _id instead of name */}
                           {category.name}
                         </option>
                       ))}
@@ -418,23 +413,34 @@ export default function FloatingButtons() {
                     )}
                   </div>
 
-                  {/* Logo Upload */}
-                  {/* <div className="col-12">
-                    <label className="form-label">Logo</label>
-                    <input
-                      type="file"
-                      name="logo"
-                      className={`form-control ${
-                        errors.logo ? "is-invalid" : ""
-                      }`}
-                      accept="image/*"
-                      onChange={handleChange}
-                    />
-                    {errors.logo && (
-                      <div className="invalid-feedback">{errors.logo}</div>
-                    )}
-                  </div> */}
+                  {/* Other Fields */}
+                  {/* Contact Details */}
+                  {[
+                    "primaryNumber",
+                    "secondaryNumber",
+                    "whatsAppNumber",
+                    "website",
+                  ].map((field) => (
+                    <div className="col-md-6" key={field}>
+                      <input
+                        type={field.includes("Number") ? "tel" : "url"}
+                        name={`contactDetails.${field}`}
+                        className={`form-control ${
+                          errors[`contactDetails.${field}`] ? "is-invalid" : ""
+                        }`}
+                        placeholder={field.replace(/([A-Z])/g, " $1").trim()}
+                        value={formData.contactDetails[field]}
+                        onChange={handleChange}
+                      />
+                      {errors[`contactDetails.${field}`] && (
+                        <div className="invalid-feedback">
+                          {errors[`contactDetails.${field}`]}
+                        </div>
+                      )}
+                    </div>
+                  ))}
 
+                  {/* Logo Upload */}
                   <div className="col-12">
                     <label className="form-label">Logo</label>
                     <input
@@ -482,44 +488,6 @@ export default function FloatingButtons() {
                     </div>
                   ))}
 
-                  {/* Contact Details */}
-                  {[
-                    "primaryNumber",
-                    "secondaryNumber",
-                    "whatsAppNumber",
-                    "email",
-                    "website",
-                  ].map((field) => (
-                    <div
-                      className={`col-md-${
-                        field === "email" || field === "website" ? "12" : "4"
-                      }`}
-                      key={field}
-                    >
-                      <input
-                        type={
-                          field === "email"
-                            ? "email"
-                            : field.includes("Number")
-                            ? "tel"
-                            : "url"
-                        }
-                        name={`contactDetails.${field}`}
-                        className={`form-control ${
-                          errors[`contactDetails.${field}`] ? "is-invalid" : ""
-                        }`}
-                        placeholder={field.replace(/([A-Z])/g, " $1").trim()}
-                        value={formData.contactDetails[field]}
-                        onChange={handleChange}
-                      />
-                      {errors[`contactDetails.${field}`] && (
-                        <div className="invalid-feedback">
-                          {errors[`contactDetails.${field}`]}
-                        </div>
-                      )}
-                    </div>
-                  ))}
-
                   {/* Description */}
                   <div className="col-12">
                     <textarea
@@ -540,23 +508,6 @@ export default function FloatingButtons() {
                   </div>
 
                   {/* Images Upload */}
-                  {/* <div className="col-12">
-                    <label className="form-label">Images (5 max)</label>
-                    <input
-                      type="file"
-                      name="images"
-                      className={`form-control ${
-                        errors.images ? "is-invalid" : ""
-                      }`}
-                      accept="image/*"
-                      multiple
-                      onChange={handleChange}
-                    />
-                    {errors.images && (
-                      <div className="invalid-feedback">{errors.images}</div>
-                    )}
-                  </div> */}
-
                   <div className="col-12">
                     <label className="form-label">Images (5 max)</label>
                     <input

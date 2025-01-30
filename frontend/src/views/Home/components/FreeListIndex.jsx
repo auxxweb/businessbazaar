@@ -23,13 +23,10 @@ import {
   FaEdit,
 } from "react-icons/fa";
 import { motion, AnimatePresence } from "framer-motion";
+import { freeListLogin, updateFreelist } from "../../../Functions/functions";
+import { toast } from "react-toastify"; // Import toast from a library like react-toastify
 
-const FreeListIndex = ({
-  freelist,
-  renderStars,
-
-  handleEnquiryClick,
-}) => {
+const FreeListIndex = ({ freelist, renderStars, handleEnquiryClick }) => {
   const [showModal, setShowModal] = useState(false); // State for modal visibility
   const [selectedBusiness, setSelectedBusiness] = useState(null); // State to store selected business data
 
@@ -53,7 +50,123 @@ const FreeListIndex = ({
     setShowModal(false); // Close the modal
   };
 
-  console.log(freelist,'modelaaaaa')
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [editFormData, setEditFormData] = useState({
+    email: "",
+    password: "",
+  });
+  const [updateId, setUpdateId] = useState("");
+  const [showListingModal, setShowListingModal] = useState(false);
+  const [updateFormData, setUpdateFormData] = useState({
+    name: "",
+    brandName: "",
+    contactDetails: {
+      email: "",
+      primaryNumber: "",
+      secondaryNumber: "",
+      whatsAppNumber: "",
+      website: "",
+    },
+    category: "",
+    password: "",
+    address: {
+      buildingName: "",
+      streetName: "",
+      landMark: "",
+      district: "",
+      state: "",
+      pinCode: "",
+    },
+    description: "",
+    enconnectUrl: "",
+    logo: "",
+    images: [],
+  });
+
+  const handleEditOpenModal = () => setShowEditModal(true);
+  const handleEditCloseModal = () => setShowEditModal(false);
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setEditFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleEditSubmit = async (e) => {
+    e.preventDefault();
+
+    const response = await freeListLogin(editFormData);
+    if (response.success === true) {
+      setUpdateFormData(response.data);
+      setUpdateId(response.data._id);
+      toast.success("login success");
+      console.log(updateFormData, "Login Successful!");
+      setShowEditModal(false);
+      setShowListingModal(true);
+    }
+    handleEditCloseModal(); // Close modal after submission
+  };
+
+  const [errors, setErrors] = useState({});
+  const [imagePreviews, setImagePreviews] = useState([]);
+  const [logoPreview, setLogoPreview] = useState("");
+
+  const handleChange = (e) => {
+    const { name, value, files } = e.target;
+
+    // Handle file inputs
+    if (e.target.type === "file") {
+      if (name === "logo") {
+        setUpdateFormData((prev) => ({
+          ...prev,
+          logo: files[0],
+        }));
+      } else if (name === "images") {
+        setUpdateFormData((prev) => ({
+          ...prev,
+          images: Array.from(files),
+        }));
+      }
+    } else {
+      if (name.startsWith("contactDetails.")) {
+        const field = name.split(".")[1];
+        setUpdateFormData((prev) => ({
+          ...prev,
+          contactDetails: {
+            ...prev.contactDetails,
+            [field]: value,
+          },
+        }));
+      } else if (name.startsWith("address.")) {
+        const field = name.split(".")[1];
+        setUpdateFormData((prev) => ({
+          ...prev,
+          address: {
+            ...prev.address,
+            [field]: value,
+          },
+        }));
+      } else {
+        setUpdateFormData((prev) => ({
+          ...prev,
+          [name]: value,
+        }));
+      }
+    }
+  };
+
+
+  const handleUpdateSubmit = async (e) => {
+    e.preventDefault();
+
+    const response = await updateFreelist(updateId, updateFormData);
+    if (response.success === true) {
+      toast.success("Business Updated successfully!");
+      setShowModal(false);
+      setShowListingModal(false);
+    }
+    handleEditCloseModal(); // Close modal after submission
+  };
+
   return (
     <section className="home-spot h-auto mb-2">
       <div className="container py-5" id="freelist">
@@ -230,8 +343,7 @@ const FreeListIndex = ({
                               animate={{ opacity: 1 }}
                               transition={{ delay: 0.3 }}
                             >
-                               <p className="mb-0 text-gray-600">
-                                
+                              <p className="mb-0 text-gray-600">
                                 {selectedBusiness?.categoryName || "N/A"}
                               </p>
                               <h2 className="h4 mt-4 pt-2 mb-2 text-emerald-600 fw-bold">
@@ -248,14 +360,6 @@ const FreeListIndex = ({
                             </motion.div>
                             {/* Wrap the buttons in a div to align them to the top-right */}
                             <div className="position-absolute top-0 end-0 d-flex">
-                              <Button
-                                variant="link"
-                                // onClick={handleEdit}
-                                className="p-0 me-3 text-blue-500 hover:text-blue-700 transition-all"
-                              >
-                                <FaEdit size={24} />{" "}
-                                {/* Increased size of Edit icon */}
-                              </Button>
                               <Button
                                 variant="link"
                                 onClick={handleCloseModal}
@@ -466,6 +570,13 @@ const FreeListIndex = ({
                   whileTap={{ scale: 0.95 }}
                 >
                   <Button
+                    variant="link"
+                    onClick={handleEditOpenModal}
+                    className="p-0 me-3 text-blue-500 hover:text-blue-700 transition-all"
+                  >
+                    <FaEdit size={24} />
+                  </Button>
+                  <Button
                     variant="outline-secondary"
                     onClick={handleCloseModal}
                     className="px-4 py-2 rounded-full shadow-sm bg-gradient-to-r from-gray-200 to-gray-300 text-gray-700 hover:from-gray-300 hover:to-gray-400"
@@ -478,29 +589,328 @@ const FreeListIndex = ({
           </Modal>
         )}
       </AnimatePresence>
+
+      <Modal show={showEditModal} onHide={handleEditCloseModal} centered>
+        <Modal.Header closeButton>
+          <Modal.Title>Edit Details</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <form onSubmit={handleEditSubmit}>
+            <div className="mb-3">
+              <label className="form-label">Email</label>
+              <input
+                type="email"
+                name="email"
+                className="form-control"
+                placeholder="Enter Email"
+                value={editFormData.email}
+                onChange={handleInputChange}
+                required
+              />
+            </div>
+            <div className="mb-3">
+              <label className="form-label">Password</label>
+              <input
+                type="password"
+                name="password"
+                className="form-control"
+                placeholder="Enter Password"
+                value={editFormData.password}
+                onChange={handleInputChange}
+                required
+              />
+            </div>
+            <div className="text-end">
+              <Button
+                variant="secondary"
+                onClick={handleEditCloseModal}
+                className="me-2"
+              >
+                Cancel
+              </Button>
+              <Button type="submit" variant="primary">
+                Submit
+              </Button>
+            </div>
+          </form>
+        </Modal.Body>
+      </Modal>
+
+      <Modal show={showListingModal} onHide={() => setShowListingModal(false)}>
+      <div className="modal-dialog modal-dialog-centered modal-xl">
+        <div className="modal-content">
+          <div className="modal-header border-0">
+            <h5 className="modal-title fw-bold">Edit Free Listing</h5>
+            <button
+              type="button"
+              className="btn-close"
+              onClick={() => setShowListingModal(false)}
+            ></button>
+          </div>
+          <div className="modal-body">
+            <form onSubmit={handleUpdateSubmit}>
+              <div className="row g-3">
+                <div className="col-md-6">
+                  <label className="form-label">Your Name</label>
+                  <input
+                    type="text"
+                    name="name"
+                    className="form-control"
+                    placeholder="Your Name"
+                    value={updateFormData.name || ""}
+                    onChange={handleChange}
+                  />
+                </div>
+                <div className="col-md-6">
+                  <label className="form-label">Brand Name</label>
+                  <input
+                    type="text"
+                    name="brandName"
+                    className="form-control"
+                    placeholder="Brand Name"
+                    value={updateFormData.brandName || ""}
+                    onChange={handleChange}
+                  />
+                </div>
+
+                <div className="col-md-6">
+                  <label className="form-label">Email</label>
+                  <input
+                    type="email"
+                    name="contactDetails.email"
+                    className="form-control"
+                    placeholder="Email"
+                    value={updateFormData.contactDetails?.email || ""}
+                    onChange={handleChange}
+                  />
+                </div>
+
+                <div className="col-md-6">
+                  <label className="form-label">Primary Number</label>
+                  <input
+                    type="tel"
+                    name="contactDetails.primaryNumber"
+                    className="form-control"
+                    placeholder="Primary Number"
+                    value={updateFormData.contactDetails?.primaryNumber || ""}
+                    onChange={handleChange}
+                  />
+                </div>
+
+                <div className="col-md-6">
+                  <label className="form-label">Secondary Number</label>
+                  <input
+                    type="tel"
+                    name="contactDetails.secondaryNumber"
+                    className="form-control"
+                    placeholder="Secondary Number"
+                    value={updateFormData.contactDetails?.secondaryNumber || ""}
+                    onChange={handleChange}
+                  />
+                </div>
+
+                <div className="col-md-6">
+                  <label className="form-label">WhatsApp Number</label>
+                  <input
+                    type="tel"
+                    name="contactDetails.whatsAppNumber"
+                    className="form-control"
+                    placeholder="WhatsApp Number"
+                    value={updateFormData.contactDetails?.whatsAppNumber || ""}
+                    onChange={handleChange}
+                  />
+                </div>
+
+                <div className="col-md-6">
+                  <label className="form-label">Website</label>
+                  <input
+                    type="url"
+                    name="contactDetails.website"
+                    className="form-control"
+                    placeholder="Website"
+                    value={updateFormData.contactDetails?.website || ""}
+                    onChange={handleChange}
+                  />
+                </div>
+
+                <div className="col-md-6">
+                  <label className="form-label">Category</label>
+                  <input
+                    type="text"
+                    name="category"
+                    className="form-control"
+                    placeholder="Category"
+                    value={updateFormData.category || ""}
+                    onChange={handleChange}
+                  />
+                </div>
+
+                <div className="col-md-6">
+                  <label className="form-label">Building Name</label>
+                  <input
+                    type="text"
+                    name="address.buildingName"
+                    className="form-control"
+                    placeholder="Building Name"
+                    value={updateFormData.address?.buildingName || ""}
+                    onChange={handleChange}
+                  />
+                </div>
+
+                <div className="col-md-6">
+                  <label className="form-label">Street Name</label>
+                  <input
+                    type="text"
+                    name="address.streetName"
+                    className="form-control"
+                    placeholder="Street Name"
+                    value={updateFormData.address?.streetName || ""}
+                    onChange={handleChange}
+                  />
+                </div>
+
+                <div className="col-md-6">
+                  <label className="form-label">Landmark</label>
+                  <input
+                    type="text"
+                    name="address.landMark"
+                    className="form-control"
+                    placeholder="Landmark"
+                    value={updateFormData.address?.landMark || ""}
+                    onChange={handleChange}
+                  />
+                </div>
+
+                <div className="col-md-6">
+                  <label className="form-label">District</label>
+                  <input
+                    type="text"
+                    name="address.district"
+                    className="form-control"
+                    placeholder="District"
+                    value={updateFormData.address?.district || ""}
+                    onChange={handleChange}
+                  />
+                </div>
+
+                <div className="col-md-6">
+                  <label className="form-label">State</label>
+                  <input
+                    type="text"
+                    name="address.state"
+                    className="form-control"
+                    placeholder="State"
+                    value={updateFormData.address?.state || ""}
+                    onChange={handleChange}
+                  />
+                </div>
+
+                <div className="col-md-6">
+                  <label className="form-label">Pin Code</label>
+                  <input
+                    type="text"
+                    name="address.pinCode"
+                    className="form-control"
+                    placeholder="Pin Code"
+                    value={updateFormData.address?.pinCode || ""}
+                    onChange={handleChange}
+                  />
+                </div>
+
+                <div className="col-12">
+                  <label className="form-label">Business Description</label>
+                  <textarea
+                    name="description"
+                    className="form-control"
+                    rows={4}
+                    placeholder="Business Description"
+                    value={updateFormData.description || ""}
+                    onChange={handleChange}
+                  ></textarea>
+                </div>
+
+                <div className="col-12">
+                  <label className="form-label">Logo</label>
+                  <input
+                    type="file"
+                    name="logo"
+                    className="form-control"
+                    accept="image/*"
+                    onChange={handleChange}
+                  />
+                </div>
+
+                <div className="col-12">
+                  <label className="form-label">Images (5 max)</label>
+                  <input
+                    type="file"
+                    name="images"
+                    className="form-control"
+                    accept="image/*"
+                    multiple
+                    onChange={handleChange}
+                  />
+                  <div className="image-previews">
+                    {imagePreviews.map((preview, index) => (
+                      <img
+                        key={index}
+                        src={preview}
+                        alt={`preview-${index}`}
+                        className="img-thumbnail"
+                        style={{ width: 100, height: 100, margin: 5 }}
+                      />
+                    ))}
+                  </div>
+                </div>
+
+                <div className="col-12">
+                  <label className="form-label">Enconnect URL</label>
+                  <input
+                    type="url"
+                    name="enconnectUrl"
+                    className="form-control"
+                    placeholder="Enconnect URL"
+                    value={updateFormData.enconnectUrl || ""}
+                    onChange={handleChange}
+                  />
+                </div>
+
+                <div className="col-12">
+                  <button type="submit" className="btn btn-primary w-100 mt-3">
+                    Update Listing
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </Modal>
+
+
       <style>
         {`
       .hover-scale {
-  transition: transform 0.3s ease;
-}
+        transition: transform 0.3s ease;
+      }
 
-.hover-scale:hover {
-  transform: scale(1.05);
-}
+      .hover-scale:hover {
+        transform: scale(1.05);
+      }
 
-.hover-opacity-100:hover {
-  opacity: 1 !important;
-}
+      .hover-opacity-100:hover {
+        opacity: 1 !important;
+      }
 
-.hover-underline:hover {
-  text-decoration: underline !important;
-}
+      .hover-underline:hover {
+        text-decoration: underline !important;
+      }
 
-.transition-all {
-  transition: all 0.3s ease;
-}
+      .transition-all {
+        transition: all 0.3s ease;
+      }
 
-`}
+      `}
       </style>
     </section>
   );
