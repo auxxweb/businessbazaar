@@ -771,7 +771,7 @@ const FreeListIndex = ({
                 className="form-control"
                 placeholder="Enter Email"
                 value={editFormData.email}
-                onChange={handleInputChange}
+               
                 required
               />
             </div>
