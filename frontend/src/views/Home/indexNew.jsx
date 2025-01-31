@@ -173,8 +173,8 @@ export default function Home() {
 
   const [freelist, setFreelist] = useState([]);
 
-  useEffect(() => {
-    const fetchFreeList = async () => {
+ 
+ const fetchFreeList = async () => {
       try {
         const response = await getAllFreeList(BUSINESS_PAGE,
           visibleFreelist,
@@ -186,10 +186,10 @@ export default function Home() {
       } catch (error) {
         console.error("Error fetching freelist:", error);
       }
-    };
-
+   };
+  useEffect(() => {
     fetchFreeList();
-  }, [location]);
+  }, [location,]);
   
 
   const handleClick = () => {
@@ -340,7 +340,7 @@ export default function Home() {
         totalBusinessData={totalBusinessData}
       /> 
 
-      <FreeListIndex freelist={freelist}/>
+      <FreeListIndex freelist={freelist} fetchFreeList={fetchFreeList}/>
 
       <ReviewSection
         currentSlide={currentSlide}
@@ -359,7 +359,7 @@ export default function Home() {
         handleReviewSubmit={handleReviewSubmit}
         reviewLoading={reviewLoading} />
 
-      <FloatButtonIndex/>
+      <FloatButtonIndex fetchFreeList={fetchFreeList}/>
       <FooterIndex />
       {/* <a
       href="https://wa.me/<your_phone_number>?text=Hello!"

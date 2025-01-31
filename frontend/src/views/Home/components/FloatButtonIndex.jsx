@@ -15,7 +15,7 @@ import ReactCropper from "react-cropper";
 import getCroppedImg from "../../../utils/cropper.utils";
 import { AnimatePresence } from "framer-motion";
 
-export default function FloatingButtons() {
+export default function FloatingButtons({fetchFreeList}) {
   const [showAdvertiseModal, setShowAdvertiseModal] = useState(false);
   const [showListingModal, setShowListingModal] = useState(false);
   const [categoryData, setCategoryData] = useState([]);
@@ -286,6 +286,7 @@ export default function FloatingButtons() {
           enconnectUrl: "",
           images: null,
         });
+        fetchFreeList()
         setShowListingModal(false);
       } else {
         toast.error("Failed to create listing.");

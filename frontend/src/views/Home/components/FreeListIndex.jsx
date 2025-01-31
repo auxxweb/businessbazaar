@@ -35,7 +35,7 @@ import { preRequestFun } from "../../CreateBusiness/service/s3url";
 import Cropper from "react-easy-crop";
 import getCroppedImg from "../../../utils/cropper.utils";
 
-const FreeListIndex = ({ freelist, renderStars, handleEnquiryClick }) => {
+const FreeListIndex = ({ freelist,fetchFreeList, renderStars, handleEnquiryClick }) => {
   const [showModal, setShowModal] = useState(false); // State for modal visibility
   const [selectedBusiness, setSelectedBusiness] = useState(null); // State to store selected business data
   const [modalImage, setModalImage] = useState(null);
@@ -120,7 +120,6 @@ const FreeListIndex = ({ freelist, renderStars, handleEnquiryClick }) => {
   const [errors, setErrors] = useState({});
   const [imagePreviews, setImagePreviews] = useState([]);
 
-
   const [logoPreview, setLogoPreview] = useState(null);
   const [logoFile, setLogoFile] = useState(null);
   const [showCropModal, setShowCropModal] = useState(false);
@@ -136,13 +135,13 @@ const FreeListIndex = ({ freelist, renderStars, handleEnquiryClick }) => {
       if (name === "logo") {
         const file = files[0];
         const reader = new FileReader();
-  
+
         reader.onload = function (e) {
           setLogoPreview(e.target.result); // Show preview of image
           setLogoFile(file); // Store the original file
           setShowCropModal(true); // Open the crop modal
         };
-  
+
         reader.readAsDataURL(file);
       }
       if (name === "images") {
@@ -197,7 +196,7 @@ const FreeListIndex = ({ freelist, renderStars, handleEnquiryClick }) => {
         logoFile?.name || "cropped-logo.png",
         { type: blob.type }
       );
-      const prereq = await preRequestFun(croppedFile, 'freelist');
+      const prereq = await preRequestFun(croppedFile, "freelist");
 
       setUpdateFormData((prev) => ({
         ...prev,
@@ -216,7 +215,9 @@ const FreeListIndex = ({ freelist, renderStars, handleEnquiryClick }) => {
     if (response.success === true) {
       toast.success("Business Updated successfully!");
       setShowModal(false);
+      fetchFreeList()
       setShowListingModal(false);
+
     }
     handleEditCloseModal(); // Close modal after submission
   };
@@ -237,6 +238,11 @@ const FreeListIndex = ({ freelist, renderStars, handleEnquiryClick }) => {
 
   const handleRemoveImage = (index) => {
     setImagePreviews((prev) => prev.filter((_, i) => i !== index));
+
+    setUpdateFormData((prev) => ({
+      ...prev,
+      images: prev.images.filter((_, i) => i !== index),
+    }));
   };
   return (
     <section className="home-spot h-auto mb-2">
@@ -254,6 +260,8 @@ const FreeListIndex = ({ freelist, renderStars, handleEnquiryClick }) => {
           </p>
         </div>
 
+
+        {/* freelist cards */}
         <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 mt-4 g-lg-4 g-0">
           {freelist?.length > 0 ? (
             freelist.map((business) => (
@@ -371,9 +379,11 @@ const FreeListIndex = ({ freelist, renderStars, handleEnquiryClick }) => {
             </div>
           )}
         </div>
+
+
       </div>
 
-      {/* Modal */}
+      {/* freelist details Modal */}
       <AnimatePresence>
         {showModal && (
           <Modal show={showModal} onHide={handleCloseModal} size="lg" centered>
@@ -689,6 +699,8 @@ const FreeListIndex = ({ freelist, renderStars, handleEnquiryClick }) => {
         )}
       </AnimatePresence>
 
+
+     {/* image hover modal */}
       <Modal show={modalImage}>
         {modalImage && (
           <motion.div
@@ -734,6 +746,8 @@ const FreeListIndex = ({ freelist, renderStars, handleEnquiryClick }) => {
         )}
       </Modal>
 
+
+     {/* login modal */}
       <Modal show={showEditModal} onHide={handleEditCloseModal} centered>
         <Modal.Header closeButton>
           <Modal.Title>Edit Details</Modal.Title>
@@ -779,70 +793,72 @@ const FreeListIndex = ({ freelist, renderStars, handleEnquiryClick }) => {
           </form>
         </Modal.Body>
       </Modal>
-      
 
+        {/* crop modal */}
       <Modal show={showCropModal}>
-      <AnimatePresence>
-        {showCropModal && logoFile && (
-          <div
-            className="modal fade show d-block"
-            tabIndex="-1"
-            role="dialog"
-          >
-            <div className="modal-dialog modal-lg" role="document">
-              <div className="modal-content">
-                <div className="modal-header">
-                  <h5 className="modal-title">Crop Your Logo</h5>
-                  <button
-                    type="button"
-                    className="btn-close"
-                    aria-label="Close"
-                    onClick={() => setShowCropModal(false)}
-                  ></button>
-                </div>
-                <div className="modal-body">
-                  <div
-                    className="cropper-container position-relative"
-                    style={{ height: "400px" }}
-                  >
-                    <Cropper
-                      image={logoPreview}
-                      crop={crop}
-                      zoom={zoom}
-                      aspect={1}
-                      onCropChange={setCrop}
-                      onZoomChange={setZoom}
-                      onCropComplete={(
-                        croppedAreaPercentage,
-                        croppedAreaPixels
-                      ) => setCroppedArea(croppedAreaPixels)}
-                    />
+        <AnimatePresence>
+          {showCropModal && logoFile && (
+            <div
+              className="modal fade show d-block"
+              tabIndex="-1"
+              role="dialog"
+            >
+              <div className="modal-dialog modal-lg" role="document">
+                <div className="modal-content">
+                  <div className="modal-header">
+                    <h5 className="modal-title">Crop Your Logo</h5>
+                    <button
+                      type="button"
+                      className="btn-close"
+                      aria-label="Close"
+                      onClick={() => setShowCropModal(false)}
+                    ></button>
                   </div>
-                </div>
-                <div className="modal-footer">
-                  <button
-                    className="mx-2 btn-primary"
-                    variant="contained"
-                    color="primary"
-                    onClick={handleCropSave}
-                  >
-                    Save Crop
-                  </button>
-                  <button
-                  className="btn btn-danger"
-                    variant="filled"
-                    color="warning"
-                    onClick={() => setShowCropModal(false)}
-                  >
-                    Cancel
-                  </button>
+                  <div className="modal-body">
+                    <div
+                      className="cropper-container position-relative"
+                      style={{ height: "400px" }}
+                    >
+                      <Cropper
+                        image={logoPreview}
+                        crop={crop}
+                        zoom={zoom}
+                        aspect={1}
+                        onCropChange={setCrop}
+                        onZoomChange={setZoom}
+                        onCropComplete={(
+                          croppedAreaPercentage,
+                          croppedAreaPixels
+                        ) => setCroppedArea(croppedAreaPixels)}
+                      />
+                    </div>
+                  </div>
+                  <div className="modal-footer">
+                    <button
+                      className="mx-2 btn-primary"
+                      variant="contained"
+                      color="primary"
+                      onClick={handleCropSave}
+                    >
+                      Save Crop
+                    </button>
+                    <button
+                      className="btn btn-danger"
+                      variant="filled"
+                      color="warning"
+                      onClick={() => setShowCropModal(false)}
+                    >
+                      Cancel
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        )}
-      </AnimatePresence>
+          )}
+        </AnimatePresence>
       </Modal>
+
+      {/* edit modal  */}
       <Modal show={showListingModal} onHide={() => setShowListingModal(false)}>
         <div className="modal-dialog modal-dialog-centered modal-xl">
           <div className="modal-content">
@@ -1085,50 +1101,50 @@ const FreeListIndex = ({ freelist, renderStars, handleEnquiryClick }) => {
                       />
                     </div>
                   )}
-                  
+
                   <div className="col-12">
-      <label className="form-label">Images (5 max)</label>
-      <input
-        type="file"
-        name="images"
-        className="form-control"
-        accept="image/*"
-        multiple
-        onChange={handleChange}
-      />
-      <div className="d-flex gap-2 flex-wrap mt-2">
-        {updateFormData.images.map((src, index) => (
-          <div key={index} className="position-relative">
-            <img
-              src={src}
-              alt={`Preview ${index + 1}`}
-              className="img-thumbnail"
-              style={{
-                width: "100px",
-                height: "100px",
-                objectFit: "cover",
-              }}
-            />
-            <button
-              type="button"
-              className="position-absolute top-0 start-100 translate-middle badge bg-danger border-0"
-              onClick={() => handleRemoveImage(index)}
-              style={{
-                width: "20px",
-                height: "20px",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                borderRadius: "50%",
-                cursor: "pointer",
-              }}
-            >
-              X
-            </button>
-          </div>
-        ))}
-      </div>
-    </div>
+                    <label className="form-label">Images (5 max)</label>
+                    <input
+                      type="file"
+                      name="images"
+                      className="form-control"
+                      accept="image/*"
+                      multiple
+                      onChange={handleChange}
+                    />
+                    <div className="d-flex gap-2 flex-wrap mt-2">
+                      {updateFormData.images.map((src, index) => (
+                        <div key={index} className="position-relative">
+                          <img
+                            src={src}
+                            alt={`Preview ${index + 1}`}
+                            className="img-thumbnail"
+                            style={{
+                              width: "100px",
+                              height: "100px",
+                              objectFit: "cover",
+                            }}
+                          />
+                          <button
+                            type="button"
+                            className="position-absolute top-0 start-100 translate-middle badge bg-danger border-0"
+                            onClick={() => handleRemoveImage(index)}
+                            style={{
+                              width: "20px",
+                              height: "20px",
+                              display: "flex",
+                              alignItems: "center",
+                              justifyContent: "center",
+                              borderRadius: "50%",
+                              cursor: "pointer",
+                            }}
+                          >
+                            X
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
                   <div className="col-12">
                     <label className="form-label">Enconnect URL</label>
                     <input
@@ -1188,11 +1204,16 @@ export default FreeListIndex;
 
 const ContactItem = ({ icon, label, value }) => (
   <motion.p
-    className="mb-1 d-flex align-items-center"
+    className="mb-1 d-flex align-items-center flex-wrap"
     whileHover={{ x: 5, color: "#059669" }}
   >
     <span className="me-2">{icon}</span>
     <strong>{label}:</strong>{" "}
-    <span className="ms-1 text-gray-700">{value}</span>
+    <span
+      className="ms-1 fs-14 text-gray-700 text-break"
+      style={{ wordBreak: "break-word", whiteSpace: "normal" }}
+    >
+      {value}
+    </span>
   </motion.p>
 );
