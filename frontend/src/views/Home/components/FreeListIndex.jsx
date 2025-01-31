@@ -35,7 +35,12 @@ import { preRequestFun } from "../../CreateBusiness/service/s3url";
 import Cropper from "react-easy-crop";
 import getCroppedImg from "../../../utils/cropper.utils";
 
-const FreeListIndex = ({ freelist,fetchFreeList, renderStars, handleEnquiryClick }) => {
+const FreeListIndex = ({
+  freelist,
+  fetchFreeList,
+  renderStars,
+  handleEnquiryClick,
+}) => {
   const [showModal, setShowModal] = useState(false); // State for modal visibility
   const [selectedBusiness, setSelectedBusiness] = useState(null); // State to store selected business data
   const [modalImage, setModalImage] = useState(null);
@@ -94,8 +99,13 @@ const FreeListIndex = ({ freelist,fetchFreeList, renderStars, handleEnquiryClick
     images: [],
   });
 
-  const handleEditOpenModal = () => setShowEditModal(true);
-  const handleEditCloseModal = () => setShowEditModal(false);
+  const handleEditOpenModal = (email) => {
+    setEditFormData((prev) => ({
+      ...prev,
+      email: email || "", // Ensure it's not undefined
+    }));
+    setShowEditModal(true);
+  };  const handleEditCloseModal = () => setShowEditModal(false);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -106,7 +116,7 @@ const FreeListIndex = ({ freelist,fetchFreeList, renderStars, handleEnquiryClick
     e.preventDefault();
 
     const response = await freeListLogin(editFormData);
-   alert(response)
+    
     if (response.success === true) {
       setUpdateFormData(response.data);
       setUpdateId(response.data._id);
@@ -216,9 +226,8 @@ const FreeListIndex = ({ freelist,fetchFreeList, renderStars, handleEnquiryClick
     if (response.success === true) {
       toast.success("Business Updated successfully!");
       setShowModal(false);
-      fetchFreeList()
+      fetchFreeList();
       setShowListingModal(false);
-
     }
     handleEditCloseModal(); // Close modal after submission
   };
@@ -260,7 +269,6 @@ const FreeListIndex = ({ freelist,fetchFreeList, renderStars, handleEnquiryClick
             businesses around you!
           </p>
         </div>
-
 
         {/* freelist cards */}
         <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 mt-4 g-lg-4 g-0">
@@ -380,8 +388,6 @@ const FreeListIndex = ({ freelist,fetchFreeList, renderStars, handleEnquiryClick
             </div>
           )}
         </div>
-
-
       </div>
 
       {/* freelist details Modal */}
@@ -454,7 +460,11 @@ const FreeListIndex = ({ freelist,fetchFreeList, renderStars, handleEnquiryClick
                                   transition: "color 0.3s ease-in-out",
                                 }}
                                 variant="link"
-                                onClick={handleEditOpenModal}
+                                onClick={() =>
+                                  handleEditOpenModal(
+                                    selectedBusiness?.contactDetails?.email
+                                  )
+                                }
                                 className="p-0 me-3 text-blue-500 hover:text-blue-700 transition-all"
                               >
                                 <FaEdit size={22} />
@@ -700,8 +710,7 @@ const FreeListIndex = ({ freelist,fetchFreeList, renderStars, handleEnquiryClick
         )}
       </AnimatePresence>
 
-
-     {/* image hover modal */}
+      {/* image hover modal */}
       <Modal show={modalImage}>
         {modalImage && (
           <motion.div
@@ -747,8 +756,7 @@ const FreeListIndex = ({ freelist,fetchFreeList, renderStars, handleEnquiryClick
         )}
       </Modal>
 
-
-     {/* login modal */}
+      {/* login modal */}
       <Modal show={showEditModal} onHide={handleEditCloseModal} centered>
         <Modal.Header closeButton>
           <Modal.Title>Edit Details</Modal.Title>
@@ -795,7 +803,7 @@ const FreeListIndex = ({ freelist,fetchFreeList, renderStars, handleEnquiryClick
         </Modal.Body>
       </Modal>
 
-        {/* crop modal */}
+      {/* crop modal */}
       <Modal show={showCropModal}>
         <AnimatePresence>
           {showCropModal && logoFile && (
