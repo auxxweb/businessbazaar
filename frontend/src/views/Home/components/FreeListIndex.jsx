@@ -105,7 +105,8 @@ const FreeListIndex = ({
       email: email || "", // Ensure it's not undefined
     }));
     setShowEditModal(true);
-  };  const handleEditCloseModal = () => setShowEditModal(false);
+  };
+  const handleEditCloseModal = () => setShowEditModal(false);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -116,7 +117,7 @@ const FreeListIndex = ({
     e.preventDefault();
 
     const response = await freeListLogin(editFormData);
-    
+
     if (response.success === true) {
       setUpdateFormData(response.data);
       setUpdateId(response.data._id);
@@ -771,8 +772,9 @@ const FreeListIndex = ({
                 className="form-control"
                 placeholder="Enter Email"
                 value={editFormData.email}
-               
-                required
+                readOnly
+                disabled
+                style={{ pointerEvents: "none", backgroundColor: "#f3f4f6" }} // Light gray background
               />
             </div>
             <div className="mb-3">
