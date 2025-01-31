@@ -655,8 +655,16 @@ export const freeListLogin = async (formData) => {
         },
       }
     );
+  
     return response.data; // Return response data if needed
   } catch (error) {
+    if (error.response) {
+      toast.error(error.response.data.message || "Login failed. Please try again.");
+    } else if (error.request) {
+      toast.error("No response from the server. Please check your internet connection.");
+    } else {
+      toast.error("Something went wrong. Please try again.");
+    }
     console.error("Login failed:", error);
     throw error; // Re-throw the error for handling in the calling function
   }

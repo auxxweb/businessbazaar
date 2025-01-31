@@ -106,6 +106,7 @@ const FreeListIndex = ({ freelist,fetchFreeList, renderStars, handleEnquiryClick
     e.preventDefault();
 
     const response = await freeListLogin(editFormData);
+   alert(response)
     if (response.success === true) {
       setUpdateFormData(response.data);
       setUpdateId(response.data._id);
