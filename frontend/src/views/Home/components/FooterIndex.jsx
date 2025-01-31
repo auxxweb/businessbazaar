@@ -23,43 +23,50 @@ const FooterIndex = () => {
   return (
     <div>
       <div
-        className="bg-black position-relative mt-5 mx-auto px-4 py-5 text-white"
+        className="bg-black   position-relative mt-5 mx-auto   text-white"
         style={{
-          maxWidth: "80rem", // Adjust width to make it responsive
-          padding: "3rem 2rem",
+          maxWidth: "80rem",
+          padding: "2rem 2rem",
           borderRadius: "17px",
-          display: "flex", // Use Flexbox for layout
-          justifyContent: "space-between", // Distribute space between left and right
-          alignItems: "center", // Center align items vertically
+          marginLeft: "2px",
+          display: "flex",
+          flexDirection: "column", // Default layout
+          justifyContent: "space-between",
+          alignItems: "center",
         }}
       >
-        <div style={{ width: "60%", textAlign: "left", marginLeft: "10px" }}>
+        <div style={{ width: "100%",  }}>
           <h1
             className="fw-bold mb-3"
-            style={{ fontSize: "2rem", textAlign: "left" }}
+            style={{ fontSize: "2rem", }}
           >
             ¡Ready to Create Business!
           </h1>
-          <p className="mb-4" style={{ fontSize: "1rem", lineHeight: "1.5" }}>
+          <p className="mb-4 " style={{ fontSize: "1rem", lineHeight: "1.5" ,textAlign:'center'}}>
             Showcase your profile to the world! Our platform is designed for
             both businesses and professionals to list their profiles and connect
             with a wider audience!
           </p>
         </div>
-        <div style={{ width: "40%", textAlign: "center" }}>
+        <div
+          className="button-container btn-cntnr"
+          style={{
+            width: "100%",
+            textAlign: "center",
+          }}
+        >
           <button
             className="btn btn-light px-4 py-2 fw-semibold"
             onClick={() => navigate("/create-business")}
             style={{
               fontSize: "1rem",
-              borderRadius: "50px", // Keep rounded-pill for a sleek look
+              borderRadius: "50px",
             }}
           >
             Create Profile!
           </button>
         </div>
       </div>
-
       <footer className="bg-white text-black py-5 footer-content border-top">
         <div className="container">
           <div className="row gy-4 justify-content-between">
@@ -221,7 +228,7 @@ const FooterIndex = () => {
             padding-right: 1rem;
           }
           .sub-txt {
-           margin-left: 1.5rem;
+            margin-left: 1.5rem;
           }
           @media (max-width: 767px) {
             .footer-content {
@@ -243,12 +250,10 @@ const FooterIndex = () => {
             .footer-content .justify-content-md-end {
               justify-content: center !important;
             }
-              .imglogo {
+            .imglogo {
               width: 80%;
-
-              }
+            }
           }
-
         `}</style>
       </footer>
     </div>

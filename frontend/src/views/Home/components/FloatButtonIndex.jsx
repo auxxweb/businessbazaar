@@ -1,17 +1,32 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { X } from "lucide-react";
+import { X, Eye, EyeOff } from "lucide-react";
 import { useNavigate } from "react-router";
-import { CreateFreeListDetails, getAllFreeList } from "../../../Functions/functions";
+import Cropper from "react-easy-crop";
+import {
+  CreateFreeListDetails,
+  fetchCategories,
+  getAllFreeList,
+} from "../../../Functions/functions";
 import { preRequestFun } from "../../CreateBusiness/service/s3url";
+import { toast } from "react-toastify"; // Import toast from a library like react-toastify
+import "cropperjs/dist/cropper.css";
+import ReactCropper from "react-cropper";
+import getCroppedImg from "../../../utils/cropper.utils";
+import { AnimatePresence } from "framer-motion";
 
-export default function FloatingButtons() {
+export default function FloatingButtons({fetchFreeList}) {
   const [showAdvertiseModal, setShowAdvertiseModal] = useState(false);
   const [showListingModal, setShowListingModal] = useState(false);
+  const [categoryData, setCategoryData] = useState([]);
   const navigate = useNavigate();
+  const [showCropModal, setShowCropModal] = useState(false);
+
   const [formData, setFormData] = useState({
     name: "",
     brandName: "",
+    password: "",
+    category: "",
     logo: null, // For file uploads
     address: {
       buildingName: "",
@@ -36,71 +51,269 @@ export default function FloatingButtons() {
     images: null, // For multiple file uploads
   });
 
-  
+  const [logoPreview, setLogoPreview] = useState(null);
+  const [imagePreviews, setImagePreviews] = useState([]);
+  const [showPassword, setShowPassword] = useState(false);
+
+  const [errors, setErrors] = useState({});
+
+  const validate = () => {
+    const newErrors = {};
+
+    // Name and Brand Name Validation
+    if (!formData.name.trim()) newErrors.name = "Name is required.";
+    if (!formData.brandName.trim())
+      newErrors.brandName = "Brand Name is required.";
+
+    // Logo and Images Validation
+    if (!formData.images || formData.images.length === 0)
+      newErrors.images = "At least one image is required.";
+
+    // Address Validation
+    const addressFields = [
+      "buildingName",
+      "streetName",
+      "landMark",
+      "district",
+      "state",
+      "pinCode",
+    ];
+    addressFields.forEach((field) => {
+      if (!formData.address[field].trim()) {
+        newErrors[`address.${field}`] = `${field} is required.`;
+      }
+    });
+
+    if (!formData.password.trim()) {
+      newErrors.password = "Password is required.";
+    } else if (formData.password.length < 6) {
+      newErrors.password = "Password must be at least 6 characters long.";
+    }
+
+    // Handle nested fields (address, contactDetails, etc.)
+    if (name === "confirmPassword") {
+      setFormData((prev) => ({ ...prev, confirmPassword: value }));
+
+      // Check if passwords match
+      if (value !== formData.password) {
+        updatedErrors.confirmPassword = "Passwords do not match.";
+      } else {
+        delete updatedErrors.confirmPassword;
+      }
+    }
+
+    if (!formData.category) newErrors.category = "Category is required.";
+    // Contact Details Validation
+    if (
+      !formData.contactDetails.primaryNumber.trim() ||
+      isNaN(formData.contactDetails.primaryNumber) ||
+      formData.contactDetails.primaryNumber.length !== 10
+    ) {
+      newErrors["contactDetails.primaryNumber"] =
+        "Primary number must be a valid 10-digit number.";
+    }
+
+    if (
+      !formData.contactDetails.whatsAppNumber.trim() ||
+      isNaN(formData.contactDetails.whatsAppNumber) ||
+      formData.contactDetails.whatsAppNumber.length !== 10
+    ) {
+      newErrors["contactDetails.whatsAppNumber"] =
+        "WhatsApp number must be a valid 10-digit number.";
+    }
+
+    if (
+      !formData.contactDetails.email.trim() ||
+      !/\S+@\S+\.\S+/.test(formData.contactDetails.email)
+    ) {
+      newErrors["contactDetails.email"] = "Valid email is required.";
+    }
+
+    if (
+      !formData.contactDetails.website.trim() ||
+      !/^https?:\/\/[^\s$.?#].[^\s]*$/.test(formData.contactDetails.website)
+    ) {
+      newErrors["contactDetails.website"] = "Valid website URL is required.";
+    }
+
+    if (!formData.description.trim())
+      newErrors.description = "Description is required.";
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
 
   const handleChange = async (e) => {
     const { name, value, files } = e.target;
-  
+
     if (files) {
-      // Handle single file upload (e.g., logo)
       if (name === "logo") {
-        const logoFile = files[0];
-        const logoLink = await preRequestFun(logoFile, "freelist");
-        setFormData((prev) => ({
-          ...prev,
-          logo: logoLink.accessLink, // Correctly set the accessLink
-        }));
+        const file = files[0];
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          setLogoPreview(e.target.result); // Show preview of image
+          setLogoFile(file); // Store the original file
+          setShowCropModal(true); // Open the crop modal
+        };
+        reader.readAsDataURL(file);
       }
-  
-      // Handle multiple file uploads (e.g., images)
+
       if (name === "images") {
         const imageFiles = Array.from(files);
         const imageLinks = await Promise.all(
           imageFiles.map((file) => preRequestFun(file, "freelist"))
         );
-  
-        // Ensure the `images` array is updated correctly
         setFormData((prev) => ({
           ...prev,
-          images: [...(prev.images || []), ...imageLinks.map(link => link.accessLink)], // Merge with existing images
+          
+          images: imageLinks.map((link) => link.accessLink),
         }));
+        setImagePreviews(imageFiles.map((file) => URL.createObjectURL(file)));
       }
-  
       return;
     }
-  
-    // Handle nested fields
+
+    let updatedErrors = { ...errors };
+
+    // Handle nested fields (address, contactDetails, etc.)
     if (name.includes(".")) {
       const [key, subKey] = name.split(".");
       setFormData((prev) => ({
         ...prev,
-        [key]: {
-          ...prev[key],
-          [subKey]: value,
-        },
+        [key]: { ...prev[key], [subKey]: value },
       }));
+
+      // Validate and remove error if corrected
+      if (value.trim()) {
+        delete updatedErrors[name];
+      } else {
+        updatedErrors[name] = `${subKey} is required.`;
+      }
     } else {
-      // Handle top-level fields
+      setFormData((prev) => ({ ...prev, [name]: value }));
+
+      // Validate and remove error if corrected
+      if (value.trim()) {
+        delete updatedErrors[name];
+      } else {
+        updatedErrors[name] = `${name} is required.`;
+      }
+    }
+
+    // Specific validation for primary number and WhatsApp number
+    if (
+      name === "contactDetails.primaryNumber" ||
+      name === "contactDetails.whatsAppNumber"
+    ) {
+      if (value.trim() && !isNaN(value) && value.length === 10) {
+        delete updatedErrors[name];
+      } else {
+        updatedErrors[name] = `${
+          name === "contactDetails.primaryNumber"
+            ? "Primary number"
+            : "WhatsApp number"
+        } must be a valid 10-digit number.`;
+      }
+    }
+
+    setErrors(updatedErrors);
+  };
+
+  const [logoFile, setLogoFile] = useState(null);
+
+  const [crop, setCrop] = useState({ x: 0, y: 0 });
+  const [zoom, setZoom] = useState(1);
+  const [croppedArea, setCroppedArea] = useState(null);
+  const handleCropSave = async () => {
+    try {
+      const { fileUrl, blob } = await getCroppedImg(logoPreview, croppedArea);
+      setLogoPreview(fileUrl); // Set the cropped image preview
+      setFormData((prev) => ({ ...prev, logo: fileUrl })); // Update form data with the cropped image URL
+      setShowCropModal(false); // Close the crop modal
+     
+      const croppedFile = new File(
+        [blob],
+        logoFile?.name || "cropped-logo.png",
+        { type: blob.type }
+      );
+      const prereq = await preRequestFun(croppedFile,'freelist')
+      
       setFormData((prev) => ({
         ...prev,
-        [name]: value,
+        logo: prereq.accessLink,
       }));
+      setLogoFile(croppedFile); // Store the cropped file
+    } catch (e) {
+      console.error("Error cropping image:", e);
     }
   };
-  
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    console.log("Form submitted!");
 
-    const res = await CreateFreeListDetails(formData);
-    if (res.success) {
-      alert("Success");
-    } else {
-      alert("Failed");
+    if (!validate()) {
+      toast.error("Please fix the errors in the form.");
+      return;
+    }
+
+    try {
+      const res = await CreateFreeListDetails(formData);
+      if (res.success) {
+        toast.success("Listing created successfully!");
+        setFormData({
+          name: "",
+          brandName: "",
+          logo: null,
+          address: {
+            buildingName: "",
+            streetName: "",
+            landMark: "",
+            district: "",
+            state: "",
+            pinCode: "",
+          },
+          contactDetails: {
+            primaryNumber: "",
+            secondaryNumber: "",
+            whatsAppNumber: "",
+            primaryCountryCode: "",
+            secondaryCountryCode: "",
+            whatsappCountryCode: "",
+            email: "",
+            website: "",
+          },
+          description: "",
+          enconnectUrl: "",
+          images: null,
+        });
+        fetchFreeList()
+        setShowListingModal(false);
+      } else {
+        toast.error("Failed to create listing.");
+      }
+    } catch (error) {
+      console.error("Error submitting form:", error);
+      toast.error("An unexpected error occurred.");
     }
   };
-  // Function to handle button click (CreateFreeListDetails)
+
+  const handleRemoveImage = (index) => {
+    setImagePreviews((prev) => prev.filter((_, i) => i !== index));
+  };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const categoryDetails = await fetchCategories();
+        setCategoryData(categoryDetails?.data?.data);
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, []);
 
   return (
     <>
@@ -112,12 +325,12 @@ export default function FloatingButtons() {
           whileHover={{ x: -5 }}
           whileTap={{ scale: 0.95 }}
         >
-          My Profile
+          Create Profile
         </motion.button>
         <br /> {/* Add this line */}
         <motion.button
           className="btn-listing"
-          onClick={() => setShowListingModal(false)} //temporarily disabled
+          onClick={() => setShowListingModal(true)} //temporarily disabled
           whileHover={{ x: -5 }}
           whileTap={{ scale: 0.95 }}
         >
@@ -156,25 +369,131 @@ export default function FloatingButtons() {
                     <input
                       type="text"
                       name="name"
-                      className="form-control"
+                      className={`form-control ${
+                        errors.name ? "is-invalid" : ""
+                      }`}
                       placeholder="Your Name"
                       value={formData.name}
                       onChange={handleChange}
-                      required
                     />
+                    {errors.name && (
+                      <div className="invalid-feedback">{errors.name}</div>
+                    )}
                   </div>
                   <div className="col-md-6">
                     <input
                       type="text"
                       name="brandName"
-                      className="form-control"
+                      className={`form-control ${
+                        errors.brandName ? "is-invalid" : ""
+                      }`}
                       placeholder="Brand Name"
                       value={formData.brandName}
                       onChange={handleChange}
-                      required
                     />
+                    {errors.brandName && (
+                      <div className="invalid-feedback">{errors.brandName}</div>
+                    )}
                   </div>
-
+                  {/* Email */}
+                  <div className="col-md-6">
+                    <input
+                      type="email"
+                      name="contactDetails.email"
+                      className={`form-control ${
+                        errors["contactDetails.email"] ? "is-invalid" : ""
+                      }`}
+                      placeholder="Email"
+                      value={formData.contactDetails.email}
+                      onChange={handleChange}
+                    />
+                    {errors["contactDetails.email"] && (
+                      <div className="invalid-feedback">
+                        {errors["contactDetails.email"]}
+                      </div>
+                    )}
+                  </div>
+                  {/* Password */}
+                  <div className="col-md-6 position-relative">
+                    <div className="input-group">
+                      <input
+                        type={showPassword ? "text" : "password"}
+                        name="password"
+                        className={`form-control ${
+                          errors.password ? "is-invalid" : ""
+                        }`}
+                        placeholder="Password"
+                        value={formData.password}
+                        onChange={handleChange}
+                      />
+                      <button
+                        type="button"
+                        className="btn btn-outline-secondary"
+                        onClick={() => setShowPassword(!showPassword)}
+                      >
+                        {showPassword ? (
+                          <EyeOff size={20} />
+                        ) : (
+                          <Eye size={20} />
+                        )}
+                      </button>
+                    </div>
+                    {errors.password && (
+                      <div className="invalid-feedback">{errors.password}</div>
+                    )}
+                  </div>
+                  {/* Category */}
+                  <div className="col-md-12">
+                    <select
+                      name="category"
+                      className={`form-control ${
+                        errors.category ? "is-invalid" : ""
+                      }`}
+                      value={formData.category}
+                      onChange={(e) => {
+                        setFormData((prev) => ({
+                          ...prev,
+                          category: e.target.value,
+                        }));
+                      }}
+                    >
+                      <option value="">Select Category</option>
+                      {categoryData.map((category, index) => (
+                        <option key={index} value={category._id}>
+                          {category.name}
+                        </option>
+                      ))}
+                    </select>
+                    {errors.category && (
+                      <div className="invalid-feedback">{errors.category}</div>
+                    )}
+                  </div>
+                  {/* Other Fields */}
+                  {/* Contact Details */}
+                  {[
+                    "primaryNumber",
+                    "secondaryNumber",
+                    "whatsAppNumber",
+                    "website",
+                  ].map((field) => (
+                    <div className="col-md-6" key={field}>
+                      <input
+                        type={field.includes("Number") ? "tel" : "url"}
+                        name={`contactDetails.${field}`}
+                        className={`form-control ${
+                          errors[`contactDetails.${field}`] ? "is-invalid" : ""
+                        }`}
+                        placeholder={field.replace(/([A-Z])/g, " $1").trim()}
+                        value={formData.contactDetails[field]}
+                        onChange={handleChange}
+                      />
+                      {errors[`contactDetails.${field}`] && (
+                        <div className="invalid-feedback">
+                          {errors[`contactDetails.${field}`]}
+                        </div>
+                      )}
+                    </div>
+                  ))}
                   {/* Logo Upload */}
                   <div className="col-12">
                     <label className="form-label">Logo</label>
@@ -184,136 +503,61 @@ export default function FloatingButtons() {
                       className="form-control"
                       accept="image/*"
                       onChange={handleChange}
-                      required
                     />
+                    {logoPreview && (
+                      <img
+                        src={logoPreview}
+                        alt="Logo Preview"
+                        className="img-thumbnail mt-2"
+                        style={{ width: "100px" }}
+                      />
+                    )}
                   </div>
-
                   {/* Address Fields */}
-                  <div className="col-md-6">
-                    <input
-                      type="text"
-                      name="address.buildingName"
-                      className="form-control"
-                      placeholder="Building Name"
-                      value={formData.address.buildingName}
-                      onChange={handleChange}
-                      required
-                    />
-                  </div>
-                  <div className="col-md-6">
-                    <input
-                      type="text"
-                      name="address.streetName"
-                      className="form-control"
-                      placeholder="Street Name"
-                      value={formData.address.streetName}
-                      onChange={handleChange}
-                      required
-                    />
-                  </div>
-                  <div className="col-md-6">
-                    <input
-                      type="text"
-                      name="address.landMark"
-                      className="form-control"
-                      placeholder="Landmark"
-                      value={formData.address.landMark}
-                      onChange={handleChange}
-                      required
-                    />
-                  </div>
-                  <div className="col-md-6">
-                    <input
-                      type="text"
-                      name="address.district"
-                      className="form-control"
-                      placeholder="District"
-                      value={formData.address.district}
-                      onChange={handleChange}
-                      required
-                    />
-                  </div>
-                  <div className="col-md-6">
-                    <input
-                      type="text"
-                      name="address.state"
-                      className="form-control"
-                      placeholder="State"
-                      value={formData.address.state}
-                      onChange={handleChange}
-                      required
-                    />
-                  </div>
-                  <div className="col-md-6">
-                    <input
-                      type="text"
-                      name="address.pinCode"
-                      className="form-control"
-                      placeholder="Pincode"
-                      value={formData.address.pinCode}
-                      onChange={handleChange}
-                      required
-                    />
-                  </div>
-
-                  {/* Contact Details */}
-                  <div className="col-md-4">
-                    <input
-                      type="tel"
-                      name="contactDetails.primaryNumber"
-                      className="form-control"
-                      placeholder="Primary Number"
-                      value={formData.contactDetails.primaryNumber}
-                      onChange={handleChange}
-                      required
-                    />
-                  </div>
-                  <div className="col-md-4">
-                    <input
-                      type="tel"
-                      name="contactDetails.secondaryNumber"
-                      className="form-control"
-                      placeholder="Secondary Number"
-                      value={formData.contactDetails.secondaryNumber}
-                      onChange={handleChange}
-                    />
-                  </div>
-                  <div className="col-md-4">
-                    <input
-                      type="tel"
-                      name="contactDetails.whatsAppNumber"
-                      className="form-control"
-                      placeholder="WhatsApp Number"
-                      value={formData.contactDetails.whatsAppNumber}
-                      onChange={handleChange}
-                      required
-                    />
-                  </div>
-                  <div className="col-12">
-                    <input
-                      type="email"
-                      name="contactDetails.email"
-                      className="form-control"
-                      placeholder="Email"
-                      value={formData.contactDetails.email}
-                      onChange={handleChange}
-                      required
-                    />
-                  </div>
-
+                  {[
+                    "buildingName",
+                    "streetName",
+                    "landMark",
+                    "district",
+                    "state",
+                    "pinCode",
+                  ].map((field) => (
+                    <div className="col-md-6" key={field}>
+                      <input
+                        type="text"
+                        name={`address.${field}`}
+                        className={`form-control ${
+                          errors[`address.${field}`] ? "is-invalid" : ""
+                        }`}
+                        placeholder={field.replace(/([A-Z])/g, " $1").trim()}
+                        value={formData.address[field]}
+                        onChange={handleChange}
+                      />
+                      {errors[`address.${field}`] && (
+                        <div className="invalid-feedback">
+                          {errors[`address.${field}`]}
+                        </div>
+                      )}
+                    </div>
+                  ))}
                   {/* Description */}
                   <div className="col-12">
                     <textarea
                       name="description"
-                      className="form-control"
+                      className={`form-control ${
+                        errors.description ? "is-invalid" : ""
+                      }`}
                       rows={4}
                       placeholder="Business Description"
                       value={formData.description}
                       onChange={handleChange}
-                      required
                     ></textarea>
+                    {errors.description && (
+                      <div className="invalid-feedback">
+                        {errors.description}
+                      </div>
+                    )}
                   </div>
-
                   {/* Images Upload */}
                   <div className="col-12">
                     <label className="form-label">Images (5 max)</label>
@@ -324,50 +568,132 @@ export default function FloatingButtons() {
                       accept="image/*"
                       multiple
                       onChange={handleChange}
-                      required
                     />
+                    <div className="d-flex gap-2 flex-wrap mt-2">
+                      {imagePreviews.map((src, index) => (
+                        <div key={index} className="position-relative">
+                          <img
+                            src={src}
+                            alt={`Preview ${index + 1}`}
+                            className="img-thumbnail"
+                            style={{
+                              width: "100px",
+                              height: "100px",
+                              objectFit: "cover",
+                            }}
+                          />
+                          <button
+                            type="button"
+                            className="position-absolute top-0 start-100 translate-middle badge bg-danger border-0"
+                            onClick={() => handleRemoveImage(index)}
+                            style={{
+                              width: "20px",
+                              height: "20px",
+                              display: "flex",
+                              alignItems: "center",
+                              justifyContent: "center",
+                              borderRadius: "50%",
+                              cursor: "pointer",
+                            }}
+                          >
+                            X
+                          </button>
+                        </div>
+                      ))}
+                    </div>
                   </div>
-
-                  {/* URLs */}
-                  <div className="col-md-6">
-                    <input
-                      type="url"
-                      name="contactDetails.website"
-                      className="form-control"
-                      placeholder="Website URL"
-                      value={formData.contactDetails.website}
-                      onChange={handleChange}
-                      required
-                    />
-                  </div>
-                  <div className="col-md-6">
+                  {/* Enconnect URL */}
+                  <div className="col-12">
                     <input
                       type="url"
                       name="enconnectUrl"
-                      className="form-control"
+                      className={`form-control ${
+                        errors.enconnectUrl ? "is-invalid" : ""
+                      }`}
                       placeholder="Enconnect Profile URL"
                       value={formData.enconnectUrl}
                       onChange={handleChange}
-                      required
                     />
+                    {errors.enconnectUrl && (
+                      <div className="invalid-feedback">
+                        {errors.enconnectUrl}
+                      </div>
+                    )}
                   </div>
-                </div>
-
-                {/* Submit Button */}
-                <div className="mt-4">
-                  <motion.button
-                    type="submit"
-                    className="btn btn-submit w-100"
-                    whileTap={{ scale: 0.95 }}
-                  >
-                    Submit Listing
-                  </motion.button>
+                  {/* Submit Button */}
+                  <div className="col-12">
+                    <button type="submit" className="btn btn-submit w-100">
+                      Submit
+                    </button>
+                  </div>
                 </div>
               </form>
             </div>
           </div>
         </div>
       </div>
+      <AnimatePresence>
+        {showCropModal && logoFile && (
+          <div
+            className="modal fade show d-block"
+            tabIndex="-1"
+            role="dialog"
+            style={{ backgroundColor: "rgba(0, 0, 0, 0.5)" }}
+          >
+            <div className="modal-dialog modal-lg" role="document">
+              <div className="modal-content">
+                <div className="modal-header">
+                  <h5 className="modal-title">Crop Your Logo</h5>
+                  <button
+                    type="button"
+                    className="btn-close"
+                    aria-label="Close"
+                    onClick={() => setShowCropModal(false)}
+                  ></button>
+                </div>
+                <div className="modal-body">
+                  <div
+                    className="cropper-container position-relative"
+                    style={{ height: "400px" }}
+                  >
+                    <Cropper
+                      image={logoPreview}
+                      crop={crop}
+                      zoom={zoom}
+                      aspect={1}
+                      onCropChange={setCrop}
+                      onZoomChange={setZoom}
+                      onCropComplete={(
+                        croppedAreaPercentage,
+                        croppedAreaPixels
+                      ) => setCroppedArea(croppedAreaPixels)}
+                    />
+                  </div>
+                </div>
+                <div className="modal-footer">
+                  <button
+                    className="mx-2 btn-primary"
+                    variant="contained"
+                    color="primary"
+                    onClick={handleCropSave}
+                  >
+                    Save Crop
+                  </button>
+                  <button
+                  className="btn btn-danger"
+                    variant="filled"
+                    color="warning"
+                    onClick={() => setShowCropModal(false)}
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+      </AnimatePresence>
+
       {/* Modal Backdrop */}
       {(showAdvertiseModal || showListingModal) && (
         <div

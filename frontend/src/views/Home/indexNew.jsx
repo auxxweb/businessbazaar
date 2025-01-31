@@ -173,8 +173,8 @@ export default function Home() {
 
   const [freelist, setFreelist] = useState([]);
 
-  useEffect(() => {
-    const fetchFreeList = async () => {
+ 
+ const fetchFreeList = async () => {
       try {
         const response = await getAllFreeList(BUSINESS_PAGE,
           visibleFreelist,
@@ -186,10 +186,10 @@ export default function Home() {
       } catch (error) {
         console.error("Error fetching freelist:", error);
       }
-    };
-
+   };
+  useEffect(() => {
     fetchFreeList();
-  }, [location]);
+  }, [location,]);
   
 
   const handleClick = () => {
@@ -249,7 +249,6 @@ export default function Home() {
     fetchCategory();
   }, [])
 
-  console.log(categoryData, 'ithenne')
 
   useEffect(() => {
     const fetchBanner = async () => {
@@ -279,7 +278,7 @@ export default function Home() {
       location);
       setCurrentPage(currentPage + 1)
     setVisibleBusiness((prev) => prev + 10);
-    console.log(businessDetails.data)
+    // console.log(businessDetails.data)
     setBusinessData((prev) => [...prev, ...businessDetails.data.data]);
     setLoading(false)
   };
@@ -312,7 +311,6 @@ export default function Home() {
     },
     [location, visibleBusiness]
   );
-  console.log(businessData, 'asasasasasasa')
   const [searchItem,setSerachItem ]= useState(false)
   return (
     <Layout  title="Home" navClass="home" onSearch={getSearchData} searchItem={searchItem} setSerachItem={setSerachItem}
@@ -342,7 +340,7 @@ export default function Home() {
         totalBusinessData={totalBusinessData}
       /> 
 
-      {/* <FreeListIndex freelist={freelist}/> */}
+      <FreeListIndex freelist={freelist} fetchFreeList={fetchFreeList}/>
 
       <ReviewSection
         currentSlide={currentSlide}
@@ -361,7 +359,7 @@ export default function Home() {
         handleReviewSubmit={handleReviewSubmit}
         reviewLoading={reviewLoading} />
 
-      <FloatButtonIndex/>
+      <FloatButtonIndex fetchFreeList={fetchFreeList}/>
       <FooterIndex />
       {/* <a
       href="https://wa.me/<your_phone_number>?text=Hello!"
