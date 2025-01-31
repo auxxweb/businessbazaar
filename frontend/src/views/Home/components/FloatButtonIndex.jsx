@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { X, Eye, EyeOff } from "lucide-react";
 import { useNavigate } from "react-router";
+import Cropper from "react-easy-crop";
 import {
   CreateFreeListDetails,
   fetchCategories,
@@ -9,12 +10,17 @@ import {
 } from "../../../Functions/functions";
 import { preRequestFun } from "../../CreateBusiness/service/s3url";
 import { toast } from "react-toastify"; // Import toast from a library like react-toastify
+import "cropperjs/dist/cropper.css";
+import ReactCropper from "react-cropper";
+import getCroppedImg from "../../../utils/cropper.utils";
+import { AnimatePresence } from "framer-motion";
 
 export default function FloatingButtons() {
   const [showAdvertiseModal, setShowAdvertiseModal] = useState(false);
   const [showListingModal, setShowListingModal] = useState(false);
   const [categoryData, setCategoryData] = useState([]);
   const navigate = useNavigate();
+  const [showCropModal, setShowCropModal] = useState(false);
 
   const [formData, setFormData] = useState({
     name: "",
@@ -142,10 +148,14 @@ export default function FloatingButtons() {
 
     if (files) {
       if (name === "logo") {
-        const logoFile = files[0];
-        const logoLink = await preRequestFun(logoFile, "freelist");
-        setFormData((prev) => ({ ...prev, logo: logoLink.accessLink }));
-        setLogoPreview(URL.createObjectURL(logoFile));
+        const file = files[0];
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          setLogoPreview(e.target.result); // Show preview of image
+          setLogoFile(file); // Store the original file
+          setShowCropModal(true); // Open the crop modal
+        };
+        reader.readAsDataURL(file);
       }
 
       if (name === "images") {
@@ -155,6 +165,7 @@ export default function FloatingButtons() {
         );
         setFormData((prev) => ({
           ...prev,
+          
           images: imageLinks.map((link) => link.accessLink),
         }));
         setImagePreviews(imageFiles.map((file) => URL.createObjectURL(file)));
@@ -206,6 +217,35 @@ export default function FloatingButtons() {
     }
 
     setErrors(updatedErrors);
+  };
+
+  const [logoFile, setLogoFile] = useState(null);
+
+  const [crop, setCrop] = useState({ x: 0, y: 0 });
+  const [zoom, setZoom] = useState(1);
+  const [croppedArea, setCroppedArea] = useState(null);
+  const handleCropSave = async () => {
+    try {
+      const { fileUrl, blob } = await getCroppedImg(logoPreview, croppedArea);
+      setLogoPreview(fileUrl); // Set the cropped image preview
+      setFormData((prev) => ({ ...prev, logo: fileUrl })); // Update form data with the cropped image URL
+      setShowCropModal(false); // Close the crop modal
+     
+      const croppedFile = new File(
+        [blob],
+        logoFile?.name || "cropped-logo.png",
+        { type: blob.type }
+      );
+      const prereq = await preRequestFun(croppedFile,'freelist')
+      
+      setFormData((prev) => ({
+        ...prev,
+        logo: prereq.accessLink,
+      }));
+      setLogoFile(croppedFile); // Store the cropped file
+    } catch (e) {
+      console.error("Error cropping image:", e);
+    }
   };
 
   const handleSubmit = async (event) => {
@@ -354,7 +394,6 @@ export default function FloatingButtons() {
                       <div className="invalid-feedback">{errors.brandName}</div>
                     )}
                   </div>
-
                   {/* Email */}
                   <div className="col-md-6">
                     <input
@@ -373,7 +412,6 @@ export default function FloatingButtons() {
                       </div>
                     )}
                   </div>
-
                   {/* Password */}
                   <div className="col-md-6 position-relative">
                     <div className="input-group">
@@ -403,7 +441,6 @@ export default function FloatingButtons() {
                       <div className="invalid-feedback">{errors.password}</div>
                     )}
                   </div>
-
                   {/* Category */}
                   <div className="col-md-12">
                     <select
@@ -430,7 +467,6 @@ export default function FloatingButtons() {
                       <div className="invalid-feedback">{errors.category}</div>
                     )}
                   </div>
-
                   {/* Other Fields */}
                   {/* Contact Details */}
                   {[
@@ -457,7 +493,6 @@ export default function FloatingButtons() {
                       )}
                     </div>
                   ))}
-
                   {/* Logo Upload */}
                   <div className="col-12">
                     <label className="form-label">Logo</label>
@@ -477,7 +512,6 @@ export default function FloatingButtons() {
                       />
                     )}
                   </div>
-
                   {/* Address Fields */}
                   {[
                     "buildingName",
@@ -505,7 +539,6 @@ export default function FloatingButtons() {
                       )}
                     </div>
                   ))}
-
                   {/* Description */}
                   <div className="col-12">
                     <textarea
@@ -524,7 +557,6 @@ export default function FloatingButtons() {
                       </div>
                     )}
                   </div>
-
                   {/* Images Upload */}
                   <div className="col-12">
                     <label className="form-label">Images (5 max)</label>
@@ -587,7 +619,6 @@ export default function FloatingButtons() {
                       </div>
                     )}
                   </div>
-
                   {/* Submit Button */}
                   <div className="col-12">
                     <button type="submit" className="btn btn-submit w-100">
@@ -600,6 +631,68 @@ export default function FloatingButtons() {
           </div>
         </div>
       </div>
+      <AnimatePresence>
+        {showCropModal && logoFile && (
+          <div
+            className="modal fade show d-block"
+            tabIndex="-1"
+            role="dialog"
+            style={{ backgroundColor: "rgba(0, 0, 0, 0.5)" }}
+          >
+            <div className="modal-dialog modal-lg" role="document">
+              <div className="modal-content">
+                <div className="modal-header">
+                  <h5 className="modal-title">Crop Your Logo</h5>
+                  <button
+                    type="button"
+                    className="btn-close"
+                    aria-label="Close"
+                    onClick={() => setShowCropModal(false)}
+                  ></button>
+                </div>
+                <div className="modal-body">
+                  <div
+                    className="cropper-container position-relative"
+                    style={{ height: "400px" }}
+                  >
+                    <Cropper
+                      image={logoPreview}
+                      crop={crop}
+                      zoom={zoom}
+                      aspect={1}
+                      onCropChange={setCrop}
+                      onZoomChange={setZoom}
+                      onCropComplete={(
+                        croppedAreaPercentage,
+                        croppedAreaPixels
+                      ) => setCroppedArea(croppedAreaPixels)}
+                    />
+                  </div>
+                </div>
+                <div className="modal-footer">
+                  <button
+                    className="mx-2 btn-primary"
+                    variant="contained"
+                    color="primary"
+                    onClick={handleCropSave}
+                  >
+                    Save Crop
+                  </button>
+                  <button
+                  className="btn btn-danger"
+                    variant="filled"
+                    color="warning"
+                    onClick={() => setShowCropModal(false)}
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+      </AnimatePresence>
+
       {/* Modal Backdrop */}
       {(showAdvertiseModal || showListingModal) && (
         <div
