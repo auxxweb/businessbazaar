@@ -79,7 +79,7 @@ export default function Home() {
   const [reviews, setReviews] = useState([]);
   const [visibleCategories, setVisibleCategories] = useState(21);
   const [visibleBusiness, setVisibleBusiness] = useState(8);
-  const [visibleFreelist, setVisibleFreelist] = useState(9);
+  const [visibleFreelist, setVisibleFreelist] = useState(8);
 
   const businessSectionRef = useRef(null);
   const isInitialRender = useRef(true); // Track if it's the initial render
@@ -172,16 +172,19 @@ export default function Home() {
   };
 
   const [freelist, setFreelist] = useState([]);
+  const [freeListTotalCount,setFreeListTotalCount]=useState(0)
+  const [freeListPage,setFreeListPage]=useState(1)
 
  
  const fetchFreeList = async () => {
       try {
-        const response = await getAllFreeList(BUSINESS_PAGE,
+        const response = await getAllFreeList(freeListPage,
           visibleFreelist,
           "",
           location);
         if (response && response.data) {
-          setFreelist(response.data);
+          setFreelist(response.data?.data);
+          setFreeListTotalCount(response?.data?.totalCount)
         }
       } catch (error) {
         console.error("Error fetching freelist:", error);
@@ -189,7 +192,7 @@ export default function Home() {
    };
   useEffect(() => {
     fetchFreeList();
-  }, [location,]);
+  }, [location,freeListPage]);
   
 
   const handleClick = () => {
@@ -340,7 +343,7 @@ export default function Home() {
         totalBusinessData={totalBusinessData}
       /> 
 
-      <FreeListIndex freelist={freelist} fetchFreeList={fetchFreeList}/>
+      <FreeListIndex freeListPage={freeListPage} setFreeListPage={setFreeListPage} freelist={freelist} freeListTotalCount={freeListTotalCount} fetchFreeList={fetchFreeList}/>
 
       <ReviewSection
         currentSlide={currentSlide}

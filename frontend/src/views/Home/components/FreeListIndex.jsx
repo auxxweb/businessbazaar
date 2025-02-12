@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Modal, Button, Row, Col, Image } from "react-bootstrap";
@@ -38,6 +39,9 @@ import getCroppedImg from "../../../utils/cropper.utils";
 const FreeListIndex = ({
   freelist,
   fetchFreeList,
+  freeListPage,
+  setFreeListPage,
+  freeListTotalCount,
   renderStars,
   handleEnquiryClick,
 }) => {
@@ -45,6 +49,17 @@ const FreeListIndex = ({
   const [selectedBusiness, setSelectedBusiness] = useState(null); // State to store selected business data
   const [modalImage, setModalImage] = useState(null);
   const [categoryData, setCategoryData] = useState([]);
+  const [freeListData,setFreeListData]=useState(freelist)
+
+
+  useEffect(()=>{
+    setFreeListData((prev) => [...prev, ...freelist]);
+  },[freelist])
+
+  
+
+
+
 
   const handleCardClick = (business) => {
     setSelectedBusiness(business); // Set the selected business when a card is clicked
@@ -65,6 +80,10 @@ const FreeListIndex = ({
   const handleCloseModal = () => {
     setShowModal(false); // Close the modal
   };
+
+  const loadMoreBusiness = ()=>{
+    setFreeListPage(freeListPage+1)
+  }
 
   const [showEditModal, setShowEditModal] = useState(false);
   const [editFormData, setEditFormData] = useState({
@@ -273,8 +292,10 @@ const FreeListIndex = ({
 
         {/* freelist cards */}
         <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 mt-4 g-lg-4 g-0">
-          {freelist?.length > 0 ? (
-            freelist.map((business) => (
+         
+          {freeListData?.length > 0 ? (
+            freeListData?.map((business) => (
+              
               <div key={business._id} className="col mb-4">
                 <div
                   className="card h-100 border-0 shadow-xl btn-parent rounded-4 hover-card"
@@ -382,12 +403,31 @@ const FreeListIndex = ({
                   </div>
                 </div>
               </div>
+
+             
             ))
+            
+            
           ) : (
             <div className="col-12">
               <div className="text-center">No profiles available.</div>
             </div>
           )}
+            {(8 *freeListPage)<freeListTotalCount&&(
+               <div className="col">
+               <div
+                 className="cardd h-100 border-0 shadow-xl rounded-4 overflow-visible hover-card d-flex align-items-center justify-content-center cursor-pointer"
+                 onClick={loadMoreBusiness}
+               >
+                 <div className="text-center">
+                   <h5 className="card-title h6 fw-bold text-dark ">
+                     View More
+                   </h5>
+                   <i className="bi bi-arrow-right fs-4"></i>
+                 </div>
+               </div>
+             </div>
+              ) }
         </div>
       </div>
 
