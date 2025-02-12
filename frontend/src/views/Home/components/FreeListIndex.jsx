@@ -49,11 +49,14 @@ const FreeListIndex = ({
   const [selectedBusiness, setSelectedBusiness] = useState(null); // State to store selected business data
   const [modalImage, setModalImage] = useState(null);
   const [categoryData, setCategoryData] = useState([]);
-  const [freeListData,setFreeListData]=useState(freelist)
+  const [freeListData,setFreeListData]=useState(freelist ?? [])
 
 
   useEffect(()=>{
-    setFreeListData((prev) => [...prev, ...freelist]);
+    if(freelist){
+
+      setFreeListData((prev) => [...prev, ...freelist]);
+    }
   },[freelist])
 
   
