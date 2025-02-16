@@ -684,6 +684,23 @@ export const updateFreelist = async (id, formData) => {
     );
     return response.data; // Return response data if needed
   } catch (error) {
+    toast.error(
+      error?.response?.data?.message ??
+      "Failed to update Please try again.",
+      {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        theme: "colored",
+        style: {
+          backgroundColor: "#e74c3c", // Custom red color for error
+          color: "#FFFFFF", // White text
+        },
+      }
+    );
     console.error("Update failed:", error);
     throw error; // Re-throw the error for handling in the calling function
   }
