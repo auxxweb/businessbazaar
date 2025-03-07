@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Modal, Button, Row, Col, Image } from "react-bootstrap";
-import { X } from "lucide-react";
+import { Share2, X } from "lucide-react";
 
 import {
   Phone,
@@ -59,7 +59,7 @@ const FreeListIndex = ({
     }
   },[freelist])
 
-  
+
 
 
 
@@ -277,6 +277,14 @@ const FreeListIndex = ({
       images: prev.images.filter((_, i) => i !== index),
     }));
   };
+
+  const copyToClipBoard = (id)=>{
+    navigator.clipboard.writeText(window.location.href+'business-page/'+id).then(()=>{
+        toast.success("Link copied to clipboard!");
+        // setToastMessage("Link copied to clipboard!");
+        setTimeout(() => setToastMessage(""), 2000); // Hide toast after 3 seconds
+    })
+  }
   return (
     <section className="home-spot h-auto mb-2">
       <div className="container py-5" id="freelist">
@@ -295,10 +303,10 @@ const FreeListIndex = ({
 
         {/* freelist cards */}
         <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 mt-4 g-lg-4 g-0">
-         
+
           {freeListData?.length > 0 ? (
             freeListData?.map((business) => (
-              
+
               <div key={business._id} className="col mb-4">
                 <div
                   className="card h-100 border-0 shadow-xl btn-parent rounded-4 hover-card"
@@ -406,11 +414,7 @@ const FreeListIndex = ({
                   </div>
                 </div>
               </div>
-
-             
             ))
-            
-            
           ) : (
             <div className="col-12">
               <div className="text-center">No profiles available.</div>
@@ -496,6 +500,19 @@ const FreeListIndex = ({
                             </motion.div>
                             {/* Wrap the buttons in a div to align them to the top-right */}
                             <div className="position-absolute top-0 end-0 d-flex">
+                              <Button
+                                style={{
+                                    fontSize: "30px",
+                                    fontWeight: "bold",
+                                  color: "#6b7280",
+                                  transition: "color 0.3s ease-in-out",
+                                }}
+                                variant="link"
+                                onClick={()=>copyToClipBoard(selectedBusiness._id)}
+                                className="p-0 me-3 text-blue-500 hover:text-blue-700 transition-all"
+                              >
+                                <Share2 />
+                              </Button>
                               <Button
                                 style={{
                                   fontSize: "30px",

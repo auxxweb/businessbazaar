@@ -958,7 +958,6 @@ export default function Template() {
                     {/* Social Media Links */}
                     <div className=" col-12 social-media gap-2">
                       {businessData?.contactDetails?.website && (
-                       
                           <a
                             href={`https://${businessData?.contactDetails?.website.replace(
                               /^https?:\/\//,
@@ -970,7 +969,7 @@ export default function Template() {
                           >
                             <i className="bi bi-globe text-2xl"></i>
                           </a>
-                        
+
                       )}
                       {businessData?.socialMediaLinks?.map((social) => (
                         <>

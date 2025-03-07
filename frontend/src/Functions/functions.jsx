@@ -35,10 +35,10 @@ export const fetchCategories = async (page,limit) => {
 export const fetchBusiness = async (page, limit, search, location) => {
   try {
     console.log(page,limit, "locationnnn");
-   
-    
+
+
     const query = {
-     
+
     };
 
     // if (search) {
@@ -79,7 +79,7 @@ export const fetchBusinesses = async (page, limit, search, location) => {
 
     // const response = await axios.get(`${baseUrl}/api/v1/review?page=${page}&limit=${limit}&searchTerm=${searchTerm}`, config);
     const query = {
-     
+
     };
 
     // if (search) {
@@ -95,7 +95,7 @@ export const fetchBusinesses = async (page, limit, search, location) => {
       config});
 
 
-    
+
     if (response.status !== 200) {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
@@ -150,7 +150,7 @@ export const fetchBusinessTemplate = async (id, setLoading) => {
       console.error("Failed to fetch Search Value");
     }
   } catch (error) {
-    
+
     console.error("Failed to fetch Business Site Details");
   } finally {
   }
@@ -392,7 +392,7 @@ export const createPayment = async (paymentData, token) => {
     );
  console.log(response.data,'llllllllllllllllllll');
     const data = response.data;
-    
+
     if (data.success) {
       return data; // Successfully created business details
     } else {
@@ -410,7 +410,7 @@ export const createPayment = async (paymentData, token) => {
 
 export const checkPaymentStatus = async ( token) => {
   try {
-    
+
     const response = await axios.get(`${baseUrl}/api/v1/payment/status`, {
       headers: {
         Authorization: `Bearer ${token}`, // Add the Bearer token here
@@ -619,7 +619,7 @@ export const getAllFreeList = async ( page, limit, search, location ) => {
   try {
 
     const query = {
-     
+
     };
 
     // if (search) {
@@ -655,7 +655,7 @@ export const freeListLogin = async (formData) => {
         },
       }
     );
-  
+
     return response.data; // Return response data if needed
   } catch (error) {
     if (error.response) {
@@ -676,6 +676,39 @@ export const updateFreelist = async (id, formData) => {
     const response = await axios.patch(
       `${baseUrl}/api/v1/freelist/${id}`,  // Include the `id` in the URL
       formData, // Send formData in the request body
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    return response.data; // Return response data if needed
+  } catch (error) {
+    toast.error(
+      error?.response?.data?.message ??
+      "Failed to update Please try again.",
+      {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        theme: "colored",
+        style: {
+          backgroundColor: "#e74c3c", // Custom red color for error
+          color: "#FFFFFF", // White text
+        },
+      }
+    );
+    console.error("Update failed:", error);
+    throw error; // Re-throw the error for handling in the calling function
+  }
+};
+export const getOneFreelist = async (id) => {
+  try {
+    const response = await axios.get(
+      `${baseUrl}/api/v1/freelist/${id}`,
       {
         headers: {
           "Content-Type": "application/json",

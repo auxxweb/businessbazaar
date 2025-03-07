@@ -23,6 +23,7 @@ import BusinessTermsAndConditions from "./components/Business/BusinessTermsAndCo
 import Loader from "./components/Loader/Loader";
 import ShareButton from "./components/ShareButton";
 import NotFound from "./components/NotFound";
+import { BusinessModalPage } from "./views/Home/components/BusinessModalPage";
 // import IndexHome from "./views/Home/indexNew";
 
 // Lazy loading components
@@ -115,6 +116,7 @@ const router = createBrowserRouter([
   { path: "/reviews", element: <Testimonials /> },
   { path: "/business", element: <Business /> },
   { path: "/category/:id", element: <Business /> },
+  { path: "/business-page/:id", element: <BusinessModalPage /> },
   // { path: "/business/:id", element: (<div className="relative"><Template /></div>),},
   { path: "/profile/:name/:id", element: (<div className="relative"><Template /></div>) },
   { path: "/profile/premium/:name/:id", element: <PremiumTemplate /> },

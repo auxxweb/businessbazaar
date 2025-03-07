@@ -11,6 +11,7 @@ import {
   FaCamera,
 } from "react-icons/fa";
 import { saveContactToDevice } from "./saveContact";
+import { toast } from "react-toastify";
 
 const ShareButton = ({ number, countryCode,logoUrl,businessName,theme, saveContactDetails }) => {
   const [showOptions, setShowOptions] = useState(false);
@@ -56,26 +57,27 @@ const ShareButton = ({ number, countryCode,logoUrl,businessName,theme, saveConta
         },
         image: "/titleEnconnectLogo.png",
       });
-  
+
       // Clear previous QR code
       qrCodeRef.current.innerHTML = "";
       qrCode.append(qrCodeRef.current);
     }
   }, [url, showQRCode]);
-  
-  
+
+
   const handleCopyLink = () => {
-    navigator.clipboard.writeText(url).then(() => {
-      setToastMessage("Link copied to clipboard!");
-      setTimeout(() => setToastMessage(""), 2000); // Hide toast after 3 seconds
+        navigator.clipboard.writeText(url).then(() => {
+        toast.success("Link copied to clipboard!");
+        setToastMessage("Link copied to clipboard!");
+        setTimeout(() => setToastMessage(""), 2000); // Hide toast after 3 seconds
     });
   };
- 
+
 
   const handleShareSocial = async () => {
     const url = window.location.href; // Current page URL
     const text = `Explore this page using the link below or scan the QR code:\n${url}`;
-  
+
     try {
       // Create a new QRCodeStyling instance
       const qrCode = new QRCodeStyling({
@@ -104,7 +106,7 @@ const ShareButton = ({ number, countryCode,logoUrl,businessName,theme, saveConta
         },
         image: "/titleEnconnectLogo.png",
       });
-  
+
       // Generate the QR code as a Blob
       const blob = await new Promise((resolve, reject) => {
         qrCode.getRawData("png").then((data) => {
@@ -113,10 +115,10 @@ const ShareButton = ({ number, countryCode,logoUrl,businessName,theme, saveConta
           reject(err);
         });
       });
-  
+
       // Create a file from the QR code blob
       const qrFile = new File([blob], `${businessName}.png`, { type: "image/png" });
-  
+
       // Check if the browser supports sharing files and URLs
       if (navigator.share && navigator.canShare({ files: [qrFile] })) {
         try {
