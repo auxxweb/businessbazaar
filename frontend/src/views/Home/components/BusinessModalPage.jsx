@@ -19,7 +19,7 @@ import { getOneFreelist } from '../../../Functions/functions';
 import Layout from '../../../components/Layout';
 import ShareButton from '../../../components/ShareButton';
 import Loader from '../../../components/Loader/Loader';
-import { Helmet } from 'react-helmet';
+import { Helmet } from 'react-helmet-async';
 
 export const BusinessModalPage = () => {
     const params = useParams();
@@ -34,39 +34,17 @@ export const BusinessModalPage = () => {
 
     useEffect(() => {
         getBusinessData();
-    }, []);
+    }, [params.id]);
 
     return (
         <>
-            <Helmet>
-                <title>{businessData ? businessData?.name : ''} - Enconnect</title>
-                <meta charSet="utf-8" />
-                <meta name="viewport" content="width=device-width, initial-scale=1" />
-                <link
-                    href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
-                    rel="stylesheet"
-                    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
-                    crossOrigin="anonymous"
-                />
-                <link
-                    href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css"
-                    rel="stylesheet"
-                />
-                <link
-                    href="https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css"
-                    rel="stylesheet"
-                />
-                <link rel="icon" type="image/x-icon" href={'/images/title image.jpg'} />
-                <link rel="preconnect" href="https://fonts.googleapis.com" />
-                <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-                <link
-                    href="https://fonts.googleapis.com/css2?family=David+Libre:wght@400;500;700&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap"
-                    rel="stylesheet"
-                />
-                {/* Other meta and link tags... */}
-                <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
-                <meta property="og:image" content={businessData && businessData?.logo} />
-            </Helmet>
+          <Helmet>
+        <title>{businessData?.name}</title>
+        <meta property="og:title" content={businessData?.name} />
+        <meta property="og:description" content={businessData?.description} />
+        <meta property="og:image" content={businessData?.logo} />
+        <meta property="og:url" content={`https://yourwebsite.com/business/${businessData?._id}`} />
+      </Helmet>
 
             <Layout title="Business" navClass="home">
                 {businessData ? (
