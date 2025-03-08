@@ -56,11 +56,7 @@ export const BusinessModalPage = () => {
                     href="https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css"
                     rel="stylesheet"
                 />
-                <link
-                    rel="icon"
-                    type="image/x-icon"
-                    href={businessData ? businessData.logo : '/images/title image.jpg'}
-                />
+                <link rel="icon" type="image/x-icon" href={'/images/title image.jpg'} />
                 <link rel="preconnect" href="https://fonts.googleapis.com" />
                 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
                 <link
@@ -69,6 +65,7 @@ export const BusinessModalPage = () => {
                 />
                 {/* Other meta and link tags... */}
                 <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
+                <meta property="og:image" content={businessData && businessData?.logo} />
             </Helmet>
 
             <Layout title="Business" navClass="home">
