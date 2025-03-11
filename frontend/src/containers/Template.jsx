@@ -44,6 +44,7 @@ import ShareButton from "../components/ShareButton";
 import ResponsiveGalleryCarousel from "../components/GalleryComponent";
 import { Button } from "@mui/material";
 import { size } from "lodash";
+import MetaTags from "../utils/MetaTags";
 
 export default function Template() {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -666,6 +667,13 @@ export default function Template() {
 
   return (
     <>
+      <MetaTags
+        title="Enconnect | Find Trusted Local Businesses"
+        description="Discover trusted services with Enconnect.in, the top local business directory listing. Start your search today!"
+        keywords="local search, travel, order food, grocery, medicines, online shopping"
+        url="https://enconnect.in"
+        image={businessData?.logo}
+      />
       <link rel="preconnect" href="https://fonts.googleapis.com" />
       <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin />
       <link

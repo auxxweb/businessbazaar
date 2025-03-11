@@ -9,11 +9,11 @@ import App from "./App.jsx";
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <Provider store={store}>
-    <HelmetProvider>
       <PersistGate loading={null} persistor={persistor}>
-        <App />
+        <HelmetProvider>
+          <App />
+        </HelmetProvider>
       </PersistGate>
-      </HelmetProvider>
     </Provider>
   </StrictMode>
 );
