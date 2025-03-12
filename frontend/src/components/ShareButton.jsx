@@ -13,7 +13,7 @@ import {
 import { saveContactToDevice } from "./saveContact";
 import { toast } from "react-toastify";
 
-const ShareButton = ({ number, countryCode,logoUrl,businessName,theme, saveContactDetails }) => {
+const ShareButton = ({ profileId,number, countryCode,logoUrl,businessName,theme, saveContactDetails }) => {
   const [showOptions, setShowOptions] = useState(false);
   const [showQRCode, setShowQRCode] = useState(false);
   const [toastMessage, setToastMessage] = useState(""); // Toast message state
@@ -21,6 +21,14 @@ const ShareButton = ({ number, countryCode,logoUrl,businessName,theme, saveConta
   const buttonRef = useRef(null);
   const phoneNumber = number; // Replace with your WhatsApp number including the country code
   const qrCodeRef = useRef(null);
+
+  const slugify = (text) => {
+    if (!text) return text;
+    return text
+      .toLowerCase()
+      .replace(/ /g, "-")
+      .replace(/[^\w-]+/g, "");
+  };
 
   const handleClick = () => {
     const defaultCountryCode = "+91"; // Default country code
@@ -64,9 +72,13 @@ const ShareButton = ({ number, countryCode,logoUrl,businessName,theme, saveConta
     }
   }, [url, showQRCode]);
 
+  const generateShareLink = () => {
+    return ` https://server.enconnect.in/profile/${slugify(businessName)}/${profileId}`;  
+};
+
 
   const handleCopyLink = () => {
-        navigator.clipboard.writeText(url).then(() => {
+        navigator.clipboard.writeText(generateShareLink()).then(() => {
         toast.success("Link copied to clipboard!");
         setToastMessage("Link copied to clipboard!");
         setTimeout(() => setToastMessage(""), 2000); // Hide toast after 3 seconds

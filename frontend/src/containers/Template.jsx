@@ -1084,6 +1084,7 @@ export default function Template() {
                         </a>
                         <ShareButton
                           theme={colorTheme}
+                          profileId={businessData?._id}
                           saveContactDetails={saveContact}
                           logoUrl={businessData?.logo}
                           businessName={businessData?.businessName}
