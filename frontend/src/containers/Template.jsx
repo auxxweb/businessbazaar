@@ -933,7 +933,7 @@ export default function Template() {
                           isTruncated && (
                             <span
                               onClick={toggleTruncation}
-                              className="text-primary cursor-pointer ml-1 text-black"
+                              className="text-secondary cursor-pointer ml-1 text-black"
                             >
                               ...
                             </span>
@@ -1163,7 +1163,20 @@ export default function Template() {
                   </div>
                   <div className="col-12 mt-4">
                     <p className="text-secondary text-center text-lg-start david-font mt-4">
-                      {businessData?.welcomePart?.description}
+                    {truncateText(
+                          businessData?.welcomePart?.description,
+                          100
+                        )}
+                        {businessData?.welcomePart?.description.length >
+                          100 &&
+                          isTruncated && (
+                            <span
+                              onClick={toggleTruncation}
+                              className="text-secondary cursor-pointer ml-1 text-black"
+                            >
+                              ...
+                            </span>
+                          )}
                     </p>
                   </div>
                 </div>
