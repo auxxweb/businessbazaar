@@ -734,7 +734,7 @@ const FreeListIndex = ({
                               className="me-2 text-purple-500"
                               size={12}
                             />{" "}
-                            Enconnect URL
+                            Auxxbay URL
                           </h5>
                           <motion.a
                             href={selectedBusiness.enconnectUrl}
@@ -1217,12 +1217,12 @@ const FreeListIndex = ({
                     </div>
                   </div>
                   <div className="col-12">
-                    <label className="form-label">Enconnect URL</label>
+                    <label className="form-label">Auxxbay URL</label>
                     <input
                       type="url"
                       name="enconnectUrl"
                       className="form-control"
-                      placeholder="Enconnect URL"
+                      placeholder="Auxxbay URL"
                       value={updateFormData.enconnectUrl || ""}
                       onChange={handleChange}
                     />

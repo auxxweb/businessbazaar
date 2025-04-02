@@ -668,8 +668,8 @@ export default function Template() {
   return (
     <>
       <MetaTags
-        title="Enconnect | Find Trusted Local Businesses"
-        description="Discover trusted services with Enconnect.in, the top local business directory listing. Start your search today!"
+        title="Auxxbay | Find Trusted Local Businesses"
+        description="Discover trusted services with Auxxbay.in, the top local business directory listing. Start your search today!"
         keywords="local search, travel, order food, grocery, medicines, online shopping"
         url="https://enconnect.in"
         image={businessData?.logo}

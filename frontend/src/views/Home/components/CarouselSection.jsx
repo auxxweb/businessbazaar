@@ -64,7 +64,7 @@ const CarouselSection = ({ bannerData, onSearch, setLocation }) => {
                 Your Digital Platform for Growing Your Business
               </h1>
               <p className="text-white d-none d-md-block" >
-                EnConnect is your one-stop platform to create, showcase, and share your business online. Get a personalized NFC card to connect with clients instantly, boost referrals, and expand your reach. Build a professional online presence effortlessly with subscription-based tools. Connect and grow with EnConnect!
+                Auxxbay is your one-stop platform to create, showcase, and share your business online. Get a personalized NFC card to connect with clients instantly, boost referrals, and expand your reach. Build a professional online presence effortlessly with subscription-based tools. Connect and grow with Auxxbay!
               </p>
             </div>
 

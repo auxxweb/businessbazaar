@@ -371,7 +371,8 @@ export const BusinessModalPage = () => {
                                                             className="me-2 text-purple-500"
                                                             size={12}
                                                         />{' '}
-                                                        Enconnect URL
+                                                        
+                                                        Auxxbay URL
                                                     </h5>
                                                     <motion.a
                                                         href={businessData.enconnectUrl}
