@@ -581,7 +581,7 @@ export default function Template() {
                   className="text-black text-center text-lg-start text-decoration-none fs-14"
                   style={{ color: "black" }}
                 >
-                  Blogs
+                  AuxxFeed
                 </NavLink>
                 <NavLink
                   href="#services"
@@ -834,7 +834,7 @@ export default function Template() {
                 className="text-black text-center text-lg-start text-decoration-none fs-14"
                 style={{ color: "black" }}
               >
-                Blogs
+                AuxxFeed
               </NavLink>
               <NavLink
                 href="#services"

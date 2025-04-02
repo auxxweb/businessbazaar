@@ -153,86 +153,77 @@ function NewsArticles({ colorTheme }) {
 
 export default NewsArticles
 
-function LinkPreview({ url }) {
+const LinkPreview = ({ url }) => {
     const [previewData, setPreviewData] = useState(null);
     const [loading, setLoading] = useState(true);
 
+    const isYouTubeURL = (url) => url?.includes("youtube.com") || url?.includes("youtu.be");
+    const isInstagramURL = (url) => url?.includes("instagram.com/p/");
+    console.log(isInstagramURL,"hello");
+    
+
+    const getInstagramThumbnail = (url) => {
+        const match = url.match(/\/p\/([^/]+)\//);
+        return match ? `https://www.instagram.com/p/${match[1]}/media/?size=l` : null;
+    };
+
     useEffect(() => {
-        const isYouTubeVideo = isYouTubeURL(url);
-        if (isYouTubeVideo) {
-            setPreviewData({
-                youtube: true
-            });
-            setLoading(false);
-        }
+        if (!url) return;
+
         const fetchData = async () => {
             try {
-
                 const response = await fetch(url);
                 const data = await response.text();
 
-                if (!isYouTubeVideo) {
-                    const parser = new DOMParser();
-                    const doc = parser.parseFromString(data, 'text/html');
-                    const title = doc.querySelector('title')?.textContent || '';
-                    const description = doc.querySelector('meta[name="description"]')?.getAttribute('content') || '';
-                    const image = doc.querySelector('meta[property="og:image"]')?.getAttribute('content') || '';
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(data, "text/html");
 
-                    setPreviewData({
-                        title,
-                        description,
-                        image,
-                        youtube: false,
-                    });
-                    setLoading(false);
-                }
+                const title = doc.querySelector("title")?.textContent || "";
+                const description = doc.querySelector('meta[name="description"]')?.getAttribute("content") || "";
+                const image = doc.querySelector('meta[property="og:image"]')?.getAttribute("content") || "";
+
+                setPreviewData({ title, description, image, youtube: false, instagram: false });
             } catch (error) {
-                console.error(error);
+                console.error("Error fetching preview:", error);
+            } finally {
                 setLoading(false);
             }
         };
-        if (!isYouTubeVideo) {
 
+        if (isYouTubeURL(url)) {
+            setPreviewData({ youtube: true });
+            setLoading(false);
+        } else if (isInstagramURL(url)) {
+            setPreviewData({ instagram: true, image: getInstagramThumbnail(url) });
+            setLoading(false);
+        } else {
             fetchData();
         }
     }, [url]);
 
-    const isYouTubeURL = (url) => {
-        return url?.includes('youtube.com') || url?.includes('youtu.be');
-    };
+    const handleClick = () => window.open(url, "_blank");
 
-    if (loading) {
-        return <p>Loading...</p>;
-    }
+    if (loading) return <p>Loading...</p>;
 
     if (!previewData) {
         return (
-            <div className='overflow-hidden  rounded' style={{ cursor: 'pointer' }}>
-                <img src={PlaceholderBanner} alt="Link Preview" className='w-100 h-100' />
-            </div>
-        )
-    }
-
-    if (previewData?.youtube) {
-        return (<div className='overflow-hidden  rounded' style={{ cursor: 'pointer' }}>
-            <iframe src={url} frameBorder="0" className='w-100 h-100'></iframe>
-        </div>)
-    }
-
-    const handleClick = () => {
-        window.open(url, '_blank');
-    };
-
-    if (previewData.videoId) {
-        return (
-            <div onClick={handleClick} style={{ cursor: 'pointer' }}>
-                <img src={previewData.videoThumbnail} alt="Video Thumbnail" />
+            <div className="overflow-hidden rounded" style={{ cursor: "pointer" }}>
+                <img src={PlaceholderBanner} alt="Link Preview" className="w-100 h-100" />
             </div>
         );
     }
+
+    if (previewData.youtube) {
+        return (
+            <div className="overflow-hidden rounded" style={{ cursor: "pointer" }}>
+                <iframe src={url} frameBorder="0" className="w-100 h-100"></iframe>
+            </div>
+        );
+    }
+
     return (
-        <div className='overflow-hidden  rounded' onClick={handleClick} style={{ cursor: 'pointer' }}>
-            {previewData.image && <img src={previewData?.image} alt="Link Preview" className='w-100 h-100' />}
+        <div className="overflow-hidden rounded" onClick={handleClick} style={{ cursor: "pointer" }}>
+            {previewData.image && <img src={previewData.image} alt="Link Preview" className="w-100 h-100" />}
         </div>
     );
-}
+};
