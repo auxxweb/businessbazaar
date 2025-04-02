@@ -73,7 +73,7 @@ const ShareButton = ({ profileId,number, countryCode,logoUrl,businessName,theme,
   }, [url, showQRCode]);
 
   const generateShareLink = () => {
-    return ` https://server.auxxweb.in/profile/${slugify(businessName)}/${profileId}`;  
+    return ` https://auxx-bay.auxxweb.in/profile/${slugify(businessName)}/${profileId}`;  
 };
 
 
