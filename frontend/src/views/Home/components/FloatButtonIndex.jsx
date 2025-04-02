@@ -610,7 +610,7 @@ export default function FloatingButtons({fetchFreeList}) {
                       className={`form-control ${
                         errors.enconnectUrl ? "is-invalid" : ""
                       }`}
-                      placeholder="Enconnect Profile URL"
+                      placeholder="Auxxbay Profile URL"
                       value={formData.enconnectUrl}
                       onChange={handleChange}
                     />

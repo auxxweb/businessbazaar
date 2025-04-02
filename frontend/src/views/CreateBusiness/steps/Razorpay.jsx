@@ -57,7 +57,7 @@ export default function Razorpay() {
       name: "Auxxbay",
       description:
         "Auxxbay is a comprehensive platform designed to simplify and enhance professional networking, providing seamless tools for business growth, collaboration, and community building",
-      image: "https://instant-connect.in/src/assets/images/auxxbay-logo.png", // Dummy logo URL
+      image: "https://auxxbay.auxxweb.in/images/auxxbay-logo.png", // Dummy logo URL
       handler: async function (response) {
         console.log(response, "response");
         setLoader(true);

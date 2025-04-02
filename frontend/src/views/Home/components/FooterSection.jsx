@@ -76,7 +76,7 @@ const FooterSection = () => {
                     <i className="bi bi-instagram"></i>
                   </a>
                   <a
-                    href="https://www.linkedin.com/company/enconnect/"
+                    href="https://www.linkedin.com/company/auxxweb/"
                     className="contact-banner text-orange d-flex align-items-center justify-content-center"
                     style={{
                       fontSize: '2rem',
@@ -161,7 +161,7 @@ const FooterSection = () => {
                 {' '}
                 <span>
                   Copyright &copy;
-                  {new Date().getFullYear()} En Connect. All Rights Reserved
+                  {new Date().getFullYear()} Auxxbay. All Rights Reserved
                 </span>{' '}
               </p>
             </div>

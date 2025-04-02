@@ -60,7 +60,7 @@ const CarouselSection = ({ bannerData, onSearch, setLocation }) => {
             {/* Left Section */}
             <div className="col-12 col-md-6 banner-head-text" style={{ textAlign: "left" }}>
               <h1 className="text-5xl sm:text-4xl md:text-7xl text-white fw-bold font-bold text-start" >
-                En<span className="text-theme2">Connect</span> <br />
+                Auxx<span className="text-theme2">Bay</span> <br />
                 Your Digital Platform for Growing Your Business
               </h1>
               <p className="text-white d-none d-md-block" >

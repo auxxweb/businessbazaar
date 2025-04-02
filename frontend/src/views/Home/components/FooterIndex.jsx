@@ -187,20 +187,7 @@ const FooterIndex = () => {
             </div>
             <div className="col-12 col-md-4 mb-3 mb-md-0">
               <p className="text-secondary mb-0">
-                Copyright © 2025 En Connect. All Rights Reserved.
-              </p>
-            </div>
-            <div className="col-12 col-md-4 mb-3 mb-md-0 ">
-              <p className="text-secondary mb-0">
-                Technical Partner:{" "}
-                <a
-                  href="https://www.auxxweb.in"
-                  className="text-secondary text-decoration-none"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Auxxweb IT Solutions
-                </a>
+                Copyright © 2025 Auxxbay. All Rights Reserved.
               </p>
             </div>
           </div>

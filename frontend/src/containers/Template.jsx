@@ -2494,7 +2494,7 @@ export default function Template() {
                       <div style={{ color: "#A4B3CB" }} className="text-right">
                         <span>
                           Copyright &copy;
-                          {new Date().getFullYear()} En Connect. All Rights
+                          {new Date().getFullYear()} Auxxbay. All Rights
                           Reserved
                         </span>
                       </div>
