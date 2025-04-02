@@ -671,7 +671,7 @@ export default function Template() {
         title="Auxxbay | Find Trusted Local Businesses"
         description="Discover trusted services with Auxxbay.in, the top local business directory listing. Start your search today!"
         keywords="local search, travel, order food, grocery, medicines, online shopping"
-        url="https://enconnect.in"
+        url="https://auxxbay.auxxweb.in"
         image={businessData?.logo}
       />
       <link rel="preconnect" href="https://fonts.googleapis.com" />

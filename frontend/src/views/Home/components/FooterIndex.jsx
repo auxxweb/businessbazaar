@@ -11,8 +11,8 @@ const FooterIndex = () => {
       icon: Facebook,
       href: "https://www.facebook.com/profile.php?id=61570312289347&mibextid=ZbWKwL",
     },
-    { icon: Instagram, href: "https://www.instagram.com/enconnect.nfc" },
-    { icon: Linkedin, href: "https://www.linkedin.com/company/enconnect/" },
+    { icon: Instagram, href: "https://www.instagram.com/auxxweb" },
+    { icon: Linkedin, href: "https://www.linkedin.com/company/auxxweb/" },
   ];
 
   const usefulLinks = [
@@ -73,11 +73,11 @@ const FooterIndex = () => {
             {/* Company Info */}
             <div className="col-12 col-md-6 col-lg-3">
               <img
-                src="/images/enconnectLogo.png"
+                src="/images/auxxbay-logo.png"
                 width={250}
                 height={100}
                 className="imglogo img-fluid mb-3"
-                alt="Enconnect Logo"
+                alt="Auxxbay Logo"
               />
               <p className="mb-2 sub-txt">where requirements are found</p>
 
@@ -134,10 +134,10 @@ const FooterIndex = () => {
               <ul className="list-unstyled">
                 <motion.li className="mb-3" whileHover={{ x: 5 }}>
                   <a
-                    href="mailto:connect@enconnect.in"
+                    href="mailto:connect@auxxbay.in"
                     className="text-black text-decoration-none"
                   >
-                    connect@enconnect.in
+                    connect@auxxbay.in
                   </a>
                 </motion.li>
                 <motion.li className="mb-3" whileHover={{ x: 5 }}>

@@ -27,7 +27,7 @@ const FooterSection = () => {
           <div className="row ">
             <div className="col-12 col-md-6">
               <h1 className="fs-45 text-white text-center text-md-start fw-bold mb-3">
-                Enconnect
+                Auxxbay
               </h1>
               <span className="fs-20 text-white text-center text-md-start">
                 where requirements are found
@@ -62,7 +62,7 @@ const FooterSection = () => {
                     <i className="bi bi-facebook"></i>
                   </a>
                   <a
-                    href="https://www.instagram.com/enconnect.nfc"
+                    href="https://www.instagram.com/auxxweb"
                     className="contact-banner text-orange d-flex align-items-center justify-content-center"
                     style={{
                       fontSize: '2rem',
@@ -121,9 +121,8 @@ const FooterSection = () => {
                     Contact Info
                   </h3>
                   <div className="col-12 mb-3 text-center text-md-start">
-                    <a href="mailto:enconnect.nfc@gmail.com" className="fs-16 text-white">
-                    connect@enconnect.in
-                    </a>
+                    <a href="mailto:auxxweb@gmail.com" className="fs-16 text-white">
+                    auxxweb@gmail.com                    </a>
                   </div>
                   <div className="col-12 mb-3 text-center text-md-start">
                     <a

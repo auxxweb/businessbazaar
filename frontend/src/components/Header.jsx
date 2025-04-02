@@ -70,7 +70,7 @@ export default function Header({ onSearch, setLocation ,setSerachItem, searchIte
           {/* Logo */}
           <Navbar.Brand href="/" className="fw-bold d-flex align-items-center">
             <img
-              src="/images/enconnectLogo.png"
+              src="/images/auxxbay-logo.png"
               alt="Logo"
               style={{ height: "50px", width: "150px" }}
             />
@@ -145,7 +145,7 @@ export default function Header({ onSearch, setLocation ,setSerachItem, searchIte
                   Review
                 </a>
                 <a
-                  href="https://admin.enconnect.in/"
+                  href="https://dashboard.auxxbay.auxxweb.in/"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-decoration-none my-profile-btn mx-2 py-2 px-2"

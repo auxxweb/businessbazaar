@@ -50,7 +50,7 @@ export default function BusinessHeader() {
           style={{ fontSize: "36px" }}
         >
           <img
-            src="/images/enconnectLogo.png"
+            src="/images/auxxbay-logo.png"
             alt=""
             style={{ height: "50px", width: "150px" }}
           />

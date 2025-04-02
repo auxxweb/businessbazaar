@@ -54,10 +54,10 @@ export default function Razorpay() {
       key: import.meta.env.VITE_APP_RAZORPAY_API_KEY, // Dummy Razorpay key ID for testing
       amount: planDetails?.amount * 100, // Amount in paise (50000 paise = ₹500)
       currency: "INR",
-      name: "EnConnect",
+      name: "Auxxbay",
       description:
-        "EnConnect is a comprehensive platform designed to simplify and enhance professional networking, providing seamless tools for business growth, collaboration, and community building",
-      image: "https://instant-connect.in/src/assets/images/enConnectLogo.png", // Dummy logo URL
+        "Auxxbay is a comprehensive platform designed to simplify and enhance professional networking, providing seamless tools for business growth, collaboration, and community building",
+      image: "https://instant-connect.in/src/assets/images/auxxbay-logo.png", // Dummy logo URL
       handler: async function (response) {
         console.log(response, "response");
         setLoader(true);

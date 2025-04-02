@@ -25,7 +25,7 @@ const ShareButtonHome = ({logoUrl,businessName,  }) => {
     const defaultCountryCode = "+91"; // Default country code
     window.open(`https://wa.me/${defaultCountryCode}${phoneNumber}`, "_blank");
   };
-  const url = 'https://www.enconnect.in'
+  const url = 'https://www.auxxbay.auxxweb.in'
 
   useEffect(() => {
     if (url && showQRCode && qrCodeRef.current) {
@@ -72,7 +72,7 @@ const ShareButtonHome = ({logoUrl,businessName,  }) => {
  
 
   const handleShareSocial = async () => {
-    const url ='https://www.enconnect.in' // Current page URL
+    const url ='https://www.auxxbay.auxxweb.in' // Current page URL
     const text = `Explore this page using the link below or scan the QR code:\n${url}`;
   
     try {
