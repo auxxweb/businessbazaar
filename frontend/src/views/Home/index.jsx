@@ -163,7 +163,7 @@ export default function Home() {
 
 
   const handleClick = () => {
-    window.open(`https://wa.me/${9447020270}`, "_blank");
+    window.open(`https://wa.me/${9074306855}`, "_blank");
   };
 
   useEffect(() => {

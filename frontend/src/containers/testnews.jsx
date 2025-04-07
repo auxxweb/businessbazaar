@@ -159,12 +159,12 @@ const LinkPreview = ({ url }) => {
 
     const isYouTubeURL = (url) => url?.includes("youtube.com") || url?.includes("youtu.be");
     const isInstagramURL = (url) => url?.includes("instagram.com/p/");
-    console.log(isInstagramURL,"hello");
+    console.log(isInstagramURL,"hello-------------------------------------------------");
     
 
     const getInstagramThumbnail = (url) => {
         const match = url.match(/\/p\/([^/]+)\//);
-        return match ? `https://www.instagram.com/p/${match[1]}/media/?size=l` : null;
+        return match ? `https://www.instagram.com/p/DHfdvPOzbcj/media/?size=l` : null;
     };
 
     useEffect(() => {

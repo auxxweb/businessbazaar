@@ -131,7 +131,7 @@ const FooterSection = () => {
                     >
                       <a style={{color:"white"}} href='tel:9745004569'>
                         <i className="bi bi-telephone text-white me-1"></i> +91
-                        9447020270
+                        9074306855
 
                       </a>
                     </a>
