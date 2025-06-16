@@ -18,7 +18,7 @@ const ShareButtonHome = ({logoUrl,businessName,  }) => {
   const [toastMessage, setToastMessage] = useState(""); // Toast message state
   const optionsRef = useRef(null);
   const buttonRef = useRef(null);
-  const phoneNumber = 9074306855; // Replace with your WhatsApp number including the country code
+  const phoneNumber = 7511175402; // Replace with your WhatsApp number including the country code
   const qrCodeRef = useRef(null);
 
   const handleClick = () => {
