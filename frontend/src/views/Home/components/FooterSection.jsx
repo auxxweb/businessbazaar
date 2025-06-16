@@ -121,17 +121,17 @@ const FooterSection = () => {
                     Contact Info
                   </h3>
                   <div className="col-12 mb-3 text-center text-md-start">
-                    <a href="mailto:auxxweb@gmail.com" className="fs-16 text-white">
-                    auxxweb@gmail.com                    </a>
+                    <a href="mailto:auxxbay@gmail.com" className="fs-16 text-white">
+                    auxxbay@gmail.com                    </a>
                   </div>
                   <div className="col-12 mb-3 text-center text-md-start">
                     <a
                       href=""
                       className=" fs-20 text-decoration-none text-white"
                     >
-                      <a style={{color:"white"}} href='tel:9745004569'>
+                      <a style={{color:"white"}} href='tel:7511175402'>
                         <i className="bi bi-telephone text-white me-1"></i> +91
-                        9074306855
+                        7511175402
 
                       </a>
                     </a>
