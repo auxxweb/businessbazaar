@@ -134,7 +134,7 @@ const FooterIndex = () => {
               <ul className="list-unstyled">
                 <motion.li className="mb-3" whileHover={{ x: 5 }}>
                   <a
-                    href="mailto:connect@auxxbay.in"
+                    href="mailto:auxxbay@gmail.com"
                     className="text-black text-decoration-none"
                   >
                     connect@auxxbay.in
@@ -142,11 +142,11 @@ const FooterIndex = () => {
                 </motion.li>
                 <motion.li className="mb-3" whileHover={{ x: 5 }}>
                   <a
-                    href="tel:+919074306855"
+                    href="tel:+917511175402"
                     className="text-black text-decoration-none d-flex align-items-center gap-2"
                   >
                     <Phone size={16} />
-                    +91 9074306855
+                    +91 7511175402
                   </a>
                 </motion.li>
                 <motion.li whileHover={{ x: 5 }}>
