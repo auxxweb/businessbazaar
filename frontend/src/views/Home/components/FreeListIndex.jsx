@@ -181,13 +181,13 @@ const FreeListIndex = ({
       if (name === "images") {
         const imageFiles = Array.from(files);
         const imageLinks = await Promise.all(
-          imageFiles.map((file) => preRequestFun(file, "freelist"))
+          imageFiles?.map((file) => preRequestFun(file, "freelist"))
         );
         setUpdateFormData((prev) => ({
           ...prev,
-          images: imageLinks.map((link) => link.accessLink),
+          images: imageLinks?.map((link) => link.accessLink),
         }));
-        setImagePreviews(imageFiles.map((file) => URL.createObjectURL(file)));
+        setImagePreviews(imageFiles?.map((file) => URL.createObjectURL(file)));
       }
     } else {
       if (name.startsWith("contactDetails.")) {
@@ -584,7 +584,7 @@ const FreeListIndex = ({
                               className="d-flex flex-wrap gap-3 p-3 border rounded-lg bg-white overflow-auto"
                               style={{ maxHeight: "250px" }}
                             >
-                              {selectedBusiness.images.map((image, index) => (
+                              {selectedBusiness?.images?.map((image, index) => (
                                 <motion.div
                                   key={index}
                                   className="rounded-lg overflow-hidden shadow-md cursor-pointer"
@@ -1050,7 +1050,7 @@ const FreeListIndex = ({
                       }}
                     >
                       <option value="">Select Category</option>
-                      {categoryData.map((category, index) => (
+                      {categoryData?.map((category, index) => (
                         <option key={index} value={category._id}>
                           {category.name}
                         </option>
@@ -1184,7 +1184,7 @@ const FreeListIndex = ({
                       onChange={handleChange}
                     />
                     <div className="d-flex gap-2 flex-wrap mt-2">
-                      {updateFormData.images.map((src, index) => (
+                      {updateFormData?.images?.map((src, index) => (
                         <div key={index} className="position-relative">
                           <img
                             src={src}

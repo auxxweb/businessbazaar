@@ -161,14 +161,14 @@ export default function FloatingButtons({fetchFreeList}) {
       if (name === "images") {
         const imageFiles = Array.from(files);
         const imageLinks = await Promise.all(
-          imageFiles.map((file) => preRequestFun(file, "freelist"))
+          imageFiles?.map((file) => preRequestFun(file, "freelist"))
         );
         setFormData((prev) => ({
           ...prev,
           
-          images: imageLinks.map((link) => link.accessLink),
+          images: imageLinks?.map((link) => link.accessLink),
         }));
-        setImagePreviews(imageFiles.map((file) => URL.createObjectURL(file)));
+        setImagePreviews(imageFiles?.map((file) => URL.createObjectURL(file)));
       }
       return;
     }
@@ -458,7 +458,7 @@ export default function FloatingButtons({fetchFreeList}) {
                       }}
                     >
                       <option value="">Select Category</option>
-                      {categoryData.map((category, index) => (
+                      {categoryData?.map((category, index) => (
                         <option key={index} value={category._id}>
                           {category.name}
                         </option>
@@ -475,7 +475,7 @@ export default function FloatingButtons({fetchFreeList}) {
                     "secondaryNumber",
                     "whatsAppNumber",
                     "website",
-                  ].map((field) => (
+                  ]?.map((field) => (
                     <div className="col-md-6" key={field}>
                       <input
                         type={field.includes("Number") ? "tel" : "url"}
@@ -521,7 +521,7 @@ export default function FloatingButtons({fetchFreeList}) {
                     "district",
                     "state",
                     "pinCode",
-                  ].map((field) => (
+                  ]?.map((field) => (
                     <div className="col-md-6" key={field}>
                       <input
                         type="text"
@@ -570,7 +570,7 @@ export default function FloatingButtons({fetchFreeList}) {
                       onChange={handleChange}
                     />
                     <div className="d-flex gap-2 flex-wrap mt-2">
-                      {imagePreviews.map((src, index) => (
+                      {imagePreviews?.map((src, index) => (
                         <div key={index} className="position-relative">
                           <img
                             src={src}
